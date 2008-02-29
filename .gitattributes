@@ -1,9 +1,9 @@
 * text=auto !eol
-code/db/CreateDatabase.sql -text
 code/db/CreateSchema.sql -text
 code/db/CreateStoredProcedures.sql -text
 code/db/GrantPermissions.sql -text
 code/db/LoadData.sql -text
+code/db/cms_db_creation_scripts/CreateDatabase.sql -text
 code/webroot/Application.cfm -text
 code/webroot/Application.local.dev -text
 code/webroot/com/ContentManager/Category.cfc -text
