@@ -1,1 +1,7 @@
 * text=auto !eol
+code/MasterView/webroot/Application.cfm -text
+code/MasterView/webroot/Application.local.dev -text
+code/MasterView/webroot/content.cfm -text
+code/MasterView/webroot/eraseme.cfm -text
+code/MasterView/webroot/index.cfm -text
+code/MasterView/webroot/robots.txt -text
