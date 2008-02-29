@@ -4,6 +4,7 @@ code/db/cms_db_creation_scripts/CreateSchema.sql -text
 code/db/cms_db_creation_scripts/CreateStoredProcedures.sql -text
 code/db/cms_db_creation_scripts/GrantPermissions.sql -text
 code/db/cms_db_creation_scripts/LoadData.sql -text
+code/db/cms_db_creation_scripts/README.txt -text
 code/webroot/Application.cfm -text
 code/webroot/Application.local.dev -text
 code/webroot/com/ContentManager/Category.cfc -text
