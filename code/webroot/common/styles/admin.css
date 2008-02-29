@@ -1,0 +1,326 @@
+<!--
+TD,P,Input,Select,textarea,td.cfdebug {  font-family: Arial, Geneva, Helvetica, sans-serif; font-size: 12px; color: #000000}
+
+A {  font-family: Arial, Geneva, Helvetica, sans-serif; font-size: 12px; color: #0099FF; text-decoration:none;}
+
+A:hover {  font-family: Arial, Geneva, Helvetica, sans-serif;text-decoration:underline;}
+
+Input,Select,textarea {  font-family: Arial, Geneva, Helvetica, sans-serif; font-size: 12px; color: #000000}
+
+.off {color:black}
+
+body {
+background-image: url(/common/images/global/site_bg.gif);
+background-repeat: no-repeat;
+}
+.inactive  {color:999999}
+
+.breadcrumb, .breadcrumb a {
+	font-weight:bold;
+	font-size:14px;
+}
+
+.SiteTitle, .SiteTitle TD{
+	color:#97AEB8;
+	font-weight:bold;
+	font-size:18px;
+}
+
+.border1 {
+	border-bottom:1px solid gray;
+}
+
+.MenuAdmin {
+	border-right:1px dotted gray;
+	color:white;
+	text-transform:uppercase;
+	padding:10px;
+}
+.MenuAdmin a {
+	color:white;
+}
+
+.PageTitle {
+	font-size:20px;
+	padding-bottom:10px;
+	padding-left:10px;
+	font-weight:bold;
+}
+
+.FooterAdmin2, .FooterAdmin2 p {
+	color: gray;
+}
+
+
+.dashModuleNormal{
+	padding:0px;
+	margin-bottom:10px;
+	width:275px;
+}
+
+.box1 { 
+  background: #33393C;
+}
+.boxtop1 { 
+  background: url(/common/images/admin/ne1.gif) no-repeat top right;
+}
+.boxtop1 div { 
+  height: 3px; 
+  background: url(/common/images/admin/nw1.gif) no-repeat top left; 
+}
+.boxbottom1 { 
+  background: url(/common/images/admin/se1.gif) no-repeat bottom right; 
+}
+.boxbottom1 div { 
+  height: 3px; 
+  background: url(/common/images/admin/sw1.gif) no-repeat bottom left; 
+}
+.boxtop1 div, .boxtop1, 
+.boxbottom1 div, .boxbottom1 {
+   width: 100%;
+   height: 3px;
+   font-size: 1px;
+}
+
+.box2 { 
+  background: #FFFFFF; 
+}
+.boxtop2 { 
+  background: url(/common/images/admin/ne2.gif) no-repeat top right; 
+}
+.boxtop2 div { 
+  height: 3px; 
+  background: url(/common/images/admin/nw2.gif) no-repeat top left; 
+}
+.boxbottom2 { 
+  background: url(/common/images/admin/se2.gif) no-repeat bottom right; 
+}
+.boxbottom2 div { 
+  height: 3px; 
+  background: url(/common/images/admin/sw2.gif) no-repeat bottom left; 
+}
+.boxtop2 div, .boxtop2, 
+.boxbottom2 div, .boxbottom2 {
+   width: 100%;
+   height: 3px;
+   font-size: 1px;
+}
+
+.box3 { 
+  background: #D4D4D4; 
+}
+.boxtop3 { 
+  background: url(/common/images/admin/ne3.gif) no-repeat top right; 
+}
+.boxtop3 div { 
+  height: 3px; 
+  background: url(/common/images/admin/nw3.gif) no-repeat top left; 
+}
+.boxbottom3 { 
+  background: url(/common/images/admin/se3.gif) no-repeat bottom right; 
+}
+.boxbottom3 div { 
+  height: 3px; 
+  background: url(/common/images/admin/sw3.gif) no-repeat bottom left; 
+}
+.boxtop3 div, .boxtop3, 
+.boxbottom3 div, .boxbottom3 {
+   width: 100%;
+   height: 3px;
+   font-size: 1px;
+}
+
+
+.ModuleTitle1 {
+	padding: 3px 8px 3px 8px;
+	color:#97AEB8;
+	font-size:14px;
+	font-weight:bold;
+	/*cursor:move;
+	position:absolute;
+	width:300px;*/
+}
+
+.ModuleBody1 {
+	padding: 3px 8px 8px 8px;
+	background-color:white;
+}
+
+.ModuleTitle2 {
+	padding: 3px 8px 3px 8px;
+	color:#97AEB8;
+	font-size:14px;
+	font-weight:bold;
+	
+}
+
+.ModuleBody2 {
+	padding: 3px 8px 8px 8px;
+	background-color:white;
+}
+
+.ModuleTitle3 {
+	padding: 3px 8px 3px 8px;
+	color:#33393C;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.ModuleBody3 {
+	padding: 3px 8px 8px 8px;
+	background-color:white;
+}
+.RuleSolid1 {
+	height:1px;
+	border-top:1px solid gray;
+	position:relative;
+	margin: 6px -16px 5px 0px;
+	left:-8px;
+	font-size:1px;
+}
+
+.RuleDotted1 {
+	height:1px;
+	border-top:1px dotted gray;
+	position:relative;
+	margin: 6px -16px 5px 0px;
+	left:-8px;
+	font-size:1px;
+}
+
+.tab1 {
+	width:118px;
+	display:inline;
+	padding-right:5px;
+	float: left;
+}
+
+.tablist {
+	display:block;
+	border-bottom:3px solid #33393C;
+	float: left;
+	width: 100%;
+}
+
+.actionlist1 {
+	clear:left;
+	background-color:#D4D4D4;
+	padding:10px;
+}
+.actionlist1 a {
+	padding-right:10px;
+}
+
+.datatitle1 {
+	width:100px;
+	color:#666666;
+	padding:5px 15px 5px 0px;
+	text-align:right;
+}
+
+.datacontent1 {
+	color:black;
+	padding:5px 15px 5px 0px;
+	text-align:left;
+}
+
+.progressWrapper {
+	width: 357px;
+	overflow: hidden;
+}
+.progressContainer {
+	margin: 5px;
+	padding: 4px;
+	
+	border: solid 1px #E8E8E8;
+	background-color: #F7F7F7;
+	
+	overflow: hidden;
+}
+.red /* Error */
+{
+	border: solid 1px #B50000;
+	background-color: #FFEBEB;
+}
+.green /* Current */ 
+{
+	border: solid 1px #DDF0DD;
+	background-color: #EBFFEB;
+}
+.blue /* Complete */
+{
+	border: solid 1px #CEE2F2;
+	background-color: #F0F5FF;
+}
+
+.progressName {
+	font-size: 8pt;
+	font-weight: bold;
+	color: #555555;
+	
+	width: 323px;
+	height: 14px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.progressBarInProgress,
+.progressBarComplete,
+.progressBarError {
+	font-size: 0px;
+	width: 0%;
+	height: 2px;
+	background-color: blue;
+	margin-top: 2px;
+}
+.progressBarComplete {
+	width: 100%;
+	background-color: green;
+	visibility: hidden;
+}
+.progressBarError {
+	width: 100%;
+	background-color: red;
+	visibility: hidden;
+}
+.progressBarStatus {
+	margin-top: 2px;
+	width: 337px;
+	font-size: 7pt;
+	font-family: Verdana;
+	text-align: left;
+	white-space: nowrap;
+}
+a.progressCancel,
+a.progressCancel:link,
+a.progressCancel:active,
+a.progressCancel:visited,
+a.progressCancel:hover
+{
+	font-size: 0px;
+	display: block;
+	height: 14px;
+	width: 14px;
+	
+	background-image: url(../images/cancelbutton.gif);
+	background-repeat: no-repeat;
+	background-position: -14px 0px;
+	float: right;
+}
+a.progressCancel:hover 
+{
+	background-position: 0px 0px;
+}
+-->
+/* Added by Dan */
+.dragme{position:relative; margin-right:3px; margin-left:3px; margin-top:0px; margin-bottom:1px;}
+
+#debug {
+	position:absolute;
+	left:10px;
+	top:400px;
+	width:200px;
+	height:400px;
+	background-color:#FFFFFF;
+	border:1px solid #000000;
+}

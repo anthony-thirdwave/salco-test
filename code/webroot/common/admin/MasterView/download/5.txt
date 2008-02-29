@@ -1,0 +1,6 @@
+<P>Evaluates a list of conditions and returns one of multiple possible result expressions. </P>
+<P>CASE has two formats: 
+<UL type=disc>
+<LI>The simple CASE function compares an expression to a set of simple expressions to determine the result. <BR><BR>
+<LI>The searched CASE function evaluates a set of Boolean expressions to determine the result. </LI></UL>
+<P>Both formats support an optional ELSE argument. </P>
