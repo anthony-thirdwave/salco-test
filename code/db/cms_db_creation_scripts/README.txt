@@ -1,4 +1,4 @@
-1) Change each default instance of "cmsdemo_cms_dev" in these scripts to match the value of "ThisDSN" 
+1) Change each default instance of "cmsdemo_cms_dev" in CreateDatabase.sql to match the value of "ThisDSN" 
 in ApplicationSetup.cfm
 
 2) Run CreateDatabase.sql at the master level of the machine where you want to install the DB.
