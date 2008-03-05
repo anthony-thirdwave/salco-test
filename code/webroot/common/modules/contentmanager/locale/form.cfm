@@ -2,7 +2,7 @@
 <cfparam name="FormMode" default="ShowForm">
 <!--- Determine Domains --->
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qTemplate">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qTemplate">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -15,7 +15,7 @@
 	<cfset TemplateIDList=ListAppend(TemplateIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qEventRegistrationMode">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qEventRegistrationMode">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">

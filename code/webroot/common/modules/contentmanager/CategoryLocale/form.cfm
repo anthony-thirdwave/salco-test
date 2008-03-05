@@ -23,7 +23,7 @@
 			Required="N">
 	<cfelse>
 		<cfif MyCategoryLocale.GetProperty("CategoryLocaleName") IS "">
-			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
 				method="GetCategoryName" 
 				returnVariable="ThisCategoryName"
 				CategoryID="#MyCategoryLocale.GetProperty('CategoryID')#">
@@ -179,7 +179,7 @@
 
 <cfif MyCategoryLocale.GetCategoryTypeID() IS "73"><!--- This is a gallery  --->
 	<cfparam name="lFileToImport" default="">
-	<cfinvoke component="/com/Utils/Locale"
+	<cfinvoke component=".com/Utils.Locale"
 		method="GetLocaleAlias"
 		LocaleID="#EditLocaleID#"
 		returnVariable="ThisChapterAlias">

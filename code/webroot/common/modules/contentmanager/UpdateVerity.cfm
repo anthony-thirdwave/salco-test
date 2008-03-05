@@ -31,7 +31,7 @@
 	<cfset StructInsert(slanguageName,LocaleID,LanguageName)/>
 </cfoutput>
 <!--- need to get categoryid --->
-<cfinvoke component="/com/ContentManager/ContentHandler"
+<cfinvoke component="com.ContentManager.ContentHandler"
 	method="GetCategoryID"
 	ContentID="#attributes.ContentID#"
 	returnvariable="ThisCategoryID"/>

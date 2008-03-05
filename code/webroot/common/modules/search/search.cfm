@@ -23,7 +23,7 @@
 <cfset resultsPerPage = 9>
 <cfset resultsStart = ((thisPageNum-1)*resultsPerPage)+1>
 <cfset URL.searchTxt=Left(URL.searchTxt,35)>
-<cfinvoke component="/com/UltraSeek/Search" 
+<cfinvoke component="com.UltraSeek.Search" 
 	method="search" 
 	SearchText="#URL.searchTxt#"
 	Start="#resultsStart-1#"
@@ -72,11 +72,11 @@
 		<h4><cfif numResults GT 0>#resultsStart#&mdash;#resultsEnd# of </cfif>#numResults# results</h4>
 	</div>
 	<div style="text-align:right">
-	<cfinvoke component="/com/Topic/TopicHandler" method="GetTopicQuery" returnvariable="qGetTopics">
+	<cfinvoke component="com.Topic.TopicHandler" method="GetTopicQuery" returnvariable="qGetTopics">
 	<!--- This method returns ALL topics, This should really return only relevant topics to search results.
 	
 	Ideally, the call instead would be:
-	<cfinvoke component="/com/UltraSeek/Search" 
+	<cfinvoke component="com.UltraSeek.Search" 
 	method="GetTopicQuery" 
 	SearchText="#URL.searchTxt#"
 	lCollection="#APPLICATION.UltraseekCollectionName#"

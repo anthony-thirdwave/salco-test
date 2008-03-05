@@ -17,7 +17,7 @@
 		<!--- establish return - guilty until proven innocent --->
 		<cfset isValid = false/>
 		<!--- get the front end permissions --->
-		<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetCategoryFrontEndPermissionsList" returnVariable="GroupList">
+		<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryFrontEndPermissionsList" returnVariable="GroupList">
 			<cfinvokeargument name="CategoryID" value="#Arguments.CategoryID#">
 		</cfinvoke>	
 		<cfif listlen(#Grouplist#) eq -1> <!--- nobody is allowed to see this --->

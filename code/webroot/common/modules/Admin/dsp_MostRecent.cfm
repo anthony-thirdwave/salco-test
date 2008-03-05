@@ -31,7 +31,7 @@ Order By TrackingID desc
 		<td nowrap><span title="[ #keyid# ]">#ReplaceNoCase(entity,"t_","","All")#</span></td>
 		<td>#EntityName#<cfif OperationID IS "506"><cfset lDeleted=ListAppend(lDeleted,"#entity##KeyID#")></cfif></td>
 		<td align="left">
-		<cfinvoke component="/com/utils/tracking"
+		<cfinvoke component="com.utils.tracking"
 			method="GetTrackingRecord"
 			trackingID="#TrackingID#"
 			returnvariable="ReturnString">

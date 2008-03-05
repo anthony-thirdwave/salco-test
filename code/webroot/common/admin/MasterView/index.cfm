@@ -42,7 +42,7 @@
 			<cfmodule template="/common/modules/admin/menu/menuAjax.cfm" isAutoCollapse="1" MVEid="#MVEid#"/>
 		
 			<!--- get the number of top level "site" categories --->
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="getCategoryCount" returnvariable="catCount">
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="getCategoryCount" returnvariable="catCount">
 				<cfinvokeargument name="parentId" value="-1">
 			</cfinvoke>
 		
@@ -141,7 +141,7 @@
 			</TR>
 		</cfif>
 		
-		<cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Category"
 			KeyID="#CategoryID#"
 			Operation="create">
@@ -151,7 +151,7 @@
 			<td class="datacontent1">#ReturnString#</TD>
 		</TR>
 		
-		<cfinvoke component="/com/utils/tracking" method="GetPageLastModified" returnVariable="ReturnString"
+		<cfinvoke component="com.utils.tracking" method="GetPageLastModified" returnVariable="ReturnString"
 			CategoryID="#CategoryID#">
 			
 		<TR valign="top">
@@ -159,7 +159,7 @@
 			<td class="datacontent1">#ReturnString#</TD>
 		</TR>
 		
-		<cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Category"
 			KeyID="#CategoryID#"
 			Operation="savelive">

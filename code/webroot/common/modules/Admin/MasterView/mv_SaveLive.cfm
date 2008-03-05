@@ -11,7 +11,7 @@
 <!--- Let's check if the top level category is a website, else all is for naught --->
 <cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm" ThisCategoryID="#ATTRIBUTES.CurrentCategoryID#" NameList="" IDList="#ATTRIBUTES.CurrentCategoryID#">
 
-<cfinvoke component="/com/ContentManager/CategoryHandler" 
+<cfinvoke component="com.ContentManager.CategoryHandler" 
 	method="GetProductionSiteInformation"
 	returnVariable="sProductionSiteInformation"
 	CategoryID="#Val(ListFirst(ListRest(IDList)))#">
@@ -38,47 +38,47 @@
 		</cfloop>
 		<cfset StartTickCount=GetTickCount()>
 		<cfloop index="ThisCategoryID" list="#lCategoryID#">
-			<cfset MyCategory=CreateObject("component","//com/ContentManager/Category")>
+			<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
 			<cfset MyCategory.Constructor(Val(ThisCategoryID))>
 			<cfset MyCategory.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.AdminUserID))>
 			<cfoutput>saved #ThisCategoryID# category: #GetTickCount()-StartTickCount#<BR></cfoutput>
 			<!--- IF ARTICLE --->
 			<cfif MyCategory.GetProperty('CategoryTypeID') EQ "66" AND Val(MyCategory.GetProperty('SourceID')) GT 0>
-				<cfset MyArticle=CreateObject("component","//com/Article/Article")>
+				<cfset MyArticle=CreateObject("component","com.Article.Article")>
 				<cfset MyArticle.Constructor(Val(MyCategory.GetProperty('SourceID')))>
 				<cfset MyArticle.SaveToProduction()>
 			</cfif>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetCategoryLocaleID" returnVariable="CategoryLocaleID"
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryLocaleID" returnVariable="CategoryLocaleID"
 				CategoryID="#ThisCategoryID#"
 				LocaleID="#SESSION.AdminCurrentAdminLocaleID#">
 			<cfif Val(CategoryLocaleID) GT "0">
-				<cfset MyCategoryLocale=CreateObject("component","//com/ContentManager/CategoryLocale")>
+				<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 				<cfset MyCategoryLocale.Constructor(Val(CategoryLocaleID))>
 				<cfset MyCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.AdminUserID))>
 				saved #ThisCategoryID# category locale: #GetTickCount()-StartTickCount#<BR>
 			</cfif>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetContentAndContentLocale" returnVariable="qContent"
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GetContentAndContentLocale" returnVariable="qContent"
 				CategoryID="#ThisCategoryID#"
 				LocaleID="#SESSION.AdminCurrentAdminLocaleID#">
 			<cfif qContent.RecordCount GT "0">
 				<cfoutput query="qContent" group="ContentID">
-					<cfset MyContent=CreateObject("component","//com/ContentManager/Content")>
+					<cfset MyContent=CreateObject("component","com.ContentManager.Content")>
 					<cfset MyContent.Constructor(Val(ContentID))>
 					<cfset MyContent.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.AdminUserID))>
 					saved #ContentID# content #GetTickCount()-StartTickCount#<BR>
 					<cfoutput group="ContentLocaleID">
-						<cfset MyContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+						<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 						<cfset MyContentLocale.Constructor(Val(ContentLocaleID))>
 						<cfset MyContentLocale.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.AdminUserID))>
 						saved #ContentLocaleID# content locale #GetTickCount()-StartTickCount#<BR>
 					</cfoutput>
 				</cfoutput>
 			</cfif>
-			<cfinvoke component="/com/ContentManager/CategoryHandler"
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#ThisCategoryID#">
-			<cfinvoke component="/com/ContentManager/CategoryHandler"
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="UpdateCacheDateTime"
 				returnVariable="success"
 				Lookup="Category"
@@ -204,7 +204,7 @@
 			<table border="0" width="100%" cellspacing="0" cellpadding="0"><tr valign="top"><TD><small>last updated:</small></TD><TD nowrap>
 			<small>#DateFormat(CacheDateTime)# #TimeFormat(CacheDateTime)#</small></TD></TR>
 			<TR valign="top"><TD nowrap><Small>last saved live:</small></TD><TD nowrap>
-			<cfinvoke component="/com/utils/tracking" method="GetTrackingDate" returnVariable="SaveLiveDate"
+			<cfinvoke component="com.utils.tracking" method="GetTrackingDate" returnVariable="SaveLiveDate"
 				Entity="Category"
 				KeyID="#CategoryID#"
 				Operation="savelive"><cfif IsDate(SaveLiveDate)><small>#DateFormat(SaveLiveDate)# #TimeFormat(SaveLiveDate)#</small></cfif>

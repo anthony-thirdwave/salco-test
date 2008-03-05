@@ -14,7 +14,7 @@
 	<cfif isWDDX(ContentBody)>
 		<cfwddx action="WDDX2CFML" input="#ContentBody#" output="sContentBody">
 			<cfif StructKeyExists(sContentBody,"LinkURL") AND Trim(StructFind(sContentBody,"LinkURL")) is not "">
-				<cfinvoke component="/com/ContentManager/ContentHandler"
+				<cfinvoke component="com.ContentManager.ContentHandler"
 					method="GetResourceFilePath"
 					returnVariable="ReturnValue"
 					ContentID="ContentID"

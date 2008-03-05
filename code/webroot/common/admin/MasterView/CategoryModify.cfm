@@ -36,7 +36,7 @@
 </cfif>
 <cfset lid=Encrypt(EditLocaleID,APPLICATION.Key)>
 <cfif EditCategoryID GT "0">
-	<cfinvoke component="/com/ContentManager/CategoryHandler"
+	<cfinvoke component="com.ContentManager.CategoryHandler"
 		method="GetCategoryLocaleID"
 		returnVariable="EditCategoryLocaleID"
 		CategoryID="#EditCategoryID#"
@@ -56,7 +56,7 @@
 	<cfparam name="FORM.Delete#ThisImage#" default="0">
 </cfloop>
 
-<cfset MyCategory=CreateObject("component","//com/ContentManager/Category")>
+<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
 <cfset MyCategory.Constructor(Val(EditCategoryID))>
 <cfif PageAction IS "Add" and val(EditParentID) GT "0">
 	<cfset MyCategory.SetProperty("ParentID",EditParentID)>
@@ -64,7 +64,7 @@
 	<cfset MyCategory.SetProperty("CategoryTypeID",URL.CategoryTypeID)>
 	</cfif>
 </cfif>
-<cfset MyCategoryLocale=CreateObject("component","//com/ContentManager/CategoryLocale")>
+<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 <cfset MyCategoryLocale.Constructor(Val(EditCategoryLocaleID))>
 <cfset MyCategoryLocale.SetProperty("CategoryID",EditCategoryID)>
 <cfif Val(EditCategoryLocaleID) LTE "0">
@@ -76,14 +76,14 @@
 <!--- If Article, create Article object --->
 <cfif MyCategory.GetProperty("CategoryTypeID") EQ 66 OR (IsDefined("FORM.CategoryTypeID") AND FORM.CategoryTypeID EQ 66)>
 	<cfparam name="FORM.DeletePortraitPath" default="0">
-	<cfset MyArticle=CreateObject("component","//com/Article/Article")>
+	<cfset MyArticle=CreateObject("component","com.Article.Article")>
 	<cfset MyArticle.Constructor(Val(MyCategory.GetProperty("SourceID")))>
 </cfif>
 --->
 
 <cfif IsDefined("FORM.CategoryName")>
 	<cfif IsDefined("FORM.ButLoad2") and FORM.ButLoad2 IS "Load" AND Val(lclid) GTE "1">
-		<cfset SourceCategoryLocale=CreateObject("component","//com/ContentManager/CategoryLocale")>
+		<cfset SourceCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 		<cfset SourceCategoryLocale.Constructor(Val(REQUEST.SimpleDecrypt(lclid)))>
 		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,ProductPrice,ProductFamilyDescription,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#">
 			<cfset MyCategoryLocale.SetProperty("#PropertyToCopy#",SourceCategoryLocale.GetProperty("#PropertyToCopy#"))>
@@ -184,7 +184,7 @@
 		</cfoutput>
 		
 		<cfif SESSION.AdminCurrentAdminLocaleID IS NOT APPLICATION.DefaultLocaleID and PageAction IS "Edit">
-			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
 					method="GetOtherCategoryLocale" 
 					returnVariable="GetOtherCategoryLocale"
 					CategoryID="#EditCategoryID#">
@@ -222,7 +222,7 @@
 							<cfset FormMode="Validate">
 						</cfif>
 					<cfelse>
-						<cfinvoke component="/com/ContentManager/CategoryHandler" 
+						<cfinvoke component="com.ContentManager.CategoryHandler" 
 							method="GetOtherCategoryLocale" 
 							returnVariable="GetOtherCategoryLocale"
 							CategoryID="#EditCategoryID#">
@@ -241,7 +241,7 @@
 			</div>
 		</div>
 		<br><br>
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qLocale">
+		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qLocale">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_Locale">
 			<cfinvokeargument name="FieldName" value="LocaleID">
@@ -319,7 +319,7 @@
 			</div>
 		</div>
 		<br><br>
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qLocale">
+		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qLocale">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_Locale">
 			<cfinvokeargument name="FieldName" value="LocaleID">
@@ -412,7 +412,7 @@
 					<cfset ThisFileImageName=Evaluate("ImageName_#i#")>
 					<cfset ThisFileImageCaption=Evaluate("ImageCaption_#i#")>
 					<cfif ThisFileImageName IS ""><cfset ThisFileImageName="#ThisFileName#"></cfif>
-					<cfset MyContent=CreateObject("component","//com/ContentManager/Content")>
+					<cfset MyContent=CreateObject("component","com.ContentManager.Content")>
 					<cfset MyContent.Constructor(-1)>
 					<cfset MyContent.SetProperty("ContentTypeID",212)>
 					<cfset MyContent.SetProperty("CategoryID",MyCategory.GetProperty("CategoryID"))>
@@ -420,7 +420,7 @@
 					<cfset MyContent.SetProperty("ContentPositionID",401)>
 					<cfset MyContent.SetProperty("ContentActive",1)>
 					<cfset MyContent.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-					<cfset MyContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+					<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 					<cfset MyContentLocale.Constructor(-1)>
 					<cfset MyContentLocale.SetProperty("ContentID",MyContent.GetProperty("ContentID"))>
 					<cfset MyContentLocale.SetProperty("LocaleID",EditLocaleID)>
@@ -434,7 +434,7 @@
 			</cfif>
 			
 			<!--- do ultraseek indexing 
-			<cfinvoke component="/com/UltraSeek/Search" 
+			<cfinvoke component="com.UltraSeek.Search" 
 				method="IndexByCategoryID" 
 				CategoryID="#MyCategory.GetProperty('CategoryID')#"/>--->
 			<!--- update summary --->

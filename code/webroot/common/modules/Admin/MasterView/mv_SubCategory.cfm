@@ -54,12 +54,12 @@
 			</cfquery>
 		</cfloop>
 		<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GenerateDisplayOrderString" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
 				returnVariable="Success"
 				SourceParentID="#Val(ATTRIBUTES.CurrentCategoryID)#"
 				datasource="#APPLICATION.DSN#">
 		</cfif>
-		<cfinvoke component="/com/ContentManager/CategoryLocaleHandler" method="GenerateDisplayOrderString" 
+		<cfinvoke component="com.ContentManager.CategoryLocaleHandler" method="GenerateDisplayOrderString" 
 			returnVariable="Success"
 			SourceParentID="#Val(ATTRIBUTES.CurrentCategoryID)#"
 			LocaleID="#Val(SESSION.AdminCurrentAdminLocaleID)#"

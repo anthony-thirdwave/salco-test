@@ -8,7 +8,7 @@ Date:			Jan 5, 2003
 <cfcomponent>
 	<!--- Properties --->
 	<cfproperty name="error" type="error"/>
-	<cfparam name="This.Error" default="#CreateObject('component','/com/error/error')#">
+	<cfparam name="This.Error" default="#CreateObject('component','com.error.error')#">
 
 	<!--- Get Property List --->
 	<cffunction name="getPropertyList" returntype="string" output="false">

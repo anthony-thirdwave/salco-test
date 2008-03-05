@@ -8,7 +8,7 @@
 	
 	<cfif ValMsg EQ "">
 		<!--- CREATE CATEGORY --->
-		<cfset MyCategory=CreateObject("component","//com/ContentManager/Category")>
+		<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
 		<cfset MyCategory.Constructor()>
 		<cfset MyCategory.SetProperty("ParentID",FORM.qpa_ParentID)>
 		<cfset MyCategory.SetProperty("CategoryName",Trim(FORM.qpa_PageName))>
@@ -18,7 +18,7 @@
 		<cfset MyCategoryID = MyCategory.GetProperty("CategoryID")>
 		
 		<!--- CREATE CATEGORY LOCALE --->
-		<cfset MyCategoryLocale=CreateObject("component","//com/ContentManager/CategoryLocale")>
+		<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 		<cfset MyCategoryLocale.Constructor()>
 		<cfset MyCategoryLocale.SetProperty("CategoryID",MyCategoryID)>
 		<cfset MyCategoryLocale.SetProperty("LocaleID",SESSION.AdminCurrentAdminLocaleID)>
@@ -26,7 +26,7 @@
 		
 		<cfif Trim(FORM.qpa_PlaceholderContent) NEQ "">
 			<!--- CREATE CONTENT ITEM --->
-			<cfset ThisContent=CreateObject("component","//com/ContentManager/Content")>
+			<cfset ThisContent=CreateObject("component","com.ContentManager.Content")>
 			<cfset ThisContent.Constructor()>
 			<cfset ThisContent.SetProperty("CategoryID",MyCategoryID)>
 			<cfset ThisContent.SetProperty("ContentName","Place Holder Content")>
@@ -36,7 +36,7 @@
 			<cfset thisContentID = ThisContent.GetProperty("ContentID")>
 			
 			<!--- CREATE CONTENTLOCALE --->
-			<cfset ThisContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+			<cfset ThisContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 			<cfset ThisContentLocale.Constructor()>
 			<cfset ThisContentLocale.SetContentPositionID("401")>
 			<cfset ThisContentLocale.SetProperty("ContentID",thisContentID)>
@@ -47,7 +47,7 @@
 		</cfif>
 		
 		<cfif FORM.qpa_NextSiblingID NEQ "">
-			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
 				method="SetLocationAboveSibling"
 				CategoryID="#MyCategoryID#"
 				SiblingID="#FORM.qpa_NextSiblingID#"

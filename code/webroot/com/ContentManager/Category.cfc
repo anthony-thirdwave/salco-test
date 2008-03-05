@@ -385,7 +385,7 @@
 			</cfif>
 			
 			<cfif ThisCategoryAlias IS "">
-				<cfinvoke component="/com/ContentManager/CategoryHandler" 
+				<cfinvoke component="com.ContentManager.CategoryHandler" 
 					method="CreateAlias"
 					Name="#thisCategoryName#"
 					CategoryID="#Val(ThisCategoryID)#"
@@ -531,7 +531,7 @@
 						</cfif>
 					</cfloop>
 				</cfif>
-				<cfinvoke component="/com/ContentManager/CategoryHandler" method="GenerateDisplayOrderString" 
+				<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
 					returnVariable="Success"
 					SourceParentID="#Val(this.GetProperty('ParentID'))#"
 					datasource="#APPLICATION.DSN#">
@@ -547,14 +547,14 @@
 						 <cfqueryparam value="#Trim(ThisDisplayOrder)#" cfsqltype="cf_sql_varchar">
 						)
 					</cfquery>
-					<cfinvoke component="/com/ContentManager/CategoryLocaleHandler" method="GenerateDisplayOrderString" 
+					<cfinvoke component="com.ContentManager.CategoryLocaleHandler" method="GenerateDisplayOrderString" 
 						returnVariable="Success"
 						SourceParentID="#Val(this.GetProperty('ParentID'))#"
 						datasource="#APPLICATION.DSN#"
 						LocaleID="#LocaleID#">
 				</cfoutput>
 				<cfif Val(ARGUMENTS.UserID) GT "0">
-					<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+					<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 						UserID="#ARGUMENTS.UserID#"
 						Entity="Category"
 						KeyID="#ThisCategoryID#"
@@ -613,12 +613,12 @@
 					<cfquery name="getCommonCategoryID" datasource="#APPLICATION.DSN#" maxrows="1">
 						select CategoryID from T_Category Where CategoryID IN (<cfqueryparam value="#CommonIDLIst#" cfsqltype="cf_sql_integer" list="yes">) order by DisplayLevel Desc
 					</cfquery>
-					<cfinvoke component="/com/ContentManager/CategoryHandler" method="GenerateDisplayOrderString" 
+					<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
 						returnVariable="Success"
 						SourceParentID="#Val(getCommonCategoryID.CategoryID)#"
 						datasource="#APPLICATION.DSN#">updated #getCommonCategoryID.CategoryID# tree
 					<cfoutput query="GetLocales">
-						<cfinvoke component="/com/ContentManager/CategoryLocaleHandler" method="GenerateDisplayOrderString" 
+						<cfinvoke component="com.ContentManager.CategoryLocaleHandler" method="GenerateDisplayOrderString" 
 							returnVariable="Success"
 							SourceParentID="#Val(this.GetProperty('ParentID'))#"
 							datasource="#APPLICATION.DSN#"
@@ -626,7 +626,7 @@
 					</cfoutput>
 				</cfif>
 				<cfif Val(ARGUMENTS.UserID) GT "0">
-					<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+					<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 						UserID="#ARGUMENTS.UserID#"
 						Entity="Category"
 						KeyID="#ThisCategoryID#"
@@ -712,7 +712,7 @@
 				</cfoutput>
 			</cfif>
 			
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Category"
 				KeyID="#thisCategoryID#">
 				
@@ -795,7 +795,7 @@
 					<cfreturn false>
 				</cfif>
 				<cfif ARGUMENTS.Value IS NOT "">
-					<cfinvoke component="/com/ContentManager/CategoryHandler" 
+					<cfinvoke component="com.ContentManager.CategoryHandler" 
 						method="CheckDuplicateAlias"
 						CandidateAlias="#Trim(ARGUMENTS.Value)#"
 						CategoryID="#this.GetProperty('CategoryID')#"
@@ -814,7 +814,7 @@
 				<cfif Val(ARGUMENTS.Value) GT "0">
 					<cfswitch expression="#ARGUMENTS.Property#">
 						<cfcase value="ParentID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Category">
 								<cfinvokeargument name="FieldName" value="CategoryID">
@@ -828,7 +828,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="ProductProgramTypeID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Category">
 								<cfinvokeargument name="FieldName" value="CategoryID">
@@ -842,7 +842,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="CategoryTypeID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -856,7 +856,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="WorkflowStatusID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -870,7 +870,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="ArticleSourceID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -884,7 +884,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="ProductBrandLogoID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -898,7 +898,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="ProductConsoleTypeID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -912,7 +912,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="ColorID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -964,7 +964,7 @@
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		
-		<cfinvoke component="/com/ContentManager/CategoryHandler"
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="CreateResourcePath"
 			returnVariable="ReturnValue"
 			CategoryID="#this.GetProperty('CategoryID')#"
@@ -978,7 +978,7 @@
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		
-		<cfinvoke component="/com/ContentManager/CategoryHandler"
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetResourcePath"
 			returnVariable="ReturnValue"
 			CategoryID="#this.GetProperty('CategoryID')#"
@@ -993,7 +993,7 @@
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		
-		<cfinvoke component="/com/ContentManager/CategoryHandler"
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetResourceFilePath"
 			returnVariable="ReturnValue"
 			CategoryID="#this.GetProperty('CategoryID')#"
@@ -1074,7 +1074,7 @@
 		<cfset var ReturnString = "">
 		<cfset var Test = "">
 		
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_Label">
 			<cfinvokeargument name="FieldName" value="LabelID">
@@ -1247,7 +1247,7 @@
 			<cfquery name="SelectCategory" datasource="#APPLICATION.DSN#">
 				SELECT * FROM t_Category WHERE CategoryID IN (<cfqueryparam value="#branch#" cfsqltype="cf_sql_integer" list="yes">)
 			</cfquery>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#this.GetProperty('CategoryID')#">
@@ -1257,7 +1257,7 @@
 					select CategoryLocaleID from t_CategoryLocale Where CategoryID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfoutput query="GetLocale">
-					<cfset MyCategoryLocale=CreateObject("component","//com/ContentManager/CategoryLocale")>
+					<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 					<cfset MyCategoryLocale.Constructor(Val(CategoryLocaleID))>
 					<cfset MyCategoryLocale.Delete(ARGUMENTS.TrashPath,ARGUMENTS.UserID)>
 				</cfoutput>
@@ -1312,7 +1312,7 @@
 			</cftransaction>
 			
 			<cfif Val(ARGUMENTS.UserID) GT "0">
-				<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+				<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 					UserID="#ARGUMENTS.UserID#"
 					Entity="Category"
 					KeyID="#this.GetProperty('CategoryID')#"
@@ -1480,7 +1480,7 @@
 		<cfset var success = "">
 		<cfset var SaveResults = "">
 		
-		<cfinvoke component="/com/ContentManager/CategoryHandler" 
+		<cfinvoke component="com.ContentManager.CategoryHandler" 
 			method="GetProductionSiteInformation"
 			returnVariable="sProductionSiteInformation"
 			CategoryID="#this.GetProperty('CategoryID')#">
@@ -1493,7 +1493,7 @@
 				SELECT * FROM t_Category Where ParentID=<cfqueryparam value="#ThisParentID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			
-			<cfinvoke component="/com/PostToProduction/postToProduction" method="postLive">
+			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisCategoryID#">
 			     <cfinvokeargument name="columnList" value="CategoryID">
 			     <cfinvokeargument name="tableName" value="t_Category">
@@ -1570,7 +1570,7 @@
 				
 			<!--- Create the directories on the production server --->
 			<!--- Open connection to the ftp server --->
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="CreateRemoteFolders" returnVariable="success"
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="CreateRemoteFolders" returnVariable="success"
 				CategoryID="#ThisCategoryID#"
 				FTPHost="#sProductionSiteInformation.ProductionFTPHost#"
 				FTPRootPath="#sProductionSiteInformation.ProductionFTPRootPath#"
@@ -1578,14 +1578,14 @@
 				FTPPassword="#sProductionSiteInformation.ProductionFTPPassword#">
 			
 			
-			<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#ARGUMENTS.UserID#"
 				Entity="Category"
 				KeyID="#ThisCategoryID#"
 				Operation="savelive"
 				EntityName="#this.GetProperty('CategoryName')#">
 				
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GenerateDisplayOrderString" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
 				returnVariable="Success"
 				SourceParentID="#Val(this.GetProperty('ParentID'))#"
 				datasource="#sProductionSiteInformation.ProductionDBDSN#">

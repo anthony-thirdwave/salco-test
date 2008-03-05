@@ -136,7 +136,7 @@
 				<cfif Val(ARGUMENTS.Value) GT "0">
 					<cfswitch expression="#ARGUMENTS.Property#">
 						<cfcase value="ContentID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Content">
 								<cfinvokeargument name="FieldName" value="ContentID">
@@ -181,7 +181,7 @@
 		<cfset var ReturnString = "">
 		<cfset var Test = "">
 		
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_User">
 			<cfinvokeargument name="FieldName" value="UserID">

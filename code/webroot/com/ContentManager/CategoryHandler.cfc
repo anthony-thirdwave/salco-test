@@ -32,7 +32,7 @@
 	<cfset CandidateAlias=lcase(ReReplace(CandidateAlias,"[ ]"," ","all"))>
 	<cfset CandidateAlias=lcase(ReReplace(CandidateAlias,"[ ]","-","all"))>
 	
-	<cfinvoke component="/com/ContentManager/CategoryHandler" 
+	<cfinvoke component="com.ContentManager.CategoryHandler" 
 		method="CheckDuplicateAlias"
 		CandidateAlias="#Trim(CandidateAlias)#"
 		CategoryID="#Val(ARGUMENTS.CategoryID)#"
@@ -193,7 +193,7 @@
 				WHERE CategoryID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfoutput>
-		<cfinvoke component="/com/ContentManager/CategoryHandler" method="GenerateDisplayOrderString" 
+		<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
 			returnVariable="Success"
 			SourceParentID="#Val(GetParentID.ParentID)#"
 			datasource="#APPLICATION.DSN#">
@@ -529,7 +529,7 @@
 				</cfquery>
 			</cfoutput>
 			
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GenerateDisplayOrderString" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
 				returnVariable="Success"
 				SourceParentID="#thisParentID#"
 				datasource="#APPLICATION.DSN#">
@@ -570,7 +570,7 @@
 					AND LocaleID = <cfqueryparam value="#getLocales.thisLocaleID[getLocales.CurrentRow]#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfloop>
-			<cfinvoke component="/com/ContentManager/CategoryLocaleHandler" method="GenerateDisplayOrderString" 
+			<cfinvoke component="com.ContentManager.CategoryLocaleHandler" method="GenerateDisplayOrderString" 
 				returnVariable="Success"
 				SourceParentID="#thisParentID#"
 				LocaleID="#thisLocaleID#"

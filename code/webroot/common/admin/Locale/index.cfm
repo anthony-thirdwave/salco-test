@@ -71,7 +71,7 @@
 	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | Search">
 
 
-	<cfobject component="/com/ContentManager/LocaleHandler" name="myLocaleHandler">
+	<cfobject component="com.ContentManager.LocaleHandler" name="myLocaleHandler">
 	
 	<cfinvoke component="#myLocaleHandler#" method="getLocaleById" returnvariable="yo">
 		<cfinvokeargument name="localeId" value="1"> 

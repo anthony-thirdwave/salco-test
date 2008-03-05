@@ -16,7 +16,7 @@
 	</cfswitch>
 </cfif>
 
-<cfset MyCategory=CreateObject("component","//com/ContentManager/Category")>
+<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
 <cfset MyCategory.Constructor(Val(ATTRIBUTES.CurrentCategoryID))>
 
 <cfset lErrors="">

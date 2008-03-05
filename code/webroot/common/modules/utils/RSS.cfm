@@ -3,7 +3,7 @@
 <cfif ATTRIBUTES.File IS NOT "" AND FileExists(ATTRIBUTES.File)>
 	<cffile action="READ" file="#ATTRIBUTES.File#" variable="RSSContent">
 	<cfif 0>
-		<cfinvoke component="/com/utils/rss"
+		<cfinvoke component="com.utils.rss"
 			method="ParseRSSDescription"
 			returnVariable="qRSS"
 			RSSXML="#RSSContent#">
@@ -11,7 +11,7 @@
 			<p class="RSSTitle">#Title#</p>
 		</cfoutput>
 	</cfif>
-	<cfinvoke component="/com/utils/rss"
+	<cfinvoke component="com.utils.rss"
 		method="ParseRSSItems"
 		returnVariable="qRSS"
 		RSSXML="#RSSContent#">

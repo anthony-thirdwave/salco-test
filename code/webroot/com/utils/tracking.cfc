@@ -16,7 +16,7 @@
 		</cfif>
 		
 		<cfif 0><!--- Skip test --->
-			<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+			<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 				<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 				<cfinvokeargument name="TableName" value="t_User">
 				<cfinvokeargument name="FieldName" value="UserID">
@@ -30,7 +30,7 @@
 		</cfif>
 		
 		<cfif ARGUMENTS.Operation IS NOT "delete">
-			<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+			<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 				<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 				<cfinvokeargument name="TableName" value="t_#ARGUMENTS.Entity#">
 				<cfinvokeargument name="FieldName" value="#ARGUMENTS.Entity#ID">
@@ -43,7 +43,7 @@
 			</cfif>
 		</cfif>
 
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qOperation">
+		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qOperation">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_label">
 			<cfinvokeargument name="FieldName" value="LabelCode">

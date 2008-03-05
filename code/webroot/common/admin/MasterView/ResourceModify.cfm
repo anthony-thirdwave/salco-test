@@ -41,17 +41,17 @@
 </cfif>
 <cfset lid=Encrypt(EditLocaleID,APPLICATION.Key)>
 <cfif EditCategoryID GT "0">
-	<cfinvoke component="/com/ContentManager/CategoryHandler" 
+	<cfinvoke component="com.ContentManager.CategoryHandler" 
 		method="GetCategoryLocaleID" 
 		returnVariable="EditCategoryLocaleID"
 		CategoryID="#EditCategoryID#"
 		LocaleID="#EditLocaleID#">
-	<cfinvoke component="/com/ContentManager/ResourceHandler" 
+	<cfinvoke component="com.ContentManager.ResourceHandler" 
 		method="GetLastVersionContentID" 
 		returnVariable="EditContentID"
 		ResourceID="#EditCategoryID#"
 		LocaleID="#EditLocaleID#">
-	<cfinvoke component="/com/ContentManager/ContentHandler" 
+	<cfinvoke component="com.ContentManager.ContentHandler" 
 		method="GetContentLocaleID" 
 		returnVariable="EditContentLocaleID"
 		ContentID="#EditContentID#"
@@ -67,7 +67,7 @@
 	<cfparam name="FORM.Delete#ThisImage#" default="0">
 </cfloop>
 
-<cfset MyCategory=CreateObject("component","//com/ContentManager/Category")>
+<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
 <cfset MyCategory.Constructor(Val(EditCategoryID))>
 <!--- Standard set parameters --->
 <cfset MyCategory.SetProperty("Active",1)>
@@ -76,7 +76,7 @@
 <cfset MyCategory.SetProperty("ParentID",392)>
 <cfset MyCategory.SetProperty("TemplateID",1500)>
 
-<cfset MyCategoryLocale=CreateObject("component","//com/ContentManager/CategoryLocale")>
+<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 <cfset MyCategoryLocale.Constructor(Val(EditCategoryLocaleID))>
 <cfif Val(EditCategoryLocaleID) LTE "0">
 	<cfset MyCategoryLocale.SetProperty("LocaleID",EditLocaleID)>
@@ -85,7 +85,7 @@
 <cfset MyCategoryLocale.SetProperty("DefaultCategoryLocale",1)>
 <cfset MyCategoryLocale.SetProperty("CategoryLocaleActive",1)>
 
-<cfset MyContent=CreateObject("component","//com/ContentManager/Content")>
+<cfset MyContent=CreateObject("component","com.ContentManager.Content")>
 <cfset MyContent.Constructor(Val(EditContentID))>
 <cfset MyContent.SetProperty("CategoryID",MyCategory.GetProperty("CategoryID"))>
 <cfset MyContent.SetProperty("ContentName","#MyCategory.GetProperty('CategoryName')#  v#REQUEST.OutputVersion(MyCategory.GetProperty('MajorVersion'),MyCategory.GetProperty('MinorVersion'))#")>
@@ -94,7 +94,7 @@
 <cfset MyContent.SetProperty("Active",1)>
 <cfset MyContent.SetProperty("ContentPositionID",402)>
 
-<cfset MyContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 <cfset MyContentLocale.Constructor(Val(EditContentLocaleID))>
 <cfif Val(EditContentLocaleID) LTE "0">
 	<cfset MyContentLocale.SetProperty("ContentID",EditContentID)>
@@ -164,21 +164,21 @@
 
 <cfswitch expression="#Trim(PageAction)#">
 	<cfcase value="AttachDetach">
-		<cfinvoke component="/com/ContentManager/ResourceHandler" 
+		<cfinvoke component="com.ContentManager.ResourceHandler" 
 			method="GetResourceLinkContentID"
 			returnVariable="ResourceLinkContentID"
 			CategoryID="#EditAttachCategoryID#"
 			ResourceID="#EditCategoryID#">
 		<cfif Val(ResourceLinkContentID) GT "0">
 			<!--- A link exists, delete it --->
-			<cfset MyContent=CreateObject("component","//com/ContentManager/Content")>
+			<cfset MyContent=CreateObject("component","com.ContentManager.Content")>
 			<cfset MyContent.Constructor(Val(ResourceLinkContentID))>
 			<cfset MyContent.Delete(APPLICATION.TrashPath)>
 		<cfelse>
 			<!--- No link exists, create it --->
-			<cfset MyContent=CreateObject("component","//com/ContentManager/Content")>
+			<cfset MyContent=CreateObject("component","com.ContentManager.Content")>
 			<cfset MyContent.Constructor(-1)>
-			<cfset MyContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+			<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 			<cfset MyContentLocale.Constructor(-1)>
 			
 			<cfset MyContent.SetProperty("ContentTypeID",APPLICATION.ResourceLinkContentTypeID)>
@@ -282,7 +282,7 @@
 			</cfif>
 			<cfset MyCategory.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 			<cfif ListFindNoCase("SaveMajor",SaveType) OR PageAction IS "ValidateAdd">
-				<cfinvoke component="/com/utils/tracking" 
+				<cfinvoke component="com.utils.tracking" 
 					method="track"
 					returnVariable="success"
 					UserID="#SESSION.AdminUserID#"
@@ -299,21 +299,21 @@
 			<cfset MyContentLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 			
 			<!--- Handling Detachment of a Related Page --->
-			<cfinvoke component="/com/ContentManager/ResourceHandler" method="GetResourceRelatedCategory" returnVariable="qRelatedPages">
+			<cfinvoke component="com.ContentManager.ResourceHandler" method="GetResourceRelatedCategory" returnVariable="qRelatedPages">
 				<cfinvokeargument name="ResourceID" value="#MyCategory.GetProperty('CategoryID')#">
 			</cfinvoke>
 			
 			<cfoutput query="qRelatedPages">
 				<cfparam name="Detach_#REQUEST.SimpleEncrypt(RelatedCategoryID)#" default="0">
 				<cfif Evaluate("Detach_#REQUEST.SimpleEncrypt(RelatedCategoryID)#")>
-					<cfinvoke component="/com/ContentManager/ResourceHandler" 
+					<cfinvoke componencom.ContentManager.ResourceHandlerer" 
 						method="GetResourceLinkContentID"
 						returnVariable="ResourceLinkContentID"
 						CategoryID="#RelatedCategoryID#"
 						ResourceID="#MyCategory.GetProperty('CategoryID')#">
 					<cfif Val(ResourceLinkContentID) GT "0">
 						<!--- A link exists, delete it --->
-						<cfset DeleteContent=CreateObject("component","//com/ContentManager/Content")>
+						<cfset DeleteContent=CreateObject("component","com.ContentManager.Content")>
 						<cfset DeleteContent.Constructor(Val(ResourceLinkContentID))>
 						<cfset DeleteContent.Delete(APPLICATION.TrashPath)>
 					</cfif>
@@ -321,18 +321,18 @@
 			</cfoutput>
 			
 			<!--- Handle Permissions --->
-			<cfinvoke component="/com/ContentManager/ResourceHandler" 
+			<cfinvoke componencom.ContentManager.ResourceHandlerler" 
 				method="ClearFrontEndPermissions"
 				returnVariable="Success"
 				ResourceID="#MyCategory.GetProperty('CategoryID')#">
 			<cfif FEPermissions IS "Public">
-				<cfinvoke component="/com/ContentManager/ResourceHandler" 
+				<cfinvoke componencom.ContentManager.ResourceHandlerler" 
 					method="SetFrontEndPermissions"
 					returnVariable="Success"
 					lUserGroupID="1900"
 					ResourceID="#MyCategory.GetProperty('CategoryID')#">
 			<cfelse>
-				<cfinvoke component="/com/ContentManager/ResourceHandler" 
+				<cfinvoke componencom.ContentManager.ResourceHandlerler" 
 					method="SetFrontEndPermissions"
 					returnVariable="Success"
 					lUserGroupID="#FrontEndUserGroupID#"

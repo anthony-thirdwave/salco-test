@@ -16,7 +16,7 @@
 	<cfset UseActiveEdit="Yes">
 </cfif>
 <!--- Determine Domains --->
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qLocale">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qLocale">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Locale">
 	<cfinvokeargument name="FieldName" value="LocaleID">
@@ -26,7 +26,7 @@
 </cfinvoke>
 <cfset Restrictions=MyContentLocale.GetRestrictionsPropertyList()>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qTitleType">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qTitleType">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -59,7 +59,7 @@
 			Required="N">
 	<cfelse>
 		<cfif MyContentLocale.GetProperty("ContentLocaleName") IS "">
-			<cfinvoke component="/com/ContentManager/ContentHandler" 
+			<cfinvoke component="com.ContentManager.ContentHandler" 
 				method="GetContentName" 
 				returnVariable="ThisContentName"
 				ContentID="#MyContentLocale.GetProperty('ContentID')#">
@@ -344,7 +344,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"ShowEventRangeID")>
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qShowEventRangeID">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qShowEventRangeID">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">

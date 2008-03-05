@@ -435,7 +435,7 @@
 			<cfset thisTitleTypeID=this.GetProperty("TitleTypeID")>
 			
 			
-			<cfinvoke component="/com/ContentManager/ContentHandler" 
+			<cfinvoke component="com.ContentManager.ContentHandler" 
 				method="GetContentName" 
 				returnVariable="ThisContentName"
 				ContentID="#this.GetProperty('ContentID')#">
@@ -585,7 +585,7 @@
 						</cfif>
 					</cfloop>
 					<cfif Val(ARGUMENTS.UserID) GT "0">
-						<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+						<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 							UserID="#ARGUMENTS.UserID#"
 							Entity="ContentLocale"
 							KeyID="#thisContentLocaleID#"
@@ -620,7 +620,7 @@
 					WHERE ContentLocaleID=<cfqueryparam value="#val(ThisContentLocaleID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfif Val(ARGUMENTS.UserID) GT "0">
-					<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+					<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 						UserID="#ARGUMENTS.UserID#"
 						Entity="ContentLocale"
 						KeyID="#thisContentLocaleID#"
@@ -649,7 +649,7 @@
 			
 			<!--- create the thumbnail --->
 			<cfif ThisImage IS NOT "" and ThisImageThumbnail IS "">
-				<cfinvoke component="/com/utils/image" method="Resize" returnVariable="ThisImageThumbnail"
+				<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImageThumbnail"
 					WebrootPath="#ARGUMENTS.WebrootPath#"
 					Source="#ThisImage#"
 					Width="75">
@@ -759,7 +759,7 @@
 			</cfquery>
 			
 			<cfif GetLocales.RecordCount IS NOT TestContentLocaleMeta.RecordCount>
-				<cfinvoke component="/com/ContentManager/ContentHandler" method="GetCategoryID" returnVariable="ThisCategoryID"
+				<cfinvoke component="com.ContentManager.ContentHandler" method="GetCategoryID" returnVariable="ThisCategoryID"
 					ContentID="#ThisContentID#">
 				<cfoutput query="GetLocales">
 					<cfquery name="TestThisContentLocaleMeta" datasource="#APPLICATION.DSN#">
@@ -792,7 +792,7 @@
 				</cfoutput>
 			</cfif>
 			
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Content"
 				KeyID="#thisContentID#">
 				
@@ -884,7 +884,7 @@
 				<cfif Val(ARGUMENTS.Value) GT "0">
 					<cfswitch expression="#ARGUMENTS.Property#">
 						<cfcase value="ContentID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Content">
 								<cfinvokeargument name="FieldName" value="ContentID">
@@ -898,7 +898,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="LocaleID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Locale">
 								<cfinvokeargument name="FieldName" value="LocaleID">
@@ -912,7 +912,7 @@
 							</cfif>
 						</cfcase>
 						<cfcase value="TitleTypeID">
-							<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+							<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 								<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 								<cfinvokeargument name="TableName" value="t_Label">
 								<cfinvokeargument name="FieldName" value="LabelGroupID,LabelID">
@@ -1073,7 +1073,7 @@
 		<!--- init variables --->
 		<cfset var ThisTokenList = "">
 		
-		<cfinvoke component="/com/ContentManager/ContentHandler" 
+		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetTokenList" 
 			returnVariable="ThisTokenList"
 			ContentID="#Val(GetContentTemplateID())#"
@@ -1168,7 +1168,7 @@
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		
-		<cfinvoke component="/com/ContentManager/ContentHandler"
+		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="CreateResourcePath"
 			returnVariable="ReturnValue"
 			ContentID="#this.GetProperty('ContentID')#"
@@ -1182,7 +1182,7 @@
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		
-		<cfinvoke component="/com/ContentManager/ContentHandler"
+		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourcePath"
 			returnVariable="ReturnValue"
 			ContentID="#this.GetProperty('ContentID')#"
@@ -1197,7 +1197,7 @@
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		
-		<cfinvoke component="/com/ContentManager/ContentHandler"
+		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourceFilePath"
 			returnVariable="ReturnValue"
 			ContentID="#this.GetProperty('ContentID')#"
@@ -1396,7 +1396,7 @@
 	<cffunction name="GetDisplayTemplateTypeName" returnType="String" output="false">
 		<cfset var ReturnString = "">
 		<cfset var Test = "">
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_Label">
 			<cfinvokeargument name="FieldName" value="LabelID">
@@ -1502,12 +1502,12 @@
 					</cfif>
 				</cfif>
 			</cftransaction>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Content"
 				KeyID="#thisContentID#">
 			
 			<cfif Val(ARGUMENTS.UserID) GT "0">
-				<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+				<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 					UserID="#ARGUMENTS.UserID#"
 					Entity="ContentLocale"
 					KeyID="#this.GetProperty('ContentLocaleID')#"
@@ -1515,12 +1515,12 @@
 					EntityName="#this.GetProperty('ContentLocaleName')#">
 			</cfif>
 			
-			<cfinvoke component="/com/ContentManager/ContentHandler" 
+			<cfinvoke component="com.ContentManager.ContentHandler" 
 				method="GetCategoryID"
 				returnVariable="ThisCategoryID"
 				ContentID="#this.GetProperty('ContentID')#">
 				
-			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#ThisCategoryID#">
@@ -1601,12 +1601,12 @@
 		<cfset var success = "">
 		<cfset var SaveResults = "">
 		
-		<cfinvoke component="/com/ContentManager/ContentHandler" 
+		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetCategoryID"
 			returnVariable="ThisCategoryID"
 			ContentID="#this.GetProperty('ContentID')#">
 			
-		<cfinvoke component="/com/ContentManager/CategoryHandler" 
+		<cfinvoke component="com.ContentManager.CategoryHandler" 
 			method="GetProductionSiteInformation"
 			returnVariable="sProductionSiteInformation"
 			CategoryID="#ThisCategoryID#">
@@ -1618,7 +1618,7 @@
 			<cfset ThisLocaleID=this.GetProperty("LocaleID")>
 			
 		
-			<cfinvoke component="/com/PostToProduction/postToProduction" method="postLive">
+			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisContentLocaleID#">
 			     <cfinvokeargument name="columnList" value="ContentLocaleID">
 			     <cfinvokeargument name="tableName" value="t_ContentLocale">
@@ -1629,7 +1629,7 @@
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
 			
-			<cfinvoke component="/com/PostToProduction/postToProduction" method="postLive">
+			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisContentID#,#ThisLocaleID#">
 			     <cfinvokeargument name="columnList" value="ContentID,LocaleID">
 			     <cfinvokeargument name="tableName" value="t_ContentLocaleMeta">
@@ -1664,7 +1664,7 @@
 			<!--- Open connection to the ftp server --->
 			
 
-			<cfinvoke component="/com/ContentManager/ContentHandler" method="CreateRemoteFolders" returnVariable="success"
+			<cfinvoke component="com.ContentManager.ContentHandler" method="CreateRemoteFolders" returnVariable="success"
 				ContentID="#ThisContentID#"
 				FTPHost="#sProductionSiteInformation.ProductionFTPHost#"
 				FTPRootPath="#sProductionSiteInformation.ProductionFTPRootPath#"
@@ -1692,7 +1692,7 @@
 				</cfloop>
 			</cfif>
 			
-			<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#ARGUMENTS.UserID#"
 				Entity="ContentLocale"
 				KeyID="#ThisContentLocaleID#"

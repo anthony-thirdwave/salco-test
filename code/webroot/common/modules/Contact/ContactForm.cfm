@@ -146,7 +146,7 @@ Message:
 	<td align="left" valign="top"></td>
 	<td><img src="/common/images/spacer.gif" width="20" height="1"></td>
 	<td align="left" valign="top"><cfscript>
-	captcha = createObject("component", "/com/utils/Captcha").init();
+	captcha = createObject("component", "com.utils.Captcha").init();
 	captcha.captchaToFile("#APPLICATION.WebrootPath#common/images/captcha/captcha.jpg","#thisWord#",200,50,30,10,35,45,60);
 </cfscript><img src="/common/images/captcha/captcha.jpg"></td>
 </tr>

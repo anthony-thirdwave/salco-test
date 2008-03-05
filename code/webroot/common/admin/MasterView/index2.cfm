@@ -118,20 +118,20 @@
 		
 		<TR>
 		<TD bgcolor="bac0c9"><b>Created</b></TD><td bgcolor="eaeaea" colspan="3">
-			<cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+			<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 				Entity="Category"
 				KeyID="#CategoryID#"
 				Operation="create">[ #ReturnString# ]
 		</TD>
 		</TR>
 		<TR>
-		<TD bgcolor="bac0c9"><b>Last Updated</b></TD><td bgcolor="eaeaea" colspan="3"><cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+		<TD bgcolor="bac0c9"><b>Last Updated</b></TD><td bgcolor="eaeaea" colspan="3"><cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 				Entity="Category"
 				KeyID="#CategoryID#"
 				Operation="modify">[ #ReturnString# ]</TD>
 		</TR>
 		<TR>
-		<TD bgcolor="bac0c9"><b>Last Saved Live</b></TD><td bgcolor="eaeaea" colspan="3"><cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+		<TD bgcolor="bac0c9"><b>Last Saved Live</b></TD><td bgcolor="eaeaea" colspan="3"><cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 				Entity="Category"
 				KeyID="#CategoryID#"
 				Operation="savelive">[ #ReturnString# ]</TD>

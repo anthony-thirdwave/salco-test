@@ -1,7 +1,7 @@
 <cfsilent>
 	<!--- This page is called via cfhttp as a workaround to the <, issue --->
 	<cftry>
-		<cfinvoke component="/com/utils/image" method="Resize" returnVariable="ThisImageThumbnail"
+		<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImageThumbnail"
 			WebrootPath="#URL.WebrootPath#"
 			Source="#URL.Source#"
 			Width="#URL.Width#">

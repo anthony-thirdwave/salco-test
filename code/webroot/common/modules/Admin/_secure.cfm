@@ -12,7 +12,7 @@
 		<cfset SESSION.AdminUserLogin = FORM.TryUserLogin>
 		<cfset SESSION.AdminUserPassword = FORM.TryUserPassword>
 	</cflock>
-	<cfinvoke component="/com/utils/security" method="Authenticate" returnVariable="qUser">
+	<cfinvoke component="com.utils.security" method="Authenticate" returnVariable="qUser">
 		<cfinvokeargument name="username" value="#Trim(SESSION.AdminUserLogin)#">
 		<cfinvokeargument name="password" value="#trim(SESSION.AdminUserPassword)#">
 	</cfinvoke>
@@ -26,20 +26,20 @@
 	</cfif>
 <!--- Subsequent access to other pages ---->
 <CFELSEIF IsDefined("SESSION.AdminUserLogin") IS "YES" AND IsDefined("SESSION.AdminUserPassword") IS "YES" and SESSION.AdminUserPassword IS NOT "">
-	<cfinvoke component="/com/utils/security" method="Authenticate" returnVariable="qUser">
+	<cfinvoke component="com.utils.security" method="Authenticate" returnVariable="qUser">
 		<cfinvokeargument name="username" value="#Trim(SESSION.AdminUserLogin)#">
 		<cfinvokeargument name="password" value="#trim(SESSION.AdminUserPassword)#">
 	</cfinvoke>
 <cfelse>
 <!--- Try to enter the update portion by not using form --->
-	<cfinvoke component="/com/utils/security" method="GetBlank" returnVariable="qUser">
+	<cfinvoke component="com.utils.security" method="GetBlank" returnVariable="qUser">
 	</cfinvoke>
 </CFIF>
 <cfdump var="#qUser#">
 <cfif qUser.RecordCount IS NOT 0>
 	<CFLOCK TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
 		<cfset SESSION.AdminUserID="#qUser.UserID#">
-		<cfinvoke component="/com/utils/security" 
+		<cfinvoke component="com.utils.security" 
 			method="GetUserGroupID"
 			returnVariable="lUserGroupID"
 			UserID="#Val(SESSION.AdminUserID)#">

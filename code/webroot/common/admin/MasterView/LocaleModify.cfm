@@ -24,7 +24,7 @@
 
 <cfparam name="FORM.LocaleActive" default="0">
 
-<cfset MyLocale=CreateObject("component","//com/ContentManager/Locale")>
+<cfset MyLocale=CreateObject("component","com.ContentManager.Locale")>
 <cfset MyLocale.Constructor(Val(EditLocaleID))>
 <cfif PageAction IS "Add" and val(EditChapterID) GT "0">
 	<cfset MyLocale.SetProperty("ChapterID",EditChapterID)>

@@ -99,7 +99,7 @@
 		<!--- It's best to check the table name to ensure that it actually exists.
 			  Failing that, checking for illegal and potentially hostile characters
 			  should be considered a minimum precaution.  --->
-		<cfinvoke component="/com/utils/Database"
+		<cfinvoke component="com.utils.Database"
 			method="ContainsSpecialSQLChars"
 			returnvariable="TableNameIsBogus">
 			<cfinvokeargument name="Input" value="#Arguments.BaseTable#"/>

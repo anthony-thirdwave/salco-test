@@ -1,4 +1,4 @@
-<cfinvoke component="/com/ContentManager/ContentNoteHandler" 
+<cfinvoke component="com.ContentManager.ContentNoteHandler" 
 	method="GetContentNoteQuery" 
 	returnVariable="qryGetContentNoteQuery"
 	ContentID="#MyContent.GetProperty('ContentID')#">

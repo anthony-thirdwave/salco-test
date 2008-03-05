@@ -49,7 +49,7 @@
 <cfset CategoryIDThreadList=IDList>
 
 <cfif SESSION.AdminUserLocaleID IS "1"><!--- User is admin --->
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qLocale">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qLocale">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Locale">
 		<cfinvokeargument name="FieldName" value="">
@@ -58,7 +58,7 @@
 		<cfinvokeargument name="SortOrder" value="Asc">
 	</cfinvoke>
 <cfelse>
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qLocale">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qLocale">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Locale">
 		<cfinvokeargument name="FieldName" value="LocaleID">

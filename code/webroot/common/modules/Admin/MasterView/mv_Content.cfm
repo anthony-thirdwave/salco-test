@@ -137,7 +137,7 @@
 			</cfif>
 			
 		</cfloop>
-		<cfinvoke component="/com/ContentManager/CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
+		<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 			Lookup="Category"
 			KeyID="#ATTRIBUTES.CurrentCategoryID#">
 	</cftransaction>

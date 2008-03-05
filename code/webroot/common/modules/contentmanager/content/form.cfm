@@ -11,7 +11,7 @@
 	<cfset ContentTypeIDList=ListAppend(ContentTypeIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/ContentManager/CategoryHandler" 
+<cfinvoke component="com.ContentManager.CategoryHandler" 
 	method="GetNavCategoryQuery" 
 	returnVariable="ValidParents">
 <cfset CategoryIDList="">
@@ -26,7 +26,7 @@
 <cfset CategoryIDList=ListPrepend(CategoryIDList,"{-1|None (Top Level)}","^^")>
 
 <cfif ListFindNoCase(Restrictions,"InheritID")>
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qInheritIDList">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qInheritIDList">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -41,7 +41,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"ShowQuestionRangeID")>
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qShowQuestionRangeID">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qShowQuestionRangeID">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -196,7 +196,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"ShowNavigationRangeID")>
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qShowNavigationRangeIDList">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qShowNavigationRangeIDList">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -237,7 +237,7 @@
 			<cfset dspModeReq = "N">
 		</cfdefaultcase>
 	</cfswitch>
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qDisplayModeID">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qDisplayModeID">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -332,7 +332,7 @@
 
 <cfif ListFindNoCase(Restrictions,"SourceID")>
 	<cfif MyContent.GetProperty("ContentTypeID") IS "234"><!--- Templatized Content --->
-		<cfinvoke component="/com/ContentManager/ContentHandler" 
+		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetContentTemplatePicker" 
 			returnVariable="GetContentTemplatePicker">
 		<cfset ContentIDList="">
@@ -362,7 +362,7 @@
 			FormEltJavaScript="onchange=""this.form.submit()"""
 			FormEltStyle="width:200px;">
 	<cfelseif listContains("249,250",MyContent.GetProperty("ContentTypeID"))><!--- Gallery Thumbnanil Navigation and Display --->
-		<cfinvoke component="/com/ContentManager/CategoryHandler" 
+		<cfinvoke component="com.ContentManager.CategoryHandler" 
 			method="GetCategoryPicker" 
 			CategoryTypeID="73"
 			LocaleID="#EditLocaleID#"
@@ -381,7 +381,7 @@
 			Required="Y"
 			FormEltStyle="width:200px;">
 	<cfelse>
-		<cfinvoke component="/com/ContentManager/ContentHandler" 
+		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetContentPicker" 
 			ContentTypeID="#MyContent.GetProperty('ContentTypeID')#" 
 			returnVariable="GetContentPicker"
@@ -415,7 +415,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"lTopicID")>
-	<cfinvoke component="/com/Topic/TopicHandler" method="GetTopicQuery" returnvariable="getTopics">
+	<cfinvoke component="com.Topic.TopicHandler" method="GetTopicQuery" returnvariable="getTopics">
 	<cfset TopicList="">
 	<cfoutput query="getTopics">
 		<cfset TopicList=ListAppend(TopicList,"{#ID#|" & RepeatString("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", level-1) & "-#name#}","^^")>
@@ -438,13 +438,13 @@
 		<TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white">Content ID</TD><TD bgcolor="white">[ #MyContent.GetProperty("ContentID")# ]</TD></TR>
 		<TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white">Current State</TD><TD bgcolor="white">[ <cfif MyContent.GetProperty("ContentActive")>Active<cfelse>Not active</cfif> ]</TD></TR>
 		<TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white">Created</TD><TD bgcolor="white">
-		<cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Content"
 			KeyID="#MyContent.GetProperty("ContentID")#"
 			Operation="create">[ #ReturnString# ]
 		</TD></TR>
 		<TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white">Last modified</TD><TD bgcolor="white">
-		<cfinvoke component="/com/utils/tracking" method="GetTracking" returnVariable="ReturnString"
+		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Content"
 			KeyID="#MyContent.GetProperty("ContentID")#"
 			Operation="modify">[ #ReturnString# ]

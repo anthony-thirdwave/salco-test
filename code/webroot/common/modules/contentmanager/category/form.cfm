@@ -26,7 +26,7 @@
 
 <cfset Restrictions=MyCategory.GetRestrictionsPropertyList()>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qSource">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qSource">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -39,7 +39,7 @@
 	<cfset SourceIDList=ListAppend(SourceIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qBrand">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qBrand">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -52,7 +52,7 @@
 	<cfset BrandIDList=ListAppend(BrandIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qConsole">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qConsole">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -65,7 +65,7 @@
 	<cfset ConsoleIDList=ListAppend(ConsoleIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qTemplate">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qTemplate">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -78,7 +78,7 @@
 	<cfset TemplateIDList=ListAppend(TemplateIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qColorID">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qColorID">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -91,7 +91,7 @@
 	<cfset ColorIDList=ListAppend(ColorIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qProductProgramTypeIDList">
+<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qProductProgramTypeIDList">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_category">
 	<cfinvokeargument name="FieldName" value="ParentID">

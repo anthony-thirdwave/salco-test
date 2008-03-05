@@ -94,7 +94,7 @@
 	<!--- init variables --->
 	<cfset var Test = "">
 	
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -109,7 +109,7 @@
 	<!--- init variables --->
 	<cfset var Test = "">
 	
-	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="Test">
+	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
 		<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -360,16 +360,16 @@
 	<cfset var MyContentLocale = "">
 	<cfset var StringToTest = "">
 	
-	<cfinvoke component="/com/ContentManager/ContentHandler" 
+	<cfinvoke component="com.ContentManager.ContentHandler" 
 		method="GetContentLocaleID" 
 		returnVariable="EditContentLocaleID"
 		ContentID="#Val(ARGUMENTS.ContentID)#"
 		LocaleID="#Val(ARGUMENTS.LocaleID)#">
-	<cfset MyContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+	<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 	<cfset MyContentLocale.Constructor(Val(EditContentLocaleID))>
 
 	<cfset StringToTest=MyContentLocale.GetProperty("HTMLTemplate")>
-	<cfinvoke	component="/com/utils/utils"
+	<cfinvoke	component="com.utils.utils"
 		method="extractByToken"
 		content="#StringToTest#"
 		startToken="[["

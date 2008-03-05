@@ -22,7 +22,7 @@
 			</cfquery>
 		</cfif>
 		<cfoutput query="GetItems" group="CategoryID">
-			<cfset ThisCategoryItem=CreateObject("component","//com/ContentManager/Category")>
+			<cfset ThisCategoryItem=CreateObject("component","com.ContentManager.Category")>
 			<cfset ThisCategoryItem.Constructor(CategoryID)>
 			<cfset ArrayAppend(This.Collection, ThisCategoryItem)>
 		</cfoutput>
@@ -47,7 +47,7 @@
 		<!--- It's best to check the field name to ensure that it actually exists.
 			  Failing that, checking for illegal and potentially hostile characters
 			  should be considered a minimum precaution.  --->
-		<cfinvoke component="/com/utils/Database"
+		<cfinvoke component="com.utils.Database"
 			method="ContainsSpecialSQLChars"
 			returnvariable="FieldNameIsBogus">
 			<cfinvokeargument name="Input" value="#Arguments.FieldName#"/>
@@ -84,7 +84,7 @@
 		<!--- It's best to check the field name to ensure that it actually exists.
 			  Failing that, checking for illegal and potentially hostile characters
 			  should be considered a minimum precaution.  --->
-		<cfinvoke component="/com/utils/Database"
+		<cfinvoke component="com.utils.Database"
 			method="ContainsSpecialSQLChars"
 			returnvariable="FieldNameIsBogus">
 			<cfinvokeargument name="Input" value="#Arguments.FieldName#"/>

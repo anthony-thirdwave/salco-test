@@ -33,7 +33,7 @@
 	<cfset EditLocaleID=Decrypt(URL.lid,APPLICATION.Key)>
 </cfif>
 <cfif EditContentID GT "0">
-	<cfinvoke component="/com/ContentManager/ContentHandler" 
+	<cfinvoke component="com.ContentManager.ContentHandler" 
 		method="GetContentLocaleID" 
 		returnVariable="EditContentLocaleID"
 		ContentID="#EditContentID#"
@@ -53,17 +53,17 @@
 <cfparam name="FORM.DeleteLocaleRecord" default="0">
 <cfparam name="FORM.AllowMultipleRegistrations" default="0">
 
-<cfset MyContent=CreateObject("component","//com/ContentManager/Content")>
+<cfset MyContent=CreateObject("component","com.ContentManager.Content")>
 <cfset MyContent.Constructor(Val(EditContentID))>
-<cfset MyContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 <cfset MyContentLocale.Constructor(Val(EditContentLocaleID))>
 <cfset MyContentLocale.SetProperty("ContentID",EditContentID)>
-<cfset MyContentNote=CreateObject("component","//com/ContentManager/ContentNote")>
+<cfset MyContentNote=CreateObject("component","com.ContentManager.ContentNote")>
 <cfset MyContentNote.Constructor()>
 
 <cfif Right(PageAction,3) IS "Add" and val(EditCategoryID) GT "0">
 	<cfset MyContent.SetProperty("CategoryID",EditCategoryID)>
-	<cfinvoke component="/com/ContentManager/CategoryHandler" 
+	<cfinvoke component="com.ContentManager.CategoryHandler" 
 		method="GetCategoryTypeID" 
 		CategoryID="#EditCategoryID#"
 		returnVariable="ThisCategoryTypeID">
@@ -85,7 +85,7 @@
 
 <cfif IsDefined("FORM.ContentName")>
 	<cfif IsDefined("FORM.ButLoad") and FORM.ButLoad IS "Load">
-		<cfset SourceContentLocale=CreateObject("component","//com/ContentManager/ContentLocale")>
+		<cfset SourceContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 		<cfset SourceContentLocale.Constructor(Val(REQUEST.SimpleDecrypt(lclid)))>
 		
 		<cfloop index="PropertyToCopy" list="ContentID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,lStateProvince,PageActionURL,NumItems,ItemCode,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
@@ -375,7 +375,7 @@
 
 
 <cfif IsDefined("FORM.ButPreview") And Mycontent.isCorrect() and MyContentLocale.isCorrect()>
-	<cfset MyContentPreview=CreateObject("component","//com/ContentManager/Content")>
+	<cfset MyContentPreview=CreateObject("component","com.ContentManager.Content")>
 	<cfset MyContentPreview.Constructor()>
 	<cfloop index="PropertyToCopy" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,SourceID,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,lRelatedCategoryID,InheritID,SourceCategoryID,DisplayModeID">
 		<cfset MyContentPreview.SetProperty("#PropertyToCopy#",MyContent.GetProperty("#PropertyToCopy#"))>
@@ -384,7 +384,7 @@
 	<cfset MyContentPreview.SetProperty("ContentID",-1)>
 	<cfset MyContentPreview.SetProperty("ContentPositionID",403)>
 	<cfset MyContentPreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-	<cfset MyContentLocalePreview=CreateObject("component","//com/ContentManager/ContentLocale")>
+	<cfset MyContentLocalePreview=CreateObject("component","com.ContentManager.ContentLocale")>
 	<cfset MyContentLocalePreview.Constructor()>
 	<cfloop index="PropertyToCopy" list="LocaleID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,sHTML,ImageRollover,Flash,ImageLarge,aFile">
 		<cfset MyContentLocalePreview.SetProperty("#PropertyToCopy#",MyContentLocale.GetProperty("#PropertyToCopy#"))>
@@ -396,7 +396,7 @@
 	<cfset MyContentLocalePreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 	<cfset pcid=REQUEST.SimpleEncrypt(MyContentPreview.GetProperty("ContentID"))>
 	<cfset prcid=REQUEST.SimpleEncrypt(MyContent.GetProperty("ContentID"))>
-	<cfinvoke component="/com/ContentManager/CategoryHandler" 
+	<cfinvoke component="com.ContentManager.CategoryHandler" 
 		method="GetCategoryBasicDetails"
 		CategoryID="#MyContent.GetProperty('CategoryID')#"
 		returnVariable="qGetCategoryBasicDetails">
@@ -434,7 +434,7 @@
 		
 		<cfoutput><input type="hidden" name="PageAction" value="Validate#PageAction#"></cfoutput>
 		<cfif SESSION.AdminCurrentAdminLocaleID IS NOT APPLICATION.DefaultLocaleID and PageAction IS "Edit">
-			<cfinvoke component="/com/ContentManager/ContentHandler" 
+			<cfinvoke component="com.ContentManager.ContentHandler" 
 				method="GetOtherContentLocale" 
 				returnVariable="GetOtherContentLocale"
 				ContentID="#EditContentID#">
@@ -468,7 +468,7 @@
 					<cfif MyContentLocale.GetProperty("LocaleID") IS APPLICATION.DefaultLocaleID>
 						<cfset FormMode="ShowForm">
 					<cfelse>
-						<cfinvoke component="/com/ContentManager/ContentHandler" 
+						<cfinvoke component="com.ContentManager.ContentHandler" 
 							method="GetOtherContentLocale" 
 							returnVariable="GetOtherContentLocale"
 							ContentID="#EditContentID#">
@@ -479,7 +479,7 @@
 						</cfif>
 					</cfif>
 				<cfelse>
-					<cfinvoke component="/com/ContentManager/ContentHandler" 
+					<cfinvoke component="com.ContentManager.ContentHandler" 
 						method="GetOtherContentLocale" 
 						returnVariable="GetOtherContentLocale"
 						ContentID="#EditContentID#">
@@ -638,13 +638,13 @@
 								WHERE		localeID = #SESSION.AdminCurrentAdminLocaleID#
 							</cfquery>
 							<!--- Create a new discussion entry --->
-							<cfinvoke component="/com/discussion/discussionHandler" method="setEntry" returnVariable="entryID">
+							<cfinvoke component="com.discussion.discussionHandler" method="setEntry" returnVariable="entryID">
 								<cfinvokeargument name="Datasource" value="#APPLICATION.mtDSN#"/>
 								<cfinvokeargument name="discussionID" value="#qDiscussionID.MTDefaultDiscussionID#"/>
 								<cfinvokeargument name="title" value="#form.contentName#"/>
 							</cfinvoke>
 							<!--- Attach entry to content --->
-							<cfinvoke component="/com/contentManager/contentHandler" method="attachDiscussionEntry">
+							<cfinvoke component="com.ContentManager.ContentHandler" method="attachDiscussionEntry">
 								<cfinvokeargument name="contentID" value="#MyContent.GetProperty("contentID")#"/>
 								<cfinvokeargument name="entryID" value="#entryID#"/>
 							</cfinvoke>
@@ -666,7 +666,7 @@
 					<cfset MyContentLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 			
 					<!--- do ultraseek indexing
-					<cfinvoke component="/com/UltraSeek/Search" 
+					<cfinvoke component="com.UltraSeek.Search" 
 						method="IndexByCategoryID" 
 						CategoryID="#MyContent.GetProperty('CategoryID')#"/> --->
 					<!--- if neccessary, regenerate rss --->
