@@ -12,7 +12,7 @@
 		<cfquery name="Check" datasource="#APPLICATION.DSN#">
 			select * from t_permissions
 			Where 
-			userGroupID IN (<cfqueryparam value="#ATTRIBUTES.UserGroupID#" cfsqltype="cf_sql_integer" list="yes") AND 
+			userGroupID IN (<cfqueryparam value="#ATTRIBUTES.UserGroupID#" cfsqltype="cf_sql_integer" list="yes">) AND 
 			CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.CategoryID#">
 		</cfquery>
 		<cfoutput query="Check">
