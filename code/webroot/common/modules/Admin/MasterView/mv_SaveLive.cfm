@@ -1,4 +1,4 @@
-<cfparam name="ATTRIBUTES.FormAction" default="#CGI.Path_Info#?#CGI.Query_string#">
+<cfparam name="ATTRIBUTES.FormAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_string#">
 <cfparam name="ATTRIBUTES.ObjectAction" default="List">
 <cfparam name="ATTRIBUTES.sCurrentCategoryPermissions">
 
@@ -176,10 +176,10 @@
 								<br>
 								<cfif dasc NEQ 1>
 									<cfmodule template="/common/modules/utils/addtoquerystring.cfm" QueryString="#cgi.QUERY_STRING#" varname="dasc" Value="1">
-									<a href="#cgi.PATH_INFO#?#QueryString#">display all sub-pages</a>
+									<a href="#CGI.SCRIPT_NAME#?#QueryString#">display all sub-pages</a>
 								<cfelse>
 									<cfmodule template="/common/modules/utils/addtoquerystring.cfm" QueryString="#cgi.QUERY_STRING#" varname="dasc" Value="0">
-									<a href="#cgi.PATH_INFO#?#QueryString#">display only this page</a>		
+									<a href="#CGI.SCRIPT_NAME#?#QueryString#">display only this page</a>		
 								</cfif>
 							</td>
 						</tr>

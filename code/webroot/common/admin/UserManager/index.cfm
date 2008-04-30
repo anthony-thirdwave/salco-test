@@ -13,7 +13,7 @@
 <cfset DevNull=DeleteClientVariable("OrderASC")>
 <cfparam name="OrderBy" default="LastName">
 <cfparam name="OrderAsc" default="1">
-<cfset PathPage=CGI.Path_Info>
+<cfset PathPage=CGI.SCRIPT_NAME>
 <cfset PathQueryString=CGI.Query_String>
 
 <cfset ErrorMessage="">
@@ -29,7 +29,7 @@
 	<cfset DevNull=StructInsert(sStateProvince,StateProvinceID,StateProvinceName,1)>
 </cfoutput>
 
-<cfset PageAction=CGI.Path_Info>
+<cfset PageAction=CGI.SCRIPT_NAME>
 <cfset PageQueryString=CGI.Query_String>
 <cfset sUserGroup=StructNew()>
 

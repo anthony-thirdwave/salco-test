@@ -154,7 +154,7 @@ Browser - #Error.Browser#<br>
 IP Address - #Error.RemoteAddress#<br>
 Referring Page - #Error.HTTPReferer#<br>
 Page - #Error.Template#<br>
-PATH_INFO - #CGI.PATH_INFO#<br>
+PATH_INFO - #CGI.SCRIPT_NAME#<br>
 Query String - #Error.QueryString#<br>
 </p>
 

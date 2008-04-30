@@ -22,7 +22,7 @@
 	<cfelse>
 		<!--- If the login was successfull, cflocation to the correct page so that
 					you don't get the reload form popup when you refresh or hit the back button --->
-		<cflocation url="#cgi.PATH_INFO#?#cgi.QUERY_STRING#" addtoken="no">
+		<cflocation url="#CGI.SCRIPT_NAME#?#cgi.QUERY_STRING#" addtoken="no">
 	</cfif>
 <!--- Subsequent access to other pages ---->
 <CFELSEIF IsDefined("SESSION.AdminUserLogin") IS "YES" AND IsDefined("SESSION.AdminUserPassword") IS "YES" and SESSION.AdminUserPassword IS NOT "">

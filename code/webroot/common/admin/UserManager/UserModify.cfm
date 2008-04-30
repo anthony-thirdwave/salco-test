@@ -11,7 +11,7 @@
 		<cfcatch></cfcatch>
 	</cftry>
 </cfif>
-<cfparam name="ATTRIBUTES.PageAction" default="#CGI.Path_Info#?#CGI.Query_String#">
+<cfparam name="ATTRIBUTES.PageAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_String#">
 <cfset PageActionTemplate=GetToken(ATTRIBUTES.PageAction,1,"?")>
 <cfset PageActionQueryString=GetToken(ATTRIBUTES.PageAction,2,"?")>
 

@@ -1,6 +1,6 @@
 <cfset ElementCount = 0>
 <cfset StartTickCount=GetTickCount()>
-<cfparam name="ATTRIBUTES.FormAction" default="#CGI.Path_Info#?#CGI.Query_string#">
+<cfparam name="ATTRIBUTES.FormAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_string#">
 <cfparam name="ATTRIBUTES.ObjectAction" default="List">
 <cfparam name="ATTRIBUTES.sCurrentCategoryPermissions">
 <cfparam name="ATTRIBUTES.ObjectMode" default="ThreeColumn">
