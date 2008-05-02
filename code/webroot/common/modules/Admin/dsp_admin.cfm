@@ -40,7 +40,7 @@
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<TR bgcolor="33393C" height="41">
 			<TD width="42"  class="border1" style="width:41px;">&nbsp;</TD>
-			<TD width="95" class="border1">&nbsp;<img src="/common/images/admin/company_box_logo.gif" style="position:absolute;top:10px;left:52px;"></TD>
+			<TD width="95" class="border1">&nbsp;<img src="/common/images/admin/companyLogoTransparent.png" style="position:absolute;top:4px;left:52px;"></TD>
 			<TD width="845" class="border1">
 				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="SiteTitle">
 					<tr valign="middle">
@@ -154,7 +154,10 @@
 		</TD>
 		<TD>&nbsp;</TD>
 	</TR>
-	
+	<!-- To activate script needed for transparent pngs to work in IE 6 -->
+    <!--[if lte IE 6]>
+		<script type="text/javascript" src="/common/scripts/pngfix.js"></script>
+    <![endif]-->
 	</body>
 	</html>
  </cfif>

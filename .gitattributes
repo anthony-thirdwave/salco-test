@@ -113,6 +113,7 @@ code/webroot/common/images/admin/button_createpage.gif -text
 code/webroot/common/images/admin/button_logout.gif -text
 code/webroot/common/images/admin/button_post.gif -text
 code/webroot/common/images/admin/button_search.gif -text
+code/webroot/common/images/admin/companyLogoTransparent.png -text
 code/webroot/common/images/admin/company_box_logo.gif -text
 code/webroot/common/images/admin/corner_tleft.gif -text
 code/webroot/common/images/admin/corner_tright.gif -text
@@ -1411,6 +1412,7 @@ code/webroot/common/scripts/outline/ecms_system_id.js -text
 code/webroot/common/scripts/outline/ecms_system_layer.js -text
 code/webroot/common/scripts/overlib.js -text
 code/webroot/common/scripts/overlib_mini.js -text
+code/webroot/common/scripts/pngfix.js -text
 code/webroot/common/scripts/scriptaculous/lib/prototype.js -text
 code/webroot/common/scripts/scriptaculous/src/builder.js -text
 code/webroot/common/scripts/scriptaculous/src/controls.js -text
