@@ -429,6 +429,12 @@
 		</cfloop>
 	</cfif>
 </cfif>
+
+<!--- update the Last-Modified http header to represent the date modified ---> 
+<cfset gmtdatetime=dateadd("h",GetTimeZoneInfo().utchouroffset,CALLER.CacheDateTime)>
+<cfset gmtFullstring="#dateformat(gmtdatetime, "ddd, dd mmm yyyy")# #timeformat(gmtdatetime, "HH:mm:ss")# GMT">
+<cfheader name="Last-Modified" value="#gmtFullstring#">
+
 <cfset REQUEST.CategoryThreadList=CALLER.CategoryThreadList>
 <cfset REQUEST.SecurityDenyAccess=DenyAccess>
 
