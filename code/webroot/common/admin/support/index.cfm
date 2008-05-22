@@ -6,7 +6,7 @@
 <cfparam name="supportaction" default="1">
 <cfset ThisPath=REQUEST.CGIPathInfo>
 <cfset ThisQueryString=REQUEST.CGIQueryString>
-<h1>Support</h1>
+
 <cfif supportaction IS "1">
 	<p><strong>Documentation</strong></p>
 	
