@@ -16,6 +16,7 @@ code/webroot/com/ContentManager/Content.cfc -text
 code/webroot/com/ContentManager/ContentCollection.cfc -text
 code/webroot/com/ContentManager/ContentHandler.cfc -text
 code/webroot/com/ContentManager/ContentLocale.cfc -text
+code/webroot/com/ContentManager/ContentManagerHandler.cfc -text
 code/webroot/com/ContentManager/ContentNote.cfc -text
 code/webroot/com/ContentManager/ContentNoteHandler.cfc -text
 code/webroot/com/ContentManager/PermissionHandler.cfc -text
@@ -399,6 +400,7 @@ code/webroot/common/modules/search/SearchForm.cfm -text
 code/webroot/common/modules/search/search.cfm -text
 code/webroot/common/modules/sitemap/SitemapHelper.cfm -text
 code/webroot/common/modules/sitemap/sitemap.cfm -text
+code/webroot/common/modules/sitemap/sitemap_xml.cfm -text
 code/webroot/common/modules/utils/AddToQueryString.cfm -text
 code/webroot/common/modules/utils/Copy[!!-~]of[!!-~]DisplayFormElt.cfm -text
 code/webroot/common/modules/utils/DetermineImageSize.cfm -text
