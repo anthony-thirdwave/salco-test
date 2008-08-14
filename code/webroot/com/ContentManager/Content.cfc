@@ -95,6 +95,9 @@
 			<cfcase value="251"><!--- Event Registraiton --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
 			</cfcase>
+			<cfcase value="254"><!--- Content List (manual) --->
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
+			</cfcase>
 			<cfcase value="256"><!--- Article Listing --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
 			</cfcase>
@@ -1027,10 +1030,10 @@
 					LabelID IN (221)<!--- Only event --->
 				</cfcase>
 				<cfcase value="66"><!--- Article --->
-					LabelID IN (254,222,255)<!--- Only article body, list of files, list of links --->
+					LabelID IN (222,255)<!--- Only article body, list of files, list of links --->
 				</cfcase>
 				<cfdefaultcase><!---  --->
-					LabelID NOT IN (235,221,254)
+					LabelID NOT IN (235,221)
 				</cfdefaultcase>
 			</cfswitch>
 			ORDER BY labelPriority

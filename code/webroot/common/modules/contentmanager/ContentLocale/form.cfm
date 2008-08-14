@@ -319,6 +319,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"ImageThumbnail")>
+	
 	<cfif MyContentLocale.ContentTypeID IS "254">
 		<cfset thumbCaption = "Drop Cap Image">
 	<cfelse>
@@ -1027,7 +1028,7 @@
 	</cfif>
 </cfif>
 
-<cfif ListFindNoCase(Restrictions,"lArticleCategoryID")>
+<cfif ListFindNoCase(Restrictions,"lPageID")>
 	<style>
 	#articleList { 
 	  list-style-type:none;

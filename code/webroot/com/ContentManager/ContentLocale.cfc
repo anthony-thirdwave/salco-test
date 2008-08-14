@@ -155,6 +155,9 @@
 			<cfcase value="252"><!--- Recent Discussions --->
 				<cfset this.sFields[ThisContentTypeID]="NumItems,LinkURL,lMTCategoryIDRestrict,lMTCategoryIDAllow">
 			</cfcase>
+			<cfcase value="254"><!--- Article List (manual) --->
+				<cfset this.sFields[ThisContentTypeID]="lPageID">
+			</cfcase>
 			
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisContentTypeID]="">

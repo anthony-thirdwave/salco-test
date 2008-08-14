@@ -96,7 +96,7 @@
 		
 		<!--- MyContent Handling --->
 		<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID OR Right(PageAction,3) IS "Add">
-			<cfloop index="ThisProperty" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,InheritID,SourceCategoryID,ContentDate1,ContentDate2,DisplayModeID,lTopicID,OwnerName,OwnerEmail">
+			<cfloop index="ThisProperty" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,InheritID,SourceCategoryID,ContentDate1,ContentDate2,DisplayModeID,lTopicID,OwnerName,OwnerEmail,lPageID">
 				<cfparam name="FORM.#ThisProperty#" default="">
 				<cfset MyContent.SetProperty("#ThisProperty#",Evaluate("FORM.#ThisProperty#"))>
 			</cfloop>
@@ -377,7 +377,7 @@
 <cfif IsDefined("FORM.ButPreview") And Mycontent.isCorrect() and MyContentLocale.isCorrect()>
 	<cfset MyContentPreview=CreateObject("component","com.ContentManager.Content")>
 	<cfset MyContentPreview.Constructor()>
-	<cfloop index="PropertyToCopy" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,SourceID,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,lRelatedCategoryID,InheritID,SourceCategoryID,DisplayModeID">
+	<cfloop index="PropertyToCopy" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,SourceID,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,lRelatedCategoryID,InheritID,SourceCategoryID,DisplayModeID,lPageID">
 		<cfset MyContentPreview.SetProperty("#PropertyToCopy#",MyContent.GetProperty("#PropertyToCopy#"))>
 	</cfloop>
 	

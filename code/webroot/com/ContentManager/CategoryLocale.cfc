@@ -56,7 +56,7 @@
 	<cfset this.CategoryTypeID="-1">
 	
 	<cfset this.sFields=StructNew()>
-	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,67,68,69,70,71,72,73,74,75,76">
+	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,67,68,69,70,71,72,73,74,75,76,254">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			
 				<!--- Not Used --->
