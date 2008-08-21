@@ -76,11 +76,13 @@ setEncoding("URL", "UTF-8");
 		APPLICATION.CompanySlogan="Put your slogan here";
 
 		if (ThisSiteType IS "dev") {
-
-			APPLICATION.WebRootPath="C:\work\content.dev.#APPLICATION.UniqueName#.com\webroot\";
-			APPLICATION.CollectionPath="C:\work\content.dev.#APPLICATION.UniqueName#.com\collection\";
-			APPLICATION.WorkgroupPath="C:\work\content.dev.#APPLICATION.UniqueName#.com\workarea\";
-			APPLICATION.ExecuteTempDir="C:\work\content.dev.#APPLICATION.UniqueName#.com\temp\";
+			
+			// PathPrefix is a default - replace this with the path to the site
+			APPLICATION.PathPrefix="C:\work\www.dev.#APPLICATION.UniqueName#.com\";
+			APPLICATION.WebRootPath="#APPLICATION.PathPrefix#webroot\";
+			APPLICATION.CollectionPath="#APPLICATION.PathPrefix#collection\";
+			APPLICATION.WorkgroupPath="#APPLICATION.PathPrefix#workarea\";
+			APPLICATION.ExecuteTempDir="#APPLICATION.PathPrefix#temp\";
 			APPLICATION.LocalePath="#APPLICATION.WebRootPath#locale";
 			APPLICATION.SourceDBServer="#APPLICATION.UniqueName#.thirdwavellc.com";
 			APPLICATION.SourceLogin="cfmx";
@@ -93,22 +95,28 @@ setEncoding("URL", "UTF-8");
 
 		}
 		else if (ThisSiteType IS "staging") {
-			APPLICATION.WebRootPath="E:\websites\#APPLICATION.UniqueName#.www\staging\webroot\";
-			APPLICATION.CollectionPath="E:\websites\#APPLICATION.UniqueName#.www\staging\collection\";
-			APPLICATION.WorkgroupPath="E:\websites\#APPLICATION.UniqueName#.www\staging\workarea\";
-			APPLICATION.ExecuteTempDir="E:\websites\#APPLICATION.UniqueName#.www\staging\temp\";
+			
+			// PathPrefix is a default - replace this with the path to the site
+			APPLICATION.PathPrefix="E:\websites\#APPLICATION.UniqueName#\staging.#APPLICATION.UniqueName#.com\";
+			APPLICATION.WebRootPath="#APPLICATION.PathPrefix#webroot\";
+			APPLICATION.CollectionPath="#APPLICATION.PathPrefix#collection\";
+			APPLICATION.WorkgroupPath="#APPLICATION.PathPrefix#workarea\";
+			APPLICATION.ExecuteTempDir="#APPLICATION.PathPrefix#temp\";
 			APPLICATION.LocalePath="#APPLICATION.WebRootPath#locale";
 			APPLICATION.SourceDBServer="staging.#APPLICATION.UniqueName#.com";
 			APPLICATION.SourceLogin="cfmx";
 			APPLICATION.SourcePassword="st34l1n";
 			APPLICATION.Staging="yes";
-			APPLICATION.sLocation["www.#APPLICATION.UniqueName#.com"]="www.staging.#APPLICATION.UniqueName#.com";
+			APPLICATION.sLocation["www.#APPLICATION.UniqueName#.com"]="staging.#APPLICATION.UniqueName#.com";
 		}
 		else {
-			APPLICATION.WebRootPath="E:\websites\#APPLICATION.UniqueName#\www.#APPLICATION.UniqueName#.com\webroot\";
-			APPLICATION.CollectionPath="E:\websites\#APPLICATION.UniqueName#\www.#APPLICATION.UniqueName#.com\collection\";
-			APPLICATION.WorkgroupPath="E:\websites\#APPLICATION.UniqueName#\www.#APPLICATION.UniqueName#.com\workarea\";
-			APPLICATION.ExecuteTempDir="E:\websites\#APPLICATION.UniqueName#\www.#APPLICATION.UniqueName#.com\temp\";
+			
+			// PathPrefix is a default - replace this with the path to the site
+			APPLICATION.PathPrefix="E:\websites\#APPLICATION.UniqueName#\www.#APPLICATION.UniqueName#.com\";
+			APPLICATION.WebRootPath="#APPLICATION.PathPrefix#webroot\";
+			APPLICATION.CollectionPath="#APPLICATION.PathPrefix#collection\";
+			APPLICATION.WorkgroupPath="#APPLICATION.PathPrefix#workarea\";
+			APPLICATION.ExecuteTempDir="#APPLICATION.PathPrefix#temp\";
 			APPLICATION.LocalePath="#APPLICATION.WebRootPath#locale";
 			APPLICATION.Production="yes";
 			APPLICATION.SourceDBServer="";
