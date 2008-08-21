@@ -31,6 +31,7 @@ code/webroot/com/utils/Captcha.cfc -text
 code/webroot/com/utils/Database.cfc -text
 code/webroot/com/utils/Image.cfc -text
 code/webroot/com/utils/fckeditor.cfc -text
+code/webroot/com/utils/image3w.cfc -text
 code/webroot/com/utils/rss.cfc -text
 code/webroot/com/utils/security.cfc -text
 code/webroot/com/utils/tracking.cfc -text
