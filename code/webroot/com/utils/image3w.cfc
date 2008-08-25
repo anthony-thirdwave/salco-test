@@ -3,16 +3,15 @@
 	<!--- create a blank default image --->
 	<cfset variables.myImg = ImageNew("", 25, 25, "rgb", "red") />
 
-
 	<!--- read the image into memory --->
 	<cffunction name="readImg" output="false">
 		<cfargument name="theImg" required="true">
 		
-		<cfset var theImage = "">
+		<cfset var local = structNew()>
 		
 		<!--- read the file as binary to prevent bandOffsets.length bug --->
-		<cffile action="readBinary" file="#arguments.theImg#" variable="theImage">
-		<cfimage name="variables.myImg" action="read" source="#theImage#" isBase64="yes" />
+		<cffile action="readBinary" file="#arguments.theImg#" variable="local.theImage">
+		<cfimage name="variables.myImg" action="read" source="#local.theImage#" isBase64="yes" />
 	</cffunction>
 
 	
