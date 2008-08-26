@@ -70,7 +70,7 @@ detectionLevel:
 			<cfset imageInfo = ImageInfo(objImage)>
 			<!--- <cfimage action="info" source="#ARGUMENTS.filePath#" structName="imageInfo" /> --->
 		<cfelse>
-			<cfset imageCFC = createObject("component", "image")>
+			<cfset imageCFC = createObject("component", "com.utils.image")>
 			<cfset imageInfo = imageCFC.getImageInfo("", ARGUMENTS.filePath)>
 		</cfif>
 
