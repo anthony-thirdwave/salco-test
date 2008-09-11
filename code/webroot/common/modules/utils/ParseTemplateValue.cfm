@@ -26,7 +26,6 @@
 		<cfelse>
 			<cfset FileExtensionList=".jpg;.gif;.jpeg;.jpe;.pdf">
 		</cfif>
-		<cfset FileExtensionList = Replace(FileExtensionList,".","\.","all")>
 		<cfset invalidFileCharacters="=|'|""|\(|:">
 		<cfset FileList = "">
 		<cfset currentPosition = 1>
@@ -41,7 +40,7 @@
 					<cfset FileList = listAppend(FileList,ThisGuy,";")>
 				</cfif>
 			</cfif>
-		</cfloop>		
+		</cfloop>
 		<cfset Caller.FileList=FileList>
 		<cfset Caller.NumFiles=listLen(FileList,";")>
  	</cfsilent>
