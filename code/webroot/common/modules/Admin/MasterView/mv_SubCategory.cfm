@@ -74,7 +74,6 @@
 		and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 		Order By CategoryLocalePriority
 	</cfquery>
-	
 	<table width="100%" border="0" cellpadding="3">
 	<cf_AddToQueryString queryString="#FormQueryString#" Name="mvca" value="2">
 	<cfoutput><form action="#FormPage#?#QueryString#" method="post" name="subpageForm" id="subpageForm"></cfoutput>
@@ -88,47 +87,28 @@
 	</cfoutput></cfif></TD>
 	</TR>
 	<cfif GetCategoryList.RecordCount IS NOT "0">
-		<style>
-		#categoryList { 
-		  list-style-type:none;
+		<style type="text/css">
+		#categoryList {
 		  margin:0;
+		  margin-top:10px;
 		  padding:0;
+		  list-style-type: none;
 		  width:660px;
 		}
 		#categoryList li {
-		 background-color:#EAEAEA;
-		 margin:3px 0px 3px 0px;
-		 padding:3px;
-		 }
-		 #categoryList li input{
-		 margin-right:20px;
-		 }
-		.handle{
-		 cursor:move;
-		 /**/
-		}
-		
-		.handlewrap{
-		 display:block;
-		 float:left;
-		 width:535px;
-		 padding-bottom:1px;/**/
-		}
-		
-		.eLinks{
-		 display:block;
-		 float:left;
-		 text-align:right;
-		 padding-top:1px;
+		  margin:0;
+		  margin-bottom:4px;
+		  padding:3px;
+		  cursor:move;
+		  background-color:#EAEAEA;
 		}
 		.clearit{
-		 display:block;/**/
-		 visibility:hidden;
-		 clear:both;
-		 width:1px;
-		 height:1px;
-		 overflow:hidden;
-		/* position:absolute;*/
+			display:block;/**/
+			visibility:hidden;
+			clear:both;
+			width:1px;
+			height:1px;
+			overflow:hidden;
 		}
 		</style>
 
@@ -136,30 +116,34 @@
 		<cfoutput query="GetCategoryList">
 			<cfsavecontent variable="ThisLI">
 			<li id="#CategoryID#">
-				<span class="handlewrap">
-					<span class="handle">
-						<input type="hidden" name="EditCategoryID#CurrentRow#" value="#URLEncodedFormat(Encrypt(Categoryid,APPLICATION.Key))#">
-						<input type="checkbox" name="EditShowCategory#CurrentRow#" value="1" <cfif CategoryActive>checked</cfif>>
-						#CategoryName# (#CategoryAlias#)
-					</span>
-				</span>
-               	<span class="eLinks">
-				<a href="/Content.cfm?Alias=#CategoryAlias#">Preview</A><a href="/content.cfm/#CategoryAlias#" target="_blank" title="Preview in new window">+</A>
-				<cfset Location="/common/admin/MasterView/CategoryModify.cfm">
-				<cfset querystring="">
-				<cfset cid=encrypt(CategoryID,APPLICATION.KEY)>
-				<cfif ATTRIBUTES.sCurrentCategoryPermissions["pEdit"]>
-					<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
-					<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="Edit">
-					<a href="#Location#?#querystring#">Edit</A>
-				</cfif>
-				<cfif ATTRIBUTES.sCurrentCategoryPermissions["pDelete"]>
-					<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
-					<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="validatedelete">
-					<a href="#Location#?#querystring#">Delete</a>
-				</cfif>
-				</span>
-				<span class="clearit"></span>
+				<table border="0" cellpadding="0" cellspacing="0">
+					<tr>
+						<td width="300">
+							<input type="hidden" name="EditCategoryID#CurrentRow#" 
+								value="#URLEncodedFormat(Encrypt(Categoryid,APPLICATION.Key))#">
+							<input type="checkbox" name="EditShowCategory#CurrentRow#" 
+								value="1" <cfif CategoryActive>checked</cfif>>
+							#CategoryName# (#CategoryAlias#)
+						</td>
+						<td width="320" align="right">
+							<a href="/Content.cfm?Alias=#CategoryAlias#">Preview</a>
+							<a href="/content.cfm/#CategoryAlias#" target="_blank" title="Preview in new window">+</a>
+							<cfset Location="/common/admin/MasterView/CategoryModify.cfm">
+							<cfset querystring="">
+							<cfset cid=encrypt(CategoryID,APPLICATION.KEY)>
+							<cfif ATTRIBUTES.sCurrentCategoryPermissions["pEdit"]>
+								<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
+								<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="Edit">
+								<a href="#Location#?#querystring#">Edit</A>
+							</cfif>
+							<cfif ATTRIBUTES.sCurrentCategoryPermissions["pDelete"]>
+								<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
+								<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="validatedelete">
+								<a href="#Location#?#querystring#">Delete</a>
+							</cfif>
+						</td>
+					</tr>
+				</table>
 			</li>
 			</cfsavecontent>
 			<cfset CategoryList = CategoryList & "#ThisLI#">
@@ -174,7 +158,8 @@
 				document.getElementById('lCategoryID').value = getResults();
 			} 
 			<cfif categoryList NEQ "">
-				Sortable.create('categoryList',{ghosting:true,handle:'handle',constraint:false});
+				// Sortable.create('categoryList',{ghosting:true,handle:'handle',constraint:false});
+				Sortable.create("categoryList", {onUpdate:function(){new Ajax.Updater('list-info', '/ajax/order', {asynchronous:true, evalScripts:true, onComplete:function(request){new Effect.Highlight("list",{});}, parameters:Sortable.serialize("list")})}})
 			</cfif>
 		</script>
 		<input type="hidden" name="lCategoryID" id="lCategoryID" />
@@ -194,3 +179,4 @@
 	</cfif>
 	</table>
 </cfif>
+<div id="debuggingfordraganddrop"></div>
