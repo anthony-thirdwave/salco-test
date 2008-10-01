@@ -67,4 +67,13 @@
 		<cfreturn false>
 		
 	</cffunction>
+	
+	
+	<!--- this function creates a 33 character unique id
+			1. hyphens are removed from the generated UUID to prevent javascript difficulties 
+			2. prefixed with "G" so it can be used as a variable name --->
+	<cffunction name="createUniqueId" output="true" returntype="string">
+		<cfset var newId = "G#replace(createUUID(), '-', '', 'all')#" />
+		<cfreturn newId />		
+	</cffunction>
 </cfcomponent>
