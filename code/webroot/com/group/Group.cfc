@@ -982,7 +982,7 @@
 				<cfelse>
 				
 					<!--- if rank isn't passed, use the next value if it exists --->
-					<cfif local.maxRank neq "">
+					<cfif isDefined("local.maxRank") and local.maxRank neq "">
 						<cfqueryparam cfsqltype="cf_sql_integer" value="#local.maxRank#">,
 						
 					<!--- otherwise, this is the first value --->
