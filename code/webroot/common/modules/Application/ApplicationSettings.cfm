@@ -78,7 +78,7 @@ setEncoding("URL", "UTF-8");
 		if (ThisSiteType IS "dev") {
 			
 			// PathPrefix is a default - replace this with the path to the site
-			APPLICATION.PathPrefix="C:\work\www.dev.#APPLICATION.UniqueName#.com\";
+			APPLICATION.PathPrefix="C:\work\currentCore\";
 			APPLICATION.WebRootPath="#APPLICATION.PathPrefix#webroot\";
 			APPLICATION.CollectionPath="#APPLICATION.PathPrefix#collection\";
 			APPLICATION.WorkgroupPath="#APPLICATION.PathPrefix#workarea\";
@@ -212,11 +212,13 @@ setEncoding("URL", "UTF-8");
 
 	<cflock type="Exclusive" name="#Application.ApplicationName#" timeout="1">
 		<!--- Cache the t_StateProvince table  --->
-		<cfquery name="GetStateProvinces" datasource="#APPLICATION.DSN#" dbtype="ODBC">
-			SELECT * FROM t_StateProvince
+		<cfquery name="APPLICATION.GetStateProvinces" datasource="#APPLICATION.DSN#" dbtype="ODBC">
+			SELECT stateProvinceId, stateProvinceCode, stateProvinceName, countryCode, priority
+		    FROM  t_StateProvince
+			WHERE countrycode = 'us'
 			ORDER BY Priority
 		</cfquery>
-		<cfset Application.GetStateProvinces = Duplicate(GetStateProvinces)>
+	
 		<!--- Cache the t_Country table  --->
 		<!--- As it stands, we order this query by country code.  However, some of the
 			  codes don't start with the same letters as the country's full name, as

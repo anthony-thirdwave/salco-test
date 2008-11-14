@@ -1,4 +1,8 @@
 <cfsilent>
+	
+<!--- create a user object --->
+<cfobject component="com.user.userHandler" name="userObj">
+
 <!--- Establish control variables --->
 <cfparam name="ObjectAction" default="ShowForm">
 <cfif IsDefined("ATTRIBUTES.ObjectAction")>
@@ -189,52 +193,51 @@
 	<cfcase value="CommitEdit,CommitAdd">
 		<cftransaction>
 			<cfif Trim(ObjectAction) IS "CommitAdd">
-				<cfquery name="insertUser" datasource="#Application.DSN#">
-					SET NOCOUNT ON
-						INSERT INTO t_User (
-						FirstName,
-						MiddleName,
-						LastName,
-						Title,
-						OrganizationName,
-						PhoneNumber,
-						FaxNumber,
-						EmailAddress,
-						UserLogin,
-						UserPassword,
-						LocaleID
-						) VALUES (
-						<cfqueryparam value="#TRIM(EditFirstName)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#TRIM(EditMiddleName)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#TRIM(EditLastName)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#TRIM(EditTitle)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#Trim(EditOrganizationName)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#TRIM(EditPhoneNumber)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#TRIM(EditFaxNumber)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#TRIM(EditEmailAddress)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#Trim(EditUserLogin)#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#Trim(EditUserPassword)#" cfsqltype="cf_sql_varchar">,
-						1
-						)
-					SELECT UserID = @@Identity
-					SET NOCOUNT OFF
-				</cfquery>
-				<cfset ATTRIBUTES.EditUserID=insertUser.UserID>
+				
+				<!--- add the user --->
+				<cfinvoke component="#userObj#" method="addUser" returnvariable="addedUserId">
+					<cfinvokeargument name="firstName" value="#trim(EditFirstName)#">
+					<cfinvokeargument name="middleName" value="#trim(EditMiddleName)#">
+					<cfinvokeargument name="lastName" value="#trim(EditLastName)#">
+					<cfinvokeargument name="title" value="#trim(EditTitle)#">
+					<cfinvokeargument name="organizationName" value="#trim(EditOrganizationName)#">
+					<cfinvokeargument name="phoneNumber" value="#trim(EditPhoneNumber)#">
+					<cfinvokeargument name="faxNumber" value="#trim(EditFaxNumber)#">
+					<cfinvokeargument name="emailAddress" value="#trim(EditEmailAddress)#">
+					<cfinvokeargument name="userLogin" value="#trim(EditUserLogin)#">
+					<cfinvokeargument name="userPassword" value="#trim(EditUserPassword)#">
+				</cfinvoke>
+
+				<cfset ATTRIBUTES.EditUserID = addedUserId>
 			<cfelse>
-				<CFQUERY NAME="UpdateTeaser" DATASOURCE="#APPLICATION.DSN#">
-					UPDATE t_User SET
-					FirstName=<cfqueryparam value="#Trim(EditFirstName)#" cfsqltype="cf_sql_varchar">,
-					MiddleName=<cfqueryparam value="#Trim(EditMiddleName)#" cfsqltype="cf_sql_varchar">,
-					LastName=<cfqueryparam value="#Trim(EditLastName)#" cfsqltype="cf_sql_varchar">,
-					Title=<cfqueryparam value="#Trim(EditTitle)#" cfsqltype="cf_sql_varchar">,
-					OrganizationName=<cfqueryparam value="#Trim(EditOrganizationName)#" cfsqltype="cf_sql_varchar">,
-					PhoneNumber=<cfqueryparam value="#Trim(EditPhoneNumber)#" cfsqltype="cf_sql_varchar">,
-					FaxNumber=<cfqueryparam value="#Trim(EditFaxNumber)#" cfsqltype="cf_sql_varchar">,
-					EmailAddress=<cfqueryparam value="#Trim(EditEmailAddress)#" cfsqltype="cf_sql_varchar">,
-					UserLogin=<cfqueryparam value="#Trim(EditUserLogin)#" cfsqltype="cf_sql_varchar">,
-					UserPassword=<cfqueryparam value="#Trim(EditUserPassword)#" cfsqltype="cf_sql_varchar">
-					WHERE UserID=<cfqueryparam value="#val(ATTRIBUTES.EditUserID)#" cfsqltype="cf_sql_integer">
-				</cfquery>
+				<!--- get the user --->
+				<cfinvoke method="getUser" component="#userObj#" returnvariable="thisUser">
+					<cfinvokeargument name="userId" value="#val(ATTRIBUTES.EditUserID)#">
+				</cfinvoke>
+				
+				<!--- call the updateUser function, passing existing and new params --->
+				<cfinvoke method="updateUser" component="#userObj#">
+					<cfinvokeargument name="userId" value="#thisUser.userId#">
+					<cfinvokeargument name="localeId" value="#thisUser.localeId#">
+					<cfinvokeargument name="firstName" value="#trim(EditFirstName)#">
+					<cfinvokeargument name="middleName" value="#trim(EditMiddleName)#">
+					<cfinvokeargument name="lastName" value="#trim(EditLastName)#">
+					<cfinvokeargument name="title" value="#trim(EditTitle)#">
+					<cfinvokeargument name="organizationName" value="#trim(EditOrganizationName)#">
+					<cfinvokeargument name="userLogin" value="#trim(EditUserLogin)#">
+					<cfinvokeargument name="userPassword" value="#trim(EditUserPassword)#">
+					<cfinvokeargument name="emailAddress" value="#trim(EditEmailAddress)#">
+					<cfinvokeargument name="phoneNumber" value="#trim(EditPhoneNumber)#">
+					<cfinvokeargument name="dayPhoneNumber" value="#thisUser.dayPhoneNumber#">
+					<cfinvokeargument name="faxNumber" value="#trim(EditFaxNumber)#">
+					<cfinvokeargument name="mailingList" value="#thisUser.mailingList#">
+					<cfinvokeargument name="browser" value="#thisUser.browser#">
+					<cfinvokeargument name="remoteHost" value="#thisUser.remoteHost#">
+					<cfinvokeargument name="disableRichControls" value="#thisUser.disableRichControls#">
+					<cfinvokeargument name="dashboardModuleIDList" value="#thisUser.dashboardModuleIDList#">
+					<cfinvokeargument name="ownerEmailNotifications" value="#thisUser.ownerEmailNotifications#">
+				</cfinvoke>
+				
 				<cfquery name="InsertUserGroup" datasource="#APPLICATION.DSN#">
 					delete from t_UserGroup where UserID = <cfqueryparam value="#Val(ATTRIBUTES.EditUserID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
