@@ -717,32 +717,34 @@
 					</cfoutput>
 				</cftransaction>
 				
-				<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
-				<cfloop index="ThisImageName" list="#lImage#">
-					<cfset ThisFile=this.GetProperty(thisImageName)>
-					<cfif ThisFile IS NOT "">
-						<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
-						RemoteFile: #RemoteFile#->
-						<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
-							username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-							password="#sProductionSiteInformation.ProductionFTPPassword#"
-							stoponerror="No"
-							remotefile="#RemoteFile#"
-							connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-							Passive="No">
-						<cfif cfftp.returnValue IS "Yes">
-							<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
+				<cfif SelectCategory.RecordCount GT "0">
+					<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+					<cfloop index="ThisImageName" list="#lImage#">
+						<cfset ThisFile=this.GetProperty(thisImageName)>
+						<cfif ThisFile IS NOT "">
+							<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
+							RemoteFile: #RemoteFile#->
+							<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
 								username="#sProductionSiteInformation.ProductionFTPUserLogin#"
 								password="#sProductionSiteInformation.ProductionFTPPassword#"
 								stoponerror="No"
-								Passive="No"
-								item="#RemoteFile#"
+								remotefile="#RemoteFile#"
 								connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-								timeout="60">
-							Removed!
-						</cfif><BR>
-					</cfif>
-				</cfloop>
+								Passive="No">
+							<cfif cfftp.returnValue IS "Yes">
+								<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
+									username="#sProductionSiteInformation.ProductionFTPUserLogin#"
+									password="#sProductionSiteInformation.ProductionFTPPassword#"
+									stoponerror="No"
+									Passive="No"
+									item="#RemoteFile#"
+									connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
+									timeout="60">
+								Removed!
+							</cfif><BR>
+						</cfif>
+					</cfloop>
+				</cfif>
 			</cfif>
 			<cfreturn true>
 		<cfelse>

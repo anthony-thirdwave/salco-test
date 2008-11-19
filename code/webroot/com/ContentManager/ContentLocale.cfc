@@ -1543,33 +1543,34 @@
 					</cfoutput>
 				</cftransaction>
 				
-				
-				<cfset ThisFileList=this.GetFileList(1)>
-				<cfif ListLen(ThisFileList,";") GT "0">
-					<cfloop index="ThisFile" list="#ThisFileList#" delimiters=";">
-						<cfif Left(ThisFile,7) IS NOT "/common">
-							<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
-							RemoteFile: #RemoteFile#->
-							<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
-								username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-								password="#sProductionSiteInformation.ProductionFTPPassword#"
-								stoponerror="No"
-								remotefile="#RemoteFile#"
-								connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-								Passive="No">
-							<cfif cfftp.returnValue IS "Yes">
-								<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
+				<cfif SelectContentFromProd.RecordCount GT "0">
+					<cfset ThisFileList=this.GetFileList(1)>
+					<cfif ListLen(ThisFileList,";") GT "0">
+						<cfloop index="ThisFile" list="#ThisFileList#" delimiters=";">
+							<cfif Left(ThisFile,7) IS NOT "/common">
+								<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
+								RemoteFile: #RemoteFile#->
+								<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
 									username="#sProductionSiteInformation.ProductionFTPUserLogin#"
 									password="#sProductionSiteInformation.ProductionFTPPassword#"
 									stoponerror="No"
-									Passive="No"
-									item="#RemoteFile#"
+									remotefile="#RemoteFile#"
 									connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-									timeout="60">
-								Removed!
-							</cfif><BR>
-						</cfif>
-					</cfloop>
+									Passive="No">
+								<cfif cfftp.returnValue IS "Yes">
+									<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
+										username="#sProductionSiteInformation.ProductionFTPUserLogin#"
+										password="#sProductionSiteInformation.ProductionFTPPassword#"
+										stoponerror="No"
+										Passive="No"
+										item="#RemoteFile#"
+										connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
+										timeout="60">
+									Removed!
+								</cfif><BR>
+							</cfif>
+						</cfloop>
+					</cfif>
 				</cfif>
 			</cfif>
 			<!--- need function here to  delete the key in verity, and update using the category --->
