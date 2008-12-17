@@ -808,7 +808,7 @@
 	<cftry>
 		<!--- add the Group --->
 		<cfquery name="local.addGroup" datasource="#APPLICATION.DSN#">
-			SET NOCOUNT OFF
+			SET NOCOUNT ON
 			INSERT INTO t_group
 				(groupAlias,
 				groupByTable,
@@ -908,7 +908,7 @@
 	
 		<!--- add the groupedElem --->
 		<cfquery name="local.addElem" datasource="#APPLICATION.DSN#">
-			SET NOCOUNT OFF
+			SET NOCOUNT ON
 			INSERT INTO t_groupedElem
 				(groupId,
 				groupedElemTable,
