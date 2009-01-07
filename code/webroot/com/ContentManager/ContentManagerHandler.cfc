@@ -314,7 +314,7 @@
 			<cfset arguments.rank = arguments.rank + 1>
 			
 			<cfif Trim(getdetail.CategoryURLDerived) iS NOT "">
-				<cfset sitemap_info.url = "#REQUEST.CGIHTTPHost##GetDetail.CategoryURL#">
+				<cfset sitemap_info.url = "http://#REQUEST.CGIHTTPHost##GetDetail.CategoryURL#">
 				
 				<cfif find("/home", sitemap_info.url) neq 0>
 					<cfset sitemap_info.priority = 1>
@@ -325,7 +325,7 @@
 				<cfset #ArrayAppend(arguments.URL_array, duplicate(sitemap_info))#>
 					<!--- <URL><loc>/#GetDetail.CategoryURL#</loc></URL> --->
 			<cfelse>
-				<cfset sitemap_info.url = "#REQUEST.CGIHTTPHost#/content.cfm/#GetDetail.CategoryAlias#">
+				<cfset sitemap_info.url = "http://#REQUEST.CGIHTTPHost#/content.cfm/#GetDetail.CategoryAlias#">
 				
 				<cfif find("/home", sitemap_info.url) neq 0>
 					<cfset sitemap_info.priority = 1>
