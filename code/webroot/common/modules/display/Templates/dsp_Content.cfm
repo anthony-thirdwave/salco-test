@@ -24,7 +24,8 @@
 	</cfif>
 	<meta name="keywords" content="#MetaKeywords#" />
 	<meta name="description" content="#Metadescription#" />
-	<meta name="generator" content="3WCMS" />
+	<meta name="generator" content="#APPLICATION.GeneratorMeta#" />
+	<meta name="generator-content" content="#APPLICATION.GeneratorContentMeta#" />
 	<meta name="dc.title" content="#HTMLEditFormat(CurrentCategoryName)#" />
 
 	<!--- include meta --->

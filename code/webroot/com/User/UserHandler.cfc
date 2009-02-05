@@ -27,7 +27,7 @@
 		<cfargument name="emailAddress" default="">
 		<cfargument name="userLogin" default="">
 		<cfargument name="userPassword" default="">
-		<cfargument name="localeID" default="1">	
+		<cfargument name="localeID" default="1">
 		<cfargument name="dayPhoneNumber" default="">
 		<cfargument name="faxNumber" default="">
 		<cfargument name="mailingList" default="">
@@ -177,6 +177,93 @@
 		<cfreturn true>
 	</cffunction>
 	
+	
+	
+	
+	
+	
+	<!--- get the users based upon the passed params --->
+	<cffunction name="getUsers" output="false" access="remote">
+		<cfargument name="page" default="">
+		<cfargument name="pageSize" default="">
+		<cfargument name="cfgridsortcolumn" default="">
+		<cfargument name="cfgridsortdirection" default="">
+		<cfargument name="firstName" type="string" default="">
+		<cfargument name="lastName" type="string" default="">
+		<cfargument name="emailAddress" type="string" default="">
+		<cfargument name="organizationName" type="string" default="">
+		<cfargument name="userGroupId" type="string" default="">
+	
+		<!--- keep scope local to function --->
+		<cfset var local = structNew() />
+		
+		<!--- get the results --->
+		<cfquery name="local.getResults" datasource="#APPLICATION.USER_DSN#">
+			SELECT	u.userId, u.firstName, u.lastName, u.organizationName, u.emailAddress,
+					
+					<!--- the list of userGroups - the left takes care of the trailing comma --->
+					userGroups = left(x.groupList, len(x.groupList)-1),
+					edit = '<img src="/common/images/admin/icon_edit.gif" />',
+					delUser = '<img src="/common/images/admin/icon_delete.gif" />'
+					
+			FROM	t_User u 
+			
+			<!--- only do this join if a userGroupId is passed --->
+			<cfif isNumeric(trim(arguments.userGroupId))>
+				JOIN t_UserGroup ug ON ug.userId = u.userId
+			</cfif>
+			
+			<!--- this grabs a list of user groups and concatenates them into one field --->
+			CROSS APPLY
+			(
+				SELECT		CONVERT(VARCHAR(20), l.labelName) + ',' AS [text()]
+				FROM 		t_UserGroup ug
+				JOIN 		t_Label l
+				ON			l.labelId = ug.userGroupId
+				WHERE		ug.userId = u.userId
+				ORDER BY l.labelName
+			
+				<!--- this normally creates a wrapper element, but since we're using '', and returning
+				text, it concatenates the values --->
+				FOR XML PATH('')
+			) x (groupList)
+	
+			WHERE 1=1
+	
+				<cfif trim(arguments.firstName) neq "">
+					AND u.firstName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.firstName#%">
+				</cfif>
+				<cfif trim(arguments.lastName) neq "">
+					AND u.lastName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.lastName#%">
+				</cfif>
+				<cfif trim(arguments.emailAddress) neq "">
+					AND u.emailAddress LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.emailAddress#%">
+				</cfif>
+				<cfif trim(arguments.organizationName) neq "">
+					AND u.organizationName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.organizationName#%">
+				</cfif>
+				<cfif isNumeric(trim(arguments.userGroupId))>
+					AND ug.userGroupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.userGroupId#">
+				</cfif>
+				
+				<!--- cfgrid ordering params --->
+				<cfif trim(arguments.cfgridsortcolumn) neq "">
+					ORDER BY #arguments.cfgridsortcolumn# #arguments.cfgridsortdirection#
+				<cfelse>
+					ORDER BY u.lastName, u.firstName
+				</cfif>
+		</cfquery>
+	
+		<!--- if page and pageSize are numeric then return for cfgrid --->
+		<cfif isNumeric(arguments.page) and isNumeric(arguments.pageSize)>
+			<!--- return the results --->
+			<cfreturn queryConvertForGrid(local.getResults, arguments.page, arguments.pageSize)>
+		
+		<!--- else, return the query  --->
+		<cfelse>	
+			<cfreturn local.getResults>
+		</cfif>
+	</cffunction>	
 	
 	
 	

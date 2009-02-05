@@ -3,206 +3,114 @@
 	Page="User Manager"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | User Manager">
 	
-<cfparam name="ParamFirstName" default="">
-<cfparam name="ParamLastName" default="">
-<cfparam name="ParamEmailAddress" default="">
-<cfparam name="ParamOrganizationName" default="">
-<cfparam name="ParamUserGroupID" default="">
-
-<cfset DevNull=DeleteClientVariable("OrderBy")>
-<cfset DevNull=DeleteClientVariable("OrderASC")>
-<cfparam name="OrderBy" default="LastName">
-<cfparam name="OrderAsc" default="1">
-<cfset PathPage=CGI.SCRIPT_NAME>
-<cfset PathQueryString=CGI.Query_String>
-
-<cfset ErrorMessage="">
-
-<cfif IsDefined("RR")>
-	<cfset ReturnResults="Yes">
-<cfelse>
-	<cfset ReturnResults="No">
-</cfif>
-
-<cfset sStateProvince=StructNew()>
-<cfoutput query="Application.GetStateProvinces">
-	<cfset DevNull=StructInsert(sStateProvince,StateProvinceID,StateProvinceName,1)>
-</cfoutput>
-
-<cfset PageAction=CGI.SCRIPT_NAME>
-<cfset PageQueryString=CGI.Query_String>
-<cfset sUserGroup=StructNew()>
+<cfparam name="firstName" default="">
+<cfparam name="lastName" default="">
+<cfparam name="emailAddress" default="">
+<cfparam name="organizationName" default="">
+<cfparam name="paramUserGroupId" default="">
 
 <cfquery name="GetUserGroups" datasource="#APPLICATION.DSN#">
-	select LabelID as UserGroupID, LabelName as UserGroupName from t_Label WHERE LabelGroupID=10
-	order by LabelPriority
+	SELECT LabelID AS UserGroupID, LabelName AS UserGroupName
+	FROM t_Label
+	WHERE LabelGroupID=10
+	ORDER BY LabelPriority
 </cfquery>
 
-<cfif ReturnResults>
-	<cfquery name="GetUserPre" datasource="#APPLICATION.DSN#">
-		SELECT distinct(UserID)
-		FROM qry_GetUser WHERE 1=1
-		AND
-		<cfif Trim(ParamFirstName) IS NOT "">
-			(
-			<cfloop index="ThisParam" list="#ParamFirstName#" delimiters=" ">
-				(FirstName like '#ThisParam#%') AND
-			</cfloop>1=1)
-		<cfelse>
-			1=1
-		</cfif>
-		AND
-		<cfif Trim(ParamLastName) IS NOT "">
-			(
-			<cfloop index="ThisParam" list="#ParamLastName#" delimiters=" ">
-				(LastName like '#ThisParam#%') AND
-			</cfloop>1=1)
-		<cfelse>
-			1=1
-		</cfif>
-		AND
-		<cfif Trim(ParamEmailAddress) IS NOT "">
-			(
-			<cfloop index="ThisParam" list="#ParamEmailAddress#" delimiters=" ">
-				(EmailAddress like '#ThisParam#%') AND
-			</cfloop>1=1)
-		<cfelse>
-			1=1
-		</cfif>
-		AND
-		<cfif Trim(ParamOrganizationName) IS NOT "">
-			(
-			<cfloop index="ThisParam" list="#ParamOrganizationName#" delimiters=" ">
-				(OrganizationName like '#ThisParam#%') AND
-			</cfloop>1=1)
-		<cfelse>
-			1=1
-		</cfif>
-		AND
-		<cfif val(ParamUserGroupID) gt "0">
-			UserGroupID=#Val(ParamUserGroupID)#
-		<cfelse>
-			1=1
-		</cfif>
-	</cfquery>
-
-	<cfif GetUserPre.RecordCount IS "0">
-		<cfset ThisList="-1">
-	<cfelse>
-		<cfset ThisList=ValueList(GetUserPre.UserID)>
-	</cfif>
-
-	<cfquery name="GetUser" datasource="#APPLICATION.DSN#">
-		SELECT *
-		FROM qry_GetUser WHERE UserID IN (#ThisList#)
-		ORDER BY #OrderBy# <cfif OrderAsc>ASC<Cfelse>DESC</cfif>
-	</cfquery>
-
-	<cfoutput query="GetUser">
-		<cfif NOT StructKeyExists(sUserGroup,UserID)>
-			<cfset DevNull=StructInsert(sUserGroup,UserID,"",0)>
-		</cfif>
-		<cfif NOT ListFindNoCase(sUserGroup[UserID],UserGroupName)>
-			<cfset sUserGroup[UserID]=ListAppend(sUserGroup[UserID],UserGroupName)>
-		</cfif>
-	</cfoutput>
-</cfif>
-
-<cfset FieldNameList="ParamFirstName,ParamLastName,ParamEmailAddress,ParamOrganizationName,ParamUserGroupID">
-<cfset l_Col="FirstName,LastName,EmailAddress,OrganizationName,UserGroupName">
-<cfset l_ColDescr="First Name,Last Name,Email Address,Organization,Group">
-
-<cfset FieldList="">
-<cfloop index="ThisFieldName" list="#FieldNameList#">
-	<cfif isdefined("#ThisFieldName#")>
-		<cfif Len(trim(Evaluate("#ThisFieldName#"))) IS NOT "0">
-			<cfset FieldList=ListAppend(FieldList,"#ThisFieldName#=#URLEncodedFormat(evaluate('#ThisFieldName#'))#","&")>
-		</cfif>
-	</cfif>
-</cfloop>
-<table bgcolor="silver"><tr valign="top"><TD bgcolor="white">
-
-<table cellpadding="3">
-<cf_AddToQueryString querystring="#PageQueryString#" name="" value="" OmitList="#FieldNameList#">
-<cfset BaseString=querystring>
-<cfif OrderAsc>
-	<cfset ThisOrderAsc="0">
-	<cfset arrowimage="/common/images/widget_arrow_down.gif">
-<cfelse>
-	<cfset ThisOrderASc="1">
-	<cfset arrowimage="/common/images/widget_arrow_up.gif">
-</cfif>
-<!--- <TD><b><a href="index.cfm?OrderBy=Name&OrderAsc=#ThisOrderAsc#&#FieldList#">Name</A></b></TD> --->
-
-<tr bgcolor="bac0c9">
 <cfoutput>
-	<cfloop index="i" from="1" to="#ListLen(l_Col)#" step="1">
-		<cfset ThisCol=ListGetAt(l_Col,i)>
-		<Cfset ThisColDescr=ListGetAt(l_ColDescr,i)>
-		<td valign="top" nowrap>
-		<cf_AddToQueryString QueryString="#BaseString#" name="OrderBy" value="#ThisCol#">
-		<cf_AddToQueryString QueryString="#QueryString#" name="OrderASc" value="#OrderAsc#">
-		<cf_AddToQueryString QueryString="#QueryString#" name="rr" value="1">
-		<cfset QueryString=ListAppend(QueryString,FieldList,"&")>
-		<cfif ReturnResults IS "NO">
-			<p><b>#ThisColDescr#</b></p>
-		<cfelseif orderBy IS ThisCol>
-			<cf_AddToQueryString QueryString="#QueryString#" name="OrderASc" value="#ThisOrderAsc#">
-			<p><b><a href="#PageAction#?#QueryString#"><img src="#arrowimage#" border=0 alt="">#ThisColDescr#</a></b></p>
-		<cfelseif ListFind("UserGroupName",ThisCol)>
-			<p><b>#ThisColDescr#</b></p>
-		<cfelse>
-			<p><b><a href="#PageAction#?#QueryString#">#ThisColDescr#</A></b></p>
-		</cfif>
+
+<table width="100%">
+	<tr>
+		<td>
+
+			<cfform action="#CGI.SCRIPT_NAME#" method="post" name="userEditForm">
+			<table>
+				<tr>
+					<td>
+						<table cellspacing="0px" cellpadding="3px">
+							<tr>
+								<th>&nbsp;</th>
+								<th>First Name</th>
+								<th>Last Name</th>
+								<th>Email Address</th>
+								<th>Organization</th>
+								<th>Group</th>
+							</tr>
+							<tr bgcolor="##666666">
+								<td>
+									<font color="##FFFFFF"><strong>Search By:</strong></font>
+								</td>
+								<td>
+									<cfinput type="text" name="firstName" value="#firstName#">
+								</td>
+								<td>
+									<cfinput type="text" name="lastName" value="#lastName#">
+								</td>
+								<td>
+									<cfinput type="text" name="emailAddress" value="#emailAddress#">
+								</td>
+								<td>
+									<cfinput type="text" name="organizationName" value="#organizationName#">
+								</td>
+								<td>
+									<cfselect name="paramUserGroupID">
+										<option value="" <cfif paramUserGroupID IS "">selected</cfif>>All</option>
+										<cfloop query="GetUserGroups">
+											<option value="#getUserGroups.UserGroupID#" <cfif paramUserGroupID eq getUserGroups.UserGroupID>selected</cfif>>#getUserGroups.UserGroupName#</option>
+										</cfloop>
+									</cfselect>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<table width="100%" cellspacing="0px" cellpadding="3px">
+										<tr>
+											<td align="left">
+												<h2>Results</h2>
+											</td>
+										</tr>
+										<tr>
+											<td align="left">
+												<a href="/common/admin/UserManager/UserModify.cfm?uoa=3">Add New User</a>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+		
+							<tr>
+								<td colspan="6">
+									<!--- display the users in a cfgrid tag - this is bound both to the cfgrid
+									controls and the form controls above --->
+									<cfgrid format="html" name="showUsers" gridLines="yes"
+											selectmode="row" pagesize="20" stripeRowColor="##e0e0e0" stripeRows="yes"
+											appendKey="true"
+											bind="cfc:com.user.UserHandler.getUsers({cfgridpage}, {cfgridpagesize}, {cfgridsortcolumn}, 
+												{cfgridsortdirection}, {firstName@keyup}, {lastName@keyup}, {emailAddress@keyup}, 
+												{organizationName@keyup}, {paramUserGroupID@change})">
+										<cfgridcolumn name="userId" display="no" />
+										<cfgridcolumn name="firstName" header="First Name" width="100" />
+										<cfgridcolumn name="lastName" header="Last Name" width="100" />
+										<cfgridcolumn name="emailAddress" header="Email Address" width="200" />
+										<cfgridcolumn name="organizationName" header="Organization" width="100" />
+										<cfgridcolumn name="userGroups" header="Groups" width="200" />
+										<cfgridcolumn name="edit" header="" width="24" href="/common/admin/UserManager/UserModify.cfm?uoa=2" hrefKey="userId"/>
+										<cfgridcolumn name="delUser" header="" width="24" href="/common/admin/UserManager/UserModify.cfm?uoa=4" hrefKey="userId"/>
+									</cfgrid>
+								</td>
+							</tr>
+						</table>
+					</tr>
+				</td>
+			</table>
+			</cfform>
 		</td>
-	</cfloop>
+	</tr>
+</table>
 </cfoutput>
-<TD>
-<a href="/common/admin/UserManager/UserModify.cfm?uoa=3"><b>Add</b></A>
-</TD></tr>
-
-<cfoutput>
-<cf_AddToQueryString querystring="#PageQueryString#" name="rr" value="1" omitlist="#FieldNameList#">
-<form action="#PageAction#?#QueryString#" method="post"><input type="hidden" name="OrderAsc" value="#OrderAsc#">
-<tr bgcolor="EAEAEA">
-<td><input type="text" name="ParamFirstName" value="#ParamFirstName#" size="10"></td>
-<td><input type="text" name="ParamLastName" value="#ParamLastName#" size="10"></td>
-<td><input type="text" name="ParamEmailAddress" value="#ParamEmailAddress#" size="10"></td>
-<td><input type="text" name="ParamOrganizationName" value="#ParamOrganizationName#" size="10"></td>
-<td>
-</cfoutput>
-<select name="ParamUserGroupID">
-	<option value="" <cfif ParamUserGroupID IS "">selected</cfif>>All</option>
-<cfoutput query="GetUserGroups">
-	<option value="#UserGroupID#" <cfif ParamUserGroupID IS UserGroupID>selected</cfif>>#UserGroupName#</option>
-</cfoutput>
-</select>
-</td>
-<td><input type="submit" name="Search" value="Search"></td></TR>
-</form>
-<cfif ReturnResults IS "No">
-	<TR><TD colspan="4" align="center"><b>Please select parameters from above and click "Search".</b></TD></tR>
-<cfelseif GetUser.RecordCount GT "0">
-	<cfset Counter="0">
-	<cfoutput query="GetUser" group="UserID">
-		<cfset Counter=Counter+1>
-		<CFIF (Counter MOD 2) IS 1><cfset BGColor="white"><cfelse><cfset BGColor="EAEAEA"></cfif>
-		<cfset uid=Encrypt(UserID,APPLICATION.Key)>
-		<TR bgcolor="#bgcolor#" valign="top">
-		<td>#FirstName#</td>
-		<td>#LastName#</td>
-		<TD>#EmailAddress#</TD>
-		<TD>#OrganizationName#</TD>
-		<td>#ListChangeDelims(sUserGroup[UserID],", ")#</td>
-		<TD><a href="/common/admin/UserManager/UserModify.cfm?uid=#URLEncodedFormat(uid)#&uoa=2"><b>Edit</b></a>
-		<a href="/common/admin/UserManager/UserModify.cfm?uid=#URLEncodedFormat(uid)#&uoa=4"><b>Delete</b></A></TD>
-		</TR>
-	</cfoutput>
-<cfelse>
-	<TR><TD colspan="4" align="center"><b>No Records Found</b></TD></tR>
-</cfif>
-</table></TD></TR></table>
 <p>&nbsp;</p>
-<cfmodule template="/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm" labelGroupId="10" AllowEdit="Yes">
+
+<cfif 1>
+	<cfmodule template="/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm" labelGroupId="10" AllowEdit="Yes">
+</cfif>
 
 </cfmodule>

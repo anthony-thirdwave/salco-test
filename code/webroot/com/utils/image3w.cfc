@@ -120,7 +120,7 @@
 		<cfargument name="overwrite" type="boolean" default="true" />
 		
 		<!--- write the image --->
-		<cfimage action="write" destination="#arguments.path#" source="#variables.myImg#" overwrite="#arguments.overwrite#"/>
+		<cfimage action="write" destination="#arguments.path#" source="#variables.myImg#" overwrite="#arguments.overwrite#" isBase64="true" />
 	</cffunction>
 	
 	
@@ -138,6 +138,74 @@
 	<cffunction name="getImgInfo" output="false">
 		<!--- return the image info --->
 		<cfreturn imageInfo(variables.myImg) />
+	</cffunction>
+	
+
+	
+	
+	<!--- get the mime type --->
+	<cffunction name="getMimeType" output="false" returntype="string">
+		<cfargument name="filePath" type="string" required="true" />
+		
+		<cfset var local = structNew() />
+		
+		<!--- create a java URLConnection object --->
+		<cfset local.urlConn = createObject("java", "java.net.URLConnection")>
+
+		<!--- grab the image --->
+		<cfset local.fileobj = fileopen(arguments.filepath, "readbinary")>
+
+		<!--- read the first 20 characters of the file --->
+		<cfset local.bytes = fileread(local.fileobj, 20)>
+
+		<!--- write the chars to a ByteArrayInputStream --->
+		<cfset local.istream = createObject("java", "java.io.ByteArrayInputStream").init(local.bytes)>
+		<cfset local.fileobj.close()>
+		
+		<!--- return the mime type --->
+		<cfreturn local.urlConn.guessContentTypeFromStream(local.istream)>
+	</cffunction>
+
+
+
+
+	<!--- get the image type based upon the mime type - TODO figure out a way to do this with the existing
+	image object --->
+	<cffunction name="getImgType" returntype="string">
+	    <cfargument name="filePath" type="string" required="true" />
+		
+		<cfset var local = structNew() />
+		
+		<cfset local.mimetype = getMimeType(arguments.filePath)>
+		
+		<!--- if local.mimetype is undefined, then coldfusion can't read the mimetype of the file --->
+		<cfif not isDefined("local.mimetype")>
+			<cfreturn "" />
+		</cfif>
+		
+		<cfset local.imgtype="">
+		
+		<cfswitch expression="#local.mimetype#">
+			<cfcase value="image/gif">
+				<cfset local.imgtype="gif">
+			</cfcase>
+			<cfcase value="image/x-bitmap">
+				<cfset local.imgtype="bmp">
+			</cfcase>
+			<cfcase value="image/png">
+				<cfset local.imgtype="png">
+			</cfcase>
+			<cfcase value="image/jpeg">
+				<cfset local.imgtype="jpg">
+			</cfcase>
+			<cfcase value="image/jpg">
+				<cfset local.imgtype="jpg">
+			</cfcase>
+			<cfdefaultcase>
+				<cfset local.imgType = "">
+			</cfdefaultcase>
+		</cfswitch>
+		<cfreturn local.imgtype>
 	</cffunction>
 	
 

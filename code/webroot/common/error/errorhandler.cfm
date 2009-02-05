@@ -13,8 +13,8 @@
 	
 	<meta name="keywords" content="" />
 	<meta name="description" content="" />
-
-	<meta name="generator" content="3WCMS" />
+	<meta name="generator" content="#APPLICATION.GeneratorMeta#" />
+	<meta name="generator-content" content="#APPLICATION.GeneratorContentMeta#" />
 	<meta name="dc.title" content="" />
 	
 	<title>Site Error: #APPLICATION.CompanyName#</title>

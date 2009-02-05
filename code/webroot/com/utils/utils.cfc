@@ -1,4 +1,9 @@
 <cfcomponent>
+	
+	<cffunction name="init" returntype="utils">
+		<cfreturn this>
+	</cffunction>
+	
 	<cffunction name="extractByToken" output="true" returntype="string">
 		<cfargument name="content" required="yes" type="string">
 		<cfargument name="startToken" required="no" type="string" default="[[">
@@ -75,5 +80,24 @@
 	<cffunction name="createUniqueId" output="true" returntype="string">
 		<cfset var newId = "G#replace(createUUID(), '-', '', 'all')#" />
 		<cfreturn newId />		
+	</cffunction>
+	
+	
+	
+	<!--- insert a delimiter after each character in a string  --->
+	<cffunction name="explodeString" returntype="string">
+		<cfargument name="string" default="">
+		<cfargument name="delimiter" default="\">
+		
+		<cfset var local = structNew() />	
+		<cfset local.returnString = "">
+		
+		<!--- loop through each character in the passed string --->
+		<cfloop from="1" to="#len(arguments.string)#" index="local.itr">
+			<cfset local.returnString = local.returnString & mid(arguments.string,local.itr,1) & arguments.delimiter />
+		</cfloop>
+
+		<!--- return the exploded string --->
+		<cfreturn local.returnString />
 	</cffunction>
 </cfcomponent>

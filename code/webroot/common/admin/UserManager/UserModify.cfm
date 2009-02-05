@@ -5,12 +5,23 @@
 	
 <cfparam name="ATTRIBUTES.DonePage" default="/common/admin/UserManager/index.cfm">
 <cfparam name="ATTRIBUTES.EditUserID" default="-1">
+
+<!--- comes from the cfgrid on the user manager page --->
+<cfif isDefined("cfgridkey")>
+	<cfset ATTRIBUTES.EditUserID = cfgridkey />
+</cfif>
+
 <cfif IsDefined("URL.uid")>
 	<cftry>
 		<cfset ATTRIBUTES.EditUserID=Decrypt(URL.uid, APPLICATION.Key)>
 		<cfcatch></cfcatch>
 	</cftry>
 </cfif>
+
+<cfset MyUser=CreateObject("component","com.factory.thirdwave.FactoryObject")>
+<cfset MyUser.init("AdminUser")>
+<cfset MyUser.Constructor(Val(ATTRIBUTES.EditUserID))>
+
 <cfparam name="ATTRIBUTES.PageAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_String#">
 <cfset PageActionTemplate=GetToken(ATTRIBUTES.PageAction,1,"?")>
 <cfset PageActionQueryString=GetToken(ATTRIBUTES.PageAction,2,"?")>
@@ -29,73 +40,40 @@
 		<cfmodule template="/common/modules/User/UserObject.cfm"
 			ObjectAction="view" EditUserID="#ATTRIBUTES.EditUserID#">
 	</cfcase>
-	<cfcase value="2"><!--- Edit Object--->
+	<cfcase value="2,3"><!--- Edit Object--->
 		<cfswitch expression="#Trim(upa)#">
 			<cfcase value="1"><!--- Show Form --->
+				<cfset FormMode="ShowForm">
 				<table bgcolor="silver"><tr valign="top">
 				<TD bgcolor="white">
 				<cf_AddToQueryString querystring="#PageActionQueryString#" name="uoa" value="2">
 				<cf_AddToQueryString querystring="#QueryString#" name="upa" value="2">
 				<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
-				<cfmodule template="/common/modules/User/UserObject.cfm"
-					PageAction="Edit" EditUserID="#ATTRIBUTES.EditUserID#"
-					ObjectAction="ShowForm"
-					FormAction="#PageActionTemplate#?#querystring#">
+				<cfoutput><form action="#PageActionTemplate#?#querystring#" method="post"></cfoutput>
+				<cfinclude template="/common/modules/user/userForm.cfm">
+				<input type="submit" name="ButSubmit" value="Save">
+				</form>
 				</TD></TR></table>
 			</cfcase>
 			<cfcase value="2"><!--- Validate Form / Confirm --->
-				<table bgcolor="silver"><tr valign="top">
-				<TD bgcolor="white">
-				<cf_AddToQueryString querystring="#PageActionQueryString#" name="uoa" value="2">
-				<cf_AddToQueryString querystring="#QueryString#" name="upa" value="2">
-				<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
-				<cfmodule template="/common/modules/User/UserObject.cfm"
-					PageAction="Edit" EditUserID="#ATTRIBUTES.EditUserID#"
-					ObjectAction="Validate"
-					FormAction="#PageActionTemplate#?#querystring#">
-				</TD></TR></table>
-				<cfif Trim(ErrorFieldList) IS "">
-					<cfmodule template="/common/modules/User/UserObject.cfm"
-						PageAction="Edit" EditUserID="#ATTRIBUTES.EditUserID#"
-						ObjectAction="CommitEdit">
-					<cfif ReturnURL IS "">
-						<cflocation url="#ATTRIBUTES.DonePage#" addtoken="No">
-					<cfelse>
-						<cflocation url="#ReturnURL#" addtoken="No">
+				<cfloop array="#MyUser.propArray#" index="ThisProperty">
+					<cfif IsDefined("FORM.#ThisProperty.variableName.xmlText#")>
+						<cfset MyUser.SetProperty("#ThisProperty.variableName.xmlText#",Evaluate("FORM.#ThisProperty.variableName.xmlText#"))>
 					</cfif>
-				</cfif>
-			</cfcase>
-		</cfswitch>
-	</cfcase>
-	<cfcase value="3"><!--- Add Object --->
-		<cfswitch expression="#Trim(upa)#">
-			<cfcase value="1"><!--- ShowForm --->
+				</cfloop>
+				<cfset FormMode="Validate">
 				<table bgcolor="silver"><tr valign="top">
 				<TD bgcolor="white">
-				<cf_AddToQueryString querystring="#PageActionQueryString#" name="uoa" value="3">
+				<cf_AddToQueryString querystring="#PageActionQueryString#" name="uoa" value="2">
 				<cf_AddToQueryString querystring="#QueryString#" name="upa" value="2">
 				<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
-				<cfmodule template="/common/modules/User/UserObject.cfm"
-					PageAction="Add" 
-					ObjectAction="ShowForm"
-					FormAction="#PageActionTemplate#?#querystring#">
+				<cfoutput><form action="#PageActionTemplate#?#querystring#" method="post"></cfoutput>
+				<cfinclude template="/common/modules/user/userForm.cfm">
+				<input type="submit" name="ButSubmit" value="Save">
+				</form>
 				</TD></TR></table>
-			</cfcase>
-			<cfcase value="2"><!--- Validate Form / Confirm --->
-				<table bgcolor="silver"><tr valign="top">
-				<TD bgcolor="white">
-				<cf_AddToQueryString querystring="#PageActionQueryString#" name="uoa" value="3">
-				<cf_AddToQueryString querystring="#QueryString#" name="upa" value="2">
-				<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
-				<cfmodule template="/common/modules/User/UserObject.cfm"
-					PageAction="Add"
-					ObjectAction="Validate"
-					FormAction="#PageActionTemplate#?#querystring#">
-				</TD></tr></table>
-				<cfif Trim(ErrorFieldList) IS "">
-					<cfmodule template="/common/modules/User/UserObject.cfm"
-						PageAction="Add" 
-						ObjectAction="CommitAdd">
+				<cfif MyUser.IsCorrect()>
+					<cfset MyUser.Save()>
 					<cfif ReturnURL IS "">
 						<cflocation url="#ATTRIBUTES.DonePage#" addtoken="No">
 					<cfelse>

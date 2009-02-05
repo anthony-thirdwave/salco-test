@@ -50,8 +50,13 @@ setEncoding("URL", "UTF-8");
 		APPLICATION.CRLF=Chr(13) & Chr(10);
 		APPLICATION.Key="ER08R~!90E(@ajmlWE@$)(s";
 		APPLICATION.DSN=ThisDSN;
+		APPLICATION.USER_DSN=APPLICATION.DSN;
 		APPLICATION.ContactEmail="info@thirdwavellc.com";
+
+		// CMS info
 		APPLICATION.CMSVersion="5";
+		APPLICATION.GeneratorMeta="Thirdwave MasterView";
+		APPLICATION.GeneratorContentMeta="MasterView by Thirdwave, LLC 312.329.1960";
 		
 		// Resource paths
 		APPLICATION.ContentResourcesPath="resources\content\";
@@ -74,6 +79,7 @@ setEncoding("URL", "UTF-8");
 		APPLICATION.CompanyZip="60610";
 		APPLICATION.CompanyPhone="312.329.1960";
 		APPLICATION.CompanySlogan="Put your slogan here";
+		
 
 		if (ThisSiteType IS "dev") {
 			
@@ -91,7 +97,7 @@ setEncoding("URL", "UTF-8");
 			// only used if dev
 			APPLICATION.StagingURL="http://www.staging.thirdwavellc.com";
 
-			APPLICATION.sLocation["www.#APPLICATION.UniqueName#.com"]="#APPLICATION.UniqueName#.soho.thirdwave.local";
+			APPLICATION.sLocation["www.#APPLICATION.UniqueName#.com"]="#APPLICATION.UniqueName#.mca.thirdwave.local";
 
 		}
 		else if (ThisSiteType IS "staging") {
@@ -165,7 +171,12 @@ setEncoding("URL", "UTF-8");
 		Application.ErrorMailFrom="#APPLICATION.UniqueName#-Error@thirdwavellc.com";
 
 		</cfscript>
-
+		
+		<cfobject component="com.utils.utils" name="APPLICATION.utilsObj">
+		<cfset APPLICATION.utilsObj.init()>
+		
+		<!--- read the factory config xml into memory --->
+		<cfinclude template="/config/factory/thirdwave/createConfig.cfm" />
 	</cflock>
 </cfif>
 
