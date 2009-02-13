@@ -74,13 +74,13 @@
 					<cfset local.NewImageURL=ReplaceNoCase(local.NewImageURL,"//","/","All")>
 					
 					<!--- resize the image --->
-					<cfinvoke method="resizeImg" component="local.#myimage3w#">
+					<cfinvoke method="resizeImg" component="#local.myimage3w#">
 						<cfinvokeargument name="width" value="#ARGUMENTS.Width#">
 					</cfinvoke>
 					
 					<!--- write the image --->
 					<cfinvoke method="writeImg" component="#local.myimage3w#">
-						<cfinvokeargument name="path" value="#NewImagePath#">
+						<cfinvokeargument name="path" value="#local.NewImagePath#">
 					</cfinvoke>
 
 					<cfreturn local.NewImageURL>
