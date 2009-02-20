@@ -681,7 +681,6 @@ code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connect
 code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/aspx/connector.aspx -text
 code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/cfm/config.cfm -text
 code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/cfm/connector.cfm -text
-code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/cfm/connector.old.cfm -text
 code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/lasso/config.lasso -text
 code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/lasso/connector.lasso -text
 code/webroot/common/scripts/fckeditor/editor/filemanager/browser/default/connectors/perl/basexml.pl -text

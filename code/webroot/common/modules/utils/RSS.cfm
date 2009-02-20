@@ -5,7 +5,7 @@
 	<cffile action="READ" file="#ATTRIBUTES.File#" variable="RSSContent">
 	
 	<!--- parse the file --->
-	<cfinvoke component="#APPLICATION.Mapping#com/utils/rss"
+	<cfinvoke component="com.utils.rss"
 		method="ParseRSSItems"
 		returnVariable="qRSS2"
 		filePath="#ATTRIBUTES.File#">

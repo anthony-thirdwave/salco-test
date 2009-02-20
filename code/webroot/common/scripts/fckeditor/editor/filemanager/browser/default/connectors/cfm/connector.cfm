@@ -1,5 +1,5 @@
 <cfset SecGroup = "#APPLICATION.AdminUserGroupID#,#APPLICATION.ContentEditorUserGroupID#,#APPLICATION.SuperAdminUserGroupID#" />
-<cfmodule template="#Application.Mapping#common/modules/Admin/_secure.cfm" AcceptGroupIDList="#SecGroup#">
+<cfmodule template="/common/modules/Admin/_secure.cfm" AcceptGroupIDList="#SecGroup#">
 <cfsetting enablecfoutputonly="true" showdebugoutput="false">
 <cfsetting enablecfoutputonly="yes" showdebugoutput="no">
 <!---

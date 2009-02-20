@@ -172,6 +172,7 @@ setEncoding("URL", "UTF-8");
 
 		</cfscript>
 		
+		<!--- create a utils object --->
 		<cfobject component="com.utils.utils" name="APPLICATION.utilsObj">
 		<cfset APPLICATION.utilsObj.init()>
 		

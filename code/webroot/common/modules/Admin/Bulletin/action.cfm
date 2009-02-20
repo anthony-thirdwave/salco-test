@@ -5,7 +5,7 @@
 				DELETE FROM t_Bulletin
 				WHERE bulletinID = <cfqueryparam cfsqltype="cf_sql_integer" value="#FORM.bulletinID#">
 			</cfquery>
-			<cfinvoke component="#APPLICATION.Mapping#com/utils/tracking" method="track" returnVariable="success"
+			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#SESSION.AdminUserID#"
 				Entity="Bulletin"
 				KeyID="#FORM.bulletinID#"
@@ -16,7 +16,7 @@
 					SET message = <cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.message#" maxlength="1000">
 				WHERE bulletinID = <cfqueryparam cfsqltype="cf_sql_integer" value="#FORM.bulletinID#">
 			</cfquery>
-			<cfinvoke component="#APPLICATION.Mapping#com/utils/tracking" method="track" returnVariable="success"
+			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#SESSION.AdminUserID#"
 				Entity="Bulletin"
 				KeyID="#FORM.bulletinID#"
@@ -29,7 +29,7 @@
 			VALUES (<cfqueryparam cfsqltype="cf_sql_varchar" value="#FORM.message#" maxlength="1000">)
 			SELECT NewBulletinID=@@Identity
 		</cfquery>
-		<cfinvoke component="#APPLICATION.Mapping#com/utils/tracking" method="track" returnVariable="success"
+		<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 			UserID="#SESSION.AdminUserID#"
 			Entity="Bulletin"
 			KeyID="#insertNewBulletin.NewBulletinID#"
