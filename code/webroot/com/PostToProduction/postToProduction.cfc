@@ -17,28 +17,30 @@
 	<cffunction name="postLive" returntype="numeric" output="false" hint="This function will post the data to the live environment">
 		
 		<!--- Required Arguments --->
-		<cfargument name="valueList" type="string" required="true" default="">
-		<cfargument name="columnList" type="string" required="true" default="">
-		<cfargument name="tableName" type="string" required="true" default="">
-		<cfargument name="sourceDatabase" type="string" required="true" default="" hint="lifefitness_development">
-		<cfargument name="sourceServer" type="string" required="true" default="" hint="db02.newermedia.com">
-		<cfargument name="sourceLogin" type="string" required="true" default="" hint="#APPLICATION.SourceLogin#">
-		<cfargument name="sourcePassword" type="string" required="true" default="" hint="#APPLICATION.SourcePassword#">
-		<cfargument name="destinationDSN" type="string" required="true" default="" hint="">
+		<cfargument name="valueList" type="string" required="true">
+		<cfargument name="columnList" type="string" required="true">
+		<cfargument name="tableName" type="string" required="true">
+		<cfargument name="sourceDatabase" type="string" required="true" hint="lifefitness_development">
+		<cfargument name="sourceServer" type="string" required="true" hint="db02.newermedia.com">
+		<cfargument name="sourceLogin" type="string" required="true" hint="#APPLICATION.SourceLogin#">
+		<cfargument name="sourcePassword" type="string" required="true" hint="#APPLICATION.SourcePassword#">
+		<cfargument name="destinationDSN" type="string" required="true" hint="">
+		<cfargument name="sameServer" type="string" default="1" hint="">
 		
 		<!--- init variables --->		
 		<cfset var curResult = "">
 		
 		<!--- Run the post to production destination process stored procedure --->	
 		<cfstoredproc procedure="sp_postToProduction_productionProcess" datasource="#ARGUMENTS.destinationDSN#">
-			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@valueList" value="#arguments.valueList#" null="no">
-			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@columnList" value="#arguments.columnList#" null="no">
-			<cfprocparam cfsqltype="CF_SQL_varchar" dbvarname="@tableName" value="#arguments.tableName#" null="no">
-			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@sourceDatabase" value="#arguments.sourceDatabase#" null="no">
-			<cfprocparam cfsqltype="CF_SQL_varchar" dbvarname="@sourceServer" value="#arguments.sourceServer#" null="no">
-			<cfprocparam cfsqltype="CF_SQL_varchar" dbvarname="@sourceLogin" value="#arguments.sourceLogin#" null="no">
-			<cfprocparam cfsqltype="CF_SQL_varchar" dbvarname="@sourcePassword" value="#arguments.sourcePassword#" null="no">
-			<cfprocparam type="Out" cfsqltype="CF_SQL_BIT" variable="curResult" dbvarname="@successResult" null="no">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@valueList" value="#arguments.valueList#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@columnList" value="#arguments.columnList#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@tableName" value="#arguments.tableName#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@sourceDatabase" value="#arguments.sourceDatabase#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@sourceServer" value="#arguments.sourceServer#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@sourceLogin" value="#arguments.sourceLogin#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@sourcePassword" value="#arguments.sourcePassword#">
+			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@sameServer" value="#arguments.sameServer#">
+			<cfprocparam type="Out" cfsqltype="CF_SQL_BIT" variable="curResult" dbvarname="@successResult">
 		</cfstoredproc>
 			
 		
