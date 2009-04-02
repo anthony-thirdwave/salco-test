@@ -1,6 +1,6 @@
 * text=auto !eol
 code/db/cms_db_creation_scripts/CreateDatabase.sql -text
-code/db/cms_db_creation_scripts/CreateSchema.sql -text
+code/db/cms_db_creation_scripts/CreateSchema.sql -text svneol=unset#unset
 code/db/cms_db_creation_scripts/CreateStoredProcedures.sql -text
 code/db/cms_db_creation_scripts/GrantPermissions.sql -text
 code/db/cms_db_creation_scripts/LoadData.sql -text
