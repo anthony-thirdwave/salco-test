@@ -9,8 +9,9 @@
 	ArrayAppend(aTopNav,Duplicate(sNavElem));
 </cfscript>
 
-<div id="header">
-	<ul id="nav-top">
+<!-- Main Navigation Snippet -->
+<div id="mainNavigation">
+    <ul class="menuCSS">
 		<cfloop from="1" to="#ArrayLen(aTopNav)#" index="i">
 			<cfoutput>
 				<cfset thisNavElem = aTopNav[i]>
@@ -30,7 +31,7 @@
 		</cfloop>
 	</ul>
 
-	<hr />
+
 
 <!--- create main nav struct - nav elements will display in order listed --->
 <cfscript>
@@ -56,4 +57,3 @@
 	</ul>
 </div> <!-- end #header -->
 
-<hr />

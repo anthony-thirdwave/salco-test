@@ -23,14 +23,16 @@
 		<cfsaveContent Variable="FileContents">
 			<cfif GetTopCategories.RecordCount GT "0">
 				<div id="subnavigation"><!-- Start of Sub Navigation Elements -->
-				<cfoutput query="GetTopCategories" group="CategoryID">
-					<cfif Trim(CategoryURLDerived) IS "">
-						<cfset ThisURL="/content.cfm/#CategoryAlias#">
-					<cfelse>
-						<cfset ThisURL="#CategoryURLDerived#">
-					</cfif>
-					<div class="subnavigationelement"><a href="#ThisURL#">#CategoryNameDerived#</a></div>
-				</cfoutput>
+                    <ul>
+                    <cfoutput query="GetTopCategories" group="CategoryID">
+                        <cfif Trim(CategoryURLDerived) IS "">
+                            <cfset ThisURL="/content.cfm/#CategoryAlias#">
+                        <cfelse>
+                            <cfset ThisURL="#CategoryURLDerived#">
+                        </cfif>
+                        <li><a href="#ThisURL#">#CategoryNameDerived#</a></li>
+                    </cfoutput>
+                    </ul>
 				</div><!-- End of Sub Navigation Elements -->
 			</cfif>
 		</cfsaveContent>
