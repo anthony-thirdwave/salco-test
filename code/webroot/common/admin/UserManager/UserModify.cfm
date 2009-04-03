@@ -18,9 +18,17 @@
 	</cftry>
 </cfif>
 
-<cfset MyUser=CreateObject("component","com.factory.thirdwave.FactoryObject")>
-<cfset MyUser.init("AdminUser")>
-<cfset MyUser.Constructor(Val(ATTRIBUTES.EditUserID))>
+
+<!--- create a factory object --->
+<cfset myUser=createObject("component","com.factory.thirdwave.FactoryObject")>
+
+<!--- generate an adminUser from the factory --->
+<cfset myUser.init("AdminUser")>
+
+<!--- get the current user --->
+<cfset myUser.constructor(Val(ATTRIBUTES.EditUserID))>
+
+
 
 <cfparam name="ATTRIBUTES.PageAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_String#">
 <cfset PageActionTemplate=GetToken(ATTRIBUTES.PageAction,1,"?")>
@@ -56,11 +64,20 @@
 				</TD></TR></table>
 			</cfcase>
 			<cfcase value="2"><!--- Validate Form / Confirm --->
-				<cfloop array="#MyUser.propArray#" index="ThisProperty">
-					<cfif IsDefined("FORM.#ThisProperty.variableName.xmlText#")>
-						<cfset MyUser.SetProperty("#ThisProperty.variableName.xmlText#",Evaluate("FORM.#ThisProperty.variableName.xmlText#"))>
+			
+			
+				<!--- this loops through the properties of the adminUser, then sets them if they exist --->
+				<cfloop array="#myUser.propArray#" index="thisProperty">
+					
+					<!--- if the property was included in the form submission --->
+					<cfif isDefined("form.#thisProperty.variableName.xmlText#")>
+						
+						<!--- variableName and form element names match in this case --->
+						<cfset myUser.setProperty("#thisProperty.variableName.xmlText#",form[thisProperty.variableName.xmlText])>
 					</cfif>
 				</cfloop>
+				
+				
 				<cfset FormMode="Validate">
 				<table bgcolor="silver"><tr valign="top">
 				<TD bgcolor="white">
@@ -72,8 +89,10 @@
 				<input type="submit" name="ButSubmit" value="Save">
 				</form>
 				</TD></TR></table>
-				<cfif MyUser.IsCorrect()>
-					<cfset MyUser.Save()>
+				
+				<!--- check if the user has all the required properties set correctly --->
+				<cfif myUser.IsCorrect()>
+					<cfset myUser.Save()>
 					<cfif ReturnURL IS "">
 						<cflocation url="#ATTRIBUTES.DonePage#" addtoken="No">
 					<cfelse>

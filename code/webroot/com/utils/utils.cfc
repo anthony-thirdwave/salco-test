@@ -100,4 +100,18 @@
 		<!--- return the exploded string --->
 		<cfreturn local.returnString />
 	</cffunction>
+	
+	
+	
+	<!--- scrub out control characters and whitespace for a web friendly filename --->
+	<cffunction name="scrubFileName" returntype="string" output="false">
+		<cfargument name="fileName" type="string" required="yes">
+		
+		<cfset var local = structNew() />
+		<cfset local.returnValue=lcase(reReplace(arguments.fileName,"[’\!'/:""+=;?&<>|,]","","all"))>
+		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]"," ","all"))>
+		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]","-","all"))>
+		<cfreturn local.returnValue>
+	</cffunction>
+	
 </cfcomponent>
