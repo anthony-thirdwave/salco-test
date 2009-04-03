@@ -23,5 +23,4 @@
 	<cfset StructDelete(SESSION,"qUserDashboard")>
 	<cfset StructDelete(SESSION,"sGlobalSearch")>	
 </cflock>
-<cfsilent><cfinclude template="/common/process/DeleteAll403Content.cfm"></cfsilent>
 <cflocation url="/common/admin/" addtoken="No">
