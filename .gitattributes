@@ -375,6 +375,7 @@ code/webroot/common/modules/Contact/contact_captcha.cfm -text
 code/webroot/common/modules/News/NewsListing.cfm -text
 code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserObject.cfm -text
+code/webroot/common/modules/browsertest/browserdet.cfm -text
 code/webroot/common/modules/contentmanager/CategoryLocale/form.cfm -text
 code/webroot/common/modules/contentmanager/ContentControl.cfm -text
 code/webroot/common/modules/contentmanager/ContentLocale/form.cfm -text
