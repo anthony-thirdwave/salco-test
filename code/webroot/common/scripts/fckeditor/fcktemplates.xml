@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This is the sample templates definitions file. It makes the "templates"
+ * command completely customizable.
+ *
+ * See FCKConfig.TemplatesXmlPath in the configuration file.
+-->
+<Templates imagesBasePath="fck_template/images/">
+	<Template title="Full Column Image" image="temp_image_full.gif">
+		<Description>A template for a full column width article image. Image should be 589px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<!-- BEGIN PHOTO -->
+				<div class="photo full">
+					<img src="/common/images/template/temp-full-col.gif" width="589" alt="" />
+					<p>Caption here.</p>
+				</div>
+				<!-- END PHOTO -->
+			]]>
+		</Html>
+	</Template>
+	<Template title="Half Column Image - Left Aligned" image="temp_image_half_left.gif">
+		<Description>A template for a half column width article image, aligned left. Image should be 294px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<div class="photo half">
+					<img src="/common/images/template/temp-half-col.gif" width="294" alt="" />
+					<p>Caption here.</p>
+				</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="Half Column Image - Right Aligned" image="temp_image_half_right.gif">
+		<Description>A template for a half column width article image, aligned right. Image should be 294px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<div class="photo half alt">
+					<img src="/common/images/template/temp-half-col.gif" width="294" alt="" />
+					<p>Caption here.</p>
+				</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="1/3 Column Image - Left Aligned" image="temp_image_third_left.gif">
+		<Description>A template for a 1/3 column width article image, aligned left. Image should be 196px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<div class="photo third">
+					<img src="/common/images/template/temp-third-col.gif" width="196" alt="" />
+					<p>Caption here.</p>
+				</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="1/3 Column Image - Right Aligned" image="temp_image_third_right.gif">
+		<Description>A template for a 1/3 column width article image, aligned right. Image should be 196px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<div class="photo third alt">
+					<img src="/common/images/template/temp-third-col.gif" width="196" alt="" />
+					<p>Caption here.</p>
+				</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="1/4 Column Image - Left Aligned" image="temp_image_quarter_left.gif">
+		<Description>A template for a 1/4 column width article image, aligned left. Image should be 148px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<div class="photo quarter">
+					<img src="/common/images/template/temp-quarter-col.gif" width="148" alt="" />
+					<p>Caption here.</p>
+				</div>
+			]]>
+		</Html>
+	</Template>
+	<Template title="1/4 Column Image - Right Aligned" image="temp_image_quarter_right.gif">
+		<Description>A template for a 1/4 column width article image, aligned right. Image should be 148px wide, any height.</Description>
+		<Html>
+			<![CDATA[
+				<div class="photo quarter alt">
+					<img src="/common/images/template/temp-quarter-col.gif" width="148" alt="" />
+					<p>Caption here.</p>
+				</div>
+			]]>
+		</Html>
+	</Template>
+</Templates>
