@@ -436,6 +436,7 @@ code/webroot/common/scripts/AC_OETags.js -text
 code/webroot/common/scripts/AC_RunActiveContent.js -text
 code/webroot/common/scripts/Bdetect.js -text
 code/webroot/common/scripts/articleSelector.js -text
+code/webroot/common/scripts/bOSDetect.js -text
 code/webroot/common/scripts/categorySelector.js -text
 code/webroot/common/scripts/common.js -text
 code/webroot/common/scripts/dragdrop.js -text
@@ -1450,6 +1451,7 @@ code/webroot/common/scripts/outline/ecms_system_layer.js -text
 code/webroot/common/scripts/overlib.js -text
 code/webroot/common/scripts/overlib_mini.js -text
 code/webroot/common/scripts/pngfix.js -text
+code/webroot/common/scripts/prototype.js -text
 code/webroot/common/scripts/scriptaculous/lib/prototype.js -text
 code/webroot/common/scripts/scriptaculous/src/builder.js -text
 code/webroot/common/scripts/scriptaculous/src/controls.js -text
