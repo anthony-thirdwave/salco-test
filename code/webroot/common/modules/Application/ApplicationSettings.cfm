@@ -76,7 +76,7 @@ setEncoding("URL", "UTF-8");
 		APPLICATION.CompanyStreet="15 W. Hubbard, ##300";
 		APPLICATION.CompanyCity="Chicago";
 		APPLICATION.CompanyState="IL";
-		APPLICATION.CompanyZip="60610";
+		APPLICATION.CompanyZip="60654";
 		APPLICATION.CompanyPhone="312.329.1960";
 		APPLICATION.CompanySlogan="Put your slogan here";
 		
