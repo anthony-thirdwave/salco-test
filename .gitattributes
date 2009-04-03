@@ -1461,7 +1461,12 @@ code/webroot/common/scripts/scriptaculous/src/unittest.js -text
 code/webroot/common/scripts/sfhover.js -text
 code/webroot/common/scripts/sifr.js -text
 code/webroot/common/styles/admin.css -text
+code/webroot/common/styles/content.css -text
 code/webroot/common/styles/default.css -text
+code/webroot/common/styles/ie.css -text
+code/webroot/common/styles/mainmenudropdown.css -text
+code/webroot/common/styles/sidenavdropFlyouts.css -text
+code/webroot/common/styles/template.css -text
 code/webroot/content.cfm -text
 code/webroot/index.cfm -text
 code/webroot/robots.txt -text
