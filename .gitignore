@@ -1,4 +1,6 @@
 code/temp/*
+code/webroot/common/incoming/documents/*
+code/webroot/common/incoming/images/*
 code/webroot/incoming/*
 code/webroot/incoming/Image/*
 code/webroot/resources/category/*
