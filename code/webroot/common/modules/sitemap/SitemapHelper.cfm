@@ -1,4 +1,4 @@
-<cfparam name="ATTRIBUTES.ThisCategoryID" default="857">
+<cfparam name="ATTRIBUTES.ThisCategoryID" default="1">
 
 <cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
 	<cfprocresult name="getdetail" maxrows="1">

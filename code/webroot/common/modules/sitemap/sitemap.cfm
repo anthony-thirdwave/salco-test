@@ -1,4 +1,4 @@
-<cfparam name="ATTRIBUTES.SiteCategoryID" default="857">
+<cfparam name="ATTRIBUTES.SiteCategoryID" default="1">
 
 <cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
 	select DisplayOrder from t_Category Where CategoryID=#Val(ATTRIBUTES.SiteCategoryID)#
@@ -13,7 +13,7 @@
 <CFSET ExecuteTempFile="#APPLICATION.LocaleID#\+SiteMap_#ATTRIBUTES.SiteCategoryID#_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
 <CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
 	<cfsaveContent Variable="FileContents">
-		<cfmodule template="/common/modules/sitemap/SitemapHelper.cfm">
+		<cfmodule template="/common/modules/sitemap/SitemapHelper.cfm" ThisCategoryID="#ATTRIBUTES.SiteCategoryID#">
 	</cfsavecontent>
 	<cffile action="WRITE" file="#APPLICATION.ExecuteTempDir##ExecuteTempFile#" output="#FileContents#" addnewline="Yes">
 </cfif>
