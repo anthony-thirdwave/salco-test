@@ -34,7 +34,12 @@
 		<cfoutput><p>Creating collection #APPLICATION.CollectionPath##ThisCollectionName#...</p></cfoutput>
 		<cftry>
 		<!--- <cfcollection action="CREATE" collection="#ThisCollectionName#" path="#APPLICATION.CollectionPath#" language="#slanguageName[ThisLocaleID]#"> --->
-			<cfcollection action="CREATE" collection="#ThisCollectionName#" path="#APPLICATION.CollectionPath#" language="English">Done...
+			<cfcollection 
+				action="CREATE" 
+				collection="#ThisCollectionName#" 
+				path="#APPLICATION.CollectionPath#" 
+				categories="true"
+				language="englishx">Done...
 			<cfcatch><cfoutput><p>Collection #ThisCollectionName# already exists</p></cfoutput></cfcatch>
 		</cftry>
 		<cfindex action="PURGE" collection="#ThisCollectionName#">
