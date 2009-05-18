@@ -34,12 +34,16 @@
 		<cfoutput><p>Creating collection #APPLICATION.CollectionPath##ThisCollectionName#...</p></cfoutput>
 		<cftry>
 		<!--- <cfcollection action="CREATE" collection="#ThisCollectionName#" path="#APPLICATION.CollectionPath#" language="#slanguageName[ThisLocaleID]#"> --->
+			
+			<!--- as of CF8 categories="true" and language="englishx" don't work together,
+			      so you need to pick one per the needs of the app --->
+			
 			<cfcollection 
 				action="CREATE" 
 				collection="#ThisCollectionName#" 
 				path="#APPLICATION.CollectionPath#" 
 				categories="true"
-				language="englishx">Done...
+				language="english">Done...
 			<cfcatch><cfoutput><p>Collection #ThisCollectionName# already exists</p></cfoutput></cfcatch>
 		</cftry>
 		<cfindex action="PURGE" collection="#ThisCollectionName#">
