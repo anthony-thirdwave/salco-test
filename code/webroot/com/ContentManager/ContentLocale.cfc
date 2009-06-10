@@ -174,16 +174,16 @@
 		<cfargument name="ID" default="0" type="numeric" required="false">
 		
 		<!--- init variables --->
-		<cfset var aBlank = "">
-		<cfset var sBlank = "">
-		<cfset var aTemp = "">
-		<cfset var ThisProperty = "">
-		<cfset var GetItems = "">
-		<cfset var GetContentTypeID = "">
-		<cfset var GetContentTypeID2 = "">
-		<cfset var GetContentProperties = "">
-		<cfset var sContentBody = "">
-		<cfset var sProperties = "">
+		<cfset var aBlank="">
+		<cfset var sBlank="">
+		<cfset var aTemp="">
+		<cfset var ThisProperty="">
+		<cfset var GetItems="">
+		<cfset var GetContentTypeID="">
+		<cfset var GetContentTypeID2="">
+		<cfset var GetContentProperties="">
+		<cfset var sContentBody="">
+		<cfset var sProperties="">
 		
 		<!--- Typically, use set methods in contructor. --->
 		
@@ -276,7 +276,7 @@
 					</cfif>
 					<!--- Custom Properties --->
 					<cfquery name="GetContentProperties" datasource="#APPLICATION.DSN#">
-						SELECT * FROM t_Properties WHERE PropertiesID = <cfqueryparam value="#Val(PropertiesID)#" cfsqltype="cf_sql_integer">
+						SELECT * FROM t_Properties WHERE PropertiesID=<cfqueryparam value="#Val(PropertiesID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfif isWDDX(GetContentProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetContentProperties.PropertiesPacket#" output="sProperties">
@@ -309,85 +309,85 @@
 		<cfargument name="UserID" required="false">
 		
 		<!--- init variables --->
-		<cfset var thisContentLocaleID = "">
-		<cfset var thisContentID = "">
-		<cfset var thisContentLocaleName = "">
-		<cfset var thisLocaleID = "">
-		<cfset var thisContentLocaleActive = "">
-		<cfset var thisPropertiesID = "">
-		<cfset var thisDefaultContentLocale = "">
-		<cfset var thisNumItems = "">
-		<cfset var thisHTML = "">
-		<cfset var thisHTMLTemplate = "">
-		<cfset var thisText = "">
-		<cfset var thisSubTitle = "">
-		<cfset var thisLinkURL = "">
-		<cfset var thisaText = "">
-		<cfset var thisaToken = "">
-		<cfset var thissHTML = "">
-		<cfset var thisTextPosition = "">
-		<cfset var thisImage = "">
-		<cfset var thisImageThumbnail = "">
-		<cfset var thisImageRollover = "">
-		<cfset var thisFile = "">
-		<cfset var thisFileMimeID = "">
-		<cfset var thisFileSize = "">
-		<cfset var thisImageLarge = "">
-		<cfset var thisFlash = "">
-		<cfset var thisaFile = "">
-		<cfset var thisLocation = "">
-		<cfset var thislStateProvince = "">
-		<cfset var thisPageActionURL = "">
-		<cfset var thisItemCode = "">
-		<cfset var thisAllowMultipleRegistrations = "">
-		<cfset var thislRelatedCategoryID = "">
-		<cfset var thislMTCategoryIDRestrict = "">
-		<cfset var thislMTCategoryIDAllow = "">
-		<cfset var thisCSSID = "">
-		<cfset var thisALink = "">
-		<cfset var thisShowEventRangeID = "">
-		<cfset var thisNumberOfMonths = "">
-		<cfset var thislArticleCategoryID = "">
-		<cfset var thisContentAbstract = "">
-		<cfset var thisContentPreview = "">
-		<cfset var thisTitleTypeID = "">
-		<cfset var ThisFileList = "">
-		<cfset var DestinationDirectoryImages = "">
-		<cfset var DestinationDirectoryDocuments = "">
-		<cfset var OriginalName = "">
-		<cfset var SourceFile = "">
-		<cfset var ThisDestinationDirectory = "">
-		<cfset var UploadedFile = "">
-		<cfset var fileoperation = "">
-		<cfset var FileHREF = "">
-		<cfset var NewName = "">
-		<cfset var Source = "">
-		<cfset var DestinationToSave = "">
-		<cfset var sContentBody = "">
-		<cfset var FileToWrite = "">
-		<cfset var DevNull = "">
-		<cfset var ImageWidth = "">
-		<cfset var ImageHeight = "">
-		<cfset var sProperties = "">
-		<cfset var i = "">
-		<cfset var ThisKey = "">
-		<cfset var Afilei = "">
-		<cfset var ThisFileOfList = "">
-		<cfset var ThisImage2 = "">
-		<cfset var InsertProperties = "">
-		<cfset var InsertContent = "">
-		<cfset var UpdateContent = "">
-		<cfset var GetOldContentBody = "">
-		<cfset var GetMime = "">
-		<cfset var GetProperties = "">
-		<cfset var GetLocales = "">
-		<cfset var TestContentLocaleMeta = "">
-		<cfset var TestThisContentLocaleMeta = "">
-		<cfset var InsertContentLocaleMeta = "">
-		<cfset var ThisContentName = "">
-		<cfset var success = "">
-		<cfset var ThisCategoryID = "">
-		<cfset var wProperties = "">
+		<cfset var thisContentLocaleID="">
+		<cfset var thisContentID="">
+		<cfset var thisContentLocaleName="">
+		<cfset var thisLocaleID="">
+		<cfset var thisContentLocaleActive="">
+		<cfset var thisPropertiesID="">
+		<cfset var thisDefaultContentLocale="">
+		<cfset var thisNumItems="">
+		<cfset var thisHTML="">
+		<cfset var thisHTMLTemplate="">
+		<cfset var thisText="">
+		<cfset var thisSubTitle="">
+		<cfset var thisLinkURL="">
+		<cfset var thisaText="">
+		<cfset var thisaToken="">
+		<cfset var thissHTML="">
+		<cfset var thisTextPosition="">
+		<cfset var thisImage="">
+		<cfset var thisImageThumbnail="">
+		<cfset var thisImageRollover="">
+		<cfset var thisFile="">
+		<cfset var thisFileMimeID="">
+		<cfset var thisFileSize="">
+		<cfset var thisImageLarge="">
+		<cfset var thisFlash="">
+		<cfset var thisaFile="">
+		<cfset var thisLocation="">
+		<cfset var thislStateProvince="">
+		<cfset var thisPageActionURL="">
+		<cfset var thisItemCode="">
+		<cfset var thisAllowMultipleRegistrations="">
+		<cfset var thislRelatedCategoryID="">
+		<cfset var thislMTCategoryIDRestrict="">
+		<cfset var thislMTCategoryIDAllow="">
+		<cfset var thisCSSID="">
+		<cfset var thisALink="">
+		<cfset var thisShowEventRangeID="">
+		<cfset var thisNumberOfMonths="">
+		<cfset var thislArticleCategoryID="">
+		<cfset var thisContentAbstract="">
+		<cfset var thisContentPreview="">
+		<cfset var thisTitleTypeID="">
+		<cfset var ThisFileList="">
+		<cfset var DestinationDirectoryImages="">
+		<cfset var DestinationDirectoryDocuments="">
+		<cfset var OriginalName="">
+		<cfset var SourceFile="">
+		<cfset var ThisDestinationDirectory="">
+		<cfset var UploadedFile="">
+		<cfset var fileoperation="">
+		<cfset var FileHREF="">
+		<cfset var NewName="">
+		<cfset var Source="">
+		<cfset var DestinationToSave="">
+		<cfset var sContentBody="">
+		<cfset var FileToWrite="">
+		<cfset var DevNull="">
+		<cfset var ImageWidth="">
+		<cfset var ImageHeight="">
+		<cfset var sProperties="">
+		<cfset var i="">
+		<cfset var ThisKey="">
+		<cfset var Afilei="">
+		<cfset var ThisFileOfList="">
+		<cfset var ThisImage2="">
+		<cfset var InsertProperties="">
+		<cfset var InsertContent="">
+		<cfset var UpdateContent="">
+		<cfset var GetOldContentBody="">
+		<cfset var GetMime="">
+		<cfset var GetProperties="">
+		<cfset var GetLocales="">
+		<cfset var TestContentLocaleMeta="">
+		<cfset var TestThisContentLocaleMeta="">
+		<cfset var InsertContentLocaleMeta="">
+		<cfset var ThisContentName="">
+		<cfset var success="">
+		<cfset var ThisCategoryID="">
+		<cfset var wProperties="">
 			
 		<cfif IsCorrect()>
 			<cfset thisContentLocaleID=this.GetProperty("ContentLocaleID")>
@@ -480,113 +480,6 @@
 					<cfset thisContentLocaleID=InsertContent.NewContentLocaleID>
 					<cfset this.SetProperty("ContentLocaleID",InsertContent.NewContentLocaleID)>
 					
-					<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
-					<cfset ThisFileList=this.GetFileList(1)>
-					<cfset DestinationDirectoryImages=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('images')#","/","\","All")>
-					<cfset DestinationDirectoryImages=ReplaceNoCase(DestinationDirectoryImages,"\\","\","all")>
-					<cfif ListLen(ThisFileList,";") GT "0">
-						
-						<cfset DestinationDirectoryDocuments=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('documents')#","/","\","All")>
-						<cfset DestinationDirectoryDocuments=ReplaceNoCase(DestinationDirectoryDocuments,"\\","\","all")>
-						<cfloop index="i" from="1" to="#ListLen(ThisFileList,';')#" step="1">
-							<cfset OriginalName=ListGetAt(ThisFileList,i,";")>
-							<cfset OriginalName=ReplaceNoCase(OriginalName,"http://#CGI.Server_Name#","","All")>
-							<cfset OriginalName=ReplaceNoCase(OriginalName,"//","/","All")>
-							<cfset SourceFile="#ARGUMENTS.WebrootPath##ReplaceNoCase(OriginalName,'/','\','all')#">
-							<cfset SourceFile=ReplaceNoCase(SourceFile,"\\","\","all")>
-							<cfif ListFindNoCase("#APPLICATION.ImageFileExtensionList#",".#ListLast('#OriginalName#','.')#",";") GT "0">
-								<cfset ThisDestinationDirectory="#DestinationDirectoryImages#">
-							<cfelse>
-								<cfset ThisDestinationDirectory="#DestinationDirectoryDocuments#">
-							</cfif>
-							<cfset UploadedFile="#ThisDestinationDirectory##ListLast('#SourceFile#','\')#">
-							<cfif FileExists(SourceFile) AND SourceFile IS NOT UploadedFile>
-								<cfif left(OriginalName,len("/common/incoming")) IS "/common/incoming">
-									<cfset fileoperation="move">
-								<cfelse>
-									<cfset fileoperation="copy">
-								</cfif>
-								<cffile action="#fileoperation#" source="#SourceFile#" destination="#ThisDestinationDirectory#">
-								
-								<cfset FileHREF=ReplaceNoCase(UploadedFile,ARGUMENTS.WebrootPath,"/","All")>
-								<cfset FileHREF=ReplaceNoCase(FileHREF,"\","/","All")>
-								<cfset FileHREF=ReplaceNoCase(FileHREF,"//","/","All")>
-								<cfset thisHTML=ReplaceNoCase(thisHTML,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisHTMLTemplate=ReplaceNoCase(thisHTMLTemplate,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisFile=ReplaceNoCase(thisFile,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisText=ReplaceNoCase(thisText,"#OriginalName#","#FileHREF#","All")>
-								<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
-									<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#OriginalName#","#FileHREF#","All")>
-								</cfloop>
-								<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
-									<cfset ThissHTML[ThisKey]=ReplaceNoCase(ThissHTML[ThisKey],"#OriginalName#","#FileHREF#","All")>
-								</cfloop>
-								<cfset thisImage=ReplaceNoCase(thisImage,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisImageLarge=ReplaceNoCase(thisImageLarge,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisImageThumbnail=ReplaceNoCase(thisImageThumbnail,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisImageRollover=ReplaceNoCase(thisImageRollover,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisFlash=ReplaceNoCase(thisFlash,"#OriginalName#","#FileHREF#","All")>
-								<cfset thisAFile=this.GetProperty("aFile")>
-								<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
-									<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
-										<cfset thisAFile[Afilei].FilePath=ReplaceNoCase(thisAFile[Afilei].FilePath,"#OriginalName#","#FileHREF#","All")>
-									</cfloop>
-								</cfif>
-							</cfif>
-						</cfloop>
-						<cfset ThisFileList=this.GetFileList(1)>
-						<cfif ListLen(ThisFileList,";") GT "0">
-							<cfloop index="ThisFileOfList" list="#FileList#" delimiters=";">
-								<cfif Left(ThisFileOfList,Len("http://#CGI.Server_Name#")) iS "http://#CGI.Server_Name#">
-									<cfset NewName=ReplaceNoCase(ThisFileOfList,"http://#CGI.Server_Name#","","All")>
-									<cfset NewName=ReplaceNoCase(NewName,"//","/","All")>
-									<cfset thisHTML=Replace(thisHTML,"#ThisFileOfList#","#NewName#","All")>
-									<cfset thisHTMLTemplate=Replace(thisHTMLTemplate,"#ThisFileOfList#","#NewName#","All")>
-									<cfset thisFile=Replace(thisFile,"#ThisFileOfList#","#NewName#","All")>
-									<cfset thisText=Replace(thisText,"#ThisFileOfList#","#NewName#","All")>
-									<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
-										<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#ThisFileOfList#","#NewName#","All")>
-									</cfloop>
-									<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
-										<cfset ThissHTML[ThisKey]=ReplaceNoCase(ThissHTML[ThisKey],"#ThisFileOfList#","#NewName#","All")>
-									</cfloop>
-									<cfset thisImage=ReplaceNoCase(thisImage,"#ThisFile#","#NewName#","All")>
-									<cfset thisImageLarge=ReplaceNoCase(thisImageLarge,"#ThisFile#","#NewName#","All")>
-									<cfset thisImageThumbnail=ReplaceNoCase(thisImageThumbnail,"#ThisFile#","#NewName#","All")>
-									<cfset thisImageRollover=ReplaceNoCase(thisImageRollover,"#ThisFile#","#NewName#","All")>
-									<cfset thisFlash=ReplaceNoCase(thisFlash,"#ThisFile#","#NewName#","All")>
-									<cfset thisAFile=this.GetProperty("aFile")>
-									<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
-									<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
-										<cfset thisAFile[Afilei].FilePath=ReplaceNoCase(thisAFile[Afilei].FilePath,"#ThisFile#","#NewName#","All")>
-									</cfloop>
-								</cfif>
-								</cfif>
-							</cfloop>
-						</cfif>
-						<cfset this.SetProperty("HTML",thisHTML)>
-						<cfset this.SetProperty("HTMLTemplate",thisHTMLTemplate)>
-						<cfset this.SetProperty("Text",thisText)>
-						<cfset this.SetProperty("aText",ThisAText)>
-						<cfset this.SetProperty("File",thisFile)>
-						<cfset this.SetProperty("Image",thisImage)>
-						<cfset this.SetProperty("ImageLarge",thisImageLarge)>
-						<cfset this.SetProperty("ImageRollover",thisImageRollover)>
-						<cfset this.SetProperty("ImageThumbnail",thisImageThumbnail)>
-						<cfset this.SetProperty("Flash",thisFlash)>
-						<cfset this.SetProperty("aFile",thisAFile)>
-					</cfif>
-					<cfloop index="ThisImage2" list="Image,Flash,ImageLarge,ImageRollover,ImageThumbnail">
-						<cfset Source=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetProperty('#ThisImage2#')#","/","\","all")>
-						<cfset Source=ReplaceNoCase("#Source#","\\","\","all")>
-						<cfif FileExists(Source)>							
-							<cffile action="MOVE" source="#Source#" destination="#DestinationDirectoryImages#">
-							<cfset DestinationToSave="#this.GetResourcePath('images')##ListLast(this.GetProperty('#ThisImage2#'),'/')#">
-							<cfset DestinationToSave=ReplaceNoCase(DestinationToSave,"//","/","all")>
-							<cfset this.SetProperty("#ThisImage2#","#DestinationToSave#")>
-							<cfset SetVariable("This#ThisImage2#","#DestinationToSave#")>
-						</cfif>
-					</cfloop>
 					<cfif Val(ARGUMENTS.UserID) GT "0">
 						<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 							UserID="#ARGUMENTS.UserID#"
@@ -631,6 +524,116 @@
 						EntityName="#ThisContentLocaleName#">
 				</cfif>
 			</cfif>
+			
+			<!--- This next routine makes sure that all associated resources are moved from /common/incoming into this 
+					content locale's resource folder.
+			 --->
+			<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
+			<cfset ThisFileList=this.GetFileList(1)>
+			<cfif ListLen(ThisFileList,";") GT "0">
+				<cfset DestinationDirectoryImages=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('images')#","/","\","All")>
+				<cfset DestinationDirectoryImages=ReplaceNoCase(DestinationDirectoryImages,"\\","\","all")>
+				<cfset DestinationDirectoryDocuments=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('documents')#","/","\","All")>
+				<cfset DestinationDirectoryDocuments=ReplaceNoCase(DestinationDirectoryDocuments,"\\","\","all")>
+				<cfloop index="i" from="1" to="#ListLen(ThisFileList,';')#" step="1">
+					<cfset OriginalName=ListGetAt(ThisFileList,i,";")>
+					<cfset OriginalName=ReplaceNoCase(OriginalName,"http://#CGI.Server_Name#","","All")>
+					<cfset OriginalName=ReplaceNoCase(OriginalName,"//","/","All")>
+					<cfset SourceFile="#ARGUMENTS.WebrootPath##ReplaceNoCase(OriginalName,'/','\','all')#">
+					<cfset SourceFile=ReplaceNoCase(SourceFile,"\\","\","all")>
+					<cfif ListFindNoCase("#APPLICATION.ImageFileExtensionList#",".#ListLast('#OriginalName#','.')#",";") GT "0">
+						<cfset ThisDestinationDirectory="#DestinationDirectoryImages#">
+					<cfelse>
+						<cfset ThisDestinationDirectory="#DestinationDirectoryDocuments#">
+					</cfif>
+					<cfset UploadedFile="#ThisDestinationDirectory##ListLast('#SourceFile#','\')#">
+					<cfif FileExists(SourceFile) AND SourceFile IS NOT UploadedFile>
+						<cfif left(OriginalName,len("/common/incoming")) IS "/common/incoming">
+							<cfset fileoperation="move">
+						<cfelse>
+							<cfset fileoperation="copy">
+						</cfif>
+						<cffile action="#fileoperation#" source="#SourceFile#" destination="#ThisDestinationDirectory#">
+						
+						<cfset FileHREF=ReplaceNoCase(UploadedFile,ARGUMENTS.WebrootPath,"/","All")>
+						<cfset FileHREF=ReplaceNoCase(FileHREF,"\","/","All")>
+						<cfset FileHREF=ReplaceNoCase(FileHREF,"//","/","All")>
+						<cfset thisHTML=ReplaceNoCase(thisHTML,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisHTMLTemplate=ReplaceNoCase(thisHTMLTemplate,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisFile=ReplaceNoCase(thisFile,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisText=ReplaceNoCase(thisText,"#OriginalName#","#FileHREF#","All")>
+						<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
+							<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#OriginalName#","#FileHREF#","All")>
+						</cfloop>
+						<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
+							<cfset ThissHTML[ThisKey]=ReplaceNoCase(ThissHTML[ThisKey],"#OriginalName#","#FileHREF#","All")>
+						</cfloop>
+						<cfset thisImage=ReplaceNoCase(thisImage,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisImageLarge=ReplaceNoCase(thisImageLarge,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisImageThumbnail=ReplaceNoCase(thisImageThumbnail,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisImageRollover=ReplaceNoCase(thisImageRollover,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisFlash=ReplaceNoCase(thisFlash,"#OriginalName#","#FileHREF#","All")>
+						<cfset thisAFile=this.GetProperty("aFile")>
+						<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
+							<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
+								<cfset thisAFile[Afilei].FilePath=ReplaceNoCase(thisAFile[Afilei].FilePath,"#OriginalName#","#FileHREF#","All")>
+							</cfloop>
+						</cfif>
+					</cfif>
+				</cfloop>
+				<cfset ThisFileList=this.GetFileList(1)>
+				<cfif ListLen(ThisFileList,";") GT "0">
+					<cfloop index="ThisFileOfList" list="#FileList#" delimiters=";">
+						<cfif Left(ThisFileOfList,Len("http://#CGI.Server_Name#")) iS "http://#CGI.Server_Name#">
+							<cfset NewName=ReplaceNoCase(ThisFileOfList,"http://#CGI.Server_Name#","","All")>
+							<cfset NewName=ReplaceNoCase(NewName,"//","/","All")>
+							<cfset thisHTML=Replace(thisHTML,"#ThisFileOfList#","#NewName#","All")>
+							<cfset thisHTMLTemplate=Replace(thisHTMLTemplate,"#ThisFileOfList#","#NewName#","All")>
+							<cfset thisFile=Replace(thisFile,"#ThisFileOfList#","#NewName#","All")>
+							<cfset thisText=Replace(thisText,"#ThisFileOfList#","#NewName#","All")>
+							<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
+								<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#ThisFileOfList#","#NewName#","All")>
+							</cfloop>
+							<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
+								<cfset ThissHTML[ThisKey]=ReplaceNoCase(ThissHTML[ThisKey],"#ThisFileOfList#","#NewName#","All")>
+							</cfloop>
+							<cfset thisImage=ReplaceNoCase(thisImage,"#ThisFile#","#NewName#","All")>
+							<cfset thisImageLarge=ReplaceNoCase(thisImageLarge,"#ThisFile#","#NewName#","All")>
+							<cfset thisImageThumbnail=ReplaceNoCase(thisImageThumbnail,"#ThisFile#","#NewName#","All")>
+							<cfset thisImageRollover=ReplaceNoCase(thisImageRollover,"#ThisFile#","#NewName#","All")>
+							<cfset thisFlash=ReplaceNoCase(thisFlash,"#ThisFile#","#NewName#","All")>
+							<cfset thisAFile=this.GetProperty("aFile")>
+							<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
+							<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
+								<cfset thisAFile[Afilei].FilePath=ReplaceNoCase(thisAFile[Afilei].FilePath,"#ThisFile#","#NewName#","All")>
+							</cfloop>
+						</cfif>
+						</cfif>
+					</cfloop>
+				</cfif>
+				<cfset this.SetProperty("HTML",thisHTML)>
+				<cfset this.SetProperty("HTMLTemplate",thisHTMLTemplate)>
+				<cfset this.SetProperty("Text",thisText)>
+				<cfset this.SetProperty("aText",ThisAText)>
+				<cfset this.SetProperty("File",thisFile)>
+				<cfset this.SetProperty("Image",thisImage)>
+				<cfset this.SetProperty("ImageLarge",thisImageLarge)>
+				<cfset this.SetProperty("ImageRollover",thisImageRollover)>
+				<cfset this.SetProperty("ImageThumbnail",thisImageThumbnail)>
+				<cfset this.SetProperty("Flash",thisFlash)>
+				<cfset this.SetProperty("aFile",thisAFile)>
+			</cfif>
+			<cfloop index="ThisImage2" list="Image,Flash,ImageLarge,ImageRollover,ImageThumbnail">
+				<cfset Source=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetProperty('#ThisImage2#')#","/","\","all")>
+				<cfset Source=ReplaceNoCase("#Source#","\\","\","all")>
+				<cfif FileExists(Source)>							
+					<cffile action="MOVE" source="#Source#" destination="#DestinationDirectoryImages#">
+					<cfset DestinationToSave="#this.GetResourcePath('images')##ListLast(this.GetProperty('#ThisImage2#'),'/')#">
+					<cfset DestinationToSave=ReplaceNoCase(DestinationToSave,"//","/","all")>
+					<cfset this.SetProperty("#ThisImage2#","#DestinationToSave#")>
+					<cfset SetVariable("This#ThisImage2#","#DestinationToSave#")>
+				</cfif>
+			</cfloop>
 			
 			<cfquery name="GetOldContentBody" datasource="#APPLICATION.DSN#">
 				SELECT ContentBody
@@ -776,10 +779,10 @@
 						<cfquery name="TestThisContentLocaleMeta" datasource="#APPLICATION.DSN#">
 							SELECT 	MAX(cm.ContentLocalePriority) AS nextPriority
 							FROM	t_ContentLocaleMeta cm
-							INNER JOIN	t_content c ON c.contentID = cm.contentID
+							INNER JOIN	t_content c ON c.contentID=cm.contentID
 							WHERE	c.CategoryID=<cfqueryparam value="#val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
 							AND		cm.LocaleID=<cfqueryparam value="#val(GetLocales.LocaleID)#" cfsqltype="cf_sql_integer">
-							AND		cm.contentPositionID = <cfqueryparam cfsqltype="cf_sql_integer" value="#this.ContentPositionID#">
+							AND		cm.contentPositionID=<cfqueryparam cfsqltype="cf_sql_integer" value="#this.ContentPositionID#">
 						</cfquery>
 						<cfquery name="InsertContentLocaleMeta" datasource="#APPLICATION.DSN#">
 							INSERT INTO t_ContentLocaleMeta
@@ -821,7 +824,7 @@
 		<cfargument name="Value" required="true" type="any">
 		
 		<!--- init variables --->
-		<cfset var Test = "">
+		<cfset var Test="">
 		
 		<cfset ARGUMENTS.Property=Trim(ARGUMENTS.Property)>
 				
@@ -944,7 +947,7 @@
 		<cfargument name="Property" required="true">
 		
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 		
 		<cfif IsInError(ARGUMENTS.Property)>
 			<cfreturn GetErrorValue(ARGUMENTS.Property)>
@@ -957,13 +960,13 @@
 	<cffunction name="SetPreview" returntype="string" output="1">
 		
 		<!--- init variables --->
-		<cfset var ReturnString = "">
-		<cfset var aText = "">
-		<cfset var sHTML = "">
-		<cfset var ThisContentID = "">
-		<cfset var rit = "">
-		<cfset var ThisKey = "">
-		<cfset var GetContent = "">
+		<cfset var ReturnString="">
+		<cfset var aText="">
+		<cfset var sHTML="">
+		<cfset var ThisContentID="">
+		<cfset var rit="">
+		<cfset var ThisKey="">
+		<cfset var GetContent="">
 		
 		<cfswitch expression="#this.GetContentTypeID()#">
 			<cfcase value="200"><!--- Text --->
@@ -1061,7 +1064,7 @@
 	<cffunction name="InitializeHTMLStructure" returntype="boolean" output="false">
 		<cfset var ThisTokenList=GetTokenList()>
 		<cfset var ThissHTML=this.getProperty("sHTML")>
-		<cfset var ThisToken = "">
+		<cfset var ThisToken="">
 		<cfloop index="ThisToken" list="#ThisTokenList#">
 			<cfif NOT StructKeyExists(ThissHTML,ThisToken)>
 				<cfset StructInsert(ThissHTML,ThisToken,"")>
@@ -1074,7 +1077,7 @@
 	<cffunction name="GetTokenList" returntype="String" output="1">
 		
 		<!--- init variables --->
-		<cfset var ThisTokenList = "">
+		<cfset var ThisTokenList="">
 		
 		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetTokenList" 
@@ -1088,15 +1091,15 @@
 		<cfargument name="AllProperties" required="false">
 		
 		<!--- init variables --->
-		<cfset var StringToTest = "">
-		<cfset var ThisAText = "">
-		<cfset var ThissHTML = "">
-		<cfset var thisAFile = "">
-		<cfset var FinalList = "">
-		<cfset var atexti = "">
-		<cfset var ThisKey = "">
-		<cfset var Afilei = "">
-		<cfset var ThisFile2 = "">
+		<cfset var StringToTest="">
+		<cfset var ThisAText="">
+		<cfset var ThissHTML="">
+		<cfset var thisAFile="">
+		<cfset var FinalList="">
+		<cfset var atexti="">
+		<cfset var ThisKey="">
+		<cfset var Afilei="">
+		<cfset var ThisFile2="">
 		
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"HTML")>
 			<cfset StringToTest="#this.GetProperty('HTML')#">
@@ -1169,7 +1172,7 @@
 		<cfargument name="WebrootPath" required="true">
 		
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 		
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="CreateResourcePath"
@@ -1183,7 +1186,7 @@
 		<cfargument name="ResourceType" required="true">
 		
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 		
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourcePath"
@@ -1198,7 +1201,7 @@
 		<cfargument name="WebrootPath" required="true">
 		
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 		
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourceFilePath"
@@ -1214,17 +1217,17 @@
 		<cfargument name="WebrootPath" required="true">
 		
 		<!--- init variables --->
-		<cfset var ThisFileList = this.GetFileList()>
-		<cfset var UploadDirectory = "">
-		<cfset var DestinationDirectoryImages = "">
-		<cfset var DestinationDirectoryDocuments = "">
-		<cfset var OriginalName = "">
-		<cfset var UploadedFile = "">
-		<cfset var FileHREF = "">
-		<cfset var thisaText = "">
-		<cfset var ThissHTML = "">
-		<cfset var i = "">
-		<cfset var ThisKey = "">
+		<cfset var ThisFileList=this.GetFileList()>
+		<cfset var UploadDirectory="">
+		<cfset var DestinationDirectoryImages="">
+		<cfset var DestinationDirectoryDocuments="">
+		<cfset var OriginalName="">
+		<cfset var UploadedFile="">
+		<cfset var FileHREF="">
+		<cfset var thisaText="">
+		<cfset var ThissHTML="">
+		<cfset var i="">
+		<cfset var ThisKey="">
 		
 		<cfif ARGUMENTS.FormFileFieldName IS "" OR ARGUMENTS.WebrootPath IS "" OR ListLen(ThisFileList,";") LTE "0">
 			<cfreturn false>
@@ -1287,16 +1290,16 @@
 		<cfargument name="FormFileFieldName" required="true">
 		
 		<!--- init variables --->
-		<cfset var UploadDirectory = "">
-		<cfset var UploadedFile = "">
-		<cfset var ThisFileSize = "">
-		<cfset var ThisDestDir = "">
-		<cfset var ThisUploadedFile = "">
-		<cfset var thisExt = "">
-		<cfset var ThisFilePart = "">
-		<cfset var FinalDest = "">
-		<cfset var FilePath = "">
-		<cfset var GetMime = "">
+		<cfset var UploadDirectory="">
+		<cfset var UploadedFile="">
+		<cfset var ThisFileSize="">
+		<cfset var ThisDestDir="">
+		<cfset var ThisUploadedFile="">
+		<cfset var thisExt="">
+		<cfset var ThisFilePart="">
+		<cfset var FinalDest="">
+		<cfset var FilePath="">
+		<cfset var GetMime="">
 		
 		<cfif ARGUMENTS.FormFileFieldName IS "" OR ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
@@ -1378,7 +1381,7 @@
 		<cfargument name="Property" required="true">
 		
 		<!--- init variables --->
-		<cfset var FileToDelete = "">
+		<cfset var FileToDelete="">
 		
 		<cfif ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
@@ -1397,8 +1400,8 @@
 	</cffunction>
 	
 	<cffunction name="GetDisplayTemplateTypeName" returnType="String" output="false">
-		<cfset var ReturnString = "">
-		<cfset var Test = "">
+		<cfset var ReturnString="">
+		<cfset var Test="">
 		<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_Label">
@@ -1412,8 +1415,8 @@
 	<cffunction name="GetSiblingQuery" returnType="query" output="false">
 		
 		<!--- init variables --->
-		<cfset var GetSiblingQuery = "">
-		<cfset var ThisContentID = this.GetProperty("ContentID")>
+		<cfset var GetSiblingQuery="">
+		<cfset var ThisContentID=this.GetProperty("ContentID")>
 		
 		<cfif ThisContentID LTE "0">
 			<cfset ThisContentID="-1">
@@ -1429,28 +1432,28 @@
 		<cfargument name="UserID" required="true">
 		
 		<!--- init variables --->
-		<cfset var ThisFileList = "">
-		<cfset var ThisContentLocaleID = "">
-		<cfset var ThisContentID = "">
-		<cfset var ThisLocaleID = "">
-		<cfset var DirDone = "">
-		<cfset var DirectoryToCreate = "">
-		<cfset var DestImages = "">
-		<cfset var DestDocs = "">
-		<cfset var OriginalName = "">
-		<cfset var SourceFile = "">
-		<cfset var RemoteFile = "">
-		<cfset var i = "">
-		<cfset var ThisFile = "">
-		<cfset var SelectProps = "">
-		<cfset var deleteContent1 = "">
-		<cfset var deleteContent3 = "">
-		<cfset var SelectContentFromProd = "">
-		<cfset var DeleteContent = "">
-		<cfset var DeleteContentProps = "">
-		<cfset var success = "">
-		<cfset var ThisCategoryID = "">
-		<cfset var sProductionSiteInformation = "">
+		<cfset var ThisFileList="">
+		<cfset var ThisContentLocaleID="">
+		<cfset var ThisContentID="">
+		<cfset var ThisLocaleID="">
+		<cfset var DirDone="">
+		<cfset var DirectoryToCreate="">
+		<cfset var DestImages="">
+		<cfset var DestDocs="">
+		<cfset var OriginalName="">
+		<cfset var SourceFile="">
+		<cfset var RemoteFile="">
+		<cfset var i="">
+		<cfset var ThisFile="">
+		<cfset var SelectProps="">
+		<cfset var deleteContent1="">
+		<cfset var deleteContent3="">
+		<cfset var SelectContentFromProd="">
+		<cfset var DeleteContent="">
+		<cfset var DeleteContentProps="">
+		<cfset var success="">
+		<cfset var ThisCategoryID="">
+		<cfset var sProductionSiteInformation="">
 		
 		<cfif ARGUMENTS.TrashPath IS NOT "" and this.GetProperty("ContentLocaleID") GT "0">
 			<cftransaction>
@@ -1589,21 +1592,21 @@
 		<cfargument name="UserID" required="true">
 
 		<!--- init variables --->
-		<cfset var ThisContentLocaleID = "">
-		<cfset var ThisPropertiesID = "">
-		<cfset var ThisContentID = "">
-		<cfset var ThisLocaleID = "">
-		<cfset var ThisFileList = "">
-		<cfset var Source = "">
-		<cfset var Destination = "">
-		<cfset var ThisFile = "">
-		<cfset var GetProps = "">
-		<cfset var DeleteContentOnProduction2 = "">
-		<cfset var UpdateContentOnProduction4 = "">
-		<cfset var ThisCategoryID = "">
-		<cfset var sProductionSiteInformation = "">
-		<cfset var success = "">
-		<cfset var SaveResults = "">
+		<cfset var ThisContentLocaleID="">
+		<cfset var ThisPropertiesID="">
+		<cfset var ThisContentID="">
+		<cfset var ThisLocaleID="">
+		<cfset var ThisFileList="">
+		<cfset var Source="">
+		<cfset var Destination="">
+		<cfset var ThisFile="">
+		<cfset var GetProps="">
+		<cfset var DeleteContentOnProduction2="">
+		<cfset var UpdateContentOnProduction4="">
+		<cfset var ThisCategoryID="">
+		<cfset var sProductionSiteInformation="">
+		<cfset var success="">
+		<cfset var SaveResults="">
 		
 		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetCategoryID"
