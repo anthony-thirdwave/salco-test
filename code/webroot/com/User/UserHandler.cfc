@@ -203,8 +203,8 @@
 					
 					<!--- the list of userGroups - the left takes care of the trailing comma --->
 					userGroups = left(x.groupList, len(x.groupList)-1),
-					edit = '<img src="/common/images/admin/icon_edit.gif" />',
-					delUser = '<img src="/common/images/admin/icon_delete.gif" />'
+					edit = '<img src="/common/images/admin/icon_edit.gif" width="12" height="12" />',
+					delUser = '<img src="/common/images/admin/icon_delete.gif" width="12" height="12" />'
 					
 			FROM	t_User u 
 			
