@@ -245,107 +245,113 @@
 	</cffunction>
 
 
+	<!--- generates the sitemap.xml file --->
 	<cffunction name="create_sitemap_xml">
 		
-		<cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
-			select DisplayOrder from t_Category Where CategoryID=1
+		<cfset var local = structNew() />
+		
+		<cfquery name="local.GetDisplayOrder" datasource="#APPLICATION.DSN#">
+			SELECT	DisplayOrder 
+			FROM	t_Category 
+			WHERE	CategoryID = 1
 		</cfquery>
 		
-		<cfquery name="GetLastCache" datasource="#APPLICATION.DSN#" maxrows="1">
-			SELECT     MAX(CacheDateTime) AS CacheDateTime
-			FROM         t_Category
-			WHERE     DisplayOrder like '#GetDisplayOrder.DisplayOrder#%'
-		</cfquery>
+		<cfset local.myArray = ArrayNew(1)>
+		<cfset local.myDoc = xmlNew() />
 		
-		<!--- <CFSET ExecuteTempFile="#APPLICATION.LocaleID#\+SiteMap_#ATTRIBUTES.SiteCategoryID#_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm"> --->
+		<cfinvoke method="sitemap_help_xml" URL_array="#local.myArray#" returnvariable="local.array_to_xml"/>	
 		
-		<cfset myArray = ArrayNew(1)>
-		<cfset myDoc = xmlNew() />
+		<cfset local.myDoc.xmlRoot = xmlElemNew(local.myDoc, "urlset") />
+		<cfset local.myDoc.xmlRoot.xmlAttributes["xmlns"] = "http://www.sitemaps.org/schemas/sitemap/0.9" />
 		
-		<cfinvoke method="sitemap_help_xml" URL_array="#myArray#" returnvariable="array_to_xml"/>	
-		
-		<cfset myDoc.xmlRoot = xmlElemNew(myDoc, "urlset") />
-		
-		<cfloop from="1" to="#ArrayLen(array_to_xml)#" index="j">
+		<cfloop from="1" to="#ArrayLen(local.array_to_xml)#" index="local.j">
 			
-			<cfset URL1 = xmlElemNew(myDoc, "url") />
+			<cfset local.URL1 = xmlElemNew(local.myDoc, "url") />
 			
-			<cfset loc = xmlElemNew(myDoc, "loc") />
-			<cfset loc.xmlText = "#array_to_xml[j].url#" />
+			<cfset local.loc = xmlElemNew(local.myDoc, "loc") />
+			<cfset local.loc.xmlText = "#local.array_to_xml[local.j].url#" />
 
-			<cfset priority = xmlElemNew(myDoc, "priority") />
-			<cfset priority.xmlText = "#round(DecimalFormat(1/array_to_xml[j].priority) * 10)/10#" />
+			<cfset local.priority = xmlElemNew(local.myDoc, "priority") />
+			<cfset local.priority.xmlText = "#round(DecimalFormat(1/local.array_to_xml[local.j].priority) * 10)/10#" />
 
-			<cfset lastmod = xmlElemNew(myDoc, "lastmod") />
-			<cfset lastmod.xmlText = #DateFormat(now(), "yyyy-mm-dd")# />
+			<cfset local.lastmod = xmlElemNew(local.myDoc, "lastmod") />
+			<cfset local.lastmod.xmlText = dateFormat(now(), "yyyy-mm-dd") />
 			
-			<cfset changefreq = xmlElemNew(myDoc, "changefreq") />
-			<cfset changefreq.xmlText = "weekly" />
+			<cfset local.changefreq = xmlElemNew(local.myDoc, "changefreq") />
+			<cfset local.changefreq.xmlText = "weekly" />
 			
 			
-			<cfset arrayAppend(URL1.xmlChildren, loc) />
-			<cfset arrayAppend(URL1.xmlChildren, priority) />
-			<cfset arrayAppend(URL1.xmlChildren, lastmod) />
-			<cfset arrayAppend(URL1.xmlChildren, changefreq) />
+			<cfset arrayAppend(local.URL1.xmlChildren, local.loc) />
+			<cfset arrayAppend(local.URL1.xmlChildren, local.priority) />
+			<cfset arrayAppend(local.URL1.xmlChildren, local.lastmod) />
+			<cfset arrayAppend(local.URL1.xmlChildren, local.changefreq) />
 			
-			<cfset arrayAppend(myDoc.xmlRoot.xmlChildren, URL1) /> 
+			<cfset arrayAppend(local.myDoc.xmlRoot.xmlChildren, local.URL1) /> 
 
 		</cfloop>
 		
-		 <cffile action="write"  file="#application.webrootpath#\sitemap.xml" output="#ToString(mydoc)#">
+		<cffile action="write"  file="#application.webrootpath#\sitemap.xml" output="#toString(local.mydoc)#">
 		
 	</cffunction>
 	
+	
+	
+	
+	
+	<!--- determines how and if a link should be added to sitemap.xml --->
 	<cffunction name="sitemap_help_xml">
 		<cfargument name="ThisCategoryID" default="1">
 		<cfargument name="rank" default="1">
 		<cfargument name="URL_array" type="array">
+
+		<cfset var local = structNew() />
 	
 		<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
-			<cfprocresult name="getdetail" maxrows="1">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ThisCategoryID)#" null="No">
+			<cfprocresult name="local.getdetail" maxrows="1">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(arguments.ThisCategoryID)#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
 		</cfstoredproc>
 		
-		<cfif getdetail.CategoryActiveDerived IS "1" AND ThisCategoryID neq 1>
+		<cfif local.getdetail.CategoryActiveDerived IS "1" AND arguments.ThisCategoryID neq 1>
 		
 			<!--- This is used to keep track of how important the page is higher rank = more important--->
 			<cfset arguments.rank = arguments.rank + 1>
 			
-			<cfif Trim(getdetail.CategoryURLDerived) iS NOT "">
-				<cfset sitemap_info.url = "http://#REQUEST.CGIHTTPHost##GetDetail.CategoryURL#">
+			<!--- if the categoryURLDerived is not empty, make sure it's a root relative link - sitemap.xml can't have links
+			to other hosts --->
+			<cfif len(trim(local.getdetail.CategoryURLDerived)) and not isValid("url", local.getdetail.CategoryURLDerived)>
+			
+				<cfset local.sitemap_info.url = "http://#REQUEST.CGIHTTPHost##local.getDetail.CategoryURL#">
 				
-				<cfif find("/home", sitemap_info.url) neq 0>
-					<cfset sitemap_info.priority = 1>
+				<cfif findNoCase("/home", local.sitemap_info.url) neq 0>
+					<cfset local.sitemap_info.priority = 1>
 				<cfelse>	
-					<cfset sitemap_info.priority = arguments.rank>
+					<cfset local.sitemap_info.priority = arguments.rank>
 				</cfif>
 				
-				<cfset #ArrayAppend(arguments.URL_array, duplicate(sitemap_info))#>
-					<!--- <URL><loc>/#GetDetail.CategoryURL#</loc></URL> --->
-			<cfelse>
-				<cfset sitemap_info.url = "http://#REQUEST.CGIHTTPHost#/content.cfm/#GetDetail.CategoryAlias#">
+				<cfset arrayAppend(arguments.URL_array, duplicate(local.sitemap_info))>
+			<cfelseif not len(trim(local.getdetail.CategoryURLDerived))>
+				<cfset local.sitemap_info.url = "http://#REQUEST.CGIHTTPHost#/content.cfm/#local.GetDetail.CategoryAlias#">
 				
-				<cfif find("/home", sitemap_info.url) neq 0>
-					<cfset sitemap_info.priority = 1>
+				<cfif findNoCase("/home", local.sitemap_info.url) neq 0>
+					<cfset local.sitemap_info.priority = 1>
 				<cfelse>	
-					<cfset sitemap_info.priority = arguments.rank>
+					<cfset local.sitemap_info.priority = arguments.rank>
 				</cfif>
 
-				<cfset #ArrayAppend(arguments.URL_array, duplicate(sitemap_info))#>
-					<!--- <URL><loc>/content.cfm/#GetDetail.CategoryAlias#</loc></URL> --->
+				<cfset arrayAppend(arguments.URL_array, duplicate(local.sitemap_info))>
 			</cfif>
 			
 		</cfif>
 		
 		
 		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
-			<cfprocresult name="GetcategoryList">
+			<cfprocresult name="local.getCategoryList">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#ThisCategoryID#" null="NO">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#arguments.ThisCategoryID#" null="NO">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="#APPLICATION.lVisibleCategoryTypeID#" null="No">
@@ -354,9 +360,9 @@
 		</cfstoredproc>
 		
 		
-		<cfif GetcategoryList.recordcount GT "0">
-			<cfloop query="GetcategoryList">
-				<cfinvoke method="sitemap_help_xml" ThisCategoryID="#CategoryID#" URL_array="#arguments.URL_array#" rank="#arguments.rank#" returnvariable="arguments.URL_array"> 	
+		<cfif local.getCategoryList.recordcount gt "0">
+			<cfloop query="local.getCategoryList">
+				<cfinvoke method="sitemap_help_xml" ThisCategoryID="#local.getCategoryList.CategoryID#" URL_array="#arguments.URL_array#" rank="#arguments.rank#" returnvariable="arguments.URL_array"> 	
 			</cfloop>	
 		</cfif>
 		
