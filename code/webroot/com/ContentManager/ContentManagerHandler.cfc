@@ -264,11 +264,11 @@
 		
 		<cfinvoke method="sitemap_help_xml" URL_array="#myArray#" returnvariable="array_to_xml"/>	
 		
-		<cfset myDoc.xmlRoot = xmlElemNew(myDoc, "Urlset") />
+		<cfset myDoc.xmlRoot = xmlElemNew(myDoc, "urlset") />
 		
 		<cfloop from="1" to="#ArrayLen(array_to_xml)#" index="j">
 			
-			<cfset URL1 = xmlElemNew(myDoc, "URL") />
+			<cfset URL1 = xmlElemNew(myDoc, "url") />
 			
 			<cfset loc = xmlElemNew(myDoc, "loc") />
 			<cfset loc.xmlText = "#array_to_xml[j].url#" />
