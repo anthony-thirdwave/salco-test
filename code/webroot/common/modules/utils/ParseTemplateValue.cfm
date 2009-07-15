@@ -30,7 +30,7 @@
 		<cfset FileList = "">
 		<cfset currentPosition = 1>
 		<cfloop condition="currentPosition GT 0">
-			<cfset aFileSearchResults = REFind('(' & #invalidFileCharacters# & ')([^(' & #invalidFileCharacters# & ')]*(?:\([A-Za-a0-9]*\)){0,1}(' & Replace(ListChangeDelims(FileExtensionList,'|',';'),".","\.","all") & '))',Attributes.String,currentPosition,True)>
+			<cfset aFileSearchResults = REFindNoCase('(' & #invalidFileCharacters# & ')([^(' & #invalidFileCharacters# & ')]*(?:\([A-Za-a0-9]*\)){0,1}(' & Replace(ListChangeDelims(FileExtensionList,'|',';'),".","\.","all") & '))',Attributes.String,currentPosition,True)>
 			<cfif aFileSearchResults.pos[1] EQ 0>
 				<cfset currentPosition = 0>
 			<cfelse>

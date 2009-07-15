@@ -6,25 +6,37 @@
 </head>
 
 <body>
-<cfquery name="GetAllContent">
+
+<!--- get the content of rss type --->
+<cfquery name="GetAllContent" datasource="#APPLICATION.DSN#">
 	select * from qry_GetContentLocale where ContentTypeID=241 order by ContentID
 </cfquery>
 
 <cfoutput query="GetAllContent">
-	<cfif isWDDX(ContentBody)>
-		<cfwddx action="WDDX2CFML" input="#ContentBody#" output="sContentBody">
-			<cfif StructKeyExists(sContentBody,"LinkURL") AND Trim(StructFind(sContentBody,"LinkURL")) is not "">
-				<cfinvoke component="com.ContentManager.ContentHandler"
-					method="GetResourceFilePath"
-					returnVariable="ReturnValue"
-					ContentID="ContentID"
-					ResourceType="Generated"
-					WebrootPath="#APPLICATION.WebrootPath#">
-				<cfhttp url="#LinkURL#" method="get">
-				<cfset FileToWrite="#this.GetResourceFilePath('Generated',ARGUMENTS.WebrootPath)#rss_#ContentLocale#.xml">
-				<cffile action="WRITE" file="#FileToWrite#" output="#CFHTTP.FileContent#" addnewline="Yes">
-			</cfif>
-		</cfwddx>
+	<cfif isWDDX(GetAllContent.ContentBody)>
+		
+		<cfwddx action="WDDX2CFML" input="#GetAllContent.ContentBody#" output="sContentBody" />
+		
+		<!--- check for the linkUrl param --->
+		<cfif StructKeyExists(sContentBody,"LinkURL") AND len(sContentBody.LinkUrl)>
+			
+			<!--- get the path where the file will reside --->
+			<cfinvoke component="com.ContentManager.ContentHandler"
+				method="GetResourceFilePath"
+				returnVariable="ReturnValue"
+				ContentID="#GetAllContent.ContentID#"
+				ResourceType="Generated"
+				WebrootPath="#APPLICATION.WebrootPath#">
+			
+			<!--- get the content of the link --->	
+			<cfhttp url="#sContentBody.LinkURL#" method="get">
+			
+			<!--- define the path and file name --->
+			<cfset FileToWrite = ReturnValue & "rss_#GetAllContent.ContentLocaleId#.xml">
+			
+			<!--- write the file --->
+			<cffile action="WRITE" file="#FileToWrite#" output="#request.stripChars(CFHTTP.FileContent)#" addnewline="Yes">
+		</cfif>
 	</cfif>
 </cfoutput>
 
