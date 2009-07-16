@@ -24,17 +24,6 @@
 		thisKey = thisKey + 1;
 		
 		// position 401 modules
-		sDashboardModule.ID = 2;
-		sDashboardModule.Name = "Recent Changes";
-		sDashboardModule.Description = "Recent changes module.";
-		sDashboardModule.Required = 1;
-		sDashboardModule.Position=401;
-		sDashboardModule.Priority=10;
-		sDashboardModule.UsergroupIdList="#APPLICATION.AdminUserGroupID#,#APPLICATION.ContentEditorUserGroupID#";
-		sDashboardModule.Path="/common/modules/admin/RecentChanges/recentChanges.cfm";
-		sDashboard[thisKey]=Duplicate(sDashboardModule);
-		thisKey = thisKey + 1;
-		
 		sDashboardModule.ID = 3;
 		sDashboardModule.Name = "Quicky Add Page";
 		sDashboardModule.Description = "Quicky add page module.";
@@ -43,6 +32,18 @@
 		sDashboardModule.Priority=20;
 		sDashboardModule.UsergroupIdList="all";
 		sDashboardModule.Path="/common/modules/admin/QuickyAddPage/addPage.cfm";
+		sDashboard[thisKey]=Duplicate(sDashboardModule);
+		thisKey = thisKey + 1;
+		
+		// position 402 modules
+		sDashboardModule.ID = 2;
+		sDashboardModule.Name = "Recent Changes";
+		sDashboardModule.Description = "Recent changes module.";
+		sDashboardModule.Required = 1;
+		sDashboardModule.Position=402;
+		sDashboardModule.Priority=10;
+		sDashboardModule.UsergroupIdList="#APPLICATION.AdminUserGroupID#,#APPLICATION.ContentEditorUserGroupID#";
+		sDashboardModule.Path="/common/modules/admin/RecentChanges/recentChanges.cfm";
 		sDashboard[thisKey]=Duplicate(sDashboardModule);
 		thisKey = thisKey + 1;
 		
