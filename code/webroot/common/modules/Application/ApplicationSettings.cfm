@@ -13,6 +13,10 @@ setEncoding("URL", "UTF-8");
 <cfparam name="REQUEST.ContentGenerateMode" default="DYNAMIC">
 <cfparam name="REQUEST.ReCache" default="1">
 
+<!--- make sure pages aren't caching in browser --->
+<cfheader name="Expires" value="Mon, 06 Jan 1990 00:00:01 GMT"> 
+<cfheader name="Pragma" value="no-cache"> 
+<cfheader name="cache-control" value="no-cache">
 
 <!--- <cfsetting showdebugoutput="No"> --->
 
@@ -177,7 +181,12 @@ setEncoding("URL", "UTF-8");
 		<cfset APPLICATION.utilsObj.init()>
 		
 		<!--- read the factory config xml into memory --->
-		<cfinclude template="/config/factory/thirdwave/createConfig.cfm" />
+		<cfif ThisSiteType neq "dev"
+				or MustResetAppVars
+				or not isDefined("APPLICATION.FACTORYCONFIGSTATUS")>
+			<cfinclude template="/config/factory/thirdwave/createConfig.cfm" />
+			<cfinclude template="/config/factory/thirdwave/createTemplateConfig.cfm" />
+		</cfif>
 	</cflock>
 </cfif>
 
