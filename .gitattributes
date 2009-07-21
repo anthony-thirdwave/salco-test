@@ -29,6 +29,7 @@ code/webroot/com/error/error.cfc -text
 code/webroot/com/group/Group.cfc -text
 code/webroot/com/group/Param.cfc -text
 code/webroot/com/label/labelHandler.cfc -text
+code/webroot/com/time/Time.cfc -text
 code/webroot/com/utils/Captcha.cfc -text
 code/webroot/com/utils/Database.cfc -text
 code/webroot/com/utils/Image.cfc -text
