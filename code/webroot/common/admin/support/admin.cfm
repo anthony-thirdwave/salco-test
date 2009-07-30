@@ -5,8 +5,8 @@
 	IncludeTopMenu="no"
 	Indent="1">
 <cfparam name="supportaction" default="1">
-<cfset ThisPath=REQUEST.CGIPathInfo>
-<cfset ThisQueryString=REQUEST.CGIQueryString>
+<cfset ThisPath=CGI.SCRIPT_NAME>
+<cfset ThisQueryString=CGI.QUERY_STRING>
 <h1>Support Admin</h1>
 <cfif supportaction IS "1">
 	<p><strong>View Requests and Change Staus</strong></p>

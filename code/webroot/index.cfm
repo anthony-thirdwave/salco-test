@@ -1,4 +1,4 @@
-<cfset ThisHTTPHost="#REQUEST.CGIHTTPHost#">
+<cfset ThisHTTPHost="#CGI.HTTP_HOST#">
 <cfswitch expression="#ListFirst(ReplaceNoCase(ThisHTTPHost,'www.','','one'),'.')#">
 	<cfcase value="voice,journal">
 		<cfset Page="voice">

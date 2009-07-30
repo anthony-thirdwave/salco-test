@@ -27,7 +27,7 @@
 			<cfelse>
 				<a href="/content.cfm/#CategoryAlias#" target="_blank"><img src="/common/images/admin/icon_preview.gif" border="0"/></a>&nbsp;
 				<a href="/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#"><img src="/common/images/admin/icon_magnify.gif" border="0"/></a>&nbsp;
-				<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost#/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></a>
+				<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#CGI.HTTP_HOST#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#CGI.HTTP_HOST#/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></a>
 			</cfif>
 			</td>
 		</tr>

@@ -95,7 +95,7 @@
 	<cfif Trim(GetPage.CategoryURLDerived) IS NOT "">
 		<cfif Left(GetPage.CategoryURLDerived,4) IS NOT "Java">
 			<cfif CALLER.CategoryTypeID IS "75">
-				<cfif Left(REQUEST.CGIPathInfo,Len("/content.cfm")) IS "/content.cfm">
+				<cfif Left(CGI.SCRIPT_NAME,Len("/content.cfm")) IS "/content.cfm">
 					<cflocation url="#GetPage.CategoryURLDerived#" addtoken="No">
 				</cfif>
 			<cfelse>
@@ -107,7 +107,7 @@
 	<cfset CALLER.CacheDateTime=GetPage.CacheDateTime>
 	<cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm"
 		thiscategoryid="#GetPage.CategoryID#"
-		namelist="#REQUEST.RemoveHTML(Replace(CALLER.CurrentCategoryName,","," ","all"))#"
+		namelist="#application.utilsObj.RemoveHTML(Replace(CALLER.CurrentCategoryName,","," ","all"))#"
 		idlist="#GetPage.CategoryID#"
 		aliaslist="#GetPage.CategoryAlias#">
 	<cfif IDList IS NOT "">
@@ -249,10 +249,10 @@
 			</cfif>
 			<cfset centerCounter = 0>
 			<cfloop index="ThisContentID" list="#ValueList(GetInherited.ContentID)#">
-				<cfif Isdefined("prcid") and REQUEST.SimpleDecrypt(Val(prcid)) IS ThisContentID>
+				<cfif Isdefined("prcid") and application.utilsObj.SimpleDecrypt(Val(prcid)) IS ThisContentID>
 					<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
 						<cfprocresult name="GetContent">
-						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(REQUEST.SimpleDecrypt(Val(pcid)))#" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(application.utilsObj.SimpleDecrypt(Val(pcid)))#" null="No">
 						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 						<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
 					</cfstoredproc>

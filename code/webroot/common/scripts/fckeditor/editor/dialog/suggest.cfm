@@ -14,7 +14,7 @@ CategoryTypeID=72 and CategoryName like <cfqueryparam cfsqltype="cf_sql_varchar"
 	</cfquery>
 	<cfset afid=ArrayNew(1)>
 	<cfoutput query="words">
-		<cfset ArrayAppend(aFid,REQUEST.SimpleEncrypt(CategoryID))>
+		<cfset ArrayAppend(aFid,application.utilsObj.SimpleEncrypt(CategoryID))>
 	</cfoutput>
 	<cfset QueryAddColumn(words,"fid",afid)>
 <cfoutput query="words">#replace(replace(Replace(CategoryName,",","|","All"), chr(10), ""), chr(13), "")#;#fid#,</cfoutput>%%%

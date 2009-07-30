@@ -650,7 +650,7 @@
 				<cfhttp url="#LinkURL#" method="get">
 				<cfset FileToWrite="#this.GetResourceFilePath('Generated',ARGUMENTS.WebrootPath)#rss_#ThisContentLocaleID#.xml">
 				<cffile action="WRITE" file="#FileToWrite#" output="#CFHTTP.FileContent#" addnewline="Yes">
-				<cfset ThisFile=REQUEST.GetURLFromPath(FileToWrite)>
+				<cfset ThisFile=application.utilsObj.GetURLFromPath(FileToWrite)>
 			</cfif>
 			
 			<!--- create the thumbnail --->
@@ -707,8 +707,8 @@
 			<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
 				<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
 					<cfif left(thisAFile[Afilei].FilePath,Len("/common/incoming")) iS "/common/incoming">
-						<cffile action="MOVE" source="#REQUEST.GetPathFromURL(thisAFile[Afilei].FilePath)#" destination="#this.GetResourceFilePath('documents',ARGUMENTS.WebrootPath)#">
-						<cfset thisAFile[Afilei].FilePath=REQUEST.GetURLFromPath("#this.GetResourceFilePath('documents',ARGUMENTS.WebrootPath)##ListLast(thisAFile[Afilei].FilePath,'/')#")>
+						<cffile action="MOVE" source="#application.utilsObj.GetPathFromURL(thisAFile[Afilei].FilePath)#" destination="#this.GetResourceFilePath('documents',ARGUMENTS.WebrootPath)#">
+						<cfset thisAFile[Afilei].FilePath=application.utilsObj.GetURLFromPath("#this.GetResourceFilePath('documents',ARGUMENTS.WebrootPath)##ListLast(thisAFile[Afilei].FilePath,'/')#")>
 					</cfif>
 				</cfloop>
 			</cfif>
@@ -717,8 +717,8 @@
 
 			<cfset DevNull=StructInsert(sContentBody,"ImageWidth","","1")>
 			<cfset DevNull=StructInsert(sContentBody,"ImageHeight","","1")>			
-			<cfif FileExists("#REQUEST.GetPathFromURL(ThisImage)#")>
-				<cf_ImageSize file="#REQUEST.GetPathFromURL(ThisImage)#">
+			<cfif FileExists("#application.utilsObj.GetPathFromURL(ThisImage)#")>
+				<cf_ImageSize file="#application.utilsObj.GetPathFromURL(ThisImage)#">
 				<cfif IsDefined("Width")>
 					<cfset ImageWidth=Width>
 					<cfset ImageHeight=Height>
@@ -877,7 +877,6 @@
 			</cfif>
 			
 			<cfif ListFindNoCase("Text",ARGUMENTS.Property)>
-				<!--- <cfset ARGUMENTS.Value="#REQUEST.OutputText(ARGUMENTS.Value)#"> --->
 				<cfset ARGUMENTS.Value="#ARGUMENTS.Value#">
 			</cfif>
 			
@@ -970,19 +969,19 @@
 		
 		<cfswitch expression="#this.GetContentTypeID()#">
 			<cfcase value="200"><!--- Text --->
-				<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('Text'))#">
+				<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('Text'))#">
 			</cfcase>
 			<cfcase value="201"><!--- HTML --->
-				<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('HTML'))#">
+				<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('HTML'))#">
 			</cfcase>
 			<cfcase value="202"><!--- HTML & Text --->
-				<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('Text'))#">
+				<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('Text'))#">
 			</cfcase>
 			<cfcase value="217"><!--- Bullet List --->
 				<cfif ArrayLen(this.GetProperty("aText")) GT "0">
 					<cfset aText=this.GetProperty("aText")>
 					<cfloop index="rit" from="1" to="#ArrayLen(aText)#">
-						<cfset ReturnString="#ReturnString# #REQUEST.RemoveHTML(aText[rit])#">
+						<cfset ReturnString="#ReturnString# #application.utilsObj.RemoveHTML(aText[rit])#">
 					</cfloop>
 				</cfif>
 			</cfcase>
@@ -990,7 +989,7 @@
 				<cfif StructKeyList(this.GetProperty("sHTML")) IS NOT "">
 					<cfset sHTML=this.GetProperty("sHTML")>
 					<cfloop index="ThisKey" list="#StructKeyList(sHTML)#">
-						<cfset ReturnString="#ReturnString# #REQUEST.RemoveHTML(sHTML[ThisKey])#">
+						<cfset ReturnString="#ReturnString# #application.utilsObj.RemoveHTML(sHTML[ThisKey])#">
 					</cfloop>
 				</cfif>
 			</cfcase>
@@ -1005,13 +1004,13 @@
 				<cfquery name="GetContent" datasource="#APPLICATION.DSN#">
 					select ContentDate1 from t_Content Where ContentID=#Val(ThisContentID)#
 				</cfquery>
-				<cfset ReturnString="#DateFormat(GetContent.ContentDate1)# - #REQUEST.RemoveHTML(this.GetProperty('Text'))#">
+				<cfset ReturnString="#DateFormat(GetContent.ContentDate1)# - #application.utilsObj.RemoveHTML(this.GetProperty('Text'))#">
 			</cfcase>
 			<cfcase value="235"><!--- News Item --->
-				<cfif REQUEST.RemoveHTML(this.GetProperty("ContentAbstract")) IS NOT "">
-					<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('ContentAbstract'))#">
+				<cfif application.utilsObj.RemoveHTML(this.GetProperty("ContentAbstract")) IS NOT "">
+					<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('ContentAbstract'))#">
 				<cfelse>
-					<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('HTML'))#">
+					<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('HTML'))#">
 				</cfif>
 				
 				<cfset ThisContentID=this.GetProperty("ContentID")>
@@ -1021,10 +1020,10 @@
 				<cfset ReturnString="#DateFormat(GetContent.ContentDate1)# - #ReturnString#">
 			</cfcase>
 			<cfdefaultcase><!--- Default --->
-				<cfif REQUEST.RemoveHTML(this.GetProperty("ContentAbstract")) IS NOT "">
-					<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('ContentAbstract'))#">
+				<cfif application.utilsObj.RemoveHTML(this.GetProperty("ContentAbstract")) IS NOT "">
+					<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('ContentAbstract'))#">
 				<cfelse>
-					<cfset ReturnString="#REQUEST.RemoveHTML(this.GetProperty('HTML'))#">
+					<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('HTML'))#">
 				</cfif>
 			</cfdefaultcase>
 		</cfswitch>
@@ -1682,7 +1681,7 @@
 			<cfif ListLen(ThisFileList,";") GT "0">
 				<cfloop index="ThisFile" list="#ThisFileList#" delimiters=";">
 					<cfif Left(ThisFile,7) IS NOT "/common">
-						<cfset Source=REQUEST.GetPathFromURL(ThisFile)>
+						<cfset Source=application.utilsObj.GetPathFromURL(ThisFile)>
 						<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
 						<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
 							username="#sProductionSiteInformation.ProductionFTPUserLogin#"

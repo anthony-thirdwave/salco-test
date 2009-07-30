@@ -8,7 +8,7 @@
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
-<cfparam name="FormAction" default="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfif IsDefined("ATTRIBUTES.FormAction")>
 	<cfset FormAction=ATTRIBUTES.FormAction>
 </cfif>

@@ -73,7 +73,7 @@
 	<!--- END set permission struct --->
 	
 	<!--- BEGIN set querystring --->
-	<cf_addToqueryString querystring="#REQUEST.CGIQueryString#" name="MVEid" value="#ATTRIBUTES.MVEid#" omitlist="MVEid,thisCatID,isAutoCollapse,MVSearchTerms,mvcid,hlid,ugid,cid,mvsla">
+	<cf_addToqueryString querystring="#CGI.QUERY_STRING#" name="MVEid" value="#ATTRIBUTES.MVEid#" omitlist="MVEid,thisCatID,isAutoCollapse,MVSearchTerms,mvcid,hlid,ugid,cid,mvsla">
 	<cfset ThisQueryString="#QueryString#">
 	<!--- END set querystring --->
 	

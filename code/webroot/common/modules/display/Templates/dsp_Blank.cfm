@@ -10,7 +10,7 @@
 	<!--- These tags are managed by the CMS. --->
 	<cfif Trim(PageTitleOverride) EQ "">
 		<cfset pageTitleList = ListRest(CategoryThreadName)>
-		<cfset thisPageTitle = REQUEST.GeneratePageTitleString(pageTitleList)>
+		<cfset thisPageTitle = APPLICATION.utilsObj.generatePageTitleString(pageTitleList)>
 	<cfelse>
 		<cfset thisPageTitle = PageTitleOverride>
 	</cfif>

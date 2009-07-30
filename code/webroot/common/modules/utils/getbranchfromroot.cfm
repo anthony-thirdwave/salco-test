@@ -7,7 +7,7 @@
 	SELECT CategoryName,CategoryID,CategoryAlias FROM t_Category WHERE CategoryID=#val(Evaluate("GetDetailOf#IncrementVAlue(Val(ATTRIBUTES.ThisCategoryID))#.parentid"))#
 </cfquery>
 <cfif Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.recordcount") IS NOT "0">
-	<cfset NameList=ListPrepend(ATTRIBUTES.NameList, REQUEST.RemoveHTML(Replace(Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryName"),","," ","all")))>
+	<cfset NameList=ListPrepend(ATTRIBUTES.NameList, application.utilsObj.RemoveHTML(Replace(Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryName"),","," ","all")))>
 	<cfset IDList=ListPrepend(ATTRIBUTES.IDList, Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryID"))>
 	<cfset AliasList=ListPrepend(ATTRIBUTES.AliasList, Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryAlias"))>
 	<cfmodule template="getbranchfromroot.cfm" ThisCategoryID="#Evaluate('GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryID')#" NameList="#NameList#" IDList="#IDList#" AliasList="#AliasList#">

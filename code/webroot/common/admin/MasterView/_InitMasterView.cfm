@@ -36,8 +36,8 @@
 <cfset sMVEntityElt.CRUDLink="">
 <cfset sMVEntity[4]=sMVEntityElt> --->
 
-<cfset MVPage="#REQUEST.CGIPathInfo#">
-<cfset MVQueryString="#REQUEST.CGIQueryString#">
+<cfset MVPage="#CGI.SCRIPT_NAME#">
+<cfset MVQueryString="#CGI.QUERY_STRING#">
 <cfset MVIndex="/common/admin/MasterView/index.cfm">
 <cfset MVSearch="/common/admin/MasterView/search.cfm">
 <cfparam name="MVMode" default="MasterView">

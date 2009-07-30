@@ -208,7 +208,7 @@
 		<tr valign="top"><TD bgcolor="bac0c9">&nbsp;</TD><TD bgcolor="bac0c9">Images in ""Incoming"" folder<BR>to Import</TD><TD>
 		<table><TR><TD><strong>Image/Name</strong></TD><TD><strong>Caption</strong></TD></TR>
 		<cfloop index="i" from="1" to="#listLen(lFileToImport)#" step="1">
-			<tr valign="top"><TD><a href="http://#ThisChapterAlias#.#REQUEST.CGIHTTPHost#/common/incoming/#ListGetAt(lFileToImport,i)#" target="_blank">#ListGetAt(lFileToImport,i)#</A><BR><input name="ImageName_#i#" type="Text" size="20" maxlength="255"></TD>
+			<tr valign="top"><TD><a href="http://#ThisChapterAlias#.#CGI.HTTP_HOST#/common/incoming/#ListGetAt(lFileToImport,i)#" target="_blank">#ListGetAt(lFileToImport,i)#</A><BR><input name="ImageName_#i#" type="Text" size="20" maxlength="255"></TD>
 			<TD><textarea cols="25" rows="4" name="ImageCaption_#i#"></textarea></TD></TR>
 			<input type="hidden" name="ImageFile_#i#" value="#HTMLEditFormat(ListGetAt(lFileToImport,i))#">
 		</cfloop>

@@ -1,6 +1,6 @@
 <cfcomponent extends="com.common.base" output="false">
 	<!--- Declare properties. Properties are either string or object
-		  (except error which is a struct --->
+		  (except error which is a struct) --->
 	<cfproperty name="CategoryLocaleID" type="numeric" default="">
 	<cfproperty name="CategoryID" type="numeric" default="">
 	<cfproperty name="CategoryLocaleName" type="string" default="">
@@ -26,7 +26,7 @@
 	<cfproperty name="Byline1" type="string" default="">
 	<cfproperty name="Byline2" type="string" default="">
 	<cfproperty name="Title" type="string" default="">
-	<cfproperty name="PageTitleOverride " type="string" default="">
+	<cfproperty name="PageTitleOverride" type="string" default="">
 	
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleID","category locale ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryID","category ID",1)>
@@ -345,8 +345,8 @@
 				<cfset sProperties=StructNew()>
 			</cfif>
 			
-			<cfif FileExists("#REQUEST.GetPathFromURL(ThisCategoryImageOff)#")>
-				<cf_ImageSize file="#REQUEST.GetPathFromURL(ThisCategoryImageOff)#">
+			<cfif FileExists("#application.utilsObj.GetPathFromURL(ThisCategoryImageOff)#")>
+				<cf_ImageSize file="#application.utilsObj.GetPathFromURL(ThisCategoryImageOff)#">
 				<cfset ImageWidth=Width>
 				<cfset DevNull=StructInsert(sProperties,"ImageWidth","#val(ImageWidth)#","1")>
 			<cfelse>
@@ -674,7 +674,7 @@
 					<cfset OriginalName=this.GetProperty(thisImageName)>
 					<cfset OriginalName=ReplaceNoCase(OriginalName,"http://#CGI.Server_Name#","","All")>
 					<cfset OriginalName=ReplaceNoCase(OriginalName,"//","/","All")>
-					<cfset SourceFile=REQUEST.GetPathFromURL(OriginalName)>
+					<cfset SourceFile=application.utilsObj.GetPathFromURL(OriginalName)>
 					<cfif FileExists(SourceFile)>
 						<cfif ListFindNoCase("#APPLICATION.ImageFileExtensionList#",".#ListLast('#OriginalName#','.')#",";") GT "0">
 							<cffile action="MOVE" source="#SourceFile#" destination="#DestImages#">
@@ -872,7 +872,7 @@
 			
 			<cfloop index="ThisImage" list="#lImageName#">
 				<cfif this.GetProperty(ThisImage) is not "">
-					<cfset Source=REQUEST.GetPathFromURL(this.GetProperty(ThisImage))>
+					<cfset Source=application.utilsObj.GetPathFromURL(this.GetProperty(ThisImage))>
 					<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##this.GetProperty(ThisImage)#","//","/","All")>
 					<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
 						username="#sProductionSiteInformation.ProductionFTPUserLogin#"

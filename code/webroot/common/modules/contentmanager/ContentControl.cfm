@@ -22,14 +22,14 @@
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aText") AND IsArray(ATTRIBUTES.sContentBody.aText) AND ArrayLen(ATTRIBUTES.sContentBody.aText) GT "0">
 			<cfset FileContents="<img src=""/common/images/global/horizbar.dots2.gif""/><table border=""0"" cellspacing=""0"" cellpadding=""0"">">
 			<cfloop index="i" from="1" to="#ArrayLen(ATTRIBUTES.sContentBody.aText)#" step="1">
-				<cfset FileContents="#FileContents#<tr valign=""top""><td><img src=""/common/images/global/bullet.redarrw.gif"" width=""8"" height=""9""/></td><td class=""bullet"">#REQUEST.ReplaceMarks(ATTRIBUTES.sContentBody.aText[i])#</td></tr>">
+				<cfset FileContents="#FileContents#<tr valign=""top""><td><img src=""/common/images/global/bullet.redarrw.gif"" width=""8"" height=""9""/></td><td class=""bullet"">#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.aText[i])#</td></tr>">
 			</cfloop>
 			<cfset FileContents="#FileContents#</table><img src=""/common/images/global/horizbar.dots2.gif""/>">
 		</cfif>
 	</cfcase>
 	<cfcase value="201"><!--- HTML --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
-			<cfset FileContents="#REQUEST.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
+			<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
 			<cfif FileContents IS NOT "">
 				<cfif IsDefined("URL.ShowContentOnly") AND Val(URL.ShowContentOnly)>
 					<cfset FileContents="#FileContents#">
@@ -57,7 +57,7 @@
 						InputText="#HTMLTemplate#"
 						returnVariable="HTMLTemplate"
 						Token1="[[text#i#]]"
-						Value1="#REQUEST.ReplaceMarks(REQUEST.RemoveLeadingPTag(ATTRIBUTES.sContentBody.aText[i]))#">
+						Value1="#application.utilsObj.ReplaceMarks(application.utilsObj.RemoveLeadingPTag(ATTRIBUTES.sContentBody.aText[i]))#">
 				</cfloop>
 				<cfset FileContents="#HTMLTemplate#">
 			</cfif>
@@ -101,7 +101,7 @@
 		<cfif GetSource.RecordCount IS "1">
 			<CFSET ExecuteTempFile="#GetSource.CategoryAlias#_#Val(ATTRIBUTES.PositionID)#_#APPLICATION.LocaleID#_#DateFormat(GetSource.CacheDateTime,'yyyymmdd')##TimeFormat(GetSource.CacheDateTime,'HHmmss')#.cfm">
 			<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
-				<cfhttp url="#REQUEST.CGIHTTPHost#/content.cfm/#GetSource.CategoryAlias#" method="GET">
+				<cfhttp url="#CGI.HTTP_HOST#/content.cfm/#GetSource.CategoryAlias#" method="GET">
 			</cfif>
 			<cfset FileContents="<cfinclude template=""#APPLICATION.TempMapping##ExecuteTempFile#"">">
 		</cfif>
@@ -348,16 +348,16 @@
 	
 	<cfcase value="240"><!--- Event Detail --->
 		<cfset EventID="-1">
-		<cfif IsDefined("URL.eid") and REQUEST.SimpleDecrypt(Val(URL.eid)) GT "0">
-			<cfset EventID=REQUEST.SimpleDecrypt(Val(URL.eid))>
+		<cfif IsDefined("URL.eid") and application.utilsObj.SimpleDecrypt(Val(URL.eid)) GT "0">
+			<cfset EventID=application.utilsObj.SimpleDecrypt(Val(URL.eid))>
 		</cfif>
 		<cfset FileContents="<cfmodule template=""/common/modules/Events/EventDetail.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" EventID=""#EventID#"">">
 	</cfcase>
 
 	<cfcase value="239"><!--- Event iCal download --->
 		<cfset EventID="-1">
-		<cfif IsDefined("URL.eid") and REQUEST.SimpleDecrypt(Val(URL.eid)) GT "0">
-			<cfset EventID=REQUEST.SimpleDecrypt(Val(URL.eid))>
+		<cfif IsDefined("URL.eid") and application.utilsObj.SimpleDecrypt(Val(URL.eid)) GT "0">
+			<cfset EventID=application.utilsObj.SimpleDecrypt(Val(URL.eid))>
 		</cfif>
 		<cfsavecontent variable="FileContents">
 			<cfif ATTRIBUTES.sContentBody.Text IS NOT "">
@@ -371,7 +371,7 @@
 		<cfset RSSFile="">
 		<cfset NumItems="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"File") AND Trim(StructFind(ATTRIBUTES.sContentBody,"File")) is not "">
-			<cfset RSSFile=REQUEST.GetPathFromURL(ATTRIBUTES.sContentBody.File)>
+			<cfset RSSFile=application.utilsObj.GetPathFromURL(ATTRIBUTES.sContentBody.File)>
 		</cfif>
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"NumItems") AND Trim(StructFind(ATTRIBUTES.sContentBody,"NumItems")) is not "">
 			<cfset NumItems=ATTRIBUTES.sContentBody.NumItems>
@@ -404,7 +404,7 @@
 						<cfloop index="ThisToken" list="#StructKeyList(ThissHTML)#">
 							<cfset ThisOutput=ReplaceNoCase(ThisOutput,"[[#ThisToken#]]",ThissHTML[ThisToken],"all")>
 						</cfloop>
-						<cfset FileContents=REQUEST.ReplaceMarks(ThisOutput)>
+						<cfset FileContents=application.utilsObj.ReplaceMarks(ThisOutput)>
 					</cfif>
 				</cfif>
 			</cfif>
@@ -520,7 +520,7 @@ FROM         dbo.t_Content t_Content_1 INNER JOIN
 		<cfset FileContents="<cfmodule template=""/common/modules/Events/Registration/ChapterEventDriver.cfm"" ChapterCode=""#APPLICATION.LocaleCode#"" EventID=""#GetEvent.SourceID#"">">
 	</cfcase>
 	<cfcase value="253"><!--- Newsletter subscribe/unsubscribe--->
-		<cfset ActionURL="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+		<cfset ActionURL="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL")>
 			<cfset ActionURL="#ATTRIBUTES.sContentBody.PageActionURL#">
 		</cfif>
@@ -547,11 +547,11 @@ FROM         dbo.t_Content t_Content_1 INNER JOIN
 					<ol class="related-images">
 					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
 						<cfset sFile = aFile[i]>
-						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(REQUEST.GetPathFromURL(sFile.FilePath))>
+						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.FilePath))>
 							<cfset thisName = "">
 							<cfset ThisLink="/common/modules/utils/ImagePopup.cfm?image=#URLEncodedFormat(sFile.FilePath)#">
 							<cfset ThisLink="PopupPic('#JSStringFormat(ThisLink)#')">
-							<cfif StructKeyExists(sFile,"ThumbnailPath") AND sFile.ThumbnailPath NEQ "" AND FileExists(REQUEST.GetPathFromURL(sFile.ThumbnailPath))>
+							<cfif StructKeyExists(sFile,"ThumbnailPath") AND sFile.ThumbnailPath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.ThumbnailPath))>
 								
 								<cfset thisName = "<img src=""#sFile.ThumbnailPath#"" border=""0"" />">
 							</cfif>
@@ -572,7 +572,7 @@ FROM         dbo.t_Content t_Content_1 INNER JOIN
 					<ul class="resources">
 					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
 						<cfset sFile = aFile[i]>
-						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(REQUEST.GetPathFromURL(sFile.FilePath))>
+						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.FilePath))>
 							<cfif ListFindNoCase("mov,mp4",ListLast(sFile.FilePath,".")) IS "video">
 								<cfset ThisIcon="/common/images/icons/icon-qt.gif">
 								<cfset ThisAlt="video podcast available">
@@ -591,7 +591,7 @@ FROM         dbo.t_Content t_Content_1 INNER JOIN
 							<cfelse>
 								<cfset ThisLink="#sFile.FilePath#">
 							</cfif>
-							<li><a name="#REQUEST.Scrub(sFile.FileName)#"></a>
+							<li><a name="#application.utilsObj.Scrub(sFile.FileName)#"></a>
 				            <dl>
 								<dt><a href="#ThisLink#" <cfif ListFindNoCase("mov,mp4",ListLast(sFile.FilePath,".")) is "0">target="_blank"</cfif>><cfif ThisIcon IS NOT ""><img class="res-icon" src="#ThisIcon#" alt="#ThisAlt#" /> </cfif>#sFile.FileName#</a></dt>
 								<dd>#sFile.FileCaption#</dd>

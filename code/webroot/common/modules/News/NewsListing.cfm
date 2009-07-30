@@ -59,7 +59,7 @@
 				</cfif>
 				<p><cfif ImageThumbnail IS NOT ""><img src="#ImageThumbnail#" align="left"/></cfif>
 				
-				<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#REQUEST.RemoveLeadingPTag(Text)#" NumChars="100" varname="Thistext">
+				<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#application.utilsObj.RemoveLeadingPTag(Text)#" NumChars="100" varname="Thistext">
 				<cfset Display="<b>#ContentNameDerived#</b> (#DateFormat(ContentDate1)#)<BR>#ThisText#">
 				<cfif LinkURL IS NOT ""><a href="#LinkURL#" <cfif LEft(LinkURL,4) IS "http">target="_blank"</cfif>>#Display#</A>
 				<cfelse>#Display#

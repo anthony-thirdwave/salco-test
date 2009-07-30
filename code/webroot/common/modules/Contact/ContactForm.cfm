@@ -1,4 +1,4 @@
-<cfparam name="FormAction" default="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfparam name="action" default="0">
 <cfparam name="question" default="">
 <cfparam name="name" default="">

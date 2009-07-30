@@ -1,5 +1,4 @@
-<cfif ListFindNoCase("webtrend,ultraseek",ListFirst(Error.Browser,"/"))>
-<cfelse>
+<cfif not ListFindNoCase("webtrend,ultraseek",ListFirst(CGI.HTTP_USER_AGENT,"/"))>
 
 <cfoutput>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -52,7 +51,7 @@
 
 
 	
-</div> <!-- end #header -->
+</div> <!-- end ##header -->
 
 <hr />
 <!-- Start of Content Area-->
@@ -117,6 +116,8 @@
 
 </body>
 </html>
+
+<!---
 <!--- Get the list of addresses to which to send the error message, as well as
 	  the From: address to use.  --->
 <cftry>
@@ -164,6 +165,6 @@ Query String - #Error.QueryString#<br>
 </cfmail>
 </cfloop>
 </cfif>
-
+--->
 </cfoutput>
 </cfif>

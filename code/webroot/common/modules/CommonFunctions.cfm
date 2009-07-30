@@ -1,14 +1,9 @@
+<!---
 <cffunction name="RemoveHTML" returntype="string" output="false">
 	<cfargument name="String" default="" type="String" required="true">
 	<cfreturn REReplace(Trim(ARGUMENTS.String),"<[^>]*>"," ","All")>
 </cffunction>
-<cfset REQUEST.RemoveHTML=RemoveHTML>
-
-<cffunction name="AddBreaks" returntype="string" output="false">
-	<cfargument name="String" default="" type="String" required="true">
-	<cfreturn ReplaceNoCase(ARGUMENTS.String,"#Chr(10)#", "<BR>","ALL")>
-</cffunction>
-<cfset REQUEST.AddBreaks=AddBreaks>
+<cfset request.RemoveHTML=RemoveHTML>
 
 <cffunction name="RemoveLeadingPTag" returntype="string" output="false">
 	<cfargument name="String" default="" type="String" required="true">
@@ -18,100 +13,7 @@
 		<cfreturn ARGUMENTS.String>
 	</cfif>
 </cffunction>
-<cfset REQUEST.RemoveLeadingPTag=RemoveLeadingPTag>
-
-<cffunction name="RemoveTrailingPTag" returntype="string" output="false">
-	<cfargument name="String" default="" type="String" required="true">
-	<cfif Len(ARGUMENTS.String) GT "4" AND right(ARGUMENTS.String,4) IS "</P>">
-		<cfreturn Left(ARGUMENTS.String,len(ARGUMENTS.String)-4)>
-	<cfelse>
-		<cfreturn ARGUMENTS.String>
-	</cfif>
-</cffunction>
-<cfset REQUEST.RemoveTrailingPTag=RemoveTrailingPTag>
-
-<cffunction name="OutputText" returntype="string" output="false">
-	<cfargument name="String" default="" type="String" required="true">
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<p>","PPPPOPENPPPP","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</p>","PPPPCLOSEPPPP","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<BR>","BRBRBRBRBR","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<B>","BBBBOPENBBBB","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</B>","BBBBCLOSEBBBB","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<strong>","STRONGOPENSTRONG","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</strong>","STRONGCLOSESTRONG","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<i>","IIIIOPENIIII","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</i>","IIIICLOSEIIII","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<u>","UUUUOPENUUUU","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</u>","UUUUCLOSEUUUU","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<h1>","H1H1OPENH1H1","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</h1>","H1H1CLOSEH1H1","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<h2>","H2H2OPENH2H2","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</h2>","H2H2CLOSEH2H2","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<h3>","H3H3OPENH3H3","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</h3>","H3H3CLOSEH3H3","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<h4>","H4H4OPENH4H4","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</h4>","H4H4CLOSEH4H4","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<h5>","H5H5OPENH5H5","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</h5>","H5H5CLOSEH5H5","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<h6>","H6H6OPENH6H6","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</h6>","H6H6CLOSEH6H6","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<ol>","OLOLOPENOLOL","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</ol>","OLOLCLOSEOLOL","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<ul>","ULULOPENULUL","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</ul>","ULULCLOSEULUL","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<li>","LILIOPENLILI","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</li>","LILICLOSELILI","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<a","AAAAOPENAAAA","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</A>","AAAACLOSEAAAA","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"<span","SPANOPENSPAN","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"</span>","SPANCLOSESPAN","all")>
-	<cfset ARGUMENTS.String=REQUEST.RemoveHTML(ARGUMENTS.String)>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"PPPPOPENPPPP","<p>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"PPPPCLOSEPPPP","</p>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"BRBRBRBRBR","<BR>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"BBBBOPENBBBB","<B>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"BBBBCLOSEBBBB","</B>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"STRONGOPENSTRONG","<strong>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"STRONGCLOSESTRONG","</strong>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"IIIIOPENIIII","<i>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"IIIICLOSEIIII","</i>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"UUUUOPENUUUU","<u>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"UUUUCLOSEUUUU","</u>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H1H1OPENH1H1","<h1>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H1H1CLOSEH1H1","</h1>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H2H2OPENH2H2","<h2>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H2H2CLOSEH2H2","</h2>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H3H3OPENH3H3","<h3>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H3H3CLOSEH3H3","</h3>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H3H3OPENH3H3","<h3>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H3H3CLOSEH3H3","</h3>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H4H4OPENH4H4","<h4>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H4H4CLOSEH4H4","</h4>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H5H5OPENH5H5","<h5>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H5H5CLOSEH5H5","</h5>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H6H6OPENH6H6","<h6>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"H6H6CLOSEH6H6","</h6>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"OLOLOPENOLOL","<ol>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"OLOLCLOSEOLOL","</ol>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"ULULOPENULUL","<ul>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"ULULCLOSEULUL","</ul>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"LILIOPENLILI","<li>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"LILICLOSELILI","</li>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"AAAAOPENAAAA","<a","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"AAAACLOSEAAAA","</A>","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"SPANOPENSPAN","<span","all")>
-	<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"SPANCLOSESPAN","</span>","all")>
-	<cfreturn ARGUMENTS.String>
-</cffunction>
-<cfset REQUEST.OutputText=OutputText>
-
-<cffunction name="ParseLinks" returntype="string" output="false">
-	<cfargument name="String" default="" type="String" required="true">
-	<cfmodule template="/common/modules/utils/hyperlinkURLs.cfm" stringToMarkup="#ARGUMENTS.String#"
-		hrefTarget="_blank">
-	<cfreturn hyperlinkedString>
-</cffunction>
-<cfset REQUEST.ParseLinks=ParseLinks>
+<cfset request.RemoveLeadingPTag=RemoveLeadingPTag>
 
 <cffunction name="ReplaceMarks" returntype="string" output="false">
 	<cfargument name="String" default="" type="String" required="true">
@@ -120,14 +22,14 @@
 	<!--- <cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"(C)","&##169;","all")> --->
 	<cfreturn ARGUMENTS.String>
 </cffunction>
-<cfset REQUEST.ReplaceMarks=ReplaceMarks>
+<cfset request.ReplaceMarks=ReplaceMarks>
 
 <cffunction name="SimpleEncrypt" returntype="string" output="false">
 	<cfargument name="ID" default="" type="Numeric" required="true">
 	<cfset ARGUMENTS.ID=(ARGUMENTS.ID*ARGUMENTS.ID)+430213>
 	<cfreturn ARGUMENTS.ID>
 </cffunction>
-<cfset REQUEST.SimpleEncrypt=SimpleEncrypt>
+<cfset request.SimpleEncrypt=SimpleEncrypt>
 
 <cffunction name="SimpleDecrypt" returntype="string" output="false">
 	<cfargument name="ID" default="" type="Numeric" required="true">
@@ -140,7 +42,7 @@
 		</cfcatch>
 	</cftry>
 </cffunction>
-<cfset REQUEST.SimpleDecrypt=SimpleDecrypt>
+<cfset request.SimpleDecrypt=SimpleDecrypt>
 
 <cffunction name="GetPathFromURL" returntype="string" output="false">
 	<cfargument name="String" default="" type="String" required="true">
@@ -153,7 +55,7 @@
 		<cfreturn ReturnString>
 	</cfif>
 </cffunction>
-<cfset REQUEST.GetPathFromURL=GetPathFromURL>
+<cfset request.GetPathFromURL=GetPathFromURL>
 
 <cffunction name="GetURLFromPath" returntype="string" output="false">
 	<cfargument name="String" default="" type="String" required="true">
@@ -169,18 +71,7 @@
 		<cfreturn ReturnString>
 	</cfif>
 </cffunction>
-<cfset REQUEST.GetURLFromPath=GetURLFromPath>
-
-<cffunction name="formatExternalURL" returntype="string" output="false">
-	<cfargument name="String" default="" type="String" required="true">
-	<cfset var thisString = arguments.String>
-	<cfif left(thisString,4) EQ "http" OR left(thisString,1) EQ "/">
-		<cfreturn thisString>
-	<cfelse>
-		<cfreturn "http://" & thisString>
-	</cfif>
-</cffunction>
-<cfset REQUEST.formatExternalURL=formatExternalURL>
+<cfset request.GetURLFromPath=GetURLFromPath>
 
 <cffunction name="GeneratePageTitleString" returntype="string" output="false">
 	<cfargument name="pageTitleList" default="" type="string" required="true">
@@ -194,7 +85,7 @@
 		<cfset thisPageTitle = thisPageTitle & Application.SiteTitle>
 		<cfreturn thisPageTitle>
 </cffunction>
-<cfset REQUEST.GeneratePageTitleString=GeneratePageTitleString>
+<cfset request.generatePageTitleString=GeneratePageTitleString>
 
 <cffunction name="StripChars" returntype="string" output="false">
 	<cfargument name="strInput" type="string" required="yes">
@@ -216,7 +107,7 @@
 	<cfset RetVal=REReplace(RetVal,"[^A-Za-z0-9!""##$%&'()*+,-./:;?@[\\\]_`{|}~ \t\r\n\v\f]","","all")>
 	<cfreturn Trim(retVal)>
 </cffunction>
-<cfset REQUEST.StripChars=StripChars>
+<cfset request.StripChars=StripChars>
 
 
 <cffunction name="ReplaceExtendedCharacters" returntype="string" output="false">
@@ -239,7 +130,7 @@
 
 	<cfreturn ARGUMENTS.string>
 </cffunction>
-<cfset REQUEST.ReplaceExtendedCharacters=ReplaceExtendedCharacters>
+<cfset request.ReplaceExtendedCharacters=ReplaceExtendedCharacters>
 
 
 <cffunction name="Scrub" returntype="string" output="false">
@@ -249,7 +140,7 @@
 	<cfset ReturnValue=lcase(ReReplace(ReturnValue,"[ ]","-","all"))>
 	<cfreturn ReturnValue>
 </cffunction>
-<cfset REQUEST.Scrub=Scrub>
+<cfset request.Scrub=Scrub>
 
 <cfscript>
 function TitleCase(str) {
@@ -264,7 +155,7 @@ function TitleCase(str) {
 	return wordsCapFirst;
 }
 </cfscript>
-<cfset REQUEST.TitleCase=TitleCase>
+<cfset request.titleCase=TitleCase>
 
 <cfscript>
 /**
@@ -298,5 +189,5 @@ function GMTDateFormat (adate,offset) {
      else { return; }
 }
 </cfscript>
-<cfset REQUEST.GMTDateFormat=GMTDateFormat>
-
+<cfset request.GMTDateFormat=GMTDateFormat>
+--->

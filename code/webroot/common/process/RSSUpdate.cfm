@@ -35,7 +35,7 @@
 			<cfset FileToWrite = ReturnValue & "rss_#GetAllContent.ContentLocaleId#.xml">
 			
 			<!--- write the file --->
-			<cffile action="WRITE" file="#FileToWrite#" output="#request.stripChars(CFHTTP.FileContent)#" addnewline="Yes">
+			<cffile action="WRITE" file="#FileToWrite#" output="#application.utilsObj.StripChars(CFHTTP.FileContent)#" addnewline="Yes">
 		</cfif>
 	</cfif>
 </cfoutput>

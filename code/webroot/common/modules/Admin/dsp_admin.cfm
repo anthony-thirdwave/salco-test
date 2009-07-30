@@ -12,7 +12,7 @@
 
 <cfif IsDefined("FORM.NewAdminLocaleID")>
 	<cfset SESSION.AdminCurrentAdminLocaleID=FORM.NewAdminLocaleID>
-	<cflocation url="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#" addToken="no">
+	<cflocation url="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#" addToken="no">
 </cfif>
 <cfparam name="SESSION.AdminUserLocaleID" default="-1">
 
@@ -88,8 +88,8 @@
 			<TR bgcolor="33393C">
 				<TD width="42">&nbsp;</TD>
 				<TD width="95">&nbsp;</TD>
-				<cfif REQUEST.CGIPathInfo IS "/common/admin/Masterview/index.cfm">
-					<cfset ThisFormAction="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+				<cfif CGI.SCRIPT_NAME IS "/common/admin/Masterview/index.cfm">
+					<cfset ThisFormAction="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 				<cfelse>
 					<cfset ThisFormAction="/common/admin/index.cfm">
 				</cfif>

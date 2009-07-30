@@ -1,4 +1,3 @@
-
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
 	Page="User Manager"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | User Manager">
@@ -10,10 +9,10 @@
 <cfparam name="paramUserGroupId" default="">
 
 <cfquery name="GetUserGroups" datasource="#APPLICATION.DSN#">
-	SELECT LabelID AS UserGroupID, LabelName AS UserGroupName
-	FROM t_Label
-	WHERE LabelGroupID=10
-	ORDER BY LabelPriority
+	SELECT		LabelID AS UserGroupID, LabelName AS UserGroupName
+	FROM		t_Label
+	WHERE		LabelGroupID= <cfqueryparam cfsqltype="cf_sql_integer" value="10" />
+	ORDER BY	LabelPriority
 </cfquery>
 
 <cfoutput>

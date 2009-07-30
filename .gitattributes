@@ -5,8 +5,7 @@ code/db/cms_db_creation_scripts/CreateStoredProcedures.sql -text svneol=unset#ap
 code/db/cms_db_creation_scripts/GrantPermissions.sql -text
 code/db/cms_db_creation_scripts/LoadData.sql -text
 code/db/cms_db_creation_scripts/README.txt -text
-code/webroot/Application.cfm -text
-code/webroot/Application.local.dev -text
+code/webroot/Application.cfc -text
 code/webroot/com/ContentManager/Category.cfc -text
 code/webroot/com/ContentManager/CategoryCollection.cfc -text
 code/webroot/com/ContentManager/CategoryHandler.cfc -text
@@ -56,7 +55,6 @@ code/webroot/common/admin/MasterView/download/3.txt -text
 code/webroot/common/admin/MasterView/download/4.txt -text
 code/webroot/common/admin/MasterView/download/5.txt -text
 code/webroot/common/admin/MasterView/index.cfm -text
-code/webroot/common/admin/MasterView/index2.cfm -text
 code/webroot/common/admin/MasterView/search.cfm -text
 code/webroot/common/admin/NullSearchTerms/CommentsUser.cfm -text
 code/webroot/common/admin/NullSearchTerms/_StatusChange.cfm -text
@@ -338,8 +336,6 @@ code/webroot/common/modules/Admin/MasterView/_notes/mv_Content.cfm.mno -text
 code/webroot/common/modules/Admin/MasterView/_notes/mv_Content.junk.cfm.mno -text
 code/webroot/common/modules/Admin/MasterView/dsp_Nav.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Content.cfm -text
-code/webroot/common/modules/Admin/MasterView/mv_Content.junk.cfm -text
-code/webroot/common/modules/Admin/MasterView/mv_Content2.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_FEPermissions.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Feedback.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Owners.cfm -text
@@ -366,9 +362,6 @@ code/webroot/common/modules/Admin/dsp_AdminFooter.cfm -text
 code/webroot/common/modules/Admin/dsp_AdminHeader.cfm -text
 code/webroot/common/modules/Admin/dsp_MostRecent.cfm -text
 code/webroot/common/modules/Admin/dsp_admin.cfm -text
-code/webroot/common/modules/Application/ApplicationRequestVars.cfm -text
-code/webroot/common/modules/Application/ApplicationSettings.cfm -text
-code/webroot/common/modules/Application/ApplicationSetup.cfm -text
 code/webroot/common/modules/CommonFunctions.cfm -text
 code/webroot/common/modules/Contact/ContactForm.cfm -text
 code/webroot/common/modules/Contact/captcha.jpg -text

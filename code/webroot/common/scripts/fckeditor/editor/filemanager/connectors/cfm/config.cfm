@@ -41,7 +41,7 @@
 
 <cfif url.userdir is not "#APPLICATION.UserFilesPath#">
 	<cfset Config.UserFilesPath = url.userdir>
-	<cfset Config.ServerPath = "#REQUEST.GetPathFromURL(url.userdir)#">
+	<cfset Config.ServerPath = "#application.utilsObj.GetPathFromURL(url.userdir)#">
 </cfif>
 <cfscript>
 	// Due to security issues with Apache modules, it is recommended to leave the

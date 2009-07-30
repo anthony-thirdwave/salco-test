@@ -282,7 +282,7 @@
 									<cfif IsWddx(getPacket.PropertiesPacket)>
 										<cfwddx action="WDDX2CFML" input="#getPacket.PropertiesPacket#" output="sContentLocalePropertiesPacket">
 										<cfif StructKeyExists(sContentLocalePropertiesPacket,"ContentPreview")>
-											<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#REQUEST.RemoveHTML(sContentLocalePropertiesPacket.ContentPreview)#" NumChars="200" VarName="ThisPreview">
+											<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#application.utilsObj.RemoveHTML(sContentLocalePropertiesPacket.ContentPreview)#" NumChars="200" VarName="ThisPreview">
 										</cfif>
 									</cfif>
 									<cfif (ContentLocaleName IS NOT "" and ContentLocaleName IS NOT ContentName) OR ThisPreview IS NOT "">

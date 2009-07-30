@@ -43,7 +43,7 @@
 						<cfset NewStartRow=StartRow-(SearchNum*2)>
 						<cf_AddToQueryString QueryString="#FieldList#" name="StartRow" value="#NewStartRow#">
 						<cf_AddToQueryString QueryString="#querystring#" name="SearchNum" value="#SearchNum#">
-						<a href="#REQUEST.CGIPathInfo#?#querystring#">&lt; Previous page</a>&nbsp;&nbsp;&nbsp;
+						<a href="#CGI.SCRIPT_NAME#?#querystring#">&lt; Previous page</a>&nbsp;&nbsp;&nbsp;
 					<cfelse>
 						<a class="inactive">&lt; Previous page</a>&nbsp;&nbsp;&nbsp;
 					</CFIF></td>
@@ -58,7 +58,7 @@
 							<cfset NewStartRow=(1-(2*SearchNum))+(SearchNum*i)>
 							<cfmodule template="/common/modules/utils/AddToQueryString.cfm" QueryString="#FieldList#" varname="StartRow" value="#NewStartRow#">
 							<cfmodule template="/common/modules/utils/AddToQueryString.cfm" QueryString="#querystring#" varname="SearchNum" value="#SearchNum#">
-							<cfset outputstr="#outputstr#&nbsp;<a href=""#REQUEST.CGIPathInfo#?#querystring#"">#i#</a>&nbsp;">
+							<cfset outputstr="#outputstr#&nbsp;<a href=""#CGI.SCRIPT_NAME#?#querystring#"">#i#</a>&nbsp;">
 
 						</cfif>
 						<cfif (i NEQ 1) AND (i MOD 15) EQ 0><cfset outputstr="#outputstr#<BR>"></cfif>
@@ -72,7 +72,7 @@
 					<td valign="top" align="left"><CFIF ATTRIBUTES.StartRow LT (ATTRIBUTES.RecordCount - (ATTRIBUTES.SearchNum-1))>
 						<cf_AddToQueryString QueryString="#FieldList#" name="StartRow" value="#StartRow#">
 						<cf_AddToQueryString QueryString="#querystring#" name="SearchNum" value="#SearchNum#">
-						<a href="#REQUEST.CGIPathInfo#?#querystring#" class="capsBlackLink">Next page &gt;</a>
+						<a href="#CGI.SCRIPT_NAME#?#querystring#" class="capsBlackLink">Next page &gt;</a>
 					<cfelse>
 						<a class="inactive">Next page &gt;</a>
 					</CFIF>

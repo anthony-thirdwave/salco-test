@@ -4,8 +4,8 @@
 	Page="Support"
 	Indent="1">
 <cfparam name="supportaction" default="1">
-<cfset ThisPath=REQUEST.CGIPathInfo>
-<cfset ThisQueryString=REQUEST.CGIQueryString>
+<cfset ThisPath=CGI.SCRIPT_NAME>
+<cfset ThisQueryString=CGI.QUERY_STRING>
 
 <cfif supportaction IS "1">
 	<p><strong>Documentation</strong></p>

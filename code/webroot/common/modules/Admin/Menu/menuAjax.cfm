@@ -101,7 +101,7 @@
 			#idPrefix#responseDiv = '#idPrefix#categoryChildContainer_'+catID;
 			document.getElementById(#idPrefix#responseDiv).innerHTML='loading...';
 			document.getElementById(#idPrefix#responseDiv).style.display='block';
-			<cf_addToqueryString querystring="#REQUEST.CGIQueryString#" name="MVEid" value="#ATTRIBUTES.MVEid#" omitlist="MVEid,thisCatID,isAutoCollapse,MVSearchTerms,mvcid,hlid,ugid,cid,mvsla">
+			<cf_addToqueryString querystring="#CGI.QUERY_STRING#" name="MVEid" value="#ATTRIBUTES.MVEid#" omitlist="MVEid,thisCatID,isAutoCollapse,MVSearchTerms,mvcid,hlid,ugid,cid,mvsla">
 			#idPrefix#getMenuHTTPCall.open("GET", "/common/modules/admin/menu/menuAjaxGetChildCategories.cfm?#QueryString#&isAutoCollapse=#ATTRIBUTES.isAutoCollapse#<cfif ATTRIBUTES.JSFunctionName NEQ "">&JSFunctionName=#ATTRIBUTES.JSFunctionName#</cfif><cfif ATTRIBUTES.isNewPage NEQ "">&isNewPage=#ATTRIBUTES.isNewPage#</cfif><cfif idPrefix NEQ "">&idPrefix=#idPrefix#</cfif>&thisCatID=" + catID, true);
 			#idPrefix#getMenuHTTPCall.onreadystatechange = #idPrefix#handleThisHttpResponse;
 			#idPrefix#getMenuHTTPCall.send(null);

@@ -26,7 +26,7 @@
 	<cfset sApplicationCategoryID["1"]="www.#Application.UniqueName#.com">
 	<cfif ListLen(CategoryThreadList) GTE "2" AND ListFindNoCase(StructKeyList(sApplicationCategoryID),ListGetAt(CategoryThreadList,2))>
 		<cfif sApplicationCategoryID[ListGetAt(CategoryThreadList,2)] IS NOT APPLICATION.ApplicationName>
-			<cflocation url="http://#APPLICATION.sLocation[sApplicationCategoryID[ListGetAt(CategoryThreadList,2)]]##REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#" addtoken="No">
+			<cflocation url="http://#APPLICATION.sLocation[sApplicationCategoryID[ListGetAt(CategoryThreadList,2)]]##CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#" addtoken="No">
 		</cfif>
 	</cfif>
 </cfsilent>

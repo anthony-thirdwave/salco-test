@@ -9,7 +9,7 @@
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
-<cfparam name="FormAction" default="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfif IsDefined("ATTRIBUTES.FormAction")>
 	<cfset FormAction=ATTRIBUTES.FormAction>
 </cfif>
@@ -86,7 +86,7 @@
 <cfif IsDefined("FORM.ContentName")>
 	<cfif IsDefined("FORM.ButLoad") and FORM.ButLoad IS "Load">
 		<cfset SourceContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
-		<cfset SourceContentLocale.Constructor(Val(REQUEST.SimpleDecrypt(lclid)))>
+		<cfset SourceContentLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
 		
 		<cfloop index="PropertyToCopy" list="ContentID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,lStateProvince,PageActionURL,NumItems,ItemCode,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
 			<cfset MyContentLocale.SetProperty("#PropertyToCopy#",SourceContentLocale.GetProperty("#PropertyToCopy#"))>
@@ -242,7 +242,7 @@
 								<cffile action="DELETE" file="#UploadedFile#">
 								<!--- add AddError('aProductViews') here --->
 							<cfelse>
-								<cfset SetVariable("#ThisImage#_#r#",REQUEST.GetURLFromPath(UploadedFile))>
+								<cfset SetVariable("#ThisImage#_#r#",application.utilsObj.GetURLFromPath(UploadedFile))>
 							</cfif>
 						</cfif>
 					</cfloop>
@@ -259,7 +259,7 @@
 					<cfset StructInsert(sElement,"FileSize",Evaluate("FileSize_#r#"),1)>
 					<cfset StructInsert(sElement,"Order",Evaluate("Order_#r#"),1)>
 					<cfif Evaluate("MainFilePath_#r#") IS NOT "">
-						<cfset ThisDir="#REQUEST.GetPathFromURL(Evaluate('MainFilePath_#r#'))#">
+						<cfset ThisDir="#application.utilsObj.GetPathFromURL(Evaluate('MainFilePath_#r#'))#">
 						<cfset ThisDir=ListDeleteAt(ThisDir,ListLen(ThisDir,"\"),"\")>
 						<cfdirectory action="LIST" directory="#ThisDir#" name="qDir">
 						<cfquery name="qDir2" dbtype="query">
@@ -269,7 +269,7 @@
 							<cfset StructInsert(sElement,"FileSize",Val(qDir2.Size),1)>
 						</cfif>
 					</cfif>
-					<cfset ThisKey="#NumberFormat(Val(Evaluate('Order_#r#')),'000')#_#REQUEST.Scrub(Evaluate('FileName_#r#'))#">
+					<cfset ThisKey="#NumberFormat(Val(Evaluate('Order_#r#')),'000')#_#application.utilsObj.Scrub(Evaluate('FileName_#r#'))#">
 					<cfset StructInsert(sView,ThisKey,sElement,"1")>
 					<cfset lOrder=ListAppend(lOrder,ThisKey)>
 				</cfif>
@@ -294,7 +294,7 @@
 							<cffile action="DELETE" file="#UploadedFile#">
 							<!--- add AddError('aProductViews') here --->
 						<cfelse>
-							<cfset SetVariable("#ThisImage#_New",REQUEST.GetURLFromPath(UploadedFile))>
+							<cfset SetVariable("#ThisImage#_New",application.utilsObj.GetURLFromPath(UploadedFile))>
 						</cfif>
 					</cfif>
 				</cfloop>
@@ -306,14 +306,14 @@
 				<cfset ArrayAppend(aView,sElement)>
 			</cfif>
 			
-			<cfif IsDefined("FORM.hidFileID") and Trim(FORM.hidFileID) IS NOT "" and FileExists(REQUEST.GetPathFromURL(Trim(FORM.hidFileID)))>
+			<cfif IsDefined("FORM.hidFileID") and Trim(FORM.hidFileID) IS NOT "" and FileExists(application.utilsObj.GetPathFromURL(Trim(FORM.hidFileID)))>
 				<cfset FORM.hidFileID=Trim(FORM.hidFileID)>
-				<cffile action="MOVE" source="#REQUEST.GetPathFromURL(FORM.hidFileID)#" destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#">
+				<cffile action="MOVE" source="#application.utilsObj.GetPathFromURL(FORM.hidFileID)#" destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#">
 				<cfdirectory action="LIST" directory="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#" name="qDir">
 				<cfquery name="qDir2" dbtype="query">
 					select * from qDir Where Name='#ListLast(FORM.hidFileID,'/')#'
 				</cfquery>
-				<cfset MainFilePath_New=REQUEST.GetURLFromPath("#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#\#ListLast(FORM.hidFileID,'/')#")>
+				<cfset MainFilePath_New=application.utilsObj.GetURLFromPath("#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#\#ListLast(FORM.hidFileID,'/')#")>
 				<cfloop index="ThisImage" list="ThumbnailPath">
 					<cfparam name="#ThisImage#_New" default="">
 					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND evaluate("FORM.#ThisImage#_NewFileObject") IS NOT "">
@@ -326,7 +326,7 @@
 							<cffile action="DELETE" file="#UploadedFile#">
 							<!--- add AddError('aProductViews') here --->
 						<cfelse>
-							<cfset SetVariable("#ThisImage#_New",REQUEST.GetURLFromPath(UploadedFile))>
+							<cfset SetVariable("#ThisImage#_New",application.utilsObj.GetURLFromPath(UploadedFile))>
 						</cfif>
 					</cfif>
 				</cfloop>
@@ -394,8 +394,8 @@
 	<cfset MyContentLocalePreview.SetProperty("ContentID",MyContentPreview.GetProperty("ContentID"))>
 	<cfset MyContentLocalePreview.setContentPositionID(403)>
 	<cfset MyContentLocalePreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-	<cfset pcid=REQUEST.SimpleEncrypt(MyContentPreview.GetProperty("ContentID"))>
-	<cfset prcid=REQUEST.SimpleEncrypt(MyContent.GetProperty("ContentID"))>
+	<cfset pcid=application.utilsObj.SimpleEncrypt(MyContentPreview.GetProperty("ContentID"))>
+	<cfset prcid=application.utilsObj.SimpleEncrypt(MyContent.GetProperty("ContentID"))>
 	<cfinvoke component="com.ContentManager.CategoryHandler" 
 		method="GetCategoryBasicDetails"
 		CategoryID="#MyContent.GetProperty('CategoryID')#"
@@ -444,7 +444,7 @@
 					<option value="-1">Select...</option>
 					<cfoutput query="GetOtherContentLocale">
 						<cfif ContentLocaleID IS NOT MyContentLocale.GetProperty("ContentLocaleID")>
-							<option value="#REQUEST.SimpleEncrypt(ContentLocaleID)#">#LocaleName#</option>
+							<option value="#application.utilsObj.SimpleEncrypt(ContentLocaleID)#">#LocaleName#</option>
 						</cfif>
 					</cfoutput>
 				</select> <input type="submit" name="ButLoad" value="Load"></div>

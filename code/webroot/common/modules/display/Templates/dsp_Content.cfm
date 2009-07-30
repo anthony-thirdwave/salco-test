@@ -40,7 +40,7 @@
 	<!--- These tags are managed by the CMS. --->
 	<cfif Trim(PageTitleOverride) EQ "">
 		<cfset pageTitleList = ListRest(CategoryThreadName)>
-		<cfset thisPageTitle = REQUEST.GeneratePageTitleString(pageTitleList)>
+		<cfset thisPageTitle = APPLICATION.utilsObj.generatePageTitleString(pageTitleList)>
 	<cfelse>
 		<cfset thisPageTitle = PageTitleOverride>
 	</cfif>
@@ -108,12 +108,12 @@
         <!-- end of left column -->
         <!-- start of center column -->
         <div id="centerColumn">
-          <cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+			<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
       	</div>
         <!-- end of center column -->
         <!-- start of right column -->
         <div id="rightColumn">
-        	
+			<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
         </div>
     	<!-- end of right column -->
         <!-- clear floats -->

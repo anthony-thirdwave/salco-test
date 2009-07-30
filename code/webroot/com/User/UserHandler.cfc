@@ -1,4 +1,10 @@
 <cfcomponent>
+
+	<cffunction name="init" returntype="UserHandler">
+		<cfreturn this>
+	</cffunction>
+	
+	
 	
 	<cffunction name="GetUserLogin" output="false" returntype="string">
 		<cfargument name="UserID" type="numeric" required="true">

@@ -6,7 +6,7 @@
 	<cfset qDashboard=SESSION.qUserDashboard>
 </cflock>
 
-<cfif APPLICATION.Staging IS "0" and APPLICATION.Production is "0">
+<cfif not APPLICATION.Staging and not APPLICATION.Production>
 <cfoutput>
 <p style="border:1px red solid; padding:5px;">This is the development server. The staging server can be accessed at <a href="#APPLICATION.StagingURL#">#APPLICATION.StagingURL#</a>.</p>
 </cfoutput>

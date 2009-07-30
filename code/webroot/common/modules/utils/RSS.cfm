@@ -42,7 +42,7 @@
 					</dt>
 					
 					<!--- display content --->
-					<dd>#REQUEST.ReplaceExtendedCharacters(qRSS2.queryRSS.content[itr])#</dd>
+					<dd>#application.utilsObj.ReplaceExtendedCharacters(qRSS2.queryRSS.content[itr])#</dd>
 				</cfloop>
 				</dl>
 			</cfif>

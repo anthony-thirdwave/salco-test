@@ -11,7 +11,7 @@
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
-<cfparam name="FormAction" default="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfif IsDefined("ATTRIBUTES.FormAction")>
 	<cfset FormAction=ATTRIBUTES.FormAction>
 </cfif>
@@ -84,7 +84,7 @@
 <cfif IsDefined("FORM.CategoryName")>
 	<cfif IsDefined("FORM.ButLoad2") and FORM.ButLoad2 IS "Load" AND Val(lclid) GTE "1">
 		<cfset SourceCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
-		<cfset SourceCategoryLocale.Constructor(Val(REQUEST.SimpleDecrypt(lclid)))>
+		<cfset SourceCategoryLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
 		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,ProductPrice,ProductFamilyDescription,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#">
 			<cfset MyCategoryLocale.SetProperty("#PropertyToCopy#",SourceCategoryLocale.GetProperty("#PropertyToCopy#"))>
 		</cfloop>
@@ -194,7 +194,7 @@
 					<option value="-1">Select...</option>
 					<cfoutput query="GetOtherCategoryLocale">
 						<cfif CategoryLocaleID IS NOT MyCategoryLocale.GetProperty("CategoryLocaleID")>
-							<option value="#REQUEST.SimpleEncrypt(CategoryLocaleID)#">#LocaleName#</option>
+							<option value="#application.utilsObj.SimpleEncrypt(CategoryLocaleID)#">#LocaleName#</option>
 						</cfif>
 					</cfoutput>
 				</select> <input type="submit" name="ButLoad2" value="Load"></div>

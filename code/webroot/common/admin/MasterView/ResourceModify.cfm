@@ -8,7 +8,7 @@
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
-<cfparam name="FormAction" default="#REQUEST.CGIPathInfo#?#REQUEST.CGIQueryString#">
+<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfif IsDefined("ATTRIBUTES.FormAction")>
 	<cfset FormAction=ATTRIBUTES.FormAction>
 </cfif>
@@ -304,8 +304,8 @@
 			</cfinvoke>
 			
 			<cfoutput query="qRelatedPages">
-				<cfparam name="Detach_#REQUEST.SimpleEncrypt(RelatedCategoryID)#" default="0">
-				<cfif Evaluate("Detach_#REQUEST.SimpleEncrypt(RelatedCategoryID)#")>
+				<cfparam name="Detach_#application.utilsObj.SimpleEncrypt(RelatedCategoryID)#" default="0">
+				<cfif Evaluate("Detach_#application.utilsObj.SimpleEncrypt(RelatedCategoryID)#")>
 					<cfinvoke componencom.ContentManager.ResourceHandlerer" 
 						method="GetResourceLinkContentID"
 						returnVariable="ResourceLinkContentID"
