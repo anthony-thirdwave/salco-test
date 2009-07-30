@@ -180,6 +180,10 @@ setEncoding("URL", "UTF-8");
 		<cfobject component="com.utils.utils" name="APPLICATION.utilsObj">
 		<cfset APPLICATION.utilsObj.init()>
 		
+		<!--- create a time object --->
+		<cfobject component="com.time.Time" name="APPLICATION.timeObj">
+		<cfset APPLICATION.timeObj.init()>
+		
 		<!--- read the factory config xml into memory --->
 		<cfif ThisSiteType neq "dev"
 				or MustResetAppVars
