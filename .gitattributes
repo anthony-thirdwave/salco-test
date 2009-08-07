@@ -362,7 +362,6 @@ code/webroot/common/modules/Admin/dsp_AdminFooter.cfm -text
 code/webroot/common/modules/Admin/dsp_AdminHeader.cfm -text
 code/webroot/common/modules/Admin/dsp_MostRecent.cfm -text
 code/webroot/common/modules/Admin/dsp_admin.cfm -text
-code/webroot/common/modules/CommonFunctions.cfm -text
 code/webroot/common/modules/Contact/ContactForm.cfm -text
 code/webroot/common/modules/Contact/captcha.jpg -text
 code/webroot/common/modules/Contact/contact_captcha.cfm -text
@@ -409,7 +408,6 @@ code/webroot/common/modules/utils/ExplodeString.cfm -text
 code/webroot/common/modules/utils/ImagePopup.cfm -text
 code/webroot/common/modules/utils/Pagination.cfm -text
 code/webroot/common/modules/utils/PaginationUL.cfm -text
-code/webroot/common/modules/utils/Pagination_FileSubmit.cfm -text
 code/webroot/common/modules/utils/ParseTemplateValue.cfm -text
 code/webroot/common/modules/utils/ParseURL.cfm -text
 code/webroot/common/modules/utils/RSS.cfm -text
