@@ -1170,17 +1170,20 @@
 		<cfset var ThisParentID = "">
 		<cfset var GetSiblingQuery = "">
 		
+		<!--- protect the "ORDER BY" --->
 		<cfif ListFindNoCase("CategoryPriority,CategoryName,CategoryAlias",ARGUMENTS.OrderBy) LTE "0">
 			<cfset ARGUMENTS.Orderby="CategoryPriority">
 		</cfif>
 		<cfset ThisParentID=this.GetProperty("ParentID")>
 		<cfif ThisParentID LTE "0">
 			<cfset ThisParentID="-1">
-		</cfif><cfif not isNumeric(ThisParentID)><cfdump var=#ThisParentID#><cfabort></cfif>
+		</cfif>
+		
 		<cfquery name="GetSiblingQuery" datasource="#APPLICATION.DSN#" dbtype="ODBC">
-			SELECT * FROM t_Category 
-			WHERE ParentID=<cfqueryparam value="#Val(ThisParentID)#" cfsqltype="cf_sql_integer"> 
-			order by #ARGUMENTS.Orderby#
+			SELECT		*
+			FROM		t_Category 
+			WHERE		ParentID=<cfqueryparam value="#Val(ThisParentID)#" cfsqltype="cf_sql_integer"> 
+			ORDER BY	#ARGUMENTS.Orderby#
 		</cfquery>
 		<cfreturn GetSiblingQuery>
 	</cffunction>
@@ -1241,6 +1244,7 @@
 		<cfset var DeleteProductFamilyAttributesLanguages = "">
 		<cfset var sProductionSiteInformation = "">
 		<cfset var success = "">
+		<cfset var List = "">
 		
 		<cfif this.ValidateDelete() and ARGUMENTS.TrashPath IS NOT "">
 			<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#APPLICATION.DSN#" table="t_Category" Column="CategoryID" ParentColumn="ParentID">

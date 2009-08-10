@@ -261,7 +261,7 @@
 	<cfset var sParams = "" />
 	<cfset var key = "" />
 	<cfset var fieldValue = "" />
-	<cfset var fieldLabel = "" />
+	<cfset var fieldName = "" />
 	<cfset var lConfigKeys = "" />
 	<cfset var iPos = "" />
 

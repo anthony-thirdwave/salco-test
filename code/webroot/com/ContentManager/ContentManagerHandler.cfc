@@ -12,17 +12,6 @@
 		
 		<cfset var local = structNew()>
 				
-		<cfset local.getCategories = "">
-		<cfset local.flattenedCategories = "">
-		<cfset local.i = "">
-		<cfset local.cLPPColumnName = "">
-		<cfset local.cLPPColumnValue = "">
-		<cfset local.cLPPproperties = "">
-		<cfset local.j = "">
-		<cfset local.cPPcolumnName = "">
-		<cfset local.cPPcolumnValue = "">
-		<cfset local.cPPproperties = "">
-				
 		<cfif arguments.getByParentId>
 		
 			<cfquery name="local.getCategories" datasource="#application.dsn#">
@@ -76,8 +65,8 @@
 			
 			<cfloop index="local.j" list="#StructKeyList(local.cPPproperties)#" delimiters=",">
 				<!--- set the column name and value --->
-				<cfset cPPColumnName = local.j>
-				<cfset cPPColumnValue = local.cPPproperties[local.j]>
+				<cfset local.cPPColumnName = local.j>
+				<cfset local.cPPColumnValue = local.cPPproperties[local.j]>
 				
 				<!--- if the columnValue is not complex, then add it to the query --->				
 				<cfif not isStruct(local.cPPColumnValue) AND not isArray(local.cPPColumnValue)>
@@ -140,6 +129,8 @@
 		<cfargument name="sortColumn" required="false" default="">
 		<cfargument name="sortOrder" required="false" default="ASC">
 		
+		<cfset var local = structNew()>
+		
 		<cfset var getContents = "">
 		<cfset var flattenedContents1 = "">
 		<cfset var flattenedContents2 = "">
@@ -147,59 +138,52 @@
 		<cfset var columnName = "">
 		<cfset var columnValue = "">
 		<cfset var properties = "">
-		<cfset var getFlattenedContentBlocks = "">
 		
 		<!--- get the content blocks based on args --->
 		<cfstoredproc procedure="sp_GetContents" datasource="#APPLICATION.DSN#">
-			<cfprocresult name="getContents">
+			<cfprocresult name="local.getContents">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#arguments.localeId#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#arguments.categoryId#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentPositionID" value="#arguments.contentPositionId#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="#arguments.contentActive#" null="No">
 		</cfstoredproc>
 		
-		<!---<cfdump var="#getContents#">--->
-		
 		<!--- create a new query based on the old one --->
-		<cfset flattenedContents1 = duplicate(getContents)>
+		<cfset local.flattenedContents1 = duplicate(local.getContents)>
 		
 		<!--- loop through the query to get the content body packet--->
-		<cfloop query="getContents">
+		<cfloop query="local.getContents">
 					
-			<cfwddx action="wddx2cfml" input="#getContents.ContentBody#" output="properties">
+			<cfwddx action="wddx2cfml" input="#local.getContents.ContentBody#" output="local.properties">
 			
-			<cfloop index="i" list="#StructKeyList(properties)#" delimiters=",">
+			<cfloop index="local.i" list="#StructKeyList(local.properties)#" delimiters=",">
 				<!--- set the column name and value --->
-				<cfset columnName = i>
-				<cfset columnValue = properties[i]>
+				<cfset local.columnName = local.i>
+				<cfset local.columnValue = local.properties[local.i]>
 				
 				<!--- if the columnValue is not complex, then add it to the query --->				
-				<cfif not isStruct(columnValue) AND not isArray(columnValue)>
+				<cfif not isStruct(local.columnValue) AND not isArray(local.columnValue)>
 				
 					<!--- if the column doesn't exist, create it --->	
-					<cfif not structKeyExists(flattenedContents1,columnName)>
-						<cfset queryAddColumn(flattenedContents1,columnName,"varchar",arrayNew(1))>
+					<cfif not structKeyExists(local.flattenedContents1,local.columnName)>
+						<cfset queryAddColumn(local.flattenedContents1,local.columnName,"varchar",arrayNew(1))>
 					</cfif>
 					<!--- set the cell value --->
-					<cfset querySetCell(flattenedContents1,columnName,columnValue,getContents.currentrow)> 
-				
+					<cfset querySetCell(local.flattenedContents1,local.columnName,local.columnValue,local.getContents.currentrow)> 
 				</cfif>
-				
 			</cfloop>		
-			
-			
 		</cfloop>
 		
 		 <!--- create a new query based on the old one --->
-		<cfset flattenedContents2 = duplicate(flattenedContents1)>
+		<cfset local.flattenedContents2 = duplicate(local.flattenedContents1)>
 		
 		<!--- do what we just did for the content body for the properties packet --->
-		<cfloop query="flattenedContents1">
+		<cfloop query="local.flattenedContents1">
 			
-			<cfquery name="getProperties" datasource="#application.dsn#">
+			<cfquery name="local.getProperties" datasource="#application.dsn#">
 				SELECT propertiesPacket
 				  FROM t_properties
-				 WHERE propertiesId = <cfqueryparam value="#flattenedContents1.contentPropertiesId#"  cfsqltype="cf_sql_integer"/>
+				 WHERE propertiesId = <cfqueryparam value="#local.flattenedContents1.contentPropertiesId#"  cfsqltype="cf_sql_integer"/>
 			</cfquery>
 			
 			<!--- 
@@ -212,35 +196,34 @@
 			<!--- end of debugging --->
 			 --->
 				
-			<cfwddx action="wddx2cfml" input="#getProperties.propertiesPacket#" output="properties">
+			<cfwddx action="wddx2cfml" input="#local.getProperties.propertiesPacket#" output="local.properties">
 			
-			<cfloop index="i" list="#StructKeyList(properties)#" delimiters=",">
+			<cfloop index="local.i" list="#StructKeyList(local.properties)#" delimiters=",">
 				<!--- set the column name and value --->
-				<cfset columnName = i>
-				<cfset columnValue = properties[i]>
+				<cfset local.columnName = local.i>
+				<cfset local.columnValue = local.properties[local.i]>
 								
 				<!--- if the column doesn't exist, create it --->	
-				<cfif not structKeyExists(flattenedContents2,columnName)>
-					<cfset queryAddColumn(flattenedContents2,columnName,"varchar",arrayNew(1))>
+				<cfif not structKeyExists(local.flattenedContents2,local.columnName)>
+					<cfset queryAddColumn(local.flattenedContents2,local.columnName,"varchar",arrayNew(1))>
 				</cfif>
 				<!--- set the cell value --->
-				<cfset querySetCell(flattenedContents2,columnName,columnValue,flattenedContents1.currentrow)> 
+				<cfset querySetCell(local.flattenedContents2,local.columnName,local.columnValue,local.flattenedContents1.currentrow)> 
 				
-			</cfloop>		
-		
+			</cfloop>
 		</cfloop>		
 		
 		<!--- apply any ordering --->
-		<cfquery name="getFlattenedContentBlocks" dbtype="query">
+		<cfquery name="local.getFlattenedContentBlocks" dbtype="query">
 			SELECT *
-			  FROM flattenedContents2
+			  FROM [local].flattenedContents2
 		  <cfif len(arguments.sortColumn) GT 0>
 		  ORDER BY #arguments.sortColumn# #arguments.sortOrder#
 		  </cfif> 
 		</cfquery>
 			
 		
-		<cfreturn getFlattenedContentBlocks>
+		<cfreturn local.getFlattenedContentBlocks>
 	
 	</cffunction>
 

@@ -7,12 +7,10 @@ code/db/cms_db_creation_scripts/LoadData.sql -text
 code/db/cms_db_creation_scripts/README.txt -text
 code/webroot/Application.cfc -text
 code/webroot/com/ContentManager/Category.cfc -text
-code/webroot/com/ContentManager/CategoryCollection.cfc -text
 code/webroot/com/ContentManager/CategoryHandler.cfc -text
 code/webroot/com/ContentManager/CategoryLocale.cfc -text
 code/webroot/com/ContentManager/CategoryLocaleHandler.cfc -text
 code/webroot/com/ContentManager/Content.cfc -text
-code/webroot/com/ContentManager/ContentCollection.cfc -text
 code/webroot/com/ContentManager/ContentHandler.cfc -text
 code/webroot/com/ContentManager/ContentLocale.cfc -text
 code/webroot/com/ContentManager/ContentManagerHandler.cfc -text
@@ -22,12 +20,10 @@ code/webroot/com/ContentManager/PermissionHandler.cfc -text
 code/webroot/com/PostToProduction/postToProduction.cfc -text
 code/webroot/com/User/UserHandler.cfc -text
 code/webroot/com/common/base.cfc -text
-code/webroot/com/common/baseCollection.cfc -text
 code/webroot/com/common/search.cfc -text
 code/webroot/com/error/error.cfc -text
 code/webroot/com/group/Group.cfc -text
 code/webroot/com/group/Param.cfc -text
-code/webroot/com/label/labelHandler.cfc -text
 code/webroot/com/time/Time.cfc -text
 code/webroot/com/utils/Captcha.cfc -text
 code/webroot/com/utils/Database.cfc -text

@@ -782,6 +782,7 @@
 		<cfset var DeleteContentProps = "">
 		<cfset var success = "">
 		<cfset var sProductionSiteInformation = "">
+		<cfset var List = "">
 		
 		<cfif ARGUMENTS.TrashPath IS NOT "" and this.GetProperty("ContentID") GT "0">
 			<cfset ThisContentID=this.GetProperty("ContentID")>
