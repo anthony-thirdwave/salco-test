@@ -6,13 +6,15 @@
 
 
 <cfquery name="GetCategoryDetails" datasource="#Application.DSN#">
-	SELECT CategoryName,qry_GetCategoryWithCategoryLocale.CategoryID,CategoryAlias, CategoryTypeName,
-	CategoryActive, ParentID, CategoryTypeID,
-	t_permissions.*, CategoryURL, CategoryPropertiesID, CategoryPropertiesPacket, CategoryLocaleName, categoryLocaleActive, CategoryLocaleID, LocaleID, TemplateID
-	FROM
-	qry_GetCategoryWithCategoryLocale
-	INNER JOIN t_Permissions ON qry_GetCategoryWithCategoryLocale.CategoryID = t_Permissions.CategoryID
-	WHERE qry_GetCategoryWithCategoryLocale.CategoryID=#Val(MVCid)# AND UserGroupID IN (#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#)
+	SELECT		CategoryName,qry_GetCategoryWithCategoryLocale.CategoryID,CategoryAlias, CategoryTypeName,
+				CategoryActive, ParentID, CategoryTypeID, t_permissions.*, CategoryURL, 
+				CategoryPropertiesID, CategoryPropertiesPacket, CategoryLocaleName, 
+				categoryLocaleActive, CategoryLocaleID, LocaleID, TemplateID
+	FROM		qry_GetCategoryWithCategoryLocale
+	INNER JOIN	t_Permissions 
+	ON			qry_GetCategoryWithCategoryLocale.CategoryID = t_Permissions.CategoryID
+	WHERE		qry_GetCategoryWithCategoryLocale.CategoryID = <cfqueryparam value="#Val(MVCid)#" cfsqltype="cf_sql_integer">
+	AND 		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="true">)
 </cfquery>
 
 <cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm" ThisCategoryID="#MVCid#" NameList="" IDList="#MVCid#">

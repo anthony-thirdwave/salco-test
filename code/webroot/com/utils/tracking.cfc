@@ -90,7 +90,12 @@
 		<cfset var qry_GetTracking = "">
 
 		<cfquery name="qry_GetTracking" datasource="#APPLICATION.DSN#" maxrows="1">
-			select * from qry_GetTracking WHERE Entity='t_#Trim(ARGUMENTS.Entity)#' and KeyID=#Val(ARGUMENTS.KeyID)# and OperationCode='#Trim(ARGUMENTS.Operation)#' order by TrackingDateTime Desc
+			SELECT		*
+			FROM		qry_GetTracking 
+			WHERE		Entity = <cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar"> 
+			AND 		KeyID = <cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer" maxlength="4"> 
+			AND 		OperationCode = <cfqueryparam value="#Trim(ARGUMENTS.Operation)#" cfsqltype="cf_sql_varchar"> 
+			ORDER BY 	TrackingDateTime DESC
 		</cfquery>
 		<cfif qry_GetTracking.recordCount IS "0">
 			<cfset ReturnString="No information">
@@ -110,11 +115,12 @@
 		<cfset var qry_GetTracking = "">
 		
 		<cfquery name="qry_GetTracking" datasource="#APPLICATION.DSN#" maxrows="1">
-			select * from qry_GetTracking 
-				WHERE Entity=<cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar" maxlength="64">
-				and KeyID=<cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer" maxlength="4">
-				and OperationCode=<cfqueryparam value="#Trim(ARGUMENTS.Operation)#" cfsqltype="cf_sql_varchar">
-				order by TrackingDateTime Desc
+			SELECT		*
+			FROM		qry_GetTracking
+			WHERE		Entity = <cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar" maxlength="64">
+			AND			KeyID = <cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer">
+			AND			OperationCode = <cfqueryparam value="#Trim(ARGUMENTS.Operation)#" cfsqltype="cf_sql_varchar">
+			ORDER BY 	TrackingDateTime DESC
 		</cfquery>
 		<cfif qry_GetTracking.recordCount IS "0">
 			<cfset ReturnString="No information">
@@ -140,10 +146,11 @@
 		</cfif>
 		<cfset ReturnString=""/>
 		<cfquery name="qry_GetTracking" datasource="#APPLICATION.DSN#" maxrows="1">
-			select * from qry_GetTracking 
-				WHERE Entity=<cfqueryparam value="#ThisEntity#" cfsqltype="cf_sql_varchar"> 
-				and KeyID=<cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer"> 
-				order by TrackingDateTime Desc
+			SELECT		*
+			FROM		qry_GetTracking
+			WHERE		Entity = <cfqueryparam value="#ThisEntity#" cfsqltype="cf_sql_varchar">
+			AND			KeyID = <cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer">
+			ORDER BY 	TrackingDateTime DESC
 		</cfquery>
 		<cfoutput query="qry_GetTracking">
 			<cfset ReturnString="#OperationName# by #UserLogin# on #DateFormat(TrackingDateTime)# #TimeFormat(TrackingDateTime)#">
@@ -159,10 +166,12 @@
 		<cfset var qry_GetTracking = "">
 		
 		<cfquery name="qry_GetTracking" datasource="#APPLICATION.DSN#" maxrows="1">
-			select * from qry_GetTracking 
-				WHERE TrackingID=<cfqueryparam value="#Val(ARGUMENTS.TrackingID)#" cfsqltype="cf_sql_integer"> 
-				order by TrackingDateTime Desc
+			SELECT		*
+			FROM		qry_GetTracking
+			WHERE		TrackingID = <cfqueryparam value="#Val(ARGUMENTS.TrackingID)#" cfsqltype="cf_sql_varchar">
+			ORDER BY 	TrackingDateTime DESC
 		</cfquery>
+
 		<cfoutput query="qry_GetTracking">
 			<cfset ReturnString="#OperationName# by #UserLogin# on #DateFormat(TrackingDateTime)# #TimeFormat(TrackingDateTime)#">
 		</cfoutput>
@@ -178,10 +187,13 @@
 		<cfset var qry_GetTracking = "">
 		
 		<cfquery name="qry_GetTracking" datasource="#APPLICATION.DSN#" maxrows="1">
-			select TrackingDateTime from qry_GetTracking WHERE Entity=<cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar">
-				and KeyID=<cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer"> 
-				order by TrackingDateTime Desc
+			SELECT		TrackingDateTime
+			FROM		qry_GetTracking
+			WHERE		Entity = <cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar" maxlength="64">
+			AND			KeyID = <cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer">
+			ORDER BY 	TrackingDateTime DESC
 		</cfquery>
+
 		<cfoutput query="qry_GetTracking">
 			<cfset ReturnString="#TrackingDateTime#">
 		</cfoutput>
@@ -201,8 +213,9 @@
 		</cfquery>
 		
 		<cfquery name="qry_GetTracking" datasource="#APPLICATION.DSN#" maxrows="1">
-			select * from qry_GetTracking WHERE 
-			
+			SELECT		* 
+			FROM		qry_GetTracking
+			WHERE 	
 			(
 				(Entity=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar">
 				and KeyID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> )
@@ -212,8 +225,8 @@
 				and KeyID IN (<cfqueryparam value="#ListAppend(ValueList(GetContent.ContentID),-1)#" cfsqltype="cf_sql_integer" list="yes">)
 				)
 			)
-			and OperationID=<cfqueryparam value="501" cfsqltype="cf_sql_integer">	
-			order by TrackingDateTime Desc
+			AND			OperationID=<cfqueryparam value="501" cfsqltype="cf_sql_integer">	
+			ORDER BY	TrackingDateTime DESC
 		</cfquery>
 	
 		<cfif qry_GetTracking.recordCount IS "0">

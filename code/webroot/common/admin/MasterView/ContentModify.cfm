@@ -635,7 +635,7 @@
 							<cfquery name="qDiscussionID" datasource="#APPLICATION.DSN#">
 								SELECT		MTDefaultDiscussionID
 								FROM		t_locale
-								WHERE		localeID = #SESSION.AdminCurrentAdminLocaleID#
+								WHERE		localeID = <cfqueryparam value="#val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 							</cfquery>
 							<!--- Create a new discussion entry --->
 							<cfinvoke component="com.discussion.discussionHandler" method="setEntry" returnVariable="entryID">

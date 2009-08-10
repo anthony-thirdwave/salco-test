@@ -69,7 +69,7 @@
 		<!--- Build our query.  --->
 		<cftry>
 			<cfparam name="ARGUMENTS.MaxRows" default="0">
-			<cfif Val(Trim(ARGUMENTS.MaxRows)) IS not "0">
+			<cfif Val(Trim(ARGUMENTS.MaxRows)) neq "0">
 				<cfquery name="GenericQuery" datasource="#Arguments.DataSource#" maxrows="#Val(Trim(ARGUMENTS.MaxRows))#">
 					SELECT * FROM #Arguments.TableName#
 					WHERE 

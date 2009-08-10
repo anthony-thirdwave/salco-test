@@ -9,9 +9,10 @@
 		
 		<!--- query the SecurityDB for the passed username and password --->
 		<cfquery name="GetUser" datasource="#APPLICATION.DSN#">
-			SELECT UserID, UserLogin, UserPassword, LocaleID FROM t_User
-			WHERE UserLogin = '#Trim(arguments.Username)#'
-			AND UserPassword = '#trim(arguments.Password)#'
+			SELECT	UserID, UserLogin, UserPassword, LocaleID
+			FROM	t_User
+			WHERE	UserLogin = <cfqueryparam value="#trim(arguments.Username)#" cfsqltype="cf_sql_varchar">
+			AND		UserPassword = <cfqueryparam value="#trim(arguments.Password)#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 
 		<!--- return the appropriate result --->
@@ -24,8 +25,9 @@
 		<cfset var GetUser = "">
 		
 		<cfquery name="GetUser" datasource="#APPLICATION.DSN#">
-			SELECT UserID, UserLogin, UserPassword, LocaleID FROM t_User
-			where 1=0
+			SELECT	UserID, UserLogin, UserPassword, LocaleID 
+			FROM	t_User
+			WHERE	1=0
 		</cfquery>
 		<cfreturn GetUser/>
 	</cffunction>
@@ -38,9 +40,10 @@
 		
 		<!--- query the SecurityDB for the passed username get all groups --->
 		<cfquery name="getUserGroups" datasource="#APPLICATION.DSN#">
-			SELECT UserGroupID
-			FROM t_UserGroup
-			WHERE UserID = '#arguments.UserID#' order by UserGroupID
+			SELECT		UserGroupID
+			FROM		t_UserGroup
+			WHERE		UserID = <cfqueryparam value="#Val(arguments.UserID)#" cfsqltype="cf_sql_integer">
+			ORDER BY	UserGroupID
 		</cfquery>		
 		<!--- return the appropriate result --->
 		

@@ -51,7 +51,9 @@
 	<!--- <cfdump var="#sDashboard#"> --->
 	
 	<cfquery name="getDashboardIDList" datasource="#APPLICATION.DSN#">
-	SELECT DashboardModuleIDList FROM t_User WHERE UserID = #thisUserID#
+	SELECT	DashboardModuleIDList
+	FROM	t_User
+	WHERE	UserID = <cfqueryparam value="#val(thisUserID)#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	
 	<cfset thisDashboardModuleIDList = getDashboardIDList.DashboardModuleIDList>

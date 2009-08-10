@@ -330,8 +330,8 @@
 						<cfqueryparam value="#Val(ThisPropertiesID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(ThisSourceID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(ThisInheritID)#" cfsqltype="cf_sql_integer">,
-						<cfif thisContentDate1 IS "">NULL<cfelse>#CreateODBCDate(thisContentDate1)#</cfif>,
-						<cfif thisContentDate2 IS "">NULL<cfelse>#CreateODBCDate(thisContentDate2)#</cfif>
+						<cfqueryparam value="#ThisContentDate1#" cfsqltype="cf_sql_date" null="#not isDate(thisContentDate1)#">,
+						<cfqueryparam value="#ThisContentDate2#" cfsqltype="cf_sql_date" null="#not isDate(thisContentDate2)#">
 						)
 						SELECT NewContentID=@@Identity
 					</cfquery>
@@ -360,8 +360,8 @@
 					ContentTypeID=<cfqueryparam value="#Val(ThisContentTypeID)#" cfsqltype="cf_sql_integer">,
 					SourceID=<cfqueryparam value="#Val(ThisSourceID)#" cfsqltype="cf_sql_integer">,
 					InheritID=<cfqueryparam value="#Val(ThisInheritID)#" cfsqltype="cf_sql_integer">,
-					<cfif ThisContentDate1 IS "">ContentDate1=NULL<cfelse>ContentDate1=#CreateODBCDate(ThisContentDate1)#</cfif>,
-					<cfif ThisContentDate2 IS "">ContentDate2=NULL<cfelse>ContentDate2=#CreateODBCDate(ThisContentDate2)#</cfif>
+					ContentDate1=<cfqueryparam value="#ThisContentDate1#" cfsqltype="cf_sql_date" null="#not isDate(thisContentDate1)#">,
+					ContentDate2=<cfqueryparam value="#ThisContentDate2#" cfsqltype="cf_sql_date" null="#not isDate(thisContentDate2)#">
 					WHERE ContentID=<cfqueryparam value="#val(ThisContentID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfif Val(ARGUMENTS.UserID) GT "0">
@@ -374,9 +374,9 @@
 				</cfif>
 			</cfif>
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
-				SELECT t_Properties.PropertiesID,t_Properties.PropertiesPacket
-				FROM t_Properties 
-				WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
+				SELECT	t_Properties.PropertiesID,t_Properties.PropertiesPacket
+				FROM	t_Properties 
+				WHERE	PropertiesID = <cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif isWDDX(GetProperties.PropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#GetProperties.PropertiesPacket#" output="sProperties">
