@@ -1,0 +1,12 @@
+RewriteEngine On
+RewriteCompatibility2 On
+RepeatLimit 32
+RewriteBase
+ 
+# Ignore all admin tool pages.
+RewriteRule ^(.*/common/admin.*)$ $1 [L]
+
+#DYNAMIC_CONTENT
+
+#END_DYNAMIC_CONTENT
+

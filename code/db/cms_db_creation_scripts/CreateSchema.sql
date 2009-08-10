@@ -399,6 +399,61 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_RewriteType]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_RewriteType](
+	[RewriteTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](200) NOT NULL,
+	[Alias] [varchar](200) NOT NULL,
+	[Description] [varchar](2000) NULL,
+	[SourcePrefix] [varchar](200) NULL,
+	[SourceSuffix] [varchar](200) NULL,
+	[AllowSource] [tinyint] NOT NULL,
+	[SourceMustBeUnique] [tinyint] NOT NULL,
+	[SourceIsPath] [tinyint] NOT NULL,
+	[SourceNotNull] [tinyint] NOT NULL,
+	[DestinationPrefix] [varchar](200) NULL,
+	[DestinationSuffix] [varchar](200) NULL,
+	[AllowDestination] [tinyint] NOT NULL,
+	[DestinationMustBeUnique] [tinyint] NOT NULL,
+	[DestinationIsPath] [tinyint] NOT NULL,
+	[DestinationNotNull] [tinyint] NOT NULL,
+	[Flag] [varchar](200) NULL,
+	[PublicId] [varchar](33) NOT NULL,
+	[Priority] [int] NOT NULL,
+ CONSTRAINT [PK_t_RewriteType] PRIMARY KEY CLUSTERED 
+(
+	[RewriteTypeID] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_RewriteUrl]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_RewriteUrl](
+	[RewriteUrlId] [int] IDENTITY(1,1) NOT NULL,
+	[SourceUrl] [varchar](500) NULL,
+	[DestinationUrl] [varchar](500) NULL,
+	[RewriteTypeId] [int] NOT NULL,
+	[DateStart] [datetime] NULL,
+	[DateEnd] [datetime] NULL,
+	[PublicId] [varchar](33) NOT NULL,
+	[Priority] [int] NOT NULL,
+ CONSTRAINT [PK_t_RewriteUrl] PRIMARY KEY CLUSTERED 
+(
+	[RewriteUrlID] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_Security]') AND type in (N'U'))
 BEGIN
 CREATE TABLE [dbo].[t_Security](

@@ -5,6 +5,7 @@ code/db/cms_db_creation_scripts/CreateStoredProcedures.sql -text svneol=unset#ap
 code/db/cms_db_creation_scripts/GrantPermissions.sql -text
 code/db/cms_db_creation_scripts/LoadData.sql -text
 code/db/cms_db_creation_scripts/README.txt -text
+code/webroot/.htaccess -text
 code/webroot/Application.cfc -text
 code/webroot/com/ContentManager/Category.cfc -text
 code/webroot/com/ContentManager/CategoryHandler.cfc -text
@@ -28,6 +29,7 @@ code/webroot/com/time/Time.cfc -text
 code/webroot/com/utils/Captcha.cfc -text
 code/webroot/com/utils/Database.cfc -text
 code/webroot/com/utils/Image.cfc -text
+code/webroot/com/utils/UrlRewrite.cfc -text
 code/webroot/com/utils/fckeditor.cfc -text
 code/webroot/com/utils/image3w.cfc -text
 code/webroot/com/utils/rss.cfc -text
@@ -57,6 +59,8 @@ code/webroot/common/admin/NullSearchTerms/_StatusChange.cfm -text
 code/webroot/common/admin/NullSearchTerms/index.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/index.cfm -text
+code/webroot/common/admin/RedirectManager/edit.cfm -text
+code/webroot/common/admin/RedirectManager/index.cfm -text
 code/webroot/common/admin/Search/index.cfm -text
 code/webroot/common/admin/System/ContentGenerate.cfm -text
 code/webroot/common/admin/UserManager/UserModify.cfm -text
