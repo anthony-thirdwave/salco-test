@@ -11,12 +11,13 @@
 </cfif>
 
 <cfquery name="GetAllPages" datasource="#APPLICATION.DSN#">
-	select * from t_Category 
-	Where CategoryTypeID IN (#APPLICATION.lVisibleCategoryTypeID#) 
-	<cfif Val(ATTRIBUTES.CategoryID) GT "0">
-		and CategoryID=#Val(ATTRIBUTES.CategoryID)#
-	</cfif>
-	order by DisplayOrder
+	SELECT		*
+	FROM		t_Category 
+	WHERE		CategoryTypeID IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="true">) 
+			<cfif Val(ATTRIBUTES.CategoryID) GT "0">
+				AND CategoryID = <cfqueryparam value="#Val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer">
+			</cfif>
+	ORDER BY	DisplayOrder
 </cfquery>
 
 <cfif NOT ATTRIBUTES.Silent>

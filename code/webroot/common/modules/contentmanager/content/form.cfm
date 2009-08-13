@@ -88,8 +88,9 @@
 	FormEltStyle="width:200px;"> --->
 <!--- BEGIN Category CHOOSER --->
 <cfquery name="getCatName" datasource="#APPLICATION.DSN#">
-	SELECT CategoryName FROM t_Category
-	WHERE CategoryID = #MyContent.GetProperty('CategoryID')#
+	SELECT	CategoryName 
+	FROM	t_Category
+	WHERE	CategoryID =  <cfqueryparam value="#MyContent.GetProperty('CategoryID')#" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfset thisCatName = getCatName.CategoryName>
 <cfif FormMode NEQ "ShowForm">

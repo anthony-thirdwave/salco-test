@@ -58,9 +58,6 @@ code/webroot/common/admin/MasterView/download/4.txt -text
 code/webroot/common/admin/MasterView/download/5.txt -text
 code/webroot/common/admin/MasterView/index.cfm -text
 code/webroot/common/admin/MasterView/search.cfm -text
-code/webroot/common/admin/NullSearchTerms/CommentsUser.cfm -text
-code/webroot/common/admin/NullSearchTerms/_StatusChange.cfm -text
-code/webroot/common/admin/NullSearchTerms/index.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/index.cfm -text
 code/webroot/common/admin/RedirectManager/edit.cfm -text

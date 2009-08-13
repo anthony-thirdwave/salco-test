@@ -1049,8 +1049,9 @@
 	<cfif MyContentLocale.GetProperty('lArticleCategoryID') NEQ "">
 		<cfloop list="#MyContentLocale.GetProperty('lArticleCategoryID')#" index="thisid">
 			<cfquery name="getArticle" datasource="#APPLICATION.DSN#">
-			SELECT CategoryName, CategoryID FROM t_Category
-			WHERE CategoryID = #thisid#
+			SELECT	CategoryName, CategoryID 
+			FROM	t_Category
+			WHERE	CategoryID = <cfqueryparam value="#thisid#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfoutput query="getArticle">
 				<cfset articleList = articleList & "<li id=""#CategoryID#""><span class=""handle"">#CategoryName#</span> <a href=""javascript:removeArticle('#CategoryID#');"">remove</a></li>">

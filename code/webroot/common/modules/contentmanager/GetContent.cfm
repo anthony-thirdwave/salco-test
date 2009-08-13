@@ -7,8 +7,9 @@
 <!--- Check given alias first and obtain categoryid--->
 <cfif ATTRIBUTES.CategoryAlias IS NOT "">
 	<cfquery name="GetCategoryID" datasource="#APPLICATION.DSN#" maxrows=1 dbtype="ODBC">
-		SELECT CategoryID FROM t_Category
-		WHERE CategoryAlias=<cfqueryparam value="#Trim(ATTRIBUTES.CategoryAlias)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
+		SELECT	CategoryID
+		FROM	t_Category
+		WHERE	CategoryAlias = <cfqueryparam value="#Trim(ATTRIBUTES.CategoryAlias)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
 	</cfquery>
 	<cfif GetCategoryID.RecordCount IS "1">
 		<cfset ATTRIBUTES.CategoryID=GetCategoryID.CategoryID>
@@ -87,8 +88,9 @@
 	</cfif>
 	<cfif Val(GetPage.ParentID) GT "0">
 		<cfquery name="GetParentPageName" datasource="#APPLICATION.DSN#">
-			select CategoryName from t_Category
-			where Categoryid=<cfqueryparam value="#Val(GetPage.ParentID)#" cfsqltype="CF_SQL_INTEGER">
+			SELECT	CategoryName
+			FROM	t_Category
+			WHERE	Categoryid = <cfqueryparam value="#Val(GetPage.ParentID)#" cfsqltype="CF_SQL_INTEGER">
 		</cfquery>
 		<cfset ParentCategoryName="#GetParentPageName.CategoryName#">
 	</cfif>
@@ -115,8 +117,10 @@
 		<cfset CALLER.CategoryThreadName=NameList>
 		<cfset CALLER.CategoryThreadAlias=AliasList>
 		<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
-			select PropertiesPacket from qry_GetCategoryLocale
-			WHERE CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer"> order by displayorder desc
+			SELECT		PropertiesPacket
+			FROM		qry_GetCategoryLocale
+			WHERE		CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer">
+			ORDER BY	displayorder DESC
 		</cfquery>
 		<cfoutput query="GetCatProps">
 			<cfif IsWDDX(PropertiesPacket)>
@@ -132,8 +136,9 @@
 	</cfif>
 
 	<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
-		select PropertiesPacket from t_Properties
-		WHERE PropertiesID=<cfqueryparam value="#Val(GetPage.categoryPropertiesID)#" cfsqltype="CF_SQL_INTEGER">
+		SELECT	PropertiesPacket
+		FROM	t_Properties
+		WHERE	PropertiesID = <cfqueryparam value="#Val(GetPage.categoryPropertiesID)#" cfsqltype="CF_SQL_INTEGER">
 	</cfquery>
 	<cfoutput query="GetCatProps">
 		<cfif IsWDDX(PropertiesPacket)>
@@ -167,7 +172,7 @@
 	<cfif DenyAccess>
 		<cfquery name="GetLoginModule" datasource="#APPLICATION.DSN#" maxrows="1">
 			SELECT CategoryID, CacheDateTime
-			FROM t_Category WHERE CategoryAlias='#LoginPageAlias#'
+			FROM t_Category WHERE CategoryAlias=<cfqueryparam value="#LoginPageAlias#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 		<cfset LoginPageCacheDateTime="#GetLoginModule.CacheDateTime#">
 		<cfset LoginPageCategoryID="#GetLoginModule.CategoryID#">
@@ -198,37 +203,48 @@
 		<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") OR REQUEST.ReCache or Isdefined("prcid") or REQUEST.ContentGenerateMode IS "FLAT" OR recacheThis>
 			<cfif DenyAccess>
 				<cfquery name="GetInherited" datasource="#APPLICATION.DSN#">
-					select ContentID from qry_GetContentInherit
-					Where
-					<cfif ThisPosition IS "401">
-						ContentPositionID=#Val(ThisPosition)#
-					<cfelse>
-						1=0
-					</cfif>
-					AND LocaleID=<cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
-					AND ContentActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND CategoryActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND CategoryID = #Val(LoginPageCategoryID)#
-					order by ContentLocalePriority
+					SELECT		ContentID 
+					FROM		qry_GetContentInherit
+					WHERE
+							<cfif ThisPosition eq "401">
+								ContentPositionID = <cfqueryparam value="#Val(ThisPosition)#" cfsqltype="cf_sql_integer">
+							<cfelse>
+								1=0
+							</cfif>
+					AND			LocaleID = <cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="cf_sql_integer">
+					AND			ContentActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+					AND			CategoryActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+					AND			CategoryID = <cfqueryparam value="#Val(LoginPageCategoryID)#" cfsqltype="cf_sql_integer">
+					ORDER BY	ContentLocalePriority
 				</cfquery>
 			<cfelse>
 				<cfquery name="GetInherited" datasource="#APPLICATION.DSN#">
-					select ContentID from qry_GetContentInherit
-					Where
-					ContentPositionID=<cfqueryparam value="#Val(ThisPosition)#" cfsqltype="CF_SQL_INTEGER">
-					AND LocaleID=<cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
-					AND ContentActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND CategoryActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND (
-						(CategoryID = <cfqueryparam value="#Val(CALLER.CurrentCategoryID)#" cfsqltype="CF_SQL_INTEGER"> and 
-						(InheritID <=<cfqueryparam value="1800" cfsqltype="CF_SQL_INTEGER"> or InheritID IS NULL))
-						OR
-						(CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) AND 
-						InheritID=<cfqueryparam value="1801" cfsqltype="CF_SQL_INTEGER">)
-						OR
-						(CategoryID IN (<cfqueryparam value="#ListDeleteAt(CALLER.CategoryThreadList,ListLen(CALLER.CategoryThreadList))#" cfsqltype="cf_sql_integer" list="yes">) AND InheritID=<cfqueryparam value="1802" cfsqltype="CF_SQL_INTEGER">)
-					)
-					order by displayorder desc, ContentLocalePriority
+					SELECT		ContentID 
+					FROM		qry_GetContentInherit
+					WHERE		ContentPositionID = <cfqueryparam value="#Val(ThisPosition)#" cfsqltype="CF_SQL_INTEGER">
+					AND			LocaleID = <cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
+					AND			ContentActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
+					AND			CategoryActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
+					AND			(
+									(
+									CategoryID = <cfqueryparam value="#Val(CALLER.CurrentCategoryID)#" cfsqltype="CF_SQL_INTEGER"> 
+									AND (
+										InheritID <=<cfqueryparam value="1800" cfsqltype="CF_SQL_INTEGER"> 
+										OR InheritID IS NULL
+										)
+									)
+								OR
+									(
+									CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">)
+									AND	InheritID = <cfqueryparam value="1801" cfsqltype="CF_SQL_INTEGER">
+									)
+								OR
+									(
+									CategoryID IN (<cfqueryparam value="#ListDeleteAt(CALLER.CategoryThreadList,ListLen(CALLER.CategoryThreadList))#" cfsqltype="cf_sql_integer" list="yes">) 
+									AND InheritID=<cfqueryparam value="1802" cfsqltype="CF_SQL_INTEGER">
+									)
+								)
+					ORDER BY	displayorder DESC, ContentLocalePriority
 				</cfquery>
 			</cfif>
 			<cfset FileContents="">
@@ -236,15 +252,15 @@
 			<cfset ContentCounter="1">
 			<cfif GetInherited.RecordCount IS "0">
 				<cfquery name="GetInherited" datasource="#APPLICATION.DSN#" maxrows="1">
-					select ContentID from qry_GetContentInherit
-					Where
-					ContentPositionID=<cfqueryparam value="#Val(ThisPosition)#" cfsqltype="CF_SQL_INTEGER">
-					AND LocaleID=<cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
-					AND ContentActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND CategoryActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">)
-					AND InheritID=<cfqueryparam value="1803" cfsqltype="CF_SQL_INTEGER">
-					order by displayorder desc, ContentLocalePriority
+					SELECT		ContentID
+					FROM		qry_GetContentInherit
+					WHERE		ContentPositionID = <cfqueryparam value="#Val(ThisPosition)#" cfsqltype="CF_SQL_INTEGER">
+					AND			LocaleID = <cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
+					AND			ContentActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
+					AND			CategoryActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
+					AND			CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">)
+					AND			InheritID = <cfqueryparam value="1803" cfsqltype="CF_SQL_INTEGER">
+					ORDER BY	displayorder DESC, ContentLocalePriority
 				</cfquery>
 			</cfif>
 			<cfset centerCounter = 0>

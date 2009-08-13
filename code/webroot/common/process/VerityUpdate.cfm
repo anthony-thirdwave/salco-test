@@ -1,13 +1,16 @@
 <cfparam name="SourceTopLevelCategoryID" default="451">
 <cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
-	select LocaleID,LocaleCode,LanguageID,LabelName As LanguageName from 
-	 t_Locale LEFT OUTER JOIN
-                  t_Label ON t_Locale.LanguageID = t_Label.LabelID
+	SELECT			LocaleID, LocaleCode, LanguageID, LabelName As LanguageName
+	FROM			t_Locale 
+	LEFT OUTER JOIN	t_Label 
+	ON				t_Locale.LanguageID = t_Label.LabelID
 	
 	order by LocaleID
 </cfquery>
 <cfquery name="GetParentDisplayOrder" datasource="#APPLICATION.DSN#">
-	select DisplayOrder from t_category Where CategoryID=#SourceTopLevelCategoryID#
+	SELECT	DisplayOrder
+	FROM	t_category
+	WHERE	CategoryID = <cfqueryparam value="#SourceTopLevelCategoryID#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <cfset sLocaleCode=StructNew()>
@@ -27,7 +30,9 @@
 
 <cfloop index="ThisTopCategoryID" list="#lSiteID#">
 	<cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
-		select DisplayOrder from t_Category Where CategoryID=#Val(ThisTopCategoryID)#
+		SELECT	DisplayOrder
+		FROM	t_Category
+		WHERE	CategoryID = <cfqueryparam value="#Val(ThisTopCategoryID)#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	<cfloop index="ThisLocaleID" list="#ValueList(GetLocales.LocaleID)#">
 		<cfset ThisCollectionName="#application.collectionname##THisLocaleID#">
@@ -72,38 +77,26 @@
 			<cfset Title="#GetCats.CategoryNameDerived#">
 			<cfset Custom2="#GetCats.CategoryTypeID#">
 			<cfset Body="#GetCats.CategoryNameDerived# #GetCats.CategoryName# #GetCats.CategoryLocalePropertiesPacket#">
-			<cfif GetCats.CategoryTypeID IS "64"><!--- Product --->
-				<cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-					select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])# 
-					AND AttributeValue <> ''
-				</cfquery>
-				<cfoutput query="GetProductProps">
-					<cfif Trim(AttributeValue) IS NOT "">
-						<cfset Body="#Body# #Trim(AttributeValue)#">
-					</cfif>
-				</cfoutput>
-				<cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
-					select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])# 
-				</cfquery>
-				<cfoutput query="GetProductProps2">
-					<cfif Trim(TextBlock) IS NOT "">
-						<cfset Body="#Body# #Trim(TextBlock)#">
-					</cfif>
-				</cfoutput>
-			</cfif>
+
 			<cfquery name="GetpropertiesPacket" datasource="#APPLICATION.DSN#">
-				select * from t_Properties Where PropertiesID=#Val(GetCats.categoryPropertiesID)#
+				SELECT	*
+				FROM	t_Properties
+				WHERE	PropertiesID = <cfqueryparam value="#Val(GetCats.categoryPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfset Body="#Body# #GetpropertiesPacket.PropertiesPacket#">
 			<cfset Custom1="">
 			<cfoutput query="GetContentList">
 				<cfset Body="#Body# #ContentName# #ContentNameDerived# #ContentBody#">
 				<cfquery name="GetpropertiesPacket2" datasource="#APPLICATION.DSN#">
-					select * from t_Properties Where PropertiesID=#Val(ContentPropertiesID)#
+					SELECT	*
+					FROM	t_Properties
+					WHERE	PropertiesID = <cfqueryparam value="#Val(ContentPropertiesID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfset Body="#Body# #GetpropertiesPacket2.PropertiesPacket#">
 				<cfquery name="GetpropertiesPacket3" datasource="#APPLICATION.DSN#">
-					select * from t_Properties Where PropertiesID=#Val(ContentLocalePropertiesID)#
+					SELECT	*
+					FROM	t_Properties
+					WHERE	PropertiesID = <cfqueryparam value="#Val(ContentLocalePropertiesID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfset Body="#Body# #GetpropertiesPacket3.PropertiesPacket#">
 				<cfif IsWddx(GetpropertiesPacket3.PropertiesPacket)>

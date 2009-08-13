@@ -12,12 +12,6 @@
 	<cfset bEdit = true>
 </cfif>
 
-<!--- Application variables used --->
-<cflock type="ReadOnly" name="#Application.ApplicationName#" timeout="1">
-	<cfset DSN = Application.DSN>
-	<cfset Key = Application.Key>
-</cflock>
-
 <!--- ########   FORM PROCESSING   ######## --->
 <!--- add or update form params --->
 <cfparam name="submit" default="">
@@ -40,47 +34,60 @@
 		<!--- Add --->
 		<cfif form.labelId is 0>
 			<!--- Get the next labelId --->
-			<cfquery datasource="#DSN#" name="getNextID">
+			<cfquery datasource="#APPLICATION.DSN#" name="getNextID">
 				set nocount on
-				SELECT MAX(LabelID) as xID FROM t_Label
+				SELECT	MAX(LabelID) AS xID 
+				FROM	t_Label
 				set nocount off
 			</cfquery>
 			<cfset xLabelID = getNextID.xID+1>
 			<!--- Insert --->
-			<cfquery name="GetMaxPriority" datasource="#DSN#">
-				select max(LabelPriority) as p from t_Label where LabelGroupID=#LabelGroupID#
+			<cfquery name="GetMaxPriority" datasource="#APPLICATION.DSN#">
+				SELECT	MAX(LabelPriority) AS p
+				FROM	t_Label
+				WHERE	LabelGroupID = <cfqueryparam value="#LabelGroupID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfset NextPriority=GetMaxPriority.p+10>
-			<cfquery datasource="#DSN#" name="insertLabel">
+			<cfquery datasource="#APPLICATION.DSN#" name="insertLabel">
 				INSERT INTO t_Label
-					(LabelID, LabelCode, LabelName, LabelGroupID,LabelPriority)
+					(LabelID, LabelCode, LabelName, LabelGroupID, LabelPriority)
 				values
-					(#xLabelID#, '#trim(form.LabelCode)#', '#trim(form.LabelName)#', #Val(form.LabelGroupID)#, #Val(NextPriority)#)
+					(
+					<cfqueryparam value="#xLabelID#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#trim(form.LabelCode)#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#trim(form.LabelName)#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#Val(form.LabelGroupID)#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#Val(NextPriority)#" cfsqltype="cf_sql_integer">
+					)
 			</cfquery>
 		<!--- Edit --->	
 		<cfelse>
 			<cfif IsDefined("Form.butup") OR IsDefined("Form.butdown")>
 				<cfif IsDefined("Form.butup")>
-					<cfquery name="moveup" datasource="#DSN#">
-						update t_Label set LabelPriority=LabelPriority-15, LabelName='#Trim(form.LabelName)#' where LabelID=#Val(form.LabelID)#
+					<cfquery name="moveup" datasource="#APPLICATION.DSN#">
+						UPDATE	t_Label
+						SET		LabelPriority = LabelPriority-15,
+								LabelName = '#Trim(form.LabelName)#'
+						WHERE	LabelID = #Val(form.LabelID)#
 					</cfquery>
 				<cfelseif IsDefined("Form.butdown")>
-					<cfquery name="movedown" datasource="#DSN#">
-						update t_Label set LabelPriority=LabelPriority+15, LabelName='#Trim(form.LabelName)#' where LabelID=#Val(form.LabelID)#
+					<cfquery name="movedown" datasource="#APPLICATION.DSN#">
+						UPDATE	t_Label
+						SET		LabelPriority = LabelPriority+15, LabelName='#Trim(form.LabelName)#' where LabelID=#Val(form.LabelID)#
 					</cfquery>
 				</cfif>
-				<cfquery name="Select" datasource="#DSN#">
+				<cfquery name="Select" datasource="#APPLICATION.DSN#">
 					Select * from t_Label where LabelGroupID=#FORM.labelGroupID# order by LabelPriority
 				</cfquery>
 				<cfoutput query="select">
 					<cfset ThisNewPriority=10*CurrentRow>
-					<cfquery name="Update" datasource="#DSN#">
+					<cfquery name="Update" datasource="#APPLICATION.DSN#">
 						update t_Label set LabelPriority=#Val(ThisNewPriority)# where LabelID=#LabelID#
 					</cfquery>
 				</cfoutput>
 				<cflocation addtoken="no" url="index.cfm?LabelID=#FORM.LabelID#">
 			</cfif>
-			<cfquery datasource="#DSN#" name="updateLabel">
+			<cfquery datasource="#APPLICATION.DSN#" name="updateLabel">
 				UPDATE t_Label
 				SET LabelName='#Trim(form.LabelName)#'
 				WHERE LabelID = #Val(form.LabelID)#
@@ -98,7 +105,7 @@
 		<cfset AllowDelete="no">
 		<cfswitch expression="#labelGroupID#">
 			<cfcase value="70">
-				<cfquery name="TestSpec" datasource="#DSN#">
+				<cfquery name="TestSpec" datasource="#APPLICATION.DSN#">
 					select * from t_JobDepartment WHERE JobDepartmentID=#DeleteLabelID#
 				</cfquery>
 				<cfif TestSpec.RecordCount IS "0">
@@ -106,7 +113,7 @@
 				</cfif>
 			</cfcase>
 			<cfcase value="80">
-				<cfquery name="TestStatus" datasource="#DSN#">
+				<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
 					select * from t_job WHERE JobCategoryID=#DeleteLabelID#
 				</cfquery>
 				<cfif TestStatus.RecordCount IS "0">
@@ -114,7 +121,7 @@
 				</cfif>
 			</cfcase>
 			<cfcase value="90">
-				<cfquery name="TestStatus" datasource="#DSN#">
+				<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
 					select * from t_job WHERE JobScheduleID=#DeleteLabelID#
 				</cfquery>
 				<cfif TestStatus.RecordCount IS "0">
@@ -122,7 +129,7 @@
 				</cfif>
 			</cfcase>
 			<cfcase value="900">
-				<cfquery name="TestStatus" datasource="#DSN#">
+				<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
 					select * from t_job WHERE ContactEmailID=#DeleteLabelID#
 				</cfquery>
 				<cfif TestStatus.RecordCount IS "0">
@@ -131,7 +138,7 @@
 			</cfcase>
 		</cfswitch>
 		<cfif AllowDelete>
-			<cfquery name="deleteLabel" datasource="#DSN#">
+			<cfquery name="deleteLabel" datasource="#APPLICATION.DSN#">
 				delete from t_Label where LabelID=#Val(DeleteLabelID)#
 			</cfquery>
 			<cflocation url="index.cfm" addtoken="no">
@@ -141,14 +148,14 @@
 
 
 <!--- Get the labelgroup name --->
-<cfquery datasource="#DSN#" name="getLabelGroupName">
+<cfquery datasource="#APPLICATION.DSN#" name="getLabelGroupName">
 	SELECT TOP 1 LabelName AS labelGroupName,LabelCode AS labelGroupCode
 	FROM t_Label
 	WHERE LabelID = #Val(labelGroupID)#
 </cfquery>
 
 <!--- Get the labels with labelgroupid --->
-<cfquery datasource="#DSN#" name="getLabels">
+<cfquery datasource="#APPLICATION.DSN#" name="getLabels">
 	SELECT LabelName, LabelCode, LabelGroupID, LabelId, LabelPriority
 	FROM t_Label
 	WHERE LabelGroupID = #Val(labelGroupID)#
@@ -173,7 +180,7 @@
 				<cfset AllowDelete="No">
 				<cfswitch expression="#labelGroupID#">
 					<cfcase value="70">
-						<cfquery name="TestSpec" datasource="#DSN#">
+						<cfquery name="TestSpec" datasource="#APPLICATION.DSN#">
 							select * from t_JobDepartment WHERE JobDepartmentID=#labelId#
 						</cfquery>
 						<cfif TestSpec.RecordCount IS "0">
@@ -181,7 +188,7 @@
 						</cfif>
 					</cfcase>
 					<cfcase value="80">
-						<cfquery name="TestStatus" datasource="#DSN#">
+						<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
 							select * from t_job WHERE JobCategoryID=#labelId#
 						</cfquery>
 						<cfif TestStatus.RecordCount IS "0">
@@ -189,7 +196,7 @@
 						</cfif>
 					</cfcase>
 					<cfcase value="90">
-						<cfquery name="TestStatus" datasource="#DSN#">
+						<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
 							select * from t_job WHERE JobScheduleID=#labelId#
 						</cfquery>
 						<cfif TestStatus.RecordCount IS "0">
@@ -197,7 +204,7 @@
 						</cfif>
 					</cfcase>
 					<cfcase value="900">
-						<cfquery name="TestStatus" datasource="#DSN#">
+						<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
 							select * from t_job WHERE ContactEmailID=#labelId#
 						</cfquery>
 						<cfif TestStatus.RecordCount IS "0">

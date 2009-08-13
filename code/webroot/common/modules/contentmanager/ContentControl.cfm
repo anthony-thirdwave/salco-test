@@ -71,7 +71,9 @@
 	</cfcase>
 	<cfcase value="206"><!--- Repeated Content --->
 		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
-			select SourceID from t_Content WHere ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			SELECT	SourceID 
+			FROM	t_Content 
+			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif GetSource.RecordCount IS "1">
 			<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
@@ -93,10 +95,11 @@
 	</cfcase>
 	<cfcase value="207"><!--- Inheirited Content --->
 		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
-			SELECT     t_Category_2.CacheDateTime AS CacheDateTime, t_Category_2.CategoryAlias as CategoryAlias
-			FROM       t_Category t_Category_1 LEFT OUTER JOIN
-            t_Category t_Category_2 ON t_Category_1.ParentID = t_Category_2.CategoryID
-			WHERE t_Category_1.CategoryID=<cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
+			SELECT			t_Category_2.CacheDateTime AS CacheDateTime, t_Category_2.CategoryAlias as CategoryAlias
+			FROM			t_Category t_Category_1 
+			LEFT OUTER JOIN	t_Category t_Category_2
+			ON				t_Category_1.ParentID = t_Category_2.CategoryID
+			WHERE			t_Category_1.CategoryID = <cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif GetSource.RecordCount IS "1">
 			<CFSET ExecuteTempFile="#GetSource.CategoryAlias#_#Val(ATTRIBUTES.PositionID)#_#APPLICATION.LocaleID#_#DateFormat(GetSource.CacheDateTime,'yyyymmdd')##TimeFormat(GetSource.CacheDateTime,'HHmmss')#.cfm">
@@ -111,10 +114,11 @@
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"Image")>
 			<cfset ContentAbstract="">
 			<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
-				SELECT     *, t_Properties.PropertiesPacket
-				FROM         t_ContentLocale INNER JOIN
-	            t_Properties ON t_ContentLocale.PropertiesID = t_Properties.PropertiesID
-				WHERE ContentLocaleID=<cfqueryparam value="#Val(APPLICATION.LocaleID)#" cfsqltype="cf_sql_integer">
+				SELECT		*, t_Properties.PropertiesPacket
+				FROM		t_ContentLocale
+				INNER JOIN	t_Properties
+				ON			t_ContentLocale.PropertiesID = t_Properties.PropertiesID
+				WHERE		ContentLocaleID = <cfqueryparam value="#Val(APPLICATION.LocaleID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif IsWddx(GetContentProps.PropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#GetContentProps.PropertiesPacket#" output="sProperties">
@@ -194,10 +198,11 @@
 	</cfcase>
 	<cfcase value="214">
 		<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
-			SELECT     *, t_Properties.PropertiesPacket
-			FROM         t_Content INNER JOIN
-            t_Properties ON t_Content.PropertiesID = t_Properties.PropertiesID
-			WHERE ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			SELECT		*, t_Properties.PropertiesPacket
+			FROM		t_Content
+			INNER JOIN	t_Properties
+			ON			t_Content.PropertiesID = t_Properties.PropertiesID
+			WHERE		ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset lArticleID="">
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
@@ -210,9 +215,13 @@
 	</cfcase>
 	<cfcase value="230"><!--- Related Content --->
 		<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
-			SELECT PropertiesPacket
-			FROM t_Properties
-			WHERE PropertiesID = (SELECT PropertiesID FROM t_Content WHERE ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">)
+			SELECT	PropertiesPacket
+			FROM	t_Properties
+			WHERE	PropertiesID =	(
+									SELECT	PropertiesID 
+									FROM	t_Content 
+									WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+									)
 		</cfquery>
 		<cfset thisDisplayID = 0>
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
@@ -226,15 +235,6 @@
 		<cfelse>
 			<cfset FileContents="<cfmodule template=""/common/modules/RelatedContent/relatedContent.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"">">
 		</cfif> 
-		<!--- 
-		<cfsavecontent variable="FileContents">
-			<cfif thisDisplayID EQ 12001>
-				<cfmodule template="/common/modules/RelatedContent/events.cfm" CategoryID="#ATTRIBUTES.CurrentCategoryID#">
-			<cfelse>
-				<cfmodule template="/common/modules/RelatedContent/relatedContent.cfm" CategoryID="#ATTRIBUTES.CurrentCategoryID#">
-			</cfif>
-		</cfsavecontent>
-		--->
 	</cfcase>
 	<cfcase value="224"><!--- Press Release List --->
 		<cfset FileContents="<cfmodule template=""/common/modules/pressrelease/PressReleaseListing.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
@@ -242,9 +242,6 @@
 	<cfcase value="225"><!--- biography List --->
 		<cfset FileContents="<cfmodule template=""/common/modules/Biography/BiographyListing.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
 	</cfcase>
-	<!--- <cfcase value="227"><!--- event List --->
-		<cfset FileContents="<cfmodule template=""/common/modules/Event/EventListing.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
-	</cfcase> --->
 	<cfcase value="228"><!--- News List --->
 		<cfset NumItems="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"NumItems")>
@@ -266,10 +263,11 @@
 	<cfcase value="231"><!--- List of Recent Pages/Resources --->
 		<cfset CategoryIDToUse=ATTRIBUTES.CurrentCategoryID>
 		<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
-			SELECT     *, t_Properties.PropertiesPacket
-			FROM         t_Content INNER JOIN
-            t_Properties ON t_Content.PropertiesID = t_Properties.PropertiesID
-			WHERE ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			SELECT		*, t_Properties.PropertiesPacket
+			FROM		t_Content
+			INNER JOIN	t_Properties
+			ON			t_Content.PropertiesID = t_Properties.PropertiesID
+			WHERE		ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset ShowQuestionRange="All">
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
@@ -284,7 +282,6 @@
 		<cfsavecontent variable="FileContents">
 			<cfmodule template="/common/modules/display/dsp_NavSubPages.cfm" CategoryID="#ATTRIBUTES.CurrentCategoryID#">
 		</cfsavecontent>
-		<!--- <cfset FileContents="<cfmodule template=""/common/modules/display/dsp_NavSubPages.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"">"> --->
 	</cfcase>
 	<cfcase value="236"><!--- Event Listing --->
 		<cfset Mode="Future">
@@ -304,10 +301,11 @@
 			<cfset ShowEventRangeID="#ATTRIBUTES.sContentBody.ShowEventRangeID#">
 		</cfif>
 		<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
-			SELECT     *, t_Properties.PropertiesPacket
-			FROM         t_Content INNER JOIN
-            t_Properties ON t_Content.PropertiesID = t_Properties.PropertiesID
-			WHERE ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			SELECT		*, t_Properties.PropertiesPacket
+			FROM		t_Content
+			INNER JOIN	t_Properties
+			ON			t_Content.PropertiesID = t_Properties.PropertiesID
+			WHERE		ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
 			<cfwddx action="WDDX2CFML" input="#GetContentProps.PropertiesPacket#" output="sProperties">
@@ -494,7 +492,7 @@
 		<cfquery name="qContentGallery" datasource="#APPLICATION.DSN#">
 			SELECT	sourceID
 			FROM	t_content
-			WHERE	contentID = #ATTRIBUTES.ContentID#
+			WHERE	contentID = <cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset PageActionURL="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL")>
@@ -506,16 +504,17 @@
 		<cfquery name="qContentGallery" datasource="#APPLICATION.DSN#">
 			SELECT	sourceID
 			FROM	t_content
-			WHERE	contentID = #Val(ATTRIBUTES.ContentID)#
+			WHERE	contentID = <cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset FileContents="<cfmodule template=""/common/modules/Gallery/dsp_gallery.cfm"" galleryCategoryID=""#qContentGallery.sourceID#"">">
 	</cfcase>
 	<cfcase value="251"><!--- Event Registration--->
 		<cfquery name="GetEvent" datasource="#APPLICATION.DSN#">
-			SELECT     t_Content_2.SourceID
-FROM         dbo.t_Content t_Content_1 INNER JOIN
-                      dbo.t_Content t_Content_2 ON t_Content_1.SourceID = t_Content_2.ContentID
-			WHERE	t_Content_1.contentID = #Val(ATTRIBUTES.ContentID)#
+			SELECT		t_Content_2.SourceID
+			FROM		dbo.t_Content t_Content_1
+			INNER JOIN	dbo.t_Content t_Content_2 
+			ON			t_Content_1.SourceID = t_Content_2.ContentID
+			WHERE		t_Content_1.contentID = <cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset FileContents="<cfmodule template=""/common/modules/Events/Registration/ChapterEventDriver.cfm"" ChapterCode=""#APPLICATION.LocaleCode#"" EventID=""#GetEvent.SourceID#"">">
 	</cfcase>

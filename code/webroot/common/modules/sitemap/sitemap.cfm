@@ -1,13 +1,16 @@
 <cfparam name="ATTRIBUTES.SiteCategoryID" default="1">
 
 <cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
-	select DisplayOrder from t_Category Where CategoryID=#Val(ATTRIBUTES.SiteCategoryID)#
+	SELECT	DisplayOrder
+	FROM	t_Category
+	WHERE	CategoryID = <cfqueryparam value="#Val(ATTRIBUTES.SiteCategoryID)#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <cfquery name="GetLastCache" datasource="#APPLICATION.DSN#" maxrows="1">
-	SELECT     MAX(CacheDateTime) AS CacheDateTime
-	FROM         t_Category
-	WHERE     DisplayOrder like '#GetDisplayOrder.DisplayOrder#%'
+	SELECT	MAX(CacheDateTime)
+	AS		CacheDateTime
+	FROM	t_Category
+	WHERE	DisplayOrder LIKE <cfqueryparam value="#GetDisplayOrder.DisplayOrder#%" cfsqltype="cf_sql_varchar">
 </cfquery>
 
 <CFSET ExecuteTempFile="#APPLICATION.LocaleID#\+SiteMap_#ATTRIBUTES.SiteCategoryID#_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">

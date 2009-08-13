@@ -7,7 +7,7 @@
 
 	
 	<!--- this function initializes the session --->
-	<cffunction name="initializeSession" returntype="struct">
+	<cffunction name="initializeSession" returntype="boolean">
 	
 		<cfset var local = structNew() />
 

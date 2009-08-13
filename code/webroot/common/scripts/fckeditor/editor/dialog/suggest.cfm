@@ -2,15 +2,19 @@
 <cfset MaxResults = 7>
 <cfif URL.t EQ "int">
 	<cfquery datasource="#APPLICATION.DSN#" name="words">
-		SELECT TOP #MaxResults# CategoryAlias FROM t_Category WHERE CategoryAlias LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#URL.l#%">
-		ORDER BY CategoryAlias
+		SELECT TOP #MaxResults# CategoryAlias
+		FROM		t_Category 
+		WHERE		CategoryAlias LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#URL.l#%">
+		ORDER BY	CategoryAlias
 	</cfquery>
 <cfoutput query="words">#replace(replace(lcase(CategoryAlias), chr(10), ""), chr(13), "")#,</cfoutput>%%%
 <cfelseif URL.t EQ "res">
 	<cfquery name="words" datasource="#APPLICATION.DSN#">
-		select TOP #MaxResults# CategoryName,CategoryID from t_Category Where 
-CategoryTypeID=72 and CategoryName like <cfqueryparam cfsqltype="cf_sql_varchar" value="#URL.l#%">
-		order by CategoryName
+		SELECT TOP #MaxResults# CategoryName, CategoryID
+		FROM		t_Category
+		WHERE		CategoryTypeID = <cfqueryparam cfsqltype="cf_sql_integer" value="72">
+		AND			CategoryName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#URL.l#%">
+		ORDER BY	CategoryName
 	</cfquery>
 	<cfset afid=ArrayNew(1)>
 	<cfoutput query="words">

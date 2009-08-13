@@ -229,7 +229,8 @@
 		<cfquery name="local.GetRecipients" datasource="#APPLICATION.USER_DSN#">
 			SELECT		FirstName, MiddleName, LastName, EMailAddress 
 			FROM		qry_GetUser
-			WHERE		(UserID IN (#local.thisLToUserID#) or UserGroupID IN (#local.thisLToUserGroupID#)) 
+			WHERE		(UserID IN (<cfqueryparam value="#local.thisLToUserID#" cfsqltype="cf_sql_integer" list="true">) 
+						OR UserGroupID IN (<cfqueryparam value="#local.thisLToUserGroupID#" cfsqltype="cf_sql_integer" list="true">)) 
 			AND			OwnerEMailNotifications=1
 			ORDER BY	LastName, EmailAddress
 		</cfquery>

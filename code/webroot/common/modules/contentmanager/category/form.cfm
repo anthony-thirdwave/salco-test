@@ -232,8 +232,9 @@
 
 <!--- BEGIN PARENT PAGE CHOOSER --->
 <cfquery name="getParentName" datasource="#APPLICATION.DSN#">
-	SELECT CategoryName FROM t_Category
-	WHERE CategoryID = #MyCategory.GetProperty('ParentID')#
+	SELECT	CategoryName 
+	FROM	t_Category
+	WHERE	CategoryID = <cfqueryparam value="#MyCategory.GetProperty('ParentID')#" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfset thisParentName = getParentName.CategoryName>
 <cfif FormMode NEQ "ShowForm">
