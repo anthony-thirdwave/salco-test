@@ -20,6 +20,8 @@ code/webroot/com/ContentManager/ContentNoteHandler.cfc -text
 code/webroot/com/ContentManager/PermissionHandler.cfc -text
 code/webroot/com/PostToProduction/postToProduction.cfc -text
 code/webroot/com/User/UserHandler.cfc -text
+code/webroot/com/application/ApplicationSettings.cfc -text
+code/webroot/com/application/SessionSettings.cfc -text
 code/webroot/com/common/base.cfc -text
 code/webroot/com/common/search.cfc -text
 code/webroot/com/error/error.cfc -text
@@ -36,6 +38,8 @@ code/webroot/com/utils/rss.cfc -text
 code/webroot/com/utils/security.cfc -text
 code/webroot/com/utils/tracking.cfc -text
 code/webroot/com/utils/utils.cfc -text
+code/webroot/com/workflow/RequestHandler.cfc -text
+code/webroot/com/workflow/request.cfc -text
 code/webroot/common/admin/Dashboard/_InitDashboard.cfm -text
 code/webroot/common/admin/Dashboard/index.cfm -text
 code/webroot/common/admin/Documentation/3W_CMS_Overview_20050622.pdf -text
@@ -65,6 +69,9 @@ code/webroot/common/admin/Search/index.cfm -text
 code/webroot/common/admin/System/ContentGenerate.cfm -text
 code/webroot/common/admin/UserManager/UserModify.cfm -text
 code/webroot/common/admin/UserManager/index.cfm -text
+code/webroot/common/admin/Workflow/Request.cfm -text
+code/webroot/common/admin/Workflow/RequestList.cfm -text
+code/webroot/common/admin/Workflow/index.cfm -text
 code/webroot/common/admin/index.cfm -text
 code/webroot/common/admin/login.cfm -text
 code/webroot/common/admin/logoff.cfm -text
@@ -356,6 +363,12 @@ code/webroot/common/modules/Admin/QuickyAddPage/addPageAction.cfm -text
 code/webroot/common/modules/Admin/RecentChanges/recentChanges.cfm -text
 code/webroot/common/modules/Admin/Support/admin.cfm -text
 code/webroot/common/modules/Admin/Support/supportrequest.cfm -text
+code/webroot/common/modules/Admin/Workflow/Dashboard.cfm -text
+code/webroot/common/modules/Admin/Workflow/DashboardMasterView.cfm -text
+code/webroot/common/modules/Admin/Workflow/RequestDashboard.cfm -text
+code/webroot/common/modules/Admin/Workflow/RequestList.cfm -text
+code/webroot/common/modules/Admin/Workflow/RequestListPerCategory.cfm -text
+code/webroot/common/modules/Admin/Workflow/RequestModify.cfm -text
 code/webroot/common/modules/Admin/_AdminNavigation.cfm -text
 code/webroot/common/modules/Admin/_secure.cfm -text
 code/webroot/common/modules/Admin/dsp_AdminFooter.cfm -text

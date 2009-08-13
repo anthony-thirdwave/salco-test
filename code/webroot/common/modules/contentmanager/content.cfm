@@ -20,7 +20,6 @@
 </cfif>
 
 <cfsilent>
-	
 	<!--- TODO - is this how this will happen? --->
 	<cfset sApplicationCategoryID=StructNew()>
 	<cfset sApplicationCategoryID["1"]="www.#Application.UniqueName#.com">

@@ -566,6 +566,47 @@ END
 GO
 SET ANSI_NULLS ON
 GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_WorkflowRequest]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_WorkflowRequest](
+	[WorkflowRequestID] [int] IDENTITY(1,1) NOT NULL,
+	[WorkflowRequestTypeID] [int] NULL,
+	[WorkflowRequestDateTime] [datetime] NULL,
+	[FromUserID] [int] NULL,
+	[CategoryID] [int] NULL,
+	[LocaleID] [int] NULL,
+	[Message] [ntext] NULL,
+	[Dismissed] [bit] NULL CONSTRAINT [DF_t_WorkflowRequest_Dismissed]  DEFAULT (0),
+ CONSTRAINT [PK_t_WorkflowRequest] PRIMARY KEY CLUSTERED 
+(
+	[WorkflowRequestId] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_WorkflowRequestRecipient]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_WorkflowRequestRecipient](
+	[WorkflowRequestID] [int] NOT NULL,
+	[UserID] [int] NOT NULL,
+	[UserGroupID] [int] NOT NULL,
+ CONSTRAINT [PK_t_WorkflowRequestRecipient] PRIMARY KEY CLUSTERED 
+(
+	[WorkflowRequestId] ASC,
+	[UserID] ASC,
+	[UserGroupID] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
 SET QUOTED_IDENTIFIER OFF
 GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[sp_GetCategoryContentTree]') AND type in (N'P', N'PC'))
@@ -1556,6 +1597,64 @@ FROM         dbo.t_Category INNER JOIN
 GO
 SET ANSI_NULLS ON
 GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetWorkflow]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetWorkflow]
+AS
+SELECT     dbo.qry_GetCategoryLocaleMeta.CategoryLocaleID, dbo.qry_GetCategoryLocaleMeta.CategoryID, 
+                      dbo.qry_GetCategoryLocaleMeta.CategoryLocaleActive, dbo.qry_GetCategoryLocaleMeta.CategoryLocaleName, 
+                      dbo.qry_GetCategoryLocaleMeta.CategoryLocaleURL, dbo.qry_GetCategoryLocaleMeta.LocaleID, dbo.qry_GetCategoryLocaleMeta.PropertiesID, 
+                      dbo.qry_GetCategoryLocaleMeta.DefaultCategoryLocale, dbo.t_Locale.LocaleName, t_Label_1.LabelName AS LanguageName, 
+                      t_Label_1.LabelCode AS LanguageCode, dbo.t_Properties.PropertiesPacket, dbo.t_Category.DisplayOrder, dbo.t_Category.CategoryAlias, 
+                      dbo.t_Category.CategoryTypeID, dbo.t_Category.CategoryName, t_Label_2.LabelName AS WorkflowStatusName, dbo.t_Category.ParentID, 
+                      t_Category_1.CategoryName AS ParentCategoryName, dbo.qry_GetTrackingCategoryLatest.UserLogin, 
+                      dbo.qry_GetTrackingCategoryLatest.OperationName, dbo.qry_GetTrackingCategoryLatest.OperationCode, 
+                      dbo.qry_GetTrackingCategoryLatest.TrackingDateTime, dbo.qry_GetTrackingCategoryLatest.OperationID, 
+                      dbo.qry_GetCategoryLocaleMeta.CategoryLocalePriority, dbo.qry_GetCategoryLocaleMeta.CategoryLocaleDisplayOrder, 
+                      dbo.qry_GetTrackingCategoryLatest.FirstName AS TrackingFirstName, dbo.qry_GetTrackingCategoryLatest.MiddleName AS TrackingMiddleName, 
+                      dbo.qry_GetTrackingCategoryLatest.LastName AS TrackingLastName, dbo.qry_GetCategoryLocaleMeta.WorkflowStatusID
+FROM         dbo.t_Label AS t_Label_1 INNER JOIN
+                      dbo.t_Locale INNER JOIN
+                      dbo.t_Category INNER JOIN
+                      dbo.qry_GetCategoryLocaleMeta ON dbo.t_Category.CategoryID = dbo.qry_GetCategoryLocaleMeta.CategoryID INNER JOIN
+                      dbo.t_Properties ON dbo.qry_GetCategoryLocaleMeta.PropertiesID = dbo.t_Properties.PropertiesID ON 
+                      dbo.t_Locale.LocaleID = dbo.qry_GetCategoryLocaleMeta.LocaleID ON t_Label_1.LabelID = dbo.t_Locale.LanguageID INNER JOIN
+                      dbo.qry_GetTrackingCategoryLatest ON dbo.t_Category.CategoryID = dbo.qry_GetTrackingCategoryLatest.CategoryID INNER JOIN
+                      dbo.t_Label AS t_Label_2 ON dbo.qry_GetCategoryLocaleMeta.WorkflowStatusID = t_Label_2.LabelID LEFT OUTER JOIN
+                      dbo.t_Category AS t_Category_1 ON dbo.t_Category.ParentID = t_Category_1.CategoryID
+'
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetWorkflowRequest]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetWorkflowRequest]
+AS
+SELECT     dbo.t_WorkflowRequest.WorkflowRequestID, dbo.t_WorkflowRequest.WorkflowRequestTypeID, dbo.t_WorkflowRequest.WorkflowRequestDateTime, 
+                      dbo.t_WorkflowRequest.FromUserID, dbo.t_WorkflowRequest.CategoryID, dbo.t_WorkflowRequest.Message, dbo.t_WorkflowRequest.Dismissed, 
+                      dbo.t_Category.CategoryName, dbo.t_Category.CategoryAlias, t_User_2.FirstName AS FromFirstName, t_User_2.MiddleName AS FromMiddleName, 
+                      t_User_2.LastName AS FromLastName, t_Label_2.LabelName AS WorkflowRequestTypeName, t_User_1.FirstName AS RecipientFirstName, 
+                      t_User_1.MiddleName AS RecipientMiddleName, t_User_1.LastName AS RecipientLastName, t_Label_1.LabelName AS RecipientUserGroupName, 
+                      dbo.t_WorkflowRequestRecipient.UserID AS RecipientUserID, dbo.t_WorkflowRequestRecipient.UserGroupID AS RecipientUserGroupID, 
+                      t_User_2.EmailAddress AS FromEmailAddress, t_User_1.EmailAddress AS RecipientEmailAddress, dbo.t_WorkflowRequest.LocaleID, 
+                      dbo.t_CategoryLocale.WorkflowStatusID
+FROM         dbo.t_UserGroup LEFT OUTER JOIN
+                      dbo.t_Label AS t_Label_1 ON dbo.t_UserGroup.UserGroupID = t_Label_1.LabelID RIGHT OUTER JOIN
+                      dbo.t_WorkflowRequestRecipient ON dbo.t_UserGroup.UserGroupID = dbo.t_WorkflowRequestRecipient.UserGroupID LEFT OUTER JOIN
+                      dbo.t_User AS t_User_1 ON dbo.t_WorkflowRequestRecipient.UserID = t_User_1.UserID RIGHT OUTER JOIN
+                      dbo.t_CategoryLocale RIGHT OUTER JOIN
+                      dbo.t_WorkflowRequest ON dbo.t_CategoryLocale.CategoryID = dbo.t_WorkflowRequest.CategoryID AND 
+                      dbo.t_CategoryLocale.LocaleID = dbo.t_WorkflowRequest.LocaleID ON 
+                      dbo.t_WorkflowRequestRecipient.WorkflowRequestID = dbo.t_WorkflowRequest.WorkflowRequestID LEFT OUTER JOIN
+                      dbo.t_Label AS t_Label_2 ON dbo.t_WorkflowRequest.WorkflowRequestTypeID = t_Label_2.LabelID LEFT OUTER JOIN
+                      dbo.t_User AS t_User_2 ON dbo.t_WorkflowRequest.FromUserID = t_User_2.UserID LEFT OUTER JOIN
+                      dbo.t_Category ON dbo.t_WorkflowRequest.CategoryID = dbo.t_Category.CategoryID
+'
+GO
+SET ANSI_NULLS ON
+GO
 SET QUOTED_IDENTIFIER OFF
 GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[sp_getPage]') AND type in (N'P', N'PC'))
@@ -1600,7 +1699,7 @@ IF @defaultCategoryLocaleID = 0 AND @localeIDexists = 0
 	c.propertiesID as categoryPropertiesID, c.workflowStatusID, c.templateID, c.cacheDateTime,
 	c.SourceID, NULL As categoryLocaleID, NULL As categoryLocaleActive, 
 	NULL As localeID, NULL As categoryLocalePropertiesID, NULL As defaultCategoryLocale,
-	NULL As categoryActiveDerived, NULL as CategoryLocalePropertiesPacket
+	NULL As categoryActiveDerived, NULL as CategoryLocalePropertiesPacket, NULL as CategoryPropertiesPacket
 	FROM qry_GetCategoryMeta c
 					  
 	WHERE c.localeID = '' + Cast(@localeID as nvarchar(16)) + '' and c.categoryID = ''+Cast(@categoryID as nvarchar(16))+'' 
@@ -1647,7 +1746,8 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	categoryLocalePropertiesID INT, 
 	defaultCategoryLocale BIT,
 	categoryActiveDerived BIT,
-	CategoryLocalePropertiesPacket text
+	CategoryLocalePropertiesPacket text,
+	CategoryPropertiesPacket text
 	)
 	INSERT INTO #tempTable2
 	SELECT c.categoryID, c.categoryTypeID, c.categoryName, 
@@ -1676,12 +1776,15 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	WHEN NULL THEN 0
 	ELSE cl.categoryLocaleActive
 	END as categoryActiveDerived,
-	p.PropertiesPacket AS CategoryLocalePropertiesPacket
+	p.PropertiesPacket AS CategoryLocalePropertiesPacket,
+	p2.PropertiesPacket AS CategoryPropertiesPacket
 	FROM t_Properties p 
 	RIGHT OUTER JOIN t_CategoryLocale cl 
 	ON p.PropertiesID = cl.PropertiesID 
 	RIGHT OUTER JOIN qry_GetCategoryMeta c 
 	ON cl.CategoryID = c.CategoryID
+	RIGHT OUTER JOIN t_Properties p2
+	ON p2.PropertiesID = c.PropertiesID
 	WHERE c.categoryID = @categoryID 
 	AND cl.localeID = CASE @localeIDexists --if the localeID does not exist, use the defaultLocaleID 
 			  WHEN 0 THEN @defaultCategoryLocaleID
@@ -2143,7 +2246,8 @@ localeID INT,
 categoryLocalePropertiesID INT, 
 defaultCategoryLocale BIT,
 categoryActiveDerived BIT,
-CategoryLocalePropertiesPacket text
+CategoryLocalePropertiesPacket text,
+CategoryPropertiesPacket text
 )
 --Declare a string variable to hold the begining of the Loop TSQL
 DECLARE @sqlString nvarchar(1000)
