@@ -35,20 +35,30 @@
 	<cfinclude template="menuAjaxIconStructInc.cfm">
 	
 	<cfquery name="GetParentName" datasource="#APPLICATION.DSN#">
-		SELECT CategoryName FROM t_Category WHERE CategoryID = #ATTRIBUTES.thisCatID#
+		SELECT	CategoryName
+		FROM	t_Category
+		WHERE	CategoryID = <cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	<cfset thisParentName = GetParentName.CategoryName>
 	
 	<cfquery name="GetCategories" datasource="#APPLICATION.DSN#">
-		SELECT c.CategoryID, c.CategoryActive, c.CategoryName, c.CategoryAlias, c.CategoryTypeID, clm.CategoryLocalePriority, cl.CategoryLocaleActive
-		FROM t_Category c
-		INNER JOIN t_CategoryLocaleMeta clm ON (c.CategoryID = clm.CategoryID AND clm.LocaleID = #Val(SESSION.AdminCurrentAdminLocaleID)#)
-		LEFT OUTER JOIN t_CategoryLocale cl ON (c.CategoryID = cl.CategoryID AND cl.LocaleID = #Val(SESSION.AdminCurrentAdminLocaleID)#)
-		WHERE c.ParentID = #ATTRIBUTES.thisCatID#
+		SELECT			c.CategoryID, c.CategoryActive, c.CategoryName, c.CategoryAlias, c.CategoryTypeID, clm.CategoryLocalePriority, cl.CategoryLocaleActive
+		FROM			t_Category c
+		INNER JOIN		t_CategoryLocaleMeta clm 
+		ON 				(
+						c.CategoryID = clm.CategoryID 
+						AND clm.LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+						)
+		LEFT OUTER JOIN	t_CategoryLocale cl 
+		ON				(
+						c.CategoryID = cl.CategoryID
+						AND cl.LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+						)
+		WHERE			c.ParentID = <cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
 		<cfif IsNumeric(ATTRIBUTES.ParentChooserInitID)>
-		AND c.CategoryID <> #ATTRIBUTES.ParentChooserInitID#
+		AND				c.CategoryID <> <cfqueryparam value="#ATTRIBUTES.ParentChooserInitID#" cfsqltype="cf_sql_integer">
 		</cfif>
-		ORDER BY clm.CategoryLocalePriority
+		ORDER BY		clm.CategoryLocalePriority
 	</cfquery>
 	<cfset lCatIDs = ValueList(GetCategories.CategoryID)>
 	<cfif ListLen(lCatIDs) EQ 0>
@@ -57,10 +67,11 @@
 	
 	<!--- BEGIN set permission struct --->
 	<cfquery name="GetAllCategories" datasource="#APPLICATION.DSN#">
-		select CategoryID,pRead,UserGroupid from qry_GetCategoryPermission
-		WHERE UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="yes">)
-		AND CategoryID IN (<cfqueryparam value="#lCatIDs#" cfsqltype="cf_sql_integer" list="yes">)
-		ORDER BY DisplayOrder
+		SELECT		CategoryID, pRead, UserGroupid
+		FROM		qry_GetCategoryPermission
+		WHERE		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="yes">)
+		AND			CategoryID IN (<cfqueryparam value="#lCatIDs#" cfsqltype="cf_sql_integer" list="yes">)
+		ORDER BY	DisplayOrder
 	</cfquery>
 	
 	<cfset sAllPermissions=StructNew()>
@@ -126,7 +137,9 @@
 		
 		<!--- check to see if this category has any child categories --->
 		<cfquery name="checkChildren" datasource="#APPLICATION.DSN#">
-			SELECT categoryID FROM t_Category WHERE ParentID = #CategoryID#
+			SELECT	categoryID
+			FROM	t_Category
+			WHERE	ParentID = <cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
 		</cfquery>
 	</cfsilent>
 	<div id="#thisIdPrefix#categoryLink_#CategoryID#">

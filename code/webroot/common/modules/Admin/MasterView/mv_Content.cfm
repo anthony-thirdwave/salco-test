@@ -18,21 +18,21 @@
 <cfset FormQueryString=ListLast(ATTRIBUTES.FormAction,"?")>
 
 <cfparam name="HighlightID" default="-1">
-<cfif IsDefined("URL.hlid")>
+<cfif isDefined("URL.hlid")>
 	<cftry><cfset HighlightID=Decrypt(URL.hlid,APPLICATION.Key)><cfcatch><cfset HighlightID="-1"></cfcatch></cftry>
 </cfif>
 
 <cfquery name="qPosition" datasource="#APPLICATION.DSN#">
-	SELECT     LabelID, LabelName
-	FROM         t_Label
-	WHERE     (LabelGroupID = 90)
+	SELECT	LabelID, LabelName
+	FROM	t_Label
+	WHERE	LabelGroupID = <cfqueryparam value="90" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfset sPosition=StructNew()>
 <cfoutput query="qPosition">
 	<cfset StructInsert(sPosition,LabelID,LabelName)>
 </cfoutput>
 
-<cfif Isdefined("URL.mvca")>
+<cfif isDefined("URL.mvca")>
 	<cfswitch expression="#URL.mvca#">
 		<cfcase value="2">
 			<cfset ATTRIBUTES.ObjectAction="UpdatePriorities">
@@ -50,7 +50,7 @@
 				</cfcatch>
 			</cftry>
 			<cfif ThisContentID GT "0">
-				<cfif IsDefined("EditShowContent#i#")>
+				<cfif isDefined("EditShowContent#i#")>
 					<cfset EditShowContent="1">
 				<cfelse>
 					<cfset EditShowContent="0">
@@ -58,81 +58,93 @@
 				<!--- <cfquery name="UpdateShowContent" datasource="#APPLICATION.DSN#">
 					UPDATE t_Content SET ContentActive=#EditShowContent# WHERE contentid = #val(ThisContentID)#
 				</cfquery> --->
-				<cfif isdefined("ButtonSubmit_up_#i#.x") OR isdefined("ButtonSubmit_down_#i#.x")>
-					<cfif isdefined("ButtonSubmit_up_#i#.x")>
+				<cfif isDefined("ButtonSubmit_up_#i#.x") OR isDefined("ButtonSubmit_down_#i#.x")>
+					<cfif isDefined("ButtonSubmit_up_#i#.x")>
 						<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
 							<cfquery name="moveup" datasource="#APPLICATION.DSN#">
-								update t_Content set ContentPriority=ContentPriority-15 
-								where ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+								UPDATE	t_Content
+								SET		ContentPriority = ContentPriority-15 
+								WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
 							</cfquery>
 						</cfif>
 						<cfquery name="moveup" datasource="#APPLICATION.DSN#">
-							update t_ContentLocaleMeta set ContentLocalePriority=ContentLocalePriority-15
-							where ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer"> and
-							LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+							UPDATE	t_ContentLocaleMeta
+							SET		ContentLocalePriority=ContentLocalePriority-15
+							WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+							AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 						</cfquery>
-					<cfelseif isdefined("ButtonSubmit_down_#i#.x")>
+					<cfelseif isDefined("ButtonSubmit_down_#i#.x")>
 						<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
 							<cfquery name="movedown" datasource="#APPLICATION.DSN#">
-								update t_Content set ContentPriority=ContentPriority+15 where 
-								ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+								UPDATE	t_Content
+								SET		ContentPriority = ContentPriority+15
+								WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
 							</cfquery>
 						</cfif>
 						<cfquery name="movedown" datasource="#APPLICATION.DSN#">
-							update t_ContentLocaleMeta set ContentLocalePriority=ContentLocalePriority +15
-							where ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer"> and
-							LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+							UPDATE	t_ContentLocaleMeta
+							SET		ContentLocalePriority = ContentLocalePriority +15
+							WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+							AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 						</cfquery>
 					</cfif>
 					<cfquery name="GetPos" datasource="#APPLICATION.DSN#">
-						select ContentpositionID from t_ContentLocaleMeta
-						WHERE ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
-						and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+						SELECT	ContentpositionID
+						FROM	t_ContentLocaleMeta
+						WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+						AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfquery name="Select" datasource="#APPLICATION.DSN#">
-						SELECT ContentID FROM qry_GetContentLocaleMeta
-						WHERE CategoryID=<cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
-						and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
-						And ContentPositionID=<cfqueryparam value="#Val(GetPos.ContentpositionID)#" cfsqltype="cf_sql_integer">
-						Order By ContentLocalePriority
+						SELECT		ContentID
+						FROM		qry_GetContentLocaleMeta
+						WHERE		CategoryID = <cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
+						AND			LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+						AND			ContentPositionID = <cfqueryparam value="#Val(GetPos.ContentpositionID)#" cfsqltype="cf_sql_integer">
+						ORDER BY	ContentLocalePriority
 					</cfquery>
 					<cfoutput query="select">
 						<cfset ThisNewPriority=10*CurrentRow>
 						<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
 							<cfquery name="Update" datasource="#APPLICATION.DSN#">
-								update t_Content set ContentPriority=#Val(ThisNewPriority)# where 
-								ContentID=<cfqueryparam value="#Val(ContentID)#" cfsqltype="cf_sql_integer">
+								UPDATE	t_Content
+								SET		ContentPriority = <cfqueryparam value="#Val(ThisNewPriority)#" cfsqltype="cf_sql_integer">
+								WHERE	ContentID = <cfqueryparam value="#Val(ContentID)#" cfsqltype="cf_sql_integer">
 							</cfquery>
 						</cfif>
 						<cfquery name="Update" datasource="#APPLICATION.DSN#">
-							update t_ContentLocaleMeta set ContentLocalePriority=#Val(ThisNewPriority)# where 
-							ContentID=<cfqueryparam value="#Val(ContentID)#" cfsqltype="cf_sql_integer"> and
-							LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+							UPDATE	t_ContentLocaleMeta
+							SET		ContentLocalePriority = <cfqueryparam value="#Val(ThisNewPriority)#" cfsqltype="cf_sql_integer">
+							WHERE	ContentID = <cfqueryparam value="#Val(ContentID)#" cfsqltype="cf_sql_integer">
+							AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 						</cfquery>
 					</cfoutput>
 				</cfif>
 			</cfif>
-			<cfif isdefined("ButtonSubmit_left_#i#.x") OR isdefined("ButtonSubmit_right_#i#.x")>
+			<cfif isDefined("ButtonSubmit_left_#i#.x") OR isDefined("ButtonSubmit_right_#i#.x")>
 				<cfquery name="GetPos" datasource="#APPLICATION.DSN#">
-					select ContentpositionID from t_ContentLocaleMeta
-					WHERE ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
-					and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+					SELECT	ContentpositionID
+					FROM	t_ContentLocaleMeta
+					WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+					AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
-				<cfif isdefined("ButtonSubmit_left_#i#.x")>
+				<cfif isDefined("ButtonSubmit_left_#i#.x")>
 					<cfset ThisNewPositionID=GetPos.ContentPositionID-1>
 				<cfelse>
 					<cfset ThisNewPositionID=GetPos.ContentPositionID+1>
 				</cfif>
 				<cfquery name="SelectMax" datasource="#APPLICATION.DSN#">
-					SELECT Max(ContentLocalePriority) as MaxContentLocalePriority FROM t_ContentLocaleMeta
-					WHERE ContentPositionID=<cfqueryparam value="#Val(ThisNewPositionID)#" cfsqltype="cf_sql_integer">
-					and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+					SELECT	Max(ContentLocalePriority) as MaxContentLocalePriority
+					FROM	t_ContentLocaleMeta
+					WHERE	ContentPositionID = <cfqueryparam value="#Val(ThisNewPositionID)#" cfsqltype="cf_sql_integer">
+					AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				
 				<cfquery name="moveleft" datasource="#APPLICATION.DSN#">
-					update t_ContentLocaleMeta set ContentPositionID=#Val(ThisNewPositionID)#, ContentLocalePriority=#Val(SelectMax.MaxContentLocalePriority)+10#
-					where ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer"> and
-					LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+					UPDATE	t_ContentLocaleMeta
+					SET		ContentPositionID = <cfqueryparam value="#Val(ThisNewPositionID)#" cfsqltype="cf_sql_integer">,
+							ContentLocalePriority = <cfqueryparam value="#Val(SelectMax.MaxContentLocalePriority)+10#" cfsqltype="cf_sql_integer">
+					WHERE	ContentID = <cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">
+					AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfif>
 			
@@ -145,9 +157,9 @@
 	<cflocation url="#FormPage#?#QueryString#" addToken="no">
 <cfelse>
 	<cfquery name="GetContentTypeIcons" datasource="#APPLICATION.DSN#">
-		SELECT     *
-		FROM         t_Label
-		WHERE     (LabelGroupID = 70)
+		SELECT	*
+		FROM	t_Label
+		WHERE	LabelGroupID = <cfqueryparam value="70" cfsqltype="cf_sql_integer">
 	</cfquery>
 	<cfset sContentTypeIcon=StructNew()>
 	<cfoutput query="GetContentTypeIcons">
@@ -254,10 +266,13 @@
 													</cfif>
 													<cfif ATTRIBUTES.sCurrentCategoryPermissions["pDelete"]>
 														<cfquery name="TestProduction" datasource="#APPLICATION.DSN#" maxrows="1">
-															SELECT * FROM t_Tracking
-															WHERE operationid=503 and Entity='t_Content' and KeyID=<cfqueryparam value="#ContentID#" cfsqltype="cf_sql_integer">
+															SELECT	*
+															FROM	t_Tracking
+															WHERE	operationid = <cfqueryparam value="503" cfsqltype="cf_sql_integer">
+															AND		Entity = <cfqueryparam value="t_Content" cfsqltype="cf_sql_varchar"> 
+															AND		KeyID = <cfqueryparam value="#ContentID#" cfsqltype="cf_sql_integer">
 														</cfquery>
-														<cfif TestProduction.RecordCount GT "0" and NOT ATTRIBUTES.sCurrentCategoryPermissions["pSaveLive"]>
+														<cfif TestProduction.RecordCount GT "0" AND NOT ATTRIBUTES.sCurrentCategoryPermissions["pSaveLive"]>
 															<a href="javascript:void(0)" title="You may not delete this content, since this is saved on production." class="#ThisClass#">Delete</A>
 														<cfelse>
 															<cf_AddToQueryString querystring="#DeleteQueryString#" name="coid" value="#coid#">
@@ -277,7 +292,7 @@
 									<cfset querystring="">
 									<cfset ThisPreview="">
 									<cfquery name="getPacket" datasource="#APPLICATION.DSN#">
-										select PropertiesPacket FROM t_Properties where PropertiesID=<cfqueryparam value="#Val(contentLocalePropertiesID)#" cfsqltype="cf_sql_integer">
+										SELECT PropertiesPacket FROM t_Properties WHERE PropertiesID=<cfqueryparam value="#Val(contentLocalePropertiesID)#" cfsqltype="cf_sql_integer">
 									</cfquery>
 									<cfif IsWddx(getPacket.PropertiesPacket)>
 										<cfwddx action="WDDX2CFML" input="#getPacket.PropertiesPacket#" output="sContentLocalePropertiesPacket">
@@ -285,7 +300,7 @@
 											<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#application.utilsObj.RemoveHTML(sContentLocalePropertiesPacket.ContentPreview)#" NumChars="200" VarName="ThisPreview">
 										</cfif>
 									</cfif>
-									<cfif (ContentLocaleName IS NOT "" and ContentLocaleName IS NOT ContentName) OR ThisPreview IS NOT "">
+									<cfif (ContentLocaleName IS NOT "" and ContentLocaleName is not ContentName) OR ThisPreview IS NOT "">
 										<tr><td bgcolor="#Color2#" colspan="2"  class="#ThisClass#">
 										<cfif ContentLocaleName IS NOT "" and ContentLocaleName IS NOT ContentName><strong>#ContentLocaleName#</strong><br></cfif>
 										<cfif ThisPreview IS NOT "">

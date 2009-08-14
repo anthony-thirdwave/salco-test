@@ -102,7 +102,9 @@
 			<cfif ThisObjectID GT "0">
 				<cfif Object IS "Content">
 					<cfquery name="GetContentFromProduction1" datasource="#ProductionDSN#">
-						SELECT ContentActive FROM t_Content Where ContentID=<cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
+						SELECT	ContentActive
+						FROM	t_Content
+						WHERE	ContentID = <cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfif GetContentFromProduction1.ContentActive>
 						<cfset NewVal2=0>
@@ -110,11 +112,15 @@
 						<cfset NewVal2=1>
 					</cfif>
 					<cfquery name="UpdateContentOnProduction1" datasource="#ProductionDSN#">
-						UPDATE t_Content SET ContentActive=<cfqueryparam value="#NewVal2#" cfsqltype="cf_sql_bit"> WHERE ContentID=<cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
+						UPDATE	t_Content
+						SET		ContentActive = <cfqueryparam value="#NewVal2#" cfsqltype="cf_sql_bit">
+						WHERE	ContentID=<cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 				<cfelseif Object IS "Category">
 					<cfquery name="GetContentFromStaging1" datasource="#ProductionDSN#">
-						SELECT CategoryActive FROM t_Category Where CategoryID=<cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
+						SELECT	CategoryActive
+						FROM	t_Category
+						WHERE	CategoryID = <cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfif GetContentFromStaging1.CategoryActive>
 						<cfset NewVal=0>
@@ -122,7 +128,9 @@
 						<cfset NewVal=1>
 					</cfif>
 					<cfquery name="UpdateContentOnStaging1" datasource="#ProductionDSN#">
-						UPDATE t_Category SET CategoryActive=<cfqueryparam value="#NewVal#" cfsqltype="cf_sql_bit"> WHERE CategoryID=<cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
+						UPDATE	t_Category
+						SET		CategoryActive = <cfqueryparam value="#NewVal#" cfsqltype="cf_sql_bit">
+						WHERE	CategoryID=<cfqueryparam value="#ThisObjectID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<!--- Originally, this went through all children, but for UIMC, no. --->
 				</cfif>
@@ -145,20 +153,20 @@
 		</cfif>
 
 		<cfquery name="GetMinDisplayLevel" datasource="#Application.DSN#">
-			SELECT	Min(DisplayLevel) as MinDisplayLevel
-			FROM		qry_GetCategory
-			WHERE		CategoryID IN (<cfqueryparam value="#myBranch#" cfsqltype="cf_sql_integer" list="yes">)
+			SELECT	Min(DisplayLevel) AS MinDisplayLevel
+			FROM	qry_GetCategory
+			WHERE	CategoryID IN (<cfqueryparam value="#myBranch#" cfsqltype="cf_sql_integer" list="yes">)
 		</cfquery>
 				
 		<cfquery name="GetAllCategories" datasource="#Application.DSN#">
 			SELECT	*,(displayLevel-#GetMinDisplayLevel.MinDisplayLevel#) AS indent
-			FROM		qry_GetCategory
-			WHERE		CategoryID IN (<cfqueryparam value="#myBranch#" cfsqltype="cf_sql_integer" list="yes">) order by displayorder
+			FROM	qry_GetCategory
+			WHERE	CategoryID IN (<cfqueryparam value="#myBranch#" cfsqltype="cf_sql_integer" list="yes">) order by displayorder
 		</cfquery>
 		
 		<cfquery name="GetMaxDisplayLevel" dbtype="query">
-			SELECT	Max(indent) as MaxDisplayLevel
-			FROM		GetAllCategories
+			SELECT	Max(indent) AS MaxDisplayLevel
+			FROM	GetAllCategories
 		</cfquery>
 		
 		<cfset MaxDisplayLevel=IncrementValue(GetMaxDisplayLevel.MaxDisplayLevel)>

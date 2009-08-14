@@ -64,11 +64,12 @@
 <!--- Query for domains of search options --->
 <cfset sType=StructNew()>
 <cfquery name="GetType" datasource="#APPLICATION.DSN#">
-	select * from t_label 
-	where LabelGroupID=40 and 
-	LabelID IN (<cfqueryparam value="#ShowOnlyCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">) AND
-	LabelID NOT IN (76)<!--- Not in Journal --->
-	Order by LabelName
+	SELECT		*
+	FROM		t_label 
+	WHERE		LabelGroupID = <cfqueryparam value="40" cfsqltype="cf_sql_integer">
+	AND			LabelID IN (<cfqueryparam value="#ShowOnlyCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">)
+	AND			LabelID != <cfqueryparam value="76" cfsqltype="cf_sql_integer"> <!--- Not in Journal --->
+	ORDER BY	LabelName
 </cfquery>
 <cfoutput query="GetType">
 	<cfset StructInsert(sType,LabelID,LabelName)>
@@ -76,15 +77,19 @@
 
 <cfset sStatus=StructNew()>
 <cfquery name="GetStatus" datasource="#APPLICATION.DSN#">
-	select * from t_label where LabelGroupID=<cfqueryparam value="18000" cfsqltype="cf_sql_integer">
-	Order by LabelPriority
+	SELECT		*
+	FROM		t_label
+	WHERE		LabelGroupID = <cfqueryparam value="18000" cfsqltype="cf_sql_integer">
+	ORDER BY	LabelPriority
 </cfquery>
 <cfoutput query="GetStatus">
 	<cfset StructInsert(sStatus,LabelID,LabelName)>
 </cfoutput>
 
 <cfquery name="GetSiteDO" datasource="#APPLICATION.DSN#">
-	select DisplayOrder from t_category where CategoryID=<cfqueryparam value="#ATTRIBUTES.SiteCategoryID#" cfsqltype="cf_sql_integer">
+	SELECT	DisplayOrder
+	FROM	t_category
+	WHERE	CategoryID = <cfqueryparam value="#ATTRIBUTES.SiteCategoryID#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <cfset sOrderBy=StructNew()>
@@ -125,10 +130,9 @@
 					</cfif>
 					<cfif Evaluate("WorkflowStatusID_#i#") GT "0">
 						<cfquery name="UpdateWorkflowStatusID" datasource="#APPLICATION.DSN#">
-							update t_CategoryLocale Set
-							WorkflowStatusID=<cfqueryparam value="#Evaluate('WorkflowStatusID_#i#')#" cfsqltype="cf_sql_integer">
-							WHERE
-							CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
+							UPDATE	t_CategoryLocale
+							SET		WorkflowStatusID = <cfqueryparam value="#Evaluate('WorkflowStatusID_#i#')#" cfsqltype="cf_sql_integer">
+							WHERE	CategoryLocaleID = <cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 					</cfif>
 					<cfif Evaluate("WorkflowStatusID_#i#") IS "18002"><!--- If article is changed to archive --->
@@ -149,11 +153,10 @@
 				<cftransaction>
 					<cfloop index="ThisCategoryLocaleID" list="#lCategoryLocaleIDToDeactivate#">
 						<cfquery name="UpdateWorkflowStatusID" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-							update t_CategoryLocale Set
-							WorkflowStatusID=<cfqueryparam value="18002" cfsqltype="cf_sql_integer">,
-							CategoryLocaleActive=<cfqueryparam value="0" cfsqltype="cf_sql_integer">
-							WHERE
-							CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
+							UPDATE	t_CategoryLocale 
+							SET		WorkflowStatusID = <cfqueryparam value="18002" cfsqltype="cf_sql_integer">,
+									CategoryLocaleActive = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
+							WHERE	CategoryLocaleID = <cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 					</cfloop>
 				</cftransaction>
@@ -161,9 +164,9 @@
 				<cfset lCategoryIDToSave="">
 				<cfloop index="ThisCategoryLocaleID" list="#lCategoryLocaleIDToPublish#">
 					<cfquery name="GetCategoryID" datasource="#APPLICATION.DSN#">
-						select CategoryID from t_CategoryLocale
-						Where
-						CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
+						SELECT	CategoryID
+						FROM	t_CategoryLocale
+						WHERE	CategoryLocaleID = <cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfset lCategoryIDToSave=ListAppend(lCategoryIDToSave,GetCategoryID.CategoryID)>
 				</cfloop>
@@ -185,8 +188,8 @@
 	<cfdefaultcase>
 
 		<cfquery name="GetTopCategories1" datasource="#APPLICATION.DSN#">
-			select CategoryName,DisplayLevel,DisplayOrder,CategoryID,pEdit,pSaveLive,UserGroupid
-			from qry_GetCategoryPermission
+			SELECT CategoryName,DisplayLevel,DisplayOrder,CategoryID,pEdit,pSaveLive,UserGroupid
+			FROM qry_GetCategoryPermission
 			WHERE
 			UserGroupID IN (<cfqueryparam value="#Session.AdminUserGroupIDList#" cfsqltype="cf_sql_integer" list="yes">)
 			and PEdit=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
@@ -211,7 +214,7 @@
 		</cfoutput>
 		
 		<Cfquery name="GetTopCategories" dbtype="query">
-			select * from GetTopCategories3 order by DisplayORder
+			SELECT * FROM GetTopCategories3 order by DisplayORder
 		</cfquery>
 
 		<!--- Commented out for speeds sake. will need for internationalization though
@@ -229,7 +232,8 @@
 		</cfstoredproc> --->
 
 		<cfquery name="GetCategoryList" datasource="#APPLICATION.DSN#">
-			SELECT    * from qry_GetWorkFlow
+			SELECT		*
+			FROM		qry_GetWorkFlow
 			WHERE
 			LocaleID = <cfqueryparam value="#Val(ATTRIBUTES.LocaleID)#" cfsqltype="cf_sql_integer"> and
 			<cfif ParamCategoryID GT "0">
@@ -327,8 +331,9 @@
 			<cfif GetCategoryList.RecordCount IS NOT "0">
 				<cfoutput query="GetFinal" MAXROWS="#SearchNUM#" STARTROW="#StartRow#">
 					<cfquery name="GetThisPermissions" dbtype="query">
-						select * from GetTopCategories
-						Where CategoryID=#Val(ParentID)#
+						SELECT	*
+						FROM	GetTopCategories
+						WHERE	CategoryID = <cfqueryparam value="#Val(ParentID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfset Counter=IncrementValue(Counter)>
 					<cfif CategoryID IS HighlightID>
@@ -369,7 +374,9 @@
 					<cf_AddToQueryString queryString="#QueryString#" Name="ReturnURL" value="#FormPage#?#ThisPageQueryString#">
 					<a href="#RequestPage#?#QueryString#">Send Request</A><cfif ProductionDBDSN IS NOT ""><br>
 						<cfquery name="testlive" datasource="#ProductionDBDSN#">
-							select CategoryActivePrime from qry_GetArticleStatus Where CategoryID=<cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
+							SELECT	CategoryActivePrime 
+							FROM	qry_GetArticleStatus 
+							WHERE	CategoryID = <cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif testlive.RecordCount IS "0">
 							Not visible on live site

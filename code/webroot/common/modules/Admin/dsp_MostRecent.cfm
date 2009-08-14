@@ -1,7 +1,7 @@
 
 <cfquery name="GetLastUpdated" datasource="#APPLICATION.DSN#" maxrows="10">
 SELECT * FROM qry_GetTracking 
-WHERE ENTITY not like '%Locale'
+WHERE ENTITY not like <cfqueryparam value="%Locale" cfsqltype="cf_sql_varchar">
 Order By TrackingID desc
 </cfquery>
 
@@ -20,11 +20,15 @@ Order By TrackingID desc
 	<cfoutput query="GetLastUpdated" maxrows="10">
 		<cfif entity is "T_Category">
 			<cfquery name="GetName" datasource="#APPLICATION.DSN#">
-				SELECT CategoryName as Name, CategoryAlias, CategoryID FROM t_Category where Categoryid = #keyid#
+				SELECT	CategoryName as Name, CategoryAlias, CategoryID
+				FROM	t_Category 
+				WHERE	Categoryid = <cfqueryparam value="#keyid#" cfsqltype="cf_sql_integer">
 			</cfquery> 
 		<cfelse>
 			<cfquery name="GetName" datasource="#APPLICATION.DSN#">
-				SELECT ContentName as Name, CategoryAlias, CategoryID FROM qry_GetContent where Contentid = #keyid#
+				SELECT	ContentName as Name, CategoryAlias, CategoryID
+				FROM	qry_GetContent
+				WHERE	Contentid = <cfqueryparam value="#keyid#" cfsqltype="cf_sql_integer">
 			</cfquery> 
 		</cfif>
 		<tr valign="top" bgcolor="EAEAEA">

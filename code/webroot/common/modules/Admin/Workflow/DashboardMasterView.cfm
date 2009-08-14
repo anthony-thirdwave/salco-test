@@ -352,7 +352,7 @@
 				<cfoutput query="GetFinal" MAXROWS="#SearchNUM#" STARTROW="#StartRow#">
 					<cfquery name="GetThisPermissions" dbtype="query">
 						select * from GetTopCategories
-						Where CategoryID=#Val(CategoryID)#
+						Where CategoryID = <cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer">
 						and pSaveLive=1
 					</cfquery>
 					<cfset Counter=IncrementValue(Counter)>

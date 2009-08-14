@@ -33,9 +33,10 @@
 					<cfset EditShowCategory="0">
 				</cfif>
 				<cfquery name="UpdateShowCategory" datasource="#Application.DSN#">
-					UPDATE t_Category SET 
-					CategoryActive=<cfqueryparam value="#EditShowCategory#" cfsqltype="cf_sql_bit">, CacheDateTime=#now()# 
-					WHERE Categoryid = <cfqueryparam value="#val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
+					UPDATE	t_Category
+					SET		CategoryActive = <cfqueryparam value="#EditShowCategory#" cfsqltype="cf_sql_bit">,
+							CacheDateTime = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp"> 
+					WHERE	Categoryid = <cfqueryparam value="#val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfif>
 		</cfloop>
@@ -43,14 +44,16 @@
 			<cfset ThisCategoryID=ListGetAt(lCategoryID,j)>
 			<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
 				<cfquery name="moveup" datasource="#Application.DSN#">
-					update t_Category set CategoryPriority=(#j#*10) 
-					where CategoryID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
+					UPDATE	t_Category
+					SET		CategoryPriority = <cfqueryparam value="#j*10#" cfsqltype="cf_sql_integer"> 
+					WHERE	CategoryID = <cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfif>
 			<cfquery name="moveup" datasource="#Application.DSN#">
-				update t_CategoryLocaleMeta set CategoryLocalePriority=(#j#*10)
-				where CategoryID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
-				and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+				UPDATE	t_CategoryLocaleMeta
+				SET		CategoryLocalePriority = <cfqueryparam value="#j*10#" cfsqltype="cf_sql_integer">
+				WHERE	CategoryID = <cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
+				AND		LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfloop>
 		<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
@@ -69,10 +72,11 @@
 	<cflocation url="#FormPage#?#QueryString#" addToken="no">
 <cfelse>
 	<cfquery name="GetCategoryList" datasource="#Application.DSN#">
-		SELECT * FROM qry_GetCategoryMeta 
-		WHERE ParentID=<cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
-		and LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
-		Order By CategoryLocalePriority
+		SELECT		*
+		FROM		qry_GetCategoryMeta 
+		WHERE		ParentID = <cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
+		AND			LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+		ORDER BY	CategoryLocalePriority
 	</cfquery>
 	<table width="100%" border="0" cellpadding="3">
 	<cf_AddToQueryString queryString="#FormQueryString#" Name="mvca" value="2">

@@ -43,9 +43,9 @@
 <cfif isDefined("form.UpdateFeedbackStatus") and form.UpdateFeedBackStatus eq "1">
 	<cfloop list="#FORM.FeedbackID#" index="i">
 		<cfquery name="UpdateFeedbackStatus" datasource="#application.dsn#">
-			UPDATE t_Feedback
-			SET StatusID = #evaluate("form.#i#_StatusID")#
-			WHERE FeedbackID = <cfqueryparam value="#i#" cfsqltype="cf_sql_integer">
+			UPDATE	t_Feedback
+			SET		StatusID = <cfqueryparam value="#evaluate("form.#i#_StatusID")#" cfsqltype="cf_sql_integer">
+			WHERE	FeedbackID = <cfqueryparam value="#i#" cfsqltype="cf_sql_integer">
 		</cfquery>
 	</cfloop>
 </cfif> <!--- update status request --->
@@ -72,10 +72,10 @@
 	<cfif attributes.pagetitle neq "General Feedback">CategoryId = <cfqueryparam value="#CategoryId#" cfsqltype="cf_sql_integer"> AND</cfif>
 	<cfif isDefined("session.FeedBackSearch") and session.FeedBackSearch neq "">
 		ThisFeedBackId IN (SELECT FeedbackId from t_Feedback 
-							WHERE 	FromName 		LIKE '%<cfqueryparam value="#session.FeedBackSearch#" cfsqltype="cf_sql_varchar">%'
-							OR 		FromEmail 		LIKE '%<cfqueryparam value="#session.FeedBackSearch#" cfsqltype="cf_sql_varchar">%'
-							OR 		Comments 		LIKE '%<cfqueryparam value="#session.FeedBackSearch#" cfsqltype="cf_sql_varchar">%'
-							OR		CategoryName	LIKE '%<cfqueryparam value="#session.FeedBackSearch#" cfsqltype="cf_sql_varchar">%') AND
+							WHERE 	FromName 		LIKE <cfqueryparam value="%#session.FeedBackSearch#%" cfsqltype="cf_sql_varchar">
+							OR 		FromEmail 		LIKE <cfqueryparam value="%#session.FeedBackSearch#%" cfsqltype="cf_sql_varchar">
+							OR 		Comments 		LIKE <cfqueryparam value="%#session.FeedBackSearch#%" cfsqltype="cf_sql_varchar">
+							OR		CategoryName	LIKE <cfqueryparam value="%#session.FeedBackSearch#%" cfsqltype="cf_sql_varchar">) AND
 	</cfif>
 	1 = 1
 	ORDER BY #Session.FeedSortBy# #Session.FeedSortDir#

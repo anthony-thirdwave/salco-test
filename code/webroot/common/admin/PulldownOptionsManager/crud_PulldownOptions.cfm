@@ -35,10 +35,10 @@
 		<cfif form.labelId is 0>
 			<!--- Get the next labelId --->
 			<cfquery datasource="#APPLICATION.DSN#" name="getNextID">
-				set nocount on
+				SET NOCOUNT ON
 				SELECT	MAX(LabelID) AS xID 
 				FROM	t_Label
-				set nocount off
+				SET NOCOUNT OFF
 			</cfquery>
 			<cfset xLabelID = getNextID.xID+1>
 			<!--- Insert --->
@@ -67,30 +67,37 @@
 					<cfquery name="moveup" datasource="#APPLICATION.DSN#">
 						UPDATE	t_Label
 						SET		LabelPriority = LabelPriority-15,
-								LabelName = '#Trim(form.LabelName)#'
-						WHERE	LabelID = #Val(form.LabelID)#
+								LabelName = <cfqueryparam value="#Trim(form.LabelName)#" cfsqltype="cf_sql_varchar">
+						WHERE	LabelID = <cfqueryparam value="#Val(form.LabelID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 				<cfelseif IsDefined("Form.butdown")>
 					<cfquery name="movedown" datasource="#APPLICATION.DSN#">
 						UPDATE	t_Label
-						SET		LabelPriority = LabelPriority+15, LabelName='#Trim(form.LabelName)#' where LabelID=#Val(form.LabelID)#
+						SET		LabelPriority = LabelPriority+15,
+								LabelName = <cfqueryparam value="#Trim(form.LabelName)#" cfsqltype="cf_sql_varchar">
+						WHERE	LabelID = <cfqueryparam value="#Val(form.LabelID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 				</cfif>
 				<cfquery name="Select" datasource="#APPLICATION.DSN#">
-					Select * from t_Label where LabelGroupID=#FORM.labelGroupID# order by LabelPriority
+					SELECT		*
+					FROM		t_Label
+					WHERE		LabelGroupID = <cfqueryparam value="#FORM.labelGroupID#" cfsqltype="cf_sql_integer"> 
+					ORDER BY	LabelPriority
 				</cfquery>
 				<cfoutput query="select">
 					<cfset ThisNewPriority=10*CurrentRow>
 					<cfquery name="Update" datasource="#APPLICATION.DSN#">
-						update t_Label set LabelPriority=#Val(ThisNewPriority)# where LabelID=#LabelID#
+						UPDATE	t_Label
+						SET		LabelPriority = <cfqueryparam value="#Val(ThisNewPriority)#" cfsqltype="cf_sql_integer"> 
+						WHERE	LabelID = <cfqueryparam value="#LabelID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 				</cfoutput>
 				<cflocation addtoken="no" url="index.cfm?LabelID=#FORM.LabelID#">
 			</cfif>
 			<cfquery datasource="#APPLICATION.DSN#" name="updateLabel">
-				UPDATE t_Label
-				SET LabelName='#Trim(form.LabelName)#'
-				WHERE LabelID = #Val(form.LabelID)#
+				UPDATE	t_Label
+				SET		LabelName = <cfqueryparam value="#Trim(form.LabelName)#" cfsqltype="cf_sql_varchar">
+				WHERE	LabelID = <cfqueryparam value="#Val(form.LabelID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfif>
 	</cfif>
@@ -106,7 +113,9 @@
 		<cfswitch expression="#labelGroupID#">
 			<cfcase value="70">
 				<cfquery name="TestSpec" datasource="#APPLICATION.DSN#">
-					select * from t_JobDepartment WHERE JobDepartmentID=#DeleteLabelID#
+					SELECT	*
+					FROM	t_JobDepartment
+					WHERE	JobDepartmentID = <cfqueryparam value="#val(DeleteLabelID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfif TestSpec.RecordCount IS "0">
 					<cfset AllowDelete="Yes">
@@ -114,7 +123,9 @@
 			</cfcase>
 			<cfcase value="80">
 				<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
-					select * from t_job WHERE JobCategoryID=#DeleteLabelID#
+					SELECT	* 
+					FROM	t_job 
+					WHERE	JobCategoryID = <cfqueryparam value="#val(DeleteLabelID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfif TestStatus.RecordCount IS "0">
 					<cfset AllowDelete="Yes">
@@ -122,7 +133,9 @@
 			</cfcase>
 			<cfcase value="90">
 				<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
-					select * from t_job WHERE JobScheduleID=#DeleteLabelID#
+					SELECT	*
+					FROM	t_job
+					WHERE	JobScheduleID = <cfqueryparam value="#val(DeleteLabelID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfif TestStatus.RecordCount IS "0">
 					<cfset AllowDelete="Yes">
@@ -130,7 +143,9 @@
 			</cfcase>
 			<cfcase value="900">
 				<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
-					select * from t_job WHERE ContactEmailID=#DeleteLabelID#
+					SELECT	*
+					FROM	t_job
+					WHERE	ContactEmailID = <cfqueryparam value="#val(DeleteLabelID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfif TestStatus.RecordCount IS "0">
 					<cfset AllowDelete="Yes">
@@ -139,7 +154,8 @@
 		</cfswitch>
 		<cfif AllowDelete>
 			<cfquery name="deleteLabel" datasource="#APPLICATION.DSN#">
-				delete from t_Label where LabelID=#Val(DeleteLabelID)#
+				DELETE FROM	t_Label
+				WHERE		LabelID = <cfqueryparam value="#val(DeleteLabelID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cflocation url="index.cfm" addtoken="no">
 		</cfif>
@@ -149,17 +165,17 @@
 
 <!--- Get the labelgroup name --->
 <cfquery datasource="#APPLICATION.DSN#" name="getLabelGroupName">
-	SELECT TOP 1 LabelName AS labelGroupName,LabelCode AS labelGroupCode
-	FROM t_Label
-	WHERE LabelID = #Val(labelGroupID)#
+	SELECT	TOP 1 LabelName AS labelGroupName, LabelCode AS labelGroupCode
+	FROM 	t_Label
+	WHERE	LabelID = <cfqueryparam value="#Val(labelGroupID)#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <!--- Get the labels with labelgroupid --->
 <cfquery datasource="#APPLICATION.DSN#" name="getLabels">
-	SELECT LabelName, LabelCode, LabelGroupID, LabelId, LabelPriority
-	FROM t_Label
-	WHERE LabelGroupID = #Val(labelGroupID)#
-	ORDER BY LabelName
+	SELECT		LabelName, LabelCode, LabelGroupID, LabelId, LabelPriority
+	FROM		t_Label
+	WHERE		LabelGroupID = <cfqueryparam value="#Val(labelGroupID)#" cfsqltype="cf_sql_integer">
+	ORDER BY	LabelName
 </cfquery>
 
 <cfoutput>
@@ -181,7 +197,9 @@
 				<cfswitch expression="#labelGroupID#">
 					<cfcase value="70">
 						<cfquery name="TestSpec" datasource="#APPLICATION.DSN#">
-							select * from t_JobDepartment WHERE JobDepartmentID=#labelId#
+							SELECT	*
+							FROM	t_JobDepartment
+							WHERE	JobDepartmentID = <cfqueryparam value="#val(labelId)#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif TestSpec.RecordCount IS "0">
 							<cfset AllowDelete="Yes">
@@ -189,7 +207,9 @@
 					</cfcase>
 					<cfcase value="80">
 						<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
-							select * from t_job WHERE JobCategoryID=#labelId#
+							SELECT	*
+							FROM	t_job
+							WHERE	JobCategoryID = <cfqueryparam value="#val(labelId)#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif TestStatus.RecordCount IS "0">
 							<cfset AllowDelete="Yes">
@@ -197,7 +217,9 @@
 					</cfcase>
 					<cfcase value="90">
 						<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
-							select * from t_job WHERE JobScheduleID=#labelId#
+							SELECT	*
+							FROM	t_job
+							WHERE	JobScheduleID = <cfqueryparam value="#val(labelId)#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif TestStatus.RecordCount IS "0">
 							<cfset AllowDelete="Yes">
@@ -205,7 +227,9 @@
 					</cfcase>
 					<cfcase value="900">
 						<cfquery name="TestStatus" datasource="#APPLICATION.DSN#">
-							select * from t_job WHERE ContactEmailID=#labelId#
+							SELECT	*
+							FROM	t_job
+							WHERE	ContactEmailID = <cfqueryparam value="#val(labelId)#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif TestStatus.RecordCount IS "0">
 							<cfset AllowDelete="Yes">
