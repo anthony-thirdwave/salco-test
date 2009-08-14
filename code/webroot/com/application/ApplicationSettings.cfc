@@ -5,7 +5,7 @@
 		<cfreturn this />
 	</cffunction>
 
-	
+
 	<!--- this function initializes the application, based upon the site type --->
 	<cffunction name="initializeApplication" returntype="boolean">
 	

@@ -1,5 +1,4 @@
 <cfcomponent displayname="Application">
-
 	
 	<!--- the unique name used in database and directory defaults --->
 	<cfset this.uniqueName = "cmsdemo" />
@@ -25,7 +24,6 @@
 	<cfset this.datasource="#this.uniqueName#_cms_#this.siteType#" />
 	<cfset this.clientStorage="#this.uniqueName#_cms_#this.siteType#" />
 		
-
 		
 	<!--- this function gets the site type --->
 	<cffunction name="determineSiteType" returntype="string">
@@ -240,9 +238,10 @@
 		<cfreturn this.datasource />
 	</cffunction>
 
-
+	
 	<!--- return the unique name --->
 	<cffunction name="getUniqueName" returntype="string">
 		<cfreturn this.uniqueName />
 	</cffunction>
+
 </cfcomponent>
