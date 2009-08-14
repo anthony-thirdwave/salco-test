@@ -98,6 +98,7 @@ CREATE TABLE [dbo].[t_CategoryLocale](
 	[LocaleID] [int] NULL,
 	[PropertiesID] [int] NULL,
 	[DefaultCategoryLocale] [bit] NULL,
+	[WorkflowStatusID] [int] NULL,
  CONSTRAINT [PK_t_CategoryLocale] PRIMARY KEY CLUSTERED 
 (
 	[CategoryLocaleID] ASC
@@ -421,11 +422,11 @@ CREATE TABLE [dbo].[t_RewriteType](
 	[Flag] [varchar](200) NULL,
 	[PublicId] [varchar](33) NOT NULL,
 	[Priority] [int] NOT NULL,
- CONSTRAINT [PK_t_RewriteType] PRIMARY KEY CLUSTERED 
+CONSTRAINT [PK_t_RewriteType] PRIMARY KEY CLUSTERED 
 (
 	[RewriteTypeID] ASC
 )WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 END
 GO
 SET ANSI_NULLS ON
@@ -447,7 +448,7 @@ CREATE TABLE [dbo].[t_RewriteUrl](
 (
 	[RewriteUrlID] ASC
 )WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 END
 GO
 SET ANSI_NULLS ON
@@ -1468,7 +1469,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE VIEW [dbo].[qry_GetContentLocale]
+
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetContentLocale]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetContentLocale]
 AS
 SELECT     dbo.t_Content.ContentID, dbo.t_Content.CategoryID, dbo.t_Content.ContentTypeID, dbo.t_Content.ContentPriority, dbo.t_Content.ContentActive, 
                       dbo.t_Content.ContentIndexed, dbo.t_Content.SourceID, dbo.t_ContentLocale.ContentLocaleID, 
@@ -1479,7 +1482,7 @@ FROM         dbo.t_Content INNER JOIN
                       dbo.t_ContentLocale ON dbo.t_Content.ContentID = dbo.t_ContentLocale.ContentID INNER JOIN
                       dbo.t_Locale ON dbo.t_ContentLocale.LocaleID = dbo.t_Locale.LocaleID INNER JOIN
                       dbo.t_Properties ON dbo.t_ContentLocale.PropertiesID = dbo.t_Properties.PropertiesID
-
+'
 GO
 
 SET ANSI_NULLS ON
@@ -1533,7 +1536,26 @@ FROM         dbo.t_Category RIGHT OUTER JOIN
                       dbo.t_Label t_Label_1 ON dbo.t_Locale.LanguageID = t_Label_1.LabelID ON dbo.t_CategoryLocale.LocaleID = dbo.t_Locale.LocaleID
 ' 
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetCategoryLocaleMeta]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetCategoryLocaleMeta]
+AS
+SELECT     dbo.t_CategoryLocale.CategoryLocaleID, dbo.t_CategoryLocale.CategoryID, dbo.t_CategoryLocale.CategoryLocaleActive, 
+                      dbo.t_CategoryLocale.CategoryLocaleName, dbo.t_CategoryLocale.CategoryLocaleURL, dbo.t_CategoryLocale.LocaleID, dbo.t_CategoryLocale.WorkflowStatusId,
+                      dbo.t_CategoryLocale.PropertiesID, dbo.t_CategoryLocale.DefaultCategoryLocale, dbo.t_CategoryLocaleMeta.CategoryLocalePriority, 
+                      dbo.t_CategoryLocaleMeta.CategoryLocaleDisplayOrder, dbo.t_Category.ParentID, dbo.t_Category.CategoryTypeID, dbo.t_Category.CategoryName, 
+                      dbo.t_Category.CategoryAlias, dbo.t_Category.DisplayLevel, dbo.t_Category.DisplayOrder, dbo.t_Category.CategoryActive, 
+                      dbo.t_Category.ShowInNavigation, dbo.t_Category.CategoryIndexed, dbo.t_Category.CategoryPriority, dbo.t_Category.CategoryURL, 
+                      dbo.t_Category.TemplateID, dbo.t_Category.CacheDateTime, dbo.t_Category.SourceID, dbo.t_Label.LabelName AS CategoryTypeName
+FROM         dbo.t_CategoryLocale INNER JOIN
+                      dbo.t_CategoryLocaleMeta ON dbo.t_CategoryLocale.CategoryID = dbo.t_CategoryLocaleMeta.CategoryID INNER JOIN
+                      dbo.t_Category ON dbo.t_CategoryLocale.CategoryID = dbo.t_Category.CategoryID INNER JOIN
+                      dbo.t_Label ON dbo.t_Category.CategoryTypeID = dbo.t_Label.LabelID
+'
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -1594,64 +1616,6 @@ SELECT     dbo.t_Category.CategoryID, dbo.t_Category.DisplayOrder, dbo.t_Propert
 FROM         dbo.t_Category INNER JOIN
                       dbo.t_Properties ON dbo.t_Category.PropertiesID = dbo.t_Properties.PropertiesID
 ' 
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetWorkflow]'))
-EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetWorkflow]
-AS
-SELECT     dbo.qry_GetCategoryLocaleMeta.CategoryLocaleID, dbo.qry_GetCategoryLocaleMeta.CategoryID, 
-                      dbo.qry_GetCategoryLocaleMeta.CategoryLocaleActive, dbo.qry_GetCategoryLocaleMeta.CategoryLocaleName, 
-                      dbo.qry_GetCategoryLocaleMeta.CategoryLocaleURL, dbo.qry_GetCategoryLocaleMeta.LocaleID, dbo.qry_GetCategoryLocaleMeta.PropertiesID, 
-                      dbo.qry_GetCategoryLocaleMeta.DefaultCategoryLocale, dbo.t_Locale.LocaleName, t_Label_1.LabelName AS LanguageName, 
-                      t_Label_1.LabelCode AS LanguageCode, dbo.t_Properties.PropertiesPacket, dbo.t_Category.DisplayOrder, dbo.t_Category.CategoryAlias, 
-                      dbo.t_Category.CategoryTypeID, dbo.t_Category.CategoryName, t_Label_2.LabelName AS WorkflowStatusName, dbo.t_Category.ParentID, 
-                      t_Category_1.CategoryName AS ParentCategoryName, dbo.qry_GetTrackingCategoryLatest.UserLogin, 
-                      dbo.qry_GetTrackingCategoryLatest.OperationName, dbo.qry_GetTrackingCategoryLatest.OperationCode, 
-                      dbo.qry_GetTrackingCategoryLatest.TrackingDateTime, dbo.qry_GetTrackingCategoryLatest.OperationID, 
-                      dbo.qry_GetCategoryLocaleMeta.CategoryLocalePriority, dbo.qry_GetCategoryLocaleMeta.CategoryLocaleDisplayOrder, 
-                      dbo.qry_GetTrackingCategoryLatest.FirstName AS TrackingFirstName, dbo.qry_GetTrackingCategoryLatest.MiddleName AS TrackingMiddleName, 
-                      dbo.qry_GetTrackingCategoryLatest.LastName AS TrackingLastName, dbo.qry_GetCategoryLocaleMeta.WorkflowStatusID
-FROM         dbo.t_Label AS t_Label_1 INNER JOIN
-                      dbo.t_Locale INNER JOIN
-                      dbo.t_Category INNER JOIN
-                      dbo.qry_GetCategoryLocaleMeta ON dbo.t_Category.CategoryID = dbo.qry_GetCategoryLocaleMeta.CategoryID INNER JOIN
-                      dbo.t_Properties ON dbo.qry_GetCategoryLocaleMeta.PropertiesID = dbo.t_Properties.PropertiesID ON 
-                      dbo.t_Locale.LocaleID = dbo.qry_GetCategoryLocaleMeta.LocaleID ON t_Label_1.LabelID = dbo.t_Locale.LanguageID INNER JOIN
-                      dbo.qry_GetTrackingCategoryLatest ON dbo.t_Category.CategoryID = dbo.qry_GetTrackingCategoryLatest.CategoryID INNER JOIN
-                      dbo.t_Label AS t_Label_2 ON dbo.qry_GetCategoryLocaleMeta.WorkflowStatusID = t_Label_2.LabelID LEFT OUTER JOIN
-                      dbo.t_Category AS t_Category_1 ON dbo.t_Category.ParentID = t_Category_1.CategoryID
-'
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetWorkflowRequest]'))
-EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetWorkflowRequest]
-AS
-SELECT     dbo.t_WorkflowRequest.WorkflowRequestID, dbo.t_WorkflowRequest.WorkflowRequestTypeID, dbo.t_WorkflowRequest.WorkflowRequestDateTime, 
-                      dbo.t_WorkflowRequest.FromUserID, dbo.t_WorkflowRequest.CategoryID, dbo.t_WorkflowRequest.Message, dbo.t_WorkflowRequest.Dismissed, 
-                      dbo.t_Category.CategoryName, dbo.t_Category.CategoryAlias, t_User_2.FirstName AS FromFirstName, t_User_2.MiddleName AS FromMiddleName, 
-                      t_User_2.LastName AS FromLastName, t_Label_2.LabelName AS WorkflowRequestTypeName, t_User_1.FirstName AS RecipientFirstName, 
-                      t_User_1.MiddleName AS RecipientMiddleName, t_User_1.LastName AS RecipientLastName, t_Label_1.LabelName AS RecipientUserGroupName, 
-                      dbo.t_WorkflowRequestRecipient.UserID AS RecipientUserID, dbo.t_WorkflowRequestRecipient.UserGroupID AS RecipientUserGroupID, 
-                      t_User_2.EmailAddress AS FromEmailAddress, t_User_1.EmailAddress AS RecipientEmailAddress, dbo.t_WorkflowRequest.LocaleID, 
-                      dbo.t_CategoryLocale.WorkflowStatusID
-FROM         dbo.t_UserGroup LEFT OUTER JOIN
-                      dbo.t_Label AS t_Label_1 ON dbo.t_UserGroup.UserGroupID = t_Label_1.LabelID RIGHT OUTER JOIN
-                      dbo.t_WorkflowRequestRecipient ON dbo.t_UserGroup.UserGroupID = dbo.t_WorkflowRequestRecipient.UserGroupID LEFT OUTER JOIN
-                      dbo.t_User AS t_User_1 ON dbo.t_WorkflowRequestRecipient.UserID = t_User_1.UserID RIGHT OUTER JOIN
-                      dbo.t_CategoryLocale RIGHT OUTER JOIN
-                      dbo.t_WorkflowRequest ON dbo.t_CategoryLocale.CategoryID = dbo.t_WorkflowRequest.CategoryID AND 
-                      dbo.t_CategoryLocale.LocaleID = dbo.t_WorkflowRequest.LocaleID ON 
-                      dbo.t_WorkflowRequestRecipient.WorkflowRequestID = dbo.t_WorkflowRequest.WorkflowRequestID LEFT OUTER JOIN
-                      dbo.t_Label AS t_Label_2 ON dbo.t_WorkflowRequest.WorkflowRequestTypeID = t_Label_2.LabelID LEFT OUTER JOIN
-                      dbo.t_User AS t_User_2 ON dbo.t_WorkflowRequest.FromUserID = t_User_2.UserID LEFT OUTER JOIN
-                      dbo.t_Category ON dbo.t_WorkflowRequest.CategoryID = dbo.t_Category.CategoryID
-'
 GO
 SET ANSI_NULLS ON
 GO
@@ -2034,6 +1998,98 @@ FROM         dbo.t_Tracking LEFT OUTER JOIN
                       dbo.t_User ON dbo.t_Tracking.UserID = dbo.t_User.UserID LEFT OUTER JOIN
                       dbo.t_Label ON dbo.t_Tracking.OperationID = dbo.t_Label.LabelID
 ' 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetTrackingCategory]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetTrackingCategory]
+AS
+SELECT     dbo.t_Tracking.TrackingID, dbo.t_Tracking.UserID, dbo.t_Tracking.Entity, dbo.t_Tracking.KeyID, dbo.t_Tracking.TrackingDateTime, 
+                      dbo.t_Tracking.OperationID, dbo.t_Tracking.EntityName, dbo.t_User.UserLogin, dbo.t_Label.LabelName AS OperationName, 
+                      dbo.t_Label.LabelCode AS OperationCode, dbo.t_Category.CategoryID, dbo.t_Category.CategoryName, dbo.t_User.FirstName, dbo.t_User.MiddleName, 
+                      dbo.t_User.LastName
+FROM         dbo.t_Tracking INNER JOIN
+                      dbo.t_User ON dbo.t_Tracking.UserID = dbo.t_User.UserID INNER JOIN
+                      dbo.t_Category ON dbo.t_Tracking.KeyID = dbo.t_Category.CategoryID AND dbo.t_Tracking.Entity = ''t_Category'' INNER JOIN
+                      dbo.t_Label ON dbo.t_Tracking.OperationID = dbo.t_Label.LabelID
+'
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetTrackingCategoryLatest]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetTrackingCategoryLatest]
+AS
+SELECT     TrackingID, UserID, Entity, KeyID, TrackingDateTime, OperationID, EntityName, UserLogin, OperationName, OperationCode, CategoryID, 
+                      CategoryName, FirstName, MiddleName, LastName
+FROM         dbo.qry_GetTrackingCategory AS gt
+WHERE     (TrackingID =
+                          (SELECT     TOP (1) TrackingID
+                            FROM          dbo.qry_GetTrackingCategory
+                            WHERE      (CategoryID = gt.CategoryID)
+                            ORDER BY TrackingDateTime DESC))
+'
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetWorkflow]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetWorkflow]
+AS
+SELECT     dbo.qry_GetCategoryLocaleMeta.CategoryLocaleID, dbo.qry_GetCategoryLocaleMeta.CategoryID, 
+                      dbo.qry_GetCategoryLocaleMeta.CategoryLocaleActive, dbo.qry_GetCategoryLocaleMeta.CategoryLocaleName, 
+                      dbo.qry_GetCategoryLocaleMeta.CategoryLocaleURL, dbo.qry_GetCategoryLocaleMeta.LocaleID, dbo.qry_GetCategoryLocaleMeta.PropertiesID, 
+                      dbo.qry_GetCategoryLocaleMeta.DefaultCategoryLocale, dbo.t_Locale.LocaleName, t_Label_1.LabelName AS LanguageName, 
+                      t_Label_1.LabelCode AS LanguageCode, dbo.t_Properties.PropertiesPacket, dbo.t_Category.DisplayOrder, dbo.t_Category.CategoryAlias, 
+                      dbo.t_Category.CategoryTypeID, dbo.t_Category.CategoryName, t_Label_2.LabelName AS WorkflowStatusName, dbo.t_Category.ParentID, 
+                      t_Category_1.CategoryName AS ParentCategoryName, dbo.qry_GetTrackingCategoryLatest.UserLogin, 
+                      dbo.qry_GetTrackingCategoryLatest.OperationName, dbo.qry_GetTrackingCategoryLatest.OperationCode, 
+                      dbo.qry_GetTrackingCategoryLatest.TrackingDateTime, dbo.qry_GetTrackingCategoryLatest.OperationID, 
+                      dbo.qry_GetCategoryLocaleMeta.CategoryLocalePriority, dbo.qry_GetCategoryLocaleMeta.CategoryLocaleDisplayOrder, 
+                      dbo.qry_GetTrackingCategoryLatest.FirstName AS TrackingFirstName, dbo.qry_GetTrackingCategoryLatest.MiddleName AS TrackingMiddleName, 
+                      dbo.qry_GetTrackingCategoryLatest.LastName AS TrackingLastName, dbo.qry_GetCategoryLocaleMeta.WorkflowStatusID
+FROM         dbo.t_Label AS t_Label_1 INNER JOIN
+                      dbo.t_Locale INNER JOIN
+                      dbo.t_Category INNER JOIN
+                      dbo.qry_GetCategoryLocaleMeta ON dbo.t_Category.CategoryID = dbo.qry_GetCategoryLocaleMeta.CategoryID INNER JOIN
+                      dbo.t_Properties ON dbo.qry_GetCategoryLocaleMeta.PropertiesID = dbo.t_Properties.PropertiesID ON 
+                      dbo.t_Locale.LocaleID = dbo.qry_GetCategoryLocaleMeta.LocaleID ON t_Label_1.LabelID = dbo.t_Locale.LanguageID INNER JOIN
+                      dbo.qry_GetTrackingCategoryLatest ON dbo.t_Category.CategoryID = dbo.qry_GetTrackingCategoryLatest.CategoryID INNER JOIN
+                      dbo.t_Label AS t_Label_2 ON dbo.qry_GetCategoryLocaleMeta.WorkflowStatusID = t_Label_2.LabelID LEFT OUTER JOIN
+                      dbo.t_Category AS t_Category_1 ON dbo.t_Category.ParentID = t_Category_1.CategoryID
+'
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetWorkflowRequest]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetWorkflowRequest]
+AS
+SELECT     dbo.t_WorkflowRequest.WorkflowRequestID, dbo.t_WorkflowRequest.WorkflowRequestTypeID, dbo.t_WorkflowRequest.WorkflowRequestDateTime, 
+                      dbo.t_WorkflowRequest.FromUserID, dbo.t_WorkflowRequest.CategoryID, dbo.t_WorkflowRequest.Message, dbo.t_WorkflowRequest.Dismissed, 
+                      dbo.t_Category.CategoryName, dbo.t_Category.CategoryAlias, t_User_2.FirstName AS FromFirstName, t_User_2.MiddleName AS FromMiddleName, 
+                      t_User_2.LastName AS FromLastName, t_Label_2.LabelName AS WorkflowRequestTypeName, t_User_1.FirstName AS RecipientFirstName, 
+                      t_User_1.MiddleName AS RecipientMiddleName, t_User_1.LastName AS RecipientLastName, t_Label_1.LabelName AS RecipientUserGroupName, 
+                      dbo.t_WorkflowRequestRecipient.UserID AS RecipientUserID, dbo.t_WorkflowRequestRecipient.UserGroupID AS RecipientUserGroupID, 
+                      t_User_2.EmailAddress AS FromEmailAddress, t_User_1.EmailAddress AS RecipientEmailAddress, dbo.t_WorkflowRequest.LocaleID, 
+                      dbo.t_CategoryLocale.WorkflowStatusID
+FROM         dbo.t_UserGroup LEFT OUTER JOIN
+                      dbo.t_Label AS t_Label_1 ON dbo.t_UserGroup.UserGroupID = t_Label_1.LabelID RIGHT OUTER JOIN
+                      dbo.t_WorkflowRequestRecipient ON dbo.t_UserGroup.UserGroupID = dbo.t_WorkflowRequestRecipient.UserGroupID LEFT OUTER JOIN
+                      dbo.t_User AS t_User_1 ON dbo.t_WorkflowRequestRecipient.UserID = t_User_1.UserID RIGHT OUTER JOIN
+                      dbo.t_CategoryLocale RIGHT OUTER JOIN
+                      dbo.t_WorkflowRequest ON dbo.t_CategoryLocale.CategoryID = dbo.t_WorkflowRequest.CategoryID AND 
+                      dbo.t_CategoryLocale.LocaleID = dbo.t_WorkflowRequest.LocaleID ON 
+                      dbo.t_WorkflowRequestRecipient.WorkflowRequestID = dbo.t_WorkflowRequest.WorkflowRequestID LEFT OUTER JOIN
+                      dbo.t_Label AS t_Label_2 ON dbo.t_WorkflowRequest.WorkflowRequestTypeID = t_Label_2.LabelID LEFT OUTER JOIN
+                      dbo.t_User AS t_User_2 ON dbo.t_WorkflowRequest.FromUserID = t_User_2.UserID LEFT OUTER JOIN
+                      dbo.t_Category ON dbo.t_WorkflowRequest.CategoryID = dbo.t_Category.CategoryID
+'
 GO
 SET ANSI_NULLS OFF
 GO
