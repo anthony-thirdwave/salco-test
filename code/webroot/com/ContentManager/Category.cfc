@@ -464,6 +464,8 @@
 						DELETE From t_Permissions where CategoryID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfif Val(ThisParentID) LTE "0">
+											
+						<!--- add permissions for super admin --->
 						<cfquery name="Test" datasource="#APPLICATION.DSN#">
 							insert into t_permissions (
 							UserGroupID,
@@ -483,6 +485,29 @@
 							1,
 							1,
 							1
+							)
+						</cfquery>
+						
+						<!--- add permissions for content editor --->
+						<cfquery name="Test" datasource="#APPLICATION.DSN#">
+							insert into t_permissions (
+							UserGroupID,
+							CategoryID,
+							pRead,
+							pCreate,
+							pEdit,
+							pDelete,
+							pSaveLive,
+							pManage
+							) VALUES (
+							<cfqueryparam value="#APPLICATION.ContentEditorUserGroupID#" cfsqltype="cf_sql_integer">, 
+							<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">,
+							1,
+							1,
+							1,
+							1,
+							0,
+							0
 							)
 						</cfquery>
 					<cfelse>

@@ -12,7 +12,7 @@
 	<cfset ATTRIBUTES.PageAction=FORM.PageAction>
 </cfif>
 
-<cfset MyWorkflowRequest=CreateObject("component","/com/workflow/request")>
+<cfset MyWorkflowRequest=CreateObject("component","com.workflow.request")>
 <cfset MyWorkflowRequest.Constructor(-1)>
 <cfset MyWorkflowRequest.SetProperty("FromUserID",SESSION.AdminUserID)>
 <cfset MyWorkflowRequest.SetProperty("CategoryID",ATTRIBUTES.CategoryID)>
@@ -57,7 +57,7 @@
 	<cfset ReturnURL=CGI.HTTP_Referer>
 </cfif>
 
-<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qRequestType">
+<cfinvoke component="com.utils.database" method="GenericLookup" returnVariable="qRequestType">
 	<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 	<cfinvokeargument name="TableName" value="t_Label">
 	<cfinvokeargument name="FieldName" value="LabelGroupID">
@@ -66,10 +66,10 @@
 	<cfinvokeargument name="SortOrder" value="Asc">
 </cfinvoke>
 
-<cfinvoke component="/com/user/userhandler" method="GetCategoryOwnerEditorUsers" returnVariable="qGetCategoryOwnerEditorUsers">
+<cfinvoke component="com.user.userhandler" method="GetCategoryOwnerEditorUsers" returnVariable="qGetCategoryOwnerEditorUsers">
 	<cfinvokeargument name="CategoryID" value="#ATTRIBUTES.CategoryID#">
 </cfinvoke>
-<cfinvoke component="/com/user/userhandler" method="GetCategoryOwnerEditorUserGroups" returnVariable="qGetCategoryOwnerEditorUserGroups">
+<cfinvoke component="com.user.userhandler" method="GetCategoryOwnerEditorUserGroups" returnVariable="qGetCategoryOwnerEditorUserGroups">
 	<cfinvokeargument name="CategoryID" value="#ATTRIBUTES.CategoryID#">
 </cfinvoke>
 
@@ -172,7 +172,7 @@ function PopulateSelect() {
 //-->
 </script>
 <cfparam name="WorkflowRequestTypeID" default="19001">
-<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetCategoryBasicDetails" returnVariable="qCategory" CategoryID="#ATTRIBUTES.CategoryID#">
+<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails" returnVariable="qCategory" CategoryID="#ATTRIBUTES.CategoryID#">
 
 <p>Page: <cfoutput><strong>#qCategory.CategoryName#</strong></cfoutput></p>
 <div class="RuleSolid1"></div>

@@ -51,7 +51,7 @@
 </cfif>
 
 <!--- Pull production information --->
-<cfinvoke component="/com/ContentManager/CategoryHandler"
+<cfinvoke component="com.ContentManager.CategoryHandler"
 	method="GetProductionSiteInformation"
 	returnVariable="sProductionSiteInformation"
 	CategoryID="#ATTRIBUTES.SiteCategoryID#">
@@ -145,7 +145,7 @@
 		</cftransaction>
 
 		<cfif Val(APPLICATION.Staging)>
-			<cfinvoke component="/com/ContentManager/CategoryHandler"
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#Val(ATTRIBUTES.SiteCategoryID)#">
@@ -170,7 +170,7 @@
 					</cfquery>
 					<cfset lCategoryIDToSave=ListAppend(lCategoryIDToSave,GetCategoryID.CategoryID)>
 				</cfloop>
-				<cfinvoke component="/com/ContentManager/CategoryHandler"
+				<cfinvoke component="com.ContentManager.CategoryHandler"
 					method="SavePages"
 					returnVariable="bSuccess"
 					UserID="#SESSION.UserID#"

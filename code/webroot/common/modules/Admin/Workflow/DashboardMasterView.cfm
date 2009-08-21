@@ -57,7 +57,7 @@
 </cfif>
 
 <!--- Pull production information --->
-<cfinvoke component="/com/ContentManager/CategoryHandler"
+<cfinvoke component="com.ContentManager.CategoryHandler"
 	method="GetProductionSiteInformation"
 	returnVariable="sProductionSiteInformation"
 	CategoryID="#ATTRIBUTES.CategoryID#">
@@ -135,7 +135,7 @@
 							CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif DismissAll IS "1">
-							<cfinvoke component="/com/workflow/RequestHandler"
+							<cfinvoke component="com.workflow.RequestHandler"
 								method="DismissOutstandingPublishRequest"
 								returnVariable="qOutstandingPublishRequest"
 								CategoryID="#ThisCategoryID#">
@@ -146,11 +146,11 @@
 						<cfset lCategoryLocaleIDToDeactivate=ListAppend(lCategoryLocaleIDToDeactivate,ThisCategoryLocaleID)>
 					</cfif>
 					<cfif 1>
-						<cfinvoke component="/com/ContentManager/CategoryHandler"
+						<cfinvoke component="com.ContentManager.CategoryHandler"
 							method="GetCategoryBasicDetails"
 							returnVariable="qCategory"
 							CategoryID="#Val(ThisCategoryID)#">
-						<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+						<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 							UserID="#SESSION.AdminUserID#"
 							Entity="Category"
 							KeyID="#Val(ThisCategoryID)#"
@@ -160,12 +160,12 @@
 				</cfif>
 
 				<cfif Evaluate("RequestSaveLive_#i#")>
-					<cfset MyWorkflowRequest=CreateObject("component","/com/workflow/request")>
+					<cfset MyWorkflowRequest=CreateObject("component","com.workflow.request")>
 					<cfset MyWorkflowRequest.Constructor(-1)>
 					<cfset MyWorkflowRequest.SetProperty("FromUserID",SESSION.AdminUserID)>
 					<cfset MyWorkflowRequest.SetProperty("CategoryID",ThisCategoryID)>
 					<cfset MyWorkflowRequest.SetProperty("WorkflowRequestTypeID",19001)><!--- Request to save live --->
-					<cfinvoke component="/com/user/userhandler" method="GetCategoryOwnerEditorUserGroups"
+					<cfinvoke component="com.user.userhandler" method="GetCategoryOwnerEditorUserGroups"
 						returnVariable="qGetCategoryOwnerEditorUserGroups"
 						CategoryID="#ThisCategoryID#">
 					<cfset ThisLToUserGroupID="">
@@ -204,7 +204,7 @@
 					</cfquery>
 					<cfset lCategoryIDToSave=ListAppend(lCategoryIDToSave,GetCategoryID.CategoryID)>
 				</cfloop>
-				<cfinvoke component="/com/ContentManager/CategoryHandler"
+				<cfinvoke component="com.ContentManager.CategoryHandler"
 					method="SavePages"
 					returnVariable="bSuccess"
 					UserID="#SESSION.AdminUserID#"
@@ -369,7 +369,7 @@
 					#sStatus[WorkflowStatusID]#
 					</TD>
 					<td align="right" nowrap>
-					<cfinvoke component="/com/workflow/RequestHandler"
+					<cfinvoke component="com.workflow.RequestHandler"
 						method="OutstandingPublishRequest"
 						returnVariable="qOutstandingPublishRequest"
 						CategoryID="#CategoryID#">

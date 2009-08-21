@@ -32,7 +32,7 @@
 	<cfset EditQueryString=ListLast(ATTRIBUTES.EditAction,"?")>
 </cfif>
 
-<cfinvoke component="/com/Workflow/RequestHandler" method="GetRequestTypes" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequestTypes" 
 	returnVariable="GetRequestTypes">
 
 <!----- mark a request as processed ----->
@@ -48,14 +48,14 @@
 				<cfset SaveThis=0>
 			</cfif>
 			<cfif ThisWorkflowID GT "0" and SaveThis IS "1">
-				<cfinvoke component="/com/Workflow/RequestHandler" method="GetRequest" 
+				<cfinvoke component="com.workflow.RequestHandler" method="GetRequest" 
 					WorkflowRequestID="#Val(ThisWorkflowID)#"
 					returnVariable="GetWF">
 				<cfset lCategoryIDToPublish=ListAppend(lCategoryIDToPublish,GetWF.CategoryID)>
 			</cfif>
 		</cfloop>
 		<cfloop index="ThisCategoryID" list="#lCategoryIDToPublish#">
-			<cfinvoke component="/com/ContentManager/CategoryHandler"
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetCategoryLocaleID"
 				returnVariable="ThisCategoryLocaleID"
 				CategoryID="#ThisCategoryID#"
@@ -70,22 +70,22 @@
 			</cfquery>
 			
 			<!--- Create snap shot --->
-			<cfinvoke component="/com/ContentManager/CategoryHandler"
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetCategoryBasicDetails"
 				returnVariable="qCategory"
 				CategoryID="#Val(ThisCategoryID)#">
-			<cfinvoke component="/com/ContentManager/SnapShotHandler"
+			<cfinvoke component="com.ContentManager.SnapShotHandler"
 				method="CreateSnapShot"
 				CategoryID="#Val(ThisCategoryID)#"
 				LocaleID="#APPLICATION.DefaultLocaleID#"
 				returnVariable="SnapShotParentID">
-			<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#SESSION.AdminUserID#"
 				Entity="Category"
 				KeyID="#Val(ThisCategoryID)#"
 				Operation="revisioncreate"
 				EntityName="#qCategory.CategoryName#">
-			<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#SESSION.AdminUserID#"
 				Entity="SnapShot"
 				KeyID="#Val(SnapShotParentID)#"
@@ -93,7 +93,7 @@
 				EntityName="Snapshot: #qCategory.CategoryName#">
 		</cfloop>
 		<cfif APPLICATION.Staging>
-			<cfinvoke component="/com/ContentManager/CategoryHandler"
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="SavePages"
 				returnVariable="bSuccess"
 				UserID="#SESSION.AdminUserID#"
@@ -147,7 +147,7 @@
 <!----- /sort the results -----> 
 
 
-<cfinvoke component="/com/Workflow/RequestHandler" method="GetRequests" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequests" 
 	UserID="#SESSION.AdminUserID#"
 	UserGroupIDList="#SESSION.AdminUserGroupIDList#"
 	ParamStatusID="#ParamStatusID#"

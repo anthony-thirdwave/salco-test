@@ -182,7 +182,7 @@
 		</cfif>
 		
 		
-		<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="local.GetRequestType">
+		<cfinvoke component="com.utils.database" method="GenericLookup" returnVariable="local.GetRequestType">
 			<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 			<cfinvokeargument name="TableName" value="t_Label">
 			<cfinvokeargument name="FieldName" value="LabelID">

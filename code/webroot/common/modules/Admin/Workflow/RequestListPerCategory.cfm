@@ -33,7 +33,7 @@
 	<cfset EditQueryString=ListLast(ATTRIBUTES.EditAction,"?")>
 </cfif>
 
-<cfinvoke component="/com/Workflow/RequestHandler" method="GetRequestTypes" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequestTypes" 
 	returnVariable="GetRequestTypes">
 	
 <!----- mark a request as processed ----->
@@ -47,7 +47,7 @@
 			<cfset SetThis=0>
 		</cfif>
 		<cfif ThisWorkflowID GT "0">
-			<cfinvoke component="/com/Workflow/RequestHandler" method="ToggleDismiss" 
+			<cfinvoke component="com.workflow.RequestHandler" method="ToggleDismiss" 
 				Dismiss="#SetThis#"
 				RequestID="#Val(ThisWorkflowID)#"
 				returnVariable="Success">
@@ -56,7 +56,7 @@
 	<cfset processedMessage="Your selections have been processed">
 </cfif>
 
-<cfinvoke component="/com/Workflow/RequestHandler" method="GetRequestByCategory" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequestByCategory" 
 	ParamStatusID="#ParamStatusID#"
 	ParamTypeID="#ParamTypeID#"
 	ParamOrderBy="#ParamOrderBy#"
