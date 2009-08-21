@@ -309,4 +309,96 @@
 		<cfreturn true>
 	</cffunction>
 	
+	
+	
+	
+	<cffunction name="GetCategoryOwnerEditorUsers" output="false" returntype="query">
+		<cfargument name="CategoryID" default="" type="numeric" required="true">
+		
+		<cfset var local = structNew() />
+		
+		<cfquery name="local.GetUserGroups1" datasource="#APPLICATION.USER_DSN#">
+			SELECT	userGroupID
+			FROM	t_Permissions
+			WHERE	CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.CategoryID)#"> 
+			AND		pSaveLive=1
+		</cfquery>
+
+		<cfquery name="local.GetUserGroups2" datasource="#APPLICATION.USER_DSN#">
+			SELECT	userGroupID
+			FROM	t_Permissions
+			WHERE	CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.CategoryID)#">
+			AND		pEdit=1
+		</cfquery>
+
+		<cfset local.lOwnerUserGroupID=valueList(local.GetUserGroups1.UserGroupID)>
+		<cfset local.lEditorUserGroupID=valueList(local.GetUserGroups2.UserGroupID)>
+
+		<cfif local.lOwnerUserGroupID IS "">
+			<cfset local.lOwnerUserGroupID="-1">
+		</cfif>
+		<cfif local.lEditorUserGroupID IS "">
+			<cfset local.lEditorUserGroupID="-1">
+		</cfif>
+
+		<cfquery name="local.GetUsers1" datasource="#APPLICATION.USER_DSN#">
+			SELECT		t_User.FirstName, t_User.MiddleName, t_User.LastName, t_User.UserLogin, t_User.EmailAddress, t_User.OwnerEmailNotifications, t_User.UserID, 
+						t_Label.LabelName AS UserGroupName, UserGroupID
+			FROM		t_UserGroup 
+			INNER JOIN	t_User ON t_UserGroup.UserID = t_User.UserID 
+			INNER JOIN	t_Label ON t_UserGroup.UserGroupID = t_Label.LabelID
+			WHERE		UserGroupID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#ListAppend(local.lEditorUserGroupID,local.lOwnerUserGroupID)#" list="yes">)<!---  and UserGroupID NOT IN (4) --->
+			ORDER BY	t_User.LastName, t_User.FirstName
+		</cfquery>
+
+		<cfset local.qReturn=QueryNew("pSaveLive,CategoryID,UserGroupID,FirstName,MiddleName,LastName,UserLogin,EmailAddress,OwnerEmailNotifications,UserID,UserGroupName")>
+
+		<cfoutput query="local.GetUsers1" group="UserID">
+			<cfset local.lUserGroupID="">
+			<cfoutput group="userGroupID">
+				<cfset local.lUserGroupID=ListAppend(local.lUserGroupID,local.GetUsers1.UserGroupID)>
+			</cfoutput>
+
+			<cf_Venn ListA="#local.lUserGroupID#" ListB="#local.lOwnerUserGroupID#" AandB="local.IsOwner">
+			<cfset QueryAddRow(local.qReturn)>
+			<cfif ListLen(local.IsOwner) GT "0">
+				<cfset QuerySetCell(local.qReturn,"pSaveLive",1)>
+			<cfelse>
+				<cfset QuerySetCell(local.qReturn,"pSaveLive",0)>
+			</cfif>
+			<cfset QuerySetCell(local.qReturn,"CategoryID",arguments.CategoryID)>
+			<cfset QuerySetCell(local.qReturn,"UserGroupID",local.GetUsers1.UserGroupID)>
+			<cfset QuerySetCell(local.qReturn,"FirstName",local.GetUsers1.FirstName)>
+			<cfset QuerySetCell(local.qReturn,"MiddleName",local.GetUsers1.MiddleName)>
+			<cfset QuerySetCell(local.qReturn,"LastName",local.GetUsers1.LastName)>
+			<cfset QuerySetCell(local.qReturn,"UserLogin",local.GetUsers1.UserLogin)>
+			<cfset QuerySetCell(local.qReturn,"EmailAddress",local.GetUsers1.EmailAddress)>
+			<cfset QuerySetCell(local.qReturn,"OwnerEmailNotifications",local.GetUsers1.OwnerEmailNotifications)>
+			<cfset QuerySetCell(local.qReturn,"UserID",local.GetUsers1.UserID)>
+			<cfset QuerySetCell(local.qReturn,"UserGroupName",local.GetUsers1.UserGroupName)>
+		</cfoutput>
+
+		<cfreturn local.qReturn>
+	</cffunction>
+
+
+	<cffunction name="GetCategoryOwnerEditorUserGroups" output="false" returntype="query">
+		<cfargument name="CategoryID" default="" type="numeric" required="true">
+		
+		<cfset var local = structNew() />
+		
+		<cfquery name="local.GetUserGroups" datasource="#APPLICATION.USER_DSN#">
+			SELECT		p.pSaveLive, p.CategoryID, p.UserGroupID, l.LabelName AS UserGroupName
+			FROM		t_Permissions p 
+			INNER JOIN	t_UserGroup ug 
+			ON p.UserGroupID = ug.UserGroupID 
+			INNER JOIN	t_Label l 
+			ON ug.UserGroupID = l.LabelID
+			WHERE p.CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.CategoryID)#"> 
+			AND (p.pSaveLive = 1 OR p.pEdit = 1)
+			ORDER BY UserGroupName
+		</cfquery>
+		<cfreturn local.GetUserGroups>
+	</cffunction>
+	
 </cfcomponent>
