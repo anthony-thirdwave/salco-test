@@ -100,6 +100,7 @@
 			<cfset onSessionStart() />
 		</cfif>
 		
+		<cfset REQUEST.GlobalNavURLPrefix = "">
 		<!--- if in secure, make sure nav links exit secure --->
 		<cfif (CGI.SERVER_PORT EQ 443 or CGI.HTTP_Host neq CGI.SERVER_NAME) and APPLICATION.Production>
 			<cfset REQUEST.GlobalNavURLPrefix = "http://#CGI.SERVER_NAME#">
