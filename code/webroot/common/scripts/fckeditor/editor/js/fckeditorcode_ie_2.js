@@ -10,7 +10,66 @@
  * 
  * This file has been compacted for best loading performance.
  */
-FCK.RedirectNamedCommands=new Object();FCK.ExecuteNamedCommand=function(commandName,commandParameter){FCKUndo.SaveUndoStep();if (FCK.RedirectNamedCommands[commandName]!=null) FCK.ExecuteRedirectedNamedCommand(commandName,commandParameter);else{FCK.Focus();FCK.EditorDocument.execCommand(commandName,false,commandParameter);FCK.Events.FireEvent('OnSelectionChange');};};FCK.GetNamedCommandState=function(commandName){try{if (!FCK.EditorDocument.queryCommandEnabled(commandName)) return FCK_TRISTATE_DISABLED;else return FCK.EditorDocument.queryCommandState(commandName)?FCK_TRISTATE_ON:FCK_TRISTATE_OFF;}catch (e){return FCK_TRISTATE_OFF;};};FCK.GetNamedCommandValue=function(commandName){var sValue='';var eState=FCK.GetNamedCommandState(commandName);if (eState==FCK_TRISTATE_DISABLED) return null;try{sValue=this.EditorDocument.queryCommandValue(commandName);}catch(e) {};return sValue?sValue:'';};FCK.CleanAndPaste=function(html){html=html.replace(/<\/?SPAN[^>]*>/gi,"");html=html.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi,"<$1$3");html=html.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi,"<$1$3");html=html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi,"<$1$3");html=html.replace(/<\\?\?xml[^>]*>/gi,"");html=html.replace(/<\/?\w+:[^>]*>/gi,"");html=html.replace(/&nbsp;/," ");var re=new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi");html=html.replace(re,"<div$2</div>");FCK.InsertHtml(html);};FCK.Preview=function(){var oWindow=window.open('',null,'toolbar=yes,location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes');var sHTML='<html><head><link href="'+FCKConfig.EditorAreaCSS+'" rel="stylesheet" type="text/css" /></head><body>'+FCK.GetHTML()+'</body></html>';oWindow.document.write(sHTML);oWindow.document.close();};FCK.SwitchEditMode=function(){var bWYSIWYG=(FCK.EditMode==FCK_EDITMODE_WYSIWYG);document.getElementById('eWysiwyg').style.display=bWYSIWYG?'none':'';document.getElementById('eSource').style.display=bWYSIWYG?'':'none';if (bWYSIWYG){if (FCKBrowserInfo.IsIE) FCKUndo.SaveUndoStep();document.getElementById('eSourceField').value=(FCKConfig.EnableXHTML&&FCKConfig.EnableSourceXHTML?FCK.GetXHTML(FCKConfig.FormatSource):FCK.GetHTML(FCKConfig.FormatSource));}else FCK.SetHTML(FCK.GetHTML(),true);FCK.EditMode=bWYSIWYG?FCK_EDITMODE_SOURCE:FCK_EDITMODE_WYSIWYG;FCKToolbarSet.RefreshModeState();FCK.Focus();};FCK.CreateElement=function(tag){var e=FCK.EditorDocument.createElement(tag);return FCK.InsertElementAndGetIt(e);};FCK.InsertElementAndGetIt=function(e){e.setAttribute('__FCKTempLabel',1);this.InsertElement(e);var aEls=FCK.EditorDocument.getElementsByTagName(e.tagName);for (var i=0;i<aEls.length;i++){if (aEls[i].getAttribute('__FCKTempLabel')){aEls[i].removeAttribute('__FCKTempLabel');return aEls[i];};};};
+FCK.RedirectNamedCommands=new Object();FCK.ExecuteNamedCommand=function(commandName,commandParameter){FCKUndo.SaveUndoStep();if (FCK.RedirectNamedCommands[commandName]!=null) FCK.ExecuteRedirectedNamedCommand(commandName,commandParameter);else{FCK.Focus();FCK.EditorDocument.execCommand(commandName,false,commandParameter);FCK.Events.FireEvent('OnSelectionChange');};};FCK.GetNamedCommandState=function(commandName){try{if (!FCK.EditorDocument.queryCommandEnabled(commandName)) return FCK_TRISTATE_DISABLED;else return FCK.EditorDocument.queryCommandState(commandName)?FCK_TRISTATE_ON:FCK_TRISTATE_OFF;}catch (e){return FCK_TRISTATE_OFF;};};FCK.GetNamedCommandValue=function(commandName){var sValue='';var eState=FCK.GetNamedCommandState(commandName);if (eState==FCK_TRISTATE_DISABLED) return null;try{sValue=this.EditorDocument.queryCommandValue(commandName);}catch(e) {};return sValue?sValue:'';};FCK.CleanAndPaste=function(html){
+	html = html.replace(/<o:p>&nbsp;<\/o:p>/g, ""); // Remove all instances of <o:p>
+	html = html.replace(/<o\:p><\/o\:p>/g, "");
+	html = html.replace(/o:/g, ""); // remove all o: prefixes
+	html = html.replace(/<st1:[^>]*>/g, ""); // remove all SmartTags (from Word XP!)
+	html = html.replace(/<\?xml:[^>]*>/g, ""); // remove all XML(from Word XP!)
+	html = html.replace(/\\r/g, "<BR>");
+	html = html.replace(/\\n/g, "<BR>");
+	html = html.replace(/class=MsoNormal/g, "");
+	html = html.replace(/class=class=MsoHeader/g, "");
+	html = html.replace(/class=MsoBodyText/g, "");
+	html = html.replace(/style=\"mso-cellspacing.*\"/g, "cellspacing=0");
+	html = html.replace(/mso-[^\";]*/g, "");
+		
+	html=html.replace(/<\/?SPAN[^>]*>/gi,"");
+	html=html.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi,"<$1$3");
+	html=html.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi,"<$1$3");
+	html=html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi,"<$1$3");
+	html=html.replace(/<\\?\?xml[^>]*>/gi,"");
+	html=html.replace(/<\/?\w+:[^>]*>/gi,"");
+	html=html.replace(/&nbsp;/," ");
+	var re=new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi");
+	html=html.replace(re,"<p$2</p>");
+	
+	html=html.replace(/<\!--[\s\S]*?-->/g,'');
+	html=html.replace(/<o:p>\s*<\/o:p>/g,'');
+	html=html.replace(/<o:p>[\s\S]*?<\/o:p>/g,'&nbsp;');
+	html=html.replace(/\s*mso-[^:]+:[^;"]+;?/gi,'');
+	html=html.replace(/\s*MARGIN: 0(?:cm|in) 0(?:cm|in) 0pt\s*;/gi,'');
+	html=html.replace(/\s*MARGIN: 0(?:cm|in) 0(?:cm|in) 0pt\s*"/gi,'"');
+	html=html.replace(/\s*TEXT-INDENT: 0cm\s*;/gi,'');
+	html=html.replace(/\s*TEXT-INDENT: 0cm\s*"/gi,'"');
+	html=html.replace(/\s*TEXT-ALIGN: [^\s;]+;?"/gi,'"');
+	html=html.replace(/\s*PAGE-BREAK-BEFORE: [^\s;]+;?"/gi,'"');
+	html=html.replace(/\s*FONT-VARIANT: [^\s;]+;?"/gi,'"');
+	html=html.replace(/\s*tab-stops:[^;"]*;?/gi,'');
+	html=html.replace(/\s*tab-stops:[^"]*/gi,'');
+	html=html.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi,'<$1$3');
+	html=html.replace(/<STYLE[^>]*>[\s\S]*?<\/STYLE[^>]*>/gi,'');
+	html=html.replace(/<(?:META|LINK)[^>]*>\s*/gi,'');
+	html=html.replace(/\s*style="\s*"/gi,'');
+	html=html.replace(/<SPAN\s*[^>]*>\s*&nbsp;\s*<\/SPAN>/gi,'&nbsp;');
+	html=html.replace(/<SPAN\s*[^>]*><\/SPAN>/gi,'');
+	html=html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi,'<$1$3');
+	html=html.replace(/<SPAN\s*>([\s\S]*?)<\/SPAN>/gi,'$1');
+	html=html.replace(/<FONT\s*>([\s\S]*?)<\/FONT>/gi,'$1');
+	html=html.replace(/<\\?\?xml[^>]*>/gi,'');
+	html=html.replace(/<w:[^>]*>[\s\S]*?<\/w:[^>]*>/gi,'');
+	html=html.replace(/<\/?\w+:[^>]*>/gi,'');
+	html=html.replace(/<(U|I|STRIKE)>&nbsp;<\/\1>/g,'&nbsp;');
+	html=html.replace(/<H\d>\s*<\/H\d>/gi,'');
+	html=html.replace(/<(\w+)[^>]*\sstyle="[^"]*DISPLAY\s?:\s?none[\s\S]*?<\/\1>/ig,'');
+	html=html.replace(/<(\w[^>]*) language=([^ |>]*)([^>]*)/gi,'<$1$3');
+	html=html.replace(/<(\w[^>]*) onmouseover="([^\"]*)"([^>]*)/gi,'<$1$3');
+	html=html.replace(/<(\w[^>]*) onmouseout="([^\"]*)"([^>]*)/gi,'<$1$3');
+	
+	//html='hi';
+	//alert('hi');
+	FCK.InsertHtml(html);
+};FCK.Preview=function(){var oWindow=window.open('',null,'toolbar=yes,location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes');var sHTML='<html><head><link href="'+FCKConfig.EditorAreaCSS+'" rel="stylesheet" type="text/css" /></head><body>'+FCK.GetHTML()+'</body></html>';oWindow.document.write(sHTML);oWindow.document.close();};FCK.SwitchEditMode=function(){var bWYSIWYG=(FCK.EditMode==FCK_EDITMODE_WYSIWYG);document.getElementById('eWysiwyg').style.display=bWYSIWYG?'none':'';document.getElementById('eSource').style.display=bWYSIWYG?'':'none';if (bWYSIWYG){if (FCKBrowserInfo.IsIE) FCKUndo.SaveUndoStep();document.getElementById('eSourceField').value=(FCKConfig.EnableXHTML&&FCKConfig.EnableSourceXHTML?FCK.GetXHTML(FCKConfig.FormatSource):FCK.GetHTML(FCKConfig.FormatSource));}else FCK.SetHTML(FCK.GetHTML(),true);FCK.EditMode=bWYSIWYG?FCK_EDITMODE_SOURCE:FCK_EDITMODE_WYSIWYG;FCKToolbarSet.RefreshModeState();FCK.Focus();};FCK.CreateElement=function(tag){var e=FCK.EditorDocument.createElement(tag);return FCK.InsertElementAndGetIt(e);};FCK.InsertElementAndGetIt=function(e){e.setAttribute('__FCKTempLabel',1);this.InsertElement(e);var aEls=FCK.EditorDocument.getElementsByTagName(e.tagName);for (var i=0;i<aEls.length;i++){if (aEls[i].getAttribute('__FCKTempLabel')){aEls[i].removeAttribute('__FCKTempLabel');return aEls[i];};};};
 FCK.Paste=function(){if (FCKConfig.ForcePasteAsPlainText){FCK.PasteAsPlainText();return false;}else if (FCKConfig.AutoDetectPasteFromWord){var sHTML=FCK.GetClipboardHTML();var re=/<\w[^>]* class="?MsoNormal"?/gi;if (re.test(sHTML)){if (confirm(FCKLang["PasteWordConfirm"])){FCK.CleanAndPaste(sHTML);return false;};};}else return true;};FCK.PasteAsPlainText=function(){var sText=FCKTools.HTMLEncode(clipboardData.getData("Text"));sText=sText.replace(/\n/g,'<BR>');this.InsertHtml(sText);};FCK.PasteFromWord=function(){FCK.CleanAndPaste(FCK.GetClipboardHTML());};FCK.InsertElement=function(element){FCK.InsertHtml(element.outerHTML);};FCK.GetClipboardHTML=function(){var oDiv=document.getElementById('___FCKHiddenDiv');if (!oDiv){var oDiv=document.createElement('DIV');oDiv.id='___FCKHiddenDiv';oDiv.style.visibility='hidden';oDiv.style.overflow='hidden';oDiv.style.position='absolute';oDiv.style.width=1;oDiv.style.height=1;document.body.appendChild(oDiv);};oDiv.innerHTML='';var oTextRange=document.body.createTextRange();oTextRange.moveToElementText(oDiv);oTextRange.execCommand('Paste');var sData=oDiv.innerHTML;oDiv.innerHTML='';return sData;};FCK.AttachToOnSelectionChange=function(functionPointer){this.Events.AttachEvent('OnSelectionChange',functionPointer);};FCK.CreateLink=function(url){FCK.ExecuteNamedCommand('Unlink');if (url.length>0){var sTempUrl='javascript:void(0);/*'+(new Date().getTime())+'*/';FCK.ExecuteNamedCommand('CreateLink',sTempUrl);var oLinks=this.EditorDocument.links;for (i=0;i<oLinks.length;i++){if (oLinks[i].href==sTempUrl){oLinks[i].href=url;return oLinks[i];};};};};
 var FCKSelection=new Object();FCK.Selection=FCKSelection;
 FCKSelection.GetType=function(){return FCK.EditorDocument.selection.type;};FCKSelection.GetSelectedElement=function(){if (this.GetType()=='Control'){var oRange=FCK.EditorDocument.selection.createRange();if (oRange&&oRange.item) return FCK.EditorDocument.selection.createRange().item(0);};};FCKSelection.GetParentElement=function(){if (this.GetType()=='Control') return FCKSelection.GetSelectedElement().parentElement;else return FCK.EditorDocument.selection.createRange().parentElement();};FCKSelection.SelectNode=function(node){FCK.Focus();FCK.EditorDocument.selection.empty();var oRange=FCK.EditorDocument.selection.createRange();oRange.moveToElementText(node);oRange.select();};FCKSelection.Collapse=function(toStart){FCK.Focus();var oRange=FCK.EditorDocument.selection.createRange();oRange.collapse(toStart==null||toStart===true);oRange.select();};FCKSelection.HasAncestorNode=function(nodeTagName){var oContainer;if (FCK.EditorDocument.selection.type=="Control"){oContainer=this.GetSelectedElement();}else{var oRange=FCK.EditorDocument.selection.createRange();oContainer=oRange.parentElement();};while (oContainer){if (oContainer.tagName==nodeTagName) return true;oContainer=oContainer.parentNode;};return false;};FCKSelection.MoveToAncestorNode=function(nodeTagName){var oNode;if (FCK.EditorDocument.selection.type=="Control"){var oRange=FCK.EditorDocument.selection.createRange();for (i=0;i<oRange.length;i++){if (oRange(i).parentNode){oNode=oRange(i).parentNode;break;};};}else{var oRange=FCK.EditorDocument.selection.createRange();oNode=oRange.parentElement();};while (oNode&&oNode.nodeName!=nodeTagName) oNode=oNode.parentNode;return oNode;};FCKSelection.Delete=function(){var oSel=FCK.EditorDocument.selection;if (oSel.type.toLowerCase()!="none"){oSel.clear();};return oSel;}
