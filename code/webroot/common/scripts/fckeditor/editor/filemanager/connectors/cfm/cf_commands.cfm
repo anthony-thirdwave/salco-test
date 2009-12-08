@@ -86,7 +86,7 @@
 			while( fileExists( sServerDir & sFileName ) )
 			{
 				counter = counter + 1;
-				sFileName = sFilePart & '(#counter#).' & CFFILE.ClientFileExt;
+				sFileName = sFilePart & '-#counter#.' & CFFILE.ClientFileExt;
 				errorNumber = 201;
 			}
 		</cfscript>

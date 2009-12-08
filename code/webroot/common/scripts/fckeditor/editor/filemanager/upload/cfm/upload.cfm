@@ -122,7 +122,7 @@
 					tmpFileName = fileName;
 					while( fileExists("#currentFolderPath##fileName#.#fileExt#") ) {
 						counter = counter + 1;
-						fileName = tmpFileName & '(#counter#)';
+						fileName = tmpFileName & '-#counter#';
 					}
 				}
 			</cfscript>
