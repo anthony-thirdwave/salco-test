@@ -324,3 +324,9 @@ a.progressCancel:hover
 	background-color:#FFFFFF;
 	border:1px solid #000000;
 }
+
+/* Added by Tad */
+
+#pageChooser{
+	z-index:500; /* to fix select location from dashboard page for "Quickly Add Page" styles */
+}
