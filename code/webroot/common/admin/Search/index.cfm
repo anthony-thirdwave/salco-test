@@ -72,7 +72,6 @@
 <!--- search results are stored in session, only reset when new search is defined --->
 
 <script language="javascript">
-<!--
 function valNewSearch(thisForm){
 	if(document.getElementById('globalSearchForm').searchBy[document.getElementById('globalSearchForm').searchBy.selectedIndex].value == ""){
 		alert("Please select a 'search by' option.");
