@@ -42,10 +42,9 @@ code/webroot/com/workflow/RequestHandler.cfc -text
 code/webroot/com/workflow/request.cfc -text
 code/webroot/common/admin/Dashboard/_InitDashboard.cfm -text
 code/webroot/common/admin/Dashboard/index.cfm -text
-code/webroot/common/admin/Documentation/3W_CMS_Overview_20050622.pdf -text
+code/webroot/common/admin/Documentation/CMS_Instructions.pdf -text svneol=unset#unset
 code/webroot/common/admin/Documentation/data.cfm -text
 code/webroot/common/admin/Documentation/index.cfm -text
-code/webroot/common/admin/Documentation/lf.cms.training.20041005.pdf -text
 code/webroot/common/admin/Locale/index.cfm -text
 code/webroot/common/admin/MasterView/CategoryModify.cfm -text
 code/webroot/common/admin/MasterView/ContentModify.cfm -text
