@@ -198,7 +198,7 @@
 					<cfset thisPageTitle = thisPageTitle & ListGetAt(ARGUMENTS.pageTitleList,i) & ": ">
 				</cfif>
 			</cfloop>
-			<cfset thisPageTitle = thisPageTitle & Application.SiteTitle>
+			<cfset thisPageTitle = thisPageTitle & Application.CompanyName>
 			<cfreturn thisPageTitle>
 	</cffunction>
 	

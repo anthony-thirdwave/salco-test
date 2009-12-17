@@ -31,10 +31,15 @@
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
 			<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
 			<cfif FileContents IS NOT "">
+				<cfif ATTRIBUTES.sContentBody["CSSID"] neq "">
+					<cfset contentCSSID="id=""#ATTRIBUTES.sContentBody["CSSID"]#""">
+				<cfelse>
+					<cfset contentCSSID="">
+				</cfif>
 				<cfif IsDefined("URL.ShowContentOnly") AND Val(URL.ShowContentOnly)>
 					<cfset FileContents="#FileContents#">
 				<cfelse>
-					<cfset FileContents="<div class=""body"">#FileContents#</div>">
+					<cfset FileContents="<div #contentCSSID# class=""body"">#FileContents#</div>">
 				</cfif>
 			</cfif>
 		</cfif>

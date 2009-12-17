@@ -11,7 +11,7 @@
 	<p><strong>Documentation</strong></p>
 	
 	<UL>
-	<LI><a href="/common/admin/documentation/3W_CMS_Overview_20050622.pdf" target="_blank">CMS Overview</a></li>
+	<LI><a href="/common/admin/documentation/CMS_Instructions.pdf" target="_blank">CMS Overview</a></li>
 	</UL>
 
 	<!--- Display Form and submit to self --->
