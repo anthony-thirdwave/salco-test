@@ -329,7 +329,7 @@
 							</cfif>
 							<cfswitch expression="#APPLICATION.ApplicationName#">
 								<cfdefaultcase>
-									<cfset thisContentString = "#subTitle##TheseFileContents#">
+									<cfset thisContentString = "#TheseFileContents#">
 									<cfset FileContents="#FileContents# #Title# #thisContentString#">
 								</cfdefaultcase>
 							</cfswitch>
