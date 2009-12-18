@@ -78,19 +78,19 @@
 			</cfif>
 			<tr>
 				<td>Your name*</td>
-				<td><input type="text" name="txtName" id="txtName" value="<cfoutput>#txtName#</cfoutput>" style="width:200px;" maxlength="200"/></td>
+				<td><input type="text" name="txtName" id="txtName" value="<cfoutput>#txtName#</cfoutput>"  maxlength="200"/></td>
 			</tr>
 			<tr>
 				<td>Your email address*</td>
-				<td><input type="text" name="txtEmail" id="txtEmail" value="<cfoutput>#txtEmail#</cfoutput>"  style="width:200px;" maxlength="200"/></td>
+				<td><input type="text" name="txtEmail" id="txtEmail" value="<cfoutput>#txtEmail#</cfoutput>"   maxlength="200"/></td>
 			</tr>
 			<tr>
 				<td>Your phone number*</td>
-				<td><input type="text" name="txtPhone" id="txtPhone" value="<cfoutput>#txtPhone#</cfoutput>"  style="width:200px;" maxlength="20"/></td>
+				<td><input type="text" name="txtPhone" id="txtPhone" value="<cfoutput>#txtPhone#</cfoutput>"   maxlength="20"/></td>
 			</tr>
 			<tr>
 				<td>Type of issue*</td>
-				<td><input type="text" name="txtIssueType" id="txtIssueType" value="<cfoutput>#txtIssueType#</cfoutput>"  style="width:200px;" maxlength="200"/>
+				<td><input type="text" name="txtIssueType" id="txtIssueType" value="<cfoutput>#txtIssueType#</cfoutput>"  maxlength="200"/>
 				</td>
 			</tr>
 			<tr valign="top">
@@ -100,7 +100,7 @@
 			<tr>
 				<td>Your platform</td>
 				<td>
-					<select name="platform" id="platform"  style="width:200px;">
+					<select name="platform" id="platform"  >
 						<option value="0">Select one</option>
 						<cfoutput query="OS">
 							<option value="#LabelID#" <cfif isDefined("URL.platform") and URL.platform IS LabelID>selected</cfif>>#LabelName#</option>
@@ -110,11 +110,11 @@
 			</tr>
 			<tr>
 				<td>Browser you are using</td>
-				<td><input type="text" name="txtBrowser" id="txtBrowser" value="<cfoutput>#txtBrowser#</cfoutput>" maxlength="100" style="width:200px;"/></td>
+				<td><input type="text" name="txtBrowser" id="txtBrowser" value="<cfoutput>#txtBrowser#</cfoutput>" maxlength="100" /></td>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td align="right"><input type="submit" value="Submit &gt;"></a></td>
+				<td><input class="submitButton" type="submit" value="Submit">&nbsp;</td>
+				<td align="right"></td>
 			</tr>
 			</form>
 		</table>
