@@ -45,7 +45,7 @@
 				<table width="100%" border="0" cellspacing="0" cellpadding="0" class="SiteTitle">
 					<tr valign="middle">
 						<TD style="padding-left:10px;">MasterView</TD>
-						<td align="right"><small><cfif SESSION.AdminUserID IS NOT "">Welcome, <cfoutput>#SESSION.AdminUserLogin#</cfoutput></small> <a href="/common/admin/logoff.cfm" style="padding-left:10px;"><img src="/common/images/admin/button_logout.gif" border="0" align="absmiddle" alt=""></A></cfif></td>
+						<td align="right"><small><cfif SESSION.AdminUserID IS NOT "">Welcome, <cfoutput>#SESSION.AdminUserLogin#</cfoutput></small> <a href="/common/admin/logoff.cfm" style="padding-left:10px; "><img src="/common/images/admin/button_logout.gif" border="0" align="absmiddle" style="margin-bottom:3px;" alt=""></A></cfif></td>
 					</TR>
 				</table>
 			</TD>
@@ -78,7 +78,7 @@
 				</cfif>
 				</TR></table></TD>
 				<form action="/common/admin/search/index.cfm" method="get"><input name="newSearch" value="1" type="hidden"><input name="searchBy" value="title" type="hidden"><td align="right" valign="middle">
-				<input type="text" name="searchText" size="25" maxlength="100"> <input type="image" src="/common/images/admin/button_search.gif" border="0" style="padding-left:10px;">
+				<input type="text" name="searchText" size="25" maxlength="100"> <input type="image" src="/common/images/admin/button_search.gif" border="0" style="padding-left:10px; margin-bottom:-5px;">
 				</td></form></tr></table>
 			</cfif>
 			</TD>
