@@ -330,3 +330,17 @@ a.progressCancel:hover
 #pageChooser{
 	z-index:500; /* to fix select location from dashboard page for "Quickly Add Page" styles */
 }
+
+/* styles for support form page */
+
+#txtName, #txtEmail, #txtPhone, #txtIssueType, #platform, #txtBrowser{width:250px;}
+
+#txtIssue{width:300px;}
+
+.submitButton {
+background:#0099ff;
+border:#0099ff solid 1px;
+color:#FFFFFF;
+font-weight:900;
+margin-top:10px;
+}
