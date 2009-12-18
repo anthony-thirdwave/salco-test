@@ -68,8 +68,8 @@
 					<td style="font-size:10px; " valign="top">
 						<span style="color:red;">#DateFormat(PostDate,'mm/dd/yyyy')#</span><br>
 						<cfif thisMode EQ "edit">
-							<a href="javascript:editMsg(#bulletinID#);"><img src="/common/images/admin/icon_edit.gif" border="0"/></a>&nbsp;
-							<a href="javascript:deleteMsg(#bulletinID#);"><img src="/common/images/admin/icon_delete.gif" border="0"/></a>
+							<a href="javascript:editMsg(#bulletinID#);" title="Edit"><img src="/common/images/admin/icon_edit.gif" border="0"/></a>&nbsp;
+							<a href="javascript:deleteMsg(#bulletinID#);" title="Delete"><img src="/common/images/admin/icon_delete.gif" border="0"/></a>
 						</Cfif>
 					</td>
 				</tr>	
