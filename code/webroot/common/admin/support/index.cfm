@@ -8,11 +8,11 @@
 <cfset ThisQueryString=CGI.QUERY_STRING>
 
 <cfif supportaction IS "1">
-	<p><strong>Documentation</strong></p>
+	<!---<p><strong>Documentation</strong></p>
 	
 	<UL>
 	<LI><a href="/common/admin/documentation/CMS_Instructions.pdf" target="_blank">CMS Overview</a></li>
-	</UL>
+	</UL> --->
 
 	<!--- Display Form and submit to self --->
 	<p><strong>Submit a support request</strong></p>
