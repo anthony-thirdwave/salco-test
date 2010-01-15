@@ -278,9 +278,9 @@
 					</table>
 					<BR>
 					<div class="RuleDotted1"></div>
-					<div>
-						<input type="button" name="ButCancel" value="Cancel" onClick="history.back()" title="Cancel this edit and go to the previous page.">
-						<input type="submit" name="ButSubmit" value="Save">
+					<div class="butContainerWysiwyg">
+						<input type="button" class="cxlBut2"  name="ButCancel" value="" onClick="history.back()" title="Cancel this edit and go to the previous page.">
+					    <input type="image" src="/common/images/admin/button_save.png" name="ButSubmit2" value="Save" />
 					</div>
 				</div>
 			</div>
@@ -343,8 +343,8 @@
 					<BR>
 					<div class="RuleDotted1"></div>
 					<div>
-						<input type="button" name="ButCancel" value="Cancel" onClick="history.go(-2)" title="Cancel this edit and go to the previous page.">
-						<input type="submit" name="ButSubmit" value="Save">
+						<input type="button" class="cxlBut2" name="ButCancel" value="Cancel" onClick="history.go(-2)" title="Cancel this edit and go to the previous page.">
+						<input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" value="Save">
 					</div>
 				</div>
 			</div>
@@ -469,7 +469,7 @@
 		</cfoutput>
 		<cfif MyCategory.ValidateDelete()>
 			<cfoutput><P>Are you sure you want to delete the Category "#MyCategory.GetProperty('CategoryName')#" and its associated localized records from both staging and production?</P></cfoutput>
-			<input type="submit" value="Delete">
+			<input type="image" src="/common/images/admin/button_delete.png" value="Delete">
 		<cfelse>
 			<cfoutput><P>You cannot delete the Category "#MyCategory.GetProperty('CategoryName')#" since it still contains content.</P></cfoutput>
 		</cfif>

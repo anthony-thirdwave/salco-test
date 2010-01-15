@@ -248,7 +248,7 @@
 						<td><cfif 0><cfif labelindex IS NOT "1"><input type="submit" name="butup" value="Move Up"></cfif><BR>
 						<cfif labelindex IS NOT getLabels.recordcount><input type="submit" name="butdown" value="Move Down"></cfif></cfif>
 						</TD><TD nowrap>
-						<cfif ATTRIBUTES.AllowEdit><input type="submit" name="butSub" value="Edit"></cfif>
+						<cfif ATTRIBUTES.AllowEdit><input type="image" src="/common/images/admin/button_edit.png" name="butSub" value="Edit"></cfif>
 						<cfif AllowDelete>
 							<input type="button" value="Delete" onclick="window.location='index.cfm?dlid=#URLencodedFOrmat(Encrypt(LabelID,APPLICATION.Key))#&labelGroupID=#LabelGroupID#'">
 						</cfif>
@@ -264,7 +264,7 @@
 					<cfif (Right(getLabels.LabelCode[labelindex],2) IS "_S" AND getLabels.LabelGroupID[labelindex] IS "10")>
 						<cfset bThisEdit="No">
 					<cfelse>
-						<cfif bEdit OR NOT ATTRIBUTES.AllowEdit>&nbsp;<Cfelse><input type="button" value="Edit" onclick="window.location='index.cfm?labelId=#getLabels.LabelId[labelindex]#'"></cfif>
+						<cfif bEdit OR NOT ATTRIBUTES.AllowEdit>&nbsp;<Cfelse><input type="button" class="EditButs" value="" onclick="window.location='index.cfm?labelId=#getLabels.LabelId[labelindex]#'"></cfif>
 					</cfif>
 					</td>
 				</tr>
@@ -281,7 +281,7 @@
 				<input type="hidden" name="labelId" value="0">
 				<tr>
 					<td><input type="text" size="24" maxlength="128" name="labelName"></td><TD></TD>
-					<td><input type="submit" value="Add"></td>
+					<td><input type="image" src="/common/images/admin/button_add.png" value="Add"></td>
 				</tr>
 			</form>
 		</cfif>

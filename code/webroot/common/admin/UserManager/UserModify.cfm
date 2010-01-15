@@ -59,7 +59,7 @@
 				<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
 				<cfoutput><form action="#PageActionTemplate#?#querystring#" method="post"></cfoutput>
 				<cfinclude template="/common/modules/user/userForm.cfm">
-				<input type="submit" name="ButSubmit" value="Save">
+				<input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" value="Save">
 				</form>
 				</TD></TR></table>
 			</cfcase>
@@ -86,7 +86,7 @@
 				<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
 				<cfoutput><form action="#PageActionTemplate#?#querystring#" method="post"></cfoutput>
 				<cfinclude template="/common/modules/user/userForm.cfm">
-				<input type="submit" name="ButSubmit" value="Save">
+				<input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" value="Save">
 				</form>
 				</TD></TR></table>
 				

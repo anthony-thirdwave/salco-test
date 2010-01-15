@@ -34,7 +34,7 @@
 
 <cfset lid=Encrypt(SESSION.AdminCurrentAdminLocaleID,APPLICATION.Key)>
 <table width="940" cellpadding="0" cellspacing="0" border="0">
-<TR valign="top"><TD width="275">
+<tr valign="top"><td width="275">
 <div class="dashModuleNormal">
 
 	<div class="box2">
@@ -57,7 +57,7 @@
 	</div>
 
 </div>
-</TD><TD width="665" style="padding-left:10px;">
+</td><td width="665" style="padding-left:10px;">
 
 <div class="tablist">
 	<div class="tab1">
@@ -116,94 +116,106 @@
 		</div>
 		<div style="background-color:white">&nbsp;
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
-		<TR valign="top">
-			<TD class="datatitle1">Page:</TD>
-			<TD class="datacontent1">#CategoryName#</TD>
-		</TR>
+        <tr>
+        	<td valign="top">
+            <table width="200" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
+        <tr valign="top" align="left" class="firstC">
+			<td class="datatitle1">Page:</td>
+			<td class="datacontent1">#CategoryName#</td>
+		</tr>
 		
 		<cfif CategoryAlias IS NOT "">
-			<TR valign="top">
-				<TD class="datatitle1">Alias:</TD>
-				<td class="datacontent1">#CategoryAlias#</TD>
-			</TR>
+			<tr valign="top">
+				<td class="datatitle1">Alias:</td>
+				<td class="datacontent1">#CategoryAlias#</td>
+			</tr>
 		</cfif>
-		<TR valign="top">
-			<TD class="datatitle1">Type:</TD>
-			<td class="datacontent1">#CategoryTypeName#</TD>
-		</TR>
+		<tr valign="top">
+			<td class="datatitle1">Type:</td>
+			<td class="datacontent1">#CategoryTypeName#</td>
+		</tr>
 		
-		<TR valign="top">
-			<TD class="datatitle1">Active:</TD>
-			<td class="datacontent1">#YesNoFormat(CategoryActive)#</TD>
-		</TR>
+		<tr valign="top">
+			<td class="datatitle1">Active:</td>
+			<td class="datacontent1">#YesNoFormat(CategoryActive)#</td>
+		</tr>
 		<cfif CategoryURL IS NOT "">
-			<TR valign="top">
-				<TD class="datatitle1">Override URL:</TD>
-				<td class="datacontent1">#CategoryURL#</TD>
-			</TR>
+			<tr valign="top">
+				<td class="datatitle1">Override URL:</td>
+				<td class="datacontent1">#CategoryURL#</td>
+			</tr>
 		</cfif>
 		
+		<cfif 0>
+			<tr valign="top">
+				<td class="datatitle1"><strong>LOCAL DETAILS</strong></td>
+				<td class="datacontent1"></td>
+			</tr>
+			<cfset LocaleCategoryPresent="0">
+			<cfoutput group="CategoryLocaleID">
+				<cfif LocaleID IS SESSION.AdminCurrentAdminLocaleID>
+					<cfset LocaleCategoryPresent="1">
+					<tr valign="top">
+						<td class="datatitle1">Page Name:</td>
+						<td class="datacontent1"><cfif CategoryLocaleName IS "">#CategoryName# (using same as Master)<cfelse>#CategoryLocaleName#</cfif></td>
+					</tr>
+					<tr valign="top">
+						<td class="datatitle1">Name:</td>
+						<td class="datacontent1">#YesNoFormat(CategoryLocaleActive)#</td>
+					</tr>
+				</cfif>
+			</cfoutput>
+			<cfif LocaleCategoryPresent is "0">
+				<tr valign="top">
+					<td class="datatitle1">Page Name:</td>
+					<td class="datacontent1">no localized details present</td>
+				</tr>
+				<tr valign="top">
+					<td class="datatitle1">Name:</td>
+					<td class="datacontent1">no localized details present</td>
+				</tr>
+			</cfif>
+		</cfif>
+        </table>
+        </td>
+        <td valign="top">
+        <table  border="0" cellspacing="0" cellpadding="0" bgcolor="white">
+        <!-- second column -->
 		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Category"
 			KeyID="#CategoryID#"
 			Operation="create">
 			
-		<TR valign="top">
-			<TD class="datatitle1">Created:</TD>
-			<td class="datacontent1">#ReturnString#</TD>
-		</TR>
+		<tr valign="top">
+			<td class="datatitle1">Created:</td>
+			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
+		</tr>
 		
 		<cfinvoke component="com.utils.tracking" method="GetPageLastModified" returnVariable="ReturnString"
 			CategoryID="#CategoryID#">
 			
-		<TR valign="top">
-			<TD class="datatitle1">Last Updated:</TD>
-			<td class="datacontent1">#ReturnString#</TD>
-		</TR>
+		<tr valign="top">
+			<td class="datatitle1">Last Updated:</td>
+			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
+		</tr>
 		
 		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Category"
 			KeyID="#CategoryID#"
 			Operation="savelive">
 			
-		<TR valign="top">
-			<TD class="datatitle1">Last Saved Live:</TD>
-			<td class="datacontent1">#ReturnString#</TD>
-		</TR>
-		
-		<cfif 0>
-			<TR valign="top">
-				<TD class="datatitle1"><strong>LOCAL DETAILS</strong></TD>
-				<td class="datacontent1"></TD>
-			</TR>
-			<cfset LocaleCategoryPresent="0">
-			<cfoutput group="CategoryLocaleID">
-				<cfif LocaleID IS SESSION.AdminCurrentAdminLocaleID>
-					<cfset LocaleCategoryPresent="1">
-					<TR valign="top">
-						<TD class="datatitle1">Page Name:</TD>
-						<td class="datacontent1"><cfif CategoryLocaleName IS "">#CategoryName# (using same as Master)<cfelse>#CategoryLocaleName#</cfif></TD>
-					</TR>
-					<TR valign="top">
-						<TD class="datatitle1">Name:</TD>
-						<td class="datacontent1">#YesNoFormat(CategoryLocaleActive)#</TD>
-					</TR>
-				</cfif>
-			</cfoutput>
-			<cfif LocaleCategoryPresent is "0">
-				<TR valign="top">
-					<TD class="datatitle1">Page Name:</TD>
-					<td class="datacontent1">no localized details present</TD>
-				</TR>
-				<TR valign="top">
-					<TD class="datatitle1">Name:</TD>
-					<td class="datacontent1">no localized details present</TD>
-				</TR>
-			</cfif>
-		</cfif>
+		<tr valign="top">
+			<td class="datatitle1">Last Saved Live:</td>
+			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
+		</tr>
+		<!-- end second column -->
+        </table>
+        </td>
+        
 	</cfoutput>
 		
-		
+			
+            
 		
 	</table>
 	&nbsp;
@@ -243,7 +255,7 @@
 		&nbsp;
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<cfoutput>
-		<TR><TD>
+		<tr><td>
 		<cfswitch expression="#MVEid#">
 			<cfcase value="1">
 				<cfif ListFind("71,73,67",GetCategoryDetails.CategoryTypeID)>
@@ -277,13 +289,13 @@
 				<p>Please select a category from the left.</p>
 			</cfdefaultcase>
 		</cfswitch>
-		</TD></TR></table>
+		</td></tr></table>
 		</cfoutput>
 	</cfif>
 	</div>
 </cfif>
 
-</TD></TR>
+</td></tr>
 </table>
 
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm">

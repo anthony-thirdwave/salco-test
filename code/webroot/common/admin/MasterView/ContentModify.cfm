@@ -517,20 +517,20 @@
 				</cfswitch>
 				<cfinclude template="/common/modules/ContentManager/ContentLocale/form.cfm">
 				</table>
-				<BR>
+		    <BR>
 				<div class="RuleDotted1"></div>
-				<div>
+				<div class="butContainerWysiwyg">
 					<CF_Venn
 						ListA="HTML,HTMLTemplate,sHTML"
 						ListB="#MyContentLocale.GetRestrictionsPropertyList()#"
 						AandB="TestList">
 					<cfif ListLen(TestList) GT "0">
-						<input type="submit" name="ButProcess" value="Process" title="If there are any images or documents linked to in the content areas, press this button for the CMS to prompt you to upload them.">
+						<input type="image" src="/common/images/admin/button_process.png" name="ButProcess" value="Process" title="If there are any images or documents linked to in the content areas, press this button for the CMS to prompt you to upload them.">
 					</cfif>
-					<input type="submit" name="ButPreview" value="Preview" title="Preview this content in the site layout without saving changes to database.">
-					&nbsp;&nbsp;&nbsp;
-					<input type="button" name="ButCancel" value="Cancel" onClick="window.location = '/common/admin/MasterView/index.cfm?MVEid=1&mvcid=<cfoutput>#MyContent.GetProperty('CategoryID')#</cfoutput>'" title="Cancel this edit and go to the Content Manager.">
-					<input type="submit" name="ButSubmit" id="ButSubmit" value="Save" title="Save this content element to the database.">
+					<input type="image" src="/common/images/admin/button_preview.png" name="ButPreview" value="Preview" title="Preview this content in the site layout without saving changes to database.">
+					<input type="button" name="ButCancel2"  onclick="window.location='/common/admin/MasterView/index.cfm?MVEid=1&mvcid=<cfoutput>#MyContent.GetProperty('CategoryID')#</cfoutput>'" class="cxlBut" title="Cancel this edit and go to the Content Manager." />
+			      <input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" id="ButSubmit" value="Save" title="Save this content element to the database.">
+                  <span class="clearit"></span>
 				</div>
 			</div>
 		</div>
@@ -593,8 +593,8 @@
 				<BR>
 				<div class="RuleDotted1"></div>
 				<div>
-					<input type="button" name="ButCancel" value="Cancel" onClick="window.location = '/common/admin/MasterView/index.cfm?MVEid=1&mvcid=<cfoutput>#MyContent.GetProperty('CategoryID')#</cfoutput>'" title="Cancel this edit and go to the Content Manager.">
-					<input type="submit" name="ButSubmit" id="ButSubmit" value="Save">
+					<input type="button" class="cxlBut2" name="ButCancel" value="Cancel" onClick="window.location = '/common/admin/MasterView/index.cfm?MVEid=1&mvcid=<cfoutput>#MyContent.GetProperty('CategoryID')#</cfoutput>'" title="Cancel this edit and go to the Content Manager.">
+					<input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" id="ButSubmit" value="Save">
 				</div>
 			</div>
 		</div>
@@ -745,7 +745,7 @@
 			<form action="#Location#?#querystring#" method="post">
 		</cfoutput>
 		<cfoutput><P>Are you sure you want to delete the content "#MyContent.GetProperty('ContentName')#" from the site? Any associated localized content records will be deleted. In addition, if this content element is repeated elsewhere on the site, those instances will be deleted as well.</P></cfoutput>
-		<input type="submit" value="Delete">
+		<input type="image" src="/common/images/admin/button_delete.png" value="Delete">
 		</form>
 	</cfcase>
 	<cfcase value="CommitDelete">

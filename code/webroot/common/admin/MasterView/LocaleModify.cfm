@@ -82,11 +82,11 @@
 		<cfinclude template="/common/modules/ContentManager/Locale/form.cfm">
 		</table></TD></TR>
 		<TR><TD bgcolor="white">
-		<div align="right"><input type="submit" name="ButSubmit" value="Apply"></div></form>
+		<div align="right"><input type="image" src="/common/images/admin/button_apply.png" name="ButSubmit" value="Apply"></div></form>
 		
 		
 		<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="SaveToProduction">
-			<p align="right"><form action="#Location#?#querystring#" method="post"><input type="submit" value="Save Settings to Production"></form></p>
+			<p align="right"><form action="#Location#?#querystring#" method="post"><input type="image" src="/common/images/admin/button_saveSetProd.png" value="Save Settings to Production"></form></p>
 		</TD></TR></table>
 	</cfcase>
 	<cfcase value="ValidateEdit,ValidateAdd">
@@ -120,7 +120,7 @@
 		<cfelse>
 			<cfoutput><input type="hidden" name="PageAction" value="#PageAction#"></cfoutput>
 		</cfif>
-		<div align="right"><input type="submit" name="ButSubmit" value="Apply"></div>
+		<div align="right"><input type="image" src="/common/images/admin/button_apply.png" name="ButSubmit" value="Apply"></div>
 		</TD></form></TR></table>
 	</cfcase>
 	<cfcase value="CommitAdd,CommitEdit">
@@ -137,7 +137,7 @@
 		</cfoutput>
 		<cfif MyLocale.ValidateDelete()>
 			<cfoutput><P>Are you sure you want to delete the Locale "#MyLocale.GetProperty('LocaleName')#" and its associated localized records from both staging and production?</P></cfoutput>
-			<input type="submit" value="Delete">
+			<input type="image" src="/common/images/admin/button_delete.png" value="Delete">
 		<cfelse>
 			<cfoutput><P>You cannot delete the Locale "#MyLocale.GetProperty('LocaleName')#" since it still contains content.</P></cfoutput>
 		</cfif>
@@ -163,9 +163,9 @@
 		<cfset querystring=GetToken(FormAction,2,"?")>
 		<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="Edit">
 		<cfoutput>
-			<p align="right"><form action="#Location#?#querystring#" method="post"><input type="submit" value="Edit"></form>
+			<p align="right"><form action="#Location#?#querystring#" method="post"><input type="image" src="/common/images/admin/button_edit.png" value="Edit"></form>
 			<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="SaveToProduction">
-			<form action="#Location#?#querystring#" method="post"><input type="submit" value="Save Settings to Production"></form></p>
+			<form action="#Location#?#querystring#" method="post"><input type="image" src="../../images/admin/button_saveSetProd.png" value="Save Settings to Production"></form></p>
 		</cfoutput>
 		</table>
 	</cfcase>

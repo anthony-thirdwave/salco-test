@@ -227,7 +227,7 @@
 					<option value="SaveMajor" <cfif SaveType IS "SaveMajor">selected</cfif>>Save as New Major Version</option>
 				</select>
 			</cfif>
-			<input type="submit" name="ButSubmit" value="Apply">
+			<input type="image" src="/common/images/admin/button_apply.png" name="ButSubmit" value="Apply">
 		</div>
 		</TD></form>
 		<cfif PageAction IS NOT "add">
@@ -260,7 +260,7 @@
 					<option value="SaveMajor" <cfif SaveType IS "SaveMajor">selected</cfif>>Save as New Major Version</option>
 				</select>
 			</cfif>
-			<input type="submit" name="ButSubmit" value="Apply">
+			<input type="image" src="/common/images/admin/button_apply.png" name="ButSubmit" value="Apply">
 		</div>
 		</TD></form>
 		<cfif PageAction IS NOT "ValidateAdd">
@@ -367,7 +367,7 @@
 			<form action="#Location#?#querystring#" method="post">
 		</cfoutput>
 		<cfoutput><P>Are you sure you want to delete the resource "#MyCategory.GetProperty('CategoryName')#" and its associated files?</P></cfoutput>
-		<input type="submit" value="Delete">
+		<input type="image" src="/common/images/admin/button_delete.png" value="Delete">
 		</form>
 	</cfcase>
 	<cfcase value="CommitDelete">

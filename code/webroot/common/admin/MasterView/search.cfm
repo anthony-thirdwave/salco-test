@@ -16,7 +16,7 @@
 				<option value="#LocaleID#" <cfif SESSION.AdminCurrentAdminLocaleID IS LocaleID>selected</cfif>>#LocaleName#</option>
 			</cfoutput>
 	      </select>
-	      <input class="button" name="submit" type="submit" value="Switch Locale">
+	      <input class="button" name="submit" type="image" src="/common/images/admin/button_switchlocale.png" value="Switch Locale">
 		</cfif>
    </TD> </form>
 	<cfoutput>
