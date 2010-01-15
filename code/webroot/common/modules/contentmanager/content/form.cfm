@@ -147,8 +147,8 @@
 	<TD bgcolor="white"></TD><TD nowrap bgcolor="white" class="allcaps">
 		Display on page<cfif FormMode EQ "ShowForm"> <a href="javascript:openChooser();">[choose]</a></cfif>
 		<cfif FormMode EQ "ShowForm">
-			<div id="pageChooser" style="display:none; border:1px solid black; width:400px; background-color:#FFFFCC; position:absolute; z-index:1;/*overflow: inherit;*/ white-space:normal;">
-				<div style="width:100%; text-align:right; font-weight:bold;"><a href="javascript:closeChooser();"><img src="/common/images/admin/icon_delete.gif" style="padding:2px;" border="0"/></a></div>
+			<div id="pageChooser" style="display:none; border:1px solid black; width:400px; background-color:#FFFFCC; position:absolute; z-index:1;/*overflow: inherit;*/ white-space:normal; margin:16px 0px 0px -142px;">
+				<div style="width:100%; text-align:right; font-weight:bold;"><a href="javascript:closeChooser();"><img src="/common/images/admin/icon_delete.gif" style="margin:5px;" border="0"/></a></div>
 				<cfmodule template="/common/modules/admin/menu/menuAjax.cfm" 
 					mvcid="#MyContent.GetProperty('CategoryID')#" 
 					isAutoCollapse="1" 
