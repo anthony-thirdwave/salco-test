@@ -303,4 +303,304 @@
 	}
 	</cfscript>
 
+
+		
+	
+	<!--- returns a spelled out number --->
+	<cffunction name="getNumberAsWords">
+		<cfargument name="theNum" type="numeric" required="true">
+		<cfargument name="getAsOrdinal" type="boolean" default="false">
+	
+		<cfset var local = structNew() />
+		
+		<!--- only handles positive numbers under 100,000 and rounds floats --->
+		<cfif arguments.theNum gt 99999 or arguments.theNum lt 0>
+			<cfreturn arguments.theNum />
+		<cfelse>
+			<cfset arguments.theNum = round(arguments.theNum) />
+		</cfif>
+		
+		<!--- create some variables which will be used based upon how large the number is --->
+		<cfset local.ones = right(arguments.theNum,1) />
+		
+		<cftry>
+			<cfset local.tens = mid(arguments.theNum, len(arguments.theNum) -1, 1) />
+			<cfset local.teens = right(arguments.theNum, 2) />
+			<cfset local.hundreds = mid(arguments.theNum, len(arguments.theNum) -2, 1) />
+			<cfset local.thousands = mid(arguments.theNum, len(arguments.theNum) - 3, 1) />
+			<cfset local.tenThousands = mid(arguments.theNum, len(arguments.theNum) - 4, 1) />
+			<cfset local.tenThousandTeens = mid(arguments.theNum, len(arguments.theNum) - 4, 2) />
+			<cfcatch>
+				<!--- do nothing --->
+			</cfcatch>
+		</cftry>
+			
+		<!--- dashes for twenty-one through ninety-nine --->
+		<cfif not local.ones or (structKeyExists(local, "tens") and not local.tens)>
+			<cfset local.tensDash = "" />
+		<cfelse>
+			<cfset local.tensDash = "-" />
+		</cfif>
+		
+		<!--- only display " hundred " where needed --->
+		<cfif structKeyExists(local, "hundreds") and local.hundreds>
+			<cfset local.hundredsHolder = " hundred " />
+		<cfelse>
+			<cfset local.hundredsHolder = "" />
+		</cfif>
+		
+		<!--- only display " thousand " where needed --->
+		<cfif structKeyExists(local, "thousands") and local.thousands or structKeyExists(local, "tenThousands") and local.tenThousands>
+			<cfset local.thousandsHolder = " thousand " />
+		<cfelse>
+			<cfset local.thousandsHolder = "" />
+		</cfif>
+		
+		<!--- dashes for twenty-one through ninety-nine thousand --->
+		<cfif (structKeyExists(local, "thousands") and not local.thousands) or (structKeyExists(local, "tenThousands") and not local.tenThousands)>
+			<cfset local.tenThousandsDash = "" />
+		<cfelse>
+			<cfset local.tenThousandsDash = "-" />
+		</cfif>
+		
+		<!--- we'll always have a onesString   --->
+		<cfif local.ones eq 0 and not structKeyExists(local, "tens") >
+			<cfif not arguments.getAsOrdinal>
+				<cfset local.onesString = "zero" />
+			<cfelse>
+				<cfset local.onesString = "zeroth" />
+			</cfif>
+		<cfelse>
+			<!--- this always uses the passed getAsOrdinal value --->
+			<cfset local.onesString = ones(local.ones, arguments.getAsOrdinal) />
+		</cfif>
+		
+		<!--- try to format the tens column --->
+		<cftry>
+			
+			<!--- if no ones, then pass the getAsOrdinal boolean --->
+			<cfif not len(trim(local.onesString)) or (structKeyExists(local, "tens") and local.tens eq 1)>
+				<cfset local.tensOrdinals = arguments.getAsOrdinal />
+			<cfelse>
+				<cfset local.tensOrdinals = false />
+			</cfif>
+			
+			<!--- decide between tens and teens --->
+			<cfif local.tens eq 1>
+				<cfset local.tensString = teens(local.teens, local.tensOrdinals) />
+			<cfelse>
+				<cfset local.tensString = tens(local.tens, local.tensOrdinals) & local.tensDash & local.onesString />
+			</cfif>
+			
+			<cfcatch>
+				<!--- return a string version of a number less than 100 --->
+				<cfif arguments.theNum lt 10>
+					<cfreturn trim(local.onesString) />
+				<cfelse><!--- else, there was a problem, return the original value --->
+					<cfreturn arguments.theNum />
+				</cfif>
+			</cfcatch>
+		</cftry>
+		
+		<!--- try to format the hundreds column --->
+		<cftry>
+			
+			<!--- if no tens and getAsOrdinal, display with "th" --->
+			<cfif not len(trim(local.tensString)) and arguments.getAsOrdinal and len(trim(local.hundredsHolder))>
+				<cfset local.hundredsString = ones(local.hundreds) & " hundredth" />
+			<cfelse>
+				<cfset local.hundredsString = ones(local.hundreds) & local.hundredsHolder & local.tensString />
+			</cfif>
+			
+			<cfcatch>
+				<!--- return a string version of a number less than 100 --->
+				<cfif arguments.theNum lt 100>
+					<cfreturn trim(local.tensString) />
+				<cfelse> <!--- else, there was a problem, return the original value --->
+					<cfreturn arguments.theNum />
+				</cfif>
+			</cfcatch>
+		</cftry>
+		
+		<!--- try to format the thousands column --->
+		<cftry>
+			
+			<!--- if no hundreds and getAsOrdinal, display with "th" --->
+			<cfif not len(trim(local.hundredsString)) and arguments.getAsOrdinal>
+				<cfset local.thousandsHolder = " thousandth" />
+			</cfif>
+		
+			<cfset local.thousandsString = ones(local.thousands) & local.thousandsHolder & local.hundredsString />
+			
+			<cfcatch>
+				<!--- return a string version of a number less than 1000 --->
+				<cfif arguments.theNum lt 1000>
+					<cfreturn trim(local.hundredsString) />
+				<cfelse> <!--- else, there was a problem, return the original value --->
+					<cfreturn arguments.theNum />
+				</cfif>
+			</cfcatch>
+		</cftry>
+		
+		<!--- try to format the tenThousands column --->
+		<cftry>
+			
+			<cfif local.tenThousands eq 1>
+				<cfset local.tenThousandsString = teens(local.tenThousandTeens) & local.thousandsString />
+			<cfelse>
+				<cfset local.tenThousandsString = tens(local.tenThousands) & local.tenThousandsDash & local.thousandsString />
+			</cfif>
+		
+			<cfcatch>
+				<!--- return a string version of a number less than 10000 --->
+				<cfif arguments.theNum lt 10000>
+					<cfreturn trim(local.thousandsString) />
+				<cfelse> <!--- else, there was a problem, return the original value --->
+					<cfreturn arguments.theNum />
+				</cfif>
+			</cfcatch>
+		</cftry>
+		
+		<!--- this is a high as we go --->
+		<cfreturn trim(local.tenThousandsString) />
+	</cffunction>
+
+	<cffunction name="ones">
+		<cfargument name="num" type="numeric">
+		<cfargument name="getAsOrdinal" type="boolean" default="false">
+		
+		<cfset var local = structNew() />
+		
+		<cfsavecontent variable="local.numAsString">
+			<cfif not arguments.getAsOrdinal>
+				<cfswitch expression="#arguments.num#">
+					<cfcase value="1">one</cfcase>
+					<cfcase value="2">two</cfcase>
+					<cfcase value="3">three</cfcase>
+					<cfcase value="4">four</cfcase>
+					<cfcase value="5">five</cfcase>
+					<cfcase value="6">six</cfcase>
+					<cfcase value="7">seven</cfcase>
+					<cfcase value="8">eight</cfcase>
+					<cfcase value="9">nine</cfcase>
+				</cfswitch>
+			<cfelse>
+				<cfswitch expression="#arguments.num#">
+					<cfcase value="1">first</cfcase>
+					<cfcase value="2">second</cfcase>
+					<cfcase value="3">third</cfcase>
+					<cfcase value="4">fourth</cfcase>
+					<cfcase value="5">fifth</cfcase>
+					<cfcase value="6">sixth</cfcase>
+					<cfcase value="7">seventh</cfcase>
+					<cfcase value="8">eighth</cfcase>
+					<cfcase value="9">ninth</cfcase>
+				</cfswitch>
+			</cfif>
+		</cfsavecontent>
+		
+		<cfreturn trim(local.numAsString) />
+	</cffunction>
+	
+	
+	<cffunction name="tens">
+		<cfargument name="num" type="numeric">
+		<cfargument name="getAsOrdinal" type="boolean" default="false">
+		
+		<cfset var local = structNew() />
+		
+		<cfsavecontent variable="local.numAsString">
+			<cfif not arguments.getAsOrdinal>
+				<cfswitch expression="#arguments.num#">
+					<cfcase value="1">ten</cfcase>
+					<cfcase value="2">twenty</cfcase>
+					<cfcase value="3">thirty</cfcase>
+					<cfcase value="4">forty</cfcase>
+					<cfcase value="5">fifty</cfcase>
+					<cfcase value="6">sixty</cfcase>
+					<cfcase value="7">seventy</cfcase>
+					<cfcase value="8">eighty</cfcase>
+					<cfcase value="9">ninety</cfcase>
+				</cfswitch>
+			<cfelse>
+				<cfswitch expression="#arguments.num#">
+					<cfcase value="1">tenth</cfcase>
+					<cfcase value="2">twentieth</cfcase>
+					<cfcase value="3">thirtieth</cfcase>
+					<cfcase value="4">fortieth</cfcase>
+					<cfcase value="5">fiftieth</cfcase>
+					<cfcase value="6">sixtieth</cfcase>
+					<cfcase value="7">seventieth</cfcase>
+					<cfcase value="8">eightieth</cfcase>
+					<cfcase value="9">ninetieth</cfcase>
+				</cfswitch>
+			</cfif>
+		</cfsavecontent>
+		
+		<cfreturn trim(local.numAsString) />
+	</cffunction>
+	
+	<cffunction name="teens">
+		<cfargument name="num" type="numeric">
+		<cfargument name="getAsOrdinal" type="boolean" default="false">
+		
+		<cfset var local = structNew() />
+		
+		<cfsavecontent variable="local.numAsString">
+			<cfif not arguments.getAsOrdinal>
+				<cfswitch expression="#arguments.num#">
+					<cfcase value="10">ten</cfcase>
+					<cfcase value="11">eleven</cfcase>
+					<cfcase value="12">twelve</cfcase>
+					<cfcase value="13">thirteen</cfcase>
+					<cfcase value="14">fourteen</cfcase>
+					<cfcase value="15">fifteen</cfcase>
+					<cfcase value="16">sixteen</cfcase>
+					<cfcase value="17">seventeen</cfcase>
+					<cfcase value="18">eighteen</cfcase>
+					<cfcase value="19">nineteen</cfcase>
+				</cfswitch>
+			<cfelse>
+				<cfswitch expression="#arguments.num#">
+					<cfcase value="10">tenth</cfcase>
+					<cfcase value="11">eleventh</cfcase>
+					<cfcase value="12">twelveth</cfcase>
+					<cfcase value="13">thirteenth</cfcase>
+					<cfcase value="14">fourteenth</cfcase>
+					<cfcase value="15">fifteenth</cfcase>
+					<cfcase value="16">sixteenth</cfcase>
+					<cfcase value="17">seventeenth</cfcase>
+					<cfcase value="18">eighteenth</cfcase>
+					<cfcase value="19">nineteenth</cfcase>
+				</cfswitch>
+			</cfif>
+		</cfsavecontent>
+		
+		<cfreturn trim(local.numAsString) />
+	</cffunction>
+
+	<!--- convert a number to an ordinal --->
+	<cffunction name="getNumberAsOrdinal" returntype="string">
+		<cfargument name="num" type="numeric">
+		
+		<cfset var local = structNew() />
+		<cfset local.numAsOrdinal = "" />
+		
+		<!--- get the last two digits --->
+		<cfset local.lastTwo = right(arguments.num, 2) />
+		
+		<!--- determine the suffix --->
+		<cfif right(local.lastTwo, 1) eq 1 and local.lastTwo neq 11>
+			<cfset local.numAsOrdinal = arguments.num & "st" />
+		<cfelseif right(local.lastTwo, 1) eq 2 and local.lastTwo neq 12>
+			<cfset local.numAsOrdinal = arguments.num & "nd" />
+		<cfelseif right(local.lastTwo, 1) eq 3 and local.lastTwo neq 13>
+			<cfset local.numAsOrdinal = arguments.num & "rd" />
+		<cfelse>
+			<cfset local.numAsOrdinal = arguments.num & "th" />
+		</cfif>
+		
+		<cfreturn trim(local.numAsOrdinal) />
+	</cffunction>
+
 </cfcomponent>

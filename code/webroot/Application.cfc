@@ -100,6 +100,10 @@
 			<cfset onSessionStart() />
 		</cfif>
 		
+		<!--- lock the session scope here to make sure session not accessed in odd state by asynchronous requests. --->
+		<cflock scope="SESSION" type="exclusive" timeout="10">
+		</cflock>
+		
 		<cfset REQUEST.GlobalNavURLPrefix = "">
 		<!--- if in secure, make sure nav links exit secure --->
 		<cfif (CGI.SERVER_PORT EQ 443 or CGI.HTTP_Host neq CGI.SERVER_NAME) and APPLICATION.Production>

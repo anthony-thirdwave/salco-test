@@ -30,21 +30,37 @@
 		<cfset session.sessionID = CreateUUID()>
 
 		<!--- Pull the browser information into session scope  --->
-		<CF_BrowserCheck>
+		<cftry>
+			<CF_BrowserCheck>
+			<cfcatch>
+			</cfcatch>
+		</cftry>
 		
-		<cfif BC_BROWSER CONTAINS "MSIE">
-			<cfset session.CurrentBrowserApp="IE">
+		<cfif isDefined("BC_BROWSER")>
+			<cfif BC_BROWSER contains "MSIE">
+				<cfset session.CurrentBrowserApp="IE" />
+			<cfelse>
+				<cfset session.CurrentBrowserApp="NS" />
+			</cfif>
 		<cfelse>
-			<cfset session.CurrentBrowserApp="NS">
+			<cfset session.CurrentBrowserApp = "Unknown" />
 		</cfif>
 		
-		<cfif BC_OS CONTAINS "mac">
-			<cfset session.CurrentOS="Mac">
+		<cfif isDefined("BC_OS")>
+			<cfif BC_OS contains "mac">
+				<cfset session.CurrentOS="Mac">
+			<cfelse>
+				<cfset session.CurrentOS="PC">
+			</cfif>
 		<cfelse>
-			<cfset session.CurrentOS="PC">
+			<cfset session.CurrentOS = "Unknown" />
 		</cfif>
 		
-		<cfset session.CurrentBrowserVersion=BC_VERSION>
+		<cfif isDefined("BC_BROWSER")>
+			<cfset session.CurrentBrowserVersion=BC_VERSION>
+		<cfelse>
+			<cfset session.CurrentBrowserVersion="0">
+		</cfif>
 
 		<!--- init User ID, login and password --->
 		<cfset session.UserID = "" />

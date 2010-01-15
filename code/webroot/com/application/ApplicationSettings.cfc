@@ -129,7 +129,7 @@
 		
 		<cfset APPLICATION.ImageFileExtensionList = ".jpg;.gif;.jpeg;.jpe;.swf;.png" />
 		<cfset APPLICATION.DocumentFileExtensionList = ".pdf;.txt;.eps;.doc;.hqx;.sea;.ppt;.mov;.zip;.sit;.indt;.mpg;.mp3;.mp4;.xls;.key" />
-		<cfset APPLICATION.MasterFileExtensionList = ListAppend(APPLICATION.ImageFileExtensionList,APPLICATION.DocumentFileExtensionList,";") />
+		<cfset APPLICATION.MasterFileExtensionList = listAppend(APPLICATION.ImageFileExtensionList,APPLICATION.DocumentFileExtensionList,";") />
 
 		<!--- This is the e-mail address to which error reports should be sent.
 		 It is possible to specify more than one address by making this a
