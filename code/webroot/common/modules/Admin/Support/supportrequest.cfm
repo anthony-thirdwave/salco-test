@@ -113,7 +113,7 @@
 				<td><input type="text" name="txtBrowser" id="txtBrowser" value="<cfoutput>#txtBrowser#</cfoutput>" maxlength="100" /></td>
 			</tr>
 			<tr>
-				<td><input class="submitButton" type="submit" value="Submit">&nbsp;</td>
+				<td><input class="submitButton" type="image" src="/common/images/admin/button_submit.png" value="Submit">&nbsp;</td>
 				<td align="right"></td>
 			</tr>
 			</form>

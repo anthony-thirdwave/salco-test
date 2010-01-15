@@ -56,8 +56,8 @@ Create a placeholder Page<br>
 <input name="qpa_PageName" value="#FORM.qpa_PageName#" style="width:340px;"><br><br>
 <strong>Select Location</strong> <a href="javascript:openChooser();">[choose]</a>
 
-<div id="pageChooser" style="display:none; border:1px solid black; width:300px; background-color:##FFFFCC; position:absolute;">
-	<div style="width:100%; text-align:right; font-weight:bold;"><a href="javascript:closeChooser();"><img src="/common/images/admin/icon_delete.gif" style="padding:2px;" border="0"/></a></div>
+<div id="pageChooser" style="display:none; border:1px solid black; width:300px; background-color:##FFFFCC; position:absolute; left: auto; margin:13px 0px 0px -139px;">
+	<div style="width:100%; text-align:right; font-weight:bold;"><a href="javascript:closeChooser();"><img src="/common/images/admin/icon_delete.gif" style="margin:4px;" border="0"/></a></div>
 	<cfmodule template="/common/modules/admin/menu/menuAjax.cfm" 
 		mvcid="-1" 
 		isAutoCollapse="1" 

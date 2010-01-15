@@ -173,7 +173,7 @@
 				<input type="hidden" name="NumItems" value="#GetCategoryList.RecordCount#">
 				<TR>
 				<td colspan="3" align="right" bgcolor="##FFFFFF">
-				<input type="image" src="/common/images/ContentManager/but_update.gif" name="ButtonSubmit2" border="0" tabindex="#Counter#">
+				<input type="image" src="/common/images/admin/button_update.png" name="ButtonSubmit2" border="0" tabindex="#Counter#">
 				</td></form>
 				<TD>&nbsp;</TD></tr>
 			</cfoutput>
