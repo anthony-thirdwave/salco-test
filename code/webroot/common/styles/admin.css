@@ -9,6 +9,13 @@ Input,Select,textarea {  font-family: Arial, Geneva, Helvetica, sans-serif; font
 
 .off {color:black}
 
+.clearit{
+clear:both;
+height:0px;
+width:0px;
+display:block;
+}
+
 body {
 background-image: url(/common/images/global/site_bg.gif);
 background-repeat: no-repeat;
@@ -43,8 +50,9 @@ background-repeat: no-repeat;
 .PageTitle {
 	font-size:20px;
 	padding-bottom:10px;
-	padding-left:10px;
+	padding-left:0px;
 	font-weight:bold;
+	color:#4a5154;
 }
 
 .FooterAdmin2, .FooterAdmin2 p {
@@ -173,18 +181,18 @@ background-repeat: no-repeat;
 .RuleSolid1 {
 	height:1px;
 	border-top:1px solid gray;
-	position:relative;
-	margin: 6px -16px 5px 0px;
-	left:-8px;
+	
+	margin: 6px -8px 5px -8px;
 	font-size:1px;
+
 }
 
 .RuleDotted1 {
 	height:1px;
 	border-top:1px dotted gray;
-	position:relative;
-	margin: 6px -16px 5px 0px;
-	left:-8px;
+	
+	margin: 6px -8px 5px -8px;
+
 	font-size:1px;
 }
 
@@ -338,9 +346,69 @@ a.progressCancel:hover
 #txtIssue{width:300px;}
 
 .submitButton {
-background:#0099ff;
-border:#0099ff solid 1px;
-color:#FFFFFF;
-font-weight:900;
-margin-top:10px;
+	color:#FFFFFF;
+	font-weight:900;
+	margin-top:10px;
 }
+
+.butContainerWysiwyg{}
+
+.butContainerWysiwyg input{
+	display:block;
+	float:left;
+	margin-right:5px;
+}
+
+.cxlBut{
+	background:url(/common/images/admin/button_cancel_correct.png) no-repeat; 
+	width:77px; 
+	height:19px; 
+	border:none;
+	margin-left:10px; 
+}
+
+.cxlBut2{
+	background:url(/common/images/admin/button_cancel_correct.png) no-repeat; 
+	width:77px; 
+	height:19px; 
+	border:none;
+
+}
+
+.EditButs{
+background: url(/common/images/admin/button_edit.png) no-repeat;
+	width:58px; 
+	height:19px; 
+	border:none;
+}
+
+.sdatacontent1{
+width:270px;}
+
+.firstC .datatitle1{
+ 	width:35px;
+}
+
+.logoutBut{
+margin-bottom:3px;
+margin-left:10px;
+
+}
+
+.adminSearchField{
+width:190px;
+height:19px;
+}
+
+.adminSearchSubmitBut{
+	margin-left:14px; 
+	margin-bottom:-4px;
+	margin-right:3px;
+}
+
+#bulletinMessageBox{
+width:260px;
+}
+
+#qpa_categoryLink_1, #catParent_categoryLink_1{
+padding-left:5px;}
