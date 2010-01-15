@@ -5,14 +5,7 @@
 	<cfoutput><base href="#REQUEST.OverrideBaseHREF#"></cfoutput>
 </cfif>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<cfparam name="URL.pff" default="0">
-<cfif Val(URL.pff)>
-	<cfsetting showdebugoutput="no">
-	<link rel="stylesheet" type="text/css" media="screen, projection" href="/common/styles/print.css" />
-	<link rel="stylesheet" type="text/css" media="print" href="/common/styles/print.css" />
-<cfelse>
-	<link rel="stylesheet" type="text/css" media="print" href="/common/styles/print.css" />
-</cfif>
+
 	<!-- import standard styles -->
 	<style type="text/css">
         @import url(/common/styles/default.css);
@@ -60,14 +53,7 @@
 	<script type="text/javascript" src="/common/scripts/sifr.js"></script>
 	<script type="text/javascript" src="/common/scripts/common.js"></script>
 </cfoutput>
-<cfif Val(URL.pff)>
-<!-- auto print window if url is pff -->
-<script type="text/javascript">
- window.onload=function(){
- 	window.print();
- }
-</script>
-</cfif>
+
 </head>
 <body><a name="top"></a>
 <!-- Main Element Container (wrapper) -->
