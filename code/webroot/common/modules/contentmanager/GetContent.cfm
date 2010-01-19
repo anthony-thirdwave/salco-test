@@ -358,7 +358,7 @@
 
 				<cfif val(GetFirstChildCategory.RecordCount) GT "0">
 					<cfif GetFirstChildCategory.CategoryAlias is not "">
-						<cflocation url="/content.cfm/#GetFirstChildCategory.CategoryAlias#" addtoken="No">
+						<cflocation url="#APPLICATION.contentPageInUrl#/#GetFirstChildCategory.CategoryAlias#" addtoken="No">
 					<cfelse>
 						<cflocation url="/content.cfm?CategoryID=#GetFirstChildCategory.CategoryID#" addtoken="No">
 					</cfif>

@@ -130,8 +130,8 @@
 							#CategoryName# (#CategoryAlias#)
 						</td>
 						<td width="320" align="right">
-							<a href="/Content.cfm?Alias=#CategoryAlias#">Preview</a>
-							<a href="/content.cfm/#CategoryAlias#" target="_blank" title="Preview in new window">+</a>
+							<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#">Preview</a>
+							<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window">+</a>
 							<cfset Location="/common/admin/MasterView/CategoryModify.cfm">
 							<cfset querystring="">
 							<cfset cid=encrypt(CategoryID,APPLICATION.KEY)>

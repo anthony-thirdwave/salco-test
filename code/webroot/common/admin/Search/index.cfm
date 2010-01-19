@@ -171,7 +171,7 @@ function doChecking(){
 			<tr>
 				<td align="left" width="13%">
 					<img src="/common/images/spacer.gif" width="10" height="1" border="0"/>
-					<a href="/content.cfm/#CategoryAlias#" target="_blank"><img src="/common/images/icon_preview.gif" hspace="2" border="0"/></a>
+					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank"><img src="/common/images/icon_preview.gif" hspace="2" border="0"/></a>
 					<a href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#"><img src="/common/images/icon_edit.gif" hspace="2" border="0"/></a>
 					<!--- <a href="##"><img src="/common/images/icon_delete.gif" hspace="2" border="0"/></a> --->
 				</td>

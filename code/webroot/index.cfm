@@ -5,4 +5,4 @@
 	</cfdefaultcase>
 </cfswitch>
 
-<cfinclude template="content.cfm">
+<cfinclude template="/content.cfm">

@@ -502,7 +502,6 @@ function Ok()
 				GetE('txtEMailSubject').value,
 				GetE('txtEMailBody').value ) ;
 			break ;
-
 		case 'inturl' :
 			sUri = GetE('txtAlias').value ;
 
@@ -511,12 +510,12 @@ function Ok()
 				alert( FCKLang.DlnLnkMsgNoUrl ) ;
 				return false ;
 			}
-
-			// Shouldn't need this, always same protocol -dk
-			// sUri = GetE('cmbLinkProtocol').value + sUri ;
 			
-			// Since it's an alias, content.cfm will look it up -dk
-			sUri = "/content.cfm/" + sUri;
+			// get how the content page is shown in the url
+			custAlias = GetE('contentPageInUrl').value;
+			
+			// add the custom alias
+			sUri = custAlias + "/" + sUri;
 
 			if( GetE('cmbTarget').value == 'popup' )
 				sUri = BuildPopupUri( sUri ) ;

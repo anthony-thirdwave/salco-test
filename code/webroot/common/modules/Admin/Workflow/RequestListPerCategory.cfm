@@ -119,7 +119,7 @@
 		<tr valign="top">
 		<td>#FromFirstName# #FromMiddleName# #FromLastName#
 			<cfif FromEmailAddress IS NOT "">
-				<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+				<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 			</cfif>
 			</td>
 		<TD>
@@ -130,7 +130,7 @@
 				<cfif RecipientLastName IS NOT "">
 					#RecipientFirstName# #RecipientMiddleName# #RecipientLastName#
 					<cfif RecipientEmailAddress IS NOT "">
-					<a href="mailto:#RecipientEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+					<a href="mailto:#RecipientEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 				</cfif>
 					<BR>
 				</cfif>

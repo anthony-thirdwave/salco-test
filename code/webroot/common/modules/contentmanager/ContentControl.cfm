@@ -109,7 +109,7 @@
 		<cfif GetSource.RecordCount IS "1">
 			<CFSET ExecuteTempFile="#GetSource.CategoryAlias#_#Val(ATTRIBUTES.PositionID)#_#APPLICATION.LocaleID#_#DateFormat(GetSource.CacheDateTime,'yyyymmdd')##TimeFormat(GetSource.CacheDateTime,'HHmmss')#.cfm">
 			<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
-				<cfhttp url="#CGI.HTTP_HOST#/content.cfm/#GetSource.CategoryAlias#" method="GET">
+				<cfhttp url="#CGI.HTTP_HOST##APPLICATION.contentPageInUrl#/#GetSource.CategoryAlias#" method="GET">
 			</cfif>
 			<cfset FileContents="<cfinclude template=""#APPLICATION.TempMapping##ExecuteTempFile#"">">
 		</cfif>
@@ -293,8 +293,8 @@
 		<cfset DisplayMode="Default">
 		<cfset NumItems="">
 		<cfset NumberOfMonths="">
-		<cfset EventDetailURL="/content.cfm/event-detail">
-		<cfset EventListingURL="/content.cfm/calendar">
+		<cfset EventDetailURL="#APPLICATION.contentPageInUrl#/event-detail">
+		<cfset EventListingURL="#APPLICATION.contentPageInUrl#/calendar">
 		<cfset ShowEventRangeID="8002">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL") and ATTRIBUTES.sContentBody.PageActionURL IS NOT "">
 			<cfset EventDetailURL="#ATTRIBUTES.sContentBody.PageActionURL#">
@@ -443,7 +443,7 @@
 		<cfset FileContents="<cfmodule template=""/common/modules/job/jobSearchForm.cfm"" ChapterID=""#APPLICATION.ChapterID#"" PageActionURL=""#PageActionURL#"">">
 	</cfcase>
 	<cfcase value="246"><!--- Job Listing --->
-		<cfset PageActionURL="/content.cfm?Page=Job_Detail">
+		<cfset PageActionURL="#APPLICATION.contentPageInUrl#/Job_Detail">
 		<cfset lStateProvince="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL") and ATTRIBUTES.sContentBody.PageActionURL IS NOT "">
 			<cfset PageActionURL=ATTRIBUTES.sContentBody.PageActionURL>

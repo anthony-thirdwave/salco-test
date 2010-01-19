@@ -26,7 +26,7 @@
 						<cfset class = "last">
 					</cfif>
 				</cfif>
-				<li<cfif class NEQ ""> class="#class#"</cfif>><a href="#REQUEST.GlobalNavURLPrefix#/content.cfm/#thisNavElem.alias#">#thisNavElem.name#</a></li>
+				<li<cfif class NEQ ""> class="#class#"</cfif>><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/#thisNavElem.alias#">#thisNavElem.name#</a></li>
 			</cfoutput>
 		</cfloop>
 	</ul>
@@ -51,7 +51,7 @@
 		<cfloop from="1" to="#ArrayLen(aMainNav)#" index="i">
 			<cfoutput>
 				<cfset thisNavElem = aMainNav[i]>
-				<li id="#thisNavElem.styleid#"<cfif ListFind(CategoryThreadList,thisNavElem.id)> class="active"</cfif>><a href="#REQUEST.GlobalNavURLPrefix#/content.cfm/#thisNavElem.alias#">#thisNavElem.name#</a></li>
+				<li id="#thisNavElem.styleid#"<cfif ListFind(CategoryThreadList,thisNavElem.id)> class="active"</cfif>><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/#thisNavElem.alias#">#thisNavElem.name#</a></li>
 			</cfoutput>
 		</cfloop>
 	</ul>

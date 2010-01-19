@@ -12,7 +12,7 @@
 		<cfif Trim(getdetail.CategoryURLDerived) iS NOT "">
 			<LI><a href="#GetDetail.CategoryURL#">#getdetail.CategoryNameDerived#</a></LI>
 		<cfelse>
-			<LI><a href="/content.cfm/#GetDetail.CategoryAlias#">#getdetail.CategoryNameDerived#</a></LI>
+			<LI><a href="#APPLICATION.contentPageInUrl#/#GetDetail.CategoryAlias#">#getdetail.CategoryNameDerived#</a></LI>
 		</cfif>
 	</cfoutput>
 </cfif>

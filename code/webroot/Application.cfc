@@ -23,7 +23,42 @@
 	<cfset this.sessiontimeout = createTimeSpan(0,1,0,0) />
 	<cfset this.datasource="#this.uniqueName#_cms_#this.siteType#" />
 	<cfset this.clientStorage="#this.uniqueName#_cms_#this.siteType#" />
+	<cfset variables.botSessionInSeconds = 2 />
+
+	<!--- bots don't keep cookies and we don't want to do this for valid users --->
+	<cfif not structKeyExists(cookie, "CFID") or structKeyExists(url, "testShortSession")>
 		
+		<!--- if no user agent or test case, set the short session timeout --->
+		<cfif not len(CGI.HTTP_USER_AGENT) or structKeyExists(url, "testShortSession")>
+			<cfset this.sessionTimeout = createTimespan(0,0,0,variables.botSessionInSeconds) />
+		<cfelse>
+		
+			<!--- get the userAgent as lowercase --->
+			<cfset variables.botUserAgent = lCase(CGI.HTTP_USER_AGENT) />
+			
+			<!--- the lists of potential bots --->
+			<cfset variables.findList = "crawl,feed,news,blog,reader,syndication,coldfusion,slurp,google,zyborg,emonitor,jeeves,yandex" />
+			<cfset variables.reFindList = "bot\b,\brss" />
+			<cfset variables.botFound = false />
+			
+			<!--- if this is a bot, set a short session timeout --->
+			<cfloop list="#findList#" index="variables.bot" delimiters=",">
+				<cfif find(variables.bot, variables.botUserAgent)>
+					<cfset this.sessionTimeout = createTimespan(0,0,0,variables.botSessionInSeconds) />
+					<cfset variables.botFound = true />
+					<cfbreak />
+				</cfif>
+			</cfloop>
+			<cfif not variables.botFound>
+				<cfloop list="#reFindList#" index="variables.bot" delimiters=",">
+					<cfif reFind(variables.bot, variables.botUserAgent)>
+						<cfset this.sessionTimeout = createTimespan(0,0,0,variables.botSessionInSeconds) />
+						<cfbreak />
+					</cfif>
+				</cfloop>
+			</cfif>
+		</cfif>
+	</cfif>
 		
 	<!--- this function gets the site type --->
 	<cffunction name="determineSiteType" returntype="string">

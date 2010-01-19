@@ -215,7 +215,7 @@
 				<td>
 					#FromFirstName# #FromMiddleName# #FromLastName# 
 					<cfif FromEmailAddress IS NOT "">
-						<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+						<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 					</cfif>
 				</td>
 				<TD><strong>#CategoryName#</strong><br>
@@ -225,11 +225,11 @@
 				
 				<!--- if this is not a facility manager request --->
 				<cfif getWF.categoryId neq 12>
-					<a href="/content.cfm/#CategoryAlias#" target="_blank" title="Preview"><img src="/common/images/admin/icon_magnify.gif" border="0"/></a>
+					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview"><img src="/common/images/admin/icon_magnify.gif" border="0"/></a>
 					<cf_AddToQueryString queryString="#QueryString#" Name="ReturnURL" value="#FormPage#?#ThisPageQueryString#">
 					<a href="#EditPage#?#QueryString#" title="Edit"><img src="/common/images/admin/icon_edit.gif" border="0"/></A>
 					<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
-					<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+					<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 				
 				<!--- else, this is a facility manager request - everything should go to the facility manager index --->
 				<cfelse>
@@ -285,7 +285,7 @@
 			<td>
 				#FromFirstName# #FromMiddleName# #FromLastName# 
 				<cfif FromEmailAddress IS NOT "">
-					<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+					<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 				</cfif>
 			</td>
 			<TD>
@@ -295,7 +295,7 @@
 				<cfoutput group="RecipientUserID">
 					<cfif RecipientLastName IS NOT "">#RecipientFirstName# #RecipientMiddleName# #RecipientLastName#
 					<cfif RecipientEmailAddress IS NOT "">
-						<a href="mailto:#RecipientEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+						<a href="mailto:#RecipientEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 					</cfif><BR></cfif>
 				</cfoutput>
 			</TD>
@@ -306,11 +306,11 @@
 			<td nowrap align="left">
 			<!--- if this is not a facility manager request --->
 			<cfif getWF.categoryId neq 12>
-				<a href="/content.cfm/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"/></a>&nbsp;
+				<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"/></a>&nbsp;
 				<cf_AddToQueryString queryString="#QueryString#" Name="ReturnURL" value="#FormPage#?#ThisPageQueryString#">
 				<a href="#EditPage#?#QueryString#" title="Edit"><img src="/common/images/admin/icon_edit.gif" border="0"/></A>
 				<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
-				<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost#/content.cfm/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+				<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 			<!--- else, this is a facility manager request - everything should go to the facility manager index --->
 			<cfelse>
 				<cf_AddToQueryString queryString="#QueryString#" Name="mvcid" value="#CategoryID#">

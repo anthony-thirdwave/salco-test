@@ -5,10 +5,10 @@
 			#APPLICATION.CompanyStreet# #APPLICATION.CompanyCity# #APPLICATION.CompanyState# #APPLICATION.CompanyZip# | #APPLICATION.CompanyPhone# 
 			</div>
             <ul>
-        <li><a href="/content.cfm/terms">terms</a></li>
-        <li><a href="/content.cfm/about-contact">contact</a></li>
-        <li><a href="/content.cfm/faqs">faqs</a></li>
-        <li><a href="/content.cfm/site-index">site index</a></li>
+        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/terms">terms</a></li>
+        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/about-contact">contact</a></li>
+        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/faqs">faqs</a></li>
+        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/site-index">site index</a></li>
     </ul>
             
 		</cfoutput>	

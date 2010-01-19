@@ -1,4 +1,4 @@
-<cfparam name="ATTRIBUTES.FormAction" default="/content.cfm/Search">
+<cfparam name="ATTRIBUTES.FormAction" default="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/Search">
 <cfparam name="sc" default="1">
 <cfset FormPath=GetToken(ATTRIBUTES.FormAction,1,"?")>
 <cfset FormQueryString=GetToken(ATTRIBUTES.FormAction,2,"?")>

@@ -66,7 +66,7 @@
         </div>
          <!-- Utility Navigation and items -->
         <div id="utilityNavigation">
-                <form id="search" action="/content.cfm/search" method="get">
+                <form id="search" action="#APPLICATION.contentPageInUrl#/search" method="get">
                 <input id="search-text" type="text" name="searchTxt"<cfif IsDefined("URL.searchTxt")> value="<cfoutput>#URL.searchTxt#</cfoutput>"</cfif> />
                 <input id="search-btn" type="image" src="/common/images/template/btn-search.gif" alt="Search" />
             </form>

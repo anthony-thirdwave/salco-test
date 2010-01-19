@@ -58,7 +58,18 @@
 		<cfset APPLICATION.GeneratorMeta = "Thirdwave MasterView" />
 		<cfset APPLICATION.GeneratorContentMeta = "MasterView by Thirdwave, LLC 312.329.1960" />
 		
+		<!--- 
+			determine how content.cfm is called - default .htaccess is formatted to deal with the following permutations
+			a) "/content.cfm" - non seo links (e.g. "http://www.thirdwavellc.com/content.cfm/about")
+			b) "" - seo links defined purely by contentAlias (e.g. "http://www.thirdwavellc.com/about")
+			c) "/yourstringhere" - any string that you want to go before the contentAlias (e.g. "http://www.thirdwavellc.com/page/about") 
+		--->
+		<cfset APPLICATION.contentPageInUrl = "page" />
 		
+		<!--- make sure non null contentPageInUrl has a leading slash --->
+		<cfif len(trim(APPLICATION.contentPageInUrl)) and left(APPLICATION.contentPageInUrl, 1) neq "/">
+			<cfset APPLICATION.contentPageInUrl = "/" & trim(APPLICATION.contentPageInUrl) />
+		</cfif>
 		
 		<cfif local.siteType eq "dev">
 		

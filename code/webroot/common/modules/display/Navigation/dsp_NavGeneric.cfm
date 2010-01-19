@@ -49,14 +49,14 @@
 					<cfset ThisHREF=Replace(CategoryURLDerived,"'","\'","All")>
 					<!--- <cfset ThisHREF="javascript:clickit(\'sdsd\');"> --->
 				<cfelse>
-					<cfset ThisHref="/content.cfm/#CategoryAlias#">
+					<cfset ThisHref="#APPLICATION.contentPageInUrl#/#CategoryAlias#">
 				</cfif>
 				<cfset ThisOLLevel=(Len(DisplayOrder)/3)-2>
 			</cfsilent>
 			<cfif ListFind(CategoryThreadList,CategoryID)>
-				ECMS_add_item(#ThisOLLevel#, '<b>#JSStringFormat(lcase(CategoryNameDerived))#</b>','#ThisHref#','',true);
+				ECMS_add_item(#ThisOLLevel#, '<b>#JSStringFormat(lcase(CategoryNameDerived))#</b>','#REQUEST.GlobalNavURLPrefix##ThisHref#','',true);
 			<cfelse>
-				ECMS_add_item(#ThisOLLevel#, '#JSStringFormat(lcase(CategoryNameDerived))#','#ThisHref#');
+				ECMS_add_item(#ThisOLLevel#, '#JSStringFormat(lcase(CategoryNameDerived))#','#REQUEST.GlobalNavURLPrefix##ThisHref#');
 			</cfif>
 		</cfif>
 	</cfoutput>

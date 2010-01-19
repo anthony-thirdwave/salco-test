@@ -67,7 +67,7 @@
 	  
 	  <P>Please use either your
 	  browser's Back button to go back, or click on the #APPLICATION.CompanyName# logo to the left
-	  to return to the home page.  If you have any questions, please <a href="/content.cfm/about-contact">contact  
+	  to return to the home page.  If you have any questions, please <a href="#APPLICATION.contentPageInUrl#/about-contact">contact  
 #APPLICATION.CompanyName#</a>.
 	  </p>
 	  
@@ -93,7 +93,7 @@
 	
 	
 	
-	<form id="search" action="/content.cfm/search" method="get">
+	<form id="search" action="#APPLICATION.contentPageInUrl#/search" method="get">
 
 		<input id="search-text" type="text" name="searchTxt" />
 		<input id="search-btn" type="image" src="/common/images/template/btn-search.gif" alt="Search" />

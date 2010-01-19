@@ -256,7 +256,7 @@ Message:
 #local.ThisMessage#
 
 Staging URL:
-http://#REQUEST.CGIHTTPHost#/content.cfm/#local.GetPage.CategoryAlias#?Preview=1
+http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#local.GetPage.CategoryAlias#?Preview=1
 
 CMS URL:
 http://#REQUEST.CGIHTTPHost#/common/admin/masterview/index.cfm?MVEid=1&MVCid=#local.ThisCategoryID#
