@@ -78,8 +78,6 @@ code/webroot/common/error/cfservertest.cfm -text
 code/webroot/common/error/errorhandler.cfm -text
 code/webroot/common/error/errortest.cfm -text
 code/webroot/common/error/process404.cfm -text
-code/webroot/common/flash/Navigation.html -text
-code/webroot/common/flash/Navigation.swf -text
 code/webroot/common/images/ContentManager/Thumbs.db -text
 code/webroot/common/images/ContentManager/Widget_Addcategory.gif -text
 code/webroot/common/images/ContentManager/Widget_Addcontent.gif -text
@@ -348,8 +346,6 @@ code/webroot/common/images/widget_arrow_up_grey.gif -text
 code/webroot/common/images/xml.gif -text
 code/webroot/common/modules/Admin/Bulletin/action.cfm -text
 code/webroot/common/modules/Admin/Bulletin/bulletin.cfm -text
-code/webroot/common/modules/Admin/MasterView/_notes/mv_Content.cfm.mno -text
-code/webroot/common/modules/Admin/MasterView/_notes/mv_Content.junk.cfm.mno -text
 code/webroot/common/modules/Admin/MasterView/dsp_Nav.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Content.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_FEPermissions.cfm -text
@@ -358,12 +354,6 @@ code/webroot/common/modules/Admin/MasterView/mv_Owners.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Permissions.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_SaveLive.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_SubCategory.cfm -text
-code/webroot/common/modules/Admin/MasterView/scripts/ecms_config.js -text
-code/webroot/common/modules/Admin/MasterView/scripts/ecms_frames.js -text
-code/webroot/common/modules/Admin/MasterView/scripts/ecms_system.js -text
-code/webroot/common/modules/Admin/MasterView/scripts/ecms_system_default.js -text
-code/webroot/common/modules/Admin/MasterView/scripts/ecms_system_id.js -text
-code/webroot/common/modules/Admin/MasterView/scripts/ecms_system_layer.js -text
 code/webroot/common/modules/Admin/Menu/menuAjax.cfm -text
 code/webroot/common/modules/Admin/Menu/menuAjaxGetChildCategories.cfm -text
 code/webroot/common/modules/Admin/Menu/menuAjaxIconStructInc.cfm -text
@@ -447,11 +437,7 @@ code/webroot/common/modules/utils/validateEmail.cfm -text
 code/webroot/common/process/ContentGenerate.cfm -text
 code/webroot/common/process/RSSUpdate.cfm -text
 code/webroot/common/process/VerityUpdate.cfm -text
-code/webroot/common/scripts/AC_OETags.js -text
-code/webroot/common/scripts/AC_RunActiveContent.js -text
-code/webroot/common/scripts/Bdetect.js -text
 code/webroot/common/scripts/articleSelector.js -text
-code/webroot/common/scripts/bOSDetect.js -text
 code/webroot/common/scripts/categorySelector.js -text
 code/webroot/common/scripts/common.js -text
 code/webroot/common/scripts/dragdrop.js -text
@@ -1457,16 +1443,7 @@ code/webroot/common/scripts/fckeditor/fckstyles.xml -text
 code/webroot/common/scripts/fckeditor/fcktemplates.xml -text
 code/webroot/common/scripts/fckeditor/htaccess.txt -text
 code/webroot/common/scripts/fckeditor/license.txt -text
-code/webroot/common/scripts/flash_resize.js -text
 code/webroot/common/scripts/handlers.js -text
-code/webroot/common/scripts/outline/ecms_config.js -text
-code/webroot/common/scripts/outline/ecms_frames.js -text
-code/webroot/common/scripts/outline/ecms_system.js -text
-code/webroot/common/scripts/outline/ecms_system_default.js -text
-code/webroot/common/scripts/outline/ecms_system_id.js -text
-code/webroot/common/scripts/outline/ecms_system_layer.js -text
-code/webroot/common/scripts/overlib.js -text
-code/webroot/common/scripts/overlib_mini.js -text
 code/webroot/common/scripts/pngfix.js -text
 code/webroot/common/scripts/prototype.js -text
 code/webroot/common/scripts/scriptaculous/CHANGELOG -text
@@ -1566,7 +1543,6 @@ code/webroot/common/scripts/scriptaculous/test/unit/slider_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/sortable_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/string_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/unittest_test.html -text
-code/webroot/common/scripts/sfhover.js -text
 code/webroot/common/scripts/sifr.js -text
 code/webroot/common/styles/admin.css -text
 code/webroot/common/styles/content.css -text

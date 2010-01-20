@@ -1,4 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<info>
-	<infoitem key="UD_TESTVALUES_sp_GetContents" value="name:LocaleID;testValue:null,name:CategoryID;testValue:null,name:ContentPositionID;testValue:null,name:ContentActiveDerived;testValue:,name:DefaultContentLocale;testValue:1" />
-</info>

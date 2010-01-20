@@ -305,47 +305,6 @@
 				<cfset StructInsert(sElement,"ThumbnailPath","",1)>
 				<cfset ArrayAppend(aView,sElement)>
 			</cfif>
-			
-			<cfif IsDefined("FORM.hidFileID") and Trim(FORM.hidFileID) IS NOT "" and FileExists(application.utilsObj.GetPathFromURL(Trim(FORM.hidFileID)))>
-				<cfset FORM.hidFileID=Trim(FORM.hidFileID)>
-				<cffile action="MOVE" source="#application.utilsObj.GetPathFromURL(FORM.hidFileID)#" destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#">
-				<cfdirectory action="LIST" directory="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#" name="qDir">
-				<cfquery name="qDir2" dbtype="query">
-					select * from qDir Where Name='#ListLast(FORM.hidFileID,'/')#'
-				</cfquery>
-				<cfset MainFilePath_New=application.utilsObj.GetURLFromPath("#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#\#ListLast(FORM.hidFileID,'/')#")>
-				<cfloop index="ThisImage" list="ThumbnailPath">
-					<cfparam name="#ThisImage#_New" default="">
-					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND evaluate("FORM.#ThisImage#_NewFileObject") IS NOT "">
-						<cffile action="UPLOAD" 
-							filefield="FORM.#ThisImage#_newFileObject" 
-							destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
-							nameconflict="MAKEUNIQUE">
-						<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
-						<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
-							<cffile action="DELETE" file="#UploadedFile#">
-							<!--- add AddError('aProductViews') here --->
-						<cfelse>
-							<cfset SetVariable("#ThisImage#_New",application.utilsObj.GetURLFromPath(UploadedFile))>
-						</cfif>
-					</cfif>
-				</cfloop>
-				
-				<cfset sElement=StructNew()>
-				<cfset StructInsert(sElement,"FileName",FileName_New,1)>
-				<cfset StructInsert(sElement,"FileSubTitle",FileSubTitle_new,1)>
-				<cfset StructInsert(sElement,"Author",Author_new,1)>
-				<cfset StructInsert(sElement,"FileDuration",FileDuration_new,1)>
-				<cfset StructInsert(sElement,"FileKeywords",FileKeywords_new,1)>
-				<cfset StructInsert(sElement,"FileDateTimeStamp",FileDateTimeStamp_New,1)>
-				<cfset StructInsert(sElement,"FileCaption",FileCaption_New,1)>
-				<cfset StructInsert(sElement,"FilePath",MainFilePath_New,1)>
-				<cfset StructInsert(sElement,"ThumbnailPath",ThumbnailPath_New,1)>
-				<cfif Val(qDir2.Size) GT "0">
-					<cfset StructInsert(sElement,"FileSize",Val(qDir2.Size),1)>
-				</cfif>
-				<cfset ArrayAppend(aView,sElement)>
-			</cfif>
 
 			<cfset MyContentLocale.SetProperty("aFile",aView)>
 		</cfif>

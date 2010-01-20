@@ -2,7 +2,6 @@
 <cfparam name="ATTRIBUTES.Secure" default="Yes">
 <cfparam name="ATTRIBUTES.PageTitle" default="#APPLICATION.SiteTitle#">
 <cfparam name="ATTRIBUTES.PageHeader" default="#ATTRIBUTES.PageTitle#">
-<cfparam name="ATTRIBUTES.IncludeOverlibJS" default="0">
 
 <cfif ATTRIBUTES.secure>
 	<cfset ThisAcceptGroupIDList=ListAppend(ATTRIBUTES.AcceptGroupIDList,APPLICATION.SuperAdminUserGroupID)>
@@ -21,11 +20,6 @@
 <link rel="stylesheet" type="text/css" href="/common/styles/admin.css" title="docProperties">
 </head>
 <body bgcolor="White" topmargin=0 leftmargin=0 marginwidth="0" marginheight="0" link="#339999" vlink="#006666" alink="003333">
-<cfif ATTRIBUTES.IncludeOverlibJS>
-<!-- http://www.bosrup.com/web/overlib/ -->
-<DIV ID="overDiv" STYLE="position:absolute; visibility:hide; z-index:1;"></DIV>
-<SCRIPT language=JavaScript src="/common/scripts/overlib.js"></SCRIPT>
-</cfif>
 <table width="760" border="0" cellspacing="0" cellpadding="0">
    <TR>
   	<TD>&nbsp;</TD>
