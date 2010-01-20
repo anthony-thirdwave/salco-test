@@ -57,6 +57,7 @@
 		<cfset APPLICATION.CMSVersion = "5" />
 		<cfset APPLICATION.GeneratorMeta = "Thirdwave MasterView" />
 		<cfset APPLICATION.GeneratorContentMeta = "MasterView by Thirdwave, LLC 312.329.1960" />
+		<cfset APPLICATION.CategoryID404Page="-1">
 		
 		<!--- 
 			determine how content.cfm is called - default .htaccess is formatted to deal with the following permutations

@@ -155,7 +155,7 @@
 			while( fileExists('#sUserFilesPath##URL.CurrentFolder##sFilename#.#sFileExt#') )
 			{
 			  	iCounter=iCounter+1;
-				sFileName = sTmpFileName & '(#iCounter#)';
+				sFileName = sTmpFileName & '-#iCounter#';
 			}
 		}
 		</cfscript>

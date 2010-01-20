@@ -30,18 +30,6 @@
 	<cfcase value="201"><!--- HTML --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
 			<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
-			<cfif FileContents IS NOT "">
-				<cfif ATTRIBUTES.sContentBody["CSSID"] neq "">
-					<cfset contentCSSID="id=""#ATTRIBUTES.sContentBody["CSSID"]#""">
-				<cfelse>
-					<cfset contentCSSID="">
-				</cfif>
-				<cfif IsDefined("URL.ShowContentOnly") AND Val(URL.ShowContentOnly)>
-					<cfset FileContents="#FileContents#">
-				<cfelse>
-					<cfset FileContents="<div #contentCSSID# class=""body"">#FileContents#</div>">
-				</cfif>
-			</cfif>
 		</cfif>
 	</cfcase>
 	<cfcase value="202"><!--- HTML & Text --->
@@ -150,7 +138,7 @@
 			<cfif Trim(ATTRIBUTES.sContentBody.Flash) IS NOT "">
 				<cfsavecontent variable="TheseContents">
 					<!--page flash-->
-					<div <cfif IsDefined("exception") AND Exception IS "commercialflashpopup">style="margin-left:30px"</cfif>>
+					<div>
 					<script LANGUAGE=JavaScript1.1 type="text/javascript">
 					<!--
 					var MM_contentVersion = 7;

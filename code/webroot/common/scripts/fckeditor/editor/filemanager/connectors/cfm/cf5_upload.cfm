@@ -251,7 +251,7 @@
 			while( fileExists("#currentFolderPath##fileName#.#fileExt#") ) {
 				fileExisted = true ;
 				counter = counter + 1 ;
-				fileName = tmpFileName & '(#counter#)' ;
+				fileName = tmpFileName & '-#counter#' ;
 			}
 		}
 		</cfscript>

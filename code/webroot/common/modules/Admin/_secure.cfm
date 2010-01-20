@@ -69,9 +69,8 @@
 		</cfif>
 		<cfset SESSION.DisableRichControls=0>
 	</cflock>
-	<cfif IsDefined("CLIENT.wAdminCurrentUser")>
-		<!--- <cfa_dump var="#Client.wCurrentUser#"> --->
-		<CFWDDX action="wddx2cfml" input="#CLIENT.wAdminCurrentUser#" output="sCurrentUser">
+	<cfif IsDefined("SESSION.wAdminCurrentUser")>
+		<CFWDDX action="wddx2cfml" input="#SESSION.wAdminCurrentUser#" output="sCurrentUser">
 		<cfif StructKeyExists(sCurrentUser,"UserLogin") AND sCurrentUser.UserLogin IS SESSION.AdminUserLogin AND sCurrentUser.UserID IS qUser.UserID AND sCurrentUser.CFToken IS SESSION.CFToken AND sCurrentUser.CFID IS SESSION.CFID>
 			<cfset CreateNew=0>
 		<cfelse>
@@ -93,7 +92,7 @@
 			StructInsert(sCurrentUser, "UserGroupIDList", lUserGroupID,"1");
 		</CFSCRIPT>
 	</cfif>
-	<cfwddx action="CFML2WDDX" input="#sCurrentUser#" output="CLIENT.wAdminCurrentUser">
+	<cfwddx action="CFML2WDDX" input="#sCurrentUser#" output="SESSION.wAdminCurrentUser">
 	<CFLOCK TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
 		<cfset SESSION.AdminUserGroupIDList="#lUserGroupID#">
 	</cflock>

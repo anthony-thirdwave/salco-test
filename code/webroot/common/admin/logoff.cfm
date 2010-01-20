@@ -1,5 +1,5 @@
-<cfif IsDefined("CLIENT.wAdminCurrentUser")>
-	<cfset DevNull=DeleteClientVariable("wAdminCurrentUser")>
+<cfif IsDefined("SESSION.wAdminCurrentUser")>
+	<cfset SESSION.wAdminCurrentUser="">
 </cfif>
 <CFSCRIPT>
 	sCurrentUser=StructNew();
@@ -10,7 +10,7 @@
 	StructInsert(sCurrentUser, "UserLocaleID", "-1","1");
 	StructInsert(sCurrentUser, "UserGroupIDList", "-1","1");
 </CFSCRIPT>
-<cfwddx action="CFML2WDDX" input="#sCurrentUser#" output="CLIENT.wAdminCurrentUser">
+<cfwddx action="CFML2WDDX" input="#sCurrentUser#" output="SESSION.wAdminCurrentUser">
 
 <!--- Need CFLOCK.  --PWK, 7/11/01  --->
 <CFLOCK TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">

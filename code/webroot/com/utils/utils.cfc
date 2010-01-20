@@ -254,7 +254,26 @@
 		<cfreturn ReturnValue>
 	</cffunction>
 	
-	
+	<cffunction name="ScrubServerFileName" returntype="string" output="false">
+		<cfargument name="ServerDirectory" default="" type="String" required="true">
+		<cfargument name="ServerFile" default="" type="String" required="true">
+		
+		<cfset VAR ThisExtension="">
+		<cfset VAR ThisServerFile="">
+		<cfset VAR ReturnString="">
+		
+		<cfif ListLen(ARGUMENTS.ServerFile," ") GT "1">
+			<cfset ThisExtension=ListLast(ARGUMENTS.ServerFile,".")>
+			<cfset ThisServerFile=ListDeleteAt(ARGUMENTS.ServerFile,ListLen(ARGUMENTS.ServerFile,"."),".")>
+			<cfset ThisServerFile="#ARGUMENTS.ServerDirectory#\#REQUEST.Scrub(ThisServerFile)#.#ThisExtension#">
+			<cffile action="RENAME" source="#ARGUMENTS.ServerDirectory#/#ARGUMENTS.ServerFile#" destination="#ThisServerFile#">
+			<cfset ReturnString="#ThisServerFile#">
+		<cfelse>
+			<cfset ReturnString="#ARGUMENTS.ServerDirectory#\#ARGUMENTS.ServerFile#">
+		</cfif>
+		<cfreturn ReturnString>
+	</cffunction>
+
 	<cfscript>
 	function TitleCase(str) {
 		var wordsCapFirst = "";

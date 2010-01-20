@@ -1,4 +1,3 @@
-
 <cfif Title EQ "">
 	<cfswitch expression="#ContentTypeID#">
 		<cfdefaultcase>
@@ -6,7 +5,7 @@
 				<cfoutput>
 					<cfswitch expression="#APPLICATION.ApplicationName#">
 						<cfdefaultcase>
-							<cfswitch expression="#ThisPosition#">
+							<cfswitch expression="#ARGUMENTS.ContentPositionID#">
 								<cfdefaultcase>
 									<cfswitch expression="#sContentBody.TitleTypeID#">
 										<cfcase value="1201"><cfset Title="<h1>#ContentNameDerived#</h1>"></cfcase>

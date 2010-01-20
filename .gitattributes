@@ -14,6 +14,7 @@ code/webroot/com/ContentManager/CategoryLocaleHandler.cfc -text
 code/webroot/com/ContentManager/Content.cfc -text
 code/webroot/com/ContentManager/ContentHandler.cfc -text
 code/webroot/com/ContentManager/ContentLocale.cfc -text
+code/webroot/com/ContentManager/ContentManager.cfc -text
 code/webroot/com/ContentManager/ContentManagerHandler.cfc -text
 code/webroot/com/ContentManager/ContentNote.cfc -text
 code/webroot/com/ContentManager/ContentNoteHandler.cfc -text

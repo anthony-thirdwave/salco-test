@@ -333,7 +333,8 @@
 	<cfset var GetCategoryBasicDetails = "">
 	
 	<cfquery name="GetCategoryBasicDetails" datasource="#APPLICATION.DSN#" maxrows="1">
-		select CategoryName,CategoryTypeName,CategoryAlias,CategoryActive,PropertiesPacket from qry_GetCategory
+		select CategoryName, CategoryTypeName, CategoryAlias, CategoryActive, 
+		PropertiesPacket, CategoryTypeID from qry_GetCategory
 		Where CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	<cfreturn GetCategoryBasicDetails>

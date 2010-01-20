@@ -17,12 +17,9 @@
 	<!--- default application settings --->
 	<cfset this.name = "www.#this.uniqueName#.com" />
 	<cfset this.applicationTimeout = createTimeSpan(1,0,0,0) />
-	<cfset this.clientManagement = true />
-	<cfset this.setClientCookies = true />
 	<cfset this.sessionManagement = true />
 	<cfset this.sessiontimeout = createTimeSpan(0,1,0,0) />
 	<cfset this.datasource="#this.uniqueName#_cms_#this.siteType#" />
-	<cfset this.clientStorage="#this.uniqueName#_cms_#this.siteType#" />
 	<cfset variables.botSessionInSeconds = 2 />
 
 	<!--- bots don't keep cookies and we don't want to do this for valid users --->

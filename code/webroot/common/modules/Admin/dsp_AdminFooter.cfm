@@ -3,8 +3,7 @@
 </tr>
 </table>
 <P>&nbsp;</P>
-<cfif IsDefined("CLIENT.wAdminCurrentUser") AND IsDebugMode() AND 0>
-	<cfdump var="#CLIENT.wAdminCurrentUser#">
+<cfif IsDebugMode() AND 0>
 	<cfdump var="#session#">
 </cfif>
 </body>

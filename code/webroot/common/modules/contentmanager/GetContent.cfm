@@ -1,32 +1,7 @@
 <cfparam name="ATTRIBUTES.CategoryID" default="-1">
 <cfparam name="ATTRIBUTES.CategoryAlias" default="">
-<cfparam name="ThisCategoryID" default="-1">
 
 <cfset CALLER.NoContent="1">
-
-<!--- Check given alias first and obtain categoryid--->
-<cfif ATTRIBUTES.CategoryAlias IS NOT "">
-	<cfquery name="GetCategoryID" datasource="#APPLICATION.DSN#" maxrows=1 dbtype="ODBC">
-		SELECT	CategoryID
-		FROM	t_Category
-		WHERE	CategoryAlias = <cfqueryparam value="#Trim(ATTRIBUTES.CategoryAlias)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
-	</cfquery>
-	<cfif GetCategoryID.RecordCount IS "1">
-		<cfset ATTRIBUTES.CategoryID=GetCategoryID.CategoryID>
-	</cfif>
-</cfif>
-
-
-<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
-	<cfprocresult name="GetPage" maxrows="1">
-	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ATTRIBUTES.CategoryID)#" null="No">
-	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
-	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
-</cfstoredproc>
-
-<cfif IsDefined("GetPage") AND GetPage.RecordCount IS "0">
-	<cfset CALLER.NoContent="1">
-</cfif>
 <cfset CALLER.CurrentCategoryName="Page Not Found">
 <cfset CALLER.CurrentPageTitle="Page Not Found">
 <cfset CALLER.ParentCategoryName="">
@@ -59,16 +34,34 @@
 <cfset LoginPageAlias="">
 
 <cfset lPosition="400,401,402">
-<cfloop index="ThisPosition" list="#lPosition#">
-	<cfset StructInsert(CALLER.sIncludeFile,ThisPosition,"",1)>
-	<cfset StructInsert(CALLER.sIncludeFileBlank,ThisPosition,"1",1)>
+<cfloop index="ThisContentPositionID" list="#lPosition#">
+	<cfset StructInsert(CALLER.sIncludeFile,ThisContentPositionID,"",1)>
+	<cfset StructInsert(CALLER.sIncludeFileBlank,ThisContentPositionID,"1",1)>
 	<cfif REQUEST.ContentGenerateMode IS "FLAT">
-		<cfset StructInsert(CALLER.sContent,ThisPosition,"",1)>
+		<cfset StructInsert(CALLER.sContent,ThisContentPositionID,"",1)>
 	</cfif>
 </cfloop>
 
+<!--- Check given alias first and obtain categoryid--->
+<cfif ATTRIBUTES.CategoryAlias IS NOT "">
+	<cfquery name="GetCategoryID" datasource="#APPLICATION.DSN#" maxrows=1 dbtype="ODBC">
+		SELECT	CategoryID
+		FROM	t_Category
+		WHERE	CategoryAlias = <cfqueryparam value="#Trim(ATTRIBUTES.CategoryAlias)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
+	</cfquery>
+	<cfif GetCategoryID.RecordCount IS "1">
+		<cfset ATTRIBUTES.CategoryID=GetCategoryID.CategoryID>
+	</cfif>
+</cfif>
+
+<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+	<cfprocresult name="GetPage" maxrows="1">
+	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ATTRIBUTES.CategoryID)#" null="No">
+	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
+</cfstoredproc>
+
 <cfif IsDefined("GetPage") and GetPage.RecordCount IS "1">
-	<cfset CALLER.NoContent="0">
 	<cfset CALLER.CurrentCategoryName=GetPage.CategoryNameDerived>
 	<cfset CALLER.CurrentPageTitle=GetPage.CategoryNameDerived>
 	<cfset CALLER.TemplateID=GetPage.TemplateID>
@@ -96,17 +89,10 @@
 	</cfif>
 	<cfif Trim(GetPage.CategoryURLDerived) IS NOT "">
 		<cfif Left(GetPage.CategoryURLDerived,4) IS NOT "Java">
-			<cfif CALLER.CategoryTypeID IS "75">
-				<cfif Left(CGI.SCRIPT_NAME,Len("/content.cfm")) IS "/content.cfm">
-					<cflocation url="#GetPage.CategoryURLDerived#" addtoken="No">
-				</cfif>
-			<cfelse>
-				<cflocation url="#GetPage.CategoryURLDerived#" addtoken="No">
-			</cfif>
+			<cflocation url="#GetPage.CategoryURLDerived#" addtoken="No">
 		</cfif>
 	</cfif>
 
-	<cfset CALLER.CacheDateTime=GetPage.CacheDateTime>
 	<cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm"
 		thiscategoryid="#GetPage.CategoryID#"
 		namelist="#application.utilsObj.RemoveHTML(Replace(CALLER.CurrentCategoryName,","," ","all"))#"
@@ -116,10 +102,46 @@
 		<cfset CALLER.CategoryThreadList=IDList>
 		<cfset CALLER.CategoryThreadName=NameList>
 		<cfset CALLER.CategoryThreadAlias=AliasList>
+		
+		<!--- Get Category Properties --->
+		<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
+			select		PropertiesPacket, CacheDateTime 
+			from		qry_GetCategoryProperties
+			WHERE 		CategoryID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#CALLER.CategoryThreadList#" list="yes">) 
+			order by 	displayorder desc
+		</cfquery>
+		<cfoutput query="GetCatProps">
+			<cfif IsWDDX(PropertiesPacket)>
+				<cfwddx action="WDDX2CFML" input="#PropertiesPacket#" output="sProperties">
+				<!--- Properties that should inherit --->
+				<cfloop index="ThisProp" list="">
+					<cfif StructKeyExists(sProperties,"#ThisProp#") AND Trim(StructFind(sProperties, "#ThisProp#")) IS NOT "">
+						<cfset SetVariable("CALLER.#ThisProp#",StructFind(sProperties, "#ThisProp#"))>
+					</cfif>
+				</cfloop>
+				<!--- Properties that just come from this category --->
+				<cfif CurrentRow IS "1">
+					<cfloop index="ThisProp" list="AllowComments">
+						<cfif StructKeyExists(sProperties,"#ThisProp#") AND Trim(StructFind(sProperties, "#ThisProp#")) IS NOT "">
+							<cfset SetVariable("CALLER.#ThisProp#",StructFind(sProperties, "#ThisProp#"))>
+						</cfif>
+					</cfloop>
+				</cfif>
+			</cfif>
+		</cfoutput>
+		
+		<!--- Cache date calculated from branch --->
+		<cfquery name="GetMaxCacheDateTime" dbtype="query" maxrows="1">
+			select MAX(CacheDateTime) as MaxCacheDateTime from GetCatProps
+		</cfquery>
+		<cfset CALLER.CacheDateTime=GetMaxCacheDateTime.MaxCacheDateTime>
+		
+		<!--- Get Category Locale Properties --->
 		<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
 			SELECT		PropertiesPacket
 			FROM		qry_GetCategoryLocale
-			WHERE		CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer">
+			WHERE		CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and 
+						LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer">
 			ORDER BY	displayorder DESC
 		</cfquery>
 		<cfoutput query="GetCatProps">
@@ -134,21 +156,6 @@
 			</cfif>
 		</cfoutput>
 	</cfif>
-
-	<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
-		SELECT	PropertiesPacket
-		FROM	t_Properties
-		WHERE	PropertiesID = <cfqueryparam value="#Val(GetPage.categoryPropertiesID)#" cfsqltype="CF_SQL_INTEGER">
-	</cfquery>
-	<cfoutput query="GetCatProps">
-		<cfif IsWDDX(PropertiesPacket)>
-			<cfwddx action="WDDX2CFML" input="#PropertiesPacket#" output="sProperties">
-			<cfif StructKeyExists(sProperties,"AllowComments") AND Val(sProperties.AllowComments)>
-				<cfset CALLER.AllowComments=1>
-			</cfif>
-		</cfif>
-	</cfoutput>
-	
 
 	<!--- handle security --->
 <!---
@@ -189,160 +196,39 @@
 		<cfset SESSION.lPageIDView=ListAppend(SESSION.lPageIDView,CALLER.CurrentCategoryID)>
 	</cfif>--->
 	
-	<cfloop index="ThisPosition" list="#lPosition#">
+	<cfloop index="ThisContentPositionID" list="#lPosition#">
 		<cfset recacheThis = false>
 		<cfif DenyAccess>
-			<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#LoginPageAlias#+#ThisPosition#_#APPLICATION.LocaleID#_#DateFormat(LoginPageCacheDateTime,'yyyymmdd')##TimeFormat(LoginPageCacheDateTime,'HHmmss')#.cfm">
+			<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#LoginPageAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(LoginPageCacheDateTime,'yyyymmdd')##TimeFormat(LoginPageCacheDateTime,'HHmmss')#.cfm">
 		<cfelse>
-			<cfif ListFind("2432,2548",CALLER.CurrentCategoryID)><!--- event detail, book detail always recache --->
+			<cfif ListFind("",CALLER.CurrentCategoryID)><!--- Certain page types should always recache --->
 				<cfset recacheThis = true>
 			</cfif>
-			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#GetPage.CategoryAlias#+#ThisPosition#_#APPLICATION.LocaleID#_#IsDefined('URL.ShowContentOnly')#_#DateFormat(CALLER.CacheDateTime,'yyyymmdd')##TimeFormat(CALLER.CacheDateTime,'HHmmss')#.cfm">
+			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#GetPage.CategoryAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#IsDefined('URL.ShowContentOnly')#_#DateFormat(CALLER.CacheDateTime,'yyyymmdd')##TimeFormat(CALLER.CacheDateTime,'HHmmss')#.cfm">
 		</cfif>
-		<cfset StructInsert(CALLER.sIncludeFile,ThisPosition,"#APPLICATION.TempMapping##ExecuteTempFile#",1)>
+		<cfset StructInsert(CALLER.sIncludeFile,ThisContentPositionID,"#APPLICATION.TempMapping##ExecuteTempFile#",1)>
 		<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") OR REQUEST.ReCache or Isdefined("prcid") or REQUEST.ContentGenerateMode IS "FLAT" OR recacheThis>
 			<cfif DenyAccess>
-				<cfquery name="GetInherited" datasource="#APPLICATION.DSN#">
-					SELECT		ContentID 
-					FROM		qry_GetContentInherit
-					WHERE
-							<cfif ThisPosition eq "401">
-								ContentPositionID = <cfqueryparam value="#Val(ThisPosition)#" cfsqltype="cf_sql_integer">
-							<cfelse>
-								1=0
-							</cfif>
-					AND			LocaleID = <cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="cf_sql_integer">
-					AND			ContentActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
-					AND			CategoryActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
-					AND			CategoryID = <cfqueryparam value="#Val(LoginPageCategoryID)#" cfsqltype="cf_sql_integer">
-					ORDER BY	ContentLocalePriority
-				</cfquery>
+				<cfinvoke component="com.ContentManager.ContentManager"
+					method="GetColumnOutput"
+					returnVariable="FileContents"
+					CategoryID="#Val(LoginPageCategoryID)#"
+					LocaleID="#APPLICATION.LocaleID#"
+					ContentPositionID="#ThisContentPositionID#"
+					CategoryThreadList="#CALLER.CategoryThreadList#">
 			<cfelse>
-				<cfquery name="GetInherited" datasource="#APPLICATION.DSN#">
-					SELECT		ContentID 
-					FROM		qry_GetContentInherit
-					WHERE		ContentPositionID = <cfqueryparam value="#Val(ThisPosition)#" cfsqltype="CF_SQL_INTEGER">
-					AND			LocaleID = <cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
-					AND			ContentActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND			CategoryActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND			(
-									(
-									CategoryID = <cfqueryparam value="#Val(CALLER.CurrentCategoryID)#" cfsqltype="CF_SQL_INTEGER"> 
-									AND (
-										InheritID <=<cfqueryparam value="1800" cfsqltype="CF_SQL_INTEGER"> 
-										OR InheritID IS NULL
-										)
-									)
-								OR
-									(
-									CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">)
-									AND	InheritID = <cfqueryparam value="1801" cfsqltype="CF_SQL_INTEGER">
-									)
-								OR
-									(
-									CategoryID IN (<cfqueryparam value="#ListDeleteAt(CALLER.CategoryThreadList,ListLen(CALLER.CategoryThreadList))#" cfsqltype="cf_sql_integer" list="yes">) 
-									AND InheritID=<cfqueryparam value="1802" cfsqltype="CF_SQL_INTEGER">
-									)
-								)
-					ORDER BY	displayorder DESC, ContentLocalePriority
-				</cfquery>
+				<cfinvoke component="com.ContentManager.ContentManager"
+					method="GetColumnOutput"
+					returnVariable="FileContents"
+					CategoryID="#Val(CALLER.CurrentCategoryID)#"
+					LocaleID="#APPLICATION.LocaleID#"
+					ContentPositionID="#ThisContentPositionID#"
+					CategoryThreadList="#CALLER.CategoryThreadList#">
 			</cfif>
-			<cfset FileContents="">
-			<cfif ThisPosition IS "401"><cfset CALLER.NoContent="1"></cfif>
-			<cfset ContentCounter="1">
-			<cfif GetInherited.RecordCount IS "0">
-				<cfquery name="GetInherited" datasource="#APPLICATION.DSN#" maxrows="1">
-					SELECT		ContentID
-					FROM		qry_GetContentInherit
-					WHERE		ContentPositionID = <cfqueryparam value="#Val(ThisPosition)#" cfsqltype="CF_SQL_INTEGER">
-					AND			LocaleID = <cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
-					AND			ContentActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND			CategoryActive = <cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
-					AND			CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">)
-					AND			InheritID = <cfqueryparam value="1803" cfsqltype="CF_SQL_INTEGER">
-					ORDER BY	displayorder DESC, ContentLocalePriority
-				</cfquery>
+			<cfif ListFind("401,402",ThisContentPositionID) and Trim(FileContents) IS NOT "">
+				<cfset CALLER.NoContent="0">
 			</cfif>
-			<cfset centerCounter = 0>
-			<cfloop index="ThisContentID" list="#ValueList(GetInherited.ContentID)#">
-				<cfif Isdefined("prcid") and application.utilsObj.SimpleDecrypt(Val(prcid)) IS ThisContentID>
-					<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
-						<cfprocresult name="GetContent">
-						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(application.utilsObj.SimpleDecrypt(Val(pcid)))#" null="No">
-						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
-						<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
-					</cfstoredproc>
-				<cfelse>
-					<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
-						<cfprocresult name="GetContent">
-						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(ThisContentID)#" null="No">
-						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
-						<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
-					</cfstoredproc>
-				</cfif>
-				<cfoutput query="GetContent">
-					<cfset subTitle = "">
-					<cfif ThisPosition IS "401">
-						<cfset CALLER.NoContent="0">
-						<cfset centerCounter = centerCounter+1>
-						<cfif centerCounter EQ 1 and CALLER.CurrentCategoryAlias IS NOT "home">
-							<cfset subTitle = "#ContentNameDerived#">
-						</cfif>
-					</cfif>
-					<cfif IsWDDX(ContentBody)>
-						<cfwddx action="WDDX2CFML" input="#ContentBody#" output="sContentBody">
-					<cfelse>
-						<cfset sContentBody=StructNew()>
-					</cfif>
-					<cfmodule template="/common/modules/ContentManager/ContentControl.cfm"
-						scontentbody="#sContentBody#"
-						currentcategoryid="#CALLER.CurrentCategoryID#"
-						currentcategorytypeid="#CALLER.CategoryTypeID#"
-						contenttypeid="#ContentTypeID#"
-						contentid="#ContentID#"
-						ContentLocaleID="#ContentLocaleID#"
-						positionid="#ThisPosition#"
-						returnvariable="TheseFileContents">
-					<!--- Render Title --->
-					<cfif Trim(TheseFileContents) IS NOT "">
-						<cfif (ContentTypeID EQ 230) or (IsDefined("URL.ShowContentOnly") AND Val(URL.ShowContentOnly))><!--- if related content, ignore title, etc... --->
-							<cfset FileContents="#FileContents# #TheseFileContents#">
-						<cfelse>
-							<cfset Title="">
-							<cfif StructKeyExists(sContentBody,"TitleTypeID")>
-								<cfinclude template="/common/modules/ContentManager/TitleControl.cfm">
-							</cfif>
-							<cfif StructKeyExists(sContentBody,"CSSID") and sContentBody["CSSID"] IS NOT "">
-								<cfset ThisID=sContentBody["CSSID"]>
-							<cfelse>
-								<cfset ThisID="iskContentElement#ContentID#">
-							</cfif>
-							
-							
-							<!--- design specifications --->
-							<cfswitch expression="#ContentTypeID#">
-								<cfdefaultcase><cfset divclass = "basic"></cfdefaultcase>
-							</cfswitch>
-						
-							<cfif subTitle NEQ "">
-								<cfset subTitle = "<h1>#subTitle#</h1>">
-							</cfif>
-							<cfswitch expression="#APPLICATION.ApplicationName#">
-								<cfdefaultcase>
-									<cfset thisContentString = "#TheseFileContents#">
-									<cfset FileContents="#FileContents# #Title# #thisContentString#">
-								</cfdefaultcase>
-							</cfswitch>
-
-							<cfset ContentCounter=ContentCounter+1>
-						</cfif>
-					</cfif>
-				</cfoutput>
-			</cfloop>
-
-			<cfif ThisPosition is "401" and CALLER.NoContent IS "1" and CALLER.CategoryTypeID IS NOT "75">
-
-
+			<cfif ThisContentPositionID is "402" and CALLER.NoContent IS "1">
 				<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 					<cfprocresult name="GetFirstChildCategory" maxrows="1">
 					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
@@ -357,19 +243,15 @@
 				</cfstoredproc>
 
 				<cfif val(GetFirstChildCategory.RecordCount) GT "0">
-					<cfif GetFirstChildCategory.CategoryAlias is not "">
-						<cflocation url="#APPLICATION.contentPageInUrl#/#GetFirstChildCategory.CategoryAlias#" addtoken="No">
-					<cfelse>
-						<cflocation url="/content.cfm?CategoryID=#GetFirstChildCategory.CategoryID#" addtoken="No">
-					</cfif>
+					<cflocation url="#APPLICATION.contentPageInUrl#/#GetFirstChildCategory.CategoryAlias#" addtoken="No">
 				</cfif>
 				<cfset FileContents="<p>No content found.</p>">
 			</cfif>
 			<cfif Trim(FileContents) IS NOT "">
-				<cfset StructInsert(CALLER.sIncludeFileBlank,ThisPosition,"0",1)>
+				<cfset StructInsert(CALLER.sIncludeFileBlank,ThisContentPositionID,"0",1)>
 			</cfif>
 			<cfif REQUEST.ContentGenerateMode IS "FLAT">
-				<cfset StructInsert(CALLER.sContent,ThisPosition,"#FileContents#",1)>
+				<cfset StructInsert(CALLER.sContent,ThisContentPositionID,"#FileContents#",1)>
 			<cfelse>
 				<cffile action="WRITE" file="#APPLICATION.ExecuteTempDir##ExecuteTempFile#" output="#FileContents#" addnewline="Yes">
 			</cfif>
@@ -386,20 +268,20 @@
 	<cfset CALLER.NoContent="0">
 	<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
 		<cfprocresult name="GetErrorPage" maxrows="1">
-		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="2570" null="No"><!--- 2570 is category id of 404 page --->
+		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#APPLICATION.CategoryID404Page#" null="No">
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 	</cfstoredproc>
 	<cfif IsDefined("GetErrorPage") AND GetErrorPage.RecordCount IS "1">
-		<cfloop index="ThisPosition" list="400,401,402">
-			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#GetErrorPage.CategoryAlias#+#ThisPosition#_#APPLICATION.LocaleID#_#DateFormat(GetErrorPage.CacheDateTime,'yyyymmdd')##TimeFormat(GetErrorPage.CacheDateTime,'HHmmss')#.cfm">
-			<cfset StructInsert(CALLER.sIncludeFile,ThisPosition,"#APPLICATION.TempMapping##ExecuteTempFile#",1)>
-			<cfset StructInsert(CALLER.sIncludeFileBlank,ThisPosition,"0",1)>
+		<cfloop index="ThisContentPositionID" list="400,401,402">
+			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#GetErrorPage.CategoryAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(GetErrorPage.CacheDateTime,'yyyymmdd')##TimeFormat(GetErrorPage.CacheDateTime,'HHmmss')#.cfm">
+			<cfset StructInsert(CALLER.sIncludeFile,ThisContentPositionID,"#APPLICATION.TempMapping##ExecuteTempFile#",1)>
+			<cfset StructInsert(CALLER.sIncludeFileBlank,ThisContentPositionID,"0",1)>
 			<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") OR REQUEST.ReCache or REQUEST.ContentGenerateMode IS "FLAT">
 				<cfstoredproc procedure="sp_GetContents" datasource="#APPLICATION.DSN#">
 					<cfprocresult name="GetContentList">
 					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="2570" null="No">
-					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentPositionID" value="#Val(ThisPosition)#" null="No">
+					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentPositionID" value="#Val(ThisContentPositionID)#" null="No">
 					<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
 				</cfstoredproc>
 				<cfset FileContents="">
@@ -409,34 +291,20 @@
 					<cfelse>
 						<cfset sContentBody=StructNew()>
 					</cfif>
-					<cfmodule template="/common/modules/ContentManager/ContentControl.cfm"
-						scontentbody="#sContentBody#"
-						currentcategoryid="#CALLER.CurrentCategoryID#"
-						currentcategorytypeid="#CALLER.CategoryTypeID#"
-						contenttypeid="#ContentTypeID#"
-						contentid="#ContentID#"
-						ContentLocaleID="#ContentLocaleID#"
-						positionid="#ThisPosition#"
-						returnvariable="TheseFileContents">
-					<!--- Render Title --->
-					<cfset Title="">
-					<cfif StructKeyExists(sContentBody,"TitleTypeID")>
-						<cfinclude template="/common/modules/ContentManager/TitleControl.cfm">
-					</cfif>
-
-					<cfif ThisPosition EQ 401 AND ContentTypeID NEQ 261>
-						<cfset thisContentString = "<div class=""group basic"" id="""">#TheseFileContents#</div>">
-					<cfelse>
-						<cfset thisContentString = "#TheseFileContents#">
-					</cfif>
-					<cfset FileContents="#FileContents# #Title# #thisContentString#">
+					<cfinvoke component="com.ContentManager.ContentManager"
+						method="GetColumnOutput"
+						returnVariable="FileContents"
+						CategoryID="48"
+						LocaleID="#APPLICATION.LocaleID#"
+						ContentPositionID="#ThisContentPositionID#"
+						CategoryThreadList="#CALLER.CategoryThreadList#">
 				</cfoutput>
 
 				<cfif Trim(FileContents) IS NOT "">
-					<cfset StructInsert(CALLER.sIncludeFileBlank,ThisPosition,"0",1)>
+					<cfset StructInsert(CALLER.sIncludeFileBlank,ThisContentPositionID,"0",1)>
 				</cfif>
 				<cfif REQUEST.ContentGenerateMode IS "FLAT">
-					<cfset StructInsert(CALLER.sContent,ThisPosition,"#FileContents#",1)>
+					<cfset StructInsert(CALLER.sContent,ThisContentPositionID,"#FileContents#",1)>
 				<cfelse>
 					<cffile action="WRITE" file="#APPLICATION.ExecuteTempDir##ExecuteTempFile#" output="#FileContents#" addnewline="Yes">
 				</cfif>

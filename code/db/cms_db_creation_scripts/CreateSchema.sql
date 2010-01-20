@@ -1612,7 +1612,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetCategoryProperties]'))
 EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetCategoryProperties]
 AS
-SELECT     dbo.t_Category.CategoryID, dbo.t_Category.DisplayOrder, dbo.t_Properties.PropertiesPacket
+SELECT     dbo.t_Category.CategoryID, dbo.t_Category.DisplayOrder, dbo.t_Category.CacheDateTime, dbo.t_Properties.PropertiesPacket
 FROM         dbo.t_Category INNER JOIN
                       dbo.t_Properties ON dbo.t_Category.PropertiesID = dbo.t_Properties.PropertiesID
 ' 
@@ -1815,9 +1815,10 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetContentLocaleMeta]'))
 EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetContentLocaleMeta]
 AS
-SELECT     dbo.t_Content.*, dbo.t_ContentLocaleMeta.LocaleID, dbo.t_ContentLocaleMeta.ContentLocalePriority, dbo.t_ContentLocaleMeta.ContentPositionID
+SELECT     dbo.t_Content.*, dbo.t_ContentLocaleMeta.LocaleID, dbo.t_ContentLocaleMeta.ContentLocalePriority, dbo.t_ContentLocaleMeta.ContentPositionID, dbo.t_Label.LabelName AS ContentTypeName
 FROM         dbo.t_Content INNER JOIN
-                      dbo.t_ContentLocaleMeta ON dbo.t_Content.ContentID = dbo.t_ContentLocaleMeta.ContentID
+                      dbo.t_ContentLocaleMeta ON dbo.t_Content.ContentID = dbo.t_ContentLocaleMeta.ContentID INNER JOIN
+                      dbo.t_Label ON dbo.t_Content.ContentTypeID = dbo.t_Label.LabelID
 ' 
 GO
 
@@ -1860,7 +1861,7 @@ IF @localeIDexists IS NULL
 IF @defaultContentLocaleID = 0 AND @localeIDexists = 0
   BEGIN
 	SET @sql = ''SELECT c.contentID, c.categoryID, c.contentName, c.contentName As contentNameDerived, '''''''' as ContentLocaleName,
-	c.contentTypeID, c.contentPositionID, c.contentPriority, c.contentLocalePriority, c.contentActive, c.ContentDate1, c.ContentDate2,
+	c.contentTypeID, c.ContentTypeName, c.contentPositionID, c.contentPriority, c.contentLocalePriority, c.contentActive, c.ContentDate1, c.ContentDate2,
 	0 as contentActiveDerived, c.contentIndexed, 
 	c.sourceID, c.propertiesID as contentPropertiesID,
 	NULL As contentLocaleID, NULL As contentLocaleActive, 
@@ -1890,6 +1891,7 @@ ELSE --the the combination of both t_content and t_ContentLocale information
 	contentNameDerived varchar(1000),
 	ContentLocaleName varchar(1000),
 	contentTypeID INT, 
+	ContentTypeName varchar(128),
 	contentPositionID INT, 
 	contentPriority INT, 
 	contentLocalePriority INT, 
@@ -1914,7 +1916,7 @@ ELSE --the the combination of both t_content and t_ContentLocale information
 	WHEN ''0'' THEN c.contentName
 	ELSE cl.contentLocaleName
 	END as contentNameDerived, cl.ContentLocaleNAme,
-	c.contentTypeID, c.contentPositionID, c.contentPriority, c.ContentLocalePriority, c.contentActive,
+	c.contentTypeID, c.ContentTypeName, c.contentPositionID, c.contentPriority, c.ContentLocalePriority, c.contentActive,
 	c.ContentDate1, c.ContentDate2,
 	CASE c.contentActive
 	WHEN 0 THEN 0
@@ -2111,6 +2113,7 @@ contentName varchar(1000),
 contentNameDerived varchar(1000),
 ContentLocaleName varchar(1000),
 contentTypeID INT, 
+ContentTypeName varchar(128),
 contentPositionID INT, 
 contentPriority INT, 
 contentLocalePriority int,
@@ -2210,6 +2213,7 @@ contentName varchar(1000),
 contentNameDerived varchar(1000),
 ContentLocaleName varchar(1000),
 contentTypeID INT, 
+ContentTypeName varchar(128),
 contentPositionID INT, 
 contentPriority INT, 
 contentLocalePriority INT, 

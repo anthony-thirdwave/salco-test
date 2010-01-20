@@ -2,9 +2,9 @@
 <cfif IsDefined("ATTRIBUTES.StatusMessage")>
 	<cfset StatusMessage=ATTRIBUTES.StatusMessage>
 </cfif>
-<cfif IsDefined("URL.cvid") and isDefined("CLIENT.mb_#URL.cvid#")>
-	<cfset StatusMessage=Evaluate("CLIENT.mb_#URL.cvid#")>
-	<cfset DevNull=DeleteClientVariable("mb_#URL.cvid#")>
+<cfif IsDefined("URL.cvid") and isDefined("SESSION.mb_#URL.cvid#")>
+	<cfset StatusMessage=Evaluate("SESSION.mb_#URL.cvid#")>
+	<cfset SetVariable("SESSION.mb_#URL.cvid#","")>
 </cfif>
 <cfif IsDefined("URL.svid")>
 	<cfset StatusMessage=Evaluate("SESSION.mb_#URL.svid#")>
