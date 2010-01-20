@@ -1443,7 +1443,6 @@ code/webroot/common/scripts/fckeditor/fckstyles.xml -text
 code/webroot/common/scripts/fckeditor/fcktemplates.xml -text
 code/webroot/common/scripts/fckeditor/htaccess.txt -text
 code/webroot/common/scripts/fckeditor/license.txt -text
-code/webroot/common/scripts/handlers.js -text
 code/webroot/common/scripts/pngfix.js -text
 code/webroot/common/scripts/prototype.js -text
 code/webroot/common/scripts/scriptaculous/CHANGELOG -text
