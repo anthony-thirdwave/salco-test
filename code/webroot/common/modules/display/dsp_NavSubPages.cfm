@@ -2,33 +2,38 @@
 <cfparam name="ThisParentID" default="-1">
 
 <cfquery name="GetThesePages" datasource="#APPLICATION.DSN#">
-	select parentid, CategoryID,CategoryURL,CategoryAlias,CategoryName from qry_GetCategoryMeta
-	Where ParentID=<cfqueryparam value="#Val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer"> and 
-		CAtegoryTypeID  IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">) AND
-		ShowInNavigation = 1 AND
-		CategoryActive =1 and ParentID <> 1
-	order by CategoryLocalePriority
+	SELECT		parentid, CategoryID,CategoryURL,CategoryAlias,CategoryName 
+	FROM 		qry_GetCategoryMeta
+	WHERE		ParentID=<cfqueryparam value="#Val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer"> 
+		AND		CategoryTypeID IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">) 
+		AND		ShowInNavigation = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+		AND		CategoryActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+		AND		ParentID <> <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+	ORDER BY CategoryLocalePriority
 </cfquery>
 <cfif GetThesePages.RecordCount GT "0">
 	<cfset ThisParentID=GetThesePages.ParentID>
 </cfif>
 <cfif GetThesePages.RecordCount IS "0">
 	<cfquery name="GetParent" datasource="#APPLICATION.DSN#">
-		select ParentID from t_category
-		Where CategoryID=<cfqueryparam value="#Val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer"> and 
-			CAtegoryTypeID  IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">) AND
-			ShowInNavigation = 1 AND
-			CategoryActive = 1
-		order by displayOrder
+		SELECT 		ParentID 
+		FROM 		t_category
+		WHERE 		CategoryID=<cfqueryparam value="#Val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer"> 
+			AND 	CategoryTypeID  IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">) 
+			AND		ShowInNavigation = <cfqueryparam value="1" cfsqltype="cf_sql_integer"> 
+			AND		CategoryActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+		ORDER BY displayOrder
 	</cfquery>
 	<cfset ThisParentID=GetParent.ParentID>
 	<cfquery name="GetThesePages" datasource="#APPLICATION.DSN#">
-		select CategoryID,CategoryURL,CategoryAlias,CategoryName from qry_GetCategoryMeta
-		Where ParentID=<cfqueryparam value="#Val(GetParent.ParentID)#" cfsqltype="cf_sql_integer"> and ParentID <> 1 and
-			CAtegoryTypeID  IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">) AND
-			ShowInNavigation = 1 AND
-			CategoryActive =1
-		order by CategoryLocalePriority
+		SELECT 		CategoryID,CategoryURL,CategoryAlias,CategoryName
+		FROM 		qry_GetCategoryMeta
+		WHERE 		ParentID=<cfqueryparam value="#Val(GetParent.ParentID)#" cfsqltype="cf_sql_integer">
+			AND 	ParentID <> <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+			AND		CategoryTypeID  IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">)
+			AND		ShowInNavigation = <cfqueryparam value="1" cfsqltype="cf_sql_integer"> 
+			AND		CategoryActive = <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+		ORDER BY CategoryLocalePriority
 	</cfquery>
 </cfif>
 

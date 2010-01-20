@@ -1,5 +1,7 @@
 <cfparam name="ATTRIBUTES.CategoryID" default="-1">
 <cfparam name="ATTRIBUTES.CategoryAlias" default="">
+<cfparam name="ATTRIBUTES.PreviewSourceContentID" default="-1">
+<cfparam name="ATTRIBUTES.PreviewTargetContentID" default="-1">
 
 <cfset CALLER.NoContent="1">
 <cfset CALLER.CurrentCategoryName="Page Not Found">
@@ -193,27 +195,23 @@
 			<cfif ListFind("",CALLER.CurrentCategoryID)><!--- Certain page types should always recache --->
 				<cfset recacheThis = true>
 			</cfif>
-			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#GetPage.CategoryAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#IsDefined('URL.ShowContentOnly')#_#DateFormat(CALLER.CacheDateTime,'yyyymmdd')##TimeFormat(CALLER.CacheDateTime,'HHmmss')#.cfm">
+			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#GetPage.CategoryAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(CALLER.CacheDateTime,'yyyymmdd')##TimeFormat(CALLER.CacheDateTime,'HHmmss')#.cfm">
 		</cfif>
 		<cfset StructInsert(CALLER.sIncludeFile,ThisContentPositionID,"#APPLICATION.TempMapping##ExecuteTempFile#",1)>
 		<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") OR REQUEST.ReCache or Isdefined("prcid") or REQUEST.ContentGenerateMode IS "FLAT" OR recacheThis>
 			<cfif DenyAccess>
-				<cfinvoke component="com.ContentManager.ContentManager"
-					method="GetColumnOutput"
-					returnVariable="FileContents"
-					CategoryID="#Val(LoginPageCategoryID)#"
-					LocaleID="#APPLICATION.LocaleID#"
-					ContentPositionID="#ThisContentPositionID#"
-					CategoryThreadList="#CALLER.CategoryThreadList#">
+				<cfset CategoryIDPrime="#Val(LoginPageCategoryID)#">
 			<cfelse>
-				<cfinvoke component="com.ContentManager.ContentManager"
-					method="GetColumnOutput"
-					returnVariable="FileContents"
-					CategoryID="#Val(CALLER.CurrentCategoryID)#"
-					LocaleID="#APPLICATION.LocaleID#"
-					ContentPositionID="#ThisContentPositionID#"
-					CategoryThreadList="#CALLER.CategoryThreadList#">
+				<cfset CategoryIDPrime="#Val(CALLER.CurrentCategoryID)#">
 			</cfif>
+			<cfmodule template="/common/modules/ContentManager/GetColumn.cfm"
+				returnVariable="FileContents"
+				CategoryID="#Val(CategoryIDPrime)#"
+				LocaleID="#APPLICATION.LocaleID#"
+				ContentPositionID="#ThisContentPositionID#"
+				CategoryThreadList="#CALLER.CategoryThreadList#"
+				PreviewSourceContentID="#Val(ATTRIBUTES.PreviewSourceContentID)#"
+				PreviewTargetContentID="#Val(ATTRIBUTES.PreviewTargetContentID)#">
 			<cfif ListFind("401,402",ThisContentPositionID) and Trim(FileContents) IS NOT "">
 				<cfset CALLER.NoContent="0">
 			</cfif>
@@ -280,10 +278,9 @@
 					<cfelse>
 						<cfset sContentBody=StructNew()>
 					</cfif>
-					<cfinvoke component="com.ContentManager.ContentManager"
-						method="GetColumnOutput"
+					<cfmodule template="/common/modules/ContentManager/GetColumn.cfm"
 						returnVariable="FileContents"
-						CategoryID="48"
+						CategoryID="#Val(APPLICATION.CategoryID404Page)#"
 						LocaleID="#APPLICATION.LocaleID#"
 						ContentPositionID="#ThisContentPositionID#"
 						CategoryThreadList="#CALLER.CategoryThreadList#">

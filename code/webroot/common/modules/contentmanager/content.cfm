@@ -1,13 +1,18 @@
 <!--- declare variables --->
 <cfparam name="CategoryID" default="">
 <cfparam name="Page" default="">
-<cfparam name="URL.ShowContentOnly" default="No">
 <cfparam name="URL.pff" default="no">
-<cfparam name="ForceNew" default="0">
+<cfparam name="URL.prcid" default="">
+<cfparam name="URL.pcid" default="">
+<cfset PreviewTargetContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.prcid))>
+<cfset PreviewSourceContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.pcid))>
 
 <cfmodule template="/common/modules/ContentManager/GetContent.cfm"
-	CategoryID="#CategoryID#"
-	CategoryAlias="#Page#">
+	CategoryID="#Val(CategoryID)#"
+	CategoryAlias="#Page#"
+	PreviewTargetContentID="#Val(PreviewTargetContentID)#"
+	PreviewSourceContentID="#Val(PreviewSourceContentID)#"
+	>
 
 <!--- TODO - is this how this will happen? --->
 <cfset sApplicationCategoryID=StructNew()>
@@ -18,17 +23,13 @@
 	</cfif>
 </cfif>
 
-<cfif Val(URL.ShowContentOnly)>
-	<cfinclude template="/common/modules/display/templates/dsp_SimpleContent.cfm">
-<cfelse>
-	<!--- TODO - this section handles multiple display instances based up on application name --->
-	<cfswitch expression="#TemplateID#">
-		<cfdefaultcase>
-			<cfswitch expression="#APPLICATION.ApplicationName#">
-				<cfdefaultcase>
-					<cfinclude template="/common/modules/display/templates/dsp_content.cfm">
-				</cfdefaultcase>
-			</cfswitch>
-		</cfdefaultcase>
-	</cfswitch>
-</cfif>
+<!--- TODO - this section handles multiple display instances based up on application name --->
+<cfswitch expression="#TemplateID#">
+	<cfdefaultcase>
+		<cfswitch expression="#APPLICATION.ApplicationName#">
+			<cfdefaultcase>
+				<cfinclude template="/common/modules/display/templates/dsp_content.cfm">
+			</cfdefaultcase>
+		</cfswitch>
+	</cfdefaultcase>
+</cfswitch>
