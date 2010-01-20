@@ -81,15 +81,16 @@
 	<input type="hidden" value="1" name="DefaultCategoryLocale" />
 </cfif>
 
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="text"
-	caption="Override URL" 
-	ObjectName="MyCategoryLocale"
-	PropertyName="CategoryLocaleURL"
-	size="40" maxlength="128"
-	Required="N">
-
+<cfif APPLICATION.GetAllLocale.RecordCount GT 1>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="Override URL" 
+		ObjectName="MyCategoryLocale"
+		PropertyName="CategoryLocaleURL"
+		size="40" maxlength="128"
+		Required="N">
+</cfif>
 		
 <cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 	ObjectAction="#FormMode#"

@@ -388,7 +388,7 @@
 		<cfset MyContentLocale.Constructor(Val(EditContentLocaleID))>
 	
 		<cfset StringToTest=MyContentLocale.GetProperty("HTMLTemplate")>
-		<cfinvoke	component="com.utils.utils"
+		<cfinvoke component="com.utils.utils"
 			method="extractByToken"
 			content="#StringToTest#"
 			startToken="[["

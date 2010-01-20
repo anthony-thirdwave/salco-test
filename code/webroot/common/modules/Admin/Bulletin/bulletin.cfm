@@ -66,7 +66,7 @@
 				<tr>
 					<td style="font-size:11px;" width="80%" valign="top">#Replace(Message,"#Chr(13)##Chr(10)#","<br/>","all")#<div id="message_#bulletinID#" style="display:none; ">#Message#</div></td>
 					<td style="font-size:10px; " valign="top">
-						<span style="color:red;">#DateFormat(PostDate,'mm/dd/yyyy')#</span><br>
+						<span style="color:red;">#APPLICATION.utilsObj.OutputDateTime(PostDate)#</span><br>
 						<cfif thisMode EQ "edit">
 							<a href="javascript:editMsg(#bulletinID#);" title="Edit"><img src="/common/images/admin/icon_edit.gif" border="0"/></a>&nbsp;
 							<a href="javascript:deleteMsg(#bulletinID#);" title="Delete"><img src="/common/images/admin/icon_delete.gif" border="0"/></a>

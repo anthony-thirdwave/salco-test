@@ -75,7 +75,7 @@
 <cfelseif GetCategoryDetails.RecordCount GT "0">
 	<cfoutput query="GetCategoryDetails" group="CategoryID">
 		<div class="actionlist1">	
-			<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_preview.gif" border="0"> Preview</A>
+			<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"> Preview</A>
 		
 			<!--- CRUD --->
 			<cf_AddToQueryString querystring="#MVQueryString#" name="MVCid" value="#Val(ParentID)#">
@@ -87,7 +87,7 @@
 				<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
 				<cf_AddToQueryString querystring="#QueryString#" name="lid" value="#lid#">
 				<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="Edit">
-				<a href="#Location#?#querystring#"><img src="/common/images/admin/icon_edit.gif" border="0"> Edit</a>
+				<a href="#Location#?#querystring#" title="Edit"><img src="/common/images/admin/icon_edit.gif" border="0"> Edit</a>
 			</cfif>
 			<cfif sPermissions["pDelete"]>
 				<cfset SavedToProduction="No">
@@ -104,14 +104,14 @@
 					<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
 		
 					<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
-					<a href="#Location#?#querystring#"><img src="/common/images/admin/icon_delete.gif" border="0"> Delete</A>
+					<a href="#Location#?#querystring#" title="Delete"><img src="/common/images/admin/icon_delete.gif" border="0"> Delete</A>
 				</cfif>
 			</cfif>
 			<cfif sPermissions["pCreate"]>
 				<cf_AddToQueryString querystring="#MVQueryString#" name="PageAction" value="Add">
 				<cf_AddToQueryString querystring="#QueryString#" name="pid" value="#cid#" OmitList="Cid">
 				<cf_AddToQueryString querystring="#QueryString#" name="lid" value="#lid#">
-				<a href="#Location#?#querystring#"><img src="/common/images/admin/icon_add.gif" border="0"> Add Sub Page</A>
+				<a href="#Location#?#querystring#"  title="Add Sub Page"><img src="/common/images/admin/icon_add.gif" border="0"> Add Sub Page</A>
 			</cfif>
 		</div>
 		<div style="background-color:white">&nbsp;

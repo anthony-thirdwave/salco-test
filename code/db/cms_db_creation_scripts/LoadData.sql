@@ -351,6 +351,7 @@ SET IDENTITY_INSERT t_Country OFF
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 502,'open','Opened',100,30,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 503,'savelive','Saved to Production',100,40,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 506,'delete','Deleted',100,50,null,0
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 507,'touch','Touched',100,60,null,0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 700,'FEEDST','New',700,1,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 701,'FEEDST','Received',700,11,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 702,'FEEDST','Resolved',700,21,null,null

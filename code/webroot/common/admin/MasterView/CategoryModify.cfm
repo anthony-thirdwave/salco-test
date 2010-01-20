@@ -61,7 +61,7 @@
 <cfif PageAction IS "Add" and val(EditParentID) GT "0">
 	<cfset MyCategory.SetProperty("ParentID",EditParentID)>
 	<cfif IsDefined("URL.CategoryTypeID")>
-	<cfset MyCategory.SetProperty("CategoryTypeID",URL.CategoryTypeID)>
+		<cfset MyCategory.SetProperty("CategoryTypeID",URL.CategoryTypeID)>
 	</cfif>
 </cfif>
 <cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
@@ -92,7 +92,7 @@
 		<!--- if the form is submitted, load the form values into the object --->
 	
 		<!--- Handling MyCategory --->
-		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,UserloginAccess,lTopicID,foobar"><!--- juno --->
+		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,UserloginAccess,lTopicID,foobar">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategory.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
 		</cfloop>
@@ -252,7 +252,7 @@
 		<div>
 			<div class="box1">
 				<div class="boxtop1"><div></div></div>
-				<div class="ModuleTitle1"><cfoutput>#qLocale.LocaleName#</cfoutput> version</div>
+				<div class="ModuleTitle1"><cfoutput>#qLocale.LocaleName#</cfoutput> Version</div>
 				<div class="ModuleBody1">
 					<table width="90%" cellspacing="1" cellpadding="1">
 					<tr>
@@ -280,7 +280,7 @@
 					<div class="RuleDotted1"></div>
 					<div class="butContainerWysiwyg">
 						<input type="button" class="cxlBut2"  name="ButCancel" value="" onClick="history.back()" title="Cancel this edit and go to the previous page.">
-					    <input type="image" src="/common/images/admin/button_save.png" name="ButSubmit2" value="Save" />
+					    <input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" value="Save" />
 					</div>
 				</div>
 			</div>
@@ -330,7 +330,7 @@
 		<div>
 			<div class="box1">
 				<div class="boxtop1"><div></div></div>
-				<div class="ModuleTitle1"><cfoutput>#qLocale.LocaleName#</cfoutput> version</div>
+				<div class="ModuleTitle1"><cfoutput>#qLocale.LocaleName#</cfoutput> Version</div>
 				<div class="ModuleBody1">
 					<table width="90%" cellspacing="1" cellpadding="1">
 					<tr>
@@ -350,7 +350,8 @@
 			</div>
 		</div>
 		<cfset FormValid="No">
-		
+		<cfdump var="#MyCategory#">
+			<cfdump var="#MyCategoryLocale#">
 		<cfif MyCategoryLocale.GetCategoryTypeID() IS "73"><!--- This is a gallery  --->
 			<cfif IsDefined("lFileToImport") and lFileToImport IS NOT "">
 				<cfset FormValid="No">
@@ -387,6 +388,8 @@
 				<cfset MyCategory.SetProperty("CategoryPriority",10+val(MaxCategoryPriority))>
 			</cfif>
 			<cfset MyCategory.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
+			
+		
 			<!--- if article, make sure categoryid is set --->
 	<!---		<cfif MyCategory.GetProperty("CategoryTypeID") EQ 66 AND (Val(MyArticle.GetProperty("CategoryID")) NEQ MyCategory.GetProperty("CategoryID"))>
 				<cfset MyArticle.SaveCategoryID(MyCategory.GetProperty("CategoryID"))>

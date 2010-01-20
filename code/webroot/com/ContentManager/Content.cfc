@@ -409,11 +409,27 @@
 					<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 						Lookup="Category"
 						KeyID="#ThisCategoryID#">
+					<cfif Val(ARGUMENTS.UserID) GT "0">
+						<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+							UserID="#ARGUMENTS.UserID#"
+							Entity="Category"
+							KeyID="#thisCategoryID#"
+							Operation="Touch"
+							EntityName="#ThisContentName#">
+					</cfif>
 				</cfloop>
 			<cfelse>
 				<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 					Lookup="Content"
 					KeyID="#thisContentID#">
+				<cfif Val(ARGUMENTS.UserID) GT "0">
+					<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
+						UserID="#ARGUMENTS.UserID#"
+						Entity="Category"
+						KeyID="#thisCategoryID#"
+						Operation="Touch"
+						EntityName="#ThisContentName#">
+				</cfif>
 			</cfif>
 			
 			<cfquery name="GetLocales" datasource="#APPLICATION.DSN#">

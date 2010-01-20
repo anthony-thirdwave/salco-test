@@ -20,7 +20,7 @@
 		<cfset APPLICATION.USER_DSN = APPLICATION.DSN />
 			
 		<!--- this path should work for most implementations --->
-		<cfset local.pathPrefix = replaceNoCase(expandPath("."), "\webroot", "\", "all") />
+		<cfset local.pathPrefix = replaceNoCase(expandPath("\"), "\webroot", "\", "all") />
 		
 		<!--- the default paths for dev, staging and production 
 				- only change if root path doesn't contain webroot --->

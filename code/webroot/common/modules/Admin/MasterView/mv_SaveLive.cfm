@@ -210,12 +210,12 @@
 			<TD bgcolor="bac0c9" align="center">#YesNoFormat(CategoryActive)#</TD>
 			<TD bgcolor="bac0c9">
 			<table border="0" width="100%" cellspacing="0" cellpadding="0"><tr valign="top"><TD><small>last updated:</small></TD><TD nowrap>
-			<small>#DateFormat(CacheDateTime)# #TimeFormat(CacheDateTime)#</small></TD></TR>
+			<small>#APPLICATION.utilsObj.OutputDateTime(CacheDateTime)#</small></TD></TR>
 			<TR valign="top"><TD nowrap><Small>last saved live:</small></TD><TD nowrap>
 			<cfinvoke component="com.utils.tracking" method="GetTrackingDate" returnVariable="SaveLiveDate"
 				Entity="Category"
 				KeyID="#CategoryID#"
-				Operation="savelive"><cfif IsDate(SaveLiveDate)><small>#DateFormat(SaveLiveDate)# #TimeFormat(SaveLiveDate)#</small></cfif>
+				Operation="savelive"><cfif IsDate(SaveLiveDate)><small>#APPLICATION.utilsObj.OutputDateTime(SaveLiveDate)#</small></cfif>
 			<cfset ShouldSave="Yes">
 			<cfif IsDate(SaveLiveDate) and dateCompare(SaveLiveDate,CacheDateTime) GTE "0">
 				<cfset ShouldSave="No">

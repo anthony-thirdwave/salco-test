@@ -139,7 +139,7 @@
 							<cfif attributes.pagetitle eq "General Feedback">
 								<td>#getFeedBack.CategoryName#</td>
 							</cfif>
-							<td nowrap>#DateFormat(getFeedBack.DateEntered, "mm/dd/yyyy")# - #TimeFormat(getFeedBack.DateEntered, "hh:mm:ss")#</td>
+							<td nowrap>#APPLICATION.utilsObj.OutputDateTime(getFeedBack.DateEntered)#</td>
 							<td nowrap>#getFeedback.FromName#<br>(<a href="mailto:#getFeedback.FromEmail#">#getFeedback.FromEmail#</a>) </td>
 							<td><p>#getFeedback.comments#</p></td>
 						</tr>
@@ -148,8 +148,7 @@
 						<td bgcolor="bac0c9">&nbsp;</td>
 						<TD align="center" bgcolor="eaeaea" <cfif ThisPage eq "General Feedback">colspan="5"<cfelse>colspan="4"</cfif>>
 						<div align="left"></div>
-						<div align="left">
-							<cfif GetFeedback.Recordcount lt 1>No feedback items meet your criteria.<cfelse><input type="submit" value="UPDATE"/></cfif></div></TD>
+						<div align="left"><cfif GetFeedback.Recordcount lt 1>No feedback items meet your criteria.<cfelse><input type="submit" value="UPDATE"/></cfif></div></TD>
 					</tr>
 					</form>
 				</cfoutput>

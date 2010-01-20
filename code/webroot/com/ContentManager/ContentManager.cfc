@@ -120,7 +120,7 @@
 								#FileContents#
 								<!-- START OF "#ContentNameDerived#" CONTENT BLOCK (#ContentID#) -->
 								<div id="#ThisCSSID#" class="#lcase(application.utilsObj.scrub(ContentTypeName))# position#ContentCounter#">
-									#Title# #TheseFileContents#
+									#Title# <div>#TheseFileContents#</div>
 								</div>
 								<!-- END OF "#ContentNameDerived#" CONTENT BLOCK -->
 							</cfsavecontent>

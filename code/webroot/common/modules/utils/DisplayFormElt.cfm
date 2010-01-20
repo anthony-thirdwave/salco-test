@@ -62,19 +62,6 @@
 <cfsilent>
 <cfset message="">
 <cfset ShowForm="0">
-<cfif NOT IsDefined("SESSION.CurrentBrowserApp")>
-	<cfif CGI.HTTP_USER_AGENT CONTAINS "MSIE">
-		<cfset SESSION.CurrentBrowserApp="IE">
-	<cfelse>
-		<cfset SESSION.CurrentBrowserApp="NS">
-	</cfif>
-</cfif>
-<cfif SESSION.CurrentBrowserApp IS "NS">
-	<cfparam name="ATTRIBUTES.Size" default="40">
-	<cfparam name="ATTRIBUTES.Cols" default="30">
-	<cfset ATTRIBUTES.Size=ATTRIBUTES.Size*0.60>
-	<cfset ATTRIBUTES.Cols=ATTRIBUTES.Cols*0.60>
-</cfif>
 <cfif ATTRIBUTES.ObjectAction IS "ShowForm">
 	<cfset ShowForm="1">
 	<cfset Message="">

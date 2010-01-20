@@ -184,17 +184,6 @@
 		<cfset LoginPageCacheDateTime="#GetLoginModule.CacheDateTime#">
 		<cfset LoginPageCategoryID="#GetLoginModule.CategoryID#">
 	</cfif>  --->
-
-
-	<!--- Increment Page View Counter 
-	<cfif ListFind(SESSION.lPageIDView,Caller.CurrentCategoryID) IS "0" and Caller.CurrentCategoryID IS NOT 868>
-		<cfquery name="InsertPageView" datasource="#APPLICATION.DSN#">
-			insert into t_PageView (CategoryID)
-			VALUES
-			(<cfqueryparam value="#Caller.CurrentCategoryID#" cfsqltype="cf_sql_integer">)
-		</cfquery>
-		<cfset SESSION.lPageIDView=ListAppend(SESSION.lPageIDView,CALLER.CurrentCategoryID)>
-	</cfif>--->
 	
 	<cfloop index="ThisContentPositionID" list="#lPosition#">
 		<cfset recacheThis = false>

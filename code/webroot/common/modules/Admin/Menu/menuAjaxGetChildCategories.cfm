@@ -1,4 +1,4 @@
-<cfsetting showdebugoutput="no"><cfif NOT IsDefined("SESSION.adminuserpassword") OR (IsDefined("SESSION.adminuserpassword") AND SESSION.adminuserpassword EQ "")>session timeout<cfelse>
+<cfsetting showdebugoutput="0"><cfif NOT IsDefined("SESSION.adminuserpassword") OR (IsDefined("SESSION.adminuserpassword") AND SESSION.adminuserpassword EQ "")>session timeout<cfelse>
 <cfsilent>
 	<!--- BEGIN param ATTRIBUTES variables --->
 	<cfparam name="ATTRIBUTES.thisCatIDInitList" default="">

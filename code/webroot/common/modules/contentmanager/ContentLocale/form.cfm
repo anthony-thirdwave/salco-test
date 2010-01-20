@@ -523,7 +523,7 @@
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
 				fieldname="Text"
 				fileURL="#FileURL#"
-				height="200" width="400"
+				height="400" width="800"
 				Content="#MyContentLocale.GetProperty('Text')#">
 			</TD></TR>
 		<cfelse>
@@ -559,7 +559,7 @@
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
 				fieldname="HTMLTemplate"
 				fileURL="#FileURL#"
-				height="400" width="400"
+				height="400" width="800"
 				Content="#MyContentLocale.GetProperty('HTMLTemplate')#">
 			</TD></TR>
 		<cfelse>
@@ -606,7 +606,7 @@
 					<cfmodule template="/common/modules/utils/fckeditor.cfm"
 						fieldname="sHTML_#ThisToken#"
 						fileURL="#FileURL#"
-						height="200" width="400"
+						height="400" width="800"
 						Content="#ThisValue#">
 				<cfelse>
 					<cfoutput><textarea cols="80" rows="15" name="sHTML_#ThisToken#" wrap="virtual">#HTMLEditFormat(ThisValue)#</textarea></cfoutput>
@@ -628,7 +628,7 @@
 				<cfmodule template="/common/modules/utils/fckeditor.cfm"
 					fieldname="aText_#at#"
 					fileURL="#FileURL#"
-					height="200" width="400"
+					height="400" width="800"
 					Content="#aText[at]#">
 			<cfelse>
 				<cfoutput><textarea cols="80" rows="15" name="aText_#at#" wrap="virtual">#aText[at]#</textarea></cfoutput>
@@ -646,7 +646,7 @@
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
 				fieldname="aText_New"
 				fileURL="#FileURL#"
-				height="200" width="400"
+				height="400" width="800"
 				Content="">
 		<cfelse>
 			<cfoutput><textarea cols="80" rows="15" name="aText_New" wrap="virtual"></textarea></cfoutput>

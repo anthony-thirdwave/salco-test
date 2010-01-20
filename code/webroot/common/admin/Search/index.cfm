@@ -1,4 +1,3 @@
-<cfsilent>
 <cfif IsDefined("URL.newSearch")>
 		
 	<cfquery name="getResults" datasource="#APPLICATION.DSN#">
@@ -48,7 +47,6 @@
 	<cfset thisPageNum = URL.pnum>
 </cfif>
 
-
 <cfif IsDefined("newResultNum")>
 	<cflock scope="session" type="exclusive" timeout="5">
 		<cfset SESSION.sGlobalSearch.resultsPerPage = Val(newResultNum)>
@@ -65,7 +63,7 @@
 	<cfset thisPageTitle = "Global Search: #qTheseResults.RecordCount# Matches for ""#thisSearchText#""">
 </cfif>
 
-</cfsilent><cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
 	Page="#thisPageTitle#"
 	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | Search">
 
@@ -105,27 +103,6 @@ function valNewSearch(thisForm){
 	</form>
 </cfoutput>
 <cfif IsQuery(qTheseResults)>
-<!--- <script language="javascript">
-<!--
-function doChecking(){
-	
-	bool = document.getElementById('CategoryIDSelector').checked;
-	
-	eleCheckBox = document.getElementById('checkboxForm').CategoryIdList;
-	
-	if(isNaN(eleCheckBox.length)){
-		alert('here');
-		eleCheckBox.checked = bool;
-	}
-	else{
-		for(i=0;i<eleCheckBox.length;i++){
-			eleCheckBox[i].checked = bool;
-		}
-	}
-	
-}
-//-->
-</script> --->
 	<cfif thisSortBy EQ "title" AND thisSortOrder EQ "asc"><cfset titleOrder = "desc"><cfelse><cfset titleOrder = "asc"></cfif>
 	<cfif thisSortBy EQ "alias" AND thisSortOrder EQ "asc"><cfset aliasOrder = "desc"><cfelse><cfset aliasOrder = "asc"></cfif>
 	<cfif thisSortBy EQ "date" AND thisSortOrder EQ "asc"><cfset dateOrder = "desc"><cfelse><cfset dateOrder = "asc"></cfif>
@@ -171,15 +148,15 @@ function doChecking(){
 			<tr>
 				<td align="left" width="13%">
 					<img src="/common/images/spacer.gif" width="10" height="1" border="0"/>
-					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank"><img src="/common/images/icon_preview.gif" hspace="2" border="0"/></a>
-					<a href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#"><img src="/common/images/icon_edit.gif" hspace="2" border="0"/></a>
+					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" hspace="2" border="0"/></a>
+					<a href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#" title="Edit"><img src="/common/images/admin/icon_edit.gif" hspace="2" border="0"/></a>
 					<!--- <a href="##"><img src="/common/images/icon_delete.gif" hspace="2" border="0"/></a> --->
 				</td>
 				<td width="29%"><a style="font-weight:bold;" href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#">#CategoryName#</a></td>
 				<td width="29%">#CategoryAlias#</td>
-				<td width="29%">#DateFormat(LastUpdated,'dd-mmm-yy')# #TimeFormat(LastUpdated,'h:mmtt')#</td>
+				<td width="29%">#APPLICATION.utilsObj.OutputDateTime(LastUpdated)#</td>
 			</tr>
-			<cfif showDashes><tr><td colspan="4" style=" border-top:1px dashed ##999999;"><img src="/common/images/spacer.gif" height="1" width="1" border="0"/></td></tr></cfif>
+			<cfif showDashes><tr><td colspan="4" style="border-top:1px dashed ##999999;"><img src="/common/images/spacer.gif" height="1" width="1" border="0"/></td></tr></cfif>
 		</cfoutput>
 		<cfoutput>
 		<cf_AddToQueryString querystring="" name="sortBy" value="#thisSortBy#">

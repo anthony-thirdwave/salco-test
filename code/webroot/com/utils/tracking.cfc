@@ -100,7 +100,7 @@
 		<cfif qry_GetTracking.recordCount IS "0">
 			<cfset ReturnString="No information">
 		<cfelse>
-			<cfset ReturnString="#qry_GetTracking.OperationName# by #qry_GetTracking.UserLogin# on #DateFormat(qry_GetTracking.TrackingDateTime)# #TimeFormat(qry_GetTracking.TrackingDateTime)#">
+			<cfset ReturnString="#qry_GetTracking.OperationName# by #qry_GetTracking.UserLogin# on #APPLICATION.utilsObj.OutputDateTime(qry_GetTracking.TrackingDateTime)#">
 		</cfif>
 		<cfreturn ReturnString>
 	</cffunction>
@@ -153,7 +153,7 @@
 			ORDER BY 	TrackingDateTime DESC
 		</cfquery>
 		<cfoutput query="qry_GetTracking">
-			<cfset ReturnString="#OperationName# by #UserLogin# on #DateFormat(TrackingDateTime)# #TimeFormat(TrackingDateTime)#">
+			<cfset ReturnString="#OperationName# by #UserLogin# on #APPLICATION.utilsObj.OutputDateTime(TrackingDateTime)#">
 		</cfoutput>
 		<cfreturn ReturnString>
 	</cffunction>
@@ -173,7 +173,7 @@
 		</cfquery>
 
 		<cfoutput query="qry_GetTracking">
-			<cfset ReturnString="#OperationName# by #UserLogin# on #DateFormat(TrackingDateTime)# #TimeFormat(TrackingDateTime)#">
+			<cfset ReturnString="#OperationName# by #UserLogin# on #APPLICATION.utilsObj.OutputDateTime(TrackingDateTime)#">
 		</cfoutput>
 		<cfreturn ReturnString>
 	</cffunction>
@@ -232,7 +232,7 @@
 		<cfif qry_GetTracking.recordCount IS "0">
 			<cfset ReturnString="No information">
 		<cfelse>
-			<cfset ReturnString="#qry_GetTracking.OperationName# by #qry_GetTracking.UserLogin# on #DateFormat(qry_GetTracking.TrackingDateTime)# #TimeFormat(qry_GetTracking.TrackingDateTime)#">
+			<cfset ReturnString="#qry_GetTracking.OperationName# by #qry_GetTracking.UserLogin# on #APPLICATION.utilsObj.OutputDateTime(qry_GetTracking.TrackingDateTime)#">
 		</cfif>
 		
 		<cfreturn ReturnString>

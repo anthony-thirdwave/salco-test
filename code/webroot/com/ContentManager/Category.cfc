@@ -96,7 +96,7 @@
 	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="60,63,70"><!--- Content --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,AllowComments,CategoryIndexed,CategoryURL,TemplateID,WorkflowStatusID,aOwner">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed,CategoryURL,TemplateID,WorkflowStatusID,aOwner">
 			</cfcase>
 			<cfcase value="67"><!--- News List --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
