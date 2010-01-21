@@ -252,7 +252,7 @@
 			<cfset local.URL1 = xmlElemNew(local.myDoc, "url") />
 			
 			<cfset local.loc = xmlElemNew(local.myDoc, "loc") />
-			<cfset local.loc.xmlText = "#local.array_to_xml[local.j].url#" />
+			<cfset local.loc.xmlText = "#xmlFormat(local.array_to_xml[local.j].url)#" />
 
 			<cfset local.priority = xmlElemNew(local.myDoc, "priority") />
 			<cfset local.priority.xmlText = "#round(DecimalFormat(1/local.array_to_xml[local.j].priority) * 10)/10#" />
