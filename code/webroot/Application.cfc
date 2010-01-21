@@ -209,7 +209,7 @@
 	
 	
 	<!--- called when an uncaught exception occurs --->
-	<cffunction name="OnError" returntype="void">
+	<cffunction name="OnErrosssr" returntype="void">
 		<cfargument name="exception" type="any" required="true" />
 		<cfargument name="eventName" type="string" default="" />
 		

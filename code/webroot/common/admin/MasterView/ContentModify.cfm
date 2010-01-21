@@ -88,7 +88,7 @@
 		<cfset SourceContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 		<cfset SourceContentLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
 		
-		<cfloop index="PropertyToCopy" list="ContentID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,lStateProvince,PageActionURL,NumItems,ItemCode,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
+		<cfloop index="PropertyToCopy" list="ContentID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,lStateProvince,PageActionURL,NumItems,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,CSSClass,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
 			<cfset MyContentLocale.SetProperty("#PropertyToCopy#",SourceContentLocale.GetProperty("#PropertyToCopy#"))>
 		</cfloop>
 	<cfelse>
@@ -124,7 +124,7 @@
 			<cfset FORM.HTMLTemplate=ReplaceNoCase(FORM.HTMLTemplate,"</form>","</florm>","All")>
 		</cfif>
 		
-		<cfloop index="ThisProperty" list="ContentLocaleName,ContentLocaleActive,ContentAbstract,HTML,HTMLTemplate,Text,SubTitle,LinkURL,TextPosition,TitleTypeID,DefaultContentLocale,Location,lStateProvince,PageActionURL,NumItems,ItemCode,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
+		<cfloop index="ThisProperty" list="ContentLocaleName,ContentLocaleActive,ContentAbstract,HTML,HTMLTemplate,Text,SubTitle,LinkURL,TextPosition,TitleTypeID,DefaultContentLocale,Location,lStateProvince,PageActionURL,NumItems,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,CSSClass,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyContentLocale.SetProperty("#ThisProperty#",Evaluate("FORM.#ThisProperty#"))>
 		</cfloop>

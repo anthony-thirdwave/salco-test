@@ -31,12 +31,12 @@
 	<cfproperty name="Location" type="string" default="">
 	<cfproperty name="lStateProvince" type="string" default="">
 	<cfproperty name="PageActionURL" type="string" default="">
-	<cfproperty name="ItemCode" type="string" default="">
 	<cfproperty name="AllowMultipleRegistrations" type="boolean" default="">
 	<cfproperty name="lRelatedCategoryID" type="string" default="">
 	<cfproperty name="lMTCategoryIDRestrict" type="string" default="">
 	<cfproperty name="lMTCategoryIDAllow" type="string" default="">
 	<cfproperty name="CSSID" type="string" default="">
+	<cfproperty name="CSSClass" type="string" default="">
 	<cfproperty name="aLink" type="array" default="">
 	<cfproperty name="ShowEventRangeID" type="numeric" default="">
 	<cfproperty name="NumberOfMonths" type="numeric" default="">
@@ -78,12 +78,12 @@
 	<cfset structInsert(sPropertyDisplayName,"Location","location",1)>
 	<cfset structInsert(sPropertyDisplayName,"lStateProvince","state/province list",1)>
 	<cfset structInsert(sPropertyDisplayName,"PageActionURL","page action",1)>
-	<cfset structInsert(sPropertyDisplayName,"ItemCode","item code",1)>
 	<cfset structInsert(sPropertyDisplayName,"AllowMultipleRegistrations","allow registrant to register multiple persons",1)>
 	<cfset structInsert(sPropertyDisplayName,"lRelatedCategoryID","related categories",1)>
 	<cfset structInsert(sPropertyDisplayName,"lMTCategoryIDRestrict","restrict MT categories",1)>
 	<cfset structInsert(sPropertyDisplayName,"lMTCategoryIDAllow","allow MT categories",1)>
 	<cfset structInsert(sPropertyDisplayName,"CSSID","CSS ID",1)>
+	<cfset structInsert(sPropertyDisplayName,"CSSClass","CSS class",1)>
 	<cfset structInsert(sPropertyDisplayName,"aLink","List of Links",1)>
 	<cfset structInsert(sPropertyDisplayName,"ShowEventRangeID","show event range id",1)>
 	<cfset structInsert(sPropertyDisplayName,"NumberOfMonths","Number Of Months",1)>
@@ -221,12 +221,12 @@
 		<cfset this.SetProperty("Location","")>
 		<cfset this.SetProperty("lStateProvince","")>
 		<cfset this.SetProperty("PageActionURL","")>
-		<cfset this.SetProperty("ItemCode","")>
 		<cfset this.SetProperty("AllowMultipleRegistrations","0")>
 		<cfset this.SetProperty("lRelatedCategoryID","-1")>
 		<cfset this.SetProperty("lMTCategoryIDRestrict","")>
 		<cfset this.SetProperty("lMTCategoryIDAllow","-1")>
 		<cfset this.SetProperty("CSSID","")>
+		<cfset this.SetProperty("CSSClass","")>
 		<cfset this.SetProperty("aLink",aBlank)>
 		<cfset this.SetProperty("ShowEventRangeID","8002")>
 		<cfset this.SetProperty("NumberOfMonths","")>
@@ -268,7 +268,7 @@
 					<!--- Content Properties --->
 					<cfif isWDDX(ContentBody)>
 						<cfwddx action="WDDX2CFML" input="#ContentBody#" output="sContentBody">
-						<cfloop index="ThisProperty" list="NumItems,HTML,HTMLTemplate,Text,LinkURL,aText,TextPosition,Image,ImageRollover,ImageThumbnail,File,FileMimeID,FileSize,Flash,TitleTypeID,aFile,Location,ImageLarge,aToken,sHTML,lStateProvince,PageActionURL,ItemCode,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,aLink,ShowEventRangeID,NumberOfMonths,lArticleCategoryID,SubTitle">
+						<cfloop index="ThisProperty" list="NumItems,HTML,HTMLTemplate,Text,LinkURL,aText,TextPosition,Image,ImageRollover,ImageThumbnail,File,FileMimeID,FileSize,Flash,TitleTypeID,aFile,Location,ImageLarge,aToken,sHTML,lStateProvince,PageActionURL,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,CSSClass,aLink,ShowEventRangeID,NumberOfMonths,lArticleCategoryID,SubTitle">
 							<cfif StructKeyExists(sContentBody,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sContentBody["#ThisProperty#"])>
 							</cfif>
@@ -338,12 +338,12 @@
 		<cfset var thisLocation="">
 		<cfset var thislStateProvince="">
 		<cfset var thisPageActionURL="">
-		<cfset var thisItemCode="">
 		<cfset var thisAllowMultipleRegistrations="">
 		<cfset var thislRelatedCategoryID="">
 		<cfset var thislMTCategoryIDRestrict="">
 		<cfset var thislMTCategoryIDAllow="">
 		<cfset var thisCSSID="">
+		<cfset var thisCSSClass="">
 		<cfset var thisALink="">
 		<cfset var thisShowEventRangeID="">
 		<cfset var thisNumberOfMonths="">
@@ -421,12 +421,12 @@
 			<cfset thisLocation=this.GetProperty("Location")>
 			<cfset thislStateProvince=this.GetProperty("lStateProvince")>
 			<cfset thisPageActionURL=this.GetProperty("PageActionURL")>
-			<cfset thisItemCode=this.GetProperty("ItemCode")>
 			<cfset thisAllowMultipleRegistrations=this.GetProperty("AllowMultipleRegistrations")>
 			<cfset thislRelatedCategoryID=this.GetProperty("lRelatedCategoryID")>
 			<cfset thislMTCategoryIDRestrict=this.GetProperty("lMTCategoryIDRestrict")>
 			<cfset thislMTCategoryIDAllow=this.GetProperty("lMTCategoryIDAllow")>
 			<cfset thisCSSID=this.GetProperty("CSSID")>
+			<cfset thisCSSClass=this.GetProperty("CSSClass")>
 			<cfset thisALink=this.GetProperty("aLink")>
 			<cfset thisShowEventRangeID=this.GetProperty("ShowEventRangeID")>
 			<cfset thisNumberOfMonths=this.GetProperty("NumberOfMonths")>
@@ -683,12 +683,12 @@
 			<cfset structInsert(sContentBody,"Location","#Trim(ThisLocation)#",1)>
 			<cfset structInsert(sContentBody,"lStateProvince","#Trim(ThislStateProvince)#",1)>
 			<cfset structInsert(sContentBody,"PageActionURL","#Trim(ThisPageActionURL)#",1)>
-			<cfset structInsert(sContentBody,"ItemCode","#Trim(ThisItemCode)#",1)>
 			<cfset structInsert(sContentBody,"AllowMultipleRegistrations","#val(ThisAllowMultipleRegistrations)#",1)>
 			<cfset structInsert(sContentBody,"lRelatedCategoryID","#val(ThislRelatedCategoryID)#",1)>
 			<cfset structInsert(sContentBody,"lMTCategoryIDRestrict","#ThislMTCategoryIDRestrict#",1)>
 			<cfset structInsert(sContentBody,"lMTCategoryIDAllow","#ThislMTCategoryIDAllow#",1)>
 			<cfset structInsert(sContentBody,"CSSID","#Trim(ThisCSSID)#",1)>
+			<cfset structInsert(sContentBody,"CSSClass","#Trim(ThisCSSClass)#",1)>
 			<cfset structInsert(sContentBody,"aLink",ThisALink,1)>
 			<cfset structInsert(sContentBody,"ShowEventRangeID","#val(ThisShowEventRangeID)#",1)>
 			<cfset structInsert(sContentBody,"NumberOfMonths","#Trim(ThisNumberOfMonths)#",1)>
@@ -845,7 +845,7 @@
 				</cfif>
 			</cfif>
 			
-			<cfif ListFindNoCase("ItemCode",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
+			<cfif ListFindNoCase("",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
 				<cfset ARGUMENTS.VALUE=lcase(ReReplace(ARGUMENTS.VALUE,"[’\!'/:"".;?&<>|,]","","all"))>
 				<cfset ARGUMENTS.VALUE=lcase(ReReplace(ARGUMENTS.VALUE,"[ ]"," ","all"))>
 			</cfif>

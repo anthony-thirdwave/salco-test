@@ -70,6 +70,7 @@
 			positionid="#ATTRIBUTES.ContentPositionID#"
 			returnvariable="TheseFileContents">
 		<cfif Trim(TheseFileContents) IS NOT "">
+			<cfset ContentCounter=ContentCounter+1>
 			<cfif StructKeyExists(sContentBody,"TitleTypeID")>
 				<cfmodule template="/common/modules/ContentManager/TitleControl.cfm"
 					returnVariable="Title"
@@ -83,19 +84,23 @@
 			<cfelse>
 				<cfset ThisCSSID="ContentElement#GetContent.ContentID#">
 			</cfif>
+			<cfif StructKeyExists(sContentBody,"CSSClass") and sContentBody["CSSClass"] IS NOT "">
+				<cfset ThisAdditionalCSSClass="#sContentBody['CSSClass']# ">
+			<cfelse>
+				<cfset ThisAdditionalCSSClass="">
+			</cfif>
 			<cfswitch expression="#APPLICATION.ApplicationName#">
 				<cfdefaultcase>
 					<cfsavecontent variable="FileContents">
 						#FileContents#
 						<!-- START OF "#GetContent.ContentNameDerived#" CONTENT BLOCK (#GetContent.ContentID#) -->
-						<div id="#ThisCSSID#" class="#lcase(application.utilsObj.scrub(GetContent.ContentTypeName))# position#ContentCounter#">
+						<div id="#ThisCSSID#" class="#ThisAdditionalCSSClass##lcase(application.utilsObj.scrub(GetContent.ContentTypeName))# position#ContentCounter#">
 							#Title# <div>#TheseFileContents#</div>
 						</div>
 						<!-- END OF "#GetContent.ContentNameDerived#" CONTENT BLOCK -->
 					</cfsavecontent>
 				</cfdefaultcase>
 			</cfswitch>
-			<cfset ContentCounter=ContentCounter+1>
 		</cfif>
 	</cfoutput>
 </cfloop>

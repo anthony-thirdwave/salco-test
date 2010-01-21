@@ -117,7 +117,16 @@
 	PropertyName="CSSID"
 	size="40" maxlength="40"
 	Required="N">
-	
+
+<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+	ObjectAction="#FormMode#"
+	type="text"
+	caption="CSS Class" 
+	ObjectName="MyContentLocale"
+	PropertyName="CSSClass"
+	size="40" maxlength="40"
+	Required="N">
+
 <cfif ListFindNoCase(Restrictions,"SubTitle")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
@@ -226,17 +235,6 @@
 		size="40" maxlength="128"
 		Required="N"
 		Date="Y">
-</cfif>
-
-<cfif ListFindNoCase(Restrictions,"ItemCode")>
-	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-		ObjectAction="#FormMode#"
-		type="text"
-		caption="Item Code" 
-		ObjectName="MyContentLocale"
-		PropertyName="ItemCode"
-		size="11" maxlength="10"
-		Required="N">
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"AllowMultipleRegistrations")>
