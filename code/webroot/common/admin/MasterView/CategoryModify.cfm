@@ -252,7 +252,7 @@
 		<div>
 			<div class="box1">
 				<div class="boxtop1"><div></div></div>
-				<div class="ModuleTitle1"><cfoutput>#qLocale.LocaleName#</cfoutput> Version</div>
+				<div class="ModuleTitle1"><cfif qLocale.RecordCount IS "1">Additional Details<cfelse><cfoutput>#qLocale.LocaleName#</cfoutput> Version</cfif></div>
 				<div class="ModuleBody1">
 					<table width="90%" cellspacing="1" cellpadding="1">
 					<tr>
@@ -330,7 +330,7 @@
 		<div>
 			<div class="box1">
 				<div class="boxtop1"><div></div></div>
-				<div class="ModuleTitle1"><cfoutput>#qLocale.LocaleName#</cfoutput> Version</div>
+				<div class="ModuleTitle1"><cfif qLocale.RecordCount IS "1">Additional Details<cfelse><cfoutput>#qLocale.LocaleName#</cfoutput> Version</cfif></div>
 				<div class="ModuleBody1">
 					<table width="90%" cellspacing="1" cellpadding="1">
 					<tr>
