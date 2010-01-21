@@ -276,7 +276,7 @@ SET IDENTITY_INSERT t_Country OFF
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 70,'3wCAT','Biography',-40,110,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 71,'3WCAT','Event List',40,130,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 72,'3WCAT','Resource',-40,120,null,null
- insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 73,'3WCAT','Gallery',40,140,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 73,'3WCAT','Gallery',-40,140,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 74,'3WCAT','Banner Repository',40,150,null,0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 75,'3WCAT','MT Blog ',-40,20,null,0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 100,'EN','English',60,10,null,null
