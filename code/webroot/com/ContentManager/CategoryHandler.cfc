@@ -29,9 +29,10 @@
 		<cfset var GetRecentAlias = "">
 		<cfset var ValidAlias = "">
 		
-		<cfset CandidateAlias=lcase(ReReplace(ARGUMENTS.Name,"[’\!'/:"".+=;?&<>|,]","","all"))>
-		<cfset CandidateAlias=lcase(ReReplace(CandidateAlias,"[ ]"," ","all"))>
-		<cfset CandidateAlias=lcase(ReReplace(CandidateAlias,"[ ]","-","all"))>
+		<!--- scrub the alias prior to checking for duplicates --->
+		<cfinvoke method="scrubAlias" returnvariable="CandidateAlias">
+			<cfinvokeargument name="alias" value="#ARGUMENTS.Name#" />
+		</cfinvoke>
 		
 		<cfinvoke component="com.ContentManager.CategoryHandler" 
 			method="CheckDuplicateAlias"
@@ -44,12 +45,12 @@
 			<cfquery name="GetRecentAlias" datasource="#APPLICATION.DSN#">
 				select CategoryAlias from t_category Where CategoryAlias like <cfqueryparam value="#CandidateAlias#%" cfsqltype="cf_sql_varchar"> order by CategoryAlias Desc
 			</cfquery>
-			<cfset ReturnCandidateAlias="#CandidateAlias#_1">
+			<cfset ReturnCandidateAlias="#CandidateAlias#-1">
 			<cfset FoundHighAlias="">
 			<cfoutput query="GetRecentAlias">#CategoryAlias#
-				<cfif IsNumeric(ListLast(CategoryAlias,"_")) and ListLast(CategoryAlias,"_") GT Val(FoundHighAlias)>
-					<cfset ReturnCandidateAlias="#CandidateAlias#_#IncrementValue(ListLast(GetRecentAlias.CategoryAlias,'_'))#">
-					<cfset FoundHighAlias=ListLast(CategoryAlias,"_")>
+				<cfif IsNumeric(ListLast(CategoryAlias,"-")) and ListLast(CategoryAlias,"-") GT Val(FoundHighAlias)>
+					<cfset ReturnCandidateAlias="#CandidateAlias#-#IncrementValue(ListLast(GetRecentAlias.CategoryAlias,'-'))#">
+					<cfset FoundHighAlias=ListLast(CategoryAlias,"-")>
 				</cfif>
 			</cfoutput>
 			<cfreturn ReturnCandidateAlias>
@@ -666,5 +667,78 @@
 			<cfreturn ARGUMENTS.SBranch>
 		</cfif>
 
+	</cffunction>
+	
+	
+	
+	<!--- scrub an alias --->
+	<cffunction name="scrubAlias" output="false" returntype="string">
+		<cfargument name="alias" type="string" default="">
+		
+		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[’\!'/:"".+=;?&<>|,]","","all")) />
+		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[ ]"," ","all")) />
+		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[ ]","-","all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "##", "", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "¡",  "", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "$",  "", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "à",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "á",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "â",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ã",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ä",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "å",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "À",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Á",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Â",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ã",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ä",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Å",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ç",  "c", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ç",  "C", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "é",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "è",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ê",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ë",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "È",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "É",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ê",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ë",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ì",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "í",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "î",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ì",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Í",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Î",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ï",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ñ",  "n", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ñ",  "N", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ò",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ó",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ô",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "õ",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ö",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ø",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ò",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ó",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ô",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Õ",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ö",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ø",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "š",  "s", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Š",  "S", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ù",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ú",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "û",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ü",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ù",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ú",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Û",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ü",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ý",  "y", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "Ÿ",  "Y", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ß",  "ss", "all")) />
+		
+		<cfreturn arguments.alias />
 	</cffunction>
 </cfcomponent>
