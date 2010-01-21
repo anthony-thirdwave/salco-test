@@ -8,6 +8,7 @@
 
 	<!--- this function initializes the application, based upon the site type --->
 	<cffunction name="initializeApplication" returntype="boolean">
+		<cfargument name="pathPrefix" required="true" type="string" />
 	
 		<cfset var local = structNew() />
 		
@@ -18,15 +19,15 @@
 		<!--- set the datasources  --->
 		<cfinvoke method="getDatasource" returnvariable="APPLICATION.DSN" />
 		<cfset APPLICATION.USER_DSN = APPLICATION.DSN />
-			
+		
 		<!--- this path should work for most implementations --->
-		<cfset local.pathPrefix = replaceNoCase(expandPath("\"), "\webroot", "\", "all") />
+		<cfset arguments.pathPrefix = replaceNoCase(arguments.pathPrefix, "\webroot", "", "all") />
 		
 		<!--- the default paths for dev, staging and production 
 				- only change if root path doesn't contain webroot --->
-		<cfset local.devPathPrefix = local.pathPrefix />
-		<cfset local.stagingPathPrefix = local.pathPrefix />
-		<cfset local.productionPathPrefix = local.pathPrefix />
+		<cfset local.devPathPrefix = arguments.pathPrefix />
+		<cfset local.stagingPathPrefix = arguments.pathPrefix />
+		<cfset local.productionPathPrefix = arguments.pathPrefix />
 
 		<!--- default resource paths --->
 		<cfset APPLICATION.ContentResourcesPath = "resources\content\" />
@@ -157,9 +158,12 @@
 		<cfobject component="com.time.Time" name="APPLICATION.timeObj" />
 		<cfset APPLICATION.timeObj.init() />
 		
-		
 		<!--- read the factory config xml into memory --->
-		<cfif not isDefined("APPLICATION.FACTORYCONFIGSTATUS") and directoryExists(expandPath("/com/factory/thirdwave"))>
+		<cfif directoryExists("#APPLICATION.WebRootPath#com/factory/thirdwave")>
+			
+			<!--- create a factoryUtils object in memory --->
+			<cfobject component="com.factory.thirdwave.FactoryObjectUtils" name="APPLICATION.factoryUtilsObj" />
+			<cfset APPLICATION.factoryUtilsObj.init() />
 			
 			<cfinvoke method="initFactory" returnvariable="local.factorySuccess" />
 		</cfif>

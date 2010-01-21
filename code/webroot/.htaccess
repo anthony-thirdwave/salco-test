@@ -12,8 +12,17 @@ RewriteRule ^(common/admin.*)$ $1 [L,QSA]
 
 #END_DYNAMIC_CONTENT
 
-# Handle content alias in the second level e.g. '/content/about' 
-RewriteRule ^(.[^/.]*)/(.[^/]*)/?$ content.cfm?page=$2 [L,QSA]
+# if we're in https and this page doesn't have the /secure prefix
+RewriteCond %{HTTPS} =on
+RewriteCond %{REQUEST_URI} !secure/(.[^/]*)/?
+RewriteRule ^(.[^/.]*)/(.[^/]*)/?$ http://%{SERVER_NAME}/$1/$2 [QSA]
+
+# if we're not in https and this page has the /secure prefix, redirect to https
+RewriteCond %{HTTPS} !=on
+RewriteRule ^secure/(.[^/]*)/?$ https://%{SERVER_NAME}/secure/$1 [QSA]
+
+# Handle content alias in the second level e.g. '/content/about'
+RewriteRule ^(.[^/.]*)/(.[^/.]*)/?$ content.cfm?page=$2 [L,QSA]
 
 # Handle content aliases in the top level e.g. '/about'
 RewriteRule ^(.[^/.]*)/?$ content.cfm?page=$1 [L,QSA]

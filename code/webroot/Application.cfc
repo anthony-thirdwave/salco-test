@@ -92,8 +92,10 @@
 		
 		<cfset var local = structNew() />
 			
-		<!--- initialize the application --->
+		<!--- initialize the application - we pass the directory path of this file, because it's always webroot --->
 		<cfinvoke method="initializeApplication" component="com.application.ApplicationSettings">
+			<cfinvokeargument name="pathPrefix" value="#getDirectoryFromPath( getCurrentTemplatePath())#" />
+		</cfinvoke>
 
 		<cfreturn true />
 	</cffunction>
@@ -108,7 +110,7 @@
 	<cffunction name="OnSessionStart" returntype="void">
 
 		<!--- initialize the session --->
-		<cfinvoke method="initializeSession" component="com.application.SessionSettings">		
+		<cfinvoke method="initializeSession" component="com.application.SessionSettings" />		
 
 		<cfreturn />
 	</cffunction>
