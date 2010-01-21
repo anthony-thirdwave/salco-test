@@ -388,6 +388,7 @@ code/webroot/common/modules/contentmanager/ContentLocale/form.cfm -text
 code/webroot/common/modules/contentmanager/ContentLocale/upload.cfm -text
 code/webroot/common/modules/contentmanager/ContentNote/form.cfm -text
 code/webroot/common/modules/contentmanager/ContentPositionOutput.cfm -text
+code/webroot/common/modules/contentmanager/GetColumn.cfm -text
 code/webroot/common/modules/contentmanager/GetContent.cfm -text
 code/webroot/common/modules/contentmanager/TitleControl.cfm -text
 code/webroot/common/modules/contentmanager/UpdateVerity.cfm -text
