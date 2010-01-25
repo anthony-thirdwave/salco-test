@@ -1584,9 +1584,10 @@ SELECT	dbo.t_Category.CategoryId, dbo.t_Category.CategoryTypeId, dbo.t_Category.
 		dbo.t_Category.PropertiesId, dbo.t_Category.WorkflowStatusID, dbo.t_Category.TemplateID, 
 		dbo.t_Category.CacheDateTime, dbo.t_Category.SourceID, dbo.t_CategoryLocaleMeta.LocaleID, 
 		dbo.t_CategoryLocaleMeta.CategoryLocalePriority,
-		dbo.t_CategoryLocaleMeta.CategoryLocaleDisplayOrder
-FROM         dbo.t_Category 
-INNER JOIN   dbo.t_CategoryLocaleMeta ON dbo.t_Category.CategoryID = dbo.t_CategoryLocaleMeta.CategoryID' 
+		dbo.t_CategoryLocaleMeta.CategoryLocaleDisplayOrder,   dbo.t_Label.LabelName AS CategoryTypeName
+FROM         dbo.t_Category INNER JOIN
+                      dbo.t_CategoryLocaleMeta ON dbo.t_Category.CategoryID = dbo.t_CategoryLocaleMeta.CategoryID INNER JOIN
+                      dbo.t_Label ON dbo.t_Category.CategoryTypeID = dbo.t_Label.LabelID' 
 GO
 
 GO
@@ -1654,7 +1655,7 @@ IF @localeIDexists IS NULL
 --If no record exists in t_categoryLocale, then just get category information
 IF @defaultCategoryLocaleID = 0 AND @localeIDexists = 0
   BEGIN
-	SET @sql = ''SELECT c.categoryID, c.categoryTypeID, c.categoryName, c.categoryName As categoryNameDerived,
+	SET @sql = ''SELECT c.categoryID, c.categoryTypeID, c.categoryTypeName, c.categoryName, c.categoryName As categoryNameDerived,
 	c.categoryAlias, c.parentID, c.displayLevel,  
 	c.displayOrder, c.CategoryLocaledisplayOrder as displayOrderDerived, 
 	c.categoryActive, c.ShowInNavigation,
@@ -1686,6 +1687,7 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	CREATE TABLE #tempTable2 (
 	categoryID INT, 
 	categoryTypeID INT, 
+	categoryTypeName varchar(128),
 	categoryName varchar(128), 
 	categoryNameDerived varchar(128),
 	categoryAlias varchar(128),
@@ -1714,7 +1716,7 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	CategoryPropertiesPacket text
 	)
 	INSERT INTO #tempTable2
-	SELECT c.categoryID, c.categoryTypeID, c.categoryName, 
+	SELECT c.categoryID, c.categoryTypeID, c.categoryTypeName, c.categoryName, 
 	CASE isNull(cl.categoryLocaleName,''0'')
 	WHEN '''' THEN c.categoryName
 	WHEN ''0'' THEN c.categoryName
@@ -2282,6 +2284,7 @@ As
 CREATE TABLE #tempTable (
 categoryID INT, 
 categoryTypeID INT, 
+categoryTypeName varchar(128),
 categoryName varchar(128), 
 categoryNameDerived varchar(128),
 categoryAlias varchar(128),

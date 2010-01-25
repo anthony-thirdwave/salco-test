@@ -55,7 +55,9 @@
 </cfoutput>
 
 </head>
-<body><a name="top"></a>
+<cfoutput>
+	<body id="#CSSID#" class="#CSSClass#">
+</cfoutput><a name="top"></a>
 <!-- Main Element Container (wrapper) -->
 <div id="wrapper">
 	<!-- Header Elements Container (header) -->

@@ -85,7 +85,7 @@
 	<cfif IsDefined("FORM.ButLoad2") and FORM.ButLoad2 IS "Load" AND Val(lclid) GTE "1">
 		<cfset SourceCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 		<cfset SourceCategoryLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
-		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,ProductPrice,ProductFamilyDescription,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#">
+		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#">
 			<cfset MyCategoryLocale.SetProperty("#PropertyToCopy#",SourceCategoryLocale.GetProperty("#PropertyToCopy#"))>
 		</cfloop>
 	<cfelse>
@@ -104,7 +104,7 @@
 	
 		<!--- Handling MyCategoryLocale --->
 		<cfset MyCategoryLocale.SetCategoryTypeID(CategoryTypeID)>
-		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,ProductPrice,ProductFamilyDescription,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride">
+		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategoryLocale.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
 		</cfloop>

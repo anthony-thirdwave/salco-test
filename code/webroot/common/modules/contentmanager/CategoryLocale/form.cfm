@@ -49,7 +49,7 @@
 	size="80" maxlength="128"
 	Required="N">
 	
-<cfif ListFindNoCase(Restrictions,"ProductPrice")>
+<cfif ListFindNoCase(Restrictions,"CSSID")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -112,16 +112,24 @@
 	EscapeCRLF="No"
 	Required="N">
 	
-<cfif ListFindNoCase(Restrictions,"ProductPrice")>
-	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-		ObjectAction="#FormMode#"
-		type="text"
-		caption="Product Price" 
-		ObjectName="MyCategoryLocale"
-		PropertyName="ProductPrice"
-		size="40" maxlength="128"
-		Required="N">
-</cfif>
+<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+	ObjectAction="#FormMode#"
+	type="text"
+	caption="CSS ID<BR>Default will be alias of this page" 
+	ObjectName="MyCategoryLocale"
+	PropertyName="CSSID"
+	size="40" maxlength="128"
+	Required="N">
+	
+<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+	ObjectAction="#FormMode#"
+	type="textarea"
+	caption="CSS Class" 
+	ObjectName="MyCategoryLocale"
+	PropertyName="CSSClass"
+	cols="40" rows="3"
+	EscapeCRLF="No"
+	Required="N">
 
 <cfif ListFindNoCase(Restrictions,"Title")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
@@ -142,18 +150,6 @@
 		ObjectName="MyCategoryLocale"
 		PropertyName="CallToActionURL"
 		size="40" maxlength="128"
-		Required="N">
-</cfif>
-
-<cfif ListFindNoCase(Restrictions,"ProductFamilyDescription")>
-	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-		ObjectAction="#FormMode#"
-		type="textarea"
-		caption="Positioning Sentence" 
-		ObjectName="MyCategoryLocale"
-		PropertyName="ProductFamilyDescription"
-		cols="40" rows="3"
-		EscapeCRLF="No"
 		Required="N">
 </cfif>
 

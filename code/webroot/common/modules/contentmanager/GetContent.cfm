@@ -29,6 +29,8 @@
 <cfset CALLER.sContent=StructNew()>
 <cfset CALLER.CenterColumnTitle="">
 <cfset CALLER.AllowComments="0">
+<cfset CALLER.CSSID="">
+<cfset CALLER.CSSClass="">
 
 <cfset DenyAccess="0">
 <cfset LoginPageCacheDateTime="">
@@ -73,6 +75,8 @@
 	<cfset REQUEST.CurrentCategoryAlias=GetPage.CategoryAlias>
 	<cfset CALLER.CurrentCategoryID=GetPage.CategoryID>
 	<cfset CALLER.CurrentSourceID=GetPage.SourceID>
+	<cfset CALLER.CSSID=GetPage.CategoryAlias>
+	
 	<cfif IsWDDX(GetPage.CategoryLocalePropertiesPacket)>
 		<cfwddx action="WDDX2CFML" input="#GetPage.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
 		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride">
@@ -155,10 +159,21 @@
 				<cfif StructKeyExists(sProperties,"CategoryImageTitle") AND sProperties.CategoryImageTitle is not "" and CALLER.CategoryImageTitle is "">
 					<cfset CALLER.CategoryImageTitle=sProperties.CategoryImageTitle>
 				</cfif>
+				<!--- Properties that just come from this category locale --->
+				<cfif CurrentRow IS "1">
+					<cfloop index="ThisProp" list="CSSClass,CSSID">
+						<cfif StructKeyExists(sProperties,"#ThisProp#") AND Trim(StructFind(sProperties, "#ThisProp#")) IS NOT "">
+							<cfset SetVariable("CALLER.#ThisProp#",StructFind(sProperties, "#ThisProp#"))>
+						</cfif>
+					</cfloop>
+				</cfif>
 			</cfif>
 		</cfoutput>
 	</cfif>
-
+	
+	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
+	
+	
 	<!--- handle security --->
 <!---
 	<!--- First check if anyone is logging in via persistant right column form --->

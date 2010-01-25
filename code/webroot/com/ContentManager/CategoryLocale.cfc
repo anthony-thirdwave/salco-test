@@ -19,9 +19,9 @@
 	<cfproperty name="CategoryImageRepresentative" type="string" default="">
 	<cfproperty name="MetaKeywords" type="string" default="">
 	<cfproperty name="MetaDescription" type="string" default="">
-	<cfproperty name="ProductPrice" type="string" default="">
+	<cfproperty name="CSSID" type="string" default="">
 	<cfproperty name="CallToActionURL" type="string" default="">
-	<cfproperty name="ProductFamilyDescription" type="string" default="">
+	<cfproperty name="CSSClass" type="string" default="">
 	<cfproperty name="CategoryLocaleNameAlternative" type="string" default="">
 	<cfproperty name="Byline1" type="string" default="">
 	<cfproperty name="Byline2" type="string" default="">
@@ -44,9 +44,9 @@
 	<cfset structInsert(sPropertyDisplayName,"MetaKeywords","meta keywords",1)>
 	<cfset structInsert(sPropertyDisplayName,"MetaDescription","meta description",1)>
 	<cfset structInsert(sPropertyDisplayName,"DefaultCategoryLocale","default category locale",1)>
-	<cfset structInsert(sPropertyDisplayName,"ProductPrice","product price",1)>
+	<cfset structInsert(sPropertyDisplayName,"CSSID","CSS id",1)>
+	<cfset structInsert(sPropertyDisplayName,"CSSClass","CSS class",1)>	
 	<cfset structInsert(sPropertyDisplayName,"CallToActionURL","Call To Action URL",1)>
-	<cfset structInsert(sPropertyDisplayName,"ProductFamilyDescription","product family description",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleNameAlternative","alternative category locale name",1)>
 	<cfset structInsert(sPropertyDisplayName,"Byline1","Byline 1",1)>
 	<cfset structInsert(sPropertyDisplayName,"Byline2","Byline 2",1)>
@@ -61,10 +61,10 @@
 			
 				<!--- Not Used --->
 				<cfcase value="64"><!--- Product --->
-					<cfset this.sFields[ThisCategoryTypeID]="ProductPrice,CallToActionURL">
+					<cfset this.sFields[ThisCategoryTypeID]="CSSID,CallToActionURL">
 				</cfcase>
 				<cfcase value="63"><!--- Product Series--->
-					<cfset this.sFields[ThisCategoryTypeID]="ProductFamilyDescription">
+					<cfset this.sFields[ThisCategoryTypeID]="CSSClass">
 				</cfcase>
 				<cfcase value="69"><!--- Press Release--->
 					<cfset this.sFields[ThisCategoryTypeID]="Byline1,Byline2">
@@ -110,9 +110,9 @@
 		<cfset this.SetProperty("CategoryImageRepresentative","")>
 		<cfset this.SetProperty("MetaKeywords","")>
 		<cfset this.SetProperty("MetaDescription","")>
-		<cfset this.SetProperty("ProductPrice","")>
+		<cfset this.SetProperty("CSSID","")>
+		<cfset this.SetProperty("CSSClass","")>
 		<cfset this.SetProperty("CallToActionURL","")>
-		<cfset this.SetProperty("ProductFamilyDescription","")>
 		<cfset this.SetProperty("CategoryLocaleNameAlternative","")>
 		<cfset this.SetProperty("Byline1","")>
 		<cfset this.SetProperty("Byline2","")>
@@ -145,7 +145,7 @@
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,ProductPrice,ProductFamilyDescription,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride">
+						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride">
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
@@ -183,9 +183,9 @@
 		<cfset var thisCategoryImageRepresentative = "">
 		<cfset var thisMetaKeywords = "">
 		<cfset var thisMetaDescription = "">
-		<cfset var thisProductPrice = "">
+		<cfset var thisCSSID = "">
+		<cfset var thisCSSClass = "">
 		<cfset var thisCallToActionURL = "">
-		<cfset var thisProductFamilyDescription = "">
 		<cfset var thisCategoryLocaleNameAlternative = "">
 		<cfset var thisByline1 = "">
 		<cfset var thisByline2 = "">
@@ -226,9 +226,9 @@
 			<cfset thisCategoryImageRepresentative=this.GetProperty("CategoryImageRepresentative")>
 			<cfset thisMetaKeywords=this.GetProperty("MetaKeywords")>
 			<cfset thisMetaDescription=this.GetProperty("MetaDescription")>
-			<cfset thisProductPrice=this.GetProperty("ProductPrice")>
+			<cfset thisCSSID=this.GetProperty("CSSID")>
+			<cfset thisCSSClass=this.GetProperty("CSSClass")>
 			<cfset thisCallToActionURL=this.GetProperty("CallToActionURL")>
-			<cfset thisProductFamilyDescription=this.GetProperty("ProductFamilyDescription")>
 			<cfset thisCategoryLocaleNameAlternative=this.GetProperty("CategoryLocaleNameAlternative")>
 			<cfset thisByline1=this.GetProperty("Byline1")>
 			<cfset thisByline2=this.GetProperty("Byline2")>
@@ -361,9 +361,9 @@
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageRepresentative","#Trim(ThisCategoryImageRepresentative)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"MetaKeywords","#Trim(ThisMetaKeywords)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"MetaDescription","#Trim(ThisMetaDescription)#","1")>
-			<cfset DevNull=StructInsert(sProperties,"ProductPrice","#Trim(ThisProductPrice)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"CSSID","#Trim(ThisCSSID)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"CSSClass","#Trim(ThisCSSClass)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CallToActionURL","#Trim(ThisCallToActionURL)#","1")>
-			<cfset DevNull=StructInsert(sProperties,"ProductFamilyDescription","#Trim(ThisProductFamilyDescription)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryLocaleNameAlternative","#Trim(ThisCategoryLocaleNameAlternative)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"Byline1","#Trim(ThisByline1)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"Byline2","#Trim(ThisByline2)#","1")>
