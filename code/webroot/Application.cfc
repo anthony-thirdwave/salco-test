@@ -216,7 +216,7 @@
 		<cfargument name="eventName" type="string" default="" />
 		
 		<cfset var local = structNew() />
-		
+
 		<!--- only email and go to error handling page from production --->
 		<cfif not isDebugMode() and APPLICATION.production>
 
@@ -259,7 +259,7 @@
 			<cflocation url="/common/error/errorhandler.cfm" addtoken="false" />
 		
 		<cfelse>
-			<cfdump var=#arguments#><cfabort>
+			<cfthrow object="#arguments.exception#"><cfabort>
 		</cfif>
 		
 		<cfreturn />
