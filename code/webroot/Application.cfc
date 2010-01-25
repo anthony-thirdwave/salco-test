@@ -211,14 +211,12 @@
 	
 	
 	<!--- called when an uncaught exception occurs --->
-	<cffunction name="OnErrosssr" returntype="void">
+	<cffunction name="OnError" returntype="void">
 		<cfargument name="exception" type="any" required="true" />
 		<cfargument name="eventName" type="string" default="" />
 		
 		<cfset var local = structNew() />
 		
-		<Cfdump var=#exception#><cfabort>
-<!---
 		<!--- only email and go to error handling page from production --->
 		<cfif not isDebugMode() and APPLICATION.production>
 
@@ -249,7 +247,7 @@
 							</p>
 							
 							<p>
-							#ARGUMENTS.exception#
+							<cfdump var=#arguments# />
 							<p>
 		
 						</cfmail>
@@ -259,8 +257,11 @@
 		
 			<!--- display the error page --->
 			<cflocation url="/common/error/errorhandler.cfm" addtoken="false" />
+		
+		<cfelse>
+			<cfdump var=#arguments#><cfabort>
 		</cfif>
-		--->
+		
 		<cfreturn />
 		
 	</cffunction>
