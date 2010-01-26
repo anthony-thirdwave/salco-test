@@ -33,7 +33,7 @@
 		<cfset APPLICATION.ContentResourcesPath = "resources\content\" />
 		<cfset APPLICATION.CategoryResourcesPath = "resources\category\" />
 		<cfset APPLICATION.ContentPath = "content\" />
-		<cfset APPLICATION.CollectionName = "#local.uniqueName#_content_locale_" />
+		<cfset APPLICATION.CollectionName = "#local.uniqueName#_#local.siteType#_content_locale_" />
 		<cfset APPLICATION.TempMapping = "/#local.uniqueName#_www_temp/" />
 
 		<!--- default contact info --->

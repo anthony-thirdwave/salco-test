@@ -15,10 +15,28 @@
 <cffunction name="createHtaccess" returntype="boolean" output="false">
 
 	<!--- keep variables local to this function --->
-	<cfset var local = structNew()>
+	<cfset var local = structNew() />
 	
 	<!--- read the .htaccess file --->
-	<cffile action="read" file="#APPLICATION.WebRootPath#.htaccess" variable="local.theFile">
+	<cffile action="read" file="#APPLICATION.WebRootPath#.htaccess" variable="local.theFile" />
+	
+	<!--- write two copies of the .htaccess file, one as "last" and one with a datetime --->
+	<cffile action="write" file="#APPLICATION.WebRootPath#.htaccess.last" output="#local.theFile#" />
+	<cffile action="write" file="#APPLICATION.WebRootPath#old.htaccess.#dateFormat(now(), "ddmmmyyyy")#_#timeFormat(now(), "HH:mm:ss")#" output="#local.theFile#" />
+	
+	<!--- get any old .htaccess files --->
+	<cfdirectory directory="#APPLICATION.WebRootPath#" action="list" name="local.htaccessFiles"  filter="old.htaccess*">
+
+	<!--- loop through and clean out any .htaccess files older than a week --->
+	<cfloop query="local.htaccessFiles">
+		
+		<!--- check for the difference in date --->
+		<cfif dateDiff("w", local.htaccessFiles.dateLastModified, now())>
+			
+			<!--- delete the file --->
+			<cffile action="delete" file="#local.htaccessFiles.directory#\#local.htaccessFiles.name#">
+		</cfif>
+	</cfloop>
 	
 	<!--- init some container variables --->
 	<cfset local.header = "" />
@@ -144,7 +162,7 @@
 	<cfset local.returnStruct.errorText = "Url Redirects can only be pushed live from the staging server" />
 
 
-	<!--- 914 is the category of the website root --->
+	<!--- 1 is the category of the website root --->
 	<cfinvoke component="com.ContentManager.CategoryHandler"
 		method="GetProductionSiteInformation"
 		returnVariable="local.sProductionSiteInformation"
@@ -627,11 +645,11 @@
 			<cfelseif arguments.rewriteType.destinationMustBeUnique>
 				destinationUrl = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.destinationUrl)#" />
 			</cfif>
-		AND rewriteTypeId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rewriteType.rewriteTypeId#" />
+		AND rewriteTypeId = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.rewriteType.rewriteTypeId)#" />
 		
 		<!--- if there is a passed rewriteUrlId, ignore it, because it's the same record we're checking to change --->
-		<cfif isNumeric(arguments.rewriteUrlId)>
-			AND rewriteUrlId != <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rewriteUrlId#" />
+		<cfif isNumeric(trim(arguments.rewriteUrlId))>
+			AND rewriteUrlId != <cfqueryparam cfsqltype="cf_sql_integer" value="#trim(arguments.rewriteUrlId)#" />
 		</cfif>
 	</cfquery>
 
@@ -669,8 +687,8 @@
 		DELETE
 		FROM t_rewriteUrl
 		WHERE 
-			<cfif isNumeric(arguments.rewriteUrlId)>
-				rewriteUrlId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rewriteUrlId#">
+			<cfif isNumeric(trim(arguments.rewriteUrlId))>
+				rewriteUrlId = <cfqueryparam cfsqltype="cf_sql_integer" value="#trim(arguments.rewriteUrlId)#">
 			<cfelse>
 				publicId = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.publicId)#">
 			</cfif>
@@ -702,8 +720,8 @@
 		destinationIsPath, destinationNotNull, flag, publicId, priority
 		FROM t_rewriteType
 		WHERE 
-			<cfif isNumeric(arguments.rewriteTypeId)>
-				rewriteTypeId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rewriteTypeId#">
+			<cfif isNumeric(trim(arguments.rewriteTypeId))>
+				rewriteTypeId = <cfqueryparam cfsqltype="cf_sql_integer" value="#trim(arguments.rewriteTypeId)#">
 			<cfelseif trim(arguments.publicId) neq "">
 				publicId = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.publicId)#">
 			<cfelse>
