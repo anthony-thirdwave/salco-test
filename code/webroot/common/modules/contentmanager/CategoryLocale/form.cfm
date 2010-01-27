@@ -176,7 +176,7 @@
 
 <cfif MyCategoryLocale.GetCategoryTypeID() IS "73"><!--- This is a gallery  --->
 	<cfparam name="lFileToImport" default="">
-	<cfinvoke component=".com/Utils.Locale"
+	<cfinvoke component=".com.Utils.Locale"
 		method="GetLocaleAlias"
 		LocaleID="#EditLocaleID#"
 		returnVariable="ThisChapterAlias">

@@ -230,7 +230,7 @@
 			<cfif ListFind("401,402",ThisContentPositionID) and Trim(FileContents) IS NOT "">
 				<cfset CALLER.NoContent="0">
 			</cfif>
-			<cfif ThisContentPositionID is "402" and CALLER.NoContent IS "1">
+			<cfif ThisContentPositionID is "401" and CALLER.NoContent IS "1">
 				<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 					<cfprocresult name="GetFirstChildCategory" maxrows="1">
 					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
