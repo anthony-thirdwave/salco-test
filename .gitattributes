@@ -32,6 +32,7 @@ code/webroot/com/time/Time.cfc -text
 code/webroot/com/utils/Captcha.cfc -text
 code/webroot/com/utils/Database.cfc -text
 code/webroot/com/utils/Image.cfc -text
+code/webroot/com/utils/Message.cfc -text
 code/webroot/com/utils/UrlRewrite.cfc -text
 code/webroot/com/utils/fckeditor.cfc -text
 code/webroot/com/utils/image3w.cfc -text

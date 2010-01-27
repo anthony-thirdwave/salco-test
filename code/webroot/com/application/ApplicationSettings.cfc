@@ -158,6 +158,9 @@
 		<cfobject component="com.time.Time" name="APPLICATION.timeObj" />
 		<cfset APPLICATION.timeObj.init() />
 		
+		<cfobject component="com.utils.Message" name="APPLICATION.messageObj" />
+		<cfset APPLICATION.messageObj.init() />
+		
 		<!--- read the factory config xml into memory --->
 		<cfif directoryExists("#APPLICATION.WebRootPath#com/factory/thirdwave")>
 			

@@ -509,3 +509,21 @@ SET IDENTITY_INSERT t_stateprovince ON
  insert t_stateprovince ( StateProvinceID,StateProvinceCode,StateProvinceName,CountryCode,Priority )  select 66,'SK','Saskatchewan','CA',1120
  insert t_stateprovince ( StateProvinceID,StateProvinceCode,StateProvinceName,CountryCode,Priority )  select 67,'YT','Yukon','CA',1130
 SET IDENTITY_INSERT t_stateprovince OFF
+
+
+
+/* load the system messages */
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-noRedirectType','Error','Unable to update url redirect - no matching redirect type.')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-noRedirect','Error','The requested url redirect doesn''t exist')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-updateFailed','Error','Unable to update url redirect - update failed')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-emptySourceUrl','Error','You may not pass an empty source url for this type')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-emptyDestinationUrl','Error','You may not pass an empty destination url for this type')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-noSlashSource','Error','Source url must be a root relative path, starting with "/"')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-noDestinationSlash','Error','Destination url must be a root relative path, starting with "/"')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-sourceOrDestinationNotUnique','Error','Both source and destination urls must be unique for this type')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-sourceNotUnique','Error','Source url must be unique for this type')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-destinationNotUnique','Error','Destination url must be unique for this type')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-addFailed','Error','Unable to add url redirect - insert failed')
+insert t_message (messageKey, messageLabel, message) values ('urlRewrite-redirectDeleted',null,'Url redirect deleted')
+
+

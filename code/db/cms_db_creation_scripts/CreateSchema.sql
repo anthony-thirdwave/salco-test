@@ -321,6 +321,25 @@ CREATE TABLE [dbo].[t_LabelLanguage](
 ) ON [PRIMARY]
 END
 GO
+SET ANSI_NULLS ON 
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_Message]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_Message](
+	[MessageId] [int] IDENTITY(1,1) NOT NULL,
+	[MessageKey] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+	[MessageLabel] [varchar](200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Message] [varchar](MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+ CONSTRAINT [PK_t_MessageId] PRIMARY KEY CLUSTERED 
+(
+	MessageId ASC,
+	MessageKey ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -442,8 +461,10 @@ CREATE TABLE [dbo].[t_RewriteUrl](
 	[RewriteTypeId] [int] NOT NULL,
 	[DateStart] [datetime] NULL,
 	[DateEnd] [datetime] NULL,
+	[DateAdded] [datetime] NULL,
+	[DateModified] [datetime] NULL,
 	[PublicId] [varchar](33) NOT NULL,
-	[Priority] [int] NOT NULL,
+	[Priority] [int] NULL,
  CONSTRAINT [PK_t_RewriteUrl] PRIMARY KEY CLUSTERED 
 (
 	[RewriteUrlID] ASC

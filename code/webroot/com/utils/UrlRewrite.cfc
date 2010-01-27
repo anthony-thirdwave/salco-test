@@ -21,8 +21,9 @@
 	<cffile action="read" file="#APPLICATION.WebRootPath#.htaccess" variable="local.theFile" />
 	
 	<!--- write two copies of the .htaccess file, one as "last" and one with a datetime --->
+	<cffile action="write" file="#APPLICATION.WebRootPath#old.htaccess.#dateFormat(now(), "ddmmmyyyy")#_#timeFormat(now(), "HHmmss")#" output="#local.theFile#" />
 	<cffile action="write" file="#APPLICATION.WebRootPath#.htaccess.last" output="#local.theFile#" />
-	<cffile action="write" file="#APPLICATION.WebRootPath#old.htaccess.#dateFormat(now(), "ddmmmyyyy")#_#timeFormat(now(), "HH:mm:ss")#" output="#local.theFile#" />
+	
 	
 	<!--- get any old .htaccess files --->
 	<cfdirectory directory="#APPLICATION.WebRootPath#" action="list" name="local.htaccessFiles"  filter="old.htaccess*">
@@ -343,7 +344,7 @@
 	<cfset local.returnStruct = structNew() />
 	<cfset local.returnStruct.rewriteUrlId = 0>
 	<cfset local.returnStruct.matchingId = 0>
-	<cfset local.returnStruct.message = "Unable to add url redirect - no matching redirect type.">
+	<cfset local.messageKey = "" />
 	
 	<!--- trim the user entered fields --->
 	<cfset local.sourceUrl = trim(arguments.sourceUrl) />
@@ -351,11 +352,8 @@
 	<cfset local.dateStart = trim(arguments.dateStart) />
 	<cfset local.dateEnd = trim(arguments.dateEnd) />
 	
-	<!--- grab a utils object --->
-	<cfobject component="com.utils.utils" name="local.utilsObj">
-	
 	<!--- create a new publicId --->
-	<cfset local.publicId = local.utilsObj.createUniqueId()>
+	<cfset local.publicId = APPLICATION.utilsObj.createUniqueId()>
 	
 	<!--- get the rewriteType by publicId --->
 	<cfinvoke method="getRewriteType" returnvariable="local.rewriteType">
@@ -364,7 +362,7 @@
 	
 	<!--- if there's no matching type, abort --->
 	<cfif local.rewriteType.recordcount neq 1>
-		<cfreturn local.returnStruct />
+		<cfset local.messageKey = "urlRewrite-noRedirectType" />
 	</cfif>
 	
 	<!--- validate that this rewrite can be added based upon rules of the type --->
@@ -377,54 +375,57 @@
 	<!--- if the rewrite is breaking rules, abort --->
 	<cfif local.rewriteUnique.matchingId neq 0>
 		<cfset local.returnStruct.matchingId = local.rewriteUnique.matchingId />
-		<cfset local.returnStruct.message = local.rewriteUnique.message />
-		<cfreturn local.returnStruct />
+		<cfset local.messageKey = local.rewriteUnique.messageKey />
 	</cfif>
 	
-	<cftry>
+	<!--- if no errors so far --->
+	<cfif not len(trim(local.messageKey))>
 	
-		<!--- insert the rewrite --->
-		<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-			SET NOCOUNT ON
-			INSERT INTO t_RewriteUrl
-			(
-				sourceUrl,
-				destinationUrl,
-				rewriteTypeId,
-				dateStart,
-				dateEnd,
-				publicId
-			)
-			VALUES
-			(
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.sourceUrl#" null="#not len(local.sourceUrl)#">,
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.destinationUrl#" null="#not len(local.destinationUrl)#">,
-				<cfqueryparam cfsqltype="cf_sql_integer" value="#local.rewriteType.rewriteTypeId#">,
-				<cfqueryparam cfsqltype="cf_sql_date" value="#local.dateStart#" null="#not isDate(local.dateStart)#">,
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.dateEnd#" null="#not isDate(local.dateEnd)#">,
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.publicId#">
-			)
+		<cftry>
+			<!--- insert the rewrite --->
+			<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
+				SET NOCOUNT ON
+				INSERT INTO t_RewriteUrl
+				(
+					sourceUrl,
+					destinationUrl,
+					rewriteTypeId,
+					dateStart,
+					dateEnd,
+					publicId
+				)
+				VALUES
+				(
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.sourceUrl#" null="#not len(local.sourceUrl)#">,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.destinationUrl#" null="#not len(local.destinationUrl)#">,
+					<cfqueryparam cfsqltype="cf_sql_integer" value="#local.rewriteType.rewriteTypeId#">,
+					<cfqueryparam cfsqltype="cf_sql_date" value="#local.dateStart#" null="#not isDate(local.dateStart)#">,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.dateEnd#" null="#not isDate(local.dateEnd)#">,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.publicId#">
+				)
+				
+				SELECT SCOPE_IDENTITY() AS newId
+				SET NOCOUNT OFF
+			</cfquery>
 			
-			SELECT SCOPE_IDENTITY() AS newId
-			SET NOCOUNT OFF
-		</cfquery>
+			<!--- grab the new rewriteUrlId --->
+			<cfset local.returnStruct.rewriteUrlId = local.getResults.newId />
 		
-		<!--- grab the new rewriteUrlId --->
-		<cfset local.returnStruct.message = "" />
-		<cfset local.returnStruct.rewriteUrlId = local.getResults.newId />
+			<cfcatch>
+				<cfset local.messageKey = "urlRewrite-addFailed" />
+			</cfcatch>
+		</cftry>
+	</cfif>
 	
-		<cfcatch>
-		
-			<cfset local.returnStruct.message = "Unable to add url redirect - insert failed." />
-			<cfreturn local.returnStruct />
-		</cfcatch>
-	</cftry>
+	<!--- get the message - will have blank values if no error --->
+	<cfinvoke method="getMessage" component="#APPLICATION.messageObj#" returnvariable="local.returnStruct.errorMessage">
+		<cfinvokeargument name="messageKey" value="#local.messageKey#">
+		<cfinvokeargument name="returnAsStruct" value="true">
+	</cfinvoke>
 	
 	<!--- return the rewriteUrlId --->
 	<cfreturn local.returnStruct />
 </cffunction>
-
-
 
 
 
@@ -446,9 +447,9 @@
 	
 	<!--- set some default return values --->
 	<cfset local.returnStruct = structNew() />
-	<cfset local.returnStruct.rewriteUrlId = 0>
-	<cfset local.returnStruct.matchingId = 0>
-	<cfset local.returnStruct.message = "Unable to update url redirect - no matching redirect type.">
+	<cfset local.returnStruct.rewriteUrlId = 0 />
+	<cfset local.returnStruct.matchingId = 0 />
+	<cfset local.messageKey = "" />
 	
 	<!--- trim the user entered fields --->
 	<cfset local.sourceUrl = trim(arguments.sourceUrl) />
@@ -458,65 +459,73 @@
 
 	<!--- get the rewriteType by publicId --->
 	<cfinvoke method="getRewriteType" returnvariable="local.rewriteType">
-		<cfinvokeargument name="publicId" value="#arguments.rewriteTypePublicId#"> 
+		<cfinvokeargument name="publicId" value="#arguments.rewriteTypePublicId#" /> 
 	</cfinvoke>
 	
-	<!--- if there's no matching type, abort --->
-	<cfif local.rewriteType.recordcount neq 1>
-		<cfreturn local.returnStruct />
+	<!--- if there's no matching type --->
+	<cfif not local.rewriteType.recordcount>
+		<cfset local.messageKey = "urlRewrite-noRedirectType" />
 	</cfif>
 	
 	<!--- get the rewrite by publicId --->
 	<cfinvoke method="getRewrite" returnvariable="local.rewrite">
-		<cfinvokeargument name="publicId" value="#arguments.rewriteUrlPublicId#"> 
+		<cfinvokeargument name="publicId" value="#arguments.rewriteUrlPublicId#" />
 	</cfinvoke>
 	
-	<!--- if the rewrite doesn't exist, abort --->
-	<cfif local.rewrite.recordcount neq 1>
-		<cfset local.returnStruct.message = "The requested url redirect doesn't exist" />
-		<cfreturn local.returnStruct />
+	<!--- if the rewrite doesn't exist and no errors so far --->
+	<cfif not local.rewrite.recordcount and not len(trim(local.messageKey))>
+		<cfset local.messageKey = "urlRewrite-noRedirect" />
 	</cfif>
 	
-	<!--- validate that this rewrite can be updated based upon rules of the type --->
-	<cfinvoke method="rewriteIsAllowed" returnvariable="local.rewriteUnique">
-		<cfinvokeargument name="rewriteUrlId" value="#local.rewrite.rewriteUrlId#">
-		<cfinvokeargument name="sourceUrl" value="#local.sourceUrl#">
-		<cfinvokeargument name="destinationUrl" value="#local.destinationUrl#">
-		<cfinvokeargument name="rewriteType" value="#local.rewriteType#">
+	<!--- if no errors so far --->
+	<cfif not len(trim(local.messageKey))>
+		<!--- validate that this rewrite can be updated based upon rules of the type --->
+		<cfinvoke method="rewriteIsAllowed" returnvariable="local.rewriteUnique">
+			<cfinvokeargument name="rewriteUrlId" value="#val(local.rewrite.rewriteUrlId)#" />
+			<cfinvokeargument name="sourceUrl" value="#local.sourceUrl#" />
+			<cfinvokeargument name="destinationUrl" value="#local.destinationUrl#" />
+			<cfinvokeargument name="rewriteType" value="#local.rewriteType#" />
+		</cfinvoke>
+
+		<!--- if the rewrite is breaking rules --->
+		<cfif local.rewriteUnique.matchingId neq 0>
+			<cfset local.returnStruct.matchingId = local.rewriteUnique.matchingId />
+			<cfset local.messageKey = local.rewriteUnique.messageKey />
+		</cfif>
+	</cfif>
+	
+	<!--- if no errors so far --->
+	<cfif not len(trim(local.messageKey))>
+		<cftry>
+		
+			<!--- insert the rewrite --->
+			<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
+				UPDATE t_RewriteUrl
+				SET
+					sourceUrl = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.sourceUrl#" null="#not len(local.sourceUrl)#">,
+					destinationUrl = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.destinationUrl#" null="#not len(local.destinationUrl)#">,
+					rewriteTypeId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.rewriteType.rewriteTypeId#">,
+					dateStart = <cfqueryparam cfsqltype="cf_sql_date" value="#local.dateStart#" null="#not isDate(local.dateStart)#">,
+					dateEnd = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.dateEnd#" null="#not isDate(local.dateEnd)#">
+				WHERE
+					rewriteUrlId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.rewrite.rewriteUrlId#">
+			</cfquery>
+			
+			<!--- return the id if successful --->
+			<cfset local.returnStruct.rewriteUrlId = local.rewrite.rewriteUrlId>
+		
+			<cfcatch>
+			
+				<cfset local.messageKey = "urlRewrite-updateFailed" />
+			</cfcatch>
+		</cftry>
+	</cfif>
+	
+	<!--- get the message - will have blank values if no error --->
+	<cfinvoke method="getMessage" component="#APPLICATION.messageObj#" returnvariable="local.returnStruct.errorMessage">
+		<cfinvokeargument name="messageKey" value="#local.messageKey#">
+		<cfinvokeargument name="returnAsStruct" value="true">
 	</cfinvoke>
-
-	<!--- if the rewrite is breaking rules, abort --->
-	<cfif local.rewriteUnique.matchingId neq 0>
-		<cfset local.returnStruct.matchingId = local.rewriteUnique.matchingId />
-		<cfset local.returnStruct.message = local.rewriteUnique.message />
-		<cfreturn local.returnStruct />
-	</cfif>
-
-	<cftry>
-	
-		<!--- insert the rewrite --->
-		<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-			UPDATE t_RewriteUrl
-			SET
-				sourceUrl = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.sourceUrl#" null="#not len(local.sourceUrl)#">,
-				destinationUrl = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.destinationUrl#" null="#not len(local.destinationUrl)#">,
-				rewriteTypeId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.rewriteType.rewriteTypeId#">,
-				dateStart = <cfqueryparam cfsqltype="cf_sql_date" value="#local.dateStart#" null="#not isDate(local.dateStart)#">,
-				dateEnd = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.dateEnd#" null="#not isDate(local.dateEnd)#">
-			WHERE
-				rewriteUrlId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.rewrite.rewriteUrlId#">
-		</cfquery>
-		
-		<!--- return the id if successful --->
-		<cfset local.returnStruct.rewriteUrlId = local.rewrite.rewriteUrlId>
-		<cfset local.returnStruct.message = "" />
-	
-		<cfcatch>
-		
-			<cfset local.returnStruct.message = "Unable to update url redirect - update failed." />
-			<cfreturn local.returnStruct />
-		</cfcatch>
-	</cftry>
 	
 	<!--- return the rewriteUrlId --->
 	<cfreturn local.returnStruct />
@@ -547,6 +556,14 @@
 	<cfset var local = structNew() />
 
 	<cfset local.rewrite = "RewriteRule " />
+	
+	<!--- strip leading "/" from sourceUrl and destinationUrl since "RewriteBase /" should be set in .htaccess --->
+	<cfif left(arguments.sourceUrl, 1) eq "/">
+		<cfset arguments.sourceUrl = replace(arguments.sourceUrl, "/", "", "one")>
+	</cfif>
+	<cfif left(arguments.destinationUrl, 1) eq "/">
+		<cfset arguments.destinationUrl = replace(arguments.destinationUrl, "/", "", "one")>
+	</cfif>
 	
 	<!--- prefix for the source url --->
 	<cfif trim(arguments.sourcePrefix) neq "">
@@ -588,7 +605,7 @@
 		<cfset local.rewrite = local.rewrite & " " />
 	
 		<!--- add the flag --->
-		<cfset local.rewrite = local.rewrite & trim(arguments.flag) />
+		<cfset local.rewrite = local.rewrite & "[" & trim(arguments.flag) & "]" />
 	</cfif>
 	
 	<!--- return the rewriteRule --->
@@ -609,25 +626,25 @@
 	<cfset var local = structNew() />
 	<cfset local.returnStruct = structNew() />
 	<cfset local.returnStruct.matchingId = 0 />
-	<cfset local.returnStruct.message = "" />
+	<cfset local.returnStruct.messageKey = "" />
 	
 	<!--- check first if the source or destination url is both null and restricted from being null 
 	- values should already be trimmed! --->
-	<cfif arguments.rewriteType.sourceIsPath and trim(arguments.sourceUrl) eq "">
-		<cfset local.returnStruct.message = "You may not pass an empty source url for this type." />
-	<cfelseif arguments.rewriteType.destinationNotNull and trim(arguments.destinationUrl) eq "">
-		<cfset local.returnStruct.message = "You may not pass an empty destination url for this type." />
+	<cfif trim(arguments.sourceUrl) eq "">
+		<cfset local.returnStruct.messageKey = "urlRewrite-emptySourceUrl" />
+	<cfelseif arguments.rewriteType.destinationNotNull and not len(trim(arguments.destinationUrl))>
+		<cfset local.returnStruct.messageKey = "urlRewrite-emptyDestinationUrl" />
 	</cfif>
 	
 	<!--- check if source or destination url must be a path and should start with a "/" --->
-	<cfif arguments.rewriteType.sourceIsPath and left(trim(arguments.sourceUrl), 1) neq "/">
-		<cfset local.returnStruct.message = "Source url must be a root relative path, starting with ""/""" />
-	<cfelseif arguments.rewriteType.destinationIsPath and left(trim(arguments.destinationUrl), 1) neq "/">
-		<cfset local.returnStruct.message = "Destination url must be a root relative path, starting with ""/""" />
+	<cfif not len(trim(local.returnStruct.messageKey)) and arguments.rewriteType.sourceIsPath and left(trim(arguments.sourceUrl), 1) neq "/">
+		<cfset local.returnStruct.messageKey = "urlRewrite-noSourceSlash" />
+	<cfelseif not len(trim(local.returnStruct.messageKey)) and arguments.rewriteType.destinationIsPath and left(trim(arguments.destinationUrl), 1) neq "/">
+		<cfset local.returnStruct.messageKey = "urlRewrite-noDestinationSlash" />
 	</cfif>
 	
 	<!--- if a rule has been broken, return failure --->
-	<cfif local.returnStruct.message neq "">
+	<cfif len(trim(local.returnStruct.messageKey))>
 		<cfset local.returnStruct.matchingId = -1 />
 		<cfreturn local.returnStruct />
 	</cfif>
@@ -659,11 +676,11 @@
 		
 		<!--- return a message based up on type requirements --->
 		<cfif arguments.rewriteType.sourceMustBeUnique and arguments.rewriteType.destinationMustBeUnique>
-			<cfset local.returnStruct.message = "Both source and destination urls must be unique for this type." />
+			<cfset local.returnStruct.messageKey = "urlRewrite-sourceOrDestinationNotUnique" />
 		<cfelseif arguments.rewriteType.sourceMustBeUnique>
-			<cfset local.returnStruct.message = "Source url must be unique for this type." />
+			<cfset local.returnStruct.messageKey = "urlRewrite-sourceNotUnique" />
 		<cfelseif arguments.rewriteType.destinationMustBeUnique>
-			<cfset local.returnStruct.message = "Destination url must be unique for this type." />
+			<cfset local.returnStruct.messageKey = "urlRewrite-destinationNotUnique" />
 		</cfif>
 	</cfif>
 
@@ -694,7 +711,14 @@
 			</cfif>
 	</cfquery>
 	
-	<cfset local.returnStruct.message = "Url redirect deleted." />
+	<cfset local.messageKey = "urlRewrite-redirectDeleted" />
+	
+		<!--- get the message - will have blank values if no error --->
+	<cfinvoke method="getMessage" component="#APPLICATION.messageObj#" returnvariable="local.returnStruct.errorMessage">
+		<cfinvokeargument name="messageKey" value="#local.messageKey#">
+		<cfinvokeargument name="returnAsStruct" value="true">
+	</cfinvoke>
+	
 	<cfreturn local.returnStruct />
 </cffunction>
 

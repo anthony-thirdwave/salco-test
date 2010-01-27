@@ -106,7 +106,7 @@
 			<cfinvokeargument name="publicId" value="#trim(urlId)#">
 		</cfinvoke>
 	
-		<cfset message = deletedRewrite.message />
+		<cfset message = deletedRewrite.errorMessage.message />
 		<cfset validated = 1 />
 	<cfelse>
 		<cfset message = "Are you sure you want to delete the url redirect below?" />
@@ -127,7 +127,7 @@
 			<cfinvokeargument name="rewriteTypePublicId" value="#trim(getRewrite.rewriteTypePublicId)#">
 		</cfinvoke>
 	
-		<cfset message = editedRewrite.message />
+		<cfset message = editedRewrite.errorMessage.message />
 		
 		<cfif message eq "">
 			<cfset message = "The url redirect was successfully edited." />
@@ -151,11 +151,12 @@
 			<cfinvokeargument name="rewriteTypePublicId" value="#trim(theRewriteType.publicId)#">
 		</cfinvoke>
 	
-		<cfset message = addedRewrite.message />
-		
-		<cfif message eq "">
+		<cfdump var=#addedRewrite#><cfabort>
+		<cfif addedRewrite.errorMessage.message eq "">
 			<cfset message = "The url redirect was successfully added." />
 			<cfset validated = 1 />
+		<cfelse>
+			<cfset message = addedRewrite.errorMessage.messageLabel & ": " & addedRewrite.errorMessage.message />
 		</cfif>	
 	</cfif>
 </cfif>
