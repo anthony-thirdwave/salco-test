@@ -20,24 +20,8 @@
 	<!--- read the .htaccess file --->
 	<cffile action="read" file="#APPLICATION.WebRootPath#.htaccess" variable="local.theFile" />
 	
-	<!--- write two copies of the .htaccess file, one as "last" and one with a datetime --->
-	<cffile action="write" file="#APPLICATION.WebRootPath#old.htaccess.#dateFormat(now(), "ddmmmyyyy")#_#timeFormat(now(), "HHmmss")#" output="#local.theFile#" />
+	<!--- write a copy of the current .htaccess file --->
 	<cffile action="write" file="#APPLICATION.WebRootPath#.htaccess.last" output="#local.theFile#" />
-	
-	
-	<!--- get any old .htaccess files --->
-	<cfdirectory directory="#APPLICATION.WebRootPath#" action="list" name="local.htaccessFiles"  filter="old.htaccess*">
-
-	<!--- loop through and clean out any .htaccess files older than a week --->
-	<cfloop query="local.htaccessFiles">
-		
-		<!--- check for the difference in date --->
-		<cfif dateDiff("w", local.htaccessFiles.dateLastModified, now())>
-			
-			<!--- delete the file --->
-			<cffile action="delete" file="#local.htaccessFiles.directory#\#local.htaccessFiles.name#">
-		</cfif>
-	</cfloop>
 	
 	<!--- init some container variables --->
 	<cfset local.header = "" />
