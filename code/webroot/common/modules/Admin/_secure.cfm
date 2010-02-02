@@ -1,14 +1,14 @@
 <cfsilent>
 <!--- Begin secure.cfm --->
 
-<!--- The session variables should be checked and edited in a CFLOCK at the
+<!--- The session variables should be checked and edited in a cflock at the
 	  very top of this tag.  --PWK, 7/11/01  --->
 
 <!--- First enter the update portion using login form --->
 <cfparam name="ATTRIBUTES.AcceptGroupIDList" default="">
 <cfparam name="SESSION.AdminCurrentAdminLocaleID" default="-1"/>
-<CFIF IsDefined("FORM.TryUserLogin") IS "YES" AND IsDefined("FORM.TryUserPassword") IS "YES">
-	<CFLOCK TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
+<cfif IsDefined("FORM.TryUserLogin") IS "YES" AND IsDefined("FORM.TryUserPassword") IS "YES">
+	<cflock TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
 		<cfset SESSION.AdminUserLogin = FORM.TryUserLogin>
 		<cfset SESSION.AdminUserPassword = FORM.TryUserPassword>
 	</cflock>
@@ -25,7 +25,7 @@
 		<cflocation url="#CGI.SCRIPT_NAME#?#cgi.QUERY_STRING#" addtoken="no">
 	</cfif>
 <!--- Subsequent access to other pages ---->
-<CFELSEIF IsDefined("SESSION.AdminUserLogin") IS "YES" AND IsDefined("SESSION.AdminUserPassword") IS "YES" and SESSION.AdminUserPassword IS NOT "">
+<cfelseif IsDefined("SESSION.AdminUserLogin") IS "YES" AND IsDefined("SESSION.AdminUserPassword") IS "YES" and SESSION.AdminUserPassword IS NOT "">
 	<cfinvoke component="com.utils.security" method="Authenticate" returnVariable="qUser">
 		<cfinvokeargument name="username" value="#Trim(SESSION.AdminUserLogin)#">
 		<cfinvokeargument name="password" value="#trim(SESSION.AdminUserPassword)#">
@@ -34,10 +34,9 @@
 <!--- Try to enter the update portion by not using form --->
 	<cfinvoke component="com.utils.security" method="GetBlank" returnVariable="qUser">
 	</cfinvoke>
-</CFIF>
-<cfdump var="#qUser#">
+</cfif>
 <cfif qUser.RecordCount IS NOT 0>
-	<CFLOCK TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
+	<cflock TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
 		<cfset SESSION.AdminUserID="#qUser.UserID#">
 		<cfinvoke component="com.utils.security" 
 			method="GetUserGroupID"
@@ -54,10 +53,10 @@
 			</cfif>
 		<cfelse>
 			<cfquery name="GetLocale" datasource="#APPLICATION.DSN#">
-				select LocaleID from t_locale Where LocaleID=<cfqueryparam value="#Trim(qUser.LocaleID)#" cfsqltype="cf_sql_integer" maxlength="16">
+				select LocaleID from t_locale Where LocaleID=<cfqueryparam value="#Trim(val(qUser.LocaleID))#" cfsqltype="cf_sql_integer" maxlength="16">
 			</cfquery>
-			<cfset SESSION.AdminUserLocaleID="#GetLocale.LocaleID#">
-			<cfset SESSION.AdminCurrentAdminLocaleID="#GetLocale.LocaleID#">
+			<cfset SESSION.AdminUserLocaleID="#val(GetLocale.LocaleID)#">
+			<cfset SESSION.AdminCurrentAdminLocaleID="#val(GetLocale.LocaleID)#">
 		</cfif>
 		<cfif SESSION.CurrentAdminLocaleName IS "">
 			<cfquery name="GetLang" datasource="#APPLICATION.DSN#">
@@ -93,7 +92,7 @@
 		</CFSCRIPT>
 	</cfif>
 	<cfwddx action="CFML2WDDX" input="#sCurrentUser#" output="SESSION.wAdminCurrentUser">
-	<CFLOCK TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
+	<cflock TYPE="Exclusive" NAME="#Session.SessionID#" TIMEOUT="1">
 		<cfset SESSION.AdminUserGroupIDList="#lUserGroupID#">
 	</cflock>
 	<cfset CALLER.UserID="#qUser.UserID#">

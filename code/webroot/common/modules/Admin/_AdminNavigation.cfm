@@ -28,7 +28,7 @@
 		</cfcase>
 		<cfcase value="Url Manager">
 			<cfset StructInsert(sMenuElt,"link","/common/admin/redirectManager/index.cfm",1)>
-			<cfset StructInsert(sMenuElt,"lUserGroupID","all",1)>
+			<cfset StructInsert(sMenuElt,"lUserGroupID","#APPLICATION.AdminUserGroupID#",1)>
 			<cfset StructInsert(sMenuElt,"Description","Manage url redirects",1)>
 		</cfcase>
 	</cfswitch>

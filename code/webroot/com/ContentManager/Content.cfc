@@ -766,7 +766,13 @@
 			<cfset ThisCategoryID="-1">
 		</cfif>
 		<cfquery name="GetSiblingQuery" datasource="#APPLICATION.DSN#" dbtype="ODBC">
-			SELECT * FROM qry_GetContent WHERE CategoryID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer"> order by ContentPriority
+			SELECT		contentId, categoryId, contentName, contentTypeId, contentPriority, contentActive,
+						contentIndexed, sourceId, entryId, propertiesId, inheritId, contentDate1, contentDate2,
+						categoryName, categoryAlias, parentId, displayLevel, displayOrder, categoryActive,
+						categoryPropertiesId, contentPropertiesId, contentTypeName, contentTypeIcon
+			FROM		qry_GetContent
+			WHERE		CategoryID = <cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
+			ORDER BY	ContentPriority
 		</cfquery>
 		<cfreturn GetSiblingQuery>
 	</cffunction>

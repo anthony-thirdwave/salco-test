@@ -132,13 +132,64 @@
 			<cfset MyContentLocale.SetContentTemplateID(SourceID)>
 			<cfset MyContentLocale.InitializeHTMLStructure()>
 			<cfset ThisTokenList=MyContentLocale.GetTokenList()>
-			<cfif IsDefined("sHTML_#ListFirst(ThisTokenList)#")>
-				<cfset thissHTML=MyContentLocale.GetProperty("sHTML")>
-				<cfloop index="ThisToken" list="#ThisTokenList#">
-					<cfset StructInsert(ThissHTML,ThisToken,Evaluate("sHTML_#ThisToken#"),1)>
-				</cfloop>
-				<cfset MyContentLocale.SetProperty("sHTML",ThissHTML)>
-			</cfif>
+			<cfset thissHTML=MyContentLocale.GetProperty("sHTML")>
+
+			<cfloop index="ThisToken" list="#ThisTokenList#">
+				<!--- check for token name --->
+				<cfset ThisTokenName = getToken(ThisToken, 1, ":") />
+				<cfset ThisTokenType = getToken(ThisToken, 2, ":") />
+				<!--- get the fieldname --->
+				<cfset thisFieldName = "sHTML_" & ThisTokenName />
+				
+				<cfif structKeyExists(form, thisFieldname)>
+					
+					<!--- templated image handling --->
+					<cfif ThisTokenType eq "image">
+						<cfset thisImageField = thisFieldName & "Image" />
+						<cfset thisImageDelete = thisFieldName & "Delete" />
+						
+						<!--- if delete is selected on an existing image and there isn't an added image --->
+						<cfif structKeyExists(form, thisImageDelete) and not len(trim(form[thisImageField])) and len(trim(form[thisFieldName]))>
+							<cffile action="DELETE" file="#expandPath(trim(form[thisFieldName]))#">
+							<cfset form[thisFieldName] = "" />
+						<!--- else there's an added image --->
+						<cfelseif structKeyExists(form, thisImageField) and len(trim(form[thisImageField]))>
+							<cffile action="upload" 
+									destination="#MyContentLocale.GetResourceFilePath('images',APPLICATION.WebrootPath)#" 
+									fileField="#thisImageField#"
+									nameconflict="makeUnique"
+									result="tempImage">
+							
+							<!--- get the location of the uploaded file --->
+							<cfset tempUploadLocation = tempImage.serverDirectory & "\" & tempImage.serverFile />
+	
+							<!--- create an image handler --->
+							<cfobject component="com.utils.image3w" name="imageObj" />
+			
+							<!--- grab the fileType of the image --->
+							<cfset tempFileType = imageObj.getImgType(tempUploadLocation) />
+							
+							<!--- if not a valid image, delete --->
+							<cfif not len(tempFileType)>
+								<cffile action="DELETE" file="#tempUploadLocation#">
+								<cfset form[thisFieldName] = "" />
+							<cfelse>
+								<cfset form[thisFieldName] = application.utilsObj.GetURLFromPath(tempUploadLocation) />
+							</cfif>
+						</cfif>
+					</cfif>
+					
+					<!--- if this was saved in the old style, it needs to be converted --->
+					<cfif not isStruct(ThissHTML[ThisTokenName])>
+						<cfset ThissHTML[ThisTokenName] = structNew() />
+					</cfif>
+					
+					<!--- set the value and type for this token --->
+					<cfset ThissHTML[ThisTokenName].value = form[thisFieldname] />
+					<cfset ThissHTML[ThisTokenName].type = ThisTokenType />
+				</cfif>
+			</cfloop>
+			<cfset MyContentLocale.SetProperty("sHTML",ThissHTML)>
 		</cfif>
 		<cfif MyContent.GetProperty("ContentTypeID") IS "251">
 			<cfset MyContent.ContentTemplateID=SourceID>

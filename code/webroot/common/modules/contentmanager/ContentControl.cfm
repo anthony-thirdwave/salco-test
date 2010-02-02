@@ -371,7 +371,7 @@
 			<cfset FileContents="<cfmodule template=""/common/modules/utils/rss.cfm"" File=""#RSSFile#"" NumItems=""#NumItems#"">">
 		</cfif>
 	</cfcase>
-	<cfcase value="234">
+	<cfcase value="234"><!--- templatized content --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"sHTML")>
 			<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
 				select SourceID from t_Content WHere ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
@@ -393,7 +393,18 @@
 						<cfset ThisOutput=sContentBody["HTMLTemplate"]>
 						<cfset ThissHTML=ATTRIBUTES.sContentBody["sHTML"]>
 						<cfloop index="ThisToken" list="#StructKeyList(ThissHTML)#">
-							<cfset ThisOutput=ReplaceNoCase(ThisOutput,"[[#ThisToken#]]",ThissHTML[ThisToken],"all")>
+							<!--- get the token name --->
+							<cfset ThisTokenName = getToken(ThisToken, 1, ":") />
+							
+							<!--- if the token has a type, will store values in a struct --->
+							<cfif isStruct(ThissHTML[ThisTokenName])>
+								<cfif structKeyExists(ThissHTML[ThisTokenName], "type") and len(trim(ThissHTML[ThisTokenName].type))>
+									<cfset thisToken = thisToken & ":" & ThissHTML[ThisTokenName].type />
+								</cfif>
+								<cfset ThisOutput=ReplaceNoCase(ThisOutput,"[[#ThisToken#]]",ThissHTML[ThisTokenName].value,"all")>
+							<cfelse>
+								<cfset ThisOutput=ReplaceNoCase(ThisOutput,"[[#ThisToken#]]",ThissHTML[ThisTokenName],"all")>
+							</cfif>
 						</cfloop>
 						<cfset FileContents=application.utilsObj.ReplaceMarks(ThisOutput)>
 					</cfif>

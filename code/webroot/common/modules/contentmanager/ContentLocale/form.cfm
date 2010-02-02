@@ -42,11 +42,11 @@
 
 <cfset TextPositionIDList="{left|Left of HTML}^^{right|Right of HTML}">
 <cfif OpenAndCloseFormTables><table width="100%" cellspacing="1" cellpadding="2"></cfif>
-<!--- <TR><TD bgcolor="bac0c9" colspan="3"><b>
+<!--- <tr><td bgcolor="bac0c9" colspan="3"><b>
 <cfdump var="#MyContentLocale.getAllErrorMessages()#">
-</b></TD></TR> --->
+</b></td></tr> --->
 <cfif APPLICATION.GetAllLocale.RecordCount GT 1>
-	<TR><TD bgcolor="bac0c9" colspan="3"><b><cfoutput>#qLocale.LocaleName#</cfoutput> version</b></TD></TR>
+	<tr><td bgcolor="bac0c9" colspan="3"><b><cfoutput>#qLocale.LocaleName#</cfoutput> version</b></td></tr>
 	
 	<cfif IsDefined("SESSION.AdminCurrentAdminLocaleID") AND SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>
 		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
@@ -481,14 +481,14 @@
 	<cfif FormMode IS "ShowForm">
 		<cfif UseActiveEdit>
 			<cfset ActiveEditToolBar="HTMLActiveEditToolBar">
-			<TR valign="top"><TD bgcolor="white"><strong>*</strong></TD><TD bgcolor="white" colspan="2">HTML</TD></TR>
-			<TR><TD></TD><TD bgcolor="white" colspan="2">
+			<tr valign="top"><td bgcolor="white"><strong>*</strong></td><td bgcolor="white" colspan="2">HTML</td></tr>
+			<tr><td></td><td bgcolor="white" colspan="2">
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
 				fieldname="HTML"
 				fileURL="#FileURL#"
 				height="400" width="800"
 				Content="#MyContentLocale.GetProperty('HTML')#">
-			</TD></TR>
+			</td></tr>
 		<cfelse>
 			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 				ObjectAction="#FormMode#"
@@ -516,14 +516,14 @@
 <cfif ListFindNoCase(Restrictions,"TEXT")>
 	<cfif FormMode IS "ShowForm">
 		<cfif 0>
-			<TR valign="top"><TD bgcolor="white"></TD><TD bgcolor="white" colspan="2">Text</TD></TR>
-			<TR><TD></TD><TD bgcolor="white" colspan="2">
+			<tr valign="top"><td bgcolor="white"></td><td bgcolor="white" colspan="2">Text</td></tr>
+			<tr><td></td><td bgcolor="white" colspan="2">
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
 				fieldname="Text"
 				fileURL="#FileURL#"
 				height="400" width="800"
 				Content="#MyContentLocale.GetProperty('Text')#">
-			</TD></TR>
+			</td></tr>
 		<cfelse>
 			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 				ObjectAction="#FormMode#"
@@ -551,15 +551,15 @@
 <cfif ListFindNoCase(Restrictions,"HTMLTemplate")>
 	<cfif FormMode IS "ShowForm">
 		<cfif UseActiveEdit>			
-			<TR valign="top"><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white" colspan="2">HTML Template<BR><small>Use [[text1]], [[text2]], etc. as the tokens.</small></TD></TR>
-			<TR><TD></TD><TD bgcolor="white" colspan="2">
+			<tr valign="top"><td bgcolor="white">&nbsp;</td><td bgcolor="white" colspan="2">HTML Template<BR><small>Use [[text1]], [[text2]], etc. as the tokens.</small></td></tr>
+			<tr><td></td><td bgcolor="white" colspan="2">
 			
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
 				fieldname="HTMLTemplate"
 				fileURL="#FileURL#"
 				height="400" width="800"
 				Content="#MyContentLocale.GetProperty('HTMLTemplate')#">
-			</TD></TR>
+			</td></tr>
 		<cfelse>
 			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 				ObjectAction="#FormMode#"
@@ -571,7 +571,7 @@
 				EscapeCRLF="No"
 				Required="Y">
 		</cfif>
-		<!--- <TR><TD bgcolor="bac0c9"></TD><TD bgcolor="bac0c9"></TD><td align="right" bgcolor="#EAEAEA"><input type="submit" value="Process Template"></td></TR> --->
+		<!--- <tr><td bgcolor="bac0c9"></td><td bgcolor="bac0c9"></td><td align="right" bgcolor="#EAEAEA"><input type="submit" value="Process Template"></td></tr> --->
 	<cfelse>
 		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 			ObjectAction="#FormMode#"
@@ -588,31 +588,93 @@
 <cfif ListFindNoCase(Restrictions,"sHTML")>
 	<cfset sHTML=MyContentLocale.GetProperty("sHTML")>
 	<cfif ListLen(StructKeyList(sHTML)) IS "0">
-		<TR><TD bgcolor="white"></TD><TD bgcolor="white"></TD><td align="center">[ No templatized areas. ]</td></TR>
+		<tr><td bgcolor="white"></td><td bgcolor="white"></td><td align="center">[ No templatized areas. ]</td></tr>
 	<cfelse>
 		<cfset TokenList=MyContentLocale.GetTokenList()>
+		<cfoutput>
 		<cfloop index="ThisToken" list="#TokenList#">
-			<cfif StructKeyExists(sHTML,ThisToken)>
-				<cfset ThisValue=sHTML[ThisToken]>
-			<cfelse>
-				<cfset ThisValue="">
-			</cfif>
-			<cfif FormMode IS "ShowForm">
-				<TR valign="top"><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white" colspan="2"><cfoutput>#ThisToken#</cfoutput></TD></TR>
-				<TR><TD></TD><TD bgcolor="white" colspan="2">
-				<cfif UseActiveEdit>
-					<cfmodule template="/common/modules/utils/fckeditor.cfm"
-						fieldname="sHTML_#ThisToken#"
-						fileURL="#FileURL#"
-						height="400" width="800"
-						Content="#ThisValue#">
+		
+			<!--- get token name and type --->
+			<cfset ThisTokenName = getToken(ThisToken, 1, ":") />
+			<cfset ThisTokenType = getToken(ThisToken, 2, ":") />
+			
+			<!--- get the token value --->
+			<cfif StructKeyExists(sHTML,ThisTokenName)>
+				<!--- if the token has a type, will store values in a struct --->
+				<cfif isStruct(sHTML[ThisTokenName])>
+					<cfset ThisValue=sHTML[ThisTokenName].value />
 				<cfelse>
-					<cfoutput><textarea cols="80" rows="15" name="sHTML_#ThisToken#" wrap="virtual">#HTMLEditFormat(ThisValue)#</textarea></cfoutput>
-				</cfif></TD></TR>
+					<cfset ThisValue=sHTML[ThisTokenName] />
+				</cfif>
 			<cfelse>
-				<cfoutput><TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white"></TD><td bgcolor="EAEAEA">#ThisValue#<input type="hidden"  name="sHTML_#ThisToken#" value="#HTMLEditFormat(ThisValue)#"></td></TR></cfoutput>
+				<cfset ThisValue="" />
 			</cfif>
+			
+			<!--- get the fieldname --->
+			<cfset thisFieldname = "sHTML_" & ThisTokenName />
+			
+			<cfif FormMode IS "ShowForm">
+				<tr valign="top">
+					<td bgcolor="white">&nbsp;</td>
+					<td bgcolor="white" colspan="2">
+						<strong>#ThisTokenName#</strong>
+					</td>
+				</tr>
+				
+				<!--- handle different token types --->
+				<cfif ThisTokenType eq "image">
+					<cfif FormMode IS "ShowForm">
+						<tr valign="top">
+							<td></td>
+							<td>
+							<input type="file" name="#thisFieldname#Image"><br />
+							<cfif len(trim(ThisValue))>
+								<img src="#ThisValue#" width="75" /><br />
+								<small>Image: <a href="#ThisValue#" target="_blank">#ListLast(ThisValue,'/')#</a>
+							</cfif>
+							<input type="hidden" name="#thisFieldname#" value="#ThisValue#">
+							</td>
+							<td><input type="checkbox" name="#thisFieldname#Delete" value="1"></td>
+						</tr>
+					<cfelse>
+						<tr>
+							<td></td>
+							<td>
+								<a href="#ThisValue#" target="_blank">#ListLast(ThisValue,'/')#</a>
+							</td>
+						</tr>
+					</cfif>
+				<cfelseif ThisTokenType eq "text">
+					<tr>
+						<td></td>
+						<td bgcolor="white" colspan="2">
+							<input type="text" name="#thisFieldname#" value="#ThisValue#" maxlength="100" size="100" />
+						</td>
+					</tr>
+				<cfelse>
+					<tr>
+						<td></td>
+						<td bgcolor="white" colspan="2">
+							<cfif UseActiveEdit>
+								<cfmodule template="/common/modules/utils/fckeditor.cfm"
+									fieldname="#thisFieldname#"
+									fileURL="#FileURL#"
+									height="400" width="800"
+									Content="#ThisValue#">
+							<cfelse>
+								<textarea cols="80" rows="15" name="#thisFieldname#" wrap="virtual">#HTMLEditFormat(ThisValue)#</textarea>
+							</cfif>
+						</td>
+					</tr>
+				</cfif>
+			<cfelse>
+				<cfoutput><tr><td bgcolor="white">&nbsp;</td><td bgcolor="white"></td><td bgcolor="EAEAEA">#ThisValue#<input type="hidden"  name="sHTML_#ThisTokenName#" value="#HTMLEditFormat(ThisValue)#"></td></tr></cfoutput>
+			</cfif>
+				<tr valign="top">
+					<td bgcolor="white">&nbsp;</td>
+				</tr>
 		</cfloop>
+		</cfoutput>
 	</cfif>
 </cfif>
 
@@ -620,8 +682,8 @@
 	<cfset aText=MyContentLocale.GetProperty("aText")>
 	<cfloop index="at" from="1" to="#ArrayLen(aText)#" step="1">
 		<cfif FormMode IS "ShowForm">
-			<TR valign="top"><TD bgcolor="white">&nbsp;></TD><TD bgcolor="white" colspan="2">Text block <cfoutput>#at#</cfoutput></TD></TR>
-			<TR><TD></TD><TD bgcolor="white" colspan="2">
+			<tr valign="top"><td bgcolor="white">&nbsp;></td><td bgcolor="white" colspan="2">Text block <cfoutput>#at#</cfoutput></td></tr>
+			<tr><td></td><td bgcolor="white" colspan="2">
 			<cfif UseActiveEdit>
 				<cfmodule template="/common/modules/utils/fckeditor.cfm"
 					fieldname="aText_#at#"
@@ -630,15 +692,15 @@
 					Content="#aText[at]#">
 			<cfelse>
 				<cfoutput><textarea cols="80" rows="15" name="aText_#at#" wrap="virtual">#aText[at]#</textarea></cfoutput>
-			</cfif></TD></TR>
+			</cfif></td></tr>
 		<cfelse>
-			<cfoutput><TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white"></TD><td  bgcolor="EAEAEA">#aText[at]#<input type="hidden"  name="aText_#at#" value="#HTMLEditFormat(aText[at])#"></td></TR></cfoutput>
+			<cfoutput><tr><td bgcolor="white">&nbsp;</td><td bgcolor="white"></td><td  bgcolor="EAEAEA">#aText[at]#<input type="hidden"  name="aText_#at#" value="#HTMLEditFormat(aText[at])#"></td></tr></cfoutput>
 		</cfif>
 	</cfloop>
 	<cfoutput><input type="hidden" name="NumText" value="#at#"></cfoutput>
 	<cfif FormMode IS "ShowForm">
-		<TR valign="top"><TD bgcolor="white">&nbsp;></TD><TD bgcolor="white" colspan="2">New Text Block</TD></TR>
-		<TR><TD></TD><TD bgcolor="white" colspan="2">
+		<tr valign="top"><td bgcolor="white">&nbsp;></td><td bgcolor="white" colspan="2">New Text Block</td></tr>
+		<tr><td></td><td bgcolor="white" colspan="2">
 		
 		<cfif UseActiveEdit>
 			<cfmodule template="/common/modules/utils/fckeditor.cfm"
@@ -649,53 +711,53 @@
 		<cfelse>
 			<cfoutput><textarea cols="80" rows="15" name="aText_New" wrap="virtual"></textarea></cfoutput>
 		</cfif>
-		</TD></TR>
-		<TR><TD bgcolor="white">&nbsp;</TD><TD bgcolor="white">&nbsp;</TD><TD bgcolor="EAEAEA" align="right"><input type="submit" value="Update Text Blocks"></TD></TR>
+		</td></tr>
+		<tr><td bgcolor="white">&nbsp;</td><td bgcolor="white">&nbsp;</td><td bgcolor="EAEAEA" align="right"><input type="submit" value="Update Text Blocks"></td></tr>
 	</cfif>
 </cfif>
 
 
 <cfif ListFindNoCase(Restrictions,"aLink")>
-	<TR><TD bgcolor="white" colspan="3"><b>Links</b></TD></TR>
-	<TR>
-		<TD bgcolor="white"></TD>
-		<TD colspan="2" bgcolor="EAEAEA">
+	<tr><td bgcolor="white" colspan="3"><b>Links</b></td></tr>
+	<tr>
+		<td bgcolor="white"></td>
+		<td colspan="2" bgcolor="EAEAEA">
 			<table width="100%" border="0">
 			<cfset aLink=MyContentLocale.GetProperty("aLink")>
-			<TR>
-				<TD><strong>Title</strong></TD>
-				<TD><strong>Caption</strong></TD>
-				<TD><strong>URL</strong></TD>
-				<TD>&nbsp;</TD>
-				<TD><cfif ArrayLen(aLink) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></TD>
-			</TR>
+			<tr>
+				<td><strong>Title</strong></td>
+				<td><strong>Caption</strong></td>
+				<td><strong>URL</strong></td>
+				<td>&nbsp;</td>
+				<td><cfif ArrayLen(aLink) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></td>
+			</tr>
 			<cfloop index="li" from="1" to="#ArrayLen(aLink)#" step="1">
 				<cfif FormMode IS "ShowForm">
 					<cfoutput>
 					<tr valign="top">
-						<TD><input type="text" name="LinkTitle_#li#" value="#aLink[li].Title#" size="20" maxlength="255"></TD>
-						<TD><input type="text" name="LinkCaption_#li#" value="#aLink[li].Caption#" size="40" maxlength="255"></TD>
-						<TD><input type="text" name="LinkURL_#li#" value="#aLink[li].URL#" size="40" maxlength="255"></TD>
-						<TD nowrap>
+						<td><input type="text" name="LinkTitle_#li#" value="#aLink[li].Title#" size="20" maxlength="255"></td>
+						<td><input type="text" name="LinkCaption_#li#" value="#aLink[li].Caption#" size="40" maxlength="255"></td>
+						<td><input type="text" name="LinkURL_#li#" value="#aLink[li].URL#" size="40" maxlength="255"></td>
+						<td nowrap>
 							<cfoutput><cfif ArrayLen(aLink) GT "1">
 							<cfif li IS NOT "1"><input type="image" name="LinkButtonSubmit_up_#li#" value="up_#li#" src="/common/images/widget_arrow_up.gif"><cfelse><img src="/common/images/widget_arrow_up_grey.gif"></cfif><cfif li IS NOT ArrayLen(aLink)><input type="image" name="LinkButtonSubmit_down_#li#" value="down_#li#" src="/common/images/widget_arrow_down.gif"><cfelse><img src="/common/images/widget_arrow_down_grey.gif"></cfif>
 							</cfif></cfoutput>&nbsp;
-						</TD>
-						<TD><input type="checkbox" name="LinkDelete_#li#" value="1"></TD>
-					</TR>
+						</td>
+						<td><input type="checkbox" name="LinkDelete_#li#" value="1"></td>
+					</tr>
 					</cfoutput>
 				<cfelse>
 					<cfoutput>
-					<TR>
-						<TD>#aLink[li].Title#</TD>
-						<TD>#aLink[li].Caption#</TD>
-						<TD>
-							<a href="#aLink[li].URL#" target="_blank">#aLink[li].URL#</A>
+					<tr>
+						<td>#aLink[li].Title#</td>
+						<td>#aLink[li].Caption#</td>
+						<td>
+							<a href="#aLink[li].URL#" target="_blank">#aLink[li].URL#</a>
 							<input type="hidden" name="LinkTitle_#li#" value="#aLink[li].Title#">
 							<input type="hidden" name="LinkCaption_#li#" value="#aLink[li].Caption#">
 							<input type="hidden" name="LinkURL_#li#" value="#aLink[li].URL#">
-						</TD>
-						<TD colspan="2">&nbsp;</TD>
+						</td>
+						<td colspan="2">&nbsp;</td>
 					</tr>
 					</cfoutput>
 				</cfif>
@@ -703,16 +765,16 @@
 	<cfoutput><input type="hidden" name="NumLinks" value="#li#"></cfoutput>
 	<cfif FormMode IS "ShowForm">
 		<tr valign="top">
-			<TD><input type="text" name="LinkTitle_New" value="" size="20" maxlength="255"></TD>
-			<TD><input type="text" name="LinkCaption_New" value="" size="40" maxlength="255"></TD>
-			<TD><input type="text" name="LinkURL_New" value="" size="40" maxlength="255"></TD>
-			<TD colspan="2">&nbsp;</TD>
-		</TR>
-		<TR><TD colspan="5" align="right"><input type="submit" value="Update Links"></TD></TR>
+			<td><input type="text" name="LinkTitle_New" value="" size="20" maxlength="255"></td>
+			<td><input type="text" name="LinkCaption_New" value="" size="40" maxlength="255"></td>
+			<td><input type="text" name="LinkURL_New" value="" size="40" maxlength="255"></td>
+			<td colspan="2">&nbsp;</td>
+		</tr>
+		<tr><td colspan="5" align="right"><input type="submit" value="Update Links"></td></tr>
 	</cfif>
 	
 	</table>
-	</TD></TR>
+	</td></tr>
 </cfif>
 
 
@@ -813,19 +875,19 @@
 			</script>
 		</cfif>
 		<cfset aFile=MyContentLocale.GetProperty("aFile")>
-		<TR><TD colspan="3"><b>Files</b></TD></TR>
-		<TR>
-			<TD></TD>
-			<TD colspan="2">
+		<tr><td colspan="3"><b>Files</b></td></tr>
+		<tr>
+			<td></td>
+			<td colspan="2">
 				<table width="100%" border="0">
 				
-				<TR><TD></TD>
-					<TD><strong>Name / Date-Time Stamp</strong></TD>
-					<TD><strong>Caption</strong></TD>
-					<TD><strong>Thumbnail / File</strong></TD>
-					<TD>&nbsp;</TD>
-					<TD><cfif ArrayLen(aFile) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></TD>
-				</TR>
+				<tr><td></td>
+					<td><strong>Name / Date-Time Stamp</strong></td>
+					<td><strong>Caption</strong></td>
+					<td><strong>Thumbnail / File</strong></td>
+					<td>&nbsp;</td>
+					<td><cfif ArrayLen(aFile) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></td>
+				</tr>
 
 				<cfloop index="fi" from="1" to="#ArrayLen(aFile)#" step="1">
 					<cfloop index="ThisProperty" list="ThumbnailPath,FileDateTimeStamp,FileSize,FileSubTitle,Author,FileDuration,FileKeywords">
@@ -836,8 +898,8 @@
 					<cfif FormMode IS "ShowForm">
 						<cfoutput>
 						<tr valign="top">
-							<TD><strong>#fi#)</strong></TD>
-							<TD>
+							<td><strong>#fi#)</strong></td>
+							<td>
 							<small>Title</small><br>
 							<input type="text" name="FileName_#fi#" value="#aFile[fi].FileName#" size="30" maxlength="128"><br>
 							<small>Sub-Title</strong><br>
@@ -850,43 +912,43 @@
 							<input type="text" name="FileDuration_#fi#" value="#aFile[fi].FileDuration#" size="30" maxlength="128"><br>
 							
 							
-							</TD>
-							<TD><small>Summary</small><br>
+							</td>
+							<td><small>Summary</small><br>
 								<textarea cols="30" rows="3" name="FileCaption_#fi#">#aFile[fi].FileCaption#</textarea><br>
 								<small>Keywords</small><br>
 								<textarea cols="30" rows="3" name="FileKeywords_#fi#">#aFile[fi].FileKeywords#</textarea>
-							</TD>
-							<TD><small>Thumbnail<cfif aFile[fi].ThumbnailPath IS NOT "">: <a href="#aFile[fi].ThumbnailPath#" target="_blank">#ListLast(aFile[fi].ThumbnailPath,'/')#</A><br></cfif></small>
+							</td>
+							<td><small>Thumbnail<cfif aFile[fi].ThumbnailPath IS NOT "">: <a href="#aFile[fi].ThumbnailPath#" target="_blank">#ListLast(aFile[fi].ThumbnailPath,'/')#</a><br></cfif></small>
 							<input type="file" name="ThumbnailPath_#fi#FileObject"><br>
-							<cfif aFile[fi].FilePath is not ""><small>Main: <a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')# (#DecimalFormat(Val(aFile[fi].FileSize)/1000000)#mb)</A></cfif>
+							<cfif aFile[fi].FilePath is not ""><small>Main: <a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')# (#DecimalFormat(Val(aFile[fi].FileSize)/1000000)#mb)</a></cfif>
 								<cfif 0>
 									<input type="text" size="100" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
 								<cfelse>
 									<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
 								</cfif>
 								<input type="hidden" name="ThumbnailPath_#fi#" value="#aFile[fi].ThumbnailPath#">
-							</TD>
-							<TD nowrap>
+							</td>
+							<td nowrap>
 								<cfoutput>
 								<input type="text" name="Order_#fi#" value="#fi*10#" size="4" maxlength="4">
 								<cfif ArrayLen(aFile) GT "1" and 0>
 									<cfif fi IS NOT "1"><input type="image" name="ButtonSubmit_up_#fi#" value="up_#fi#" src="/common/images/widget_arrow_up.gif"><cfelse><img src="/common/images/widget_arrow_up_grey.gif"></cfif><cfif fi IS NOT ArrayLen(aFile)><input type="image" name="ButtonSubmit_down_#fi#" value="down_#fi#" src="/common/images/widget_arrow_down.gif"><cfelse><img src="/common/images/widget_arrow_down_grey.gif"></cfif>
 									</cfif>
 								</cfoutput>&nbsp;
-							</TD>
-							<TD><input type="checkbox" name="FileDelete_#fi#" value="1"></TD>
+							</td>
+							<td><input type="checkbox" name="FileDelete_#fi#" value="1"></td>
 							<input type="hidden" name="FileSize_#fi#" value="#aFile[fi].FileSize#">
-						</TR>
+						</tr>
 						</cfoutput>
 					<cfelse>
 						<cfoutput>
-						<TR>
-							<TD>
+						<tr>
+							<td>
 							#aFile[fi].FileName#<br>
-							#aFile[fi].FileDateTimeStamp#</TD>
-							<TD>#aFile[fi].FileCaption#</TD>
-							<TD>
-								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</A>
+							#aFile[fi].FileDateTimeStamp#</td>
+							<td>#aFile[fi].FileCaption#</td>
+							<td>
+								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a>
 								<input type="hidden" name="FileName_#fi#" value="#HTMLEditFormat(aFile[fi].FileName)#">
 								<input type="hidden" name="FileDateTimeStamp_#fi#" value="#HTMLEditFormat(aFile[fi].FileDateTimeStamp)#">
 								<input type="hidden" name="FileCaption_#fi#" value="#HTMLEditFormat(aFile[fi].FileCaption)#">
@@ -894,20 +956,20 @@
 								<input type="hidden" name="ThumbnailPath_#fi#" value="#aFile[fi].ThumbnailPath#">
 								<input type="hidden" name="FileSize_#fi#" value="#aFile[fi].FileSize#">
 								
-							</TD>
-							<TD colspan="2"></TD>
+							</td>
+							<td colspan="2"></td>
 						</tr>
 						</cfoutput>
 					</cfif>
 				</cfloop>
 				<cfif ArrayLen(aFile) GT "0">
-					<TR><TD colspan="5" align="right"><input type="submit" value="Update Files"></TD></TR>
+					<tr><td colspan="5" align="right"><input type="submit" value="Update Files"></td></tr>
 				</cfif>
 		<cfoutput><input type="hidden" name="NumFiles" value="#fi#"></cfoutput>
 		<cfif FormMode IS "ShowForm">
 			<tr valign="top">
-				<TD><strong>New)</strong></TD>
-				<TD><small>Title</small><br>
+				<td><strong>New)</strong></td>
+				<td><small>Title</small><br>
 					<input type="text" name="FileName_New" value="" size="30" maxlength="128"><br>
 					<small>Sub-Title</small><br>
 					<input type="text" name="FileSubTitle_New" value="" size="30" maxlength="128"><br>
@@ -917,13 +979,13 @@
 					<input type="text" name="FileDateTimeStamp_New" size="30" maxlength="128" value="<cfoutput>#DateFormat(Now(),'mm/dd/yyyy')# #TimeFormat(Now())#</cfoutput>"><br>
 					<small>Duration (in mm:ss)</small><br>
 					<input type="text" name="FileDuration_New" value="" size="30" maxlength="128"><br>
-				</TD>
-				<TD><small>Summary</small><br>
+				</td>
+				<td><small>Summary</small><br>
 				<textarea cols="30" rows="3" name="FileCaption_New"></textarea><br>
 				<small>Keywords</small><br>
 				<textarea cols="30" rows="3" name="FileKeywords_New"></textarea>
-				</TD>
-				<TD>
+				</td>
+				<td>
 				Thumb:<br>
 				<input type="file" name="ThumbnailPath_NewFileObject"><br>
 				Main: <br>
@@ -948,28 +1010,28 @@
 					<input type="file" name="MainFilePath_NewFileObject">
 				</cfif>
 				
-				</TD>
-				<TD colspan="2">&nbsp;</TD>
-			</TR>
-			<TR><TD colspan="5" align="right"><input type="submit" name="btnUpdateFiles" id="btnUpdateFiles" value="Add New"></TD></TR>
+				</td>
+				<td colspan="2">&nbsp;</td>
+			</tr>
+			<tr><td colspan="5" align="right"><input type="submit" name="btnUpdateFiles" id="btnUpdateFiles" value="Add New"></td></tr>
 		</cfif>
 		
 		</table>
-		</TD></TR>
+		</td></tr>
 	<cfelse>
-		<TR><TD bgcolor="white" colspan="3"><b>Files</b></TD></TR>
-		<TR>
-			<TD bgcolor="white"></TD>
-			<TD colspan="2" bgcolor="EAEAEA">
+		<tr><td bgcolor="white" colspan="3"><b>Files</b></td></tr>
+		<tr>
+			<td bgcolor="white"></td>
+			<td colspan="2" bgcolor="EAEAEA">
 				<table width="100%" border="0">
 				<cfset aFile=MyContentLocale.GetProperty("aFile")>
-				<TR>
-					<TD><strong>Name</strong></TD>
-					<TD><strong>Caption</strong></TD>
-					<TD><strong>File</strong></TD>
-					<TD>&nbsp;</TD>
-					<TD><cfif ArrayLen(aFile) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></TD>
-				</TR>
+				<tr>
+					<td><strong>Name</strong></td>
+					<td><strong>Caption</strong></td>
+					<td><strong>File</strong></td>
+					<td>&nbsp;</td>
+					<td><cfif ArrayLen(aFile) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></td>
+				</tr>
 				<cfloop index="fi" from="1" to="#ArrayLen(aFile)#" step="1">
 					<cfif NOT StructKeyExists(aFile[fi],"ThumbnailPath")>
 						<cfset StructInsert(aFile[fi],"ThumbnailPath","",1)>
@@ -977,35 +1039,35 @@
 					<cfif FormMode IS "ShowForm">
 						<cfoutput>
 						<tr valign="top">
-							<TD><input type="text" name="FileName_#fi#" value="#aFile[fi].FileName#" size="20" maxlength="128"></TD>
-							<TD>
+							<td><input type="text" name="FileName_#fi#" value="#aFile[fi].FileName#" size="20" maxlength="128"></td>
+							<td>
 								<input type="text" name="FileCaption_#fi#" value="#aFile[fi].FileCaption#" size="40" maxlength="255">
 								<input type="hidden" name="ThumbnailPath_#fi#" value="#aFile[fi].ThumbnailPath#">
-							</TD>
-							<TD>
-								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</A>
+							</td>
+							<td>
+								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a>
 								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#"><BR>
 								<input type="file" name="MainFilePath_#fi#FileObject">
-							</TD>
-							<TD nowrap>
+							</td>
+							<td nowrap>
 								<cfoutput><cfif ArrayLen(aFile) GT "1">
 								<cfif fi IS NOT "1"><input type="image" name="ButtonSubmit_up_#fi#" value="up_#fi#" src="/common/images/widget_arrow_up.gif"><cfelse><img src="/common/images/widget_arrow_up_grey.gif"></cfif><cfif fi IS NOT ArrayLen(aFile)><input type="image" name="ButtonSubmit_down_#fi#" value="down_#fi#" src="/common/images/widget_arrow_down.gif"><cfelse><img src="/common/images/widget_arrow_down_grey.gif"></cfif>
 								</cfif></cfoutput>&nbsp;
-							</TD>
-							<TD><input type="checkbox" name="FileDelete_#fi#" value="1"></TD>
-						</TR>
+							</td>
+							<td><input type="checkbox" name="FileDelete_#fi#" value="1"></td>
+						</tr>
 						</cfoutput>
 					<cfelse>
 						<cfoutput>
-						<TR>
-							<TD>#aFile[fi].FileName#</TD>
-							<TD>#aFile[fi].FileCaption#</TD>
-							<TD>
-								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</A>
+						<tr>
+							<td>#aFile[fi].FileName#</td>
+							<td>#aFile[fi].FileCaption#</td>
+							<td>
+								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a>
 								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
 								<input type="hidden" name="FileCaption_#fi#" value="#aFile[fi].FileCaption#">
-							</TD>
-							<TD colspan="2"><input type="hidden" name="FileName_#fi#" value="#HTMLEditFormat(aFile[fi].FileName)#"></TD>
+							</td>
+							<td colspan="2"><input type="hidden" name="FileName_#fi#" value="#HTMLEditFormat(aFile[fi].FileName)#"></td>
 						</tr>
 						</cfoutput>
 					</cfif>
@@ -1013,16 +1075,16 @@
 		<cfoutput><input type="hidden" name="NumFiles" value="#fi#"></cfoutput>
 		<cfif FormMode IS "ShowForm">
 			<tr valign="top">
-				<TD><input type="text" name="FileName_New" value="" size="20" maxlength="128"></TD>
-				<TD><input type="text" name="FileCaption_New" value="" size="40" maxlength="128"></TD>
-				<TD><input type="file" name="MainFilePath_NewFileObject"><BR>Leave blank to insert label</TD>
-				<TD colspan="2">&nbsp;</TD>
-			</TR>
-			<TR><TD colspan="5" align="right"><input type="submit" value="Update Files"></TD></TR>
+				<td><input type="text" name="FileName_New" value="" size="20" maxlength="128"></td>
+				<td><input type="text" name="FileCaption_New" value="" size="40" maxlength="128"></td>
+				<td><input type="file" name="MainFilePath_NewFileObject"><BR>Leave blank to insert label</td>
+				<td colspan="2">&nbsp;</td>
+			</tr>
+			<tr><td colspan="5" align="right"><input type="submit" value="Update Files"></td></tr>
 		</cfif>
 		
 		</table>
-		</TD></TR>
+		</td></tr>
 	</cfif>
 </cfif>
 
@@ -1056,15 +1118,15 @@
 			</cfoutput>
 		</cfloop>
 	</cfif>
-	<TR valign="top">
-		<TD bgcolor="white"></TD>
-		<TD bgcolor="white">
+	<tr valign="top">
+		<td bgcolor="white"></td>
+		<td bgcolor="white">
 			Find Article:<br/>
 			<input id="txtResource" name="txtResource" style="WIDTH: 200px" type="text" onKeyDown="return supressEnterKey(event);" onKeyUp="return getSuggestions(this, event);" /><br />
 			<div id="suggest" style="z-index:1000;position:absolute; border-style:solid; border-color:#7F9DB9; /*overflow: inherit;*/ white-space:normal; visibility:hidden; width:398px; border-width:1px; font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left: 0px; color:#000000; background-color:#FFFFCC"></div>
-		</TD>
-		<TD><strong>Article List:</strong><br/><span style=" font-size:.9em;">(topmost article is 'featured spot')</span><br/><ul id="articleList"><cfoutput>#Trim(articleList)#</cfoutput></ul></TD>
-	</TR>
+		</td>
+		<td><strong>Article List:</strong><br/><span style=" font-size:.9em;">(topmost article is 'featured spot')</span><br/><ul id="articleList"><cfoutput>#Trim(articleList)#</cfoutput></ul></td>
+	</tr>
 	<script src="/common/scripts/articleSelector.js" type="text/javascript"></script>
 	<script type="text/javascript">
 		document.getElementById('contentForm').onsubmit = function (e) {setResults();return true;};
@@ -1079,7 +1141,7 @@
 </cfif>
 
 <cfif ListLen(MyContentLocale.GetFileList(),";") GT "0" and (IsDefined("FORM.ContentLocaleName") or IsDefined("FORM.ButProcess"))>
-	<TR valign="top" bgcolor="white"><TD colspan="3"><b>Please upload the following files</b></TR></tr>
+	<tr valign="top" bgcolor="white"><td colspan="3"><b>Please upload the following files</b></tr></tr>
 	<cfset Counter="1">
 	<cfloop index="ThisFile" list="#MyContentLocale.GetFileList()#" delimiters=";">
 		<cfset ThisNewFile=ReplaceNoCase(ThisFile,"http://#CGI.Server_Name#","","All")>

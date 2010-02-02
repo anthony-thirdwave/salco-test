@@ -309,6 +309,7 @@
 		<cfargument name="UserID" required="false">
 		
 		<!--- init variables --->
+		<cfset var local = structNew() />
 		<cfset var thisContentLocaleID="">
 		<cfset var thisContentID="">
 		<cfset var thisContentLocaleName="">
@@ -492,8 +493,10 @@
 			<cfelse>
 				<cfset ThisFileList=this.GetFileList()>
 				<cfif ListLen(ThisFileList,";") GT "0">
-					<cfloop index="ThisFileOfList" list="#FileList#" delimiters=";">
-						<cfset NewName=ReplaceNoCase(ThisFileOfList,"http://#CGI.Server_Name#","","All")>
+				
+					<cfloop index="ThisFileOfList" list="#thisFileList#" delimiters=";">
+					
+						<cfset NewName=reReplaceNoCase(ThisFileOfList,"https?://#replaceNoCase(CGI.Server_Name, ".", "\.", "all")#","","All")>
 						<cfset NewName=ReplaceNoCase(NewName,"//","/","All")>
 						<cfset thisHTML=Replace(thisHTML,"#ThisFileOfList#","#NewName#","All")>
 						<cfset thisHTMLTemplate=Replace(thisHTMLTemplate,"#ThisFileOfList#","#NewName#","All")>
@@ -501,8 +504,8 @@
 						<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
 							<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#ThisFileOfList#","#NewName#","All")>
 						</cfloop>
-						<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
-							<cfset ThissHTML[ThisKey]=ReplaceNoCase(ThissHTML[ThisKey],"#ThisFileOfList#","#NewName#","All")>
+						<cfloop index="local.ThisKey" list="#StructKeyList(ThissHTML)#">					
+							<cfset ThissHTML[local.thisKey].value=ReplaceNoCase(ThissHTML[local.thisKey].value,"#ThisFileOfList#","#NewName#","All") />
 						</cfloop>
 					</cfloop>
 				</cfif>
@@ -581,36 +584,7 @@
 						</cfif>
 					</cfif>
 				</cfloop>
-				<cfset ThisFileList=this.GetFileList(1)>
-				<cfif ListLen(ThisFileList,";") GT "0">
-					<cfloop index="ThisFileOfList" list="#FileList#" delimiters=";">
-						<cfif Left(ThisFileOfList,Len("http://#CGI.Server_Name#")) iS "http://#CGI.Server_Name#">
-							<cfset NewName=ReplaceNoCase(ThisFileOfList,"http://#CGI.Server_Name#","","All")>
-							<cfset NewName=ReplaceNoCase(NewName,"//","/","All")>
-							<cfset thisHTML=Replace(thisHTML,"#ThisFileOfList#","#NewName#","All")>
-							<cfset thisHTMLTemplate=Replace(thisHTMLTemplate,"#ThisFileOfList#","#NewName#","All")>
-							<cfset thisFile=Replace(thisFile,"#ThisFileOfList#","#NewName#","All")>
-							<cfset thisText=Replace(thisText,"#ThisFileOfList#","#NewName#","All")>
-							<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
-								<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#ThisFileOfList#","#NewName#","All")>
-							</cfloop>
-							<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
-								<cfset ThissHTML[ThisKey]=ReplaceNoCase(ThissHTML[ThisKey],"#ThisFileOfList#","#NewName#","All")>
-							</cfloop>
-							<cfset thisImage=ReplaceNoCase(thisImage,"#ThisFile#","#NewName#","All")>
-							<cfset thisImageLarge=ReplaceNoCase(thisImageLarge,"#ThisFile#","#NewName#","All")>
-							<cfset thisImageThumbnail=ReplaceNoCase(thisImageThumbnail,"#ThisFile#","#NewName#","All")>
-							<cfset thisImageRollover=ReplaceNoCase(thisImageRollover,"#ThisFile#","#NewName#","All")>
-							<cfset thisFlash=ReplaceNoCase(thisFlash,"#ThisFile#","#NewName#","All")>
-							<cfset thisAFile=this.GetProperty("aFile")>
-							<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
-							<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
-								<cfset thisAFile[Afilei].FilePath=ReplaceNoCase(thisAFile[Afilei].FilePath,"#ThisFile#","#NewName#","All")>
-							</cfloop>
-						</cfif>
-						</cfif>
-					</cfloop>
-				</cfif>
+
 				<cfset this.SetProperty("HTML",thisHTML)>
 				<cfset this.SetProperty("HTMLTemplate",thisHTMLTemplate)>
 				<cfset this.SetProperty("Text",thisText)>
@@ -986,10 +960,16 @@
 				</cfif>
 			</cfcase>
 			<cfcase value="234"><!--- Templatized Content --->
-				<cfif StructKeyList(this.GetProperty("sHTML")) IS NOT "">
+				<cfif len(trim(structKeyList(this.GetProperty("sHTML"))))>
 					<cfset sHTML=this.GetProperty("sHTML")>
 					<cfloop index="ThisKey" list="#StructKeyList(sHTML)#">
-						<cfset ReturnString="#ReturnString# #application.utilsObj.RemoveHTML(sHTML[ThisKey])#">
+						<cfif isStruct(sHTML[ThisKey])>
+							<cfif sHTML[ThisKey].type neq "image">
+								<cfset ReturnString="#ReturnString# #application.utilsObj.RemoveHTML(sHTML[ThisKey].value)#">
+							</cfif>
+						<cfelse>
+							<cfset ReturnString="#ReturnString# #application.utilsObj.RemoveHTML(sHTML[ThisKey])#">
+						</cfif>
 					</cfloop>
 				</cfif>
 			</cfcase>
@@ -1061,110 +1041,123 @@
 	</cffunction>
 	
 	<cffunction name="InitializeHTMLStructure" returntype="boolean" output="false">
-		<cfset var ThisTokenList=GetTokenList()>
-		<cfset var ThissHTML=this.getProperty("sHTML")>
-		<cfset var ThisToken="">
-		<cfloop index="ThisToken" list="#ThisTokenList#">
-			<cfif NOT StructKeyExists(ThissHTML,ThisToken)>
-				<cfset StructInsert(ThissHTML,ThisToken,"")>
+		<cfset var local = structNew() />
+		<cfset local.ThisTokenList=GetTokenList() />
+		<cfset local.ThissHTML=this.getProperty("sHTML") />
+		
+		<cfloop index="local.ThisToken" list="#local.ThisTokenList#">
+			
+			<!--- get the token name and type --->
+			<cfset local.ThisTokenName = getToken(local.ThisToken, 1, ":") />
+			<cfset local.ThisTokenType = getToken(local.ThisToken, 2, ":") />
+			
+			<!--- if there's not a type defined, default to rich text --->
+			<cfif not len(trim(local.ThisTokenType))>
+				<cfset local.ThisTokenType = "rich" />
+			</cfif>
+			
+			<cfif not structKeyExists(local.ThissHTML,local.ThisTokenName)>
+				<cfset local.ThissHTML[local.ThisTokenName] = structNew() />
+				<cfset local.ThissHTML[local.ThisTokenName].value = "" />
+				<cfset local.ThissHTML[local.ThisTokenName].type = local.ThisTokenType />
 			</cfif>
 		</cfloop>
-		<cfset this.SetProperty("sHTML",ThissHTML)>
+		<cfset this.SetProperty("sHTML",local.ThissHTML)>
 		<cfreturn true>
 	</cffunction>
 	
-	<cffunction name="GetTokenList" returntype="String" output="1">
+	<cffunction name="GetTokenList" returntype="String" output="false">
 		
 		<!--- init variables --->
-		<cfset var ThisTokenList="">
+		<cfset var local = structNew() />
 		
 		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetTokenList" 
-			returnVariable="ThisTokenList"
+			returnVariable="local.ThisTokenList"
 			ContentID="#Val(GetContentTemplateID())#"
 			LocaleID="#Val(this.GetProperty('LocaleID'))#">
-		<cfreturn ThisTokenList>
+		<cfreturn local.ThisTokenList>
 	</cffunction>
 	
-	<cffunction name="GetFileList" returntype="string" output="True">
+	<cffunction name="GetFileList" returntype="string" output="false">
 		<cfargument name="AllProperties" required="false">
 		
-		<!--- init variables --->
-		<cfset var StringToTest="">
-		<cfset var ThisAText="">
-		<cfset var ThissHTML="">
-		<cfset var thisAFile="">
-		<cfset var FinalList="">
-		<cfset var atexti="">
-		<cfset var ThisKey="">
-		<cfset var Afilei="">
-		<cfset var ThisFile2="">
-		
+		<cfset var local = structNew() />
+		<cfset local.stringToTest = "" />
+		<cfset local.finalList = "" />
+
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"HTML")>
-			<cfset StringToTest="#this.GetProperty('HTML')#">
+			<cfset local.stringToTest = this.GetProperty('HTML') />
 		</cfif>
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"HTMLTemplate")>
-			<cfset StringToTest="#StringToTest# #this.GetProperty('HTMLTemplate')#">
+			<cfset local.stringToTest="#local.stringToTest# #this.GetProperty('HTMLTemplate')#" />
 		</cfif>
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"aText")>
-			<cfset ThisAText=this.GetProperty("aText")>
-			<cfloop index="atexti" from="1" to="#ArrayLen(ThisAText)#" step="1">
-				<cfset StringToTest="#StringToTest# #ThisAText[atexti]#">
+			<cfset local.ThisAText=this.GetProperty("aText") />
+			<cfloop index="local.atexti" from="1" to="#ArrayLen(local.ThisAText)#" step="1">
+				<cfset local.stringToTest="#local.stringToTest# #local.ThisAText[local.atexti]#" />
 			</cfloop>
 		</cfif>
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"sHTML")>
-			<cfset ThissHTML=this.GetProperty("sHTML")>
-			<cfloop index="ThisKey" list="#StructKeyList(ThissHTML)#">
-				<cfset StringToTest="#StringToTest# #ThissHTML[ThisKey]#">
+			<cfset local.ThissHTML = this.GetProperty("sHTML") />
+			<cfloop index="local.ThisKey" list="#StructKeyList(local.ThissHTML)#">
+				<cfif isStruct(local.ThissHTML[local.ThisKey])>
+					<cfset local.stringToTest="#local.stringToTest# #local.ThissHTML[local.ThisKey].value#" />
+					<cfset local.stringToTest="#local.stringToTest# #local.ThissHTML[local.ThisKey].type#" />
+				<cfelse>
+					<cfset local.stringToTest="#local.stringToTest# #local.ThissHTML[local.ThisKey]#" />
+				</cfif>
 			</cfloop>
 		</cfif>
 		
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"Text")>
-			<cfset StringToTest="#StringToTest# #this.GetProperty('Text')#">
+			<cfset local.stringToTest="#local.stringToTest# #this.GetProperty('Text')#">
 		</cfif>
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"File")>
-			<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('File')#"">">
+			<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('File')#"">">
 		</cfif>
 		
 		<cfif IsDefined("ARGUMENTS.AllProperties") AND ARGUMENTS.AllProperties>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"Image")>
-				<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('image')#"">">
+				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('image')#"">">
 			</cfif>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"File")>
-				<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('File')#"">">
+				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('File')#"">">
 			</cfif>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"ImageLarge")>
-				<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('ImageLarge')#"">">
+				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('ImageLarge')#"">">
 			</cfif>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"ImageRollover")>
-				<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('ImageRollover')#"">">
+				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('ImageRollover')#"">">
 			</cfif>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"ImageThumbnail")>
-				<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('ImageThumbnail')#"">">
+				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('ImageThumbnail')#"">">
 			</cfif>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"flash")>
-				<cfset StringToTest="#StringToTest# <img src=""#this.GetProperty('flash')#"">">
+				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('flash')#"">">
 			</cfif>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"aFile")>
-				<cfset thisAFile=this.GetProperty("aFile")>
+				<cfset local.thisAFile=this.GetProperty("aFile")>
 				<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
-					<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
-						<cfset StringToTest="#StringToTest# <a href=""#thisAFile[Afilei].FilePath#"">">
+					<cfloop index="local.Afilei" from="1" to="#ArrayLen(local.thisAFile)#" step="1">
+						<cfset local.stringToTest="#local.stringToTest# <a href=""#local.thisAFile[local.Afilei].FilePath#"">">
 					</cfloop>
 				</cfif>
 			</cfif>
 		</cfif>
-		<cfmodule template="/common/modules/utils/ParseTemplateValue.cfm"
-			Action="GetFileList" String="#StringToTest#"
-			FileExtensionList="#APPLICATION.MasterFileExtensionList#" DetectLocalHTTPImages="Yes">
-		<!--- <cfabort> --->
-		<cfset FinalList="">
-		<cfloop index="ThisFile2" list="#FileList#" delimiters=";">
-			<cfif Left(ThisFile2,Len("/common/images")) IS not "/common/images">
-				<cfset FinalList=ListAppend(FinalList,ThisFile2,";")>
+		
+		<!--- get the list of files with issues in this object --->
+		<cfinvoke method="parseTemplateValue" returnvariable="local.fileList">
+			<cfinvokeargument name="string" value="#local.stringToTest#" />
+			<cfinvokeargument name="detectLocalHTTPImages" value="true" />
+		</cfinvoke>
+
+		<cfloop index="local.thisFile2" list="#local.fileList#" delimiters=";">
+			<cfif left(local.thisFile2, len("/common/images")) neq "/common/images">
+				<cfset local.finalList = ListAppend(local.finalList, local.thisFile2, ";") />
 			</cfif>
 		</cfloop>
-		<cfreturn FinalList>
+		<cfreturn local.finalList>
 	</cffunction>
 	
 	<cffunction name="CreateResourcePath" returntype="boolean" output="true">
@@ -1409,21 +1402,6 @@
 		</cfinvoke>
 		<cfset ReturnString="#ValueList(Test.LabelName)#">
 		<cfreturn ReturnString>
-	</cffunction>
-	
-	<cffunction name="GetSiblingQuery" returnType="query" output="false">
-		
-		<!--- init variables --->
-		<cfset var GetSiblingQuery="">
-		<cfset var ThisContentID=this.GetProperty("ContentID")>
-		
-		<cfif ThisContentID LTE "0">
-			<cfset ThisContentID="-1">
-		</cfif>
-		<cfquery name="GetSiblingQuery" datasource="#APPLICATION.DSN#" dbtype="ODBC">
-			SELECT * FROM qry_GetContent WHERE ContentID=<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer"> order by DELETEME
-		</cfquery>
-		<cfreturn GetSiblingQuery>
 	</cffunction>
 	
 	<cffunction name="Delete" returnType="boolean" output="1">
@@ -1710,4 +1688,66 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
+	
+	
+		
+	<!--- Returns a ";" delimited list of files that are html attributes (with path and extension) --->
+	<cffunction name="parseTemplateValue" output="false">
+		<cfargument name="detectLocalHTTPImages" default="false">
+		<cfargument name="string" default="">
+		<cfargument name="fileExtensionList" default="#APPLICATION.MasterFileExtensionList#">
+
+		<cfset var local = structNew() />
+		
+		<!--- search for http and https as a starting point --->
+		<cfset local.invalidStartTokens="https?://|=|'|""|\(|:" />
+		<cfset local.invalidFileTokens="=|'|""|\(|:" />
+		<cfset local.fileList = "" />
+		<cfset local.currentPosition = 1 />
+		
+		<!---	this regex, split into 4 groups, looks for:
+				any of the invalidStartTokens, 
+				*not* followed immediately by any of the invalidFileTokens,
+				followed by any alphanumeric or whitespace,
+				followed by any of the extensions in arguments.fileExtensionList  --->
+		<cfset local.theRegex =	'('	& local.invalidStartTokens & ')([^(' & local.invalidFileTokens 
+									& ')]*(?:\([A-Za-z0-9\s]*\)){0,1}(' 
+									& replace(ListChangeDelims(arguments.fileExtensionList,'|',';'),".","\.","all") 
+									& '))' />
+		
+		<!--- use this counter to jump past any extracted files --->
+		<cfloop condition="local.currentPosition gt 0">
+			
+			<!--- this regex is looking for invalid tokens in paths to files --->
+			<cfset local.aFileSearchResults = reFindNoCase(local.theRegex, arguments.string, local.currentPosition, true) />
+			<cfif not local.aFileSearchResults.pos[1]>
+				<cfset local.currentPosition = 0>
+			<cfelse>
+				<cfset local.isLocalHTTP = false />
+				<cfset local.isUrl = false />
+				
+				<!--- if http or https is found in the url, we want the whole url, which is in regex group 1 --->
+				<cfif reFindNoCase("https?://", trim(mid(arguments.string, local.aFileSearchResults.pos[2], local.aFileSearchResults.len[2])))>
+					<cfset local.currentPosition = local.aFileSearchResults.pos[1] + local.aFileSearchResults.len[1] />
+					<cfset local.thisFilePath = trim(mid(arguments.string, local.aFileSearchResults.pos[1], local.aFileSearchResults.len[1])) />
+					<cfset local.isUrl = true />
+				<!--- else, return the path - regex group 3 --->
+				<cfelse>
+					<cfset local.currentPosition = local.aFileSearchResults.pos[3] + local.aFileSearchResults.len[3] />
+					<cfset local.thisFilePath=trim(mid(arguments.string, local.aFileSearchResults.pos[3], local.aFileSearchResults.len[3])) />
+				</cfif>
+				
+				<!--- if detectLocalHTTPImages is enabled, check if the host's fully qualified url is in the string --->
+				<cfif arguments.detectLocalHTTPImages>
+					<cfset local.isLocalHTTP = reFindNoCase("https?://" & CGI.server_name & "/?", local.thisFilePath) />
+				</cfif>
+
+				<!--- add the file to the list if it needs help --->
+				<cfif left(local.thisFilePath,2) is not "//" and (not local.isUrl or (local.isUrl and local.isLocalHttp))>
+					<cfset local.fileList = listAppend(local.fileList, local.thisFilePath, ";") />
+				</cfif>
+			</cfif>
+		</cfloop>
+		<cfreturn local.fileList />
+ 	</cffunction>
 </cfcomponent>

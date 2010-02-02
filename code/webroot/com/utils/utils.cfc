@@ -26,7 +26,7 @@
 				arguments.endToken = replace(arguments.endToken,listGetAt(specialCharacters,sc),"\" & listGetAt(specialCharacters,sc),"all");
 			}
 			while(NOT doneSearching){
-				sExtracted = refind("#arguments.startToken#(\S*)#arguments.endToken#",arguments.content,position,1);
+				sExtracted = refind("#arguments.startToken#(\S[^#arguments.startToken#]*)#arguments.endToken#",arguments.content,position,1);
 				if (sExtracted.len[1] EQ 0 AND sExtracted.pos[1] EQ 0){
 					// No more matches found
 					doneSearching = 1;
@@ -43,7 +43,7 @@
 			}
 		</cfscript>
 		
-		<cfreturn "#lExtracted#">
+		<cfreturn lExtracted />
 	</cffunction>
 	<cffunction name="ReplaceTextInFile" output="true" returntype="boolean">
 		<cfargument name="Token" required="yes" type="string">

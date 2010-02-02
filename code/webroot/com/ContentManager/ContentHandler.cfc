@@ -375,26 +375,24 @@
 		<cfargument name="LocaleID" default="" type="numeric" required="true">
 		
 		<!--- init variables --->
-		<cfset var EditContentLocaleID = "">
-		<cfset var MyContentLocale = "">
-		<cfset var StringToTest = "">
+		<cfset var local = structNew() />
 		
 		<cfinvoke component="com.ContentManager.ContentHandler" 
 			method="GetContentLocaleID" 
-			returnVariable="EditContentLocaleID"
+			returnVariable="local.EditContentLocaleID"
 			ContentID="#Val(ARGUMENTS.ContentID)#"
 			LocaleID="#Val(ARGUMENTS.LocaleID)#">
-		<cfset MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
-		<cfset MyContentLocale.Constructor(Val(EditContentLocaleID))>
+		<cfset local.MyContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
+		<cfset local.MyContentLocale.Constructor(Val(local.EditContentLocaleID))>
 	
-		<cfset StringToTest=MyContentLocale.GetProperty("HTMLTemplate")>
+		<cfset local.StringToTest=local.MyContentLocale.GetProperty("HTMLTemplate")>
 		<cfinvoke component="com.utils.utils"
 			method="extractByToken"
-			content="#StringToTest#"
+			content="#local.StringToTest#"
 			startToken="[["
 			endToken="]]"
-			returnvariable="lExtracted">
-		<cfreturn lExtracted>
+			returnvariable="local.lExtracted">
+		<cfreturn local.lExtracted>
 		
 	</cffunction>
 	
