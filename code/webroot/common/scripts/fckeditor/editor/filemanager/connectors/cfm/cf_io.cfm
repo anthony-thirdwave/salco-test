@@ -283,8 +283,9 @@
 	<!--- Do a cleanup of the file name to avoid possible problems --->
 	<!--- Remove \ / | : ? * " < > --->
 	<cfset sNewFileName = rereplace( sNewFileName, '\\[.]+|\\+|\/+|\|+|\:+|\?+|\*+|"+|<+|>+', "_", "all" )>
-	<cfset sNewFileName = lcase(ReReplace(sNewFileName,"[ ]"," ","all"))>
-	<cfset sNewFileName = lcase(ReReplace(sNewFileName,"[ ]","-","all"))>
+	<cfset sNewFileName = ReReplace(sNewFileName,"[’\!'/:"".+=;?&<>|,]","","all")>
+	<cfset sNewFileName = ReReplace(sNewFileName,"[ ]"," ","all")>
+	<cfset sNewFileName = ReReplace(sNewFileName,"[ ]","-","all")>
 	
 	<cfreturn sNewFileName>
 </cffunction>
