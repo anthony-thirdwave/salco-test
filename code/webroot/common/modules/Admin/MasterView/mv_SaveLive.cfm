@@ -238,7 +238,7 @@
 		<cfoutput>
 			<TR>
 			<td colspan="#MaxDisplayLevel+4#" align="right" bgcolor="FFFFFF">
-			<cf_safeSubmit 
+			<cfmodule template="/common/modules/utils/safeSubmit.cfm"
 				buttonText1="Save"
 				buttonText2="Saving...">
 			<input type="hidden" name="NumItems" value="#DecrementValue(Counter)#">

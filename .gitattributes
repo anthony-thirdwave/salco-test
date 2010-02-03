@@ -401,6 +401,8 @@ code/webroot/common/modules/display/Navigation/dsp_NavBreadcrumb.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavFooter.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavGeneric.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavGlobal.cfm -text
+code/webroot/common/modules/display/Navigation/dsp_NavR.cfm -text
+code/webroot/common/modules/display/Navigation/dsp_NavRHelper.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavSub.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavUtility.cfm -text
 code/webroot/common/modules/display/Templates/dsp_Blank.cfm -text
@@ -434,6 +436,7 @@ code/webroot/common/modules/utils/activedit.cfm -text
 code/webroot/common/modules/utils/fckEditor.cfm -text
 code/webroot/common/modules/utils/getbranchfromroot.cfm -text
 code/webroot/common/modules/utils/hyperlinkURLs.cfm -text
+code/webroot/common/modules/utils/safeSubmit.cfm -text
 code/webroot/common/modules/utils/validateEmail.cfm -text
 code/webroot/common/process/ContentGenerate.cfm -text
 code/webroot/common/process/RSSUpdate.cfm -text
