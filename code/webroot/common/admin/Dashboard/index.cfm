@@ -27,7 +27,7 @@
 				SELECT * FROM qDashboard
 				WHERE HasPermission = 1
 				AND IsActive = 1
-				AND ModulePosition = #ThisColumn#
+				AND ModulePosition = <cfqueryparam cfsqltype="cf_sql_integer" value="#ThisColumn#" />
 				ORDER BY Priority
 			</cfquery>
 			
