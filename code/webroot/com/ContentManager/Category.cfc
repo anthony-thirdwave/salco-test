@@ -36,6 +36,7 @@
 	<cfproperty name="UserloginAccess" type="string" default="">
 	<cfproperty name="sCurrentResourceDetails" type="struct" default="">
 	<cfproperty name="aOwner" type="array" default="">
+	<cfproperty name="useSSL" type="boolean" default="">
 	
 	<cfproperty name="ProductionFTPHost" type="string" default="">
 	<cfproperty name="ProductionFTPRootPath" type="string" default="">
@@ -88,11 +89,12 @@
 	<cfset structInsert(sPropertyDisplayName,"UserloginAccess","username for access",1)>
 	<cfset structInsert(sPropertyDisplayName,"sCurrentResourceDetails","resource details",1)>
 	<cfset structInsert(sPropertyDisplayName,"aOwner","owners",1)>
+	<cfset structInsert(sPropertyDisplayName,"useSSL","use ssl",1)>
 	<cfset structInsert(sPropertyDisplayName,"foober","foo bar",1)><!--- bravo --->
 	
 	<!--- Determine field restrictions based on category type --->
 	<cfset this.sFields=StructNew()>
-	<cfset BaseFieldList="CategoryName,TemplateID,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID"><!--- charlie --->
+	<cfset BaseFieldList="CategoryName,TemplateID,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID,useSSL"><!--- charlie --->
 	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="60,63,70"><!--- Content --->
@@ -202,6 +204,7 @@
 		<cfset this.SetProperty("sCurrentResourceDetails",sBlank)>
 		<cfset aBlank=ArrayNew(1)>
 		<cfset this.SetProperty("aOwner",aBlank)>
+		<cfset this.SetProperty("useSSL","0")>
 		<cfset this.SetProperty("foobar","")><!--- delta --->
 		
 		<cfif Val(ARGUMENTS.ID) GT 0>
@@ -234,7 +237,7 @@
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageOff,CategoryImageOff,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,PressReleaseDate,UserloginAccess,sCurrentResourceDetails,aOwner,foobar"><!--- echo --->
+						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageOff,CategoryImageOff,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,PressReleaseDate,UserloginAccess,sCurrentResourceDetails,aOwner,foobar,useSSL"><!--- echo --->
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
@@ -297,6 +300,7 @@
 		<cfset var thisUserloginAccess = "">
 		<cfset var thisSCurrentResourceDetails = "">
 		<cfset var thisAOwner = "">
+		<cfset var thisUseSSL = "">
 		<cfset var thisFoobar = "">
 		<cfset var Destination = "">
 		<cfset var Source = "">
@@ -372,6 +376,7 @@
 			<cfset thisUserloginAccess=this.GetProperty("UserloginAccess")>
 			<cfset thisSCurrentResourceDetails=this.GetProperty("sCurrentResourceDetails")>
 			<cfset thisAOwner=this.GetProperty("aOwner")>
+			<cfset thisUseSSL=this.GetProperty("useSSL")>
 			<cfset thisFoobar=this.GetProperty("foobar")><!--- foxtrot --->
 			
 			
@@ -688,6 +693,7 @@
 			<cfset DevNull=StructInsert(sProperties,"UserloginAccess","#ThisUserloginAccess#","1")>
 			<cfset DevNull=StructInsert(sProperties,"SCurrentResourceDetails",thisSCurrentResourceDetails,"1")>
 			<cfset DevNull=StructInsert(sProperties,"aOwner",thisAOwner,"1")>
+			<cfset DevNull=StructInsert(sProperties,"useSSL",thisUseSSL,"1")>
 			<cfset DevNull=StructInsert(sProperties,"foobar",thisFoobar,"1")><!--- golf --->
 			
 			<cfset DevNull=StructInsert(sProperties,"ProductionFTPHost","#Trim(ThisProductionFTPHost)#","1")>

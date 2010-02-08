@@ -393,7 +393,7 @@
 					<input type="hidden" name="EditCategoryID#Counter#" value="#URLEncodedFormat(REQUEST.SimpleEncrypt(Val(CategoryID)))#">
 					<input type="hidden" name="EditCategoryLocaleID#Counter#" value="#URLEncodedFormat(REQUEST.SimpleEncrypt(Val(CategoryLocaleID)))#">
 					<TD nowrap align="right">
-					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"/></A>
+					<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"/></A>
 
 					<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
 					<cf_AddToQueryString queryString="#QueryString#" Name="ReturnURL" value="#FormPage#?#ThisPageQueryString#">
@@ -404,7 +404,7 @@
 					<a href="#RequestPage#?#QueryString#"><img src="/common/images/admin/icon_clipboard.gif" border="0"/></A>
 
 					<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
-					<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
+					<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 
 					<cfif ProductionDBDSN IS NOT "" and 0><br>
 						<cfquery name="testlive" datasource="#ProductionDBDSN#">
@@ -413,7 +413,7 @@
 						<cfif testlive.RecordCount IS "0">
 							Not visible on live site
 						<cfelseif Val(testlive.CategoryActivePrime)>
-							<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank">Visible on live site</A>
+							<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank">Visible on live site</A>
 						<cfelse>
 							Not visible on live site
 						</cfif>

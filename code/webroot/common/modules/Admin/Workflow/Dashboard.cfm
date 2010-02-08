@@ -366,7 +366,7 @@
 					<input type="hidden" name="EditCategoryLocaleID#Counter#" value="#URLEncodedFormat(REQUEST.SimpleEncrypt(Val(CategoryLocaleID)))#">
 
 					<TD nowrap align="right">
-					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank">View</A>
+					<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank">View</A>
 					<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
 					<cf_AddToQueryString queryString="#QueryString#" Name="ReturnURL" value="#FormPage#?#ThisPageQueryString#">
 					<a href="#EditPage#?#QueryString#">Edit</A>
@@ -381,7 +381,7 @@
 						<cfif testlive.RecordCount IS "0">
 							Not visible on live site
 						<cfelseif Val(testlive.CategoryActivePrime)>
-							<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank">Visible on live site</A>
+							<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank">Visible on live site</A>
 						<cfelse>
 							Not visible on live site
 						</cfif>

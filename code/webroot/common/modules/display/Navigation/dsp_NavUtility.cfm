@@ -26,11 +26,11 @@
 			</cfquery>
 			<cfoutput query="GetTopCategories2" group="CategoryID">
 				<cfif Trim(CategoryURLDerived) IS "">
-					<cfset ThisURL="#APPLICATION.contentPageInUrl#/#CategoryAlias#">
+					<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
 				<cfelse>
-					<cfset ThisURL="#CategoryURLDerived#">
+					<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
 				</cfif>
-				<div class="utilitynavigationmenu"><a href="#REQUEST.GlobalNavURLPrefix##ThisURL#">#CategoryNameDerived#</a></div>
+				<div class="utilitynavigationmenu"><a href="#ThisURL#">#CategoryNameDerived#</a></div>
 			</cfoutput>
 		</cfif>
 	</cfsaveContent>

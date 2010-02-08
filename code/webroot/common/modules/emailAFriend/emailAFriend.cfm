@@ -71,7 +71,7 @@
 		
 		
 		<!--- lets get the url of the opener --->
-		<cfset thisLink = APPLICATION.protocol & CGI.SERVER_NAME & APPLICATION.contentPageInUrl & "/" & getAlias.categoryAlias />
+		<cfset thisLink = APPLICATION.protocol & CGI.SERVER_NAME & APPLICATION.utilsObj.parseCategoryUrl(getAlias.categoryAlias) />
 		
 		<cftry>
 			<!--- here we want to go ahead and shoot off an email --->

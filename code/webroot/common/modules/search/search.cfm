@@ -126,7 +126,7 @@
 							AND CategoryActive = 1
 						</cfquery>
 						<cfif getParentInfo.RecordCount EQ 1>
-							<cfset parentLinkString = "<a href=""#APPLICATION.contentPageInUrl#/#getParentInfo.CategoryAlias#"">#getParentInfo.CategoryName#</a>">
+							<cfset parentLinkString = "<a href=""#APPLICATION.utilsObj.parseCategoryUrl(getParentInfo.CategoryAlias)#"">#getParentInfo.CategoryName#</a>">
 						</cfif>
 					</cfif>
 				</cfif>
@@ -168,7 +168,7 @@
 							WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#thisTopicID#">
 						</cfquery>
 						<cfif getTopic.RecordCount EQ 1>
-							<cfset thisLinkURL = "#APPLICATION.contentPageInUrl#/search">
+							<cfset thisLinkURL = "#APPLICATION.utilsObj.parseCategoryUrl('search')#">
 							<cfif getTopic.topicAlias NEQ "">
 								<cfset thisLinkURL = thisLinkURL & "?topicAlias=#getTopic.topicAlias#">
 							</cfif>

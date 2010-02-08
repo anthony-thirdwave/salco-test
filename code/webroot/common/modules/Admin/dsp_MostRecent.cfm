@@ -44,7 +44,7 @@ Order By TrackingID desc
 		<td align="left" nowrap>
 		<cfif OperationID IS "506" or ListFindNoCase(lDeleted,"#entity##KeyID#")>
 		<cfelse>
-			<a href="#APPLICATION.contentPageInUrl#/#GetName.CategoryAlias#">View</A> <a href="/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#">Go To</a>
+			<a href="#APPLICATION.utilsObj.parseCategoryUrl(GetName.CategoryAlias)#">View</A> <a href="/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#">Go To</a>
 		</cfif>
 		</td>
 	</tr>

@@ -120,7 +120,7 @@
 			<cfif IsWDDX(PropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#PropertiesPacket#" output="sProperties">
 				<!--- Properties that should inherit --->
-				<cfloop index="ThisProp" list="">
+				<cfloop index="ThisProp" list="useSSL">
 					<cfif StructKeyExists(sProperties,"#ThisProp#") AND Trim(StructFind(sProperties, "#ThisProp#")) IS NOT "">
 						<cfset SetVariable("CALLER.#ThisProp#",StructFind(sProperties, "#ThisProp#"))>
 					</cfif>
@@ -135,6 +135,12 @@
 				</cfif>
 			</cfif>
 		</cfoutput>
+
+		<!--- if this page should be ssl, redirect --->
+		<cfif 	structKeyExists(caller, "useSSL") and caller.useSSL 
+				and CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
+			<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(ATTRIBUTES.CategoryAlias)#" addtoken="false" />
+		</cfif>
 		
 		<!--- Cache date calculated from branch --->
 		<cfquery name="GetMaxCacheDateTime" dbtype="query" maxrows="1">
@@ -245,7 +251,7 @@
 				</cfstoredproc>
 
 				<cfif val(GetFirstChildCategory.RecordCount) GT "0">
-					<cflocation url="#APPLICATION.contentPageInUrl#/#GetFirstChildCategory.CategoryAlias#" addtoken="No">
+					<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(GetFirstChildCategory.CategoryAlias)#" addtoken="No">
 				</cfif>
 				<cfset FileContents="<p>No content found.</p>">
 			</cfif>

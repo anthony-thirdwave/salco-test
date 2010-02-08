@@ -412,7 +412,7 @@
 		returnVariable="qGetCategoryBasicDetails">
 	<cfoutput>
 	<script>
-		window.open('#APPLICATION.contentPageInUrl#/#qGetCategoryBasicDetails.CategoryAlias#?pcid=#URLEncodedFormat(pcid)#&prcid=#URLEncodedFormat(prcid)#','cmspreview');
+		window.open('#APPLICATION.utilsObj.parseCategoryUrl(qGetCategoryBasicDetails.CategoryAlias)#?pcid=#URLEncodedFormat(pcid)#&prcid=#URLEncodedFormat(prcid)#','cmspreview');
 	</script>
 	</cfoutput>
 </cfif>

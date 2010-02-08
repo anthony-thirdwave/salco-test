@@ -94,8 +94,8 @@
 					<cfsavecontent variable="FileContents">
 						#FileContents#
 						<!-- START OF "#GetContent.ContentNameDerived#" CONTENT BLOCK (#GetContent.ContentID#) -->
-						<div id="#ThisCSSID#" class="#ThisAdditionalCSSClass##lcase(application.utilsObj.scrub(GetContent.ContentTypeName))# position#ContentCounter#">
-							#Title# <div>#TheseFileContents#</div>
+						<div id="#ThisCSSID#" class="#lcase(application.utilsObj.scrub(GetContent.ContentTypeName))# #ThisAdditionalCSSClass# position#ContentCounter#">
+							#Title# #TheseFileContents#
 						</div>
 						<!-- END OF "#GetContent.ContentNameDerived#" CONTENT BLOCK -->
 					</cfsavecontent>

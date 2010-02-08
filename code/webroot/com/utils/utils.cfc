@@ -643,4 +643,79 @@
 		<cfreturn trim(local.numAsOrdinal) />
 	</cffunction>
 
+
+
+	<!--- get a properly formatted cms url --->
+	<cffunction name="parseCategoryUrl" returntype="string">
+		<cfargument name="categoryUrl" type="string" required="true" />
+		<cfargument name="localeId" default="#APPLICATION.localeId#" />
+	
+		<cfset var local = structNew() />
+		
+		<!--- trim the url --->
+		<cfset arguments.categoryUrl = trim(arguments.categoryUrl) />
+		<cfset local.returnUrl = arguments.categoryUrl />
+		<cfset local.categoryLocaleProperties = structNew() />
+		
+		<!--- if this is a root relative path, not a link to a page in /common --->
+		<cfif	not reFindNoCase("(https?://)|(ftp://)|(mailto:)|(javascript:)", arguments.categoryUrl)
+				and getToken(arguments.categoryUrl, 1, "/") neq "common"
+				and listLen(arguments.categoryUrl, "/")>
+		
+			<!--- the last token in a string of "/" should be the alias  --->
+			<cfset local.categoryAlias = getToken(arguments.categoryUrl, listLen(arguments.categoryUrl, "/"), "/") />
+			
+			<!--- Check given alias first and obtain categoryid--->
+			<cfquery name="local.getCategoryInfo" datasource="#APPLICATION.DSN#" maxrows=1>
+				SELECT	c.categoryId, p.propertiesPacket
+				FROM	t_Category c
+				JOIN	t_Properties p
+				ON		p.propertiesId = c.propertiesId
+				WHERE	CategoryAlias = <cfqueryparam value="#trim(local.categoryAlias)#" cfsqltype="cf_sql_varchar" maxlength="128">
+			</cfquery>
+			
+			<!--- if we have a page, then create the url --->
+			<cfif local.getCategoryInfo.recordcount>
+				
+				<!--- check for defined CategoryLocalePropertiesPacket --->
+				<cfif isWDDX(local.getCategoryInfo.propertiesPacket)>
+					<cfwddx action="WDDX2CFML" input="#local.getCategoryInfo.propertiesPacket#" output="local.categoryProperties">
+				</cfif>
+				
+				<!--- prepend the APPLICATION.contentPageInUrl to the alias for seo --->
+				<cfset local.returnUrl = "#APPLICATION.contentPageInUrl#/" & local.categoryAlias />
+				
+				<!--- if this uses SSL --->
+				<cfif structKeyExists(local.categoryProperties, "useSSL") and val(local.categoryProperties.useSSL)>
+					
+					<!--- if we're not on a secure page and this link is secure, point to https --->
+					<cfif CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
+						<cfset local.returnUrl = APPLICATION.httpsServer & local.returnUrl />
+					</cfif>
+				<!--- else, use the contentPage alias set for the application --->
+				<cfelse>
+					
+					<!--- if we're on a secure page and this link isn't secure, point to http --->
+					<cfif CGI.SERVER_PORT eq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
+						<cfset local.returnUrl = APPLICATION.httpServer & local.returnUrl />
+					</cfif>
+				</cfif>
+			<!--- if there's not a matching page, make sure it returns as url so 404 can handle it --->
+			<cfelse>
+			
+				<!--- make sure this returns as a root relative url --->
+				<cfif compare(left(local.categoryAlias, 1), "/")>
+					<cfset local.returnUrl = "/" & local.categoryAlias />
+				</cfif>
+				
+				<!--- if we're on a secure page, point to http --->
+				<cfif CGI.SERVER_PORT eq APPLICATION.httpsPort>
+					<cfset local.returnUrl = "http://" & CGI.SERVER_NAME & local.returnUrl />
+				</cfif>
+			</cfif>
+		</cfif>
+		
+		<cfreturn local.returnUrl />
+	</cffunction>
+
 </cfcomponent>

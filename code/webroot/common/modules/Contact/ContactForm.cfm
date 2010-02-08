@@ -8,7 +8,7 @@
 <cfparam name="thisWord" default="">
 <cfparam name="chlortho" default="">
 <cfparam name="capText" default="">
-<cfparam name="ATTRIBUTES.ConfirmLocation" default="#APPLICATION.contentPageInUrl#/contactconfirm">
+<cfparam name="ATTRIBUTES.ConfirmLocation" default="#APPLICATION.utilsObj.parseCategoryUrl('/contactconfirm')#">
 <cfset errorMessage = "">
 
 

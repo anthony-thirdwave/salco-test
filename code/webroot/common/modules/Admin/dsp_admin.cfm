@@ -147,7 +147,7 @@
 		<TD>&nbsp;</TD>
 		<TD align="center" class="FooterAdmin2">
 		<p>All content copyright 2003-<cfoutput>#Year(Now())#, #APPLICATION.CompanyName# </cfoutput>unless otherwise noted. All rights reserved.<br>
-		<cfoutput><a href="/" target="_blank">#APPLICATION.CompanyName#</a> / <a href="#APPLICATION.contentPageInUrl#/privacy" target="_blank">Terms of Service &amp; Privacy Policy</A> / Version #APPLICATION.CMSVersion#</cfoutput><br>
+		<cfoutput><a href="/" target="_blank">#APPLICATION.CompanyName#</a> / <a href="#APPLICATION.utilsObj.parseCategoryUrl('privacy')#" target="_blank">Terms of Service &amp; Privacy Policy</A> / Version #APPLICATION.CMSVersion#</cfoutput><br>
 		&nbsp;</p>
 		</TD>
 		<TD>&nbsp;</TD>

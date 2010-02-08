@@ -66,11 +66,19 @@
 			b) "" - seo links defined purely by contentAlias (e.g. "http://www.thirdwavellc.com/about")
 			c) "/yourstringhere" - any string that you want to go before the contentAlias (e.g. "http://www.thirdwavellc.com/page/about") 
 		--->
-		<cfset APPLICATION.contentPageInUrl = "page" />
+		<cfset APPLICATION.contentPageInUrl = "/page" />
 		
-		<!--- make sure non null contentPageInUrl has a leading slash --->
-		<cfif len(trim(APPLICATION.contentPageInUrl)) and left(APPLICATION.contentPageInUrl, 1) neq "/">
-			<cfset APPLICATION.contentPageInUrl = "/" & trim(APPLICATION.contentPageInUrl) />
+		<!--- clean up contentPageInUrl --->
+		<cfset APPLICATION.contentPageInUrl = trim(APPLICATION.contentPageInUrl) />
+		<cfif len(APPLICATION.contentPageInUrl)>
+			<!--- make sure contentPageInUrl has a leading slash --->
+			<cfif left(APPLICATION.contentPageInUrl, 1) neq "/">
+				<cfset APPLICATION.contentPageInUrl = "/" & APPLICATION.contentPageInUrl />
+			</cfif>
+			<!--- and no trailing slash --->
+			<cfif right(APPLICATION.contentPageInUrl, 1) eq "/">
+				<cfset APPLICATION.contentPageInUrl = mid(APPLICATION.contentPageInUrl, 1, len(APPLICATION.contentPageInUrl) - 1) />
+			</cfif>
 		</cfif>
 		
 		<cfif local.siteType eq "dev">
@@ -87,7 +95,16 @@
 			
 			<!--- only used if dev --->
 			<cfset APPLICATION.StagingURL = "http://staging.#local.uniqueName#.com" />
-
+			
+			<!---	set custom httpServer and httpsServer - *both* must be set to work properly 
+					e.g.: http://www.mySite.com and https://secure.mySite.com --->
+			<cfset APPLICATION.httpServerOverride = "" />
+			<cfset APPLICATION.httpsServerOverride = "" />
+			<cfset APPLICATION.httpsPortOverride = "" />
+			
+			<!--- is ssl set up for the dev site? --->
+			<cfset APPLICATION.SSLConfigured = false />
+			
 		<cfelseif local.siteType eq "staging">
 			
 			<cfset APPLICATION.WebRootPath = "#local.stagingPathPrefix#webroot\" />
@@ -100,6 +117,16 @@
 			<cfset APPLICATION.SourcePassword = "st34l1n" />
 			<cfset APPLICATION.Staging = "yes" />
 			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = "staging.#local.uniqueName#.com" />
+			
+			<!---	set custom httpServer and httpsServer - *both* must be set to work properly 
+					e.g.: http://www.mySite.com and https://secure.mySite.com --->
+			<cfset APPLICATION.httpServerOverride = "" />
+			<cfset APPLICATION.httpsServerOverride = "" />
+			<cfset APPLICATION.httpsPortOverride = "" />
+			
+			<!--- is ssl set up for the staging site? --->
+			<cfset APPLICATION.SSLConfigured = false />
+			
 		<cfelse>
 
 			<cfset APPLICATION.WebRootPath = "#local.productionPathPrefix#webroot\" />
@@ -112,6 +139,34 @@
 			<cfset APPLICATION.SourcePassword = "" />
 			<cfset APPLICATION.Production = "yes" />
 			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = APPLICATION.applicationName />
+			
+			<!---	set custom httpServer and httpsServer - *both* must be set to work properly 
+					e.g.: http://www.mySite.com and https://secure.mySite.com --->
+			<cfset APPLICATION.httpServerOverride = "" />
+			<cfset APPLICATION.httpsServerOverride = "" />
+			<cfset APPLICATION.httpsPortOverride = "" />
+			
+			<!--- is ssl set up for the production site? --->
+			<cfset APPLICATION.SSLConfigured = false />
+			
+		</cfif>
+		
+		
+		<!--- there are *both* custom httpServer and httpsServer names --->
+		<cfif len(trim(APPLICATION.httpServerOverride)) and len(trim(APPLICATION.httpsServerOverride))>
+			<cfset APPLICATION.httpServer = APPLICATION.httpServerOverride />
+			<cfset APPLICATION.httpsServer = APPLICATION.httpsServerOverride />
+		<!--- default https and http server names --->
+		<cfelse>
+			<cfset APPLICATION.httpServer = "http://" & CGI.SERVER_NAME />
+			<cfset APPLICATION.httpsServer = "https://" & CGI.SERVER_NAME />
+		</cfif>
+		
+		<!--- if there's a port defined for https --->
+		<cfif isNumeric(APPLICATION.httpsPortOverride)>
+			<cfset APPLICATION.httpsPort = APPLICATION.httpsPortOverride />
+		<cfelse>
+			<cfset APPLICATION.httpsPort = "443" />
 		</cfif>
 		
 		<cfset APPLICATION.TrashPath = "#APPLICATION.WorkgroupPath#trash\" />

@@ -214,6 +214,15 @@
 		PropertyName="AllowBackToTop">
 </cfif>
 
+<cfif ListFindNoCase(Restrictions,"useSSL")>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="checkbox"
+		caption="Use SSL?"
+		ObjectName="MyCategory"
+		PropertyName="useSSL">
+</cfif>
+
 <cfif ListFindNoCase(Restrictions,"ParentID")>
 	<cfset ParentIDFormMode=FormMode>
 <cfelse>

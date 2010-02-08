@@ -76,7 +76,7 @@
 	
 	<div id="leftContent">
 		<div class="logoContainer">
-	  		<a href="<cfoutput>#REQUEST.GlobalNavURLPrefix#/</cfoutput>"><img src="/common/images/template/logo.gif" border="0" alt="HDH Wine" /></a>
+	  		<a href="<cfoutput>#APPLICATION.utilsObj.parseCategoryUrl('/')#</cfoutput>"><img src="/common/images/template/logo.gif" border="0" alt="HDH Wine" /></a>
 		</div>
 	</div>
 

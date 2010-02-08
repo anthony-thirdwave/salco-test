@@ -25,9 +25,9 @@
 			<td align="left">
 			<cfif OperationID IS "506" or ListFindNoCase(lDeleted,"#entity##KeyID#")>
 			<cfelse>
-				<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0" title="Preview Page in new Tab"/></a>&nbsp;
+				<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0" title="Preview Page in new Tab"/></a>&nbsp;
 				<a href="/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#" title="Edit"><img src="/common/images/admin/icon_edit.gif" title="Go to content in Masterview" border="0"/></a>&nbsp;
-				<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#CGI.HTTP_HOST##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: #URLEncodedFormat('http://#CGI.HTTP_HOST#/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></a>
+				<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#CGI.HTTP_HOST##APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#%0AEdit: #URLEncodedFormat('http://#CGI.HTTP_HOST#/common/admin/Masterview/index.cfm?MVEid=1&mvcid=#KeyID#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></a>
 			</cfif>
 			</td>
 		</tr>

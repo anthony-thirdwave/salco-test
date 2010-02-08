@@ -75,7 +75,7 @@
 <cfelseif GetCategoryDetails.RecordCount GT "0">
 	<cfoutput query="GetCategoryDetails" group="CategoryID">
 		<div class="actionlist1">	
-			<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"> Preview</A>
+			<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"> Preview</A>
 		
 			<!--- CRUD --->
 			<cf_AddToQueryString querystring="#MVQueryString#" name="MVCid" value="#Val(ParentID)#">

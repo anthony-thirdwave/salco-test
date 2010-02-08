@@ -148,7 +148,7 @@ function valNewSearch(thisForm){
 			<tr>
 				<td align="left" width="13%">
 					<img src="/common/images/spacer.gif" width="10" height="1" border="0"/>
-					<a href="#APPLICATION.contentPageInUrl#/#CategoryAlias#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" hspace="2" border="0"/></a>
+					<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" hspace="2" border="0"/></a>
 					<a href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#" title="Edit"><img src="/common/images/admin/icon_edit.gif" hspace="2" border="0"/></a>
 					<!--- <a href="##"><img src="/common/images/icon_delete.gif" hspace="2" border="0"/></a> --->
 				</td>

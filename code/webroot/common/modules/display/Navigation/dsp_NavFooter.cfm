@@ -5,10 +5,10 @@
 			#APPLICATION.CompanyStreet# #APPLICATION.CompanyCity# #APPLICATION.CompanyState# #APPLICATION.CompanyZip# | #APPLICATION.CompanyPhone# 
 			</div>
             <ul>
-        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/terms">terms</a></li>
-        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/about-contact">contact</a></li>
-        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/faqs">faqs</a></li>
-        <li><a href="#REQUEST.GlobalNavURLPrefix##APPLICATION.contentPageInUrl#/site-index">site index</a></li>
+        <li><a href="#APPLICATION.utilsObj.parseCategoryUrl('terms')#">terms</a></li>
+        <li><a href="#APPLICATION.utilsObj.parseCategoryUrl('about-contact')#">contact</a></li>
+        <li><a href="#APPLICATION.utilsObj.parseCategoryUrl('faqs')#">faqs</a></li>
+        <li><a href="#APPLICATION.utilsObj.parseCategoryUrl('site-index')#">site index</a></li>
     </ul>
             
 		</cfoutput>	

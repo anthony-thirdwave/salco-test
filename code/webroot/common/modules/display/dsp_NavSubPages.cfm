@@ -41,11 +41,11 @@
 	<cfsavecontent variable="ThisNav">
 		<cfoutput query="GetThesePages" group="CategoryID">
 			<cfif Trim(CategoryURL) IS "">
-				<cfset ThisURL="#APPLICATION.contentPageInUrl#/#CategoryAlias#">
+				<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
 			<cfelse>
-				<cfset ThisURL="#CategoryURL#">
+				<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURL)#">
 			</cfif>
-			<li><a href="#REQUEST.GlobalNavURLPrefix##ThisURL#"><cfif ListFind("#ThisParentID#,#ATTRIBUTES.CategoryID#",categoryID)><strong>#CategoryName#</strong><cfelse>#CategoryName#</cfif></a></li>
+			<li><a href="#ThisURL#"><cfif ListFind("#ThisParentID#,#ATTRIBUTES.CategoryID#",categoryID)><strong>#CategoryName#</strong><cfelse>#CategoryName#</cfif></a></li>
 		</cfoutput>
 	</cfsaveContent>
 	<cfif Trim(ThisNav) IS NOT "">

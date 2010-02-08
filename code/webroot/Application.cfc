@@ -137,12 +137,7 @@
 		<!--- lock the session scope here to make sure session not accessed in odd state by asynchronous requests. --->
 		<cflock scope="SESSION" type="exclusive" timeout="10">
 		</cflock>
-		
-		<cfset REQUEST.GlobalNavURLPrefix = "">
-		<!--- if in secure, make sure nav links exit secure --->
-		<cfif (CGI.SERVER_PORT EQ 443 or CGI.HTTP_Host neq CGI.SERVER_NAME) and APPLICATION.Production>
-			<cfset REQUEST.GlobalNavURLPrefix = "http://#CGI.SERVER_NAME#">
-		</cfif>
+
 		
 		<!--- if this request is a .cfc, then delete the onRequest method from this instance
 				- fixes a bug in CF8, not necessary for CF9 --->

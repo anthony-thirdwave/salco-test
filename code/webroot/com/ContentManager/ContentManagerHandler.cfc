@@ -305,7 +305,7 @@
 			to other hosts --->
 			<cfif len(trim(local.getdetail.CategoryURLDerived)) and not isValid("url", local.getdetail.CategoryURLDerived)>
 			
-				<cfset local.sitemap_info.url = "http://#CGI.HTTP_HOST##local.getDetail.CategoryURL#">
+				<cfset local.sitemap_info.url = "http://#CGI.HTTP_HOST##APPLICATION.utilsObj.parseCategoryUrl(local.getDetail.CategoryURL)#">
 				
 				<cfif findNoCase("/home", local.sitemap_info.url) neq 0>
 					<cfset local.sitemap_info.priority = 1>
@@ -315,7 +315,7 @@
 				
 				<cfset arrayAppend(arguments.URL_array, duplicate(local.sitemap_info))>
 			<cfelseif not len(trim(local.getdetail.CategoryURLDerived))>
-				<cfset local.sitemap_info.url = "http://#CGI.HTTP_HOST##APPLICATION.contentPageInUrl#/#local.GetDetail.CategoryAlias#">
+				<cfset local.sitemap_info.url = "http://#CGI.HTTP_HOST##APPLICATION.utilsObj.parseCategoryUrl(local.GetDetail.CategoryAlias)#">
 				
 				<cfif findNoCase("/home", local.sitemap_info.url) neq 0>
 					<cfset local.sitemap_info.priority = 1>

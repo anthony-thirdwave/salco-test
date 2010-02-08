@@ -7,17 +7,18 @@
 		AND			CategoryTypeID IN (<cfqueryparam value="#APPLICATION.lVisibleCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes" />) 
 		AND			ShowInNavigation = 1
 		AND			CategoryActive = 1
-		AND			UserGroupID IN (<cfqueryparam value="#SESSION.UserRolesIDList#" cfsqltype="cf_sql_integer">) AND pview=1
+		AND			UserGroupID IN (<cfqueryparam value="#SESSION.UserRolesIDList#" cfsqltype="cf_sql_integer">)
+		AND			pview = <cfqueryparam value="1" cfsqltype="cf_sql_integer" />
 		ORDER BY	displayOrder
 	</cfquery>
 	<cfif GetBC.RecordCount GT "0">
 		<cfoutput query="GetBC" group="CategoryID">
 			<cfif Trim(CategoryURL) IS "">
-				<cfset ThisURL="#APPLICATION.contentPageInUrl#/#CategoryAlias#">
+				<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
 			<cfelse>
-				<cfset ThisURL="#CategoryURL#">
+				<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURL)#">
 			</cfif>
-			<cfif CurrentRow IS NOT GetBC.RecordCount><a href="#REQUEST.GlobalNavURLPrefix##ThisURL#"></cfif>#CategoryName#</A> <cfif CurrentRow IS NOT GetBC.RecordCount>&gt;</cfif>
+			<cfif CurrentRow IS NOT GetBC.RecordCount><a href="#ThisURL#"></cfif>#CategoryName#</A> <cfif CurrentRow IS NOT GetBC.RecordCount>&gt;</cfif>
 		</cfoutput>
 	</cfif>
 <cfelse>&nbsp;

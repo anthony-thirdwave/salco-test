@@ -50,9 +50,9 @@ be set to "URL" and the "URL" should be "/common/error/process404.cfm".
 </cfif>
 
 <cfif NOT IsDebugMode()>
-	<cflocation url="#APPLICATION.contentPageInUrl#/#URLEncodedFormat(NewAlias)#" addtoken="No">
+	<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(URLEncodedFormat(NewAlias))#" addtoken="No">
 <cfelse>
-	<cfoutput>404 Redirecting: <a href="#APPLICATION.contentPageInUrl#/#URLEncodedFormat(NewAlias)#">#APPLICATION.contentPageInUrl#/#URLEncodedFormat(NewAlias)#</a></cfoutput>
+	<cfoutput>404 Redirecting: <a href="#APPLICATION.utilsObj.parseCategoryUrl(URLEncodedFormat(NewAlias))#">#APPLICATION.utilsObj.parseCategoryUrl(URLEncodedFormat(NewAlias))#</a></cfoutput>
 </cfif>
 
 
