@@ -68,11 +68,13 @@
         </div>
          <!-- Utility Navigation and items -->
         <div id="utilityNavigation">
-                <form id="search" action="#APPLICATION.utilsObj.parseCategoryUrl('search')#" method="get">
-                <input id="search-text" type="text" name="searchTxt"<cfif IsDefined("URL.searchTxt")> value="<cfoutput>#URL.searchTxt#</cfoutput>"</cfif> />
-                <input id="search-btn" type="image" src="/common/images/template/btn-search.gif" alt="Search" />
+		    <cfoutput>
+            <form id="search" action="#APPLICATION.utilsObj.parseCategoryUrl('search')#" method="get">
+	            <input id="search-text" type="text" name="searchTxt"<cfif IsDefined("URL.searchTxt")> value="#URL.searchTxt#"</cfif> />
+	            <input id="search-btn" type="image" src="/common/images/template/btn-search.gif" alt="Search" />
             </form>
-            </div>
+			</cfoutput>
+        </div>
         <!-- to clear out floats -->
         <div class="clearit"></div>
     	<!-- main navigation -->

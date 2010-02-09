@@ -7,4 +7,5 @@ code/webroot/incoming/Image/*
 code/webroot/resources/category/*
 code/webroot/resources/content/*
 code/webroot/resources/images/*
+code/webroot/scratchpad.cfm
 code/workarea/trash/resources/category/*
