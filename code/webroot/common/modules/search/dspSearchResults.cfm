@@ -42,7 +42,7 @@
     <cfloop list="#arguments.searchList#" index="local.i" delimiters=",">
        <cfset local.linkSubStr = "">
        
-       <cfset local.linkSubStr = "<a href='/content.cfm/#arguments.searchAlias#?#arguments.searchType#=#urlencodedformat(trim(local.i))#'>#trim(local.i)#</a>">
+       <cfset local.linkSubStr = "<a href='#APPLICATION.utilsObj.parseCategoryUrl(arguments.searchAlias)#?#arguments.searchType#=#urlencodedformat(trim(local.i))#'>#trim(local.i)#</a>">
        
        <cfset local.links = local.links & " " & local.linkSubStr>
        

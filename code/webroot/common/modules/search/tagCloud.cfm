@@ -72,7 +72,7 @@
                <cfset class="smallTag">
             </cfif>
          </cfsilent>
-         <a href="/content.cfm/search?metakeyword=#urlencodedformat(trim(tags.tag))#"><span class="#class#">#lcase(tags.tag)#</span></a>
+         <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?metakeyword=#urlencodedformat(trim(tags.tag))#"><span class="#class#">#lcase(tags.tag)#</span></a>
       </cfloop>
       </div>
    </cfoutput>
