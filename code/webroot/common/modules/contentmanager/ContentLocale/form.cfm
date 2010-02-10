@@ -1140,7 +1140,7 @@
 	<input type="hidden" name="lArticleCategoryID" id="lArticleCategoryID" />
 </cfif>
 
-<cfif ListLen(MyContentLocale.GetFileList(),";") GT "0" and (IsDefined("FORM.ContentLocaleName") or IsDefined("FORM.ButProcess"))>
+<cfif ListLen(MyContentLocale.GetFileList(),";") GT "0" and (IsDefined("FORM.ContentLocaleName") or structKeyExists(form, "ButProcess"))>
 	<tr valign="top" bgcolor="white"><td colspan="3"><b>Please upload the following files</b></tr></tr>
 	<cfset Counter="1">
 	<cfloop index="ThisFile" list="#MyContentLocale.GetFileList()#" delimiters=";">

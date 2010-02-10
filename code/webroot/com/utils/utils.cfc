@@ -344,6 +344,50 @@
 	</cfscript>
 
 
+
+	
+	
+	<!--- convert dot delimited form variables into structs  --->
+	<cffunction name="formDotNotationToStruct" returntype="struct">
+		<cfargument name="form" default="#structNew()#">
+		
+		<cfset var local = structNew() />
+		
+		<!--- make sure the struct has values --->
+		<cfif not structIsEmpty(arguments.form)>
+		
+			<!--- loop through the form elements --->
+			<cfloop collection="#arguments.form#" item="local.itr">
+				
+				<!--- is there a "." in the element name? --->
+				<cfif find(".", local.itr)>
+				
+					<!--- hold the value of the element --->
+					<cfset local.value = urlDecode(arguments.form[local.itr]) />
+					
+					<!--- delete the element from the form --->
+					<cfset structDelete(arguments.form, local.itr) />
+					
+					<!--- get the string before the first "." --->
+					<cfset local.checkImageInput = getToken(local.itr, 1, ".") />
+					
+					<!--- if this is an image input type, the variable before the "." can exist as a string,
+							so, skip adding the .x and .y --->
+					<cfif	(structKeyExists(form, local.checkImageInput) and not isSimpleValue(form[local.checkImageInput])) 
+							or not structKeyExists(form, local.checkImageInput)>
+					
+						<!--- add the element as a nested member of the form struct
+								- dot notation in the element name becomes struct elements --->
+						<cfset "arguments.form.#local.itr#" = local.value />
+					</cfif>
+				</cfif>
+			</cfloop>
+		</cfif>
+
+		<!--- return the form --->
+		<cfreturn arguments.form />
+	</cffunction>
+		
 		
 	
 	<!--- returns a spelled out number --->

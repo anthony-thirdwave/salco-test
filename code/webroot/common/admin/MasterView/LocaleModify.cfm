@@ -5,6 +5,9 @@
 <cfparam name="CurrentLanguageID" default="100">
 <cfset OpenAndCloseFormTables="no">
 
+<!--- convert any form variables with dot notation into a struct for the auction object --->
+<cfset form = APPLICATION.UtilsObj.formDotNotationToStruct(form) />
+
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
@@ -44,7 +47,7 @@
 <cfset PageAction=Trim(PageAction)>
 
 <cfif PageAction IS "ValidateEdit" OR PageAction IS "ValidateAdd">
-	<cfif NOT IsDefined("FORM.ButSubmit")>
+	<cfif not structKeyExists(form, "ButSubmit")>
 		<cfset PageAction=ReplaceNoCase(PageAction,"Validate","","All")>
 	</cfif>
 </cfif>

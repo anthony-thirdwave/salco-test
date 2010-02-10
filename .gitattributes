@@ -51,7 +51,6 @@ code/webroot/common/admin/Locale/index.cfm -text
 code/webroot/common/admin/MasterView/CategoryModify.cfm -text
 code/webroot/common/admin/MasterView/ContentModify.cfm -text
 code/webroot/common/admin/MasterView/LocaleModify.cfm -text
-code/webroot/common/admin/MasterView/ResourceModify.cfm -text
 code/webroot/common/admin/MasterView/_InitMasterView.cfm -text
 code/webroot/common/admin/MasterView/download/2.txt -text
 code/webroot/common/admin/MasterView/download/3.txt -text

@@ -8,6 +8,9 @@
 <cfparam name="FormLanguageID" default="#CurrentLanguageID#">
 <cfset OpenAndCloseFormTables="no">
 
+<!--- convert any form variables with dot notation into a struct for the auction object --->
+<cfset form = APPLICATION.UtilsObj.formDotNotationToStruct(form) />
+
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
@@ -82,7 +85,7 @@
 --->
 
 <cfif IsDefined("FORM.CategoryName")>
-	<cfif IsDefined("FORM.ButLoad2") and FORM.ButLoad2 IS "Load" AND Val(lclid) GTE "1">
+	<cfif structKeyExists(form, "ButLoad2") and val(lclid) gte "1">
 		<cfset SourceCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 		<cfset SourceCategoryLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
 		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#">
@@ -140,7 +143,7 @@
 <cfset PageAction=Trim(PageAction)>
 
 <cfif PageAction IS "ValidateEdit" OR PageAction IS "ValidateAdd">
-	<cfif NOT IsDefined("FORM.ButSubmit")>
+	<cfif not structKeyExists(form, "ButSubmit")>
 		<cfset PageAction=ReplaceNoCase(PageAction,"Validate","","All")>
 	</cfif>
 </cfif>

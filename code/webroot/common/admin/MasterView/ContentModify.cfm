@@ -6,6 +6,9 @@
 <cfparam name="EditContentLocaleID" default="-1">
 <cfparam name="EditLocaleID" default="-1">
 
+<!--- convert any form variables with dot notation into a struct for the auction object --->
+<cfset form = APPLICATION.UtilsObj.formDotNotationToStruct(form) />
+
 <cfif IsDefined("ATTRIBUTES.PageAction")>
 	<cfset PageAction=ATTRIBUTES.PageAction>
 </cfif>
@@ -84,7 +87,7 @@
 </cfif>
 
 <cfif IsDefined("FORM.ContentName")>
-	<cfif IsDefined("FORM.ButLoad") and FORM.ButLoad IS "Load">
+	<cfif structKeyExists(form, "ButLoad")>
 		<cfset SourceContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 		<cfset SourceContentLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
 		
@@ -365,7 +368,7 @@
 <cfset PageAction=Trim(PageAction)>
 
 <cfif PageAction IS "ValidateEdit" OR PageAction IS "ValidateAdd">
-	<cfif NOT IsDefined("FORM.ButSubmit")>
+	<cfif not structKeyExists(form, "ButSubmit")>
 		<cfset PageAction=ReplaceNoCase(PageAction,"Validate","","All")>
 	</cfif>
 </cfif>
@@ -384,7 +387,7 @@
 
 
 
-<cfif IsDefined("FORM.ButPreview") And Mycontent.isCorrect() and MyContentLocale.isCorrect()>
+<cfif structKeyExists(form, "ButPreview") and Mycontent.isCorrect() and MyContentLocale.isCorrect()>
 	<cfset MyContentPreview=CreateObject("component","com.ContentManager.Content")>
 	<cfset MyContentPreview.Constructor()>
 	<cfloop index="PropertyToCopy" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,SourceID,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,lRelatedCategoryID,InheritID,SourceCategoryID,DisplayModeID,lPageID">

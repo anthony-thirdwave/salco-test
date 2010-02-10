@@ -21,6 +21,9 @@
 <cfparam name="LabelCode" default="">
 <cfparam name="LabelGroupID" default="">
 
+<!--- convert any form variables with dot notation into a struct for the auction object --->
+<cfset form = APPLICATION.UtilsObj.formDotNotationToStruct(form) />
+
 <cfif bSubmit>
 	<cfif form.LabelGroupID IS "900">
 		<cfif LabelName iS NOT "">
@@ -62,15 +65,15 @@
 			</cfquery>
 		<!--- Edit --->	
 		<cfelse>
-			<cfif IsDefined("Form.butup") OR IsDefined("Form.butdown")>
-				<cfif IsDefined("Form.butup")>
+			<cfif structKeyExists(form, "butup") or structKeyExists(form, "butdown")>
+				<cfif structKeyExists(form, "butup")>
 					<cfquery name="moveup" datasource="#APPLICATION.DSN#">
 						UPDATE	t_Label
 						SET		LabelPriority = LabelPriority-15,
 								LabelName = <cfqueryparam value="#Trim(form.LabelName)#" cfsqltype="cf_sql_varchar">
 						WHERE	LabelID = <cfqueryparam value="#Val(form.LabelID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
-				<cfelseif IsDefined("Form.butdown")>
+				<cfelseif structKeyExists(form, "butdown")>
 					<cfquery name="movedown" datasource="#APPLICATION.DSN#">
 						UPDATE	t_Label
 						SET		LabelPriority = LabelPriority+15,
