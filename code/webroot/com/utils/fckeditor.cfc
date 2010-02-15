@@ -97,7 +97,8 @@
 	else if( find( "gecko/", sAgent ) )
 	{
 		// try to extract Gecko version date
-		stResult = reFind( "gecko/(200[3-9][0-1][0-9][0-3][0-9])", sAgent, 1, true );
+		// stResult = reFind( "gecko/(200[3-9][0-1][0-9][0-3][0-9])", sAgent, 1, true );
+		stResult = reFind( "gecko/([0-9]{8})", sAgent, 1, true );
 		if( arrayLen( stResult.pos ) eq 2 )
 		{
 			// get Gecko build (i18n date)
