@@ -342,6 +342,10 @@ SET IDENTITY_INSERT t_Country OFF
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 252,'CONTTYP','Recent Discussions',-70,262,'/common/images/ContentManager/icon_teaser.gif',0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 253,'CONTTYP','Newsletter Subscribe/Unsubscribe',-70,280,'/common/images/ContentManager/icon_teaser.gif',0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 300,'WFSTAT','Submitted',80,null,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 343,'PAYTYP','American Express',110,4,null,0
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 344,'PAYTYP','Visa',110,1,null,0
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 345,'PAYTYP','MasterCard',110,2,null,0
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 346,'PAYTYP','Discover',110,3,null,0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 400,'CONTPOS','Left',90,10,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 401,'CONTPOS','Center',90,20,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 402,'CONTPOS','Right',90,30,null,null

@@ -12,7 +12,7 @@
 	
 		<cfset var local = structNew() />
 		
-		<!--- get the site type --->
+		<!--- get the site type - functions defined in Application.cfc, which this extends --->
 		<cfinvoke method="getSiteType" returnvariable="local.siteType" />
 		<cfinvoke method="getUniqueName" returnvariable="local.uniqueName" />
 		

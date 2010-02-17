@@ -1,7 +1,7 @@
 <cfcomponent hint="Handles grouped elements.">
 
 <cffunction name="init" returntype="Group">
-	<cfreturn this>
+	<cfreturn this />
 </cffunction>
 
 
@@ -14,13 +14,13 @@
 	
 	<!--- get the group --->
 	<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-		SELECT groupId, groupAlias, groupDescription, groupById, groupByColumn, groupByTable, groupDateDisabled
-		FROM t_group
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
+		SELECT	groupId, groupAlias, groupDescription, groupById, groupByColumn, groupByTable, groupDateDisabled
+		FROM	t_group
+		WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
 	</cfquery>
 			
 	<!--- return the results --->
-	<cfreturn local.getResults>
+	<cfreturn local.getResults />
 </cffunction>
 
 
@@ -39,42 +39,42 @@
 	
 	<!--- get the group --->
 	<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-		SELECT groupId, groupAlias, groupDescription, groupById, groupByColumn, groupByTable, groupDateDisabled
-		FROM t_group
+		SELECT	groupId, groupAlias, groupDescription, groupById, groupByColumn, groupByTable, groupDateDisabled
+		FROM	t_group
 		WHERE 
 			
 		<!--- if the groupAlias is "", then get *all* groups matching the passed criteria --->
-		<cfif trim(arguments.groupAlias) neq "">
-			groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupAlias#">
+		<cfif len(trim(arguments.groupAlias))>
+			groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupAlias)#" />
 		<cfelse>
 			1=1
 		</cfif>
 		
 		<!--- if this relates to a specific id --->
-		<cfif isNumeric(arguments.groupById) 
-				and arguments.groupByColumn neq "" 
-				and arguments.groupByTable neq "">
-			AND groupById = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupById#">
-			AND groupByColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByColumn#">
-			AND groupByTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByTable#">
+		<cfif val(trim(arguments.groupById))
+				and len(trim(arguments.groupByColumn)) 
+				and len(trim(arguments.groupByTable))>
+			AND	groupById = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.groupById)#" />
+			AND	groupByColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupByColumn)#" />
+			AND	groupByTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupByTable)#" />
 		
 		<!--- get the master if requested --->
-		<cfelseif arguments.getMaster eq true>
-			AND groupIsMaster = 1
+		<cfelseif arguments.getMaster>
+			AND	groupIsMaster = 1
 			
 		<!--- else, get nothing --->
 		<cfelse>
-			AND 1 = 0
+			AND	1 = 0
 		</cfif>
 		
 		<!--- should we return disabled groups? --->
 		<cfif not arguments.getDisabled>
-			AND groupDateDisabled IS NULL
+			AND	groupDateDisabled IS NULL
 		</cfif>
 	</cfquery>
 			
 	<!--- return the results --->
-	<cfreturn local.getResults>
+	<cfreturn local.getResults />
 </cffunction>
 
 
@@ -92,21 +92,26 @@
 	
 	<!--- get the clones --->
 	<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-		SELECT g3.groupId, g3.groupAlias, g3.groupDescription, g3.groupById, g3.groupByColumn, g3.groupByTable, g3.groupDateDisabled
-		FROM t_group g
-		JOIN t_group g2
-		ON g2.groupById = g.groupId
-			AND g2.groupAlias = 'cloneAliasGroup'
-		JOIN t_groupedElem ge
-		ON ge.groupId = g2.groupId
-		JOIN t_group g3
-		ON g3.groupId = ge.groupedElemId
-		WHERE g.groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupAlias#">
-		AND g.groupIsMaster = 1
+		SELECT	g3.groupId, g3.groupAlias, g3.groupDescription, g3.groupById, g3.groupByColumn,
+				g3.groupByTable, g3.groupDateDisabled
+		FROM	t_group g
+		
+		JOIN	t_group g2
+		ON		g2.groupById = g.groupId
+		AND		g2.groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="cloneAliasGroup" />
+		
+		JOIN	t_groupedElem ge
+		ON		ge.groupId = g2.groupId
+		
+		JOIN	t_group g3
+		ON		g3.groupId = ge.groupedElemId
+		
+		WHERE	g.groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupAlias)#" />
+		AND		g.groupIsMaster = <cfqueryparam cfsqltype="cf_sql_integer" value="1" />
 	</cfquery>
 			
 	<!--- return the results --->
-	<cfreturn local.getResults>
+	<cfreturn local.getResults />
 </cffunction>
 
 
@@ -126,46 +131,46 @@
 		
 		<!--- prepend the parent if requested --->
 		<cfif arguments.includeParent>
-			SELECT g2.groupId, g2.groupAlias, g2.groupDescription, g2.groupById, g2.groupByColumn, g2.groupByTable, 
-			g2.groupDateDisabled
-			FROM t_group g
+			SELECT	g2.groupId, g2.groupAlias, g2.groupDescription, g2.groupById, g2.groupByColumn, g2.groupByTable, 
+					g2.groupDateDisabled
+			FROM	t_group g
 		
-			JOIN t_groupedElem ge
-			ON ge.groupedElemId = g.groupId
+			JOIN	t_groupedElem ge
+			ON		ge.groupedElemId = g.groupId
 		
-			JOIN t_group g2
-			ON g2.groupId = ge.groupId
+			JOIN	t_group g2
+			ON		g2.groupId = ge.groupId
 		
-			WHERE g.groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
-			AND ge.groupedElemTable = 't_group'
+			WHERE	g.groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
+			AND		ge.groupedElemTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="t_group" />
 			UNION ALL
 		</cfif>
 		
 		<!--- prepend self if requested --->
 		<cfif arguments.includeSelf>
-			SELECT groupId, groupAlias, groupDescription, groupById, groupByColumn, groupByTable, 
-			groupDateDisabled
-			FROM t_group
-			WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
+			SELECT	groupId, groupAlias, groupDescription, groupById, groupByColumn, groupByTable, 
+					groupDateDisabled
+			FROM	t_group
+			WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
 			UNION ALL
 		</cfif>
 		
-		SELECT g2.groupId, g2.groupAlias, g2.groupDescription, g2.groupById, g2.groupByColumn, g2.groupByTable, 
-		g2.groupDateDisabled
-		FROM t_group g
+		SELECT 		g2.groupId, g2.groupAlias, g2.groupDescription, g2.groupById, g2.groupByColumn, g2.groupByTable, 
+					g2.groupDateDisabled
+		FROM		t_group g
 		
-		JOIN t_groupedElem ge
-		ON ge.groupId = g.groupId
+		JOIN		t_groupedElem ge
+		ON			ge.groupId = g.groupId
 		
-		JOIN t_group g2
-		ON g2.groupId = ge.groupedElemId
+		JOIN		t_group g2
+		ON			g2.groupId = ge.groupedElemId
 		
-		WHERE g.groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
-		AND ge.groupedElemTable = 't_group'
+		WHERE		g.groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
+		AND			ge.groupedElemTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="t_group" />
 	</cfquery>
 			
 	<!--- return the results --->
-	<cfreturn local.getResults>
+	<cfreturn local.getResults />
 </cffunction>
 
 
@@ -177,8 +182,8 @@
 	<cfargument name="groupById" default="">
 	<cfargument name="groupByColumn" default="">
 	<cfargument name="groupByTable" default="">
-	<cfargument name="getDisabled" default="true">
-	<cfargument name="rankHorizontal" default="false">
+	<cfargument name="getDisabled" type="boolean" default="true">
+	<cfargument name="rankHorizontal" type="boolean" default="false">
 	<cfargument name="getMaster" type="boolean" default="false">
 	
 	<!--- keep scope local to function --->
@@ -186,40 +191,40 @@
 	
 	<!--- get the search params --->
 	<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-		SELECT ge.rank, ge.id, ge.groupedElemId, ge.groupedElemColumn, ge.groupedElemTable,
-		ge.groupedElemDisabledDate, ge.groupedElemDisplayType, ge.groupedElemType, ge.groupedElemLabel,
-		ge.groupedElemValue, ge.groupedElemPublicId, ge.groupId, ge.horizontalRank,
-		g.groupDateDisabled, g.groupById, g.groupByTable, g.groupByColumn
-		FROM t_group g
+		SELECT		ge.rank, ge.id, ge.groupedElemId, ge.groupedElemColumn, ge.groupedElemTable,
+					ge.groupedElemDisabledDate, ge.groupedElemDisplayType, ge.groupedElemType, ge.groupedElemLabel,
+					ge.groupedElemValue, ge.groupedElemPublicId, ge.groupId, ge.horizontalRank,
+					g.groupDateDisabled, g.groupById, g.groupByTable, g.groupByColumn
+		FROM		t_group g
 		
-		JOIN t_groupedElem ge
-		ON ge.groupId = g.groupId
+		JOIN		t_groupedElem ge
+		ON			ge.groupId = g.groupId
 		
-		WHERE g.groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupAlias#">
+		WHERE		g.groupAlias = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupAlias)#" />
 				
 		<!--- if this relates to a specific id --->
-		<cfif isNumeric(arguments.groupById)
-				and arguments.groupByColumn neq ""
-				and arguments.groupByTable neq "">
-			AND g.groupById = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupById#">
-			AND g.groupByColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByColumn#">
-			AND g.groupByTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByTable#">
+		<cfif val(arguments.groupById)
+				and len(trim(arguments.groupByColumn))
+				and len(trim(arguments.groupByTable))>
+			AND 	g.groupById = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.groupById)#" />
+			AND 	g.groupByColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupByColumn)#" />
+			AND 	g.groupByTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupByTable)#" />
 		
 		<!--- get the master if requested --->
 		<cfelseif arguments.getMaster>
-			AND g.groupIsMaster = 1
+			AND		g.groupIsMaster = <cfqueryparam cfsqltype="cf_sql_integer" value="1" />
 		</cfif>
 		
 		<!--- check if disabled elements should be returned --->
 		<cfif not arguments.getDisabled>
-			AND ge.groupedElemDisabledDate IS NULL
+			AND		ge.groupedElemDisabledDate IS NULL
 		</cfif>
 		
 		ORDER BY <cfif arguments.rankHorizontal>ge.horizontalRank, </cfif>ge.rank
 	</cfquery>
 			
 	<!--- return the results --->
-	<cfreturn local.getResults>
+	<cfreturn local.getResults />
 </cffunction>
 
 
@@ -242,29 +247,29 @@
 	
 	<!--- get the search params --->
 	<cfquery name="local.getResults" datasource="#APPLICATION.DSN#">
-		SELECT rank, id, groupedElemId, groupedElemColumn, groupedElemTable, groupedElemDisabledDate, 
-		groupedElemDisplayType, groupedElemType, groupedElemLabel, groupedElemValue, groupedElemPublicId, 
-		horizontalRank
-		FROM t_groupedElem
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
+		SELECT		rank, id, groupedElemId, groupedElemColumn, groupedElemTable, groupedElemDisabledDate, 
+					groupedElemDisplayType, groupedElemType, groupedElemLabel, groupedElemValue, groupedElemPublicId, 
+					horizontalRank
+		FROM		t_groupedElem
+		WHERE		groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
 				
 		<!--- if the values specific to a record are filled in, use them --->
-		<cfif arguments.groupedElemTable neq "" and arguments.groupedElemColumn neq "" and isNumeric(arguments.groupedElemID)>
-			AND groupedElemTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemTable#">
-			AND groupedElemColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemColumn#">
-			AND groupedElemID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemID#">
+		<cfif len(trim(arguments.groupedElemTable)) and len(trim(arguments.groupedElemColumn)) and val(arguments.groupedElemID)>
+			AND		groupedElemTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupedElemTable)#" />
+			AND		groupedElemColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupedElemColumn)#" />
+			AND		groupedElemID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#val(arguments.groupedElemID)#" />
 		</cfif>
 		
 		<!--- should we return disabled elems? --->
 		<cfif not arguments.getDisabled>
-			AND groupedElemDisabledDate IS NULL
+			AND		groupedElemDisabledDate IS NULL
 		</cfif>
 		
 		ORDER BY rank
 	</cfquery>
 			
 	<!--- return the results --->
-	<cfreturn local.getResults>
+	<cfreturn local.getResults />
 </cffunction>
 
 
@@ -277,7 +282,7 @@
 	<cfargument name="targetGroupByTable"  required="true" type="string">
 	<cfargument name="targetGroupByColumn" required="true" type="string">
 	<cfargument name="targetGroupById" required="true" type="numeric">
-	<cfargument name="targetDescription" default="">
+	<cfargument name="targetDescription" type="string" default="">
 	<cfargument name="copyGroupedElems" type="boolean" default="true">
 	<cfargument name="groupAliasSuffix" type="string" default="">
 
@@ -290,36 +295,36 @@
 		<cfquery name="local.copyGroup" datasource="#APPLICATION.DSN#">
 			SET NOCOUNT ON
 			INSERT INTO t_group
-				(groupAlias,
-				groupByTable,
-				groupByColumn,
-				groupById,
-				groupDescription)
-			SELECT	groupAlias + <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupAliasSuffix#">,
-					groupByTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.targetGroupByTable#">,
-					groupByColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.targetGroupByColumn#">,
-					groupById = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.targetGroupById#">,
-					groupDescription = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.targetDescription#">
-			FROM t_group
-			WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.sourceGroupId#">
+					(groupAlias,
+					groupByTable,
+					groupByColumn,
+					groupById,
+					groupDescription)
+			SELECT	groupAlias + <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupAliasSuffix)#" />,
+					groupByTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.targetGroupByTable)#" />,
+					groupByColumn = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.targetGroupByColumn)#" />,
+					groupById = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.targetGroupById#" />,
+					groupDescription = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.targetDescription)#" />
+			FROM	t_group
+			WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.sourceGroupId#" />
 				
 			SELECT SCOPE_IDENTITY() AS newId
 			SET NOCOUNT OFF
 		</cfquery>
 				
 		<!--- grab the new recordId --->
-		<cfset local.recordId = local.copyGroup.newId>
+		<cfset local.recordId = local.copyGroup.newId />
 
 		<cfcatch type="any">
-			<cfreturn 0>
+			<cfreturn 0 />
 		</cfcatch>
 	</cftry>
 	
 	<!--- copy this group's elements if requested --->
 	<cfif arguments.copyGroupedElems>
 		<cfinvoke method="copyGroupedElements">
-			<cfinvokeargument name="sourceGroupId" value="#arguments.sourceGroupId#">
-			<cfinvokeargument name="targetGroupId" value="#local.recordId#">
+			<cfinvokeargument name="sourceGroupId" value="#arguments.sourceGroupId#" />
+			<cfinvokeargument name="targetGroupId" value="#local.recordId#" />
 		</cfinvoke>	
 	</cfif>
 	
@@ -339,89 +344,79 @@
 		
 	<!--- get the grouped elements of the sourceGroupId --->
 	<cfquery name="local.getGroupedElems" datasource="#APPLICATION.DSN#">
-		SELECT	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.targetGroupId#">,
-				groupedElemColumn, 
-				groupedElemId,
-				groupedElemTable,
-				groupedElemDisabledDate,
-				groupedElemDisplayType,
-				groupedElemType,
-				groupedElemLabel,
-				groupedElemValue,
-				rank,
-				horizontalRank
-		FROM t_groupedElem
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.sourceGroupId#">
-		ORDER BY rank
+		SELECT		groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.targetGroupId#" />,
+					groupedElemColumn, groupedElemId, groupedElemTable, groupedElemDisabledDate, groupedElemDisplayType,
+					groupedElemType, groupedElemLabel,
+					groupedElemValue, rank,	horizontalRank
+		FROM		t_groupedElem
+		WHERE		groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.sourceGroupId#" />
+		ORDER BY	rank
 	</cfquery>
 
-	<!--- only do this if there are groupedElems for the passed source group --->
-	<cfif local.getGroupedElems.recordcount gt 0>
 		
-		<!--- get the newly added target group --->
-		<cfinvoke method="getGroupById" returnvariable="local.targetGroup">
-			<cfinvokeargument name="groupId" value="#local.getGroupedElems.groupId#">
-		</cfinvoke>
-	</cfif>
+	<!--- get the newly added target group if the source group has groupedElems --->
+	<cfinvoke method="getGroupById" returnvariable="local.targetGroup">
+		<cfinvokeargument name="groupId" value="#val(local.getGroupedElems.groupId)#" />
+	</cfinvoke>
 
 	<!--- loop through the query and add the new elems --->
-	<cfoutput query="local.getGroupedElems">
+	<cfloop query="local.getGroupedElems">
 		
 		<!--- if this grouped element points to a group, we need to see if the group exists
 		for the copied groupedElem to point to --->
-		<cfif local.getGroupedElems.groupedElemTable eq 't_group'>
+		<cfif local.getGroupedElems.groupedElemTable eq "t_group">
 			
 			<!--- get this element's source group --->
 			<cfinvoke method="getGroupById" returnvariable="local.elementSourceGroup">
-				<cfinvokeargument name="groupId" value="#local.getGroupedElems.groupedElemId#">
+				<cfinvokeargument name="groupId" value="#local.getGroupedElems.groupedElemId#" />
 			</cfinvoke>
 
 			<cfif local.elementSourceGroup.recordcount eq 1>
 				
 				<!--- is there a matching group? --->
 				<cfinvoke method="getGroups" returnvariable="local.elementTargetGroupExists">
-					<cfinvokeargument name="groupAlias" value="#local.elementSourceGroup.groupAlias#">
-					<cfinvokeargument name="groupByTable" value="#local.targetGroup.groupByTable#">
-					<cfinvokeargument name="groupByColumn" value="#local.targetGroup.groupByColumn#">
-					<cfinvokeargument name="groupById" value="#local.targetGroup.groupById#">
+					<cfinvokeargument name="groupAlias" value="#local.elementSourceGroup.groupAlias#" />
+					<cfinvokeargument name="groupByTable" value="#local.targetGroup.groupByTable#" />
+					<cfinvokeargument name="groupByColumn" value="#local.targetGroup.groupByColumn#" />
+					<cfinvokeargument name="groupById" value="#local.targetGroup.groupById#" />
 				</cfinvoke>
 
 				<!--- if the group exists, use the groupId --->
 				<cfif local.elementTargetGroupExists.recordcount eq 1>
-					<cfset local.elementTargetGroupId = local.elementTargetGroupExists.groupId>
+					<cfset local.elementTargetGroupId = local.elementTargetGroupExists.groupId />
 				
 				<!--- else, copy the group --->
 				<cfelse>
 					<cfinvoke method="copyGroup" returnvariable="local.elementTargetGroupId">
-						<cfinvokeargument name="sourceGroupId" value="#local.elementSourceGroup.groupId#">
-						<cfinvokeargument name="targetGroupByTable" value="#local.targetGroup.groupByTable#">
-						<cfinvokeargument name="targetGroupByColumn" value="#local.targetGroup.groupByColumn#">
-						<cfinvokeargument name="targetGroupById" value="#local.targetGroup.groupById#">
-						<cfinvokeargument name="targetDescription" value="#local.elementSourceGroup.groupDescription#">
+						<cfinvokeargument name="sourceGroupId" value="#local.elementSourceGroup.groupId#" />
+						<cfinvokeargument name="targetGroupByTable" value="#local.targetGroup.groupByTable#" />
+						<cfinvokeargument name="targetGroupByColumn" value="#local.targetGroup.groupByColumn#" />
+						<cfinvokeargument name="targetGroupById" value="#local.targetGroup.groupById#" />
+						<cfinvokeargument name="targetDescription" value="#local.elementSourceGroup.groupDescription#" />
 					</cfinvoke>
 				</cfif>
 			</cfif>
 			
 		<!--- else, this is a simple groupedElem --->
 		<cfelse>
-			<cfset local.elementTargetGroupId = local.getGroupedElems.groupedElemId>
+			<cfset local.elementTargetGroupId = local.getGroupedElems.groupedElemId />
 		</cfif>
 
 		<!--- insert the element --->
 		<cfinvoke method="addGroupedElem">
-			<cfinvokeargument name="groupId" value="#local.getGroupedElems.groupId#">
-			<cfinvokeargument name="groupedElemTable" value="#local.getGroupedElems.groupedElemTable#">
-			<cfinvokeargument name="groupedElemColumn" value="#local.getGroupedElems.groupedElemColumn#">
-			<cfinvokeargument name="groupedElemId" value="#local.elementTargetGroupId#">
-			<cfinvokeargument name="groupedElemDisabledDate" value="#local.getGroupedElems.groupedElemDisabledDate#">
-			<cfinvokeargument name="groupedElemDisplayType" value="#local.getGroupedElems.groupedElemDisplayType#">
-			<cfinvokeargument name="groupedElemType" value="#local.getGroupedElems.groupedElemType#">
-			<cfinvokeargument name="groupedElemLabel" value="#local.getGroupedElems.groupedElemLabel#">
-			<cfinvokeargument name="groupedElemValue" value="#local.getGroupedElems.groupedElemValue#">
-			<cfinvokeargument name="rank" value="#local.getGroupedElems.rank#">
-			<cfinvokeargument name="horizontalRank" value="#local.getGroupedElems.horizontalRank#">
+			<cfinvokeargument name="groupId" value="#local.getGroupedElems.groupId#" />
+			<cfinvokeargument name="groupedElemTable" value="#local.getGroupedElems.groupedElemTable#" />
+			<cfinvokeargument name="groupedElemColumn" value="#local.getGroupedElems.groupedElemColumn#" />
+			<cfinvokeargument name="groupedElemId" value="#local.elementTargetGroupId#" />
+			<cfinvokeargument name="groupedElemDisabledDate" value="#local.getGroupedElems.groupedElemDisabledDate#" />
+			<cfinvokeargument name="groupedElemDisplayType" value="#local.getGroupedElems.groupedElemDisplayType#" />
+			<cfinvokeargument name="groupedElemType" value="#local.getGroupedElems.groupedElemType#" />
+			<cfinvokeargument name="groupedElemLabel" value="#local.getGroupedElems.groupedElemLabel#" />
+			<cfinvokeargument name="groupedElemValue" value="#local.getGroupedElems.groupedElemValue#" />
+			<cfinvokeargument name="rank" value="#local.getGroupedElems.rank#" />
+			<cfinvokeargument name="horizontalRank" value="#local.getGroupedElems.horizontalRank#" />
 		</cfinvoke>
-	</cfoutput>
+	</cfloop>
 </cffunction>
 
 
@@ -436,9 +431,9 @@
 	
 	<!--- enable the group --->
 	<cfquery name="local.enable" datasource="#APPLICATION.DSN#">
-		UPDATE t_group
-		SET groupDateDisabled = NULL
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
+		UPDATE	t_group
+		SET		groupDateDisabled = NULL
+		WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
 	</cfquery>
 </cffunction>
 
@@ -454,9 +449,9 @@
 	
 	<!--- disable the group --->
 	<cfquery name="local.disable" datasource="#APPLICATION.DSN#">
-		UPDATE t_group
-		SET groupDateDisabled = CURRENT_TIMESTAMP
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
+		UPDATE	t_group
+		SET		groupDateDisabled = CURRENT_TIMESTAMP
+		WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
 	</cfquery>
 </cffunction>
 
@@ -472,9 +467,9 @@
 	
 	<!--- enable the groupedElem --->
 	<cfquery name="local.enable" datasource="#APPLICATION.DSN#">
-		UPDATE t_groupedElem
-		SET groupedElemDisabledDate = NULL
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		UPDATE	t_groupedElem
+		SET		groupedElemDisabledDate = NULL
+		WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -490,9 +485,9 @@
 	
 	<!--- disable the groupedElem --->
 	<cfquery name="local.disable" datasource="#APPLICATION.DSN#">
-		UPDATE t_groupedElem
-		SET groupedElemDisabledDate = CURRENT_TIMESTAMP
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		UPDATE	t_groupedElem
+		SET		groupedElemDisabledDate = CURRENT_TIMESTAMP
+		WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -508,17 +503,9 @@
 	
 	<!--- set the groupedElemLabel --->
 	<cfquery name="local.setValue" datasource="#APPLICATION.DSN#">
-		UPDATE t_groupedElem
-		SET groupedElemLabel = 
-			
-			<!--- set value or null --->
-			<cfif trim(arguments.groupedElemLabel) eq "">
-				NULL
-			<cfelse>
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemLabel#">
-			</cfif>
-			
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		UPDATE	t_groupedElem
+		SET		groupedElemLabel = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupedElemLabel)#" null="#not len(trim(arguments.groupedElemLabel))#" />
+		WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -536,17 +523,9 @@
 	
 	<!--- set the groupedElemValue --->
 	<cfquery name="local.setValue" datasource="#APPLICATION.DSN#">
-		UPDATE t_groupedElem
-		SET groupedElemValue = 
-			
-			<!--- set value or null --->
-			<cfif trim(arguments.groupedElemValue) eq "">
-				NULL
-			<cfelse>
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemValue#">
-			</cfif>
-			
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		UPDATE	t_groupedElem
+		SET		groupedElemValue = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemValue#" null="#not len(trim(arguments.groupedElemValue))#" />
+		WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -565,17 +544,9 @@
 	
 	<!--- set the groupedElemDisplayType --->
 	<cfquery name="local.setValue" datasource="#APPLICATION.DSN#">
-		UPDATE t_groupedElem
-		SET groupedElemDisplayType = 
-			
-			<!--- set value or null --->
-			<cfif trim(arguments.groupedElemDisplayType) eq "">
-				NULL
-			<cfelse>
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemDisplayType#">
-			</cfif>
-			
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		UPDATE	t_groupedElem
+		SET		groupedElemDisplayType = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemDisplayType#" null="#not len(trim(arguments.groupedElemDisplayType))#" />
+		WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -590,17 +561,17 @@
 	
 	<!--- set the groupedElemDisplayType --->
 	<cfquery name="local.getDisplayTypes" datasource="#APPLICATION.DSN#">
-		SELECT DISTINCT groupedElemDisplayType
-		FROM t_groupedElem
-		WHERE groupedElemDisplayType IS NOT NULL
+		SELECT DISTINCT	groupedElemDisplayType
+		FROM	t_groupedElem
+		WHERE	groupedElemDisplayType IS NOT NULL
 		
 		<!--- determine which categories to display --->
-		<cfif trim(arguments.groupedElemTable neq "")>
-			AND groupedElemTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemTable#">
+		<cfif len(trim(arguments.groupedElemTable))>
+			AND	groupedElemTable = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.groupedElemTable)#" />
 		</cfif>
 	</cfquery>
 	
-	<cfreturn local.getDisplayTypes>
+	<cfreturn local.getDisplayTypes />
 </cffunction>
 
 
@@ -618,34 +589,34 @@
 	<cfset var local = structNew() />
 	
 	<!--- syncType determines if we add and/or delete records from cloned groups --->
-	<cfswitch expression="#arguments.syncType#">
+	<cfswitch expression="#trim(arguments.syncType)#">
 		
 		<!--- just add records from master to clone --->
 		<cfcase value="add">
-			<cfset local.mySyncType = "add">
+			<cfset local.mySyncType = "add" />
 		</cfcase>
 		
 		<!--- just delete records from master to clone --->
 		<cfcase value="delete">
-			<cfset local.mySyncType = "delete">
+			<cfset local.mySyncType = "delete" />
 		</cfcase>
 		
 		<!--- default to both --->
 		<cfdefaultcase>
-			<cfset local.mySyncType = "both">
+			<cfset local.mySyncType = "both" />
 		</cfdefaultcase>
 	</cfswitch>
 	
 	
 	<!--- get the master groupedElems --->
 	<cfinvoke method="getGroupedElems" returnvariable="local.masterGroupedElems">
-		<cfinvokeargument name="groupAlias" value="#arguments.groupAlias#">
-		<cfinvokeargument name="getMaster" value="true">
+		<cfinvokeargument name="groupAlias" value="#trim(arguments.groupAlias)#" />
+		<cfinvokeargument name="getMaster" value="true" />
 	</cfinvoke>
 	
 	<!--- get the cloned groups --->
 	<cfinvoke method="getClonedGroups" returnvariable="local.clonedGroups">
-		<cfinvokeargument name="groupAlias" value="#arguments.groupAlias#">
+		<cfinvokeargument name="groupAlias" value="#trim(arguments.groupAlias)#" />
 	</cfinvoke>
 	
 	<!--- loop through the cloned groups --->
@@ -653,7 +624,7 @@
 		
 		<!--- get the cloned groupedElems --->
 		<cfinvoke method="getGroupedElemsByGroupId" returnvariable="local.clonedGroupedElems">
-			<cfinvokeargument name="groupId" value="#local.clonedGroups.groupId#">
+			<cfinvokeargument name="groupId" value="#local.clonedGroups.groupId#" />
 		</cfinvoke>
 
 		<!--- add cloned groupedElems to match master --->
@@ -661,35 +632,35 @@
 		
 			<!--- get the highest rank from the cloned groupedElems--->
 			<cfquery name="local.highestRank" dbtype="query" maxrows="1">
-				SELECT rank
-				FROM [local].clonedGroupedElems
-				ORDER BY rank DESC
+				SELECT		rank
+				FROM		[local].clonedGroupedElems
+				ORDER BY	rank DESC
 			</cfquery>
 		
 			<!--- see what's missing from the clone --->
 			<cfquery name="local.missingFromClone" dbtype="query">
-				SELECT groupedElemTable, groupedElemColumn,	groupedElemId, groupedElemDisabledDate,
-				groupedElemDisplayType,	groupedElemType, groupedElemLabel, groupedElemValue,
-				horizontalRank
-				FROM [local].masterGroupedElems
-				WHERE groupedElemTable != <cfqueryparam cfsqltype="cf_sql_varchar" value="t_group">
+				SELECT	groupedElemTable, groupedElemColumn,	groupedElemId, groupedElemDisabledDate,
+						groupedElemDisplayType,	groupedElemType, groupedElemLabel, groupedElemValue,
+						horizontalRank
+				FROM	[local].masterGroupedElems
+				WHERE	groupedElemTable != <cfqueryparam cfsqltype="cf_sql_varchar" value="t_group" />
 				
 				<!--- only if there are existing values --->
-				<cfif local.clonedGroupedElems.recordcount neq 0>
-					AND groupedElemId NOT IN (#valueList(local.clonedGroupedElems.groupedElemId)#)
+				<cfif local.clonedGroupedElems.recordcount>
+					AND groupedElemId NOT IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#valueList(local.clonedGroupedElems.groupedElemId)#" list="true" />)
 				</cfif>
 			</cfquery>
 		
 			<!--- insert any missing groupedElems --->
 			<cfinvoke method="addGroupedElemsByQuery">
-				<cfinvokeargument name="elemsToAdd" value="#local.missingFromClone#">
-				<cfinvokeargument name="groupId" value="#local.clonedGroups.groupId#">
+				<cfinvokeargument name="elemsToAdd" value="#local.missingFromClone#" />
+				<cfinvokeargument name="groupId" value="#local.clonedGroups.groupId#" />
 				
 				<!--- start at the next rank or 1 if there are no existing elems --->
-				<cfif local.highestRank.recordcount eq 1>
-					<cfinvokeargument name="startWithRank" value="#(local.highestRank.rank + 1)#">
+				<cfif local.highestRank.recordcount>
+					<cfinvokeargument name="startWithRank" value="#(local.highestRank.rank + 1)#" />
 				<cfelse>
-					<cfinvokeargument name="startWithRank" value="1">
+					<cfinvokeargument name="startWithRank" value="1" />
 				</cfif>
 			</cfinvoke>
 		</cfif>
@@ -699,15 +670,15 @@
 			
 			<!--- see what's missing from the master --->
 			<cfquery name="local.missingFromMaster" dbtype="query">
-				SELECT id
-				FROM [local].clonedGroupedElems
-				WHERE groupedElemId NOT IN (#valueList(local.masterGroupedElems.groupedElemId)#)
-				AND groupedElemTable != <cfqueryparam cfsqltype="cf_sql_varchar" value="t_group">
+				SELECT	id
+				FROM	[local].clonedGroupedElems
+				WHERE	groupedElemId NOT IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#valueList(local.masterGroupedElems.groupedElemId)#" list="true" />)
+				AND		groupedElemTable != <cfqueryparam cfsqltype="cf_sql_varchar" value="t_group" />
 			</cfquery>
 
 			<!--- delete any groupedElems from the clone that aren't in the master --->
 			<cfinvoke method="deleteGroupedElemsByQuery">
-				<cfinvokeargument name="elemsToDelete" value="#local.missingFromMaster#">
+				<cfinvokeargument name="elemsToDelete" value="#local.missingFromMaster#" />
 			</cfinvoke>
 		</cfif>
 		
@@ -727,24 +698,24 @@
 	<!--- keep scope local to function --->
 	<cfset var local = structNew() />
 	
-	<cfset local.myRank = arguments.startWithRank />
+	<cfset local.myRank = val(arguments.startWithRank) />
 	
 	<!--- loop through the passed query --->
 	<cfloop query="arguments.elemsToAdd">
 		
 		<!--- add the missing element --->
 		<cfinvoke method="addGroupedElem">
-			<cfinvokeargument name="groupId" value="#arguments.groupId#">
-			<cfinvokeargument name="groupedElemTable" value="#arguments.elemsToAdd.groupedElemTable#">
-			<cfinvokeargument name="groupedElemColumn" value="#arguments.elemsToAdd.groupedElemColumn#">
-			<cfinvokeargument name="groupedElemId" value="#arguments.elemsToAdd.groupedElemId#">
-			<cfinvokeargument name="groupedElemDisabledDate" value="#arguments.elemsToAdd.groupedElemDisabledDate#">
-			<cfinvokeargument name="groupedElemDisplayType" value="#arguments.elemsToAdd.groupedElemDisplayType#">
-			<cfinvokeargument name="groupedElemType" value="#arguments.elemsToAdd.groupedElemType#">
-			<cfinvokeargument name="groupedElemLabel" value="#arguments.elemsToAdd.groupedElemLabel#">
-			<cfinvokeargument name="groupedElemValue" value="#arguments.elemsToAdd.groupedElemValue#">
-			<cfinvokeargument name="rank" value="#local.myRank#">
-			<cfinvokeargument name="horizontalRank" value="#arguments.elemsToAdd.horizontalRank#">
+			<cfinvokeargument name="groupId" value="#arguments.groupId#" />
+			<cfinvokeargument name="groupedElemTable" value="#arguments.elemsToAdd.groupedElemTable#" />
+			<cfinvokeargument name="groupedElemColumn" value="#arguments.elemsToAdd.groupedElemColumn#" />
+			<cfinvokeargument name="groupedElemId" value="#arguments.elemsToAdd.groupedElemId#" />
+			<cfinvokeargument name="groupedElemDisabledDate" value="#arguments.elemsToAdd.groupedElemDisabledDate#" />
+			<cfinvokeargument name="groupedElemDisplayType" value="#arguments.elemsToAdd.groupedElemDisplayType#" />
+			<cfinvokeargument name="groupedElemType" value="#arguments.elemsToAdd.groupedElemType#" />
+			<cfinvokeargument name="groupedElemLabel" value="#arguments.elemsToAdd.groupedElemLabel#" />
+			<cfinvokeargument name="groupedElemValue" value="#arguments.elemsToAdd.groupedElemValue#" />
+			<cfinvokeargument name="rank" value="#local.myRank#" />
+			<cfinvokeargument name="horizontalRank" value="#arguments.elemsToAdd.horizontalRank#" />
 		</cfinvoke>
 	
 		<!--- increment the rank --->
@@ -765,7 +736,7 @@
 		
 		<!--- delete the extra element --->
 		<cfinvoke method="deleteGroupedElem">
-			<cfinvokeargument name="id" value="#arguments.elemsToDelete.id#">
+			<cfinvokeargument name="id" value="#arguments.elemsToDelete.id#" />
 		</cfinvoke>
 	</cfloop>
 </cffunction>
@@ -789,20 +760,18 @@
 	
 	<!--- get this group --->
 	<cfinvoke method="getGroups" returnvariable="local.groupExists">
-		<cfinvokeargument name="groupAlias" value="#arguments.groupAlias#">
-		<cfinvokeargument name="groupByTable" value="#arguments.groupByTable#">
-		<cfinvokeargument name="groupByColumn" value="#arguments.groupByColumn#">
-		<cfinvokeargument name="groupById" value="#arguments.groupById#">
+		<cfinvokeargument name="groupAlias" value="#arguments.groupAlias#" />
+		<cfinvokeargument name="groupByTable" value="#arguments.groupByTable#" />
+		<cfinvokeargument name="groupByColumn" value="#arguments.groupByColumn#" />
+		<cfinvokeargument name="groupById" value="#arguments.groupById#" />
 	</cfinvoke>
 
 	<!--- if a single matching group exists, then return the groupId, if more than one exists, bail,
 		otherwise, continue and add the group  --->
-	<cfif local.groupExists.recordcount gt 0>
-		<cfif local.groupExists.recordcount eq 1>
-			<cfreturn local.groupExists.groupId />
-		<cfelse>
-			<cfreturn 0 />
-		</cfif>
+	<cfif local.groupExists.recordcount eq 1>
+		<cfreturn local.groupExists.groupId />
+	<cfelseif local.groupExists.recordcount gt 1>
+		<cfreturn 0 />
 	</cfif>
 	
 	<cftry>
@@ -818,54 +787,26 @@
 				groupIsMaster)
 			VALUES
 				(
-				<cfif arguments.groupAlias neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupAlias#">,
-				<cfelse>
-					NULL,
-				</cfif>
-			
-				<cfif arguments.groupByTable neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByTable#">,
-				<cfelse>
-					NULL,
-				</cfif>
-			
-				<cfif arguments.groupByColumn neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByColumn#">,
-				<cfelse>
-					NULL,
-				</cfif>
-			
-				<cfif isNumeric(arguments.groupById)>
-					<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupById#">,
-				<cfelse>
-					NULL,
-				</cfif>
-	
-				<cfif arguments.groupDescription neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupDescription#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif arguments.groupIsMaster>
-					1
-				<cfelse>
-					0
-				</cfif>)
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupAlias#" null="#not len(trim(arguments.groupAlias))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByTable#" null="#not len(trim(arguments.groupByTable))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupByColumn#" null="#not len(trim(arguments.groupByColumn))#" />,
+				<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupById#" null="#not isNumeric(trim(arguments.groupById))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupDescription#" null="#not len(trim(arguments.groupDescription))#" />,
+				<cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.groupIsMaster)#" />
+				)
 			
 			SELECT SCOPE_IDENTITY() AS newId
 			SET NOCOUNT OFF
 		</cfquery>
 	
 		<!--- grab and return the new recordId --->
-		<cfset local.recordId = local.addGroup.newId>
+		<cfset local.recordId = local.addGroup.newId />
 	
 		<cfcatch type="any">
-			<cfreturn 0>
+			<cfreturn 0 />
 		</cfcatch>
 	</cftry>
-	<cfreturn local.recordId>
+	<cfreturn local.recordId />
 </cffunction>
 
 
@@ -889,19 +830,17 @@
 	<cfset var local = structNew() />
 	
 	<!--- create a uniqueId --->
-	<cfset local.utilsObject = createObject("component", "com.utils.utils") />
-	<cfset local.uniqueId = local.utilsObject.createUniqueId() />
-	
+	<cfset local.uniqueId = APPLICATION.utilsObj.createUniqueId() />
 	<cfset local.recordId = "0" />
 	
 	<!--- get the min and max ranks for this group --->
 	<cfinvoke method="getRankRange" returnvariable="local.rankRange">
-		<cfinvokeargument name="groupId" value="#arguments.groupId#"> 
+		<cfinvokeargument name="groupId" value="#arguments.groupId#" /> 
 	</cfinvoke>
 
 	<!--- if there are existing grouped elems, get the next rank --->
 	<cfif isNumeric(local.rankRange.maxRank)>
-		<cfset local.maxRank = local.rankRange.maxRank + 1>
+		<cfset local.maxRank = local.rankRange.maxRank + 1 />
 	</cfif>
 
 	<cftry>
@@ -924,85 +863,41 @@
 				horizontalRank)
 			VALUES
 				(<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">,
-				
-				<cfif arguments.groupedElemTable neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemTable#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif arguments.groupedElemColumn neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemColumn#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif isNumeric(arguments.groupedElemId)>
-					<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupedElemId#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif isDate(arguments.groupedElemDisabledDate)>
-					<cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.groupedElemDisabledDate#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif arguments.groupedElemDisplayType neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemDisplayType#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif arguments.groupedElemType neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemType#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif arguments.groupedElemLabel neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemLabel#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
-				<cfif arguments.groupedElemValue neq "">
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemValue#">,
-				<cfelse>
-					NULL,
-				</cfif>
-				
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemTable#" null="#not len(trim(arguments.groupedElemTable))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemColumn#" null="#not len(trim(arguments.groupedElemColumn))#" />,
+				<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupedElemId#" null="#not val(arguments.groupedElemId)#" />,
+				<cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.groupedElemDisabledDate#" null="#not isDate(trim(arguments.groupedElemDisabledDate))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemDisplayType#" null="#not len(trim(arguments.groupedElemDisplayType))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemType#" null="#not len(trim(arguments.groupedElemType))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemLabel#" null="#not len(trim(arguments.groupedElemLabel))#" />,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.groupedElemValue#" null="#not len(trim(arguments.groupedElemValue))#" />,
+
 				<!--- always insert a uniqueId --->
-				<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.uniqueId#">,
+				<cfqueryparam cfsqltype="cf_sql_varchar" value="#local.uniqueId#" />,
 				
 				<!--- insert the passed rank if possible --->
-				<cfif arguments.rank neq "">
-					<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rank#">,
+				<cfif val(arguments.rank)>
+					<cfqueryparam cfsqltype="cf_sql_integer" value="#val(arguments.rank)#" />,
 				<cfelse>
 				
 					<!--- if rank isn't passed, use the next value if it exists --->
-					<cfif isDefined("local.maxRank") and local.maxRank neq "">
-						<cfqueryparam cfsqltype="cf_sql_integer" value="#local.maxRank#">,
+					<cfif isDefined("local.maxRank") and val(local.maxRank)>
+						<cfqueryparam cfsqltype="cf_sql_integer" value="#val(local.maxRank)#" />,
 						
 					<!--- otherwise, this is the first value --->
 					<cfelse>
-						<cfqueryparam cfsqltype="cf_sql_integer" value="1">,
+						<cfqueryparam cfsqltype="cf_sql_integer" value="1" />,
 					</cfif>
 				</cfif>
-				
-				<cfif arguments.horizontalRank neq "">
-					<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.horizontalRank#">
-				<cfelse>
-					NULL
-				</cfif>)
-				
+				<!--- horizontal rank --->
+				<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.horizontalRank#" null="#not val(arguments.horizontalRank)#" />
+
 			SELECT SCOPE_IDENTITY() AS newId
 			SET NOCOUNT OFF
 		</cfquery>
 		
 		<!--- grab and return the new recordId --->
-		<cfset local.recordId = local.addElem.newId>
+		<cfset local.recordId = local.addElem.newId />
 
 		<cfcatch type="any">
 			<cfreturn 0 />
@@ -1023,8 +918,8 @@
 	
 	<!--- delete the groupedElem --->
 	<cfquery name="local.deleteElem" datasource="#APPLICATION.DSN#">
-		DELETE FROM t_groupedElem
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		DELETE FROM	t_groupedElem
+		WHERE		id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -1042,9 +937,9 @@
 	<cfset var local = structNew() />
 	
 	<!--- if a publicId is passed, use it --->
-	<cfif arguments.publicId neq "">
+	<cfif len(trim(arguments.publicId))>
 		<cfinvoke method="getIdFromPublicId" returnvariable="arguments.id">
-			<cfinvokeargument name="publicId" value="#arguments.publicId#">
+			<cfinvokeargument name="publicId" value="#trim(arguments.publicId)#" />
 		</cfinvoke>
 	</cfif>
 	
@@ -1052,75 +947,79 @@
 	
 		<!--- get the current rank --->
 		<cfquery name="local.getCurrentRank" datasource="#APPLICATION.DSN#">
-			SELECT groupId, rank
-			FROM t_groupedElem
-			WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+			SELECT	groupId, rank
+			FROM	t_groupedElem
+			WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 		</cfquery>
 	
 		<!--- if there is no matching record, then return false --->
-		<cfif local.getCurrentRank.recordcount eq 0>
-			<cfreturn false>
+		<cfif not local.getCurrentRank.recordcount>
+			<cfreturn false />
 		</cfif>
 	
 		<!--- if the record is already at this rank, return true --->
 		<cfif local.getCurrentRank.rank eq arguments.newRank>
-			<cfreturn true>
+			<cfreturn true />
 		</cfif>
 	
 		<!--- get the min and max ranks for this group --->
 		<cfinvoke method="getRankRange" returnvariable="local.rankRange">
-			<cfinvokeargument name="groupId" value="#local.getCurrentRank.groupId#"> 
+			<cfinvokeargument name="groupId" value="#local.getCurrentRank.groupId#" /> 
 		</cfinvoke>
 	
 		<!--- if the new rank is above or below the current range, return false --->
 		<cfif arguments.newRank gt local.rankRange.maxRank or arguments.newRank lt local.rankRange.minRank>
-			<cfreturn false>
+			<cfreturn false />
 		</cfif>
 	
 		<!--- if the current rank is greater than the new rank --->
 		<cfif local.getCurrentRank.rank gt arguments.newRank>
 			<cfquery name="local.moveElems" datasource="#APPLICATION.DSN#">
-				SELECT id, rank = rank + 1
-				FROM t_groupedElem
-				WHERE id 
-					IN (SELECT id
-						FROM t_groupedElem
-						WHERE rank >= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.newRank#">
-						AND rank < <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.rank#">
-						AND groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.groupId#">)
+				SELECT	id, rank = rank + 1
+				FROM	t_groupedElem
+				WHERE	id 
+				IN		(	
+							SELECT	id
+							FROM	t_groupedElem
+							WHERE	rank >= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.newRank#" />
+							AND		rank < <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.rank#" />
+							AND		groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.groupId#" />
+						)
 			</cfquery>
 	
 		<!--- else if the current rank is less than the new rank --->
 		<cfelse>
 			<cfquery name="local.moveElems" datasource="#APPLICATION.DSN#">
-				SELECT id, rank = rank - 1
-				FROM t_groupedElem
-				WHERE id 
-					IN (SELECT id
-						FROM t_groupedElem
-						WHERE rank <= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.newRank#">
-						AND rank > <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.rank#">
-						AND groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.groupId#">)
+				SELECT	id, rank = rank - 1
+				FROM	t_groupedElem
+				WHERE	id 
+				IN		(
+							SELECT	id
+							FROM	t_groupedElem
+							WHERE	rank <= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.newRank#" />
+							AND		rank > <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.rank#" />
+							AND		groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#local.getCurrentRank.groupId#" />
+						)
 			</cfquery>
 		</cfif>
 	
 		<!--- update the ranking for the necessary elements --->
 		<cfloop query="local.moveElems">
 			<cfinvoke method="setRank">
-				<cfinvokeargument name="id" value="#local.moveElems.id#">
-				<cfinvokeargument name="rank" value="#local.moveElems.rank#"> 
+				<cfinvokeargument name="id" value="#local.moveElems.id#" />
+				<cfinvokeargument name="rank" value="#local.moveElems.rank#" /> 
 			</cfinvoke>
 		</cfloop>
 
 		<!--- rank the passed groupedElem --->
 		<cfinvoke method="local.setRank">
-			<cfinvokeargument name="id" value="#arguments.id#">
-			<cfinvokeargument name="rank" value="#arguments.newRank#"> 
+			<cfinvokeargument name="id" value="#arguments.id#" />
+			<cfinvokeargument name="rank" value="#arguments.newRank#" /> 
 		</cfinvoke>
 	
 	</cftransaction>
 	
-	<cfreturn true>
+	<cfreturn true />
 </cffunction>
 
 
@@ -1135,9 +1034,9 @@
 	
 	<!--- rank the groupedElem --->
 	<cfquery name="local.rankElem" datasource="#APPLICATION.DSN#">
-		UPDATE t_groupedElem
-		SET rank = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rank#">
-		WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+		UPDATE	t_groupedElem
+		SET		rank = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.rank#" />
+		WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 	</cfquery>
 </cffunction>
 
@@ -1155,9 +1054,9 @@
 	
 	<!--- get the rank range for this group --->
 	<cfquery name="local.getRanks" datasource="#APPLICATION.DSN#">
-		SELECT max(rank) AS maxRank, min(rank) AS minRank
-		FROM t_groupedElem
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
+		SELECT	max(rank) AS maxRank, min(rank) AS minRank
+		FROM	t_groupedElem
+		WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
 	</cfquery>
 	
 	<!--- return the ranks --->
@@ -1180,33 +1079,26 @@
 	<cfset var local = structNew() />
 	
 	<!--- if a publicId is passed, use it --->
-	<cfif arguments.publicId neq "">
+	<cfif trim(len(arguments.publicId))>
 		<cfinvoke method="getIdFromPublicId" returnvariable="arguments.id">
-			<cfinvokeargument name="publicId" value="#arguments.publicId#">
+			<cfinvokeargument name="publicId" value="#arguments.publicId#" />
 		</cfinvoke>
 	</cfif>
 	
 	<cftry>
 		<!--- set the horizontal rank --->
 		<cfquery name="local.setRank" datasource="#APPLICATION.DSN#">
-			UPDATE t_groupedElem
-			SET horizontalRank = 
-		
-				<!--- only pass a number or null --->
-				<cfif trim(arguments.newRank) neq "" and isNumeric(arguments.newRank)>
-					<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.newRank#">
-				<cfelse>
-					NULL
-				</cfif>
-			WHERE id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#">
+			UPDATE	t_groupedElem
+			SET		horizontalRank = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.newRank#" null="#not val(trim(arguments.newRank))#" />
+			WHERE	id = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.id#" />
 		</cfquery>
 		
 		<cfcatch>
-			<cfreturn false>
+			<cfreturn false />
 		</cfcatch>
 	</cftry>
 	
-	<cfreturn true>
+	<cfreturn true />
 </cffunction>
 
 
@@ -1220,10 +1112,10 @@
 	
 	<!--- get the rank range for this group --->
 	<cfquery name="local.getRanks" datasource="#APPLICATION.DSN#">
-		SELECT max(horizontalRank) AS maxRank, min(horizontalRank) AS minRank
-		FROM t_groupedElem
-		WHERE groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#">
-		AND horizontalRank IS NOT NULL
+		SELECT	max(horizontalRank) AS maxRank, min(horizontalRank) AS minRank
+		FROM	t_groupedElem
+		WHERE	groupId = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.groupId#" />
+		AND		horizontalRank IS NOT NULL
 	</cfquery>
 	
 	<!--- return the ranks --->
@@ -1245,15 +1137,10 @@
 	<cfquery name="local.getId" datasource="#APPLICATION.DSN#">
 		SELECT id
 		FROM t_groupedElem
-		WHERE groupedElemPublicId = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.publicId#">
+		WHERE groupedElemPublicId = <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.publicId)#" />
 	</cfquery>
 	
-	<!--- set thisId if it exists --->
-	<cfif local.getId.recordcount neq 0>
-		<cfset local.thisId = local.getId.id>
-	</cfif>
-	
-	<cfreturn local.thisId>
+	<cfreturn val(local.getId.id) />
 </cffunction>
 
 

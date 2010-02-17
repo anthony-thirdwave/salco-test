@@ -200,7 +200,6 @@
 			<select id="cmbLinkType" onChange="SetLinkType(this.value);">
 				<option value="url" fckLang="DlgLnkTypeURL" selected="selected">External URL</option>
 				<option value="inturl" fckLang="DlgLnkTypeIURL">Internal URL</option>
-				<option value="resource" fckLang="DlgLnkTypeResource">Resource</option>
 				<option value="anchor" fckLang="DlgLnkTypeAnchor">Anchor in this page</option>
 				<option value="email" fckLang="DlgLnkTypeEMail">E-Mail</option>
 			</select>
@@ -244,6 +243,22 @@
 							<input id="txtAlias" name="txtAlias" style="WIDTH: 300px" type="text" onKeyUp="getSuggestions(this, event, 'hidSuggest', 'suggest', 'int');" />
 							<br />
 							<div id="suggest" class="sBox"></div>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="divLinkTypeResource"  style="DISPLAY: none">
+				<table cellspacing="0" cellpadding="0" width="100%" border="0" dir="ltr">
+					<tr>
+						<td nowrap="nowrap" width="100%" colspan="3">
+							<!-- I didn't take the time to translate alias -dk -->
+							<span>Resource</span><br />
+							<input type="hidden" name="hidSuggest2" id="hidSuggest2" />
+							<input id="txtResource" name="txtResource" style="WIDTH: 300px" type="text" onKeyUp="getSuggestions(this, event, 'hidSuggest2', 'suggest2', 'res');" />
+							<br /><input type="button" value="Add Resource" name="btnAdd" onClick="popUp('/common/admin/MasterView/ResourceModify.cfm?PageAction=Add&ReturnURL=%2Fcommon%2Fmodules%2Fcontentmanager%2Fresource%2Fclose%2Ecfm&compact=1', 500, 500);" />
+							<input type="hidden" name="hidResource" id="hidResource" value="0" />
+							<br />
+							<div id="suggest2" class="sBox"></div>
 						</td>
 					</tr>
 				</table>

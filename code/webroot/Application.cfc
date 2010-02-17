@@ -1,25 +1,25 @@
 <cfcomponent displayname="Application">
 	
 	<!--- the unique name used in database and directory defaults --->
-	<cfset this.uniqueName = "cmsdemo" />
+	<cfset variables.uniqueName = "cmsdemo" />
 
 	<!--- this variable will override any server defined siteType
 				* for cf8 sites, this is where the site type is set, leaving blank creates "dev" site type
 				* for cf9 sites, if server.siteType is set, if this should be "" unless 
 					a site type override is needed --->
-	<cfset this.overrideSiteType="">
+	<cfset variables.overrideSiteType="">
 
 	<!--- figure out the siteType --->
-	<cfinvoke method="determineSiteType" returnvariable="this.siteType">
-		<cfinvokeargument name="overrideSiteType" value="#this.overrideSiteType#">
+	<cfinvoke method="determineSiteType" returnvariable="variables.siteType">
+		<cfinvokeargument name="overrideSiteType" value="#variables.overrideSiteType#">
 	</cfinvoke>
 	
 	<!--- default application settings --->
-	<cfset this.name = "www.#this.uniqueName#.com" />
+	<cfset this.name = "www.#variables.uniqueName#.com" />
 	<cfset this.applicationTimeout = createTimeSpan(1,0,0,0) />
 	<cfset this.sessionManagement = true />
 	<cfset this.sessiontimeout = createTimeSpan(0,1,0,0) />
-	<cfset this.datasource="#this.uniqueName#_cms_#this.siteType#" />
+	<cfset this.datasource="#variables.uniqueName#_cms_#variables.siteType#" />
 	<cfset variables.botSessionInSeconds = 2 />
 
 	<!--- bots don't keep cookies and we don't want to do this for valid users --->
@@ -264,7 +264,7 @@
 
 	<!--- return the site type --->
 	<cffunction name="getSiteType" returntype="string">
-		<cfreturn this.siteType />
+		<cfreturn variables.siteType />
 	</cffunction>
 
 
@@ -276,7 +276,7 @@
 	
 	<!--- return the unique name --->
 	<cffunction name="getUniqueName" returntype="string">
-		<cfreturn this.uniqueName />
+		<cfreturn variables.uniqueName />
 	</cffunction>
 
 </cfcomponent>
