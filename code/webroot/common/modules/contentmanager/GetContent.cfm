@@ -76,7 +76,7 @@
 	<cfset CALLER.CurrentCategoryID=GetPage.CategoryID>
 	<cfset CALLER.CurrentSourceID=GetPage.SourceID>
 	<cfset CALLER.CSSID=GetPage.CategoryAlias>
-	
+
 	<cfif IsWDDX(GetPage.CategoryLocalePropertiesPacket)>
 		<cfwddx action="WDDX2CFML" input="#GetPage.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
 		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride">
@@ -108,12 +108,12 @@
 		<cfset CALLER.CategoryThreadList=IDList>
 		<cfset CALLER.CategoryThreadName=NameList>
 		<cfset CALLER.CategoryThreadAlias=AliasList>
-		
+
 		<!--- Get Category Properties --->
 		<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
-			select		PropertiesPacket, CacheDateTime 
+			select		PropertiesPacket, CacheDateTime
 			from		qry_GetCategoryProperties
-			WHERE 		CategoryID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#CALLER.CategoryThreadList#" list="yes">) 
+			WHERE 		CategoryID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#CALLER.CategoryThreadList#" list="yes">)
 			order by 	displayorder desc
 		</cfquery>
 		<cfoutput query="GetCatProps">
@@ -137,22 +137,32 @@
 		</cfoutput>
 
 		<!--- if this page should be ssl, redirect --->
-		<cfif 	structKeyExists(caller, "useSSL") and caller.useSSL 
+		<cfif 	structKeyExists(caller, "useSSL") and caller.useSSL
 				and CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
-			<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(ATTRIBUTES.CategoryAlias)#" addtoken="false" />
+
+			<!--- if we're redirecting to https, we want the query string, but not the "page=contentalias" - this removes it --->
+			<cfset thisQueryString = trim(reReplaceNoCase(CGI.query_string, "(&)?page=[^&]*(\?(1)|&)", "", "all")) />
+
+			<!--- prepend a "?" --->
+			<cfif len(trim(thisQueryString))>
+				<cfset thisQueryString = "?" & thisQueryString />
+			</cfif>
+
+			<!--- redirect to the ssl version of this page --->
+			<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(ATTRIBUTES.CategoryAlias)##thisQueryString#" addtoken="false" />
 		</cfif>
-		
+
 		<!--- Cache date calculated from branch --->
 		<cfquery name="GetMaxCacheDateTime" dbtype="query" maxrows="1">
 			select MAX(CacheDateTime) as MaxCacheDateTime from GetCatProps
 		</cfquery>
 		<cfset CALLER.CacheDateTime=GetMaxCacheDateTime.MaxCacheDateTime>
-		
+
 		<!--- Get Category Locale Properties --->
 		<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
 			SELECT		PropertiesPacket
 			FROM		qry_GetCategoryLocale
-			WHERE		CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and 
+			WHERE		CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and
 						LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer">
 			ORDER BY	displayorder DESC
 		</cfquery>
@@ -176,10 +186,10 @@
 			</cfif>
 		</cfoutput>
 	</cfif>
-	
+
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
-	
-	
+
+
 	<!--- handle security --->
 <!---
 	<!--- First check if anyone is logging in via persistant right column form --->
@@ -207,7 +217,7 @@
 		<cfset LoginPageCacheDateTime="#GetLoginModule.CacheDateTime#">
 		<cfset LoginPageCategoryID="#GetLoginModule.CategoryID#">
 	</cfif>  --->
-	
+
 	<cfloop index="ThisContentPositionID" list="#lPosition#">
 		<cfset recacheThis = false>
 		<cfif DenyAccess>
@@ -321,7 +331,7 @@
 	</cfif>
 </cfif>
 
-<!--- update the Last-Modified http header to represent the date modified ---> 
+<!--- update the Last-Modified http header to represent the date modified --->
 <cfset gmtdatetime=dateadd("h",GetTimeZoneInfo().utchouroffset,CALLER.CacheDateTime)>
 <cfset gmtFullstring="#dateformat(gmtdatetime, "ddd, dd mmm yyyy")# #timeformat(gmtdatetime, "HH:mm:ss")# GMT">
 <cfheader name="Last-Modified" value="#gmtFullstring#">
