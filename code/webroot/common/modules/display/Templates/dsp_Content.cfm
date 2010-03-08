@@ -16,17 +16,17 @@
             @import url(/common/styles/ie.css);
         </style>
     <![endif]-->
-    
+
     <!--- Remove CF comment if you need to emulate ie7 in ie8
 	<!-- Force IE8 to emulate IE7 -->
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" /> --->
-    
-    
+
+
 	<!--- Add Coldfusion browser detection --->
-    <!---  
+    <!---
     <cfset OSBrow = "browser,OS,path to style sheet; browser,OS,path to style sheet">
     <!-- import addtional style sheets -->
-    <cfinclude template="/common/modules/browsertest/browserdet.cfm"> 
+    <cfinclude template="/common/modules/browsertest/browserdet.cfm">
     --->
 
 <cfoutput>
@@ -43,7 +43,7 @@
 	<meta name="generator-content" content="#APPLICATION.GeneratorContentMeta#" />
 	<meta name="dc.title" content="#HTMLEditFormat(CurrentCategoryName)#" />
 
-	
+
 
 	<!--- include meta --->
 	<cfif IsDefined("PageType")>
@@ -64,7 +64,7 @@
 	<div id="header">
     	<!-- Logo Content -->
         <div id="logoContainer">
-        	<cfoutput><a href="/"><img src="/common/images/template/header_logo.gif" border="0" alt="#APPLICATION.CompanyName#" /></a></cfoutput>
+        	<cfoutput><a href="#APPLICATION.utilsObj.parseCategoryUrl('/')#"><img src="/common/images/template/header_logo.gif" border="0" alt="#APPLICATION.CompanyName#" /></a></cfoutput>
         </div>
          <!-- Utility Navigation and items -->
         <div id="utilityNavigation">

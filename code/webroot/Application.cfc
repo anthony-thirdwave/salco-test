@@ -39,14 +39,14 @@
 			<cfset variables.botFound = false />
 
 			<!--- if this is a bot, set a short session timeout --->
-			<cfloop list="#findList#" index="variables.bot" delimiters=",">
+			<cfloop list="#variables.findList#" index="variables.bot">
 				<cfif find(variables.bot, variables.botUserAgent)>
 					<cfset variables.botFound = true />
 					<cfbreak />
 				</cfif>
 			</cfloop>
 			<cfif not variables.botFound>
-				<cfloop list="#reFindList#" index="variables.bot" delimiters=",">
+				<cfloop list="#variables.reFindList#" index="variables.bot">
 					<cfif reFind(variables.bot, variables.botUserAgent)>
 						<cfset variables.botFound = true />
 						<cfbreak />
@@ -115,8 +115,12 @@
 	<!--- called when session is created --->
 	<cffunction name="OnSessionStart" returntype="void">
 
-		<!--- initialize the session --->
-		<cfinvoke method="initializeSession" component="com.application.SessionSettings" />
+		<!--- lock the session, in case of concurrent requests --->
+		<cflock scope="session" type="exclusive" timeout="15">
+
+			<!--- initialize the session --->
+			<cfinvoke method="initializeSession" component="com.application.SessionSettings">
+		</cflock>
 
 		<cfreturn />
 	</cffunction>

@@ -1,16 +1,16 @@
 <cfcomponent>
-	
+
 	<cffunction name="init" returntype="utils">
 		<cfreturn this>
 	</cffunction>
-	
+
 	<cffunction name="extractByToken" output="true" returntype="string">
 		<cfargument name="content" required="yes" type="string">
 		<cfargument name="startToken" required="no" type="string" default="[[">
 		<cfargument name="endToken" required="no" type="string" default="]]">
 		<cfargument name="delimiter" required="no" type="string" default=",">
 		<cfargument name="duplicates" required="no" type="boolean" default="false">
-		
+
 		<cfscript>
 			var position = 1;
 			var doneSearching = 0;
@@ -42,7 +42,7 @@
 				if(count GT 30){doneSearching = 1;writeoutput("there is a problem with the loop");}
 			}
 		</cfscript>
-		
+
 		<cfreturn lExtracted />
 	</cffunction>
 	<cffunction name="ReplaceTextInFile" output="true" returntype="boolean">
@@ -56,7 +56,7 @@
 		<cfset var ThisFileContent = "">
 		<cfset var ThisDestinationFile = "">
 		<cfset var qFiles = "">
-		
+
 		<cfif DirectoryExists(ARGUMENTS.Directory)>
 			<cfdirectory action="LIST" directory="#ARGUMENTS.Directory#" name="qFiles" filter="*.csst">
 			<cfoutput query="qFiles">
@@ -69,28 +69,28 @@
 			<cfreturn True>
 		</cfif>
 		<cfreturn false>
-		
+
 	</cffunction>
-	
-	
+
+
 	<!--- this function creates a 33 character unique id
-			1. hyphens are removed from the generated UUID to prevent javascript difficulties 
+			1. hyphens are removed from the generated UUID to prevent javascript difficulties
 			2. prefixed with "G" so it can be used as a variable name --->
 	<cffunction name="createUniqueId" output="true" returntype="string">
 		<cfset var newId = "G#replace(createUUID(), '-', '', 'all')#" />
-		<cfreturn newId />		
+		<cfreturn newId />
 	</cffunction>
-	
-	
-	
+
+
+
 	<!--- insert a delimiter after each character in a string  --->
 	<cffunction name="explodeString" returntype="string">
 		<cfargument name="string" default="">
 		<cfargument name="delimiter" default="\">
-		
-		<cfset var local = structNew() />	
+
+		<cfset var local = structNew() />
 		<cfset local.returnString = "">
-		
+
 		<!--- loop through each character in the passed string --->
 		<cfloop from="1" to="#len(arguments.string)#" index="local.itr">
 			<cfset local.returnString = local.returnString & mid(arguments.string,local.itr,1) & arguments.delimiter />
@@ -99,29 +99,29 @@
 		<!--- return the exploded string --->
 		<cfreturn local.returnString />
 	</cffunction>
-	
-	
-	
+
+
+
 	<!--- scrub out control characters and whitespace for a web friendly filename --->
 	<cffunction name="scrubFileName" returntype="string" output="false">
 		<cfargument name="fileName" type="string" required="yes">
-		
+
 		<cfset var local = structNew() />
 		<cfset local.returnValue=lcase(reReplace(arguments.fileName,"[’\!'/:""+=;?&<>|,]","","all"))>
 		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]"," ","all"))>
 		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]","-","all"))>
 		<cfreturn local.returnValue>
 	</cffunction>
-	
-	
-	
-	
+
+
+
+
 	<cffunction name="RemoveHTML" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 		<cfreturn REReplace(Trim(ARGUMENTS.String),"<[^>]*>"," ","All")>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="RemoveLeadingPTag" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 		<cfif left(ARGUMENTS.String,3) IS "<P>">
@@ -130,23 +130,23 @@
 			<cfreturn ARGUMENTS.String>
 		</cfif>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="ReplaceMarks" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 		<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"(TM)","&##8482;","all")>
 		<cfset ARGUMENTS.String=ReplaceNoCase(ARGUMENTS.String,"(R)","&##174;","all")>
 		<cfreturn ARGUMENTS.String>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="SimpleEncrypt" returntype="string" output="false">
 		<cfargument name="ID" default="" type="Numeric" required="true">
 		<cfset ARGUMENTS.ID=(ARGUMENTS.ID*ARGUMENTS.ID)+430213>
 		<cfreturn ARGUMENTS.ID>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="SimpleDecrypt" returntype="string" output="false">
 		<cfargument name="ID" default="" type="Numeric" required="true">
 		<cfset var ReturnValue = "">
@@ -158,8 +158,8 @@
 			</cfcatch>
 		</cftry>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="GetPathFromURL" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 		<cfset var ReturnString = "">
@@ -171,8 +171,8 @@
 			<cfreturn ReturnString>
 		</cfif>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="GetURLFromPath" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 		<cfset var ReturnString = "">
@@ -187,8 +187,8 @@
 			<cfreturn ReturnString>
 		</cfif>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="GeneratePageTitleString" returntype="string" output="false">
 		<cfargument name="pageTitleList" default="" type="string" required="true">
 			<cfset var thisPageTitle = "">
@@ -201,8 +201,8 @@
 			<cfset thisPageTitle = thisPageTitle & Application.CompanyName>
 			<cfreturn thisPageTitle>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="StripChars" returntype="string" output="false">
 		<cfargument name="strInput" type="string" required="yes">
 		<cfset var RetVal=Trim(ARGUMENTS.strInput)>
@@ -222,11 +222,11 @@
 		<cfreturn Trim(retVal)>
 	</cffunction>
 
-	
-	
+
+
 	<cffunction name="ReplaceExtendedCharacters" returntype="string" output="false">
 		<cfargument name="string" default="" type="String" required="true">
-	
+
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(150),"&##8211;","All")><!--- en dash --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(151),"&##8212;","All")><!--- em dash --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(145),"&##8216;","All")><!--- open apostrophe --->
@@ -234,18 +234,18 @@
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(147),"&##8220;","All")><!--- open double quote --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(148),"&##8221;","All")><!--- close double quote --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8482),"&##8482;","All")><!--- (TM) --->
-	
+
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8211),"&##8211;","All")><!--- en dash --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8212),"&##8212;","All")><!--- em dash --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8216),"&##8216;","All")><!--- open apostrophe --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8217),"&##8217;","All")><!--- close apostrophe --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8220),"&##8220;","All")><!--- open double quote --->
 		<cfset ARGUMENTS.string=ReplaceNoCase(ARGUMENTS.string,chr(8221),"&##8221;","All")><!--- close double quote --->
-	
+
 		<cfreturn ARGUMENTS.string>
 	</cffunction>
-	
-	
+
+
 	<cffunction name="Scrub" returntype="string" output="false">
 		<cfargument name="strInput" type="string" required="yes">
 		<cfset var ReturnValue=lcase(ReReplace(ARGUMENTS.strInput,"[’\!'/:"".+=;?&<>|,]","","all"))>
@@ -253,15 +253,15 @@
 		<cfset ReturnValue=lcase(ReReplace(ReturnValue,"[ ]","-","all"))>
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="ScrubServerFileName" returntype="string" output="false">
 		<cfargument name="ServerDirectory" default="" type="String" required="true">
 		<cfargument name="ServerFile" default="" type="String" required="true">
-		
+
 		<cfset VAR ThisExtension="">
 		<cfset VAR ThisServerFile="">
 		<cfset VAR ReturnString="">
-		
+
 		<cfif ListLen(ARGUMENTS.ServerFile," ") GT "1">
 			<cfset ThisExtension=ListLast(ARGUMENTS.ServerFile,".")>
 			<cfset ThisServerFile=ListDeleteAt(ARGUMENTS.ServerFile,ListLen(ARGUMENTS.ServerFile,"."),".")>
@@ -276,7 +276,7 @@
 
 	<cffunction name="OutputDateTime" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
-		
+
 		<cfif ARGUMENTS.String IS NOT "" and IsDate(ARGUMENTS.String)>
 			<cfset ReturnString="#dateFormat(ARGUMENTS.String,'mmm dd yyyy')# #TimeFormat(ARGUMENTS.String,'h:mmtt')#">
 			<cfset ThisDate=CreateDate(Year(ARGUMENTS.String),month(ARGUMENTS.String),day(ARGUMENTS.String))>
@@ -308,74 +308,74 @@
 		return wordsCapFirst;
 	}
 	</cfscript>
-	
-	
+
+
 	<cfscript>
 	/**
 	 * This function takes a date time object and an offset, and outputs a GMT date/time formatted string.
-	 * 
-	 * @param aDate 	 A date. 
-	 * @param offset 	 A valid GMT offset. 
-	 * @return Returns a string. 
-	 * @author Mark Andrachek (hallow@webmages.com) 
-	 * @version 1, March 21, 2002 
+	 *
+	 * @param aDate 	 A date.
+	 * @param offset 	 A valid GMT offset.
+	 * @return Returns a string.
+	 * @author Mark Andrachek (hallow@webmages.com)
+	 * @version 1, March 21, 2002
 	 */
 	function GMTDateFormat (adate,offset) {
 	     // adate must be a valid date time object.
 	     // the offset must be in the format -0000 or +0000.
-	     
+
 	     var dvalue = ""; // the final value.
-	     
+
 	     if (IsDate(adate)) {
-	          
+
 	          dvalue = DateAdd('h',Left(offset,3),DateAdd('s',Left(offset,1) & Right(offset,2),adate));
-	          dvalue = Left( DayOfWeekAsString( DayOfWeek( dvalue ) ), 3) & 
-	                  ', ' & 
+	          dvalue = Left( DayOfWeekAsString( DayOfWeek( dvalue ) ), 3) &
+	                  ', ' &
 	                  DateFormat(dvalue,'dd mmm yyyy') &
 	                  ' ' &
 	                  TimeFormat(dvalue,'HH:mm:ss') &
 	                  ' GMT';
-	          
+
 	          return dvalue;
 	     }
-	     
+
 	     else { return; }
 	}
 	</cfscript>
 
 
 
-	
-	
+
+
 	<!--- convert dot delimited form variables into structs  --->
 	<cffunction name="formDotNotationToStruct" returntype="struct">
 		<cfargument name="form" default="#structNew()#">
-		
+
 		<cfset var local = structNew() />
-		
+
 		<!--- make sure the struct has values --->
 		<cfif not structIsEmpty(arguments.form)>
-		
+
 			<!--- loop through the form elements --->
 			<cfloop collection="#arguments.form#" item="local.itr">
-				
+
 				<!--- is there a "." in the element name? --->
 				<cfif find(".", local.itr)>
-				
+
 					<!--- hold the value of the element --->
 					<cfset local.value = urlDecode(arguments.form[local.itr]) />
-					
+
 					<!--- delete the element from the form --->
 					<cfset structDelete(arguments.form, local.itr) />
-					
+
 					<!--- get the string before the first "." --->
 					<cfset local.checkImageInput = getToken(local.itr, 1, ".") />
-					
+
 					<!--- if this is an image input type, the variable before the "." can exist as a string,
 							so, skip adding the .x and .y --->
-					<cfif	(structKeyExists(form, local.checkImageInput) and not isSimpleValue(form[local.checkImageInput])) 
+					<cfif	(structKeyExists(form, local.checkImageInput) and not isSimpleValue(form[local.checkImageInput]))
 							or not structKeyExists(form, local.checkImageInput)>
-					
+
 						<!--- add the element as a nested member of the form struct
 								- dot notation in the element name becomes struct elements --->
 						<cfset "arguments.form.#local.itr#" = local.value />
@@ -387,26 +387,26 @@
 		<!--- return the form --->
 		<cfreturn arguments.form />
 	</cffunction>
-		
-		
-	
+
+
+
 	<!--- returns a spelled out number --->
 	<cffunction name="getNumberAsWords">
 		<cfargument name="theNum" type="numeric" required="true">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
-	
+
 		<cfset var local = structNew() />
-		
+
 		<!--- only handles positive numbers under 100,000 and rounds floats --->
 		<cfif arguments.theNum gt 99999 or arguments.theNum lt 0>
 			<cfreturn arguments.theNum />
 		<cfelse>
 			<cfset arguments.theNum = round(arguments.theNum) />
 		</cfif>
-		
+
 		<!--- create some variables which will be used based upon how large the number is --->
 		<cfset local.ones = right(arguments.theNum,1) />
-		
+
 		<cftry>
 			<cfset local.tens = mid(arguments.theNum, len(arguments.theNum) -1, 1) />
 			<cfset local.teens = right(arguments.theNum, 2) />
@@ -418,35 +418,35 @@
 				<!--- do nothing --->
 			</cfcatch>
 		</cftry>
-			
+
 		<!--- dashes for twenty-one through ninety-nine --->
 		<cfif not local.ones or (structKeyExists(local, "tens") and not local.tens)>
 			<cfset local.tensDash = "" />
 		<cfelse>
 			<cfset local.tensDash = "-" />
 		</cfif>
-		
+
 		<!--- only display " hundred " where needed --->
 		<cfif structKeyExists(local, "hundreds") and local.hundreds>
 			<cfset local.hundredsHolder = " hundred " />
 		<cfelse>
 			<cfset local.hundredsHolder = "" />
 		</cfif>
-		
+
 		<!--- only display " thousand " where needed --->
 		<cfif structKeyExists(local, "thousands") and local.thousands or structKeyExists(local, "tenThousands") and local.tenThousands>
 			<cfset local.thousandsHolder = " thousand " />
 		<cfelse>
 			<cfset local.thousandsHolder = "" />
 		</cfif>
-		
+
 		<!--- dashes for twenty-one through ninety-nine thousand --->
 		<cfif (structKeyExists(local, "thousands") and not local.thousands) or (structKeyExists(local, "tenThousands") and not local.tenThousands)>
 			<cfset local.tenThousandsDash = "" />
 		<cfelse>
 			<cfset local.tenThousandsDash = "-" />
 		</cfif>
-		
+
 		<!--- we'll always have a onesString   --->
 		<cfif local.ones eq 0 and not structKeyExists(local, "tens") >
 			<cfif not arguments.getAsOrdinal>
@@ -458,24 +458,24 @@
 			<!--- this always uses the passed getAsOrdinal value --->
 			<cfset local.onesString = ones(local.ones, arguments.getAsOrdinal) />
 		</cfif>
-		
+
 		<!--- try to format the tens column --->
 		<cftry>
-			
+
 			<!--- if no ones, then pass the getAsOrdinal boolean --->
 			<cfif not len(trim(local.onesString)) or (structKeyExists(local, "tens") and local.tens eq 1)>
 				<cfset local.tensOrdinals = arguments.getAsOrdinal />
 			<cfelse>
 				<cfset local.tensOrdinals = false />
 			</cfif>
-			
+
 			<!--- decide between tens and teens --->
 			<cfif local.tens eq 1>
 				<cfset local.tensString = teens(local.teens, local.tensOrdinals) />
 			<cfelse>
 				<cfset local.tensString = tens(local.tens, local.tensOrdinals) & local.tensDash & local.onesString />
 			</cfif>
-			
+
 			<cfcatch>
 				<!--- return a string version of a number less than 100 --->
 				<cfif arguments.theNum lt 10>
@@ -485,17 +485,17 @@
 				</cfif>
 			</cfcatch>
 		</cftry>
-		
+
 		<!--- try to format the hundreds column --->
 		<cftry>
-			
+
 			<!--- if no tens and getAsOrdinal, display with "th" --->
 			<cfif not len(trim(local.tensString)) and arguments.getAsOrdinal and len(trim(local.hundredsHolder))>
 				<cfset local.hundredsString = ones(local.hundreds) & " hundredth" />
 			<cfelse>
 				<cfset local.hundredsString = ones(local.hundreds) & local.hundredsHolder & local.tensString />
 			</cfif>
-			
+
 			<cfcatch>
 				<!--- return a string version of a number less than 100 --->
 				<cfif arguments.theNum lt 100>
@@ -505,17 +505,17 @@
 				</cfif>
 			</cfcatch>
 		</cftry>
-		
+
 		<!--- try to format the thousands column --->
 		<cftry>
-			
+
 			<!--- if no hundreds and getAsOrdinal, display with "th" --->
 			<cfif not len(trim(local.hundredsString)) and arguments.getAsOrdinal>
 				<cfset local.thousandsHolder = " thousandth" />
 			</cfif>
-		
+
 			<cfset local.thousandsString = ones(local.thousands) & local.thousandsHolder & local.hundredsString />
-			
+
 			<cfcatch>
 				<!--- return a string version of a number less than 1000 --->
 				<cfif arguments.theNum lt 1000>
@@ -525,16 +525,16 @@
 				</cfif>
 			</cfcatch>
 		</cftry>
-		
+
 		<!--- try to format the tenThousands column --->
 		<cftry>
-			
+
 			<cfif local.tenThousands eq 1>
 				<cfset local.tenThousandsString = teens(local.tenThousandTeens) & local.thousandsString />
 			<cfelse>
 				<cfset local.tenThousandsString = tens(local.tenThousands) & local.tenThousandsDash & local.thousandsString />
 			</cfif>
-		
+
 			<cfcatch>
 				<!--- return a string version of a number less than 10000 --->
 				<cfif arguments.theNum lt 10000>
@@ -544,7 +544,7 @@
 				</cfif>
 			</cfcatch>
 		</cftry>
-		
+
 		<!--- this is a high as we go --->
 		<cfreturn trim(local.tenThousandsString) />
 	</cffunction>
@@ -552,9 +552,9 @@
 	<cffunction name="ones">
 		<cfargument name="num" type="numeric">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
-		
+
 		<cfset var local = structNew() />
-		
+
 		<cfsavecontent variable="local.numAsString">
 			<cfif not arguments.getAsOrdinal>
 				<cfswitch expression="#arguments.num#">
@@ -582,17 +582,17 @@
 				</cfswitch>
 			</cfif>
 		</cfsavecontent>
-		
+
 		<cfreturn trim(local.numAsString) />
 	</cffunction>
-	
-	
+
+
 	<cffunction name="tens">
 		<cfargument name="num" type="numeric">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
-		
+
 		<cfset var local = structNew() />
-		
+
 		<cfsavecontent variable="local.numAsString">
 			<cfif not arguments.getAsOrdinal>
 				<cfswitch expression="#arguments.num#">
@@ -620,16 +620,16 @@
 				</cfswitch>
 			</cfif>
 		</cfsavecontent>
-		
+
 		<cfreturn trim(local.numAsString) />
 	</cffunction>
-	
+
 	<cffunction name="teens">
 		<cfargument name="num" type="numeric">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
-		
+
 		<cfset var local = structNew() />
-		
+
 		<cfsavecontent variable="local.numAsString">
 			<cfif not arguments.getAsOrdinal>
 				<cfswitch expression="#arguments.num#">
@@ -659,20 +659,20 @@
 				</cfswitch>
 			</cfif>
 		</cfsavecontent>
-		
+
 		<cfreturn trim(local.numAsString) />
 	</cffunction>
 
 	<!--- convert a number to an ordinal --->
 	<cffunction name="getNumberAsOrdinal" returntype="string">
 		<cfargument name="num" type="numeric">
-		
+
 		<cfset var local = structNew() />
 		<cfset local.numAsOrdinal = "" />
-		
+
 		<!--- get the last two digits --->
 		<cfset local.lastTwo = right(arguments.num, 2) />
-		
+
 		<!--- determine the suffix --->
 		<cfif right(local.lastTwo, 1) eq 1 and local.lastTwo neq 11>
 			<cfset local.numAsOrdinal = arguments.num & "st" />
@@ -683,62 +683,59 @@
 		<cfelse>
 			<cfset local.numAsOrdinal = arguments.num & "th" />
 		</cfif>
-		
+
 		<cfreturn trim(local.numAsOrdinal) />
 	</cffunction>
 
 
 
 	<!--- get a properly formatted cms url --->
-	<cffunction name="parseCategoryUrl" returntype="string">
+	<cffunction name="parseCategoryUrl" returntype="string" output="true">
 		<cfargument name="categoryUrl" type="string" required="true" />
 		<cfargument name="localeId" default="#APPLICATION.localeId#" />
-	
+
 		<cfset var local = structNew() />
-		
+
 		<!--- trim the url --->
 		<cfset arguments.categoryUrl = trim(arguments.categoryUrl) />
 		<cfset local.returnUrl = arguments.categoryUrl />
-		<cfset local.categoryLocaleProperties = structNew() />
-		
-		<!--- if this is a root relative path, not a link to a page in /common --->
-		<cfif	not reFindNoCase("(https?://)|(ftp://)|(mailto:)|(javascript:)", arguments.categoryUrl)
-				and getToken(arguments.categoryUrl, 1, "/") neq "common"
-				and listLen(arguments.categoryUrl, "/")>
-		
-			<!--- the last token in a string of "/" should be the alias  --->
-			<cfset local.categoryAlias = getToken(arguments.categoryUrl, listLen(arguments.categoryUrl, "/"), "/") />
-			
+
+		<!--- if this is a root relative path and not a link to a page in /common --->
+		<cfif	getToken(arguments.categoryUrl, 1, "/") neq "common"
+				and not reFindNoCase("(https?://)|(ftp://)|(mailto:)|(javascript:)", arguments.categoryUrl)>
+
+			<!--- if this isn't a link to "/" --->
+			<cfif arguments.categoryUrl neq "/">
+				<!--- the last token in a string of "/" should be the alias  --->
+				<cfset local.categoryAlias = getToken(arguments.categoryUrl, listLen(arguments.categoryUrl, "/"), "/") />
+			<cfelse>
+				<cfset local.categoryAlias = "/" />
+			</cfif>
+
 			<!--- Check given alias first and obtain categoryid--->
 			<cfquery name="local.getCategoryInfo" datasource="#APPLICATION.DSN#" maxrows=1>
-				SELECT	c.categoryId, p.propertiesPacket
+				SELECT	c.categoryId
 				FROM	t_Category c
-				JOIN	t_Properties p
-				ON		p.propertiesId = c.propertiesId
-				WHERE	CategoryAlias = <cfqueryparam value="#trim(local.categoryAlias)#" cfsqltype="cf_sql_varchar" maxlength="128">
+				WHERE	c.CategoryAlias = <cfqueryparam value="#trim(local.categoryAlias)#" cfsqltype="cf_sql_varchar" maxlength="128">
 			</cfquery>
-			
+
 			<!--- if we have a page, then create the url --->
 			<cfif local.getCategoryInfo.recordcount>
-				
-				<!--- check for defined CategoryLocalePropertiesPacket --->
-				<cfif isWDDX(local.getCategoryInfo.propertiesPacket)>
-					<cfwddx action="WDDX2CFML" input="#local.getCategoryInfo.propertiesPacket#" output="local.categoryProperties">
-				</cfif>
-				
+
 				<!--- prepend the APPLICATION.contentPageInUrl to the alias for seo --->
 				<cfset local.returnUrl = "#APPLICATION.contentPageInUrl#/" & local.categoryAlias />
-				
+
 				<!--- if this uses SSL --->
-				<cfif structKeyExists(local.categoryProperties, "useSSL") and val(local.categoryProperties.useSSL)>
-					
+				<cfif APPLICATION.SSLConfigured and structKeyExists(APPLICATION, "sslCategories")
+						and structKeyExists(APPLICATION.sslCategories, "ssl_" & val(local.getCategoryInfo.categoryId))>
+
 					<!--- if we're not on a secure page and this link is secure, point to https --->
-					<cfif CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
+					<cfif CGI.SERVER_PORT neq APPLICATION.httpsPort>
 						<cfset local.returnUrl = APPLICATION.httpsServer & local.returnUrl />
 					</cfif>
 				<!--- else, use the contentPage alias set for the application --->
 				<cfelse>
-					
+
 					<!--- if we're on a secure page and this link isn't secure, point to http --->
 					<cfif CGI.SERVER_PORT eq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
 						<cfset local.returnUrl = APPLICATION.httpServer & local.returnUrl />
@@ -746,19 +743,19 @@
 				</cfif>
 			<!--- if there's not a matching page, make sure it returns as url so 404 can handle it --->
 			<cfelse>
-			
+
 				<!--- make sure this returns as a root relative url --->
 				<cfif compare(left(local.categoryAlias, 1), "/")>
 					<cfset local.returnUrl = "/" & local.categoryAlias />
 				</cfif>
-				
+
 				<!--- if we're on a secure page, point to http --->
 				<cfif CGI.SERVER_PORT eq APPLICATION.httpsPort>
 					<cfset local.returnUrl = "http://" & CGI.SERVER_NAME & local.returnUrl />
 				</cfif>
 			</cfif>
 		</cfif>
-		
+
 		<cfreturn local.returnUrl />
 	</cffunction>
 
