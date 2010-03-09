@@ -141,7 +141,7 @@
 				and CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
 
 			<!--- if we're redirecting to https, we want the query string, but not the "page=contentalias" - this removes it --->
-			<cfset thisQueryString = trim(reReplaceNoCase(CGI.query_string, "(&)?page=[^&]*(\?(1)|&)", "", "all")) />
+			<cfset thisQueryString = trim(reReplaceNoCase(CGI.query_string, "(&)?page=[^&]*(\?(1)|&|$)", "", "all")) />
 
 			<!--- prepend a "?" --->
 			<cfif len(trim(thisQueryString))>

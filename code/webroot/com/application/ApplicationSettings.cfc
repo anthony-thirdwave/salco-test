@@ -311,7 +311,7 @@
 
 
 	<!--- get a struct with the categories that use SSL --->
-	<cffunction name="getSSLStruct" returntype="struct" output="true">
+	<cffunction name="getSSLStruct" returntype="struct">
 
 		<cfset var local = structNew() />
 		<cfset local.returnStruct = structNew() />

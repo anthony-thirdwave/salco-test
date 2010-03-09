@@ -694,13 +694,13 @@
 			<cfset DevNull=StructInsert(sProperties,"UserloginAccess","#ThisUserloginAccess#","1")>
 			<cfset DevNull=StructInsert(sProperties,"SCurrentResourceDetails",thisSCurrentResourceDetails,"1")>
 			<cfset DevNull=StructInsert(sProperties,"aOwner",thisAOwner,"1")>
-			<cfset DevNull=StructInsert(sProperties,"useSSL",thisUseSSL,"1")>
 
 			<!--- if useSSL has changed, set the flag so we can update the struct of SSL pages after the save  --->
 			<cfif APPLICATION.SSLConfigured and structKeyExists(sProperties, "useSSL") and thisUseSSL neq sProperties.useSSL>
 				<cfset useSSLUpdated = true />
 			</cfif>
 
+			<cfset DevNull=StructInsert(sProperties,"useSSL",thisUseSSL,"1")>
 			<cfset DevNull=StructInsert(sProperties,"foobar",thisFoobar,"1")><!--- golf --->
 
 			<cfset DevNull=StructInsert(sProperties,"ProductionFTPHost","#Trim(ThisProductionFTPHost)#","1")>
