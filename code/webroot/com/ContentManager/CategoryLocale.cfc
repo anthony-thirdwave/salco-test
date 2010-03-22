@@ -817,25 +817,6 @@
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
 			
-			
-			<cfquery name="GetSummary" datasource="#APPLICATION.DSN#">
-				SELECT * FROM t_CategorySummary WHERE CategoryID = <cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
-			</cfquery>
-			<cfoutput query="GetSummary">
-				<cfquery name="DeleteSummaryOnProduction" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-					DELETE FROM t_CategorySummary WHERE CategoryID = <cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
-				</cfquery>
-				<cfquery name="UpdateSummaryOnProduction" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-					INSERT INTO t_CategorySummary (CategoryID, CategoryAlias, Summary, ThumbnailImage)
-					VALUES (
-						<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">,
-						<cfqueryparam value="#CategoryAlias#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#Summary#" cfsqltype="cf_sql_varchar">,
-						<cfqueryparam value="#ThumbnailImage#" cfsqltype="cf_sql_varchar">
-					)
-				</cfquery>
-			</cfoutput>
-			
 			<cfquery name="GetProps" datasource="#APPLICATION.DSN#">
 				select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ThisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>

@@ -42,12 +42,6 @@
 			<cfset MyCategory.Constructor(Val(ThisCategoryID))>
 			<cfset MyCategory.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.AdminUserID))>
 			<cfoutput>saved #ThisCategoryID# category: #GetTickCount()-StartTickCount#<BR></cfoutput>
-			<!--- IF ARTICLE --->
-			<cfif MyCategory.GetProperty('CategoryTypeID') EQ "66" AND Val(MyCategory.GetProperty('SourceID')) GT 0>
-				<cfset MyArticle=CreateObject("component","com.Article.Article")>
-				<cfset MyArticle.Constructor(Val(MyCategory.GetProperty('SourceID')))>
-				<cfset MyArticle.SaveToProduction()>
-			</cfif>
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryLocaleID" returnVariable="CategoryLocaleID"
 				CategoryID="#ThisCategoryID#"
 				LocaleID="#SESSION.AdminCurrentAdminLocaleID#">
