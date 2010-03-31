@@ -7,6 +7,8 @@
 <cfset PreviewTargetContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.prcid))>
 <cfset PreviewSourceContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.pcid))>
 
+<cfset REQUEST.ReCache="1">
+
 <cfmodule template="/common/modules/ContentManager/GetContent.cfm"
 	CategoryID="#Val(CategoryID)#"
 	CategoryAlias="#Page#"

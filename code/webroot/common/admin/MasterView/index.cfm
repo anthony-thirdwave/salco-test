@@ -113,6 +113,7 @@
 				<cf_AddToQueryString querystring="#QueryString#" name="lid" value="#lid#">
 				<a href="#Location#?#querystring#"  title="Add Sub Page"><img src="/common/images/admin/icon_add.gif" border="0"> Add Sub Page</A>
 			</cfif>
+			<a href="mailto:?subject=#CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#CGI.HTTP_Host##APPLICATION.contentPageInUrl#/#CategoryAlias#%0AEdit: http://#CGI.HTTP_Host##CGI.Path_Info#?#URLEncodedFormat(CGI.Query_String)#" Title="Email This Page"><img src="/common/images/admin/icon_email.gif" border="0"/> Email This Page</A>
 		</div>
 		<div style="background-color:white">&nbsp;
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="white">

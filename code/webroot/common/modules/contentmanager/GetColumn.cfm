@@ -6,11 +6,7 @@
 <cfparam name="ATTRIBUTES.PreviewTargetContentID" default="-1">
 <cfparam name="ATTRIBUTES.returnVariable" default="FileContents">
 
-
-<cfobject component="com.ContentManager.ContentManager"
-	name="MyContentManager">
-
-<cfinvoke component="#MyContentManager#"
+<cfinvoke component="#REQUEST.MyContentManager#"
 	method="GetColumnContentIDList"
 	returnVariable="lContentID"
 	CategoryID="#ATTRIBUTES.CategoryID#"
@@ -42,17 +38,6 @@
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 		<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
 	</cfstoredproc>
-	<!--- <cfif Isdefined("URL.prcid") and application.utilsObj.SimpleDecrypt(Val(URL.prcid)) IS ThisContentID>
-		<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
-			<cfprocresult name="GetContent">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(application.utilsObj.SimpleDecrypt(Val(pcid)))#" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
-		</cfstoredproc>
-	<cfelse>
-		
-	</cfif> --->
-	
 	
 	<cfoutput query="GetContent">
 		<cfif IsWDDX(GetContent.ContentBody)>

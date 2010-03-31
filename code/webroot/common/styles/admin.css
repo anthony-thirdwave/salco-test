@@ -16,10 +16,6 @@ width:0px;
 display:block;
 }
 
-body {
-background-image: url(/common/images/global/site_bg.gif);
-background-repeat: no-repeat;
-}
 .inactive  {color:999999}
 
 .breadcrumb, .breadcrumb a {
