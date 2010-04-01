@@ -182,10 +182,7 @@
 </cfquery>
 
 <cfoutput>
-	<table bgcolor="silver"><tr valign="top">
-				<TD bgcolor="white">
-				
-	<table cellpadding="3">
+	<table cellspacing="0px" cellpadding="3px">
 		<tr>
 			<td colspan="3"><b>#getLabelGroupName.labelGroupName#</b></td>
 		</tr>
@@ -251,7 +248,9 @@
 						<td><cfif 0><cfif labelindex IS NOT "1"><input type="submit" name="butup" value="Move Up"></cfif><BR>
 						<cfif labelindex IS NOT getLabels.recordcount><input type="submit" name="butdown" value="Move Down"></cfif></cfif>
 						</TD><TD nowrap>
-						<cfif ATTRIBUTES.AllowEdit><input type="image" src="/common/images/admin/button_edit.png" name="butSub" value="Edit"></cfif>
+						<cfif ATTRIBUTES.AllowEdit>
+							<input type="image" src="/common/images/admin/icon_edit.gif" name="butSub" value="Edit">
+						</cfif>
 						<cfif AllowDelete>
 							<input type="button" value="Delete" onclick="window.location='index.cfm?dlid=#URLencodedFOrmat(Encrypt(LabelID,APPLICATION.Key))#&labelGroupID=#LabelGroupID#'">
 						</cfif>
@@ -267,7 +266,10 @@
 					<cfif (Right(getLabels.LabelCode[labelindex],2) IS "_S" AND getLabels.LabelGroupID[labelindex] IS "10")>
 						<cfset bThisEdit="No">
 					<cfelse>
-						<cfif bEdit OR NOT ATTRIBUTES.AllowEdit>&nbsp;<Cfelse><input type="button" class="EditButs" value="" onclick="window.location='index.cfm?labelId=#getLabels.LabelId[labelindex]#'"></cfif>
+						<cfif bEdit OR NOT ATTRIBUTES.AllowEdit>&nbsp;
+						<Cfelse>
+							<a href="index.cfm?labelId=#getLabels.LabelId[labelindex]#"><img border="0" src="/common/images/admin/icon_edit.gif"></a>
+						</cfif>
 					</cfif>
 					</td>
 				</tr>
@@ -288,12 +290,5 @@
 				</tr>
 			</form>
 		</cfif>
-		
-		<!--- Table Spacers --->
-		<tr>
-			<td><img src="/common/images/spacer.gif" height="1" width="160"></td>
-			<TD></TD>
-			<td><img src="/common/images/spacer.gif" height="1" width="40"></td>
-		</tr>
-	</table></TD></TR></table>
+	</table>
 </cfoutput>

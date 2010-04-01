@@ -53,12 +53,7 @@ code/webroot/common/admin/MasterView/CategoryModify.cfm -text
 code/webroot/common/admin/MasterView/ContentModify.cfm -text
 code/webroot/common/admin/MasterView/LocaleModify.cfm -text
 code/webroot/common/admin/MasterView/_InitMasterView.cfm -text
-code/webroot/common/admin/MasterView/download/2.txt -text
-code/webroot/common/admin/MasterView/download/3.txt -text
-code/webroot/common/admin/MasterView/download/4.txt -text
-code/webroot/common/admin/MasterView/download/5.txt -text
 code/webroot/common/admin/MasterView/index.cfm -text
-code/webroot/common/admin/MasterView/search.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/index.cfm -text
 code/webroot/common/admin/RedirectManager/edit.cfm -text
@@ -372,8 +367,6 @@ code/webroot/common/modules/Admin/Workflow/RequestListPerCategory.cfm -text
 code/webroot/common/modules/Admin/Workflow/RequestModify.cfm -text
 code/webroot/common/modules/Admin/_AdminNavigation.cfm -text
 code/webroot/common/modules/Admin/_secure.cfm -text
-code/webroot/common/modules/Admin/dsp_AdminFooter.cfm -text
-code/webroot/common/modules/Admin/dsp_AdminHeader.cfm -text
 code/webroot/common/modules/Admin/dsp_MostRecent.cfm -text
 code/webroot/common/modules/Admin/dsp_admin.cfm -text
 code/webroot/common/modules/Contact/ContactForm.cfm -text

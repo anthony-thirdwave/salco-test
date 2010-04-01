@@ -465,6 +465,12 @@
 	
 	</cfcase>
 	<cfcase value="ValidateDelete">
+		<div class="dashModuleWide">
+		<div class="box2">
+		<div class="boxtop2"><div></div></div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Delete?</div>
+		<div class="ModuleBody2">
+		
 		<cfoutput>
 			<cfset Location=GetToken(FormAction,1,"?")>
 			<cfset querystring=GetToken(FormAction,2,"?")>
@@ -480,6 +486,10 @@
 			<cfoutput><P>You cannot delete the Category "#MyCategory.GetProperty('CategoryName')#" since it still contains content.</P></cfoutput>
 		</cfif>
 		</form>
+		</div>
+		<div class="boxbottom2"><div></div></div>
+		</div>
+		</div>
 	</cfcase>
 	<cfcase value="CommitDelete">
 		<cfif MyCategory.ValidateDelete()>

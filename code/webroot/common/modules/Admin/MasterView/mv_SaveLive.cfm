@@ -200,7 +200,7 @@
 			<!--- Create the Indents --->
 			<cfloop index="i" from="1" to="#indent#" step="1"><TD width="10"><img src="/common/images/spacer.gif" width="10" height="1"></TD></cfloop>
 			<cfset ThisNum=(MaxDisplayLevel-Indent)>
-			<TD bgcolor="bac0c9" colspan="#IncrementValue(ThisNum)#"><b>#CategoryName#</b> <img src="/common/images/ContentManager/icon_Category.gif" border="0"><BR><small>(#CategoryID# | #CategoryAlias#)</TD>
+			<TD bgcolor="bac0c9" colspan="#IncrementValue(ThisNum)#"><b>#CategoryName#</b> <a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"></a></TD>
 			<TD bgcolor="bac0c9" align="center">#YesNoFormat(CategoryActive)#</TD>
 			<TD bgcolor="bac0c9">
 			<table border="0" width="100%" cellspacing="0" cellpadding="0"><tr valign="top"><TD><small>last updated:</small></TD><TD nowrap>

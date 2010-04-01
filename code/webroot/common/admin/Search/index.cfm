@@ -60,7 +60,7 @@
 		<cfset thisSearchText = SESSION.sGlobalSearch.searchText>
 		<cfset thisResultsPerPage = SESSION.sGlobalSearch.resultsPerPage>
 	</cflock>
-	<cfset thisPageTitle = "Global Search: #qTheseResults.RecordCount# Matches for ""#thisSearchText#""">
+	<cfset thisPageTitle = "Search: #qTheseResults.RecordCount# Matches for ""#thisSearchText#""">
 </cfif>
 
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
@@ -68,6 +68,12 @@
 	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | Search">
 
 <!--- search results are stored in session, only reset when new search is defined --->
+
+<div class="dashModuleWide">
+<div class="box2">
+<div class="boxtop2"><div></div></div>
+<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Search Results</div>
+<div class="ModuleBody2">
 
 <script language="javascript">
 function valNewSearch(thisForm){
@@ -97,7 +103,7 @@ function valNewSearch(thisForm){
 			&nbsp;
 			<input type="text" style="width:400px;" maxlength="255" name="searchText" value="#thisSearchText#">
 			&nbsp;
-			<input type="submit" name="searchSubmit" value="show">
+			<input class="adminSearchSubmitBut" type="image" src="/common/images/admin/button_search.gif" border="0" style="">
 		</td>
 	</tr>
 	</form>
@@ -113,10 +119,10 @@ function valNewSearch(thisForm){
 		<td colspan="4" style=" border-bottom:1px dashed ##999999;" align="left">&nbsp;</td>
 	</tr>
 	<tr style="background-color:##FFFFCC; font-weight:bold; height:30px;">
-		<td align="left"><img src="/common/images/spacer.gif" width="15" height="1" border="0"/>Action</td>
 		<td><a href="?sortBy=title&sortOrder=#titleOrder#">Page Title</a>&nbsp;&nbsp;<cfif thisSortBy EQ "title"><cfif thisSortOrder EQ "desc">#uparrow#<cfelse>#downarrow#</cfif></cfif></td>
 		<td><a href="?sortBy=alias&sortOrder=#aliasOrder#">Alias</a>&nbsp;&nbsp;<cfif thisSortBy EQ "alias"><cfif thisSortOrder EQ "desc">#uparrow#<cfelse>#downarrow#</cfif></cfif></td>
 		<td><a href="?sortBy=date&sortOrder=#dateOrder#">Last Updated</a>&nbsp;&nbsp;<cfif thisSortBy EQ "date"><cfif thisSortOrder EQ "desc">#uparrow#<cfelse>#downarrow#</cfif></cfif></td>
+		<td align="right">Action</td>
 	</tr>
 	<tr><td colspan="4" style=" border-top:1px solid ##999999;"><img src="/common/images/spacer.gif" height="1" width="1" border="0"/></td></tr>
 	</cfoutput>
@@ -146,15 +152,13 @@ function valNewSearch(thisForm){
 			<cfset counter = counter+1>
 			<cfif CurrentRow NEQ getTheseResults.RecordCount AND counter NEQ thisResultsPerPage><cfset showDashes = 1><cfelse><cfset showDashes = 0></cfif>
 			<tr>
-				<td align="left" width="13%">
-					<img src="/common/images/spacer.gif" width="10" height="1" border="0"/>
-					<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" hspace="2" border="0"/></a>
-					<a href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#" title="Edit"><img src="/common/images/admin/icon_edit.gif" hspace="2" border="0"/></a>
-					<!--- <a href="##"><img src="/common/images/icon_delete.gif" hspace="2" border="0"/></a> --->
-				</td>
 				<td width="29%"><a style="font-weight:bold;" href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#">#CategoryName#</a></td>
 				<td width="29%">#CategoryAlias#</td>
 				<td width="29%">#APPLICATION.utilsObj.OutputDateTime(LastUpdated)#</td>
+				<td align="right" width="13%">
+					<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" hspace="2" border="0"/></a>
+					<a href="/common/admin/masterview/index.cfm?&mvcid=#CategoryID#" title="Edit"><img src="/common/images/admin/icon_edit.gif" hspace="2" border="0"/></a>
+				</td>
 			</tr>
 			<cfif showDashes><tr><td colspan="4" style="border-top:1px dashed ##999999;"><img src="/common/images/spacer.gif" height="1" width="1" border="0"/></td></tr></cfif>
 		</cfoutput>
@@ -208,4 +212,9 @@ function valNewSearch(thisForm){
 </cfif>
 </table>
 </div>
+
+</div>
+		<div class="boxbottom2"><div></div></div>
+		</div>
+		</div>
 </cfmodule>

@@ -749,6 +749,11 @@
 		--->
 	</cfcase>
 	<cfcase value="ValidateDelete">
+		<div class="dashModuleWide">
+		<div class="box2">
+		<div class="boxtop2"><div></div></div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Delete?</div>
+		<div class="ModuleBody2">
 		<cfoutput>
 			<cfset Location=GetToken(FormAction,1,"?")>
 			<cfset querystring=GetToken(FormAction,2,"?")>
@@ -760,6 +765,10 @@
 		<cfoutput><P>Are you sure you want to delete the content "#MyContent.GetProperty('ContentName')#" from the site? Any associated localized content records will be deleted. In addition, if this content element is repeated elsewhere on the site, those instances will be deleted as well.</P></cfoutput>
 		<input type="image" src="/common/images/admin/button_delete.png" value="Delete">
 		</form>
+		</div>
+		<div class="boxbottom2"><div></div></div>
+		</div>
+		</div>
 	</cfcase>
 	<cfcase value="CommitDelete">
 		<cfset MyContent.Delete(APPLICATION.TrashPath,SESSION.AdminUserID)>

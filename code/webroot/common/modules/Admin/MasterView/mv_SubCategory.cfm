@@ -120,30 +120,30 @@
 		<cfoutput query="GetCategoryList">
 			<cfsavecontent variable="ThisLI">
 			<li id="#CategoryID#">
-				<table border="0" cellpadding="0" cellspacing="0">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
 					<tr>
-						<td width="300">
+						<td>
 							<input type="hidden" name="EditCategoryID#CurrentRow#" 
 								value="#URLEncodedFormat(Encrypt(Categoryid,APPLICATION.Key))#">
 							<input type="checkbox" name="EditShowCategory#CurrentRow#" 
 								value="1" <cfif CategoryActive>checked</cfif>>
 							#CategoryName# (#CategoryAlias#)
 						</td>
-						<td width="320" align="right">
-							<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">Preview</a>
-							<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window">+</a>
+						<td align="right">
+							<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"></a>
+							
 							<cfset Location="/common/admin/MasterView/CategoryModify.cfm">
 							<cfset querystring="">
 							<cfset cid=encrypt(CategoryID,APPLICATION.KEY)>
 							<cfif ATTRIBUTES.sCurrentCategoryPermissions["pEdit"]>
 								<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
 								<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="Edit">
-								<a href="#Location#?#querystring#">Edit</A>
+								<a href="#Location#?#querystring#"><img src="/common/images/admin/icon_edit.gif" border="0"></A>
 							</cfif>
 							<cfif ATTRIBUTES.sCurrentCategoryPermissions["pDelete"]>
 								<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
 								<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="validatedelete">
-								<a href="#Location#?#querystring#">Delete</a>
+								<a href="#Location#?#querystring#"><img src="/common/images/admin/icon_delete.gif" border="0"></a>
 							</cfif>
 						</td>
 					</tr>

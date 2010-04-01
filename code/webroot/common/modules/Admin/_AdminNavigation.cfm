@@ -1,5 +1,5 @@
 <cfset sMenu=StructNew()>
-<cfset sMenuList="Dashboard,Content Manager,User Manager,Support,Url Manager">
+<cfset sMenuList="Dashboard,Content Manager,User Manager,Redirect Manager,Support">
 
 
 <cfloop index="ThisElt" list="#sMenuList#">
@@ -26,7 +26,7 @@
 			<cfset StructInsert(sMenuElt,"lUserGroupID","all",1)>
 			<cfset StructInsert(sMenuElt,"Description","Send email to CMS support.",1)>
 		</cfcase>
-		<cfcase value="Url Manager">
+		<cfcase value="Redirect Manager">
 			<cfset StructInsert(sMenuElt,"link","/common/admin/redirectManager/index.cfm",1)>
 			<cfset StructInsert(sMenuElt,"lUserGroupID","#APPLICATION.AdminUserGroupID#",1)>
 			<cfset StructInsert(sMenuElt,"Description","Manage url redirects",1)>

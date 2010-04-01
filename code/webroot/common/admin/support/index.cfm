@@ -7,6 +7,11 @@
 <cfset ThisPath=CGI.SCRIPT_NAME>
 <cfset ThisQueryString=CGI.QUERY_STRING>
 
+<div class="dashModuleWide">
+	<div class="box2">
+		<div class="boxtop2"><div></div></div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">SUPPORT</div>
+		<div class="ModuleBody2">
 <cfif supportaction IS "1">
 	<!---<p><strong>Documentation</strong></p>
 	
@@ -34,6 +39,9 @@
 	<p><strong>Someone will look into your issue soon!</strong></p>
 	<p>&nbsp;</p>
 </cfif>
-
+</div>
+		<div class="boxbottom2"><div></div></div>
+	</div>
+</div>
 
 </cfmodule>

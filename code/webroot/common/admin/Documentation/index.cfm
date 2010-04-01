@@ -1,12 +1,14 @@
-<!--- Created By: John WebWilliam Avila on 05.13.2004
-		This template displays any documentation relating to the project
---->
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+	Page="Documentation"
+	PageHeader="<a href=""/common/admin/"">Main Menu</A> | Documentation">
 
-
-<cfmodule template="/common/modules/admin/dsp_AdminHeader.cfm" 
-	PageTitle="Documentation"
-	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | Documentation">
-
+<div class="dashModuleWide">
+	<div class="box2">
+		<div class="boxtop2"><div></div></div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Documentation</div>
+		<div class="ModuleBody2">
+		
+		
 <br>
 <b>Current Documentation:</b><br>
 <br>
@@ -27,3 +29,12 @@
 <li><a href="wireframes/ResourcesForm.html">Resources Form</a> </li>
 </ul>
  --->
+ 
+ 
+</div>
+		<div class="boxbottom2"><div></div></div>
+	</div>
+</div>
+
+
+</cfmodule>

@@ -75,7 +75,7 @@
 <cfelseif GetCategoryDetails.RecordCount GT "0">
 	<cfoutput query="GetCategoryDetails" group="CategoryID">
 		<div class="actionlist1">	
-			<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"> Preview</A>
+			<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview in new window"><img src="/common/images/admin/icon_magnify.gif" border="0"> Preview</a>
 		
 			<!--- CRUD --->
 			<cf_AddToQueryString querystring="#MVQueryString#" name="MVCid" value="#Val(ParentID)#">
@@ -299,4 +299,10 @@
 </td></tr>
 </table>
 
+</div>
+		<div class="boxbottom2"><div></div></div>
+	</div>
+</div>
+
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm">
+

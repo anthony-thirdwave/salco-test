@@ -1,15 +1,20 @@
-<!--- Created By: John WebWilliam Avila on 05.13.2004
-		This template will dynamically pull the current database structure
---->
-
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+	Page="Data Structure"
+	PageHeader="<a href=""/common/admin/"">Main Menu</A> | Data Structure">
+	
+	
 <cfstoredproc procedure="sp_util_getDataStructure" datasource="#Application.DSN#" >
 	<cfprocresult name="tables" resultset="1">
 	<cfprocresult name="defaults" resultset="2">
 </cfstoredproc>
 
-<cfmodule template="/common/modules/admin/dsp_AdminHeader.cfm" 
-	PageTitle="Data Structure"
-	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | <a href=""/common/admin/documentation/index.cfm"">Documentation</a> | Data Structure">
+<div class="dashModuleWide">
+	<div class="box2">
+		<div class="boxtop2"><div></div></div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Data Structure</div>
+		<div class="ModuleBody2">
+		
+		
 
 <br>
 <b>This chart shows the current structure of the database for <cfoutput>#Application.DSN#</cfoutput>.</b><br>
@@ -77,3 +82,18 @@
 	</tr>		
 </cfoutput>
 </table>
+
+
+
+
+
+
+
+
+</div>
+		<div class="boxbottom2"><div></div></div>
+	</div>
+</div>
+
+
+</cfmodule>
