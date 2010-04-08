@@ -1,10 +1,3 @@
-<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
-	Page="Content Manager"
-	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | Content Manager">
-<cfinclude template="/common/admin/MasterView/_InitMasterView.cfm">
-
-
-
 <cfquery name="GetCategoryDetails" datasource="#Application.DSN#">
 	SELECT		CategoryName,qry_GetCategoryWithCategoryLocale.CategoryID,CategoryAlias, CategoryTypeName,
 				CategoryActive, ParentID, CategoryTypeID, t_permissions.*, CategoryURL, 
@@ -16,6 +9,17 @@
 	WHERE		qry_GetCategoryWithCategoryLocale.CategoryID = <cfqueryparam value="#Val(MVCid)#" cfsqltype="cf_sql_integer">
 	AND 		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="true">)
 </cfquery>
+
+<cfif GetCategoryDetails.RecordCount GT "0">
+	<cfset PageTitle="Content Manager : #GetCategoryDetails.CategoryName#">
+<cfelse>
+	<cfset PageTitle="Content Manager">
+</cfif>
+
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+	Page="#PageTitle#"
+	PageHeader="<a href=""/common/admin/"" class=""white"">Main Menu</A> | Content Manager">
+<cfinclude template="/common/admin/MasterView/_InitMasterView.cfm">
 
 <cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm" ThisCategoryID="#MVCid#" NameList="" IDList="#MVCid#">
 

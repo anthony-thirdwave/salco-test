@@ -150,16 +150,16 @@
 
 
 
-<cfset PageTitle="Add Page">
+<cfset PageTitle="Page Details">
 <cfif EditCategoryID GT "0">
 	<cfif MyCategoryLocale.GetProperty("CategoryLocaleName") IS NOT "">
-		<cfset PageTitle="#MyCategoryLocale.GetProperty('CategoryLocaleName')#">
+		<cfset PageTitle="#PageTitle# : #MyCategoryLocale.GetProperty('CategoryLocaleName')#">
 	<cfelse>
-		<cfset PageTitle="#MyCategory.GetProperty('CategoryName')#">
+		<cfset PageTitle="#PageTitle# : #MyCategory.GetProperty('CategoryName')#">
 	</cfif>
 </cfif>
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
-	Page="Page Details"
+	Page="#PageTitle#"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | <a href=""/common/admin/masterview/"">Content Manager</A> | #PageTitle#">
 
 <cfif ListFindNoCase("Add,Edit,ValidateDelete",PageAction) AND NOT IsDefined("ReturnURL")>

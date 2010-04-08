@@ -9,7 +9,7 @@
 	<cfproperty name="PropertiesID" type="numeric" default="">
 	<cfproperty name="ContentBody" type="string" default="">
 	<cfproperty name="DefaultContentLocale" type="boolean" default="">
-	
+
 	<!--- Content Properties --->
 	<cfproperty name="NumItems" type="numeric" default="">
 	<cfproperty name="HTML" type="string" default="">
@@ -41,12 +41,12 @@
 	<cfproperty name="ShowEventRangeID" type="numeric" default="">
 	<cfproperty name="NumberOfMonths" type="numeric" default="">
 	<cfproperty name="lArticleCategoryID" type="string" default="">
-	
+
 	<!--- Custom Properties  --->
 	<cfproperty name="ContentAbstract" type="string" default="">
 	<cfproperty name="ContentPreview" type="string" default="">
 	<cfproperty name="TitleTypeID" type="numeric" default="">
-	
+
 	<cfset structInsert(sPropertyDisplayName,"ContentLocaleID","content ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"ContentID","content ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"ContentLocaleName","content name",1)>
@@ -54,7 +54,7 @@
 	<cfset structInsert(sPropertyDisplayName,"ContentLocaleActive","content active",1)>
 	<cfset structInsert(sPropertyDisplayName,"PropertiesID","properties ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"DefaultContentLocale","default content locale",1)>
-	
+
 	<!--- Content Properties --->
 	<cfset structInsert(sPropertyDisplayName,"NumItems","number of items",1)>
 	<cfset structInsert(sPropertyDisplayName,"HTML","HTML",1)>
@@ -88,12 +88,12 @@
 	<cfset structInsert(sPropertyDisplayName,"ShowEventRangeID","show event range id",1)>
 	<cfset structInsert(sPropertyDisplayName,"NumberOfMonths","Number Of Months",1)>
 	<cfset structInsert(sPropertyDisplayName,"lArticleCategoryID","Article ID List",1)>
-	
+
 	<!--- Custom Properties  --->
 	<cfset structInsert(sPropertyDisplayName,"ContentAbstract","content abstract",1)>
 	<cfset structInsert(sPropertyDisplayName,"ContentPreview","content preview",1)>
 	<cfset structInsert(sPropertyDisplayName,"TitleTypeID","title type",1)>
-	
+
 	<cfset this.ContentTypeID="-1">
 	<cfset this.ContentTemplateID="-1">
 	<cfset this.ContentPositionID="-1">
@@ -158,21 +158,21 @@
 			<cfcase value="254"><!--- Article List (manual) --->
 				<cfset this.sFields[ThisContentTypeID]="lPageID">
 			</cfcase>
-			
+
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisContentTypeID]="">
 			</cfdefaultcase>
 		</cfswitch>
 	</cfloop>
-	
+
 	<cffunction name="GetRestrictionsPropertyList" returnType="string" output="false">
 		<cfset var ReturnString=this.sFields[this.GetContentTypeID()]>
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="constructor" returntype="boolean" output="false">
 		<cfargument name="ID" default="0" type="numeric" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var aBlank="">
 		<cfset var sBlank="">
@@ -184,9 +184,9 @@
 		<cfset var GetContentProperties="">
 		<cfset var sContentBody="">
 		<cfset var sProperties="">
-		
+
 		<!--- Typically, use set methods in contructor. --->
-		
+
 		<cfset this.SetProperty("ContentLocaleID","-1")>
 		<cfset this.SetProperty("ContentID","-1")>
 		<cfset this.SetProperty("ContentLocaleName","")>
@@ -194,7 +194,7 @@
 		<cfset this.SetProperty("ContentLocaleActive","1")>
 		<cfset this.SetProperty("PropertiesID","-1")>
 		<cfset this.SetProperty("DefaultContentLocale","0")>
-		
+
 		<!--- Content Properties --->
 		<cfset this.SetProperty("NumItems","")>
 		<cfset this.SetProperty("HTML","")>
@@ -202,7 +202,7 @@
 		<cfset this.SetProperty("Text","")>
 		<cfset this.SetProperty("SubTitle","")>
 		<cfset this.SetProperty("LinkURL","")>
-		
+
 		<cfset aBlank=ArrayNew(1)>
 		<cfset sBlank=StructNew()>
 		<cfset this.SetProperty("aText",aBlank)>
@@ -231,12 +231,12 @@
 		<cfset this.SetProperty("ShowEventRangeID","8002")>
 		<cfset this.SetProperty("NumberOfMonths","")>
 		<cfset this.SetProperty("lArticleCategoryID","")>
-		
+
 		<!--- Custom Properties  --->
 		<cfset this.SetProperty("ContentAbstract","")>
 		<cfset this.SetProperty("ContentPreview","")>
 		<cfset this.SetProperty("TitleTypeID","1200")>
-		
+
 		<cfif Val(ARGUMENTS.ID) GT 0>
 			<!--- If id is greater than 0, load from DB. --->
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#" maxrows="1">
@@ -249,7 +249,7 @@
 					from t_Content Where ContentID=<cfqueryparam value="#Val(GetItems.ContentID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfquery name="GetContentTypeID2" datasource="#APPLICATION.DSN#">
-					select ContentPositionID 
+					select ContentPositionID
 					from t_ContentLocaleMeta Where ContentID=<cfqueryparam value="#Val(GetItems.ContentID)#" cfsqltype="cf_sql_integer">
 					and LocaleID=<cfqueryparam value="#Val(GetItems.LocaleID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
@@ -264,7 +264,7 @@
 					<cfset this.SetProperty("ContentLocaleActive",ContentLocaleActive)>
 					<cfset this.SetProperty("PropertiesID",PropertiesID)>
 					<cfset this.SetProperty("DefaultContentLocale",Val(DefaultContentLocale))>
-					
+
 					<!--- Content Properties --->
 					<cfif isWDDX(ContentBody)>
 						<cfwddx action="WDDX2CFML" input="#ContentBody#" output="sContentBody">
@@ -287,13 +287,13 @@
 						</cfloop>
 					</cfif>
 				</cfoutput>
-				
+
 				<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"aText") and ArrayLen(this.aText) IS "0" and this.Text IS NOT "">
 					<cfset aTemp=ArrayNew(1)>
 					<cfset aTemp[1]=this.text>
 					<cfset this.aText=Duplicate(aTemp)>
 				</cfif>
-				
+
 				<cfreturn true>
 			<cfelse>
 				<cfreturn false>
@@ -303,11 +303,11 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="save" returntype="boolean" output="1">
 		<cfargument name="WebrootPath" required="false">
 		<cfargument name="UserID" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var local = structNew() />
 		<cfset var thisContentLocaleID="">
@@ -389,7 +389,7 @@
 		<cfset var success="">
 		<cfset var ThisCategoryID="">
 		<cfset var wProperties="">
-			
+
 		<cfif IsCorrect()>
 			<cfset thisContentLocaleID=this.GetProperty("ContentLocaleID")>
 			<cfset thisContentID=this.GetProperty("ContentID")>
@@ -398,7 +398,7 @@
 			<cfset thisContentLocaleActive=this.GetProperty("ContentLocaleActive")>
 			<cfset thisPropertiesID=this.GetProperty("PropertiesID")>
 			<cfset thisDefaultContentLocale=this.GetProperty("DefaultContentLocale")>
-			
+
 			<!--- Content Properties --->
 			<cfset thisNumItems=This.GetProperty("NumItems")>
 			<cfset thisHTML=this.GetProperty("HTML")>
@@ -432,22 +432,22 @@
 			<cfset thisShowEventRangeID=this.GetProperty("ShowEventRangeID")>
 			<cfset thisNumberOfMonths=this.GetProperty("NumberOfMonths")>
 			<cfset thislArticleCategoryID=this.GetProperty("lArticleCategoryID")>
-			
+
 			<!--- Custom Properties --->
 			<cfset thisContentAbstract=this.GetProperty("ContentAbstract")>
 			<cfset thisContentPreview=this.GetProperty("ContentPreview")>
 			<cfset thisTitleTypeID=this.GetProperty("TitleTypeID")>
-			
-			
-			<cfinvoke component="com.ContentManager.ContentHandler" 
-				method="GetContentName" 
+
+
+			<cfinvoke component="com.ContentManager.ContentHandler"
+				method="GetContentName"
 				returnVariable="ThisContentName"
 				ContentID="#this.GetProperty('ContentID')#">
 			<cfif thisContentLocaleName IS ThisContentName>
 				<cfset thisContentLocaleName="">
 				<cfset this.SetProperty("ContentLocaleName","")>
 			</cfif>
-			
+
 			<cfif Val(thisContentLocaleID) LTE "0">
 				<cftransaction>
 					<cfquery name="InsertProperties" datasource="#APPLICATION.DSN#">
@@ -458,7 +458,7 @@
 					</cfquery>
 					<cfset thisPropertiesID=InsertProperties.NewTeaserID>
 					<cfset this.SetProperty("PropertiesID",InsertProperties.NewTeaserID)>
-				
+
 					<cfquery name="InsertContent" datasource="#APPLICATION.DSN#">
 						SET NOCOUNT ON
 						INSERT INTO t_ContentLocale (
@@ -472,7 +472,7 @@
 						<cfqueryparam value="#Val(ThisContentID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#trim(ThisContentLocaleName)#" cfsqltype="cf_sql_varchar">,
 						<cfqueryparam value="#Val(ThisContentLocaleActive)#" cfsqltype="cf_sql_bit">,
-						<cfqueryparam value="#Val(ThisLocaleID)#" cfsqltype="cf_sql_integer">, 
+						<cfqueryparam value="#Val(ThisLocaleID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(ThisPropertiesID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(ThisDefaultContentLocale)#" cfsqltype="cf_sql_bit">
 						)
@@ -480,7 +480,7 @@
 					</cfquery>
 					<cfset thisContentLocaleID=InsertContent.NewContentLocaleID>
 					<cfset this.SetProperty("ContentLocaleID",InsertContent.NewContentLocaleID)>
-					
+
 					<cfif Val(ARGUMENTS.UserID) GT "0">
 						<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 							UserID="#ARGUMENTS.UserID#"
@@ -493,9 +493,9 @@
 			<cfelse>
 				<cfset ThisFileList=this.GetFileList()>
 				<cfif ListLen(ThisFileList,";") GT "0">
-				
+
 					<cfloop index="ThisFileOfList" list="#thisFileList#" delimiters=";">
-					
+
 						<cfset NewName=reReplaceNoCase(ThisFileOfList,"https?://#replaceNoCase(CGI.Server_Name, ".", "\.", "all")#","","All")>
 						<cfset NewName=ReplaceNoCase(NewName,"//","/","All")>
 						<cfset thisHTML=Replace(thisHTML,"#ThisFileOfList#","#NewName#","All")>
@@ -504,7 +504,7 @@
 						<cfloop index="i" from="1" to="#ArrayLen(ThisAText)#" step="1">
 							<cfset ThisAText[i]=ReplaceNoCase(ThisAText[i],"#ThisFileOfList#","#NewName#","All")>
 						</cfloop>
-						<cfloop index="local.ThisKey" list="#StructKeyList(ThissHTML)#">					
+						<cfloop index="local.ThisKey" list="#StructKeyList(ThissHTML)#">
 							<cfset ThissHTML[local.thisKey].value=ReplaceNoCase(ThissHTML[local.thisKey].value,"#ThisFileOfList#","#NewName#","All") />
 						</cfloop>
 					</cfloop>
@@ -527,8 +527,8 @@
 						EntityName="#ThisContentLocaleName#">
 				</cfif>
 			</cfif>
-			
-			<!--- This next routine makes sure that all associated resources are moved from /common/incoming into this 
+
+			<!--- This next routine makes sure that all associated resources are moved from /common/incoming into this
 					content locale's resource folder.
 			 --->
 			<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
@@ -557,7 +557,7 @@
 							<cfset fileoperation="copy">
 						</cfif>
 						<cffile action="#fileoperation#" source="#SourceFile#" destination="#ThisDestinationDirectory#">
-						
+
 						<cfset FileHREF=ReplaceNoCase(UploadedFile,ARGUMENTS.WebrootPath,"/","All")>
 						<cfset FileHREF=ReplaceNoCase(FileHREF,"\","/","All")>
 						<cfset FileHREF=ReplaceNoCase(FileHREF,"//","/","All")>
@@ -600,7 +600,7 @@
 			<cfloop index="ThisImage2" list="Image,Flash,ImageLarge,ImageRollover,ImageThumbnail">
 				<cfset Source=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetProperty('#ThisImage2#')#","/","\","all")>
 				<cfset Source=ReplaceNoCase("#Source#","\\","\","all")>
-				<cfif FileExists(Source)>							
+				<cfif FileExists(Source)>
 					<cffile action="MOVE" source="#Source#" destination="#DestinationDirectoryImages#">
 					<cfset DestinationToSave="#this.GetResourcePath('images')##ListLast(this.GetProperty('#ThisImage2#'),'/')#">
 					<cfset DestinationToSave=ReplaceNoCase(DestinationToSave,"//","/","all")>
@@ -608,7 +608,7 @@
 					<cfset SetVariable("This#ThisImage2#","#DestinationToSave#")>
 				</cfif>
 			</cfloop>
-			
+
 			<cfquery name="GetOldContentBody" datasource="#APPLICATION.DSN#">
 				SELECT ContentBody
 				FROM t_ContentLocale
@@ -619,14 +619,14 @@
 			<cfelse>
 				<cfset sContentBody=StructNew()>
 			</cfif>
-			
+
 			<cfif this.GetContentTypeID() IS "241" and ThisLinkURL IS NOT ""><!--- If RSS feed, fetch rss and store as file locally --->
 				<cfhttp url="#LinkURL#" method="get">
 				<cfset FileToWrite="#this.GetResourceFilePath('Generated',ARGUMENTS.WebrootPath)#rss_#ThisContentLocaleID#.xml">
 				<cffile action="WRITE" file="#FileToWrite#" output="#CFHTTP.FileContent#" addnewline="Yes">
 				<cfset ThisFile=application.utilsObj.GetURLFromPath(FileToWrite)>
 			</cfif>
-			
+
 			<!--- create the thumbnail --->
 			<cfif ThisImage IS NOT "" and ThisImageThumbnail IS "">
 				<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImageThumbnail"
@@ -634,7 +634,7 @@
 					Source="#ThisImage#"
 					Width="75">
 			</cfif>
-			
+
 			<cfset structInsert(sContentBody,"NumItems","#ThisNumItems#",1)>
 			<cfset structInsert(sContentBody,"HTML","#Trim(ThisHTML)#",1)>
 			<cfset structInsert(sContentBody,"HTMLTemplate","#Trim(ThisHTMLTemplate)#",1)>
@@ -653,7 +653,7 @@
 			<cfset structInsert(sContentBody,"ImageThumbnail","#Trim(ThisImageThumbnail)#",1)>
 			<cfset structInsert(sContentBody,"Flash","#Trim(ThisFlash)#",1)>
 			<cfset structInsert(sContentBody,"TitleTypeID","#Trim(ThisTitleTypeID)#",1)>
-			
+
 			<cfset structInsert(sContentBody,"Location","#Trim(ThisLocation)#",1)>
 			<cfset structInsert(sContentBody,"lStateProvince","#Trim(ThislStateProvince)#",1)>
 			<cfset structInsert(sContentBody,"PageActionURL","#Trim(ThisPageActionURL)#",1)>
@@ -667,7 +667,7 @@
 			<cfset structInsert(sContentBody,"ShowEventRangeID","#val(ThisShowEventRangeID)#",1)>
 			<cfset structInsert(sContentBody,"NumberOfMonths","#Trim(ThisNumberOfMonths)#",1)>
 			<cfset structInsert(sContentBody,"lArticleCategoryID","#Trim(ThislArticleCategoryID)#",1)>
-			
+
 			<cfquery name="GetMime" datasource="#APPLICATION.DSN#">
 				select MimeID from qry_GetMime Where MimeExtension=<cfqueryparam value="#Trim(ListLast(ThisFile,"."))#" cfsqltype="cf_sql_varchar">
 			</cfquery>
@@ -676,7 +676,7 @@
 			<cfelse>
 				<cfset structInsert(sContentBody,"FileMimeID","",1)>
 			</cfif>
-			
+
 			<cfset structInsert(sContentBody,"File","#Trim(ThisFile)#",1)>
 			<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
 				<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
@@ -686,11 +686,11 @@
 					</cfif>
 				</cfloop>
 			</cfif>
-			
+
 			<cfset structInsert(sContentBody,"aFile",ThisaFile,1)>
 
 			<cfset DevNull=StructInsert(sContentBody,"ImageWidth","","1")>
-			<cfset DevNull=StructInsert(sContentBody,"ImageHeight","","1")>			
+			<cfset DevNull=StructInsert(sContentBody,"ImageHeight","","1")>
 			<cfif FileExists("#application.utilsObj.GetPathFromURL(ThisImage)#")>
 				<cf_ImageSize file="#application.utilsObj.GetPathFromURL(ThisImage)#">
 				<cfif IsDefined("Width")>
@@ -700,17 +700,17 @@
 					<cfset DevNull=StructInsert(sContentBody,"ImageHeight","#val(ImageHeight)#","1")>
 				</cfif>
 			</cfif>
-			
+
 			<cfwddx action="CFML2WDDX" input="#sContentBody#" output="wProperties">
 			<cfquery name="UpdateContent" datasource="#APPLICATION.DSN#">
 				UPDATE t_ContentLocale
 				SET ContentBody=<cfqueryparam value="#Trim(wProperties)#" cfsqltype="cf_sql_varchar">
 				WHERE ContentLocaleID=<cfqueryparam value="#val(ThisContentLocaleID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
-			
+
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
 				SELECT t_Properties.PropertiesID,t_Properties.PropertiesPacket
-				FROM t_Properties 
+				FROM t_Properties
 				WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif isWDDX(GetProperties.PropertiesPacket)>
@@ -721,23 +721,23 @@
 
 			<cfset DevNull=StructInsert(sProperties,"ContentAbstract","#Trim(ThisContentAbstract)#",1)>
 			<cfset DevNull=StructInsert(sProperties,"ContentPreview","#this.SetPreview()#",1)>
-			
+
 			<cfwddx action="CFML2WDDX" input="#sProperties#" output="wProperties">
 			<cfquery name="UpdateContent" datasource="#APPLICATION.DSN#">
 				UPDATE t_Properties
 				SET PropertiesPacket=<cfqueryparam value="#Trim(wProperties)#" cfsqltype="cf_sql_varchar">
 				WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
-			
+
 			<cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
 				select * from t_locale
 			</cfquery>
-			
+
 			<cfquery name="TestContentLocaleMeta" datasource="#APPLICATION.DSN#">
-				select * from t_ContentLocaleMeta 
+				select * from t_ContentLocaleMeta
 				Where ContentID=<cfqueryparam value="#val(ThisContentID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
-			
+
 			<cfif GetLocales.RecordCount IS NOT TestContentLocaleMeta.RecordCount>
 				<cfinvoke component="com.ContentManager.ContentHandler" method="GetCategoryID" returnVariable="ThisCategoryID"
 					ContentID="#ThisContentID#">
@@ -762,7 +762,7 @@
 							INSERT INTO t_ContentLocaleMeta
 							(ContentID,LocaleID,ContentLocalePriority,contentPositionID)
 							VALUES
-							(<cfqueryparam value="#val(ThisContentID)#" cfsqltype="cf_sql_integer">, 
+							(<cfqueryparam value="#val(ThisContentID)#" cfsqltype="cf_sql_integer">,
 							 <cfqueryparam value="#val(LocaleID)#" cfsqltype="cf_sql_integer">,
 							 <cfqueryparam value="#val(Val(TestThisContentLocaleMeta.nextPriority)+10)#" cfsqltype="cf_sql_integer">,
 							 <cfqueryparam value="#val(this.ContentPositionID)#" cfsqltype="cf_sql_integer">
@@ -771,14 +771,14 @@
 					</cfif>
 				</cfoutput>
 			</cfif>
-			
+
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Content"
 				KeyID="#thisContentID#">
-				
-			<!---- HERE WE NEED TO CALL THE VERITY UPDATER 
+
+			<!---- HERE WE NEED TO CALL THE VERITY UPDATER
 			HOLDING OFF DUE TO ERROR --->
-			
+
 			<cfif 0>
 				<cfif GetContentPositionID() IS NOT "403"><!--- If not a temp content --->
 					<cfmodule template="/common/modules/contentManager/UpdateVerity.cfm"
@@ -796,12 +796,12 @@
 	<cffunction name="SetProperty" returntype="boolean" output="false">
 		<cfargument name="Property" required="true" type="string">
 		<cfargument name="Value" required="true" type="any">
-		
+
 		<!--- init variables --->
 		<cfset var Test="">
-		
+
 		<cfset ARGUMENTS.Property=Trim(ARGUMENTS.Property)>
-				
+
 		<cfif IsSimpleValue(ARGUMENTS.Value)>
 			<cfset ARGUMENTS.Value=Trim(ARGUMENTS.Value)>
 
@@ -811,54 +811,54 @@
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
 				<cfif NOT IsDate(ARGUMENTS.Value)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a valid date.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
-				<cfset ARGUMENTS.VALUE=lcase(ReReplace(ARGUMENTS.VALUE,"[’\!'/:"".;?&<>|,]","","all"))>
+				<cfset ARGUMENTS.VALUE=lcase(ReReplace(ARGUMENTS.VALUE,"[ï¿½\!'/:"".;?&<>|,]","","all"))>
 				<cfset ARGUMENTS.VALUE=lcase(ReReplace(ARGUMENTS.VALUE,"[ ]"," ","all"))>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("HTML",ARGUMENTS.Property) AND Trim(ARGUMENTS.Value) IS "">
 				<cfif StructKeyExists(this,"ContentTypeID") and ListFindNoCase("235,201",this.ContentTypeID)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("Text",ARGUMENTS.Property) AND Trim(ARGUMENTS.Value) IS "">
 				<cfif StructKeyExists(this,"ContentTypeID") and ListFindNoCase("200",this.ContentTypeID)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("LocaleID",ARGUMENTS.Property) AND val(ARGUMENTS.Value) LTE "0">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 				<cfreturn false>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("ContentLocaleName",ARGUMENTS.Property)>
 				<cfif Len(ARGUMENTS.Value) GT "1000">
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","The #sPropertyDisplayName[ARGUMENTS.Property]# can only be 128 characters long.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("Text",ARGUMENTS.Property)>
 				<cfset ARGUMENTS.Value="#ARGUMENTS.Value#">
 			</cfif>
-			
+
 			<cfif ListFindNoCase("HTMLTemplate",ARGUMENTS.Property)>
 				<!--- This routine needs work. --->
 				<!--- <cfset this.TokenCount=GetTokenCount()> --->
 			</cfif>
-			
+
 			<cfif ListFindNoCase("ContentID,LocaleID",ARGUMENTS.Property)>
 				<cfif Val(ARGUMENTS.Value) GT "0">
 					<cfswitch expression="#ARGUMENTS.Property#">
@@ -910,18 +910,18 @@
 				</cfif>
 			</cfif>
 		</cfif>
-		
+
 		<cfset SetVariable("this.#ARGUMENTS.Property#",ARGUMENTS.Value)>
 		<cfset deleteError(ARGUMENTS.Property)>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetProperty" returntype="Any" output="false">
 		<cfargument name="Property" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue="">
-		
+
 		<cfif IsInError(ARGUMENTS.Property)>
 			<cfreturn GetErrorValue(ARGUMENTS.Property)>
 		<cfelse>
@@ -929,9 +929,9 @@
 			<cfreturn ReturnValue>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="SetPreview" returntype="string" output="1">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnString="">
 		<cfset var aText="">
@@ -940,7 +940,7 @@
 		<cfset var rit="">
 		<cfset var ThisKey="">
 		<cfset var GetContent="">
-		
+
 		<cfswitch expression="#this.GetContentTypeID()#">
 			<cfcase value="200"><!--- Text --->
 				<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('Text'))#">
@@ -992,7 +992,7 @@
 				<cfelse>
 					<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('HTML'))#">
 				</cfif>
-				
+
 				<cfset ThisContentID=this.GetProperty("ContentID")>
 				<cfquery name="GetContent" datasource="#APPLICATION.DSN#">
 					select ContentDate1 from t_Content Where ContentID=#Val(ThisContentID)#
@@ -1009,53 +1009,53 @@
 		</cfswitch>
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="GetContentTypeID" returntype="numeric" output="false">
 		<cfreturn this.ContentTypeID>
 	</cffunction>
-	
+
 	<cffunction name="SetContentTypeID" returntype="boolean" output="false">
 		<cfargument name="NewContentTypeID" required="true">
 		<cfset this.ContentTypeID=ARGUMENTS.NewContentTypeID>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetContentPositionID" returntype="numeric" output="false">
 		<cfreturn this.ContentPositionID>
 	</cffunction>
-	
+
 	<cffunction name="SetContentPositionID" returntype="boolean" output="false">
 		<cfargument name="NewContentPositionID" required="true">
 		<cfset this.ContentPositionID=ARGUMENTS.NewContentPositionID>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetContentTemplateID" returntype="numeric" output="false">
 		<cfreturn this.ContentTemplateID>
 	</cffunction>
-	
+
 	<cffunction name="SetContentTemplateID" returntype="boolean" output="false">
 		<cfargument name="NewContentTemplateID" required="true">
 		<cfset this.ContentTemplateID=ARGUMENTS.NewContentTemplateID>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="InitializeHTMLStructure" returntype="boolean" output="false">
 		<cfset var local = structNew() />
 		<cfset local.ThisTokenList=GetTokenList() />
 		<cfset local.ThissHTML=this.getProperty("sHTML") />
-		
+
 		<cfloop index="local.ThisToken" list="#local.ThisTokenList#">
-			
+
 			<!--- get the token name and type --->
 			<cfset local.ThisTokenName = getToken(local.ThisToken, 1, ":") />
 			<cfset local.ThisTokenType = getToken(local.ThisToken, 2, ":") />
-			
+
 			<!--- if there's not a type defined, default to rich text --->
 			<cfif not len(trim(local.ThisTokenType))>
 				<cfset local.ThisTokenType = "rich" />
 			</cfif>
-			
+
 			<cfif not structKeyExists(local.ThissHTML,local.ThisTokenName)>
 				<cfset local.ThissHTML[local.ThisTokenName] = structNew() />
 				<cfset local.ThissHTML[local.ThisTokenName].value = "" />
@@ -1065,23 +1065,23 @@
 		<cfset this.SetProperty("sHTML",local.ThissHTML)>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetTokenList" returntype="String" output="false">
-		
+
 		<!--- init variables --->
 		<cfset var local = structNew() />
-		
-		<cfinvoke component="com.ContentManager.ContentHandler" 
-			method="GetTokenList" 
+
+		<cfinvoke component="com.ContentManager.ContentHandler"
+			method="GetTokenList"
 			returnVariable="local.ThisTokenList"
 			ContentID="#Val(GetContentTemplateID())#"
 			LocaleID="#Val(this.GetProperty('LocaleID'))#">
 		<cfreturn local.ThisTokenList>
 	</cffunction>
-	
+
 	<cffunction name="GetFileList" returntype="string" output="false">
 		<cfargument name="AllProperties" required="false">
-		
+
 		<cfset var local = structNew() />
 		<cfset local.stringToTest = "" />
 		<cfset local.finalList = "" />
@@ -1109,14 +1109,14 @@
 				</cfif>
 			</cfloop>
 		</cfif>
-		
+
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"Text")>
 			<cfset local.stringToTest="#local.stringToTest# #this.GetProperty('Text')#">
 		</cfif>
 		<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"File")>
 			<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('File')#"">">
 		</cfif>
-		
+
 		<cfif IsDefined("ARGUMENTS.AllProperties") AND ARGUMENTS.AllProperties>
 			<cfif ListFindNoCase(this.GetRestrictionsPropertyList(),"Image")>
 				<cfset local.stringToTest="#local.stringToTest# <img src=""#this.GetProperty('image')#"">">
@@ -1145,7 +1145,7 @@
 				</cfif>
 			</cfif>
 		</cfif>
-		
+
 		<!--- get the list of files with issues in this object --->
 		<cfinvoke method="parseTemplateValue" returnvariable="local.fileList">
 			<cfinvokeargument name="string" value="#local.stringToTest#" />
@@ -1159,13 +1159,13 @@
 		</cfloop>
 		<cfreturn local.finalList>
 	</cffunction>
-	
+
 	<cffunction name="CreateResourcePath" returntype="boolean" output="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue="">
-		
+
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="CreateResourcePath"
 			returnVariable="ReturnValue"
@@ -1173,13 +1173,13 @@
 			WebrootPath="#ARGUMENTS.WebrootPath#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="ResourceType" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue="">
-		
+
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourcePath"
 			returnVariable="ReturnValue"
@@ -1187,14 +1187,14 @@
 			ResourceType="#ARGUMENTS.ResourceType#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetResourceFilePath" returntype="string" output="false">
 		<cfargument name="ResourceType" required="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue="">
-		
+
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourceFilePath"
 			returnVariable="ReturnValue"
@@ -1203,11 +1203,11 @@
 			WebrootPath="#ARGUMENTS.WebrootPath#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="FormFileListUpload" returntype="boolean" output="false">
 		<cfargument name="FormFileFieldName" required="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisFileList=this.GetFileList()>
 		<cfset var UploadDirectory="">
@@ -1220,7 +1220,7 @@
 		<cfset var ThissHTML="">
 		<cfset var i="">
 		<cfset var ThisKey="">
-		
+
 		<cfif ARGUMENTS.FormFileFieldName IS "" OR ARGUMENTS.WebrootPath IS "" OR ListLen(ThisFileList,";") LTE "0">
 			<cfreturn false>
 		<cfelse>
@@ -1238,7 +1238,7 @@
 			<cfloop index="i" from="1" to="#ListLen(ThisFileList,';')#" step="1">
 				<cfset OriginalName=Trim(ListGetAt(ThisFileList,i,";"))>
 				<cfif IsDefined("#ARGUMENTS.FormFileFieldName##i#FileObject") AND Evaluate("#ARGUMENTS.FormFileFieldName##i#FileObject") IS NOT "">
-					<cffile action="UPLOAD" 
+					<cffile action="UPLOAD"
 						filefield="#ARGUMENTS.FormFileFieldName##i#FileObject"
 						destination="#UploadDirectory#"
 						nameconflict="MakeUnique">
@@ -1275,12 +1275,12 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="FormFileUpload" returntype="boolean" output="false">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="Property" required="true">
 		<cfargument name="FormFileFieldName" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var UploadDirectory="">
 		<cfset var UploadedFile="">
@@ -1292,7 +1292,7 @@
 		<cfset var FinalDest="">
 		<cfset var FilePath="">
 		<cfset var GetMime="">
-		
+
 		<cfif ARGUMENTS.FormFileFieldName IS "" OR ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
 		<cfelseif ListFindNoCase(StructkeyList(this),ARGUMENTS.Property) LTE "0">
@@ -1313,7 +1313,7 @@
 					<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
 				</cfif>
 			</cfif>
-			<cffile action="UPLOAD" 
+			<cffile action="UPLOAD"
 				filefield="#ARGUMENTS.FormFileFieldName#"
 				destination="#UploadDirectory#"
 				nameconflict="MakeUnique">
@@ -1367,14 +1367,14 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="FileRemove" returnType="boolean" output="false">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="Property" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var FileToDelete="">
-		
+
 		<cfif ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
 		<cfelseif ListFindNoCase(StructkeyList(this),ARGUMENTS.Property) LTE "0">
@@ -1390,7 +1390,7 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetDisplayTemplateTypeName" returnType="String" output="false">
 		<cfset var ReturnString="">
 		<cfset var Test="">
@@ -1403,11 +1403,11 @@
 		<cfset ReturnString="#ValueList(Test.LabelName)#">
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="Delete" returnType="boolean" output="1">
 		<cfargument name="TrashPath" required="true">
 		<cfargument name="UserID" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisFileList="">
 		<cfset var ThisContentLocaleID="">
@@ -1431,7 +1431,7 @@
 		<cfset var success="">
 		<cfset var ThisCategoryID="">
 		<cfset var sProductionSiteInformation="">
-		
+
 		<cfif ARGUMENTS.TrashPath IS NOT "" and this.GetProperty("ContentLocaleID") GT "0">
 			<cftransaction>
 				<cfset ThisFileList=this.GetFileList()>
@@ -1465,7 +1465,7 @@
 					<cfset DirectoryToCreate="#APPLICATION.WebRootPath##APPLICATION.ContentResourcesPath##DirDone##Mid(ThisContentID,i,1)#">
 					<cfset DirDone="#DirDone##Mid(ThisContentID,i,1)#\">
 				</cfloop>
-				
+
 				<cfif 0>
 					<cfif ListLen(ThisFileList,";") GT "0">
 						<cfloop index="i" from="1" to="#ListLen(ThisFileList,';')#" step="1">
@@ -1488,7 +1488,7 @@
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Content"
 				KeyID="#thisContentID#">
-			
+
 			<cfif Val(ARGUMENTS.UserID) GT "0">
 				<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 					UserID="#ARGUMENTS.UserID#"
@@ -1497,17 +1497,17 @@
 					Operation="delete"
 					EntityName="#this.GetProperty('ContentLocaleName')#">
 			</cfif>
-			
-			<cfinvoke component="com.ContentManager.ContentHandler" 
+
+			<cfinvoke component="com.ContentManager.ContentHandler"
 				method="GetCategoryID"
 				returnVariable="ThisCategoryID"
 				ContentID="#this.GetProperty('ContentID')#">
-				
-			<cfinvoke component="com.ContentManager.CategoryHandler" 
+
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#ThisCategoryID#">
-				
+
 			<cfif IsStruct(sProductionSiteInformation)>
 				<cftransaction>
 					<cfquery name="SelectContentFromProd" datasource="#sProductionSiteInformation.ProductionDBDSN#">
@@ -1522,7 +1522,7 @@
 						</cfquery>
 					</cfoutput>
 				</cftransaction>
-				
+
 				<cfif SelectContentFromProd.RecordCount GT "0">
 					<cfset ThisFileList=this.GetFileList(1)>
 					<cfif ListLen(ThisFileList,";") GT "0">
@@ -1530,7 +1530,7 @@
 							<cfif Left(ThisFile,7) IS NOT "/common">
 								<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
 								RemoteFile: #RemoteFile#->
-								<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
+								<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#"
 									username="#sProductionSiteInformation.ProductionFTPUserLogin#"
 									password="#sProductionSiteInformation.ProductionFTPPassword#"
 									stoponerror="No"
@@ -1563,7 +1563,7 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="SaveToProduction" returntype="string" output="true">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="UserID" required="true">
@@ -1584,24 +1584,24 @@
 		<cfset var sProductionSiteInformation="">
 		<cfset var success="">
 		<cfset var SaveResults="">
-		
-		<cfinvoke component="com.ContentManager.ContentHandler" 
+
+		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetCategoryID"
 			returnVariable="ThisCategoryID"
 			ContentID="#this.GetProperty('ContentID')#">
-			
-		<cfinvoke component="com.ContentManager.CategoryHandler" 
+
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetProductionSiteInformation"
 			returnVariable="sProductionSiteInformation"
 			CategoryID="#ThisCategoryID#">
-			
+
 		<cfif IsCorrect() And IsStruct(sProductionSiteInformation)>
 			<cfset ThisContentLocaleID=this.GetProperty("ContentLocaleID")>
 			<cfset ThisPropertiesID=this.GetProperty("PropertiesID")>
 			<cfset ThisContentID=this.GetProperty("ContentID")>
 			<cfset ThisLocaleID=this.GetProperty("LocaleID")>
-			
-		
+
+
 			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisContentLocaleID#">
 			     <cfinvokeargument name="columnList" value="ContentLocaleID">
@@ -1612,7 +1612,7 @@
 			     <cfinvokeargument name="sourcePassword" value="#APPLICATION.SourcePassword#">
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
-			
+
 			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisContentID#,#ThisLocaleID#">
 			     <cfinvokeargument name="columnList" value="ContentID,LocaleID">
@@ -1623,7 +1623,7 @@
 			     <cfinvokeargument name="sourcePassword" value="#APPLICATION.SourcePassword#">
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
-			
+
 			<cfquery name="GetProps" datasource="#APPLICATION.DSN#">
 				select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ThisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
@@ -1643,10 +1643,10 @@
 					SET IDENTITY_INSERT t_Properties OFF
 				</cfquery>
 			</cfoutput>
-		
+
 			<!--- Create the directories on the production server --->
 			<!--- Open connection to the ftp server --->
-			
+
 
 			<cfinvoke component="com.ContentManager.ContentHandler" method="CreateRemoteFolders" returnVariable="success"
 				ContentID="#ThisContentID#"
@@ -1654,16 +1654,16 @@
 				FTPRootPath="#sProductionSiteInformation.ProductionFTPRootPath#"
 				FTPUserLogin="#sProductionSiteInformation.ProductionFTPUserLogin#"
 				FTPPassword="#sProductionSiteInformation.ProductionFTPPassword#">
-			
+
 			<cfset ThisFileList=this.GetFileList(1)>
 			<cfif ListLen(ThisFileList,";") GT "0">
 				<cfloop index="ThisFile" list="#ThisFileList#" delimiters=";">
 					<cfif Left(ThisFile,7) IS NOT "/common">
 						<cfset Source=application.utilsObj.GetPathFromURL(ThisFile)>
 						<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
-						<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
+						<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#"
 							username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-							password="#sProductionSiteInformation.ProductionFTPPassword#" 
+							password="#sProductionSiteInformation.ProductionFTPPassword#"
 							stoponerror="No"
 							localfile="#Source#"
 							remotefile="#Destination#"
@@ -1675,22 +1675,22 @@
 					</cfif>
 				</cfloop>
 			</cfif>
-			
+
 			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#ARGUMENTS.UserID#"
 				Entity="ContentLocale"
 				KeyID="#ThisContentLocaleID#"
 				Operation="savelive"
 				EntityName="#This.GetProperty('ContentLocaleName')#">
-				
+
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
-	
-		
+
+
+
 	<!--- Returns a ";" delimited list of files that are html attributes (with path and extension) --->
 	<cffunction name="parseTemplateValue" output="false">
 		<cfargument name="detectLocalHTTPImages" default="false">
@@ -1698,26 +1698,26 @@
 		<cfargument name="fileExtensionList" default="#APPLICATION.MasterFileExtensionList#">
 
 		<cfset var local = structNew() />
-		
+
 		<!--- search for http and https as a starting point --->
 		<cfset local.invalidStartTokens="https?://|=|'|""|\(|:" />
 		<cfset local.invalidFileTokens="=|'|""|\(|:" />
 		<cfset local.fileList = "" />
 		<cfset local.currentPosition = 1 />
-		
+
 		<!---	this regex, split into 4 groups, looks for:
-				any of the invalidStartTokens, 
+				any of the invalidStartTokens,
 				*not* followed immediately by any of the invalidFileTokens,
 				followed by any alphanumeric or whitespace,
 				followed by any of the extensions in arguments.fileExtensionList  --->
-		<cfset local.theRegex =	'('	& local.invalidStartTokens & ')([^(' & local.invalidFileTokens 
-									& ')]*(?:\([A-Za-z0-9\s]*\)){0,1}(' 
-									& replace(ListChangeDelims(arguments.fileExtensionList,'|',';'),".","\.","all") 
+		<cfset local.theRegex =	'('	& local.invalidStartTokens & ')([^(' & local.invalidFileTokens
+									& ')]*(?:\([A-Za-z0-9\s]*\)){0,1}('
+									& replace(ListChangeDelims(arguments.fileExtensionList,'|',';'),".","\.","all")
 									& '))' />
-		
+
 		<!--- use this counter to jump past any extracted files --->
 		<cfloop condition="local.currentPosition gt 0">
-			
+
 			<!--- this regex is looking for invalid tokens in paths to files --->
 			<cfset local.aFileSearchResults = reFindNoCase(local.theRegex, arguments.string, local.currentPosition, true) />
 			<cfif not local.aFileSearchResults.pos[1]>
@@ -1725,7 +1725,7 @@
 			<cfelse>
 				<cfset local.isLocalHTTP = false />
 				<cfset local.isUrl = false />
-				
+
 				<!--- if http or https is found in the url, we want the whole url, which is in regex group 1 --->
 				<cfif reFindNoCase("https?://", trim(mid(arguments.string, local.aFileSearchResults.pos[2], local.aFileSearchResults.len[2])))>
 					<cfset local.currentPosition = local.aFileSearchResults.pos[1] + local.aFileSearchResults.len[1] />
@@ -1736,7 +1736,7 @@
 					<cfset local.currentPosition = local.aFileSearchResults.pos[3] + local.aFileSearchResults.len[3] />
 					<cfset local.thisFilePath=trim(mid(arguments.string, local.aFileSearchResults.pos[3], local.aFileSearchResults.len[3])) />
 				</cfif>
-				
+
 				<!--- if detectLocalHTTPImages is enabled, check if the host's fully qualified url is in the string --->
 				<cfif arguments.detectLocalHTTPImages>
 					<cfset local.isLocalHTTP = reFindNoCase("https?://" & CGI.server_name & "/?", local.thisFilePath) />

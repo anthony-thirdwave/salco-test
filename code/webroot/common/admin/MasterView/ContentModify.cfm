@@ -373,19 +373,17 @@
 	</cfif>
 </cfif>
 
-<cfset PageTitle="Add Content">
+<cfset PageTitle="Content Details">
 <cfif EditContentID GT "0">
 	<cfif MyContentLocale.GetProperty("ContentLocaleName") IS NOT "">
-		<cfset PageTitle="#MyContentLocale.GetProperty('ContentLocaleName')#">
+		<cfset PageTitle="#PageTitle# : #MyContentLocale.GetProperty('ContentLocaleName')#">
 	<cfelse>
-		<cfset PageTitle="#MyContent.GetProperty('ContentName')#">
+		<cfset PageTitle="#PageTitle# : #MyContent.GetProperty('ContentName')#">
 	</cfif>
 </cfif>
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
-	Page="Content Details"
+	Page="#PageTitle#"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | <a href=""/common/admin/masterview/"">Content Manager</A> | #PageTitle#">
-
-
 
 <cfif structKeyExists(form, "ButPreview") and Mycontent.isCorrect() and MyContentLocale.isCorrect()>
 	<cfset MyContentPreview=CreateObject("component","com.ContentManager.Content")>
@@ -398,6 +396,7 @@
 	<cfset MyContentPreview.SetProperty("ContentPositionID",403)>
 	<cfset MyContentPreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 	<cfset MyContentLocalePreview=CreateObject("component","com.ContentManager.ContentLocale")>
+	<cfset MyContentLocalePreview.SetContentTypeID(MyContent.GetProperty("ContentTypeID"))>
 	<cfset MyContentLocalePreview.Constructor()>
 	<cfloop index="PropertyToCopy" list="LocaleID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,sHTML,ImageRollover,Flash,ImageLarge,aFile">
 		<cfset MyContentLocalePreview.SetProperty("#PropertyToCopy#",MyContentLocale.GetProperty("#PropertyToCopy#"))>
