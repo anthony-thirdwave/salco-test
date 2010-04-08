@@ -396,12 +396,11 @@
 	<cfset MyContentPreview.SetProperty("ContentPositionID",403)>
 	<cfset MyContentPreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 	<cfset MyContentLocalePreview=CreateObject("component","com.ContentManager.ContentLocale")>
-	<cfset MyContentLocalePreview.SetContentTypeID(MyContent.GetProperty("ContentTypeID"))>
 	<cfset MyContentLocalePreview.Constructor()>
 	<cfloop index="PropertyToCopy" list="LocaleID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,sHTML,ImageRollover,Flash,ImageLarge,aFile">
 		<cfset MyContentLocalePreview.SetProperty("#PropertyToCopy#",MyContentLocale.GetProperty("#PropertyToCopy#"))>
 	</cfloop>
-	
+	<cfset MyContentLocalePreview.SetContentTypeID(MyContent.GetProperty("ContentTypeID"))>
 	<cfset MyContentLocalePreview.SetProperty("ContentLocaleID",-1)>
 	<cfset MyContentLocalePreview.SetProperty("ContentID",MyContentPreview.GetProperty("ContentID"))>
 	<cfset MyContentLocalePreview.setContentPositionID(403)>
