@@ -1553,11 +1553,6 @@
 					</cfif>
 				</cfif>
 			</cfif>
-			<!--- need function here to  delete the key in verity, and update using the category --->
-			<cfmodule template="/common/modules/contentManager/UpdateVerity.cfm"
-				ContentID="#thisContentID#"
-				ContentLocaleID="#val(ThisContentLocaleID)#"
-				LocaleID="#val(ThisLocaleID)#">
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>

@@ -36,8 +36,8 @@
 	<cfset EditLocaleID=Decrypt(URL.lid,APPLICATION.Key)>
 </cfif>
 <cfif EditContentID GT "0">
-	<cfinvoke component="com.ContentManager.ContentHandler" 
-		method="GetContentLocaleID" 
+	<cfinvoke component="com.ContentManager.ContentHandler"
+		method="GetContentLocaleID"
 		returnVariable="EditContentLocaleID"
 		ContentID="#EditContentID#"
 		LocaleID="#EditLocaleID#">
@@ -66,8 +66,8 @@
 
 <cfif Right(PageAction,3) IS "Add" and val(EditCategoryID) GT "0">
 	<cfset MyContent.SetProperty("CategoryID",EditCategoryID)>
-	<cfinvoke component="com.ContentManager.CategoryHandler" 
-		method="GetCategoryTypeID" 
+	<cfinvoke component="com.ContentManager.CategoryHandler"
+		method="GetCategoryTypeID"
 		CategoryID="#EditCategoryID#"
 		returnVariable="ThisCategoryTypeID">
 	<cfif ThisCategoryTypeID IS 71>
@@ -90,13 +90,13 @@
 	<cfif structKeyExists(form, "ButLoad")>
 		<cfset SourceContentLocale=CreateObject("component","com.ContentManager.ContentLocale")>
 		<cfset SourceContentLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
-		
+
 		<cfloop index="PropertyToCopy" list="ContentID,ContentLocaleName,HTMLTemplate,ContentLocaleActive,PropertiesID,NumItems,HTML,Text,LinkURL,aText,TextPosition,Image,File,FileMimeID,FileSize,ImageLarge,Flash,Location,ContentAbstract,ContentPreview,TitleTypeID,lStateProvince,PageActionURL,NumItems,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,CSSClass,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
 			<cfset MyContentLocale.SetProperty("#PropertyToCopy#",SourceContentLocale.GetProperty("#PropertyToCopy#"))>
 		</cfloop>
 	<cfelse>
 		<!--- if the form is submitted, load the form values into the object --->
-		
+
 		<!--- MyContent Handling --->
 		<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID OR Right(PageAction,3) IS "Add">
 			<cfloop index="ThisProperty" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,InheritID,SourceCategoryID,ContentDate1,ContentDate2,DisplayModeID,lTopicID,OwnerName,OwnerEmail,lPageID">
@@ -115,9 +115,9 @@
 			<cfset MyContentNote.SetProperty("ContentNoteDate",now())>
 			<cfset MyContentNote.SetProperty("UserID",SESSION.AdminUserID)>
 		</cfif>
-		
+
 		<!--- MyContentLocale Handling --->
-		
+
 		<!--- First set the contenttypeid since that determines what fields show up. --->
 		<cfset MyContentLocale.SetContentTypeID(ContentTypeID)>
 		<cfif IsDefined("FORM.HTML")>
@@ -126,7 +126,7 @@
 		<cfif IsDefined("FORM.HTMLTemplate")>
 			<cfset FORM.HTMLTemplate=ReplaceNoCase(FORM.HTMLTemplate,"</form>","</florm>","All")>
 		</cfif>
-		
+
 		<cfloop index="ThisProperty" list="ContentLocaleName,ContentLocaleActive,ContentAbstract,HTML,HTMLTemplate,Text,SubTitle,LinkURL,TextPosition,TitleTypeID,DefaultContentLocale,Location,lStateProvince,PageActionURL,NumItems,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,CSSClass,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyContentLocale.SetProperty("#ThisProperty#",Evaluate("FORM.#ThisProperty#"))>
@@ -143,35 +143,35 @@
 				<cfset ThisTokenType = getToken(ThisToken, 2, ":") />
 				<!--- get the fieldname --->
 				<cfset thisFieldName = "sHTML_" & ThisTokenName />
-				
+
 				<cfif structKeyExists(form, thisFieldname)>
-					
+
 					<!--- templated image handling --->
 					<cfif ThisTokenType eq "image">
 						<cfset thisImageField = thisFieldName & "Image" />
 						<cfset thisImageDelete = thisFieldName & "Delete" />
-						
+
 						<!--- if delete is selected on an existing image and there isn't an added image --->
 						<cfif structKeyExists(form, thisImageDelete) and not len(trim(form[thisImageField])) and len(trim(form[thisFieldName]))>
 							<cffile action="DELETE" file="#expandPath(trim(form[thisFieldName]))#">
 							<cfset form[thisFieldName] = "" />
 						<!--- else there's an added image --->
 						<cfelseif structKeyExists(form, thisImageField) and len(trim(form[thisImageField]))>
-							<cffile action="upload" 
-									destination="#MyContentLocale.GetResourceFilePath('images',APPLICATION.WebrootPath)#" 
+							<cffile action="upload"
+									destination="#MyContentLocale.GetResourceFilePath('images',APPLICATION.WebrootPath)#"
 									fileField="#thisImageField#"
 									nameconflict="makeUnique"
 									result="tempImage">
-							
+
 							<!--- get the location of the uploaded file --->
 							<cfset tempUploadLocation = tempImage.serverDirectory & "\" & tempImage.serverFile />
-	
+
 							<!--- create an image handler --->
 							<cfobject component="com.utils.image3w" name="imageObj" />
-			
+
 							<!--- grab the fileType of the image --->
 							<cfset tempFileType = imageObj.getImgType(tempUploadLocation) />
-							
+
 							<!--- if not a valid image, delete --->
 							<cfif not len(tempFileType)>
 								<cffile action="DELETE" file="#tempUploadLocation#">
@@ -181,12 +181,12 @@
 							</cfif>
 						</cfif>
 					</cfif>
-					
+
 					<!--- if this was saved in the old style, it needs to be converted --->
 					<cfif not isStruct(ThissHTML[ThisTokenName])>
 						<cfset ThissHTML[ThisTokenName] = structNew() />
 					</cfif>
-					
+
 					<!--- set the value and type for this token --->
 					<cfset ThissHTML[ThisTokenName].value = form[thisFieldname] />
 					<cfset ThissHTML[ThisTokenName].type = ThisTokenType />
@@ -210,7 +210,7 @@
 			</cfif>
 			<cfset MyContentLocale.SetProperty("aText",aText)>
 		</cfif>
-		
+
 		<cfif isDefined("FORM.LinkURL_1") OR IsDefined("FORM.LinkURL_New")>
 			<cfset aLink=arrayNew(1)>
 			<cfif IsDefined("FORM.LinkURL_1")>
@@ -241,7 +241,7 @@
 				<cfset StructInsert(sElement,"URL",FORM.LinkURL_New,1)>
 				<cfset ArrayAppend(aLink,sElement)>
 			</cfif>
-			
+
 			<cfloop index="r" from="1" to="#ArrayLen(aLink)#" step="1">
 				<cfif isdefined("LinkButtonSubmit_up_#r#.x") OR isdefined("LinkButtonSubmit_down_#r#.x")>
 					<cfif isdefined("LinkButtonSubmit_up_#r#.x")>
@@ -255,11 +255,11 @@
 					</cfif>
 				</cfif>
 			</cfloop>
-			
+
 			<cfset MyContentLocale.SetProperty("aLink",aLink)>
-			
+
 		</cfif>
-		
+
 		<cfif IsDefined("FORM.Image1")>
 			<cfset MyContentLocale.FormFileListUpload("Image","#APPLICATION.WebrootPath#")>
 		</cfif>
@@ -268,7 +268,7 @@
 				<cfset MyContentLocale.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 			</cfif>
 		</cfloop>
-		
+
 		<cfif IsDefined("FileName_New") OR IsDefined("NumFiles")>
 			<cfset sView=StructNew()>
 			<cfset lOrder="">
@@ -287,8 +287,8 @@
 				<cfif Evaluate("FileName_#r#") IS NOT "" AND Evaluate("FileDelete_#r#") IS "0">
 					<cfloop index="ThisImage" list="MainFilePath,ThumbnailPath">
 						<cfif IsDefined("FORM.#ThisImage#_#r#FileObject") AND evaluate("FORM.#ThisImage#_#r#FileObject") IS NOT "">
-							<cffile action="UPLOAD" 
-								filefield="FORM.#ThisImage#_#r#FileObject" 
+							<cffile action="UPLOAD"
+								filefield="FORM.#ThisImage#_#r#FileObject"
 								destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
 								nameconflict="MAKEUNIQUE">
 							<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
@@ -328,19 +328,19 @@
 					<cfset lOrder=ListAppend(lOrder,ThisKey)>
 				</cfif>
 			</cfloop>
-			
+
 			<cfset aView=ArrayNew(1)>
 			<cfset lOrder=ListSort(lOrder,text)>
 			<cfloop index="ThisOrder" list="#lOrder#">
 				<Cfset ArrayAppend(aView,sView[ThisOrder])>
 			</cfloop>
-			
+
 			<cfif Isdefined("FORM.FileName_New") AND Trim(FORM.FileName_New) IS NOT "">
 				<cfloop index="ThisImage" list="MainFilePath">
 					<cfparam name="#ThisImage#_New" default="">
 					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND evaluate("FORM.#ThisImage#_NewFileObject") IS NOT "">
-						<cffile action="UPLOAD" 
-							filefield="FORM.#ThisImage#_newFileObject" 
+						<cffile action="UPLOAD"
+							filefield="FORM.#ThisImage#_newFileObject"
 							destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
 							nameconflict="MAKEUNIQUE">
 						<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
@@ -381,7 +381,7 @@
 		<cfset PageTitle="#PageTitle# : #MyContent.GetProperty('ContentName')#">
 	</cfif>
 </cfif>
-<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm"
 	Page="#PageTitle#"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | <a href=""/common/admin/masterview/"">Content Manager</A> | #PageTitle#">
 
@@ -391,7 +391,7 @@
 	<cfloop index="PropertyToCopy" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,SourceID,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,lRelatedCategoryID,InheritID,SourceCategoryID,DisplayModeID,lPageID">
 		<cfset MyContentPreview.SetProperty("#PropertyToCopy#",MyContent.GetProperty("#PropertyToCopy#"))>
 	</cfloop>
-	
+
 	<cfset MyContentPreview.SetProperty("ContentID",-1)>
 	<cfset MyContentPreview.SetProperty("ContentPositionID",403)>
 	<cfset MyContentPreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
@@ -407,7 +407,7 @@
 	<cfset MyContentLocalePreview.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 	<cfset pcid=application.utilsObj.SimpleEncrypt(MyContentPreview.GetProperty("ContentID"))>
 	<cfset prcid=application.utilsObj.SimpleEncrypt(MyContent.GetProperty("ContentID"))>
-	<cfinvoke component="com.ContentManager.CategoryHandler" 
+	<cfinvoke component="com.ContentManager.CategoryHandler"
 		method="GetCategoryBasicDetails"
 		CategoryID="#MyContent.GetProperty('CategoryID')#"
 		returnVariable="qGetCategoryBasicDetails">
@@ -422,7 +422,7 @@
 <cfif ListFindNoCase("Add,Edit,ValidateDelete",PageAction) AND NOT IsDefined("ReturnURL")>
 	<cfset ReturnURL=CGI.HTTP_Referer>
 </cfif>
-			
+
 <cfset OpenAndCloseFormTables="No">
 <cfswitch expression="#Trim(PageAction)#">
 	<cfcase value="Edit,Add">
@@ -442,11 +442,11 @@
 			<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#">
 			<form id="contentForm" name="contentForm" action="#Location#?#querystring#" method="post" enctype="multipart/form-data">
 		</cfoutput>
-		
+
 		<cfoutput><input type="hidden" name="PageAction" value="Validate#PageAction#"></cfoutput>
 		<cfif SESSION.AdminCurrentAdminLocaleID IS NOT APPLICATION.DefaultLocaleID and PageAction IS "Edit">
-			<cfinvoke component="com.ContentManager.ContentHandler" 
-				method="GetOtherContentLocale" 
+			<cfinvoke component="com.ContentManager.ContentHandler"
+				method="GetOtherContentLocale"
 				returnVariable="GetOtherContentLocale"
 				ContentID="#EditContentID#">
 			<cfif ValueList(GetOtherContentLocale.ContentLocaleID) IS NOT MyContentLocale.GetProperty("ContentLocaleID")>
@@ -479,8 +479,8 @@
 					<cfif MyContentLocale.GetProperty("LocaleID") IS APPLICATION.DefaultLocaleID>
 						<cfset FormMode="ShowForm">
 					<cfelse>
-						<cfinvoke component="com.ContentManager.ContentHandler" 
-							method="GetOtherContentLocale" 
+						<cfinvoke component="com.ContentManager.ContentHandler"
+							method="GetOtherContentLocale"
 							returnVariable="GetOtherContentLocale"
 							ContentID="#EditContentID#">
 						<cfif ValueList(GetOtherContentLocale.ContentLocaleID) IS MyContentLocale.GetProperty("ContentLocaleID")>
@@ -490,8 +490,8 @@
 						</cfif>
 					</cfif>
 				<cfelse>
-					<cfinvoke component="com.ContentManager.ContentHandler" 
-						method="GetOtherContentLocale" 
+					<cfinvoke component="com.ContentManager.ContentHandler"
+						method="GetOtherContentLocale"
 						returnVariable="GetOtherContentLocale"
 						ContentID="#EditContentID#">
 					<cfif ValueList(GetOtherContentLocale.ContentLocaleID) IS MyContentLocale.GetProperty("ContentLocaleID")>
@@ -501,7 +501,7 @@
 					</cfif>
 				</cfif>
 			</cfif>
-	
+
 			<cfinclude template="/common/modules/ContentManager/Content/form.cfm">
 			<!--- <cfinclude template="/common/modules/ContentManager/ContentNote/form.cfm"> --->
 			</table>
@@ -551,11 +551,11 @@
 	</cfcase>
 	<cfcase value="ValidateEdit,ValidateAdd">
 		<cfset FormMode="Validate">
-		
+
 		<cfoutput>
 			<cfset Location=GetToken(FormAction,1,"?")>
 			<cfset querystring=GetToken(FormAction,2,"?")>
-			
+
 			<cfif PageAction IS "ValidateAdd">
 				<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
 			<cfelse>
@@ -633,11 +633,11 @@
 						<cfset MyContent.SetProperty("SourceID",MyEvent.GetProperty("EventID"))>
 					</cfcase>
 				</cfswitch>
-				
+
 				<cfset MyContent.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 				<cfset MyContentNote.SetProperty("ContentID",MyContent.GetProperty("ContentID"))>
 				<cfset MyContentNote.Save()>
-				
+
 				<cfif val(thisContentID) LTE 0>
 					<!--- When adding new content, for the specified content types, create a new discussion entry --->
 					<cfswitch expression="#MyContent.GetProperty('ContentTypeID')#">
@@ -662,7 +662,7 @@
 						</cfcase>
 					</cfswitch>
 				</cfif>
-				
+
 				<cfif DeleteLocaleRecord>
 					<cfset MyContentLocale.Delete(APPLICATION.TrashPath,SESSION.AdminUserID)>
 				<cfelse>
@@ -675,16 +675,16 @@
 					<cfset MyContentLocale.SetProperty("HTML",ReplaceNoCase(MyContentLocale.GetProperty("HTML"),"</florm>","</form>","All"))>
 					<cfset MyContentLocale.SetProperty("HTMLTemplate",ReplaceNoCase(MyContentLocale.GetProperty("HTMLTemplate"),"</florm>","</form>","All"))>
 					<cfset MyContentLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-			
+
 					<!--- do ultraseek indexing
-					<cfinvoke component="com.UltraSeek.Search" 
-						method="IndexByCategoryID" 
+					<cfinvoke component="com.UltraSeek.Search"
+						method="IndexByCategoryID"
 						CategoryID="#MyContent.GetProperty('CategoryID')#"/> --->
 					<!--- if neccessary, regenerate rss --->
 					<cfif MyContent.GetProperty('ContentTypeID') EQ 264>
 						<cfmodule template="/common/modules/RSS/rss.cfm" ProcessMode="Generate" ContentID="#MyContent.GetProperty('ContentID')#" CategoryID="#MyContent.GetProperty('CategoryID')#">
 					</cfif>
-					
+
 					<cfif Trim(ReturnURL) IS "">
 						<cfset Location=GetToken(ATTRIBUTES.ListPage,1,"?")>
 						<cfset querystring=GetToken(ATTRIBUTES.ListPage,2,"?")>
@@ -705,46 +705,6 @@
 			<cfoutput><input type="hidden" name="PageAction" value="#PageAction#"></cfoutput>
 		</cfif>
 		</form>
-	</cfcase>
-	<cfcase value="CommitAdd,CommitEdit">
-		<cfabort showerror="Tom says this case is no more.">
-		<!---
-		<cfdump var="#form#">
-		<cfdump var="#application#">
-		<cfabort>
-
-		<cfswitch expression="#MyContent.GetProperty('ContentTypeID')#">
-			<cfcase value="235">
-				<cfset MyEvent.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-				<cfset MyContent.SetProperty("SourceID",MyEvent.GetProperty("EventID"))>
-			</cfcase>
-		</cfswitch>
-		<cfset MyContent.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-		<cfset MyContentNote.SetProperty("ContentID",MyContent.GetProperty("ContentID"))>
-		<cfset MyContentNote.Save()>
-		<cfif DeleteLocaleRecord>
-			<cfset MyContentLocale.Delete(APPLICATION.TrashPath,SESSION.AdminUserID)>
-		<cfelse>
-			<cfloop index="ThisImage" list="Image,flash,ImageLarge">
-				<cfif IsDefined("FORM.Delete#ThisImage#") AND Evaluate("FORM.Delete#ThisImage#") IS "1">
-					<cfset MyContentLocale.FileRemove(APPLICATION.WebrootPath,"#ThisImage#")>
-				</cfif>
-			</cfloop>
-			<cfset MyContentLocale.SetProperty("ContentID",MyContent.GetProperty("ContentID"))>
-			<cfset MyContentLocale.SetProperty("HTML",ReplaceNoCase(MyContentLocale.GetProperty("HTML"),"</florm>","</form>","All"))>
-			<cfset MyContentLocale.SetProperty("HTMLTemplate",ReplaceNoCase(MyContentLocale.GetProperty("HTMLTemplate"),"</florm>","</form>","All"))>
-			<cfset MyContentLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-		</cfif>
-		
-		<cfif Trim(ReturnURL) IS "">
-			<cfset Location=GetToken(ATTRIBUTES.ListPage,1,"?")>
-			<cfset querystring=GetToken(ATTRIBUTES.ListPage,2,"?")>
-			<!--- <cf_AddToQueryString querystring="#QueryString#" name="UpperIDList" value="#UpperIDList#"> --->
-			<cflocation url="#Location#?#querystring#" addtoken="No">
-		<cfelse>
-			<cflocation url="#ReturnURL#" addtoken="No">
-		</cfif>
-		--->
 	</cfcase>
 	<cfcase value="ValidateDelete">
 		<div class="dashModuleWide">
