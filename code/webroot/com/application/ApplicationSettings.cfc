@@ -58,6 +58,7 @@
 		<cfset APPLICATION.CMSVersion = "5" />
 		<cfset APPLICATION.GeneratorMeta = "Thirdwave MasterView" />
 		<cfset APPLICATION.GeneratorContentMeta = "MasterView by Thirdwave, LLC 312.329.1960" />
+		<cfset APPLICATION.CategoryAlias404Page="404-page">
 		<cfset APPLICATION.CategoryID404Page="-1">
 
 		<!---
@@ -215,6 +216,13 @@
 
 		<cfobject component="com.utils.Message" name="APPLICATION.messageObj" />
 		<cfset APPLICATION.messageObj.init() />
+
+		<cfobject component="com.ContentManager.CategoryHandler" name="APPLICATION.MyCategoryHandler" />
+		<cfset APPLICATION.MyCategoryHandler.init() />
+
+		<cfinvoke method="GetCategoryIDFromAlias" component="#APPLICATION.MyCategoryHandler#"
+			CategoryAlias="#APPLICATION.CategoryAlias404Page#"
+			returnVariable="APPLICATION.CategoryID404Page"/>
 
 		<!--- get ssl pages --->
 		<cfif APPLICATION.SSLConfigured>

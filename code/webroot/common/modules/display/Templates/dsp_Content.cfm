@@ -46,8 +46,6 @@
 		<meta name="dc.type" content="#PageType#" />
 	</cfif>
 	<title>#thisPageTitle#</title>
-	<script type="text/javascript" src="/common/scripts/sifr.js"></script>
-	<script type="text/javascript" src="/common/scripts/common.js"></script>
 </cfoutput>
 </head>
 <cfoutput>

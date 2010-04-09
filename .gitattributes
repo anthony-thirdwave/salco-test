@@ -439,7 +439,6 @@ code/webroot/common/process/RSSUpdate.cfm -text
 code/webroot/common/process/VerityUpdate.cfm -text
 code/webroot/common/scripts/articleSelector.js -text
 code/webroot/common/scripts/categorySelector.js -text
-code/webroot/common/scripts/common.js -text
 code/webroot/common/scripts/dragdrop.js -text
 code/webroot/common/scripts/fckeditor/editor/_source/classes/fckcontextmenu.js -text
 code/webroot/common/scripts/fckeditor/editor/_source/classes/fckcontextmenugroup.js -text
@@ -1542,7 +1541,6 @@ code/webroot/common/scripts/scriptaculous/test/unit/slider_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/sortable_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/string_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/unittest_test.html -text
-code/webroot/common/scripts/sifr.js -text
 code/webroot/common/styles/admin.css -text
 code/webroot/common/styles/content.css -text
 code/webroot/common/styles/default.css -text

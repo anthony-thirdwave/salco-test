@@ -1,15 +1,20 @@
 <cfcomponent>
+
+	<cffunction name="init" returntype="CategoryHandler">
+		<cfreturn this>
+	</cffunction>
+
 	<cffunction name="CheckDuplicateAlias" output="false" returntype="boolean">
 		<cfargument name="CandidateAlias" default="" type="string" required="true">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var CheckAlias = "">
-		
+
 		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
-			SELECT * 
-			FROM t_Category 
-			WHERE CategoryAlias = <cfqueryparam value="#Trim(ARGUMENTS.CandidateAlias)#" cfsqltype="cf_sql_varchar"> 
+			SELECT *
+			FROM t_Category
+			WHERE CategoryAlias = <cfqueryparam value="#Trim(ARGUMENTS.CandidateAlias)#" cfsqltype="cf_sql_varchar">
 			AND CategoryID <> <cfqueryparam value="#val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif CheckAlias.RecordCount IS NOT "0">
@@ -18,23 +23,42 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
+
+	<cffunction name="GetCategoryIDFromAlias" output="false" returntype="numeric">
+		<cfargument name="CategoryAlias" default="" type="string" required="true">
+
+		<!--- init variables --->
+		<cfset var LOCAL=StructNew()>
+
+		<cfquery name="LOCAL.CheckAlias" datasource="#APPLICATION.DSN#" maxrows="1">
+			SELECT CategoryID
+			FROM t_Category
+			WHERE CategoryAlias = <cfqueryparam value="#Trim(ARGUMENTS.CategoryAlias)#" cfsqltype="cf_sql_varchar">
+		</cfquery>
+		<cfif LOCAL.CheckAlias.RecordCount IS "1">
+			<cfreturn LOCAL.CheckAlias.CategoryID>
+		<cfelse>
+			<cfreturn -1>
+		</cfif>
+	</cffunction>
+
 	<cffunction name="CreateAlias" output="false" returntype="string">
 		<cfargument name="Name" default="" type="string" required="true">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var CandidateAlias = "">
 		<cfset var ReturnCandidateAlias = "">
 		<cfset var FoundHighAlias = "">
 		<cfset var GetRecentAlias = "">
 		<cfset var ValidAlias = "">
-		
+
 		<!--- scrub the alias prior to checking for duplicates --->
 		<cfinvoke method="scrubAlias" returnvariable="CandidateAlias">
 			<cfinvokeargument name="alias" value="#ARGUMENTS.Name#" />
 		</cfinvoke>
-		
-		<cfinvoke component="com.ContentManager.CategoryHandler" 
+
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="CheckDuplicateAlias"
 			CandidateAlias="#Trim(CandidateAlias)#"
 			CategoryID="#Val(ARGUMENTS.CategoryID)#"
@@ -58,23 +82,23 @@
 	</cffunction>
 	<cffunction name="GetContent" output="false" returntype="boolean">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var CheckAlias = "">
-		
+
 		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
 			SELECT * FROM qry_GetContent WHERE CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfreturn CheckAlias>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryPicker" output="false" returntype="query">
 		<cfargument name="CategoryTypeID" required="true" type="numeric"/>
 		<cfargument name="LocaleID" required="true" type="numeric"/>
-		
+
 		<!--- init variables --->
 		<cfset var GetCategoryQuery = "">
-		
+
 		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 			<cfprocresult name="GetCategoryQuery">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#ARGUMENTS.LocaleID#" null="No">
@@ -89,14 +113,14 @@
 		</cfstoredproc>
 		<cfreturn GetCategoryQuery>
 	</cffunction>
-	
+
 	<cffunction name="GetContentAndContentLocale" output="false" returntype="query">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 		<cfargument name="LocaleID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var CheckAlias = "">
-		
+
 		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
 			SELECT t_Content.ContentID, ContentLocaleID
 			FROM         t_Content LEFT OUTER JOIN
@@ -107,10 +131,10 @@
 		<cfreturn CheckAlias>
 	</cffunction>
 	<cffunction name="GetNavCategoryQuery" output="false" returntype="query">
-		
+
 		<!--- init variables --->
 		<cfset var GetAllCategories = "">
-		
+
 		<cfquery name="GetAllCategories" datasource="#APPLICATION.DSN#">
 			SELECT CategoryID, CategoryName, CategoryAlias, CategoryURL, DisplayOrder,DisplayLevel
 			FROM t_Category
@@ -120,29 +144,29 @@
 	</cffunction>
 	<cffunction name="GetCategoryTypeID" returntype="numeric" output="false">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var CheckAlias = "">
-		
+
 		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
 			SELECT CategoryTypeID from t_category WHERE CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfreturn Val(CheckAlias.CategoryTypeID)>
 	</cffunction>
-	
+
 	<cffunction name="UpdateCacheDateTime" returntype="boolean" output="false">
 		<cfargument name="lookup" default="" type="string" required="true">
 		<cfargument name="KeyID" default="" type="numeric" required="true">
 		<cfargument name="Datasource" default="#APPLICATION.DSN#" type="string" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var GetCategoryID = "">
 		<cfset var UpdateCache = "">
-		
+
 		<cfif NOT IsDefined("ARGUMENTS.Datasource") OR ARGUMENTS.Datasource IS "">
 			<cfset ARGUMENTS.Datasource=APPLICATION.DSN>
 		</cfif>
-		
+
 		<cfif ARGUMENTS.Lookup IS "Content">
 			<cfquery name="GetCategoryID" datasource="#ARGUMENTS.Datasource#">
 				select CategoryID from t_Content Where ContentID=<cfqueryparam value="#Val(ARGUMENTS.KeyID)#" cfsqltype="cf_sql_integer">
@@ -161,10 +185,10 @@
 		</cfif>
 		<cfreturn false>
 	</cffunction>
-	
+
 	<cffunction name="AdjustPriorities" returntype="boolean" output="false">
 		<cfargument name="sNewPriorities" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisCategoryID = "">
 		<cfset var UpdateRank = "">
@@ -172,7 +196,7 @@
 		<cfset var GetCatsAgain = "">
 		<cfset var UpdateAgain = "">
 		<cfset var Success = "">
-		
+
 		<cfif IsStruct(ARGUMENTS.sNewPriorities) AND ListLen(StructKeyList(sNewPriorities)) GT "0">
 			<cfloop index="ThisCategoryID" list="#StructKeyList(sNewPriorities)#">
 				<cfquery name="UpdateRank" datasource="#APPLICATION.DSN#">
@@ -182,7 +206,7 @@
 				</cfquery>
 			</cfloop>
 			<cfquery name="GetParentID" datasource="#APPLICATION.DSN#">
-				select ParentID from t_Category 
+				select ParentID from t_Category
 				where CategoryID=<cfqueryparam value="#Val(ListFirst(StructKeyList(sNewPriorities)))#" cfsqltype="cf_sql_integer"> order by CategoryPriority
 			</cfquery>
 			<cfquery name="GetCatsAgain" datasource="#APPLICATION.DSN#">
@@ -195,7 +219,7 @@
 					WHERE CategoryID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfoutput>
-			<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString"
 				returnVariable="Success"
 				SourceParentID="#Val(GetParentID.ParentID)#"
 				datasource="#APPLICATION.DSN#">
@@ -204,31 +228,31 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GenerateDisplayOrderString" returnType="boolean" output="1">
 		<cfargument name="SourceParentID" required="true" type="numeric">
 		<cfargument name="Datasource" required="true" type="string">
 		<cfif IsDefined("APPLICATION.Migrate") AND APPLICATION.Migrate>
 			<cfreturn true>
 		</cfif>
-		
+
 		<cfquery datasource="#ARGUMENTS.Datasource#">
 		EXEC sp_generateDisplayOrder #Val(ARGUMENTS.SourceParentID)#
 		</cfquery>
-		
+
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetProductionSiteInformation" returnType="any" output="false">
 		<cfargument name="CategoryID" required="true" type="numeric">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
 		<cfset var sProductionSiteInformation = "">
 		<cfset var ThisProperty = "">
 		<cfset var GetRootCategory = "">
 		<cfset var sProperties = "">
-		
+
 		<cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm"
 			ThisCategoryID="#ARGUMENTS.CategoryID#" NameList="" IDList="#ARGUMENTS.CategoryID#">
 		<cfquery name="GetRootCategory" datasource="#APPLICATION.DSN#">
@@ -243,7 +267,7 @@
 				</cfif>
 			</cfloop>
 		</cfif>
-		
+
 		<cfif IsDefined("ProductionFTPHost") AND IsDefined("ProductionFTPRootPath") AND IsDefined("ProductionFTPUserLogin") AND IsDefined("ProductionFTPPassword") AND IsDefined("ProductionDBServer") AND IsDefined("ProductionDBName") AND Isdefined("ProductionDBDSN")>
 			<cfset sProductionSiteInformation=StructNew()>
 			<cfset StructInsert(sProductionSiteInformation,"ProductionFTPHost",ProductionFTPHost,1)>
@@ -258,17 +282,17 @@
 			<cfreturn ReturnValue>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="CreateResourcePath" returntype="boolean" output="true">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisID=ARGUMENTS.CategoryID>
 		<cfset var DirDone = "">
 		<cfset var DirectoryToCreate = "">
 		<cfset var i = "">
-		
+
 		<cfif Val(ARGUMENTS.CategoryID) LTE "0">
 			<cfreturn false>
 		<cfelse>
@@ -288,11 +312,11 @@
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="ResourceType" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisID=ARGUMENTS.CategoryID>
 		<cfset var ReturnString = "">
-	
+
 		<cfif Val(ThisID) LTE "0" or ListFindNoCase("images,documents,generated",ARGUMENTS.ResourceType) LTE "0">
 			<cfset ReturnString="/#ReplaceNoCase(APPLICATION.UploadPath,'\','/','all')#">
 		<cfelse>
@@ -306,16 +330,16 @@
 		</cfif>
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="GetResourceFilePath" returntype="string" output="false">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="ResourceType" required="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisID=ARGUMENTS.CategoryID>
 		<cfset var ReturnString = "">
-		
+
 		<cfif Val(ThisID) LTE "0" or ListFindNoCase("images,documents,generated",ARGUMENTS.ResourceType) LTE "0">
 			<cfset ReturnString="#ARGUMENTS.WebrootPath##APPLICATION.UploadPath#">
 		<cfelse>
@@ -327,29 +351,29 @@
 		</cfif>
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryBasicDetails" returntype="query" output="false">
 		<cfargument name="CategoryID" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var GetCategoryBasicDetails = "">
-		
+
 		<cfquery name="GetCategoryBasicDetails" datasource="#APPLICATION.DSN#" maxrows="1">
-			SELECT		CategoryName, CategoryTypeName, CategoryAlias, CategoryActive, 
-						PropertiesPacket, CategoryTypeID 
+			SELECT		CategoryName, CategoryTypeName, CategoryAlias, CategoryActive,
+						PropertiesPacket, CategoryTypeID
 			FROM		qry_GetCategory
 			WHERE		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfreturn GetCategoryBasicDetails>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryLocaleID" returntype="numeric" output="false">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="LocaleID" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var GetCategoryLocaleID = "">
-		
+
 		<cfquery name="GetCategoryLocaleID" datasource="#APPLICATION.DSN#">
 			select CategoryLocaleID FROM t_CategoryLocale
 			Where CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> and LocaleID=<cfqueryparam value="#Val(ARGUMENTS.LocaleID)#" cfsqltype="cf_sql_integer">
@@ -360,14 +384,14 @@
 			<cfreturn -1>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="CreateRemoteFolders" returntype="boolean" output="1">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="FTPHost" required="true">
 		<cfargument name="FTPRootPath" required="true">
 		<cfargument name="FTPUserLogin" required="true">
 		<cfargument name="FTPPassword" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var FinalPath = "">
 		<cfset var CreateFolders = "">
@@ -375,17 +399,17 @@
 		<cfset var DirectoryToCreate = "">
 		<cfset var ThisDirectoryFragment = "">
 		<cfset var i = "">
-		
+
 		<cfmodule template="/common/modules/utils/ExplodeString.cfm" Delimiter="/" String="#ARGUMENTS.CategoryID#" ReturnVarName="PathFragment">
 		<cfset FinalPath=Replace("#ARGUMENTS.FTPRootPath##APPLICATION.CategoryResourcesPath##PathFragment#","\","/","All")>
 		<cfset CreateFolders="no">
 		<cfloop index="ThisDirectoryFragment" list="/,/images/,/documents/,/generated/">
-			<cfftp action="EXISTSDIR" 
+			<cfftp action="EXISTSDIR"
 				server="#ARGUMENTS.FTPHost#"
-				username="#ARGUMENTS.FTPUserLogin#" 
-				password="#ARGUMENTS.FTPPassword#" 
+				username="#ARGUMENTS.FTPUserLogin#"
+				password="#ARGUMENTS.FTPPassword#"
 				stoponerror="No"
-				directory="#FinalPath##ThisDirectoryFragment#" 
+				directory="#FinalPath##ThisDirectoryFragment#"
 				connection="FTP_#ReplaceNoCase(ARGUMENTS.FTPHost,'.','','all')#">
 			<cfif cfftp.returnValue IS "no">
 				<cfset CreateFolders="Yes">
@@ -398,7 +422,7 @@
 				<cfset DirectoryToCreate=ReplaceNoCase(DirectoryToCreate,"\","/","All")>
 				<cfset DirDone="#DirDone##Mid(ARGUMENTS.CategoryID,i,1)#/">
 				<cfloop index="ThisDirectoryFragment" list="/,/images/,/documents/,/generated/">
-					<cfftp action="CREATEDIR" 
+					<cfftp action="CREATEDIR"
 						directory="#DirectoryToCreate##ThisDirectoryFragment#"
 						server="#ARGUMENTS.FTPHost#"
 						username="#ARGUMENTS.FTPUserLogin#"
@@ -415,42 +439,42 @@
 	</cffunction>
 	<cffunction name="GetCategoryFrontEndPermissions" output="false" returntype="query">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var Check = "">
-		
+
 		<cfquery name="Check" datasource="#APPLICATION.DSN#">
 			select * from qry_GetCategoryFrontEndPermission
 			WHERE CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> and PView=1
 		</cfquery>
 		<cfreturn Check>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryFrontEndPermissionsList" output="false" returntype="string">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var Check = "">
 		<cfset var ReturnList = ""/>
-		
+
 		<cfquery name="Check" datasource="#APPLICATION.DSN#">
 			select DISTINCT(UserGroupID) from qry_GetCategoryFrontEndPermission
 			WHERE CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> and PView=1
 		</cfquery>
-		
+
 		<cfloop query="Check">
 			<cfset ReturnList = ListAppend(ReturnList,#Check.UserGroupID#)/>
 		</cfloop>
 		<cfreturn ReturnList/>
 	</cffunction>
-	
+
 	<cffunction name="GetLocaleIDByPage" output="false" returntype="boolean">
 		<cfargument name="Alias" default="" type="string" required="true">
 		<cfargument name="Datasource" default="" type="string" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var GetLocaleIDByPage = "">
-		
+
 		<cfquery name="GetLocaleIDByPage" datasource="#ARGUMENTS.Datasource#">
 			SELECT * FROM qry_GetcategoryLocale WHERE CategoryAlias=<cfqueryparam value="#Trim(ARGUMENTS.Alias)#" cfsqltype="cf_sql_varchar">
 		</cfquery>
@@ -460,25 +484,25 @@
 			<cfreturn -1>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryName" output="false" returntype="string">
 		<cfargument name="CategoryID" default="-1" type="numeric" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var Check = "">
-		
+
 		<cfquery name="Check" datasource="#APPLICATION.DSN#">
 			select CategoryName from t_category
 			WHERE CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfreturn Check.Categoryname>
 	</cffunction>
-	
+
 	<cffunction name="SetLocationAboveSibling" output="false" returntype="boolean">
 		<cfargument name="CategoryID" type="numeric" required="true">
 		<cfargument name="SiblingID" type="numeric" required="true">
 		<cfargument name="LocaleID" type="numeric" default="-1" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var thisParentID = "">
 		<cfset var newCategoryPriority = "">
@@ -496,7 +520,7 @@
 		<cfset var getCategoryLocales = "">
 		<cfset var UpdateCategoryLocalePriority = "">
 		<cfset var Success = "">
-		
+
 		<cfquery name="getParentIDs" datasource="#APPLICATION.DSN#">
 			SELECT ParentID FROM t_Category
 			WHERE CategoryID IN (<cfqueryparam value="#ARGUMENTS.CategoryID#,#ARGUMENTS.SiblingID#" list="yes" cfsqltype="cf_sql_integer">)
@@ -504,7 +528,7 @@
 		<cfquery name="CheckSameParent" dbtype="query">
 			SELECT DISTINCT ParentID FROM getParentIDs
 		</cfquery>
-		
+
 		<!--- IF THEY BOTH EXIST AND ARE SIBLINGS --->
 		<cfif getParentIDs.RecordCount EQ 2 AND CheckSameParent.RecordCount EQ 1>
 			<cfset thisParentID = CheckSameParent.ParentID>
@@ -519,7 +543,7 @@
 					UPDATE t_Category SET CategoryPriority = <cfqueryparam value="#newCategoryPriority#" cfsqltype="cf_sql_integer">
 					WHERE CategoryID = <cfqueryparam value="#ARGUMENTS.CategoryID#" cfsqltype="cf_sql_integer">
 				</cfquery>
-				
+
 				<cfquery name="getCategories" datasource="#APPLICATION.DSN#">
 					SELECT CategoryID AS thisCategoryID FROM t_Category
 					WHERE ParentID = <cfqueryparam value="#thisParentID#" cfsqltype="cf_sql_integer">
@@ -528,12 +552,12 @@
 				<cfoutput query="getCategories">
 					<cfset ThisNewPriority=10*CurrentRow>
 					<cfquery name="UpdateCategoryPriority" datasource="#APPLICATION.DSN#">
-						UPDATE t_Category SET CategoryPriority= <cfqueryparam value="#ThisNewPriority#" cfsqltype="cf_sql_integer"> 
+						UPDATE t_Category SET CategoryPriority= <cfqueryparam value="#ThisNewPriority#" cfsqltype="cf_sql_integer">
 						WHERE CategoryID = <cfqueryparam value="#thisCategoryID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 				</cfoutput>
-				
-				<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString" 
+
+				<cfinvoke component="com.ContentManager.CategoryHandler" method="GenerateDisplayOrderString"
 					returnVariable="Success"
 					SourceParentID="#thisParentID#"
 					datasource="#APPLICATION.DSN#">
@@ -558,7 +582,7 @@
 					AND LocaleID = <cfqueryparam value="#thisLocaleID#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfoutput>
-			
+
 			<cfoutput query="getLocales">
 				<cfquery name="getCategoryLocales" datasource="#APPLICATION.DSN#">
 					SELECT CategoryID AS thisCategoryID FROM t_CategoryLocaleMeta
@@ -569,36 +593,36 @@
 				<cfloop query="getCategoryLocales">
 					<cfset ThisNewPriority=10*CurrentRow>
 					<cfquery name="UpdateCategoryLocalePriority" datasource="#APPLICATION.DSN#">
-						UPDATE t_CategoryLocaleMeta SET CategoryLocalePriority= <cfqueryparam value="#ThisNewPriority#" cfsqltype="cf_sql_integer"> 
+						UPDATE t_CategoryLocaleMeta SET CategoryLocalePriority= <cfqueryparam value="#ThisNewPriority#" cfsqltype="cf_sql_integer">
 						WHERE CategoryID = <cfqueryparam value="#getCategoryLocales.thisCategoryID[getCategoryLocales.CurrentRow]#" cfsqltype="cf_sql_integer">
 						AND LocaleID = <cfqueryparam value="#getLocales.thisLocaleID[getLocales.CurrentRow]#" cfsqltype="cf_sql_integer">
 					</cfquery>
 				</cfloop>
-				<cfinvoke component="com.ContentManager.CategoryLocaleHandler" method="GenerateDisplayOrderString" 
+				<cfinvoke component="com.ContentManager.CategoryLocaleHandler" method="GenerateDisplayOrderString"
 					returnVariable="Success"
 					SourceParentID="#thisParentID#"
 					LocaleID="#thisLocaleID#"
 					datasource="#APPLICATION.DSN#">
 			</cfoutput>
-			
+
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<!--- get the number of categories --->
 	<cffunction name="getCategoryCount" output="false" returntype="numeric">
 		<cfargument name="parentId" type="numeric" required="false" default=0>
-		
+
 		<!--- init variables --->
 		<cfset var Check = "">
-		
+
 		<!--- return the total number of categories --->
 		<cfquery name="Check" datasource="#APPLICATION.DSN#">
 			SELECT COUNT(*) numCats
 			FROM t_category
-			
+
 			<!--- limit by parentId if passed --->
 			<cfif arguments.parentId neq 0>
 				WHERE parentId = <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
@@ -606,25 +630,25 @@
 		</cfquery>
 		<cfreturn Check.numCats>
 	</cffunction>
-	
+
 	<cffunction name="GetBranchFromRoot" output="false" returntype="struct">
 		<cfargument name="CategoryID" type="numeric" default="-1">
-		
+
 		<cfset LOCAL.sBranch=StructNew()>
-		
+
 		<cfset StructInsert(LOCAL.sBranch,"IDList","-1")>
 		<cfset StructInsert(LOCAL.sBranch,"NameList","")>
 		<cfset StructInsert(LOCAL.sBranch,"AliasList","")>
-		
+
 		<cfset LOCAL.SBranch=GetBranchFromRootHelper(ARGUMENTS.CategoryID,LOCAL.SBranch)>
-		
+
 		<cfreturn LOCAL.SBranch>
 	</cffunction>
-	
+
 	<cffunction name="GetBranchFromRootHelper" output="false" returntype="struct">
 		<cfargument name="CategoryID" type="numeric" default="-1">
 		<cfargument name="sBranch" type="struct" default="#StructNew()#">
-		
+
 		<cfif StructKeyExists(ARGUMENTS.SBranch,"IDList") IS "0">
 			<cfset StructInsert(ARGUMENTS.sBranch,"IDList","")>
 		</cfif>
@@ -634,13 +658,13 @@
 		<cfif StructKeyExists(ARGUMENTS.SBranch,"AliasList") IS "0">
 			<cfset StructInsert(ARGUMENTS.sBranch,"AliasList","")>
 		</cfif>
-		
+
 		<cfquery name="GetDetailOf#IncrementValue(Val(ARGUMENTS.CategoryID))#" datasource="#APPLICATION.DSN#" cachedwithin="#CreateTimeSpan(0,0,0,30)#">
 			SELECT	parentid,CategoryName,CategoryID,CategoryAlias
 			FROM	t_Category
 			WHERE	CategoryID = <cfqueryparam value="#val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
-	
+
 		<cfif ARGUMENTS.SBranch.IDlist IS "-1">
 			<cfset ARGUMENTS.SBranch.IDlist=val(Evaluate("GetDetailOf#IncrementValue(Val(ARGUMENTS.CategoryID))#.CategoryID"))>
 		</cfif>
@@ -650,7 +674,7 @@
 		<cfif ARGUMENTS.SBranch.AliasList IS "">
 			<cfset ARGUMENTS.SBranch.AliasList=Evaluate("GetDetailOf#IncrementValue(Val(ARGUMENTS.CategoryID))#.CategoryAlias")>
 		</cfif>
-		
+
 		<cfquery name="GetParentOf#IncrementValue(Val(ARGUMENTS.CategoryID))#" datasource="#APPLICATION.DSN#" cachedwithin="#CreateTimeSpan(0,0,0,30)#">
 			SELECT	CategoryName,CategoryID,CategoryAlias
 			FROM	t_Category
@@ -668,77 +692,77 @@
 		</cfif>
 
 	</cffunction>
-	
-	
-	
+
+
+
 	<!--- scrub an alias --->
 	<cffunction name="scrubAlias" output="false" returntype="string">
 		<cfargument name="alias" type="string" default="">
-		
-		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[’\!'/:"".+=;?&<>|,]","","all")) />
+
+		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[ï¿½\!'/:"".+=;?&<>|,]","","all")) />
 		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[ ]"," ","all")) />
 		<cfset arguments.alias=lcase(ReReplace(arguments.alias,"[ ]","-","all")) />
 		<cfset arguments.alias = lcase(replace(arguments.alias, "##", "", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "¡",  "", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "", "all")) />
 		<cfset arguments.alias = lcase(replace(arguments.alias, "$",  "", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "à",  "a", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "á",  "a", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "â",  "a", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ã",  "a", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ä",  "a", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "å",  "a", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "À",  "A", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Á",  "A", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Â",  "A", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ã",  "A", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ä",  "A", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Å",  "A", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ç",  "c", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ç",  "C", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "é",  "e", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "è",  "e", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ê",  "e", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ë",  "e", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "È",  "E", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "É",  "E", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ê",  "E", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ë",  "E", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ì",  "i", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "í",  "i", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "î",  "i", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ï",  "i", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ì",  "I", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Í",  "I", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Î",  "I", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ï",  "I", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ñ",  "n", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ñ",  "N", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ò",  "o", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ó",  "o", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ô",  "o", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "õ",  "o", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ö",  "o", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ø",  "o", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ò",  "O", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ó",  "O", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ô",  "O", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Õ",  "O", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ö",  "O", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ø",  "O", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "š",  "s", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Š",  "S", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ù",  "u", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ú",  "u", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "û",  "u", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ü",  "u", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ù",  "U", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ú",  "U", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Û",  "U", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ü",  "U", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ý",  "y", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "Ÿ",  "Y", "all")) />
-		<cfset arguments.alias = lcase(replace(arguments.alias, "ß",  "ss", "all")) />
-		
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "a", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "A", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "c", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "C", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "e", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "E", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "i", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "I", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "n", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "N", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "o", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "O", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "s", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "S", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "u", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "U", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "y", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "Y", "all")) />
+		<cfset arguments.alias = lcase(replace(arguments.alias, "ï¿½",  "ss", "all")) />
+
 		<cfreturn arguments.alias />
 	</cffunction>
 </cfcomponent>

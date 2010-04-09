@@ -14,14 +14,11 @@
 	ContentPositionID="#ATTRIBUTES.ContentPositionID#"
 	CategoryThreadList="#ATTRIBUTES.CategoryThreadList#">
 
-<cfobject component="com.ContentManager.CategoryHandler"
-	name="MyCategoryHandler">
-
-<cfinvoke component="#MyCategoryHandler#"
+<cfinvoke component="#APPLICATION.MyCategoryHandler#"
 	method="GetCategoryBasicDetails"
 	returnVariable="GetCategory"
 	CategoryID="#ATTRIBUTES.CategoryID#">
-	
+
 <cfset FileContents="">
 <cfset ContentCounter="0">
 
@@ -31,14 +28,14 @@
 	<cfelse>
 		<cfset ThisContentIDPrime=Val(ThisContentID)>
 	</cfif>
-	
+
 	<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
 		<cfprocresult name="GetContent">
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(ThisContentIDPrime)#" null="No">
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 		<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
 	</cfstoredproc>
-	
+
 	<cfoutput query="GetContent">
 		<cfif IsWDDX(GetContent.ContentBody)>
 			<cfwddx action="WDDX2CFML" input="#GetContent.ContentBody#" output="sContentBody">
