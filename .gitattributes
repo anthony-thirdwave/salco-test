@@ -1542,6 +1542,7 @@ code/webroot/common/scripts/scriptaculous/test/unit/sortable_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/string_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/unittest_test.html -text
 code/webroot/common/styles/admin.css -text
+code/webroot/common/styles/adminIE.css -text
 code/webroot/common/styles/content.css -text
 code/webroot/common/styles/default.css -text
 code/webroot/common/styles/ie.css -text
