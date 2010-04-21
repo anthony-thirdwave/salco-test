@@ -33,6 +33,12 @@
 	<title>ADMIN : <cfoutput>#ATTRIBUTES.Page#</cfoutput></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	<link rel="stylesheet" type="text/css" href="/common/styles/admin.css" title="docProperties">
+    <!--[if IE]>
+		<style type="text/css">
+        	/* styles for all versions of IE */
+    		@import url(/common/styles/adminIE.css);
+    	</style>
+	<![endif]-->
 	</head>
 	<body bgcolor="#F1F2E8" topmargin=0 leftmargin=0 marginwidth="0" marginheight="0" link="#0099FF" vlink="navy" alink="003333">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
