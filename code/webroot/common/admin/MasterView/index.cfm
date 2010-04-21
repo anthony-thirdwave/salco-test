@@ -122,10 +122,10 @@
 		<div style="background-color:white">&nbsp;
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
         <tr>
-        	<td valign="top">
+        	<td  width="50%" valign="top">
             <table  border="0" cellspacing="0" cellpadding="0" bgcolor="white">
         <tr valign="top" align="left" class="firstC">
-			<td class="datatitle1" style="text-align:right;">Page:</td>
+			<td class="datatitle1">Page:</td>
 			<td class="datacontent1">#CategoryName#</td>
 		</tr>
 
@@ -182,7 +182,8 @@
 			</cfif>
 		</cfif>
         </table>
-        
+        </td>
+        <td width="50%" valign="top">
         <table  border="0" cellspacing="0" cellpadding="0" bgcolor="white">
         <!-- second column -->
 		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
@@ -191,7 +192,6 @@
 			Operation="create">
 
 		<tr valign="top">
-			<td class="datatitle1">Created:</td>
 			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
 		</tr>
 
@@ -199,7 +199,6 @@
 			CategoryID="#CategoryID#">
 
 		<tr valign="top">
-			<td class="datatitle1">Last Updated:</td>
 			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
 		</tr>
 
@@ -209,7 +208,6 @@
 			Operation="savelive">
 
 		<tr valign="top">
-			<td class="datatitle1">Last Saved Live:</td>
 			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
 		</tr>
 		<!-- end second column -->
