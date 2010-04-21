@@ -70,9 +70,9 @@
 <!--- search results are stored in session, only reset when new search is defined --->
 
 <div class="dashModuleWide">
-<div class="box2">
+<div class="box2 ieAdjWidthBox2">
 <div class="boxtop2"><div></div></div>
-<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Search Results</div>
+<div class="ModuleTitle2 ieAdjRightMargin" style="border-bottom:1px solid #97AEB8; ">Search Results</div>
 <div class="ModuleBody2">
 
 <script language="javascript">
