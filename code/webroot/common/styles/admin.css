@@ -381,9 +381,7 @@ background: url(/common/images/admin/button_edit.png) no-repeat;
 .sdatacontent1{
 width:270px;}
 
-.firstC .datatitle1{
- 	width:35px;
-}
+
 
 .logoutBut{
 margin-bottom:3px;
@@ -408,3 +406,9 @@ width:260px;
 
 #qpa_categoryLink_1, #catParent_categoryLink_1{
 padding-left:5px;}
+
+.suppFormContainer{
+background:#FFFFFF;
+padding:5px;
+width:400px;
+}
