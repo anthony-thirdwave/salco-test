@@ -123,9 +123,9 @@
 		<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
         <tr>
         	<td valign="top">
-            <table width="200" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
+            <table  border="0" cellspacing="0" cellpadding="0" bgcolor="white">
         <tr valign="top" align="left" class="firstC">
-			<td class="datatitle1">Page:</td>
+			<td class="datatitle1" style="text-align:right;">Page:</td>
 			<td class="datacontent1">#CategoryName#</td>
 		</tr>
 
@@ -182,8 +182,7 @@
 			</cfif>
 		</cfif>
         </table>
-        </td>
-        <td valign="top">
+        
         <table  border="0" cellspacing="0" cellpadding="0" bgcolor="white">
         <!-- second column -->
 		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
