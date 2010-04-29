@@ -1076,6 +1076,13 @@
 			returnVariable="local.ThisTokenList"
 			ContentID="#Val(GetContentTemplateID())#"
 			LocaleID="#Val(this.GetProperty('LocaleID'))#">
+		<cfif local.ThisTokenList IS "">
+			<cfinvoke component="com.ContentManager.ContentHandler"
+				method="GetTokenList"
+				returnVariable="local.ThisTokenList"
+				ContentID="#Val(GetContentTemplateID())#"
+				LocaleID="#Val(APPLICATION.DefaultLocaleID)#">
+		</cfif>
 		<cfreturn local.ThisTokenList>
 	</cffunction>
 
