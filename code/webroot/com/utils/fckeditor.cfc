@@ -73,7 +73,7 @@
  * This function is used by FCKeditor module to check browser compatibility
  --->
 
-<cffunction name="FCKeditor_IsCompatibleBrowser">
+<cffunction name="FCKeditor_IsCompatibleBrowser" output="false">
 <cfscript>
 	var sAgent = lCase( cgi.HTTP_USER_AGENT );
 	var isCompatibleBrowser = false;
@@ -127,7 +127,7 @@
 				isCompatibleBrowser = true;
 		}
 	}
-	
+
 </cfscript>
 
 	<cfreturn isCompatibleBrowser>

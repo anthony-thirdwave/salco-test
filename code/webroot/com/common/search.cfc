@@ -1,7 +1,7 @@
 <cfcomponent>
-	<cffunction name="CreateExplicitSearchString" access="public" returntype="string">
+	<cffunction name="CreateExplicitSearchString" access="public" returntype="string" output="false">
 		<cfargument name="SearchString" type="string" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ExpKW = ReplaceNoCase(Arguments.SearchString,'"','','ALL')/>
 		<cfset var criteria = "">
@@ -9,7 +9,7 @@
 		<cfset var i = "">
 
 		<cfset ExpKW = ReplaceNoCase(ExpKW,",","","All")/>
-		
+
 		<!--- we need to do some parsing of this expression and get it into the criteria --->
 		<cfset criteria = "CF_TITLE <CONTAINS>" & #ExpKW#/>
 		<cfif listlen(#Arguments.SearchString#) gt 1>
@@ -20,7 +20,7 @@
 					<cfif FindOneOf('"',#i#) neq 0>
 						<!--- explicit - no stemming --->
 						<cfset thisGuy = #ReplaceNoCase(i,'"','','All')#/>
-						<cfset criteria = criteria & " OR CF_TITLE <CONTAINS>" & #Trim(thisGuy)#/> 
+						<cfset criteria = criteria & " OR CF_TITLE <CONTAINS>" & #Trim(thisGuy)#/>
 					<cfelse>
 						<cfset criteria = criteria & " OR CF_TITLE <CONTAINS><STEM>" & #i#/>
 					</cfif>
@@ -35,7 +35,7 @@
 					<cfif FindOneOf('"',#i#) neq 0>
 						<!--- explicit - no stemming --->
 						<cfset thisGuy = #ReplaceNoCase(i,'"','','All')#/>
-						<cfset criteria = criteria & " OR '" & #Trim(thisGuy)# & "'"/> 
+						<cfset criteria = criteria & " OR '" & #Trim(thisGuy)# & "'"/>
 					<cfelse>
 						<cfset criteria = criteria & " OR <MANY><STEM>" & #i#/>
 					</cfif>

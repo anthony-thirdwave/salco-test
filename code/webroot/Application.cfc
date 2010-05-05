@@ -64,7 +64,7 @@
 	</cfif>
 
 	<!--- this function gets the site type --->
-	<cffunction name="determineSiteType" returntype="string">
+	<cffunction name="determineSiteType" returntype="string" output="false">
 		<cfargument name="overrideSiteType" default="" />
 
 		<cfset var local = structNew() />
@@ -94,7 +94,7 @@
 
 
 	<!--- called when the application is created --->
-	<cffunction name="onApplicationStart" returntype="boolean">
+	<cffunction name="onApplicationStart" returntype="boolean" output="false">
 
 		<cfset var local = structNew() />
 
@@ -113,7 +113,7 @@
 
 
 	<!--- called when session is created --->
-	<cffunction name="OnSessionStart" returntype="void">
+	<cffunction name="OnSessionStart" returntype="void" output="false">
 
 		<!--- lock the session, in case of concurrent requests --->
 		<cflock scope="session" type="exclusive" timeout="15">
@@ -131,7 +131,7 @@
 
 
 	<!--- called before request is processed --->
-	<cffunction name="OnRequestStart" returntype="boolean">
+	<cffunction name="OnRequestStart" returntype="boolean" output="false">
 		<cfargument name="targetPage" type="string" required="true" />
 
 		<!--- check for an application reset --->
@@ -163,7 +163,7 @@
 
 	<!--- called after OnRequestStart, but before request is processed
 			* see Application.cfc in /com for handing of webservices, flash remoting and event gateways --->
-	<cffunction name="OnRequest" returntype="void">
+	<cffunction name="OnRequest" returntype="void" output="false">
 		<cfargument name="targetPage" type="string" required="true" />
 
 		<!--- set encoding for form and url variables --->
@@ -187,7 +187,7 @@
 
 
 	<!--- called at end of request, after processing --->
-	<cffunction name="OnRequestEnd" returntype="void">
+	<cffunction name="OnRequestEnd" returntype="void" output="false">
 
 		<cfreturn />
 	</cffunction>
@@ -195,7 +195,7 @@
 
 
 	<!--- called at the end of a session --->
-	<cffunction name="OnSessionEnd" returntype="void">
+	<cffunction name="OnSessionEnd" returntype="void" output="false">
 		<cfargument name="sessionScope" type="struct" required="true" />
 		<cfargument name="applicationScope" type="struct" default="#StructNew()#" />
 
@@ -206,7 +206,7 @@
 
 
 	<!--- called at the end of the application --->
-	<cffunction name="OnApplicationEnd" returntype="void">
+	<cffunction name="OnApplicationEnd" returntype="void" output="false">
 		<cfargument name="applicationScope" type="struct" default="#StructNew()#" />
 
 		<cfreturn />
@@ -216,7 +216,7 @@
 
 
 	<!--- called when an uncaught exception occurs --->
-	<cffunction name="OnError" returntype="void">
+	<cffunction name="OnError" returntype="void" output="false">
 		<cfargument name="exception" type="any" required="true" />
 		<cfargument name="eventName" type="string" default="" />
 
@@ -273,19 +273,19 @@
 
 
 	<!--- return the site type --->
-	<cffunction name="getSiteType" returntype="string">
+	<cffunction name="getSiteType" returntype="string" output="false">
 		<cfreturn variables.siteType />
 	</cffunction>
 
 
 	<!--- return the datasource --->
-	<cffunction name="getDatasource" returntype="string">
+	<cffunction name="getDatasource" returntype="string" output="false">
 		<cfreturn this.datasource />
 	</cffunction>
 
 
 	<!--- return the unique name --->
-	<cffunction name="getUniqueName" returntype="string">
+	<cffunction name="getUniqueName" returntype="string" output="false">
 		<cfreturn variables.uniqueName />
 	</cffunction>
 

@@ -1,13 +1,13 @@
 <cfcomponent extends="Application" output="true">
 
 	<!--- return this --->
-	<cffunction name="init" returntype="ApplicationSettings">
+	<cffunction name="init" returntype="ApplicationSettings" output="false">
 		<cfreturn this />
 	</cffunction>
 
 
 	<!--- this function initializes the application, based upon the site type --->
-	<cffunction name="initializeApplication" returntype="boolean">
+	<cffunction name="initializeApplication" returntype="boolean" output="false">
 		<cfargument name="pathPrefix" required="true" type="string" />
 
 		<cfset var local = structNew() />
@@ -286,7 +286,7 @@
 
 
 	<!--- adds the factory configuration to the application scope  --->
-	<cffunction name="initFactory" returntype="boolean" access="private">
+	<cffunction name="initFactory" returntype="boolean" access="private" output="false">
 
 		<cfset var local = structNew() />
 
@@ -319,7 +319,7 @@
 
 
 	<!--- get a struct with the categories that use SSL --->
-	<cffunction name="getSSLStruct" returntype="struct">
+	<cffunction name="getSSLStruct" returntype="struct" output="false">
 
 		<cfset var local = structNew() />
 		<cfset local.returnStruct = structNew() />

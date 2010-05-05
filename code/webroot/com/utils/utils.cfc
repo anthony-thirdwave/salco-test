@@ -1,6 +1,6 @@
 <cfcomponent>
 
-	<cffunction name="init" returntype="utils">
+	<cffunction name="init" returntype="utils" output="false">
 		<cfreturn this>
 	</cffunction>
 
@@ -84,7 +84,7 @@
 
 
 	<!--- insert a delimiter after each character in a string  --->
-	<cffunction name="explodeString" returntype="string">
+	<cffunction name="explodeString" returntype="string" output="false">
 		<cfargument name="string" default="">
 		<cfargument name="delimiter" default="\">
 
@@ -107,7 +107,7 @@
 		<cfargument name="fileName" type="string" required="yes">
 
 		<cfset var local = structNew() />
-		<cfset local.returnValue=lcase(reReplace(arguments.fileName,"[’\!'/:""+=;?&<>|,]","","all"))>
+		<cfset local.returnValue=lcase(reReplace(arguments.fileName,"[ï¿½\!'/:""+=;?&<>|,]","","all"))>
 		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]"," ","all"))>
 		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]","-","all"))>
 		<cfreturn local.returnValue>
@@ -141,14 +141,14 @@
 
 
 	<cffunction name="SimpleEncrypt" returntype="string" output="false">
-		<cfargument name="ID" default="" type="Numeric" required="true">
+		<cfargument name="ID" type="Numeric" required="true">
 		<cfset ARGUMENTS.ID=(ARGUMENTS.ID*ARGUMENTS.ID)+430213>
 		<cfreturn ARGUMENTS.ID>
 	</cffunction>
 
 
 	<cffunction name="SimpleDecrypt" returntype="string" output="false">
-		<cfargument name="ID" default="" type="Numeric" required="true">
+		<cfargument name="ID" type="Numeric" required="true">
 		<cfset var ReturnValue = "">
 		<cftry>
 			<cfset ReturnValue=Sqr(ARGUMENTS.ID-430213)>
@@ -248,7 +248,7 @@
 
 	<cffunction name="Scrub" returntype="string" output="false">
 		<cfargument name="strInput" type="string" required="yes">
-		<cfset var ReturnValue=lcase(ReReplace(ARGUMENTS.strInput,"[’\!'/:"".+=;?&<>|,]","","all"))>
+		<cfset var ReturnValue=lcase(ReReplace(ARGUMENTS.strInput,"[ï¿½\!'/:"".+=;?&<>|,]","","all"))>
 		<cfset ReturnValue=lcase(ReReplace(ReturnValue,"[ ]"," ","all"))>
 		<cfset ReturnValue=lcase(ReReplace(ReturnValue,"[ ]","-","all"))>
 		<cfreturn ReturnValue>
@@ -348,7 +348,7 @@
 
 
 	<!--- convert dot delimited form variables into structs  --->
-	<cffunction name="formDotNotationToStruct" returntype="struct">
+	<cffunction name="formDotNotationToStruct" returntype="struct" output="false">
 		<cfargument name="form" default="#structNew()#">
 
 		<cfset var local = structNew() />
@@ -391,7 +391,7 @@
 
 
 	<!--- returns a spelled out number --->
-	<cffunction name="getNumberAsWords">
+	<cffunction name="getNumberAsWords" output="false">
 		<cfargument name="theNum" type="numeric" required="true">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
 
@@ -549,7 +549,7 @@
 		<cfreturn trim(local.tenThousandsString) />
 	</cffunction>
 
-	<cffunction name="ones">
+	<cffunction name="ones" output="false">
 		<cfargument name="num" type="numeric">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
 
@@ -587,7 +587,7 @@
 	</cffunction>
 
 
-	<cffunction name="tens">
+	<cffunction name="tens" output="false">
 		<cfargument name="num" type="numeric">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
 
@@ -624,7 +624,7 @@
 		<cfreturn trim(local.numAsString) />
 	</cffunction>
 
-	<cffunction name="teens">
+	<cffunction name="teens" output="false">
 		<cfargument name="num" type="numeric">
 		<cfargument name="getAsOrdinal" type="boolean" default="false">
 
@@ -664,7 +664,7 @@
 	</cffunction>
 
 	<!--- convert a number to an ordinal --->
-	<cffunction name="getNumberAsOrdinal" returntype="string">
+	<cffunction name="getNumberAsOrdinal" returntype="string" output="false">
 		<cfargument name="num" type="numeric">
 
 		<cfset var local = structNew() />

@@ -1,6 +1,6 @@
 <cfcomponent hint="Handles grouped elements.">
 
-<cffunction name="init" returntype="Group">
+<cffunction name="init" returntype="Group" output="false">
 	<cfreturn this />
 </cffunction>
 
@@ -1079,7 +1079,7 @@
 	<cfset var local = structNew() />
 
 	<!--- if a publicId is passed, use it --->
-	<cfif trim(len(arguments.publicId))>
+	<cfif len(trim(arguments.publicId))>
 		<cfinvoke method="getIdFromPublicId" returnvariable="arguments.id">
 			<cfinvokeargument name="publicId" value="#arguments.publicId#" />
 		</cfinvoke>

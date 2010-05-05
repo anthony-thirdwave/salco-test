@@ -40,7 +40,6 @@ code/webroot/com/utils/rss.cfc -text
 code/webroot/com/utils/security.cfc -text
 code/webroot/com/utils/tracking.cfc -text
 code/webroot/com/utils/utils.cfc -text
-code/webroot/com/utils/xml2struct.cfc -text
 code/webroot/com/workflow/RequestHandler.cfc -text
 code/webroot/com/workflow/request.cfc -text
 code/webroot/common/admin/Dashboard/_InitDashboard.cfm -text

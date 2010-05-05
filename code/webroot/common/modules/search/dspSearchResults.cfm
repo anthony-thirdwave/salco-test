@@ -18,19 +18,19 @@
 <div class="pagination">
 <cf_AddToQueryString QueryString="#FormQueryString#" name="oa" value="2" OmitList="SearchNum,StartRow">
 <cf_AddToQueryString QueryString="#QueryString#" name="searchTxt" value="#searchTxt#">
-<cfmodule template="/common/modules/utils/pagination.cfm" 
-	StartRow="#StartRow#" SearchNum="#SearchNum#" 
-	RecordCount="#ContentSearch.RecordCount#" 
+<cfmodule template="/common/modules/utils/pagination.cfm"
+	StartRow="#StartRow#" SearchNum="#SearchNum#"
+	RecordCount="#ContentSearch.RecordCount#"
 	FieldList="#QueryString#">
 </div>
 
-<cffunction name="searchLink">
+<cffunction name="searchLink" output="false">
 	<cfargument name="searchType">
 	<cfargument name="searchList">
 	<cfargument name="searchAlias" required="false" default="search">
-	
+
 	<cfset var local = structNew()>
-	
+
 	<cfset local.links = "">
 	<cfloop list="#arguments.searchList#" index="local.i" delimiters=",">
 		<cfset local.linkSubStr = "">
@@ -41,25 +41,25 @@
 	<cfreturn local.links>
 </cffunction>
 
-<cffunction name="categoryTreeLinks">
+<cffunction name="categoryTreeLinks" output="false">
 	<cfargument name="categoryAliases">
 	<cfargument name="categoryNames">
 	<cfargument name="listStartAt" required="false" default="1">
 	<cfargument name="separator" required="false" default="|">
-	
+
 	<!--- the root is the home page --->
-	
-	<cfset var local = structNew()> 
+
+	<cfset var local = structNew()>
 	<!--- <cfset local.links = "<a href='/'>Home</a>" > --->
-	<cfset local.links = "" >	
-	
+	<cfset local.links = "" >
+
 	<!--- to control when to end getting the list items --->
 	<cfset local.listEnd = listlen(arguments.categoryAliases,'/')-1>
-	
+
 	<cfif local.listEnd lte 0>
 		<cfset local.listEnd = 0>
 	</cfif>
-	
+
 	<cfloop index="local.i" from="#arguments.listStartAt#" to="#local.listEnd#" step="1">
 		<!--- <cfset local.linkSubStr = arguments.separator> --->
 		<cfset local.linkSubStr = "">
@@ -69,7 +69,7 @@
 			<cfset local.links = local.links & arguments.separator>
 		</cfif>
 	</cfloop>
-	
+
 	<cfreturn local.links>
 </cffunction>
 

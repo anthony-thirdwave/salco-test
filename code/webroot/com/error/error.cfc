@@ -2,13 +2,13 @@
 	<!--- Properties --->
 	<cfproperty name="errorStruct" type="struct">
 	<cfparam name="this.errorStruct" default="#structNew()#">
-	
+
 	<!--- Constructor --->
-	<cffunction name="constructor" returntype="boolean">
+	<cffunction name="constructor" returntype="boolean" output="false">
 		<cfset this.clear()>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<!--- Has Error Occurred --->
 	<cffunction name="hasErrorOccurred" returntype="boolean" output="false">
 		<cfif (listlen(this.getErrorFields()) GT 0)>
@@ -29,7 +29,7 @@
 	</cffunction>
 
 	<!--- Get Error Messages --->
-	<cffunction name="getErrorMessages" returntype="array">
+	<cffunction name="getErrorMessages" returntype="array" output="false">
 		<cfset var errorField = "">
 		<cfset variables.errorMessages = arrayNew(1)>
 		<cfloop list="#this.getErrorFields()#" index="errorField">
@@ -69,7 +69,7 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<!--- Clear --->
 	<cffunction name="clear" returntype="boolean" output="false">
 		<cfset this.setErrorStruct(structnew())>
@@ -97,11 +97,11 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<!--- Set Error Struct --->
 	<cffunction name="setErrorStruct" returntype="boolean" output="false">
 		<cfargument name="errorStruct" required="true" type="struct">
-		<cfset this.errorStruct = arguments.errorstruct>		
+		<cfset this.errorStruct = arguments.errorstruct>
 		<cfreturn true>
 	</cffunction>
 </cfcomponent>
