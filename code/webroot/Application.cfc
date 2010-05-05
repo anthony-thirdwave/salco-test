@@ -163,7 +163,7 @@
 
 	<!--- called after OnRequestStart, but before request is processed
 			* see Application.cfc in /com for handing of webservices, flash remoting and event gateways --->
-	<cffunction name="OnRequest" returntype="void" output="false">
+	<cffunction name="OnRequest" returntype="void" output="true">
 		<cfargument name="targetPage" type="string" required="true" />
 
 		<!--- set encoding for form and url variables --->
@@ -216,7 +216,7 @@
 
 
 	<!--- called when an uncaught exception occurs --->
-	<cffunction name="OnError" returntype="void" output="false">
+	<cffunction name="OnError" returntype="void" output="true">
 		<cfargument name="exception" type="any" required="true" />
 		<cfargument name="eventName" type="string" default="" />
 
