@@ -109,6 +109,54 @@
 
 </body>
 </html>
+<!--- Get the list of addresses to which to send the error message, as well as
+	  the From: address to use.  --->
+<cftry>
+	<cflock timeout="1" name="#Application.ApplicationName#" type="ReadOnly">
+		<cfset ErrorMailTo = Application.ErrorMailTo>
+		<cfset ErrorMailFrom = Application.ErrorMailFrom>
+	</cflock>
+<cfcatch type="Lock">
+	<!--- There is a slight possibility that the application scope itself is
+		  locked.  In fact, for all we know, a lock timeout might be what got
+		  us here in the first place.  Failing to catch exceptions will result
+		  in an infinite loop, so in this unlikely event, we will send the
+		  error message to Thomas Sychay.  --->
+	<cfset ErrorMailTo = "thomas@thirdwavellc.com">
+	<cfset ErrorMailFrom = "webmaster@thirdwavellc.com">
+</cfcatch>
+</cftry>
+
+<!--- Get the current time.  --->
+<cfset ts = Now()>
+<cfif 1 and Error.RemoteAddress IS NOT "81.203.209.76" and FindNoCase("slurp",Error.Browser,1) IS "0">
+<!--- Send the error message to each address.  --->
+<cfloop index="ToAddress" list="#ErrorMailTo#" delimiters=";">
+	<cfmail to="#Trim(ToAddress)#"
+			from="#ErrorMailFrom#"
+			subject="#CGI.HTTP_HOST# Error on #DateFormat(ts)#, #TimeFormat(ts)#."
+			type="HTML">
+<p>
+There was an error that occurred on the #CGI.HTTP_HOST# website on #DateFormat(ts)#, #TimeFormat(ts)#.
+</p>
+
+<p>
+#Error.DateTime#<br>
+Browser - #Error.Browser#<br>
+IP Address - #Error.RemoteAddress#<br>
+Referring Page - #Error.HTTPReferer#<br>
+Page - #Error.Template#<br>
+PATH_INFO - #CGI.PATH_INFO#<br>
+Query String - #Error.QueryString#<br>
+</p>
+
+<p>
+#Error.Diagnostics#
+<p>
+<cfdump var="#error#">
+</cfmail>
+</cfloop>
+</cfif>
 
 </cfoutput>
 </cfif>
