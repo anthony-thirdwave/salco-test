@@ -107,3 +107,6 @@
 </div>
 </body>
 </html>
+
+<!--- clear the variables scope to slow coldfusion memory leak --->
+<cfset structClear(variables)>
