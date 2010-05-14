@@ -1,8 +1,8 @@
 
-<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm"
 	Page="User Details"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | <a href=""index.cfm"">User Manager</A> | User Details">
-	
+
 <cfparam name="ATTRIBUTES.DonePage" default="/common/admin/UserManager/index.cfm">
 <cfparam name="ATTRIBUTES.EditUserID" default="-1">
 
@@ -23,7 +23,7 @@
 <cfset myUser=createObject("component","com.factory.thirdwave.FactoryObject")>
 
 <!--- generate an adminUser from the factory --->
-<cfset myUser.init("AdminUser")>
+<cfset myUser.init("3W:AdminUser")>
 
 <!--- get the current user --->
 <cfset myUser.constructor(Val(ATTRIBUTES.EditUserID))>
@@ -64,20 +64,20 @@
 				</TD></TR></table>
 			</cfcase>
 			<cfcase value="2"><!--- Validate Form / Confirm --->
-			
-			
+
+
 				<!--- this loops through the properties of the adminUser, then sets them if they exist --->
 				<cfloop array="#myUser.propArray#" index="thisProperty">
-					
+
 					<!--- if the property was included in the form submission --->
 					<cfif isDefined("form.#thisProperty.variableName.xmlText#")>
-						
+
 						<!--- variableName and form element names match in this case --->
 						<cfset myUser.setProperty("#thisProperty.variableName.xmlText#",form[thisProperty.variableName.xmlText])>
 					</cfif>
 				</cfloop>
-				
-				
+
+
 				<cfset FormMode="Validate">
 				<table bgcolor="silver"><tr valign="top">
 				<TD bgcolor="white">
@@ -89,7 +89,7 @@
 				<input type="image" src="/common/images/admin/button_save.png" name="ButSubmit" value="Save">
 				</form>
 				</TD></TR></table>
-				
+
 				<!--- check if the user has all the required properties set correctly --->
 				<cfif myUser.IsCorrect()>
 					<cfset myUser.Save()>

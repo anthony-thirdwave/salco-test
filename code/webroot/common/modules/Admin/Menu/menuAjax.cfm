@@ -12,9 +12,9 @@
 	<cfif IsDefined("URL.mvcid") AND NOT IsDefined("ATTRIBUTES.mvcid")>
 		<cfset ATTRIBUTES.mvcid = URL.mvcid>
 	<cfelse>
-		<cfparam name="ATTRIBUTES.mvcid" default="1">
+		<cfparam name="ATTRIBUTES.mvcid" default="#APPLICATION.defaultSiteCategoryID#">
 	</cfif>
-	
+
 	<cfset idPrefix = ATTRIBUTES.idPrefix>
 	<!--- include icon image information --->
 	<cfinclude template="menuAjaxIconStructInc.cfm">
@@ -22,8 +22,8 @@
 	<cfif idlist EQ "0,-1">
 		<cfset idlist = "-1">
 	</cfif>
-	
-	
+
+
 	<style>
 		.childContent{
 			padding-left: 10px;
@@ -31,10 +31,10 @@
 	</style>
 	<cfoutput>
 	<script language="javascript" type="text/javascript">
-	
+
 	function #idPrefix#getMenuHTTPObj() {
 		var ua;
-	
+
 		if(window.XMLHttpRequest) {
 			try {
 				ua = new XMLHttpRequest();
@@ -50,7 +50,7 @@
 		}
 		return ua;
 	}
-	
+
 	<!--- store icon image information from cf structs into js arrays --->
 		#idPrefix#aCollapsedIcons = new Array();
 		<cfloop list="#StructKeyList(sIconsCollapsed)#" index="sKey">
@@ -60,8 +60,8 @@
 		<cfloop list="#StructKeyList(sIconsExpanded)#" index="sKey">
 		#idPrefix#aExpandedIcons['#sKey#'] = "#StructFind(sIconsExpanded,sKey)#";
 		</cfloop>
-	
-	
+
+
 	<!--- get icon path given category type and 'collapsed' status --->
 	function #idPrefix#getIcon(typeID,isCollapsed){
 		if(isCollapsed){
@@ -78,9 +78,9 @@
 			else
 				return #idPrefix#aExpandedIcons[typeID];
 		}
-	
+
 	}
-	
+
 	#idPrefix#getMenuHTTPCall = #idPrefix#getMenuHTTPObj();
 	<!--- inProgress: global var true if ajax call is currently in progress  --->
 	#idPrefix#inProgress = false;
@@ -92,8 +92,8 @@
 	#idPrefix#hrefCloseArray = new Array();
 	<!--- hrefCloseArray: array to store category type of page (used to get icon) --->
 	#idPrefix#typeIDArray = new Array();
-	
-	
+
+
 	<!--- doChildCategories: initial ajax call to get child categories --->
 	function #idPrefix#doChildCategories(catID,catTypeID){
 		if(!#idPrefix#inProgress){
@@ -137,14 +137,14 @@
 		document.getElementById('#idPrefix#catagoryAnchor_'+id).href = #idPrefix#hrefCloseArray[id];
 		document.getElementById('#idPrefix#catagoryBullet_'+id).src = #idPrefix#getIcon(#idPrefix#typeIDArray[id],false);
 	}
-	
+
 	function #idPrefix#isDivExpanded(id){
 		if(document.getElementById('#idPrefix#categoryChildContainer_'+id).style.display == 'block')
 			return true;
 		else
 			return false;
 	}
-	
+
 	<!---  IF menu is in auto colapse mode, include collapse function --->
 	<cfif ATTRIBUTES.isAutoCollapse EQ 1>
 	<!---  collapses all divs in idlist except thisid --->
@@ -162,7 +162,7 @@
 	}
 	</cfif>
 	</script>
-	
+
 	<div<cfif ATTRIBUTES.style NEQ ""> style="#ATTRIBUTES.style#"</cfif>>
 	</cfoutput>
 	<cfif ATTRIBUTES.IsParentChooser AND ATTRIBUTES.mvcid GT 0>

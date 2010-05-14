@@ -42,9 +42,9 @@
 <cfset MVSearch="/common/admin/MasterView/search.cfm">
 <cfparam name="MVMode" default="MasterView">
 <cfparam name="MVEid" default="1">
-<cfparam name="MVCid" default="1"><!--- CategoryID of site --->
+<cfparam name="MVCid" default="#APPLICATION.defaultSiteCategoryID#"><!--- CategoryID of site --->
 <cfparam name="MVSearchTerms" default="">
-<cfmodule Template="/common/modules/utils/GetBranchFromRoot.cfm" 
+<cfmodule Template="/common/modules/utils/GetBranchFromRoot.cfm"
 	ThisCategoryID="#MVCid#" NameList="" IDList="#MVCid#">
 <cfset CategoryIDThreadList=IDList>
 

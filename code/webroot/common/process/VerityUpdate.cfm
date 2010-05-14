@@ -1,6 +1,6 @@
 <cfsetting requesttimeout="300">
 
-<cfparam name="SourceTopLevelCategoryID" default="451">
+<cfparam name="SourceTopLevelCategoryID" default="#APPLICATION.defaultSiteCategoryID#">
 <cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
     select LocaleID,LocaleCode,LanguageID,LabelName As LanguageName from
      t_Locale LEFT OUTER JOIN
@@ -58,13 +58,13 @@
             <cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="#APPLICATION.lVisibleCategoryTypeID#" null="No">
             <cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
         </cfstoredproc>
-        
+
         <cfdump var="#getCats#" label="getCats" expand="false">
-        
-        
+
+
         <cfset qVerity=QueryNew("Key,Title,Body,Custom1,Custom2,Custom3,Custom4,Category,CategoryTree,UrlPath")>
-        
-        
+
+
         <cfloop query="GetCats">
             <cfstoredproc procedure="sp_GetContents" datasource="#APPLICATION.DSN#">
                 <cfprocresult name="GetContentList">
@@ -73,40 +73,40 @@
                 <cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentPositionID" value="401" null="No">
                 <cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
             </cfstoredproc>
-            
+
             <cfset Key="#GetCats.CategoryID#">
             <cfset Title="#GetCats.CategoryNameDerived#">
             <cfset UrlPath=getCats.CategoryAlias>
             <cfset Custom2="#GetCats.CategoryTypeID#">
             <cfset Body="#GetCats.CategoryNameDerived# #GetCats.CategoryName# #GetCats.CategoryLocalePropertiesPacket#">
-            
+
             <cfset Keywords="">
-            
+
             <cfif isWddx(GetCats.CategoryLocalePropertiesPacket)>
                 <cfwddx action="wddx2cfml"
                         input="#GetCats.CategoryLocalePropertiesPacket#"
                         output="categoryLocaleProperties">
-                        
+
                 <cfif structKeyExists(categoryLocaleProperties,"metakeywords")>
                    <cfset counter=1>
                    <!--- gotta do it like this so there are no spaces in the list --->
                    <cfloop list="#categoryLocaleProperties.metakeywords#" index="k" delimiters="," >
                       <!---  <cfset Keywords = listAppend(Keywords,lcase(k),",")> --->
                       <cfset Keywords = Keywords & lcase(trim(k))>
-                      
+
                       <cfif counter lt listlen(categoryLocaleProperties.metakeywords,",")>
                            <cfset Keywords = Keywords & ",">
                       </cfif>
-                      
+
                       <cfset counter++>
                    </cfloop>
-                   
-                </cfif>                     
+
+                </cfif>
                 <!--- <cfoutput>#GetCats.CategoryID#) #keywords#</cfoutput><br/>
                 <hr/> --->
             </cfif>
-            
-            
+
+
             <cfif GetCats.CategoryTypeID IS "64"><!--- Product --->
                 <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
                     select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])#
@@ -130,8 +130,8 @@
                 select * from t_Properties Where PropertiesID=#Val(GetCats.categoryPropertiesID)#
             </cfquery>
             <cfset Body="#Body# #GetpropertiesPacket.PropertiesPacket#">
-                        
-            
+
+
             <cfset Custom1="">
             <cfoutput query="GetContentList">
                 <cfset Body="#Body# #ContentName# #ContentNameDerived# #ContentBody#">
@@ -139,56 +139,56 @@
                     select * from t_Properties Where PropertiesID=#Val(ContentPropertiesID)#
                 </cfquery>
                 <cfset Body="#Body# #GetpropertiesPacket2.PropertiesPacket#">
-                                            
+
                 <cfquery name="GetpropertiesPacket3" datasource="#APPLICATION.DSN#">
                     select * from t_Properties Where PropertiesID=#Val(ContentLocalePropertiesID)#
                 </cfquery>
-                
+
                 <cfset Body="#Body# #GetpropertiesPacket3.PropertiesPacket#">
                 <cfif IsWddx(GetpropertiesPacket3.PropertiesPacket)>
                     <cfwddx action="WDDX2CFML" input="#GetpropertiesPacket3.PropertiesPacket#" output="sContentLocalePropertiesPacket">
-                                    
+
                     <cfif StructKeyExists(sContentLocalePropertiesPacket,"ContentPreview")>
-                        <cfset Custom1="#Custom1# #sContentLocalePropertiesPacket.ContentPreview#">                     
-                    </cfif>                 
+                        <cfset Custom1="#Custom1# #sContentLocalePropertiesPacket.ContentPreview#">
+                    </cfif>
                 </cfif>
             </cfoutput>
-            
-            
+
+
             <!--- find the taxonomy for this category, if any --->
-                      
+
 			<cftry>
-			
+
 	            <cfquery name="getTaxonomy" datasource="#APPLICATION.dsn#">
 	                SELECT lower(dbo.fn_getTopicEntityNameHierarchyList(c.categoryId)) as topicPath
 	                  FROM t_category c
 	                  JOIN t_topicEntity te ON c.categoryId = te.topicId
 	                 WHERE te.entityId = <cfqueryparam value="#key#" cfsqltype="cf_sql_integer">
 	                   AND te.entityName = <cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar">
-	            </cfquery>          
+	            </cfquery>
 
                 <cfset Category = valuelist(getTaxonomy.topicPath,",")>
-			
+
 			<cfcatch>
 			     <cfset Category = "">
 			</cfcatch>
-			
+
 			</cftry>
-            
+
             <!--- <cfif len(taxonomyCategory)>
              <cfset Category = listAppend(Category,taxonomyCategory,",")>
-            </cfif>  --->       
-                        
+            </cfif>  --->
+
             <cfquery name="getCategoryNameTree" datasource="#APPLICATION.dsn#">
-                select dbo.fn_getCategoryNameHierarchyList(<cfqueryparam value="#GetCats.CategoryID#" cfsqltype="cf_sql_integer">) as categoryNameTree            
+                select dbo.fn_getCategoryNameHierarchyList(<cfqueryparam value="#GetCats.CategoryID#" cfsqltype="cf_sql_integer">) as categoryNameTree
             </cfquery>
-            
+
             <cfset CategoryNameList = getCategoryNameTree.categoryNameTree>
-            
+
             <cfquery name="getCategoryAliasTree" datasource="#APPLICATION.dsn#">
-                select dbo.fn_getCategoryAliasHierarchyList(<cfqueryparam value="#GetCats.CategoryID#" cfsqltype="cf_sql_integer">) as categoryAliasTree           
+                select dbo.fn_getCategoryAliasHierarchyList(<cfqueryparam value="#GetCats.CategoryID#" cfsqltype="cf_sql_integer">) as categoryAliasTree
             </cfquery>
-            
+
             <cfset CategoryTree = getCategoryAliasTree.categoryAliasTree>
 
 
@@ -204,7 +204,7 @@
             <cfset QuerySetCell(qVerity, "CategoryTree",CategoryTree)>
             <cfset QuerySetCell(qVerity, "UrlPath", UrlPath)>
         </cfloop>
-        
+
         <cfindex action="UPDATE" collection="#ThisCollectionName#"
             key="Key"
             type="CUSTOM"
@@ -228,7 +228,7 @@
     <cfset temp = structdelete(APPLICATION,"tagCloud")>
 </cfif>
 
-<!--- 
+<!---
 <cfquery name="getThis" dbtype="query">
     SELECT *
       FROM qVerity

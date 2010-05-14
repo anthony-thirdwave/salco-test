@@ -236,7 +236,7 @@
 		<cfquery name="local.GetDisplayOrder" datasource="#APPLICATION.DSN#">
 			SELECT	DisplayOrder
 			FROM	t_Category
-			WHERE	CategoryID = 1
+			WHERE	CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#APPLICATION.defaultSiteCategoryID#">
 		</cfquery>
 
 		<cfset local.myArray = ArrayNew(1)>
@@ -283,7 +283,7 @@
 
 	<!--- determines how and if a link should be added to sitemap.xml --->
 	<cffunction name="sitemap_help_xml" output="false">
-		<cfargument name="ThisCategoryID" default="1">
+		<cfargument name="ThisCategoryID" default="#APPLICATION.defaultSiteCategoryID#">
 		<cfargument name="rank" default="1">
 		<cfargument name="URL_array" type="array">
 

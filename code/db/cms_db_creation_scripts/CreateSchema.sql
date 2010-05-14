@@ -75,7 +75,7 @@ CREATE TABLE [dbo].[t_Category](
 	[WorkflowStatusID] [int] NULL,
 	[TemplateID] [int] NULL,
 	[CacheDateTime] [datetime] NULL,
-	[SourceID] [int] NULL,
+	[SourceID] [int] NULL CONSTRAINT [DF_t_Category_SourceID]  DEFAULT (0),
  CONSTRAINT [PK_t_Category] PRIMARY KEY CLUSTERED 
 (
 	[CategoryID] ASC
@@ -1548,7 +1548,10 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetCategoryLocale]'))
 EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetCategoryLocale]
 AS
-SELECT     dbo.t_CategoryLocale.*, dbo.t_Locale.LocaleName AS LocaleName, t_Label_1.LabelName AS LanguageName, t_Label_1.LabelCode AS LanguageCode,
+SELECT  dbo.t_CategoryLocale.CategoryLocaleID, dbo.t_CategoryLocale.CategoryId, dbo.t_CategoryLocale.CategoryLocaleActive,
+		dbo.t_CategoryLocale.CategoryLocaleName, dbo.t_CategoryLocale.CategoryLocaleURL, dbo.t_CategoryLocale.LocaleID,
+		dbo.t_CategoryLocale.PropertiesID, dbo.t_CategoryLocale.DefaultCategoryLocale, dbo.t_CategoryLocale.WorkflowStatusID,
+		dbo.t_Locale.LocaleName AS LocaleName, t_Label_1.LabelName AS LanguageName, t_Label_1.LabelCode AS LanguageCode,
                        dbo.t_Properties.PropertiesPacket AS PropertiesPacket, dbo.t_Category.DisplayOrder AS DisplayORder, dbo.t_Category.CategoryAlias
 FROM         dbo.t_Category RIGHT OUTER JOIN
                       dbo.t_CategoryLocale ON dbo.t_Category.CategoryID = dbo.t_CategoryLocale.CategoryID LEFT OUTER JOIN
