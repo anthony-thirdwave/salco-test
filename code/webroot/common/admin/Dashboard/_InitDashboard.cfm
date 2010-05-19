@@ -47,6 +47,16 @@
 		sDashboard[thisKey]=Duplicate(sDashboardModule);
 		thisKey = thisKey + 1;
 		
+		sDashboardModule.ID = 4;
+		sDashboardModule.Name = "Comments";
+		sDashboardModule.Description = "Monitor comments.";
+		sDashboardModule.Required = 1;
+		sDashboardModule.Position=402;
+		sDashboardModule.Priority=10;
+		sDashboardModule.UsergroupIdList="all";
+		sDashboardModule.Path="/common/modules/admin/Dashboard/comments.cfm";
+		sDashboard[thisKey]=Duplicate(sDashboardModule);
+		thisKey = thisKey + 1;
 	</cfscript>
 	<!--- <cfdump var="#sDashboard#"> --->
 	

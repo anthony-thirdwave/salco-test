@@ -127,3 +127,8 @@ code{
 	text-decoration:line-through;
 }
 
+/* honeypot ant-spam field */
+.winnie {
+	display:none;
+}
+

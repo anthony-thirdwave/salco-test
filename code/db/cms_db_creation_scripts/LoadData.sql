@@ -278,7 +278,8 @@ SET IDENTITY_INSERT t_Country OFF
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 72,'3WCAT','Resource',-40,120,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 73,'3WCAT','Gallery',-40,140,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 74,'3WCAT','Banner Repository',40,150,null,0
- insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 75,'3WCAT','MT Blog ',-40,20,null,0
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 75,'3WCAT','MT Blog',-40,20,null,0
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 76,'3WCAT','Topic',40,50,null,0
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 100,'EN','English',60,10,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 101,'ES','Spanish',60,20,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 102,'DE','German',60,30,null,null
@@ -359,6 +360,12 @@ SET IDENTITY_INSERT t_Country OFF
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 700,'FEEDST','New',700,1,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 701,'FEEDST','Received',700,11,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 702,'FEEDST','Resolved',700,21,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1090 'MSGSTAT','New',1090,1,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1091 'MSGSTAT','Okay',1090,2,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1092 'MSGSTAT','Suspended',1090,3,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1093 'MSGSTAT','Draft',1090,4,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1094 'MSGSTAT','Delete',1090,5,null,null
+ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1095 'MSGSTAT','Pending',1090,6,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1200,'TITLETYPE','Hidden',170,10,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1201,'TITLETYPE','Header 1',170,20,null,null
  insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 1202,'TITLETYPE','Header 2',170,30,null,null

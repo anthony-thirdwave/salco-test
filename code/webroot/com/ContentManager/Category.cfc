@@ -26,17 +26,18 @@
 	<cfproperty name="CategoryImageTitle" type="string" default="">
 	<cfproperty name="AuthorName" type="string" default="">
 	<cfproperty name="ArticleSourceID" type="numeric" default="">
-	<cfproperty name="AllowComments" type="boolean" default="">
+	<cfproperty name="AllowComments" type="numeric" default="">
 	<cfproperty name="AllowBackToTop" type="boolean" default="">
 	<cfproperty name="ProductBrandLogoID" type="numeric" default="">
 	<cfproperty name="ProductConsoleTypeID" type="numeric" default="">
 	<cfproperty name="ProductProgramTypeID" type="numeric" default="">
 	<cfproperty name="ColorID" type="numeric" default="">
 	<cfproperty name="PressReleaseDate" type="date" default="">
-	<cfproperty name="UserloginAccess" type="string" default="">
+	<cfproperty name="CommentNotificationEmail" type="string" default="">
 	<cfproperty name="sCurrentResourceDetails" type="struct" default="">
 	<cfproperty name="aOwner" type="array" default="">
 	<cfproperty name="useSSL" type="boolean" default="">
+	<cfproperty name="lTopicID" type="string" default="">
 
 	<cfproperty name="ProductionFTPHost" type="string" default="">
 	<cfproperty name="ProductionFTPRootPath" type="string" default="">
@@ -86,11 +87,12 @@
 	<cfset structInsert(sPropertyDisplayName,"ProductProgramTypeID","product program type id",1)>
 	<cfset structInsert(sPropertyDisplayName,"ColorID","color id",1)>
 	<cfset structInsert(sPropertyDisplayName,"PressReleaseDate","press release date",1)>
-	<cfset structInsert(sPropertyDisplayName,"UserloginAccess","username for access",1)>
+	<cfset structInsert(sPropertyDisplayName,"CommentNotificationEmail","email to be sent comment notifications",1)>
 	<cfset structInsert(sPropertyDisplayName,"sCurrentResourceDetails","resource details",1)>
 	<cfset structInsert(sPropertyDisplayName,"aOwner","owners",1)>
 	<cfset structInsert(sPropertyDisplayName,"useSSL","use ssl",1)>
 	<cfset structInsert(sPropertyDisplayName,"foober","foo bar",1)><!--- bravo --->
+	<cfset structInsert(sPropertyDisplayName,"lTopicID","Topics",1)>
 
 	<!--- Determine field restrictions based on category type --->
 	<cfset this.sFields=StructNew()>
@@ -98,7 +100,7 @@
 	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="60,63,70"><!--- Content --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,aOwner">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,aOwner,AllowComments,CommentNotificationEmail">
 			</cfcase>
 			<cfcase value="67"><!--- News List --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
@@ -116,10 +118,10 @@
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN">
 			</cfcase>
 			<cfcase value="66"><!--- Article --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,ShowInNavigation,CategoryIndexed">
 			</cfcase>
-			<cfcase value="76"><!--- Journal --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed">
+			<cfcase value="76"><!--- Topic --->
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
 			</cfcase>
 
 			<!--- Not Used --->
@@ -199,13 +201,14 @@
 		<cfset this.SetProperty("ProductProgramTypeID","-1")>
 		<cfset this.SetProperty("ColorID","-1")>
 		<cfset this.SetProperty("PressReleaseDate","")>
-		<cfset this.SetProperty("UserloginAccess","")>
+		<cfset this.SetProperty("CommentNotificationEmail","")>
 		<cfset sBlank=StructNew()>
 		<cfset this.SetProperty("sCurrentResourceDetails",sBlank)>
 		<cfset aBlank=ArrayNew(1)>
 		<cfset this.SetProperty("aOwner",aBlank)>
 		<cfset this.SetProperty("useSSL","0")>
 		<cfset this.SetProperty("foobar","")><!--- delta --->
+		<cfset this.SetProperty("lTopicID","")>
 
 		<cfif Val(ARGUMENTS.ID) GT 0>
 			<!--- If id is greater than 0, load from DB. --->
@@ -237,13 +240,18 @@
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageOff,CategoryImageOff,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,PressReleaseDate,UserloginAccess,sCurrentResourceDetails,aOwner,foobar,useSSL"><!--- echo --->
+						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageOff,CategoryImageOff,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,PressReleaseDate,CommentNotificationEmail,sCurrentResourceDetails,aOwner,foobar,useSSL"><!--- echo --->
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
 						</cfloop>
 					</cfif>
-
+					<cfinvoke component="com.Taxonomy.TopicHandler"
+						method="GetRelatedTopics"
+						EntityID="#Val(ARGUMENTS.ID)#"
+						EntityName="t_Category"
+						returnvariable="getTopics">
+					<cfset this.SetProperty("lTopicID",ValueList(getTopics.TopicID))>
 				</cfoutput>
 				<cfreturn true>
 			<cfelse>
@@ -297,11 +305,12 @@
 		<cfset var thisProductProgramTypeID = "">
 		<cfset var thisColorID = "">
 		<cfset var thisPressReleaseDate = "">
-		<cfset var thisUserloginAccess = "">
+		<cfset var thisCommentNotificationEmail = "">
 		<cfset var thisSCurrentResourceDetails = "">
 		<cfset var thisAOwner = "">
 		<cfset var thisUseSSL = "">
 		<cfset var thisFoobar = "">
+		<cfset var thisLTopicID="">
 		<cfset var Destination = "">
 		<cfset var Source = "">
 		<cfset var DestinationToSave = "">
@@ -374,12 +383,12 @@
 			<cfset thisProductProgramTypeID=this.GetProperty("ProductProgramTypeID")>
 			<cfset thisColorID=this.GetProperty("ColorID")>
 			<cfset thisPressReleaseDate=this.GetProperty("PressReleaseDate")>
-			<cfset thisUserloginAccess=this.GetProperty("UserloginAccess")>
+			<cfset thisCommentNotificationEmail=this.GetProperty("CommentNotificationEmail")>
 			<cfset thisSCurrentResourceDetails=this.GetProperty("sCurrentResourceDetails")>
 			<cfset thisAOwner=this.GetProperty("aOwner")>
 			<cfset thisUseSSL=this.GetProperty("useSSL")>
 			<cfset thisFoobar=this.GetProperty("foobar")><!--- foxtrot --->
-
+			<cfset thisLTopicID=this.GetProperty("lTopicID")>
 
 			<cfif ListFindNoCase("60,62,63,64,66,71,67,74,75,76",thisCategoryTypeID) IS "0"><!--- Set ShowInNavigation to 1 if not a public category--->
 				<cfset thisShowInNavigation=1>
@@ -666,6 +675,13 @@
 				</cfif>
 			</cfif>
 
+			<!--- update lTopicID --->
+			<cfinvoke component="com.taxonomy.TopicHandler"
+				method="InsertRelatedTopics"
+				EntityID="#Val(ThisCategoryID)#"
+				EntityName="t_Category"
+				lTopicID="#thisLTopicID#">
+				
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
 				SELECT t_Properties.PropertiesID,t_Properties.PropertiesPacket
 				FROM t_Properties
@@ -691,7 +707,7 @@
 			<cfset DevNull=StructInsert(sProperties,"ProductProgramTypeID","#val(ThisProductProgramTypeID)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"ColorID","#val(ThisColorID)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"PressReleaseDate","#ThisPressReleaseDate#","1")>
-			<cfset DevNull=StructInsert(sProperties,"UserloginAccess","#ThisUserloginAccess#","1")>
+			<cfset DevNull=StructInsert(sProperties,"CommentNotificationEmail","#ThisCommentNotificationEmail#","1")>
 			<cfset DevNull=StructInsert(sProperties,"SCurrentResourceDetails",thisSCurrentResourceDetails,"1")>
 			<cfset DevNull=StructInsert(sProperties,"aOwner",thisAOwner,"1")>
 
@@ -1152,7 +1168,10 @@
 						LabelID  IN (60,61,75,66,76) <!--- Content, System, Blog, Article, Journal --->
 					</cfcase>
 					<cfcase value="61"><!--- system --->
-						LabelID IN (60,61,67,71,73, 74,66,76) <!--- Content, News List, Event List, Gallery, Banner Repository --->
+						LabelID IN (60,61,67,71,73,74,66,76) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
+					</cfcase>
+					<cfcase value="76"><!--- topic --->
+						LabelID IN (61,76) <!--- System, Topic --->
 					</cfcase>
 					<cfdefaultcase><!--- --->
 						LabelID NOT IN (61,60)
@@ -1383,65 +1402,6 @@
 						<cfquery name="CategoryImageOffssages" datasource="#sProductionSiteInformation.ProductionDBDSN#">
 							DELETE FROM t_Category WHERE CategoryID=<cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
 						</cfquery>
-
-						<!--- BEGIN PRODUCT SPECIFIC DELETE ROUTINES, easier here than in product.cfc, etc. --->
-						<cfif CategoryTypeID IS "64" OR CategoryTypeID IS "62">
-							<!--- Standard properties --->
-							<cfquery name="DeleteProductAttributes" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								delete from t_ProductAttribute
-								WHERE CategoryID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer">
-							</cfquery>
-							<!--- Text Blocks, ie key features --->
-							<cfquery name="GetPrevTextBlockStaging" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								select TextBlockID from t_TextBlock
-								WHERE KeyID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer"> and Entity='t_Category'
-								Order by TextBlockPriority
-							</cfquery>
-							<cfif GetPrevTextBlockStaging.RecordCount GT "0">
-								<cfquery name="DeleteLanguageBlocks" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-									delete from t_TextBlock
-									WHERE TextBlockID IN (<cfqueryparam value="#ValueList(GetPrevTextBlockStaging.TextBlockID)#" cfsqltype="cf_sql_integer" list="yes">)
-								</cfquery>
-								<cfquery name="DeleteLanguageBlocksLanguages" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-									delete from t_TextBlockLanguage
-									WHERE TextBlockID IN (<cfqueryparam value="#ValueList(GetPrevTextBlockStaging.TextBlockID)#" cfsqltype="cf_sql_integer" list="yes">)
-								</cfquery>
-							</cfif>
-							<!--- Resources, ie Additional product views --->
-							<cfquery name="GetPrevResourceStaging" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								select ResourceID from t_Resource
-								WHERE KeyID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer"> and Entity='t_Category'
-								Order by ResourcePriority
-							</cfquery>
-							<cfif GetPrevResourceStaging.RecordCount GT "0">
-								<cfquery name="DeleteResources" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-									delete from t_Resource
-									WHERE ResourceID IN (<cfqueryparam value="#ValueList(GetPrevResourceStaging.ResourceID)#" cfsqltype="cf_sql_integer" list="yes">)
-								</cfquery>
-								<cfquery name="DeleteResourcesLanguages" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-									delete from t_ResourceLanguage
-									WHERE ResourceID IN (<cfqueryparam value="#ValueList(GetPrevResourceStaging.ResourceID)#" cfsqltype="cf_sql_integer" list="yes">)
-								</cfquery>
-							</cfif>
-							<!--- ProductFamilyAttributes, ie Additional product views --->
-							<cfquery name="GetPrevProductFamilyAttributeStaging" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								select ProductFamilyAttributeID from t_ProductFamilyAttribute
-								WHERE CategoryID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer">
-								Order by ProductFamilyAttributePriority
-							</cfquery>
-							<cfif GetPrevProductFamilyAttributeStaging.RecordCount GT "0">
-								<cfquery name="DeleteProductFamilyAttributes" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-									delete from t_ProductFamilyAttribute
-									WHERE ProductFamilyAttributeID IN (<cfqueryparam value="#ValueList(GetPrevProductFamilyAttributeStaging.ProductFamilyAttributeID)#" cfsqltype="cf_sql_integer" list="yes">)
-								</cfquery>
-								<cfquery name="DeleteProductFamilyAttributesLanguages" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-									delete from t_ProductFamilyAttributeLanguage
-									WHERE ProductFamilyAttributeID IN (<cfqueryparam value="#ValueList(GetPrevProductFamilyAttributeStaging.ProductFamilyAttributeID)#" cfsqltype="cf_sql_integer" list="yes">)
-								</cfquery>
-							</cfif>
-						</cfif>
-						<!--- END PRODUCT DELETE ROUTINES --->
-
 					</cfoutput>
 				</cftransaction>
 				<cfoutput query="SelectCategory">
@@ -1616,6 +1576,14 @@
 				</cfquery>
 			</cfoutput>
 
+			<!--- update lTopicID --->
+			<cfinvoke component="com.Taxonomy.TopicHandler"
+				method="InsertRelatedTopics"
+				EntityID="#Val(ThisCategoryID)#"
+				EntityName="t_Category"
+				lTopicID="#this.GetProperty('lTopicID')#"
+				DSN="#sProductionSiteInformation.ProductionDBDSN#">
+				
 			<!--- Create the directories on the production server --->
 			<!--- Open connection to the ftp server --->
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="CreateRemoteFolders" returnVariable="success"

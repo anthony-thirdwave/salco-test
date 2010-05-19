@@ -32,6 +32,7 @@
 <cfset CALLER.sContent=StructNew()>
 <cfset CALLER.CenterColumnTitle="">
 <cfset CALLER.AllowComments="0">
+<cfset CALLER.CommentNotificationEmail="">
 <cfset CALLER.CSSID="">
 <cfset CALLER.CSSClass="">
 
@@ -130,7 +131,7 @@
 				</cfloop>
 				<!--- Properties that just come from this category --->
 				<cfif CurrentRow IS "1">
-					<cfloop index="ThisProp" list="AllowComments">
+					<cfloop index="ThisProp" list="AllowComments,CommentNotificationEmail">
 						<cfif StructKeyExists(sProperties,"#ThisProp#") AND Trim(StructFind(sProperties, "#ThisProp#")) IS NOT "">
 							<cfset SetVariable("CALLER.#ThisProp#",StructFind(sProperties, "#ThisProp#"))>
 						</cfif>
@@ -140,8 +141,7 @@
 		</cfoutput>
 
 		<!--- if this page should be ssl, redirect --->
-		<cfif 	structKeyExists(caller, "useSSL") and caller.useSSL
-				and CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
+		<cfif structKeyExists(caller, "useSSL") and caller.useSSL and CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
 
 			<!--- if we're redirecting to https, we want the query string, but not the "page=contentalias" - this removes it --->
 			<cfset thisQueryString = trim(reReplaceNoCase(CGI.query_string, "(&)?page=[^&]*(\?(1)|&|$)", "", "all")) />
@@ -191,8 +191,9 @@
 	</cfif>
 
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
-
-
+	<cfset REQUEST.AllowComments=CALLER.AllowComments>
+	
+	
 	<!--- handle security --->
 <!---
 	<!--- First check if anyone is logging in via persistant right column form --->
@@ -225,6 +226,8 @@
 		<cfset recacheThis = false>
 		<cfif DenyAccess>
 			<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#LoginPageAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(LoginPageCacheDateTime,'yyyymmdd')##TimeFormat(LoginPageCacheDateTime,'HHmmss')#.cfm">
+			<cfset CALLER.AllowComments="0">
+			<cfset REQUEST.AllowComments="0">
 		<cfelse>
 			<cfif ListFind("",CALLER.CurrentCategoryID)><!--- Certain page types should always recache --->
 				<cfset recacheThis = true>

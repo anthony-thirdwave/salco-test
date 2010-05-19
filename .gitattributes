@@ -11,6 +11,7 @@ code/webroot/com/ContentManager/Category.cfc -text
 code/webroot/com/ContentManager/CategoryHandler.cfc -text
 code/webroot/com/ContentManager/CategoryLocale.cfc -text
 code/webroot/com/ContentManager/CategoryLocaleHandler.cfc -text
+code/webroot/com/ContentManager/CommentHandler.cfc -text
 code/webroot/com/ContentManager/Content.cfc -text
 code/webroot/com/ContentManager/ContentHandler.cfc -text
 code/webroot/com/ContentManager/ContentLocale.cfc -text
@@ -28,6 +29,7 @@ code/webroot/com/common/search.cfc -text
 code/webroot/com/error/error.cfc -text
 code/webroot/com/group/Group.cfc -text
 code/webroot/com/group/Param.cfc -text
+code/webroot/com/taxonomy/TopicHandler.cfc -text
 code/webroot/com/time/Time.cfc -text
 code/webroot/com/utils/Captcha.cfc -text
 code/webroot/com/utils/Database.cfc -text
@@ -42,6 +44,8 @@ code/webroot/com/utils/tracking.cfc -text
 code/webroot/com/utils/utils.cfc -text
 code/webroot/com/workflow/RequestHandler.cfc -text
 code/webroot/com/workflow/request.cfc -text
+code/webroot/common/admin/CommentManager/CommentModify.cfm -text
+code/webroot/common/admin/CommentManager/index.cfm -text
 code/webroot/common/admin/Dashboard/_InitDashboard.cfm -text
 code/webroot/common/admin/Dashboard/index.cfm -text
 code/webroot/common/admin/Documentation/CMS_Instructions.pdf -text svneol=unset#unset
@@ -342,6 +346,7 @@ code/webroot/common/images/widget_arrow_up_grey.gif -text
 code/webroot/common/images/xml.gif -text
 code/webroot/common/modules/Admin/Bulletin/action.cfm -text
 code/webroot/common/modules/Admin/Bulletin/bulletin.cfm -text
+code/webroot/common/modules/Admin/Dashboard/comments.cfm -text
 code/webroot/common/modules/Admin/MasterView/dsp_Nav.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Content.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_FEPermissions.cfm -text
@@ -376,6 +381,11 @@ code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserForm.cfm -text
 code/webroot/common/modules/User/UserObject.cfm -text
 code/webroot/common/modules/browsertest/browserdet.cfm -text
+code/webroot/common/modules/comments/dsp_comments.cfm -text
+code/webroot/common/modules/comments/inc_comment_list.cfm -text
+code/webroot/common/modules/comments/inc_form.cfm -text
+code/webroot/common/modules/comments/inc_form_action.cfm -text
+code/webroot/common/modules/comments/inc_preview.cfm -text
 code/webroot/common/modules/contentmanager/CategoryLocale/form.cfm -text
 code/webroot/common/modules/contentmanager/ContentControl.cfm -text
 code/webroot/common/modules/contentmanager/ContentLocale/form.cfm -text
@@ -1441,6 +1451,7 @@ code/webroot/common/scripts/fckeditor/fckstyles.xml -text
 code/webroot/common/scripts/fckeditor/fcktemplates.xml -text
 code/webroot/common/scripts/fckeditor/htaccess.txt -text
 code/webroot/common/scripts/fckeditor/license.txt -text
+code/webroot/common/scripts/instantedit.js -text
 code/webroot/common/scripts/pngfix.js -text
 code/webroot/common/scripts/prototype.js -text
 code/webroot/common/scripts/scriptaculous/CHANGELOG -text

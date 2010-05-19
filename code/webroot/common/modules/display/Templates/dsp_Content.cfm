@@ -92,6 +92,32 @@
 		<!-- start of center column -->
 		<div id="centerColumn">
 			<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
+			<cfswitch expression="#AllowComments#">
+			<cfcase value="1"><!--- Allow comments --->
+				<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
+					EntityName="t_Category" 
+					EntityID="#CurrentCategoryID#"
+					CommentNotificationEmail="#CommentNotificationEmail#"
+					PageTitle="#CurrentCategoryName#">
+			</cfcase>
+			<cfcase value="2"><!--- Display comments but not form --->
+				<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
+					EntityName="t_Category" 
+					EntityID="#CurrentCategoryID#" 
+					AllowComments="0"
+					CommentNotificationEmail="#CommentNotificationEmail#"
+					PageTitle="#CurrentCategoryName#">
+			</cfcase>
+			<cfcase value="3"><!--- Display comments and archive message but not form --->
+				<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
+					EntityName="t_Category" 
+					EntityID="#CurrentCategoryID#" 
+					AllowComments="0"
+					DisplayArchiveMessage="1"
+					CommentNotificationEmail="#CommentNotificationEmail#"
+					PageTitle="#CurrentCategoryName#">
+			</cfcase>
+		</cfswitch>
 	  	</div>
 		<!-- end of center column -->
 		<!-- start of right column -->

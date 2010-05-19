@@ -1077,6 +1077,53 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_Comment]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_Comment](
+	[CommentID] [int] IDENTITY(1,1) NOT NULL,
+	[EntityID] [int] NULL,
+	[EntityName] [varchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Name] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[EmailAddress] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[LinkURL] [varchar](255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[Comment] [ntext] COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+	[DateCreated] [datetime] NULL CONSTRAINT [DF_t_Comment_DateCreated]  DEFAULT (getdate()),
+	[SenderID] [int] NULL,
+	[StatusID] [int] NULL,
+	[HideURL] [bit] NULL,
+ CONSTRAINT [PK_t_Comment] PRIMARY KEY CLUSTERED 
+(
+	[CommentID] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[t_TopicRelated]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[t_TopicRelated](
+	[TopicID] [int] NOT NULL,
+	[EntityID] [int] NOT NULL,
+	[EntityName] [varchar](128) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+ CONSTRAINT [PK_t_TopicRelated] PRIMARY KEY CLUSTERED 
+(
+	[TopicID] ASC,
+	[EntityID] ASC,
+	[EntityName] ASC
+)WITH (IGNORE_DUP_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+END
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[fn_IntToBase32]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 BEGIN
 execute dbo.sp_executesql @statement = N'
@@ -1483,7 +1530,21 @@ FROM         dbo.t_Content INNER JOIN
                       dbo.t_ContentLocaleMeta ON dbo.t_Content.ContentID = dbo.t_ContentLocaleMeta.ContentID
 ' 
 GO
-
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetComment]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetComment]
+AS
+SELECT     dbo.t_Comment.CommentID, dbo.t_Comment.EntityID, dbo.t_Comment.EntityName, dbo.t_Comment.Name, dbo.t_Comment.EmailAddress, 
+                      dbo.t_Comment.LinkURL, dbo.t_Comment.Comment, dbo.t_Comment.DateCreated, dbo.t_Comment.SenderID, dbo.t_Comment.StatusID, 
+                      dbo.t_Comment.HideURL, dbo.t_User.FirstName AS UserFirstName, dbo.t_User.MiddleName AS UserMiddleName, 
+                      dbo.t_User.LastName AS UserLastName, dbo.t_User.EmailAddress AS UserEmailAddress
+FROM         dbo.t_Comment LEFT OUTER JOIN
+                      dbo.t_User ON dbo.t_Comment.SenderID = dbo.t_User.UserID
+' 
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 
 /****** Object:  View [dbo].[qry_GetContentLocale]    Script Date: 08/25/2007 17:12:41 ******/
 SET ANSI_NULLS ON

@@ -687,6 +687,12 @@
 		<cfreturn trim(local.numAsOrdinal) />
 	</cffunction>
 
+	<cffunction name="ParseLinks" returntype="string" output="false">
+		<cfargument name="String" default="" type="String" required="true">
+		<cfmodule template="/common/modules/utils/hyperlinkURLs.cfm" stringToMarkup="#ARGUMENTS.String#"
+			hrefTarget="_blank">
+		<cfreturn hyperlinkedString>
+	</cffunction>
 
 
 	<!--- get a properly formatted cms url --->

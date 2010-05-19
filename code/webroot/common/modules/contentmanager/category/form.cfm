@@ -158,17 +158,6 @@
 		FormEltStyle="width:200px;">
 </cfif>
 
-<cfif ListFindNoCase(Restrictions,"UserloginAccess")>
-	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-		ObjectAction="#FormMode#"
-		type="text"
-		caption="Username Access"
-		ObjectName="MyCategory"
-		PropertyName="UserloginAccess"
-		size="40" maxlength="64"
-		Required="N">
-</cfif>
-
 <cfif ListFindNoCase(Restrictions,"CategoryActive")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
@@ -196,13 +185,50 @@
 		PropertyName="CategoryIndexed">
 </cfif>
 
+<cfif ListFindNoCase(Restrictions,"lTopicID")>
+	<cfinvoke component="com.Taxonomy.TopicHandler" method="GetTopicQuery" returnvariable="getTopics">
+	<cfset TopicList="">
+	<cfoutput query="getTopics">
+		<cfset TopicList=ListAppend(TopicList,"{#TopicID#|" & RepeatString("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", DisplayLevel-3) & "-#TopicName#}","^^")>
+	</cfoutput>
+	<cfif getTopics.RecordCount GT "0">
+		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+			ObjectAction="#FormMode#"
+			type="MultiSelect"
+			caption="Topics"
+			ObjectName="MyCategory"
+			PropertyName="lTopicID"
+			Default=""
+			Size="#getTopics.RecordCount#"
+			FormEltStyle="width:300px;"
+			OptionValues="#TopicList#"
+			Required="N">
+	<cfelse>
+		<input type="hidden" name="lTopicID" value="#HTMLEditFormat(MyCategory.GetProperty('lTopicID'))#">
+	</cfif>
+</cfif>
+
 <cfif ListFindNoCase(Restrictions,"AllowComments")>
+	<cfset AllowCommentOptionList="{0|No Comments}^^{1|Allow Comments}^^{2|Display Comments Only}^^{3|Display Comments and Archive Message}">
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
-		type="checkbox"
+		type="select"
 		caption="Allow Comments?"
 		ObjectName="MyCategory"
-		PropertyName="AllowComments">
+		PropertyName="AllowComments"
+		OptionValues="#AllowCommentOptionList#"
+		Required="Y">
+</cfif>
+
+<cfif ListFindNoCase(Restrictions,"CommentNotificationEmail")>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="Email to be Sent Comment Notifications<br>Default will be #APPLICATION.contactEmail#"
+		ObjectName="MyCategory"
+		PropertyName="CommentNotificationEmail"
+		size="40" maxlength="64"
+		Required="N">
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"AllowBackToTop")>
@@ -333,7 +359,6 @@
 			BlankMessage="none">
 	</cfif>
 
-
 	<cfif ListFindNoCase(Restrictions,"Foobar") and 0><!--- india --->
 		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 			ObjectAction="#FormMode#"
@@ -344,7 +369,6 @@
 			size="40" maxlength="128"
 			Required="N">
 	</cfif>
-
 
 	<cfif ListFindNoCase(Restrictions,"AuthorName")>
 		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
