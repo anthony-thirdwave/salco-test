@@ -56,7 +56,7 @@
 	<cfset this.CategoryTypeID="-1">
 	
 	<cfset this.sFields=StructNew()>
-	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,67,68,69,70,71,72,73,74,75,76,254">
+	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,67,68,69,70,71,72,73,74,75,76,77,254">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			
 				<!--- Not Used --->
@@ -73,9 +73,12 @@
 					<cfset this.sFields[ThisCategoryTypeID]="Title">
 				</cfcase>
 				<!--- End Not Used --->
-				<cfcase value="76"><!--- journal --->
-					<cfset this.sFields[ThisCategoryTypeID]="Title,CategoryImageRepresentative">
+				<cfcase value="76"><!--- topic --->
+					<cfset this.sFields[ThisCategoryTypeID]="">
 				</cfcase>
+				<cfcase value="77"><!--- Blog --->
+				<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
+			</cfcase>
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
 			</cfdefaultcase>

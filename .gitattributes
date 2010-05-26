@@ -380,6 +380,8 @@ code/webroot/common/modules/News/NewsListing.cfm -text
 code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserForm.cfm -text
 code/webroot/common/modules/User/UserObject.cfm -text
+code/webroot/common/modules/blog/dsp_blogListing.cfm -text
+code/webroot/common/modules/blog/dsp_blogNav.cfm -text
 code/webroot/common/modules/browsertest/browserdet.cfm -text
 code/webroot/common/modules/comments/dsp_comments.cfm -text
 code/webroot/common/modules/comments/inc_comment_list.cfm -text

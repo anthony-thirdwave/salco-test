@@ -17,6 +17,7 @@
 	<cfproperty name="DisplayOrder" type="string" default="">
 	<cfproperty name="WorkflowStatusID" type="numeric" default="">
 	<cfproperty name="TemplateID" type="numeric" default="">
+	<cfproperty name="PublishDateTime" type="date" default="">
 
 	<!--- Custom Properties --->
 	<cfproperty name="CategoryImageOff" type="string" default="">
@@ -63,6 +64,7 @@
 	<cfset structInsert(sPropertyDisplayName,"DisplayOrder","display order",1)>
 	<cfset structInsert(sPropertyDisplayName,"WorkflowStatusID","workflow status ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"TemplateID","default display template id",1)>
+	<cfset structInsert(sPropertyDisplayName,"PublishDateTime","publish date",1)>
 
 	<!--- Custom Properties --->
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageOff","off image",1)>
@@ -96,11 +98,11 @@
 
 	<!--- Determine field restrictions based on category type --->
 	<cfset this.sFields=StructNew()>
-	<cfset BaseFieldList="CategoryName,TemplateID,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID,useSSL"><!--- charlie --->
-	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76">
+	<cfset BaseFieldList="CategoryName,TemplateID,PublishDateTime,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID,useSSL"><!--- charlie --->
+	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="60,63,70"><!--- Content --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,aOwner,AllowComments,CommentNotificationEmail">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,aOwner,AllowComments,CommentNotificationEmail">
 			</cfcase>
 			<cfcase value="67"><!--- News List --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
@@ -123,7 +125,9 @@
 			<cfcase value="76"><!--- Topic --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
 			</cfcase>
-
+			<cfcase value="77"><!--- Blog Entry --->
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,PublishDateTime,lTopicID,AuthorName,ShowInNavigation,AllowComments,CommentNotificationEmail">
+			</cfcase>
 			<!--- Not Used --->
 				<cfcase value="72"><!--- resource --->
 					<cfset this.sFields[ThisCategoryTypeID]="CategoryName,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID,sCurrentResourceDetails">
@@ -178,6 +182,7 @@
 		<cfset this.SetProperty("DisplayOrder","")>
 		<cfset this.SetProperty("WorkflowStatusID","")>
 		<cfset this.SetProperty("TemplateID","1500")>
+		<cfset this.SetProperty("PublishDateTime","#Now()#")>
 
 		<!--- Custom Properties --->
 		<cfset this.SetProperty("CategoryImageOff","")>
@@ -234,6 +239,7 @@
 					<cfset this.SetProperty("DisplayOrder",DisplayOrder)>
 					<cfset this.SetProperty("WorkflowStatusID",WorkflowStatusID)>
 					<cfset this.SetProperty("TemplateID",TemplateID)>
+					<cfset this.SetProperty("PublishDateTime",PublishDateTime)>
 					<!--- Custom Properties --->
 					<cfquery name="GetCategoryProperties" datasource="#APPLICATION.DSN#">
 						SELECT * FROM t_Properties WHERE PropertiesID = <cfqueryparam value="#Val(PropertiesID)#" cfsqltype="cf_sql_integer">
@@ -284,6 +290,7 @@
 		<cfset var thisDisplayOrder = "">
 		<cfset var thisWorkflowStatusID = "">
 		<cfset var thisTemplateID = "">
+		<cfset var thisPublishDateTime="">
 		<cfset var thisCategoryImageOff = "">
 		<cfset var thisCategoryImageOn = "">
 		<cfset var thisCategoryImageRollover = "">
@@ -360,6 +367,7 @@
 			<cfset thisDisplayOrder=this.GetProperty("DisplayOrder")>
 			<cfset thisWorkflowStatusID=this.GetProperty("WorkflowStatusID")>
 			<cfset thisTemplateID=this.GetProperty("TemplateID")>
+			<cfset thisPublishDateTime=this.GetProperty("PublishDateTime")>
 			<!--- Custom Properties --->
 
 			<cfset thisCategoryImageOff=this.GetProperty("CategoryImageOff")>
@@ -393,10 +401,6 @@
 			<cfif ListFindNoCase("60,62,63,64,66,71,67,74,75,76",thisCategoryTypeID) IS "0"><!--- Set ShowInNavigation to 1 if not a public category--->
 				<cfset thisShowInNavigation=1>
 				<cfset thisCategoryIndexed=0>
-			</cfif>
-
-			<cfif ThisCategoryTypeID IS "75"><!--- If MT Blog --->
-				<cfset thisCategoryURL="/#ThisCategoryAlias#">
 			</cfif>
 
 			<cfif ThisCategoryAlias IS "">
@@ -449,7 +453,8 @@
 						PropertiesID,
 						CategoryPriority,
 						WorkflowStatusID,
-						TemplateID
+						TemplateID,
+						PublishDateTime
 						) VALUES (
 						<cfqueryparam value="#Val(ThisCategoryTypeID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#trim(ThisCategoryName)#" cfsqltype="cf_sql_varchar">,
@@ -468,7 +473,12 @@
 						<cfqueryparam value="#Val(thisPropertiesID)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(ThisCategoryPriority)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(ThisWorkflowStatusID)#" cfsqltype="cf_sql_integer">,
-						<cfqueryparam value="#Val(ThisTemplateID)#" cfsqltype="cf_sql_integer">
+						<cfqueryparam value="#Val(ThisTemplateID)#" cfsqltype="cf_sql_integer">,
+						<cfif Trim(ThisPublishDateTime) IS "">
+							NULL
+						<cfelse>
+							<cfqueryparam value="#Trim(ThisPublishDateTime)#" cfsqltype="cf_sql_timestamp">
+						</cfif>
 						)
 						SELECT NewCategoryID=@@Identity
 					</cfquery>
@@ -618,6 +628,11 @@
 					ParentID=<cfqueryparam value="#Val(ThisParentID)#" cfsqltype="cf_sql_integer">,
 					CategoryURL=<cfqueryparam value="#Trim(ThisCategoryURL)#" cfsqltype="cf_sql_varchar">,
 					TemplateID=<cfqueryparam value="#Val(ThisTemplateID)#" cfsqltype="cf_sql_integer">,
+					<cfif Trim(ThisPublishDateTime) IS "">
+						PublishDateTime=NULL,
+					<cfelse>
+						PublishDateTime=<cfqueryparam value="#Trim(ThisPublishDateTime)#" cfsqltype="cf_sql_timestamp">,
+					</cfif>
 					<cfif GetParent.RecordCount IS "0">
 						DisplayLevel=0
 					<cfelse>
@@ -805,7 +820,7 @@
 				</cfif>
 			</cfif>
 
-			<cfif ListFindNoCase("PressReleaseDate",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
+			<cfif ListFindNoCase("PressReleaseDate,PublishDateTime",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
 				<cfif NOT IsDate(ARGUMENTS.Value)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a valid date.")>
 					<cfreturn false>
@@ -868,7 +883,6 @@
 				<!--- Make sure there are no special characters in the alias --->
 				<cfset ARGUMENTS.Value=lcase(ReReplace(ARGUMENTS.Value,"[’\!'()/:"".;?&<>|, ]","","all"))>
 			</cfif>
-
 
 			<cfif ListFindNoCase("ParentID,CategoryTypeID,TemplateID,WorkflowStatusID,ArticleSourceID,ProductBrandLogoID,ProductConsoleTypeID",ARGUMENTS.Property)>
 				<cfif Val(ARGUMENTS.Value) GT "0">
@@ -1162,10 +1176,10 @@
 				SELECT * FROM t_Label WHERE LabelGroupID=40 AND
 				<cfswitch expression="#GetParentCategory.CategoryTypeID#">
 					<cfcase value="65"><!--- Website --->
-						LabelID IN (60,61,75,76)<!--- Only content, system --->
+						LabelID IN (60,61,75)<!--- Only content, system --->
 					</cfcase>
 					<cfcase value="60"><!--- Content --->
-						LabelID  IN (60,61,75,66,76) <!--- Content, System, Blog, Article, Journal --->
+						LabelID  IN (60,61,75,66,77) <!--- Content, System, Blog, Article, Journal, blog Entry --->
 					</cfcase>
 					<cfcase value="61"><!--- system --->
 						LabelID IN (60,61,67,71,73,74,66,76) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
@@ -1177,7 +1191,7 @@
 						LabelID NOT IN (61,60)
 					</cfdefaultcase>
 				</cfswitch>
-				ORDER BY labelPriority
+				ORDER BY labelName
 			</cfquery>
 		</cfif>
 		<cfreturn GetCategoryTypes>

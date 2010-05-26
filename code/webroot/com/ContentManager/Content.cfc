@@ -52,8 +52,11 @@
 	<cfset structInsert(sPropertyDisplayName,"OwnerName","Owner Name",1)>
 	
 	<cfset this.sFields=StructNew()>
-	<cfset BaseFieldList="ContentName,CategoryID,ContentTypeID,ContentPositionID,ContentActive,propertiesID,ContentPriority,ContentAbstract"><!--- charlie --->
-	<cfloop index="ThisContentTypeID" list="200,201,206,207,212,217,218,221,222,232,233,228,230,234,235,236,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266">
+	<cfset BaseFieldList="ContentName,CategoryID,ContentTypeID,ContentPositionID,ContentActive,propertiesID,ContentPriority,ContentAbstract">
+	<cfinvoke component="com.ContentManager.ContentHandler"
+		method="GetAllContentType"
+		returnVariable="GetAllContentType">
+	<cfloop index="ThisContentTypeID" list="#ValueList(GetAllContentType.LabelID)#">
 		<cfswitch expression="#ThisContentTypeID#">
 			<cfcase value="206"><!--- Repeated Content --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID,InheritID">
@@ -95,8 +98,11 @@
 			<cfcase value="251"><!--- Event Registraiton --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
 			</cfcase>
-			<cfcase value="254"><!--- Content List (manual) --->
-				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
+			<cfcase value="254"><!--- Blog Entry Listing --->
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
+			</cfcase>
+			<cfcase value="255"><!--- Blog Navigation --->
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
 			</cfcase>
 			<cfcase value="256"><!--- Article Listing --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">

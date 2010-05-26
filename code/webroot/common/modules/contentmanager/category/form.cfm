@@ -359,6 +359,18 @@
 			BlankMessage="none">
 	</cfif>
 
+	<cfif ListFindNoCase(Restrictions,"PublishDateTime")>
+		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+			ObjectAction="#FormMode#"
+			type="text"
+			caption="Publish Date"
+			ObjectName="MyCategory"
+			PropertyName="PublishDateTime"
+			size="40" maxlength="128"
+			Required="N"
+			DateTime="Y">
+	</cfif>
+	
 	<cfif ListFindNoCase(Restrictions,"Foobar") and 0><!--- india --->
 		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 			ObjectAction="#FormMode#"
@@ -381,7 +393,7 @@
 			Required="N">
 	</cfif>
 
-	<cfif ListFindNoCase(Restrictions,"AuthorName")>
+	<cfif ListFindNoCase(Restrictions,"PressReleaseDate")>
 		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 			ObjectAction="#FormMode#"
 			type="text"

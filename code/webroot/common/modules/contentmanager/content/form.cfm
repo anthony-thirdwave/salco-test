@@ -77,15 +77,6 @@
 	FormEltJavaScript="onchange=""this.form.submit()"""
 	Required="Y">
 
-<!--- <cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-	ObjectAction="#FormMode#"
-	type="select"
-	caption="Display on page" 
-	ObjectName="MyContent"
-	PropertyName="CategoryID"
-	OptionValues="#CategoryIDList#"
-	Required="Y"
-	FormEltStyle="width:200px;"> --->
 <!--- BEGIN Category CHOOSER --->
 <cfquery name="getCatName" datasource="#APPLICATION.DSN#">
 	SELECT	CategoryName 
@@ -221,7 +212,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"DisplayModeID")>
-	<cfswitch expression="#MyContent.GetProperty("ContentTypeID")#">
+	<cfswitch expression="#MyContent.GetProperty('ContentTypeID')#">
 		<cfcase value="230">
 			<cfset thisGroupID = 12000>
 			<cfset dspCapt = "Display Mode">
@@ -284,7 +275,6 @@
 		FormEltStyle="width:200px;">
 </cfif>
 
-
 <cfif ListFindNoCase(Restrictions,"ContentDate1")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
@@ -332,87 +322,109 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"SourceID")>
-	<cfif MyContent.GetProperty("ContentTypeID") IS "234"><!--- Templatized Content --->
-		<cfinvoke component="com.ContentManager.ContentHandler" 
-			method="GetContentTemplatePicker" 
-			returnVariable="GetContentTemplatePicker">
-		<cfset ContentIDList="">
-		<cfoutput query="GetContentTemplatePicker" group="categoryID">
-			<cfset Gutter="">
-			<cfloop index="i" from="1" to="#DisplayLevel#" step="1">
-				<cfset Gutter="#Gutter#&nbsp;&nbsp;&nbsp;">
-			</cfloop>
-			<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter##CategoryName# (#CategoryTypeName#)}","^^")>
-			<cfoutput group="ContentPositionID">
-				<cfset Gutter2="#Gutter#&nbsp;&nbsp;&nbsp;">
-				<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter2##ContentPositionName# Position}","^^")>
-				<cfoutput group="ContentID">
-					<cfset Gutter3="#Gutter2#&nbsp;&nbsp;&nbsp;">
-					<cfset ContentIDList=ListAppend(ContentIDList,"{#ContentID#|#Gutter3##ContentName# (#ContentTypeName#)}","^^")>
+	<cfswitch expression="#MyContent.GetProperty('ContentTypeID')#">
+		<cfcase value="234"><!--- Templatized Content --->
+			<cfinvoke component="com.ContentManager.ContentHandler" 
+				method="GetContentTemplatePicker" 
+				returnVariable="GetContentTemplatePicker">
+			<cfset ContentIDList="">
+			<cfoutput query="GetContentTemplatePicker" group="categoryID">
+				<cfset Gutter="">
+				<cfloop index="i" from="1" to="#DisplayLevel#" step="1">
+					<cfset Gutter="#Gutter#&nbsp;&nbsp;&nbsp;">
+				</cfloop>
+				<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter##CategoryName# (#CategoryTypeName#)}","^^")>
+				<cfoutput group="ContentPositionID">
+					<cfset Gutter2="#Gutter#&nbsp;&nbsp;&nbsp;">
+					<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter2##ContentPositionName# Position}","^^")>
+					<cfoutput group="ContentID">
+						<cfset Gutter3="#Gutter2#&nbsp;&nbsp;&nbsp;">
+						<cfset ContentIDList=ListAppend(ContentIDList,"{#ContentID#|#Gutter3##ContentName# (#ContentTypeName#)}","^^")>
+					</cfoutput>
 				</cfoutput>
 			</cfoutput>
-		</cfoutput>
-		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-			ObjectAction="#FormMode#"
-			type="select"
-			caption="Content Template" 
-			ObjectName="MyContent"
-			PropertyName="SourceID"
-			OptionValues="#ContentIDList#"
-			Required="Y"
-			FormEltJavaScript="onchange=""this.form.submit()"""
-			FormEltStyle="width:200px;">
-	<cfelseif listContains("249,250",MyContent.GetProperty("ContentTypeID"))><!--- Gallery Thumbnanil Navigation and Display --->
-		<cfinvoke component="com.ContentManager.CategoryHandler" 
-			method="GetCategoryPicker" 
-			CategoryTypeID="73"
-			LocaleID="#EditLocaleID#"
-			returnVariable="GetContentPicker">
-		<cfset ContentIDList="">
-		<cfoutput query="GetContentPicker" group="categoryID">
-			<cfset ContentIDList=ListAppend(ContentIDList,"{#CategoryID#|#CategoryName#}","^^")>
-		</cfoutput>
-		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-			ObjectAction="#FormMode#"
-			type="select"
-			caption="Source Content" 
-			ObjectName="MyContent"
-			PropertyName="SourceID"
-			OptionValues="#ContentIDList#"
-			Required="Y"
-			FormEltStyle="width:200px;">
-	<cfelse>
-		<cfinvoke component="com.ContentManager.ContentHandler" 
-			method="GetContentPicker" 
-			ContentTypeID="#MyContent.GetProperty('ContentTypeID')#" 
-			returnVariable="GetContentPicker"
-			LocaleID="#EditLocaleID#">
-		<cfset ContentIDList="">
-		<cfoutput query="GetContentPicker" group="categoryID">
-			<cfset Gutter="">
-			<cfloop index="i" from="1" to="#DisplayLevel#" step="1">
-				<cfset Gutter="#Gutter#&nbsp;&nbsp;&nbsp;">
-			</cfloop>
-			<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter##CategoryName# (#CategoryTypeName#)}","^^")>
-			<cfoutput group="ContentPositionID">
-				<cfset Gutter2="#Gutter#&nbsp;&nbsp;&nbsp;">
-				<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter2##ContentPositionName# Position}","^^")>
-				<cfoutput group="ContentID">
-					<cfset Gutter3="#Gutter2#&nbsp;&nbsp;&nbsp;">
-					<cfset ContentIDList=ListAppend(ContentIDList,"{#ContentID#|#Gutter3##ContentName# (#ContentTypeName#)}","^^")>
+			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+				ObjectAction="#FormMode#"
+				type="select"
+				caption="Content Template" 
+				ObjectName="MyContent"
+				PropertyName="SourceID"
+				OptionValues="#ContentIDList#"
+				Required="Y"
+				FormEltJavaScript="onchange=""this.form.submit()"""
+				FormEltStyle="width:200px;">
+		</cfcase>
+		<cfcase value="249,250"><!--- Gallery Thumbnanil Navigation and Display --->
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
+				method="GetCategoryPicker" 
+				CategoryTypeID="73"
+				LocaleID="#EditLocaleID#"
+				returnVariable="GetContentPicker">
+			<cfset ContentIDList="">
+			<cfoutput query="GetContentPicker" group="categoryID">
+				<cfset ContentIDList=ListAppend(ContentIDList,"{#CategoryID#|#CategoryName#}","^^")>
+			</cfoutput>
+			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+				ObjectAction="#FormMode#"
+				type="select"
+				caption="Source Content" 
+				ObjectName="MyContent"
+				PropertyName="SourceID"
+				OptionValues="#ContentIDList#"
+				Required="Y"
+				FormEltStyle="width:200px;">
+		</cfcase>
+		<cfcase value="254,255"><!--- Blog related --->
+			<cfinvoke component="com.ContentManager.CategoryHandler" 
+				method="GetBlog" 
+				returnVariable="GetBlog">
+			<cfset BlogIDList="">
+			<cfoutput query="GetBlog" group="BlogID">
+				<cfset BlogIDList=ListAppend(BlogIDList,"{#BlogID#|#BlogName#}","^^")>
+			</cfoutput>
+			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+				ObjectAction="#FormMode#"
+				type="select"
+				caption="Blog Root Page" 
+				ObjectName="MyContent"
+				PropertyName="SourceID"
+				OptionValues="#BlogIDList#"
+				Required="Y"
+				FormEltStyle="width:200px;">
+		</cfcase>
+		<cfdefaultcase>
+			<cfinvoke component="com.ContentManager.ContentHandler" 
+				method="GetContentPicker" 
+				ContentTypeID="#MyContent.GetProperty('ContentTypeID')#" 
+				returnVariable="GetContentPicker"
+				LocaleID="#EditLocaleID#">
+			<cfset ContentIDList="">
+			<cfoutput query="GetContentPicker" group="categoryID">
+				<cfset Gutter="">
+				<cfloop index="i" from="1" to="#DisplayLevel#" step="1">
+					<cfset Gutter="#Gutter#&nbsp;&nbsp;&nbsp;">
+				</cfloop>
+				<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter##CategoryName# (#CategoryTypeName#)}","^^")>
+				<cfoutput group="ContentPositionID">
+					<cfset Gutter2="#Gutter#&nbsp;&nbsp;&nbsp;">
+					<cfset ContentIDList=ListAppend(ContentIDList,"{0|#Gutter2##ContentPositionName# Position}","^^")>
+					<cfoutput group="ContentID">
+						<cfset Gutter3="#Gutter2#&nbsp;&nbsp;&nbsp;">
+						<cfset ContentIDList=ListAppend(ContentIDList,"{#ContentID#|#Gutter3##ContentName# (#ContentTypeName#)}","^^")>
+					</cfoutput>
 				</cfoutput>
 			</cfoutput>
-		</cfoutput>
-		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-			ObjectAction="#FormMode#"
-			type="select"
-			caption="Source Content" 
-			ObjectName="MyContent"
-			PropertyName="SourceID"
-			OptionValues="#ContentIDList#"
-			Required="Y"
-			FormEltStyle="width:200px;">
-	</cfif>
+			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+				ObjectAction="#FormMode#"
+				type="select"
+				caption="Source Content" 
+				ObjectName="MyContent"
+				PropertyName="SourceID"
+				OptionValues="#ContentIDList#"
+				Required="Y"
+				FormEltStyle="width:200px;">
+		</cfdefaultcase>
+	</cfswitch>
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"lTopicID")>

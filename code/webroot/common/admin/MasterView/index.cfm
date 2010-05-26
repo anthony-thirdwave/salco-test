@@ -5,10 +5,10 @@
 				CategoryPropertiesID, CategoryPropertiesPacket, CategoryLocaleName,
 				categoryLocaleActive, CategoryLocaleID, LocaleID, TemplateID
 	FROM		qry_GetCategoryWithCategoryLocale
-	INNER JOIN	t_Permissions
+		INNER JOIN	t_Permissions
 	ON			qry_GetCategoryWithCategoryLocale.CategoryID = t_Permissions.CategoryID
 	WHERE		qry_GetCategoryWithCategoryLocale.CategoryID = <cfqueryparam value="#Val(MVCid)#" cfsqltype="cf_sql_integer">
-	AND 		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="true">)
+	AND 		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="true">) 
 </cfquery>
 
 <cfif GetCategoryDetails.RecordCount GT "0">

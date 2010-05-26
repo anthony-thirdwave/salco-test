@@ -529,17 +529,25 @@
 		</cfif>
 		<cfset FileContents="<cfmodule template=""/common/modules/Newsletter/NewsletterSubscribe.cfm"" PageActionURL=""#ActionURL#"">">
 	</cfcase>
-	<cfcase value="254"><!--- Article Body --->
-		<!--- <cfif StructKeyExists(ATTRIBUTES.sContentBody,"ImageThumbnail") AND ATTRIBUTES.sContentBody.ImageThumbnail NEQ "">
-			<cfset FileContents = "<img src=""#ATTRIBUTES.sContentBody.ImageThumbnail#"" border=""0"" /><br/>">
-		</cfif> --->
-		<cfset articleBody = "">
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML") AND ATTRIBUTES.sContentBody.HTML NEQ "">
-			<cfset articleBody = ATTRIBUTES.sContentBody.HTML>
-		</cfif>
-		<cfsavecontent variable="FileContents">
-			<cfmodule template="/common/modules/Article/dsp_article.cfm" CategoryID="#ATTRIBUTES.CurrentCategoryID#" ArticleBody="#articleBody#">
-		</cfsavecontent>
+	<cfcase value="254"><!--- Blog Entry Listing --->
+		<cfset BlogID="-1">
+		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
+			SELECT	SourceID 
+			FROM	t_Content 
+			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+		</cfquery>
+		<cfset BlogID=GetSource.SourceID>
+		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogListing.cfm"" BlogCategoryID=""#Val(BlogID)#"">">
+	</cfcase>
+	<cfcase value="255"><!--- Blog Navigation --->
+		<cfset BlogID="-1">
+		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
+			SELECT	SourceID 
+			FROM	t_Content 
+			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+		</cfquery>
+		<cfset BlogID=GetSource.SourceID>
+		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogNav.cfm"" BlogCategoryID=""#Val(BlogID)#"">">
 	</cfcase>
 	<cfcase value="222"><!--- List of Files --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
@@ -608,7 +616,7 @@
 			</cfif>
 		</cfif>
 	</cfcase>
-	<cfcase value="255"><!--- List of Links --->
+	<cfcase value="255x"><!--- List of Links --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aLink") AND IsArray(ATTRIBUTES.sContentBody.aLink) AND ArrayLen(ATTRIBUTES.sContentBody.aLink) GT 0>
 			<cfset aLink = ATTRIBUTES.sContentBody.aLink>
 			<cfsavecontent variable="FileContents">

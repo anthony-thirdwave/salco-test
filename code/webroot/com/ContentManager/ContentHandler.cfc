@@ -19,6 +19,7 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
+	
 	<cffunction name="GetContentQuery" output="false" returntype="query">
 		<cfargument name="CategoryID" default="-1" type="numeric" required="true">
 		
@@ -33,6 +34,20 @@
 		</cfquery>
 		<cfreturn GetContentQuery>
 	</cffunction>
+	
+	<cffunction name="GetAllContentType" output="false" returntype="query">
+		
+		<cfset var LOCAL=StructNew()>
+		
+		<cfquery name="LOCAL.GetAllContentTypeID" datasource="#APPLICATION.DSN#">
+			SELECT		*
+			FROM		t_Label
+			WHERE		LabelGroupID= <cfqueryparam value="70" cfsqltype="cf_sql_integer">
+			ORDER BY	LabelName
+		</cfquery>
+		<cfreturn LOCAL.GetAllContentTypeID>
+	</cffunction>
+	
 	<cffunction name="GetContentTemplatePicker" output="false" returntype="query">
 		
 		<!--- init variables --->

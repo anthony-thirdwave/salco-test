@@ -351,4 +351,113 @@
 
 		<cfreturn arguments.URL_array>
 	</cffunction>
+	
+	<cffunction name="GetBlogEntries" output="false" returntype="query">
+		<cfargument name="ParentID" default="" type="numeric" required="true">
+		<cfargument name="month" default="0" type="numeric" required="false">
+		<cfargument name="year" default="0" type="numeric" required="false">
+		
+		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+			<cfprocresult name="GetThesePagesPrime">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="displayOrder" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#Val(ARGUMENTS.ParentID)#" null="NO">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="77" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="No">
+		</cfstoredproc>
+		
+		<cfquery name="GetThesePages" dbtype="query">
+			select *, 
+			'' as Link, '' as Thumbnail, '' as Abstract, '' as Author, '' as GroupDate, '' as CallToAction
+			from GetThesePagesPrime 
+			<cfif Isdate("#Val(ARGUMENTS.Month)#/1/#Val(ARGUMENTS.Year)#")>
+				<cfset ThisDate=CreateDate(Val(ARGUMENTS.Year),Val(ARGUMENTS.Month),1)>
+				where 
+				PublishDateTime>=<cfqueryparam value="#ThisDate#" cfsqltype="CF_SQL_DATE"> AND 
+				PublishDateTime<<cfqueryparam value="#DateAdd('m','1',ThisDate)#" cfsqltype="CF_SQL_DATE">
+			</cfif>
+			order by PublishDateTime Desc
+		</cfquery>
+		
+		<cfoutput query="GetThesePages">
+			<cfif Trim(CategoryURL) IS "">
+				<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
+			<cfelse>
+				<cfset ThisURL="#CategoryURL#">
+			</cfif>
+			<cfset ThisImage="">
+			<cfset ThisAbstract="">
+			<cfset ThisAuthor="">
+			<cfset ThisCallToAction="">
+			<cfif IsWDDX(CategoryLocalePropertiesPacket)>
+				<cfwddx action="WDDX2CFML" input="#CategoryLocalePropertiesPacket#" output="sCategoryProperties">
+				<cfif StructKeyExists(sCategoryProperties,"CategoryImageRepresentative") AND Trim(StructFind(sCategoryProperties,"CategoryImageRepresentative")) IS NOT "">
+					<cfset ThisImage=StructFind(sCategoryProperties,"CategoryImageRepresentative")>
+				</cfif>
+				<cfif StructKeyExists(sCategoryProperties,"MetaDescription") AND Trim(StructFind(sCategoryProperties,"MetaDescription")) IS NOT "">
+					<cfset ThisAbstract=StructFind(sCategoryProperties,"MetaDescription")>
+				</cfif>
+				<cfif StructKeyExists(sCategoryProperties,"CallToAction") AND Trim(StructFind(sCategoryProperties,"CallToAction")) IS NOT "">
+					<cfset ThisCallToAction=StructFind(sCategoryProperties,"CallToAction")>
+				</cfif>
+			</cfif>
+			<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
+				select PropertiesPacket from t_Properties
+				WHERE PropertiesID=<cfqueryparam value="#Val(CategoryPropertiesID)#" cfsqltype="CF_SQL_INTEGER">
+			</cfquery>
+			<cfif IsWDDX(GetCatProps.PropertiesPacket)>
+				<cfwddx action="WDDX2CFML" input="#GetCatProps.PropertiesPacket#" output="sProperties">
+				<cfif StructKeyExists(sProperties,"AuthorName") AND Trim(sProperties.AuthorName) IS NOT "">
+					<cfset ThisAuthor=sProperties.AuthorName>
+				</cfif>
+			</cfif>
+			<cfset QuerySetCell(GetThesePages,"Link",ThisURL,CurrentRow)>
+			<cfset QuerySetCell(GetThesePages,"Thumbnail",ThisImage,CurrentRow)>
+			<cfif ThisAbstract IS "">
+				<cfquery name="GetFirstHTML" datasource="#APPLICATION.DSN#" maxrows="1">
+					select ContentID from qry_GetContentLocaleMeta
+					Where
+					ContentPositionID=<cfqueryparam value="401" cfsqltype="CF_SQL_INTEGER">
+					AND LocaleID=<cfqueryparam value="#APPLICATION.LocaleID#" cfsqltype="CF_SQL_INTEGER">
+					AND ContentTypeID=<cfqueryparam value="201" cfsqltype="CF_SQL_INTEGER">
+					AND ContentActive=<cfqueryparam value="1" cfsqltype="CF_SQL_INTEGER">
+					AND CategoryID=(<cfqueryparam value="#GetThesePages.CategoryID#" cfsqltype="cf_sql_integer" list="yes">)
+					order by ContentLocalePriority
+				</cfquery>
+				<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
+					<cfprocresult name="GetContent">
+					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(GetFirstHTML.ContentID)#" null="No">
+					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+					<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
+				</cfstoredproc>
+				<cfif IsWDDX(GetContent.ContentBody)>
+					<cfwddx action="WDDX2CFML" input="#GetContent.ContentBody#" output="sContentBody">
+					<cfif StructKeyExists(sContentBody,"HTML") and sContentBody.HTML is NOT "">
+						<cfif findNoCase(chr(10),sContentBody.HTML) GT "0">
+							<cfset ThisAbstract=left(sContentBody.HTML,findNoCase(chr(10),sContentBody.HTML))>
+						<cfelse>
+							<cfset ThisAbstract=sContentBody.HTML>
+						</cfif>
+						<cfset QuerySetCell(GetThesePages,"Abstract",application.utilsObj.RemoveHTML(ThisAbstract),CurrentRow)>
+					</cfif>
+				</cfif>
+			<cfelse>
+				<cfset QuerySetCell(GetThesePages,"Abstract",ThisAbstract,CurrentRow)>
+			</cfif>
+			
+			<cfset QuerySetCell(GetThesePages,"Author",ThisAuthor,CurrentRow)>
+			<cfif ThisCallToAction IS "">
+				<cfset QuerySetCell(GetThesePages,"CallToAction","Read More...",CurrentRow)>
+			<cfelse>
+				<cfset QuerySetCell(GetThesePages,"CallToAction",ThisCallToAction,CurrentRow)>
+			</cfif>
+			<cfset QuerySetCell(GetThesePages,"GroupDate",CreateDate(year(PublishDateTime),month(PublishDateTime),1),CurrentRow)>
+		</cfoutput>
+		
+		<cfreturn GetThesePages>	
+	</cffunction>
 </cfcomponent>

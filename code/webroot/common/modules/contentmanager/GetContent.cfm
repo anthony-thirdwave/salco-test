@@ -13,6 +13,7 @@
 <cfset CALLER.PageTitleOverride="">
 <cfset CALLER.CurrentCategoryAlias="">
 <cfset REQUEST.CurrentCategoryAlias="">
+<cfset REQUEST.CurrentCategoryID="-1">
 <cfset CALLER.CategoryTypeID="-1">
 <cfset CALLER.TemplateID="-1">
 <cfset CALLER.CurrentCategoryID="-1">
@@ -78,6 +79,7 @@
 	<cfset CALLER.CurrentCategoryAlias=GetPage.CategoryAlias>
 	<cfset REQUEST.CurrentCategoryAlias=GetPage.CategoryAlias>
 	<cfset CALLER.CurrentCategoryID=GetPage.CategoryID>
+	<cfset REQUEST.CurrentCategoryID=GetPage.CategoryID>
 	<cfset CALLER.CurrentSourceID=GetPage.SourceID>
 	<cfset CALLER.CSSID=GetPage.CategoryAlias>
 

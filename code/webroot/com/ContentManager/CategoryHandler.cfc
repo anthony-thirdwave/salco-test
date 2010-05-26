@@ -80,6 +80,7 @@
 			<cfreturn ReturnCandidateAlias>
 		</cfif>
 	</cffunction>
+	
 	<cffunction name="GetContent" output="false" returntype="boolean">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
@@ -114,6 +115,19 @@
 		<cfreturn GetCategoryQuery>
 	</cffunction>
 
+	<cffunction name="GetBlog" output="false" returntype="query">
+		<!--- init variables --->
+		<cfset var LOCAL=StructNew()>
+
+		<cfquery name="GetBlog" datasource="#APPLICATION.DSN#">
+			SELECT	t_Category_2.CategoryName as BlogName, t_Category_2.CategoryID as BlogID, t_Category_2.CategoryAlias as BlogAlias
+			FROM	t_Category AS t_Category_1 INNER JOIN
+                    t_Category AS t_Category_2 ON t_Category_1.ParentID = t_Category_2.CategoryID  
+			WHERE 	t_Category_1.CategoryTypeID=<cfqueryparam value="77" cfsqltype="cf_sql_integer">
+		</cfquery>
+		<cfreturn GetBlog>
+	</cffunction>
+	
 	<cffunction name="GetContentAndContentLocale" output="false" returntype="query">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 		<cfargument name="LocaleID" default="" type="numeric" required="true">

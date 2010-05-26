@@ -22,6 +22,7 @@
 	<cfset ATTRIBUTES.Numeric="y">
 </cfif>
 <cfparam name="ATTRIBUTES.Date" default="N">
+<cfparam name="ATTRIBUTES.DateTime" default="N">
 <cfparam name="ATTRIBUTES.ValidationMessage" default="Please enter a value.">
 <cfparam name="ATTRIBUTES.EmailAddressValidationMessage" default="Please enter a valid email address.">
 <cfparam name="ATTRIBUTES.DateValidationMessage" default="Please enter a valid date.">
@@ -68,6 +69,9 @@
 	<cfif ATTRIBUTES.Date IS "Y" and ATTRIBUTES.DefaultValue IS NOT "" AND IsDate(ATTRIBUTES.DefaultValue)>
 		<cfset ATTRIBUTES.DefaultValue=DateFormat(ATTRIBUTES.DefaultValue,"mmmm d, yyyy")>
 	</cfif>
+	<cfif ATTRIBUTES.DateTime IS "Y" and ATTRIBUTES.DefaultValue IS NOT "" AND IsDate(ATTRIBUTES.DefaultValue)>
+		<cfset ATTRIBUTES.DefaultValue="#DateFormat(ATTRIBUTES.DefaultValue,'mmmm d, yyyy')# #TimeFormat(ATTRIBUTES.DefaultValue)#">
+	</cfif>
 <cfelseif ATTRIBUTES.ObjectAction IS "Validate">
 	<cfif ATTRIBUTES.ObjectName is not "">
 		<cfset TempStr="CALLER.#ATTRIBUTES.ObjectName#.IsInError('#ATTRIBUTES.PropertyName#')">
@@ -110,6 +114,14 @@
 		<cfif ATTRIBUTES.Date IS "Y" AND Trim(ATTRIBUTES.DefaultValue) IS NOT "">
 			<cfif IsDate(ATTRIBUTES.DefaultValue)>
 				<cfset ATTRIBUTES.DefaultValue=DateFormat(ATTRIBUTES.DefaultValue,"mmm d, yyyy")>
+			<cfelse>
+				<cfset ShowForm="1">
+				<cfset Message="#ATTRIBUTES.DateValidationMessage#">
+			</cfif>
+		</cfif>
+		<cfif ATTRIBUTES.DateTime IS "Y" AND Trim(ATTRIBUTES.DefaultValue) IS NOT "">
+			<cfif IsDate(ATTRIBUTES.DefaultValue)>
+				<cfset ATTRIBUTES.DefaultValue="#DateFormat(ATTRIBUTES.DefaultValue,'mmm d, yyyy')# #TimeFormat(ATTRIBUTES.DefaultValue)#">
 			<cfelse>
 				<cfset ShowForm="1">
 				<cfset Message="#ATTRIBUTES.DateValidationMessage#">

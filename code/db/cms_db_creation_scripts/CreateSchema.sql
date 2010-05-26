@@ -76,6 +76,7 @@ CREATE TABLE [dbo].[t_Category](
 	[TemplateID] [int] NULL,
 	[CacheDateTime] [datetime] NULL,
 	[SourceID] [int] NULL CONSTRAINT [DF_t_Category_SourceID]  DEFAULT (0),
+	[PublishDateTime] [datetime] NULL CONSTRAINT [DF_t_Category_PublishDateTime]  DEFAULT (getdate()),
  CONSTRAINT [PK_t_Category] PRIMARY KEY CLUSTERED 
 (
 	[CategoryID] ASC
@@ -1669,7 +1670,7 @@ SELECT	dbo.t_Category.CategoryId, dbo.t_Category.CategoryTypeId, dbo.t_Category.
 		dbo.t_Category.PropertiesId, dbo.t_Category.WorkflowStatusID, dbo.t_Category.TemplateID, 
 		dbo.t_Category.CacheDateTime, dbo.t_Category.SourceID, dbo.t_CategoryLocaleMeta.LocaleID, 
 		dbo.t_CategoryLocaleMeta.CategoryLocalePriority,
-		dbo.t_CategoryLocaleMeta.CategoryLocaleDisplayOrder,   dbo.t_Label.LabelName AS CategoryTypeName
+		dbo.t_CategoryLocaleMeta.CategoryLocaleDisplayOrder,   dbo.t_Label.LabelName AS CategoryTypeName, dbo.t_Category.PublishDateTime
 FROM         dbo.t_Category INNER JOIN
                       dbo.t_CategoryLocaleMeta ON dbo.t_Category.CategoryID = dbo.t_CategoryLocaleMeta.CategoryID INNER JOIN
                       dbo.t_Label ON dbo.t_Category.CategoryTypeID = dbo.t_Label.LabelID' 
@@ -1746,7 +1747,7 @@ IF @defaultCategoryLocaleID = 0 AND @localeIDexists = 0
 	c.categoryActive, c.ShowInNavigation,
 	c.categoryPriority, c.CategoryLocalePriority as categoryPriorityDerived,
 	c.categoryURL, c.categoryURL As categoryURLDerived,
-	c.propertiesID as categoryPropertiesID, c.workflowStatusID, c.templateID, c.cacheDateTime,
+	c.propertiesID as categoryPropertiesID, c.workflowStatusID, c.templateID, c.cacheDateTime, c.publishDateTime,
 	c.SourceID, NULL As categoryLocaleID, NULL As categoryLocaleActive, 
 	NULL As localeID, NULL As categoryLocalePropertiesID, NULL As defaultCategoryLocale,
 	NULL As categoryActiveDerived, NULL as CategoryLocalePropertiesPacket, NULL as CategoryPropertiesPacket
@@ -1790,6 +1791,8 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	workflowStatusID INT, 
 	templateID INT, 
 	cacheDateTime datetime,
+	publishDateTime datetime,
+	publishDateTime datetime,
 	sourceID INT,
 	categoryLocaleID INT, 
 	categoryLocaleActive BIT,
@@ -1819,7 +1822,7 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	WHEN '''' THEN c.categoryURL
 	ELSE cl.categoryLocaleURL
 	END as categoryURLDerived,
-	c.propertiesID As categoryPropertiesID, c.workflowStatusID, c.templateID, c.cacheDateTime,
+	c.propertiesID As categoryPropertiesID, c.workflowStatusID, c.templateID, c.cacheDateTime, c.publishDateTime,
 	c.sourceID, cl.categoryLocaleID, cl.categoryLocaleActive, 
 	cl.localeID, cl.propertiesID As categoryLocalePropertiesID, cl.defaultCategoryLocale,
 	CASE c.categoryActive
@@ -2273,7 +2276,7 @@ SELECT     dbo.qry_GetCategory.CategoryID, dbo.qry_GetCategory.CategoryTypeID, d
                       dbo.qry_GetCategoryLocale.PropertiesID AS CategoryLocalePropertiesID, dbo.qry_GetCategoryLocale.LocaleName, 
                       dbo.qry_GetCategoryLocale.LanguageName, dbo.qry_GetCategoryLocale.LanguageCode, 
                       dbo.qry_GetCategoryLocale.PropertiesPacket AS CategoryLocalePropertiesPacket, dbo.qry_GetCategory.CacheDateTime, 
-                      dbo.qry_GetCategory.ShowInNavigation
+                      dbo.qry_GetCategory.ShowInNavigation, dbo.qry_GetCategory.SourceID, dbo.qry_GetCategory.PublishDateTime
 FROM         dbo.qry_GetCategory LEFT OUTER JOIN
                       dbo.qry_GetCategoryLocale ON dbo.qry_GetCategory.CategoryID = dbo.qry_GetCategoryLocale.CategoryID
 ' 
