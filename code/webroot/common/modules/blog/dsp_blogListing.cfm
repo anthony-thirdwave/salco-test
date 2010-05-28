@@ -1,11 +1,13 @@
-<cfparam name="ATTRIBUTES.BlogCategoryID" default="#REQUEST.CurrentCategoryID#">
+<cfparam name="ATTRIBUTES.BlogID" default="#REQUEST.CurrentCategoryID#">
 <cfparam name="URL.m" default="">
 <cfparam name="URL.y" default="">
+<cfparam name="URL.topic" default="">
 
-<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntries" returnVariable="GetThesePages">
-	<cfinvokeargument name="ParentID" value="#ATTRIBUTES.BlogCategoryID#">
+<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntries" returnVariable="REQUEST.qBlogEntries_#ATTRIBUTES.BlogID#">
+	<cfinvokeargument name="BlogID" value="#ATTRIBUTES.BlogID#">
 	<cfinvokeargument name="Month" value="#Val(URL.m)#">
 	<cfinvokeargument name="Year" value="#Val(URL.y)#">
+	<cfinvokeargument name="TopicAlias" value="#Trim(URL.topic)#">
 </cfinvoke>
 
 <!--- Initialize Pagination --->
@@ -13,10 +15,12 @@
 <cfparam name="StartRow" default="1">
 <!--- End Initialize Pagination (why so much?)--->
 
-<cfif GetThesePages.RecordCount gt "0">
+<cfset BlogEntriesRecordCount=Evaluate("REQUEST.qBlogEntries_#ATTRIBUTES.BlogID#.RecordCount")>
+
+<cfif BlogEntriesRecordCount gt "0">
 	<cfsavecontent variable="ThisNav">
 		<div class="blogListing">
-		<cfoutput query="GetThesePages" group="CategoryID" maxrows="#SearchNUM#" startrow="#StartRow#">
+		<cfoutput query="REQUEST.qBlogEntries_#ATTRIBUTES.BlogID#" group="CategoryID" maxrows="#SearchNUM#" startrow="#StartRow#">
 			<h2><a href="#Link#">#CategoryNameDerived#</a></h2>
 			<cfif Thumbnail IS NOT "">
 				<p><a href="#Link#"><img alt="#CategoryNameDerived#" src="#Thumbnail#" width="440"></a></p>
@@ -24,6 +28,9 @@
 			<p class="blogAbstract">#Abstract#<br />
 			<a href="#Link#" class="more">#CallToAction#</a><br />
 			<span class="byline">posted by #Author# on #DateFormat(PublishDateTime,'mmmm d, yyyy')# at #TimeFormat(PublishDateTime,'hh:mm tt')#</span>
+			<cfif Topic IS NOT "">
+				<span class="topic">posted in #Replace(Topic,",",", ","All")#</span>
+			</cfif>
 			</p>
 		</cfoutput>
 		</div>
@@ -32,7 +39,7 @@
 			<cfmodule template="/common/modules/utils/pagination.cfm"
 				StartRow="#StartRow#"
 				SearchNum="#SearchNum#"
-				RecordCount="#GetThesePages.RecordCount#"
+				RecordCount="#BlogEntriesRecordCount#"
 				FieldList="#QueryString#">
 		</div>
 	</cfsaveContent>

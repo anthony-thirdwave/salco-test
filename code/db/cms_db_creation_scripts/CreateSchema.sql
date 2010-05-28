@@ -1792,7 +1792,6 @@ ELSE --the the combination of t_category, t_categoryLocale and t_Properties info
 	templateID INT, 
 	cacheDateTime datetime,
 	publishDateTime datetime,
-	publishDateTime datetime,
 	sourceID INT,
 	categoryLocaleID INT, 
 	categoryLocaleActive BIT,

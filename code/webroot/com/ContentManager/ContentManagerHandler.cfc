@@ -352,19 +352,74 @@
 		<cfreturn arguments.URL_array>
 	</cffunction>
 	
+	<cffunction name="GetBlogEntriesByTopic" output="false" returntype="query">
+		<cfargument name="BlogID" default="" type="numeric" required="true">
+		<cfargument name="TopicAlias" default="" type="string" required="false">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+			<cfprocresult name="LOCAL.GetRoot" maxrows="1">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ARGUMENTS.BlogID)#" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
+		</cfstoredproc>
+		
+		<cfquery name="LOCAL.GetBlogEntriesByTopic" datasource="#APPLICATION.DSN#">
+			SELECT	dbo.t_TopicRelated.TopicID, t_Category_1.CategoryName AS TopicName, t_Category_1.CategoryAlias AS TopicAlias, 
+					dbo.t_TopicRelated.EntityID, dbo.t_TopicRelated.EntityName,  
+					t_Category_2.CategoryID, t_Category_2.CategoryName, t_Category_2.CategoryAlias, t_Category_2.DisplayLevel, t_Category_2.DisplayOrder, 
+					t_Category_2.CategoryActive, t_Category_1.DisplayOrder AS TopicDisplayOrder
+			FROM    dbo.t_Category AS t_Category_1 INNER JOIN
+					dbo.t_TopicRelated ON t_Category_1.CategoryID = dbo.t_TopicRelated.TopicID INNER JOIN
+					dbo.t_Category AS t_Category_2 ON dbo.t_TopicRelated.EntityID = t_Category_2.CategoryID AND 
+					dbo.t_TopicRelated.EntityName = <cfqueryparam value="t_Category" cfsqltype="CF_SQL_VARCHAR"> AND 
+					t_Category_2.CategoryTypeID = <cfqueryparam cfsqltype="cf_sql_integer" value="77">
+			WHERE 	
+					t_Category_2.DisplayOrder like <cfqueryparam value="#LOCAL.GetRoot.DisplayOrder#%" cfsqltype="CF_SQL_VARCHAR">
+			<cfif ARGUMENTS.TopicAlias IS NOT "">
+				And t_Category_1.CategoryAlias=<cfqueryparam value="#ARGUMENTS.TopicAlias#" cfsqltype="CF_SQL_VARCHAR">
+			</cfif>
+			ORDER BY
+					TopicDisplayOrder
+		</cfquery>
+		<cfreturn LOCAL.GetBlogEntriesByTopic>
+	</cffunction>
+	
 	<cffunction name="GetBlogEntries" output="false" returntype="query">
-		<cfargument name="ParentID" default="" type="numeric" required="true">
+		<cfargument name="BlogID" default="" type="numeric" required="true">
 		<cfargument name="month" default="0" type="numeric" required="false">
 		<cfargument name="year" default="0" type="numeric" required="false">
+		<cfargument name="TopicAlias" default="" type="string" required="false">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+			<cfprocresult name="LOCAL.GetRoot" maxrows="1">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ARGUMENTS.BlogID)#" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
+		</cfstoredproc>
+		
+		<cfif ARGUMENTS.TopicAlias IS NOT "">
+			<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntriesByTopic" returnVariable="qGetBlogEntriesByTopic">
+				<cfinvokeargument name="BlogID" value="#ARGUMENTS.BlogID#">
+				<cfinvokeargument name="TopicAlias" value="#ARGUMENTS.TopicAlias#">
+			</cfinvoke>
+		</cfif>
 		
 		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 			<cfprocresult name="GetThesePagesPrime">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="displayOrder" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="displayOrder" value="#LOCAL.GetRoot.DisplayOrder#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#Val(ARGUMENTS.ParentID)#" null="NO">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="" null="Yes">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+			<cfif ARGUMENTS.TopicAlias IS NOT "" and qGetBlogEntriesByTopic.RecordCount GT "0">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="#ValueList(qGetBlogEntriesByTopic.CategoryID)#" null="No">
+			<cfelse>
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+			</cfif>
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="77" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="No">
@@ -372,7 +427,7 @@
 		
 		<cfquery name="GetThesePages" dbtype="query">
 			select *, 
-			'' as Link, '' as Thumbnail, '' as Abstract, '' as Author, '' as GroupDate, '' as CallToAction
+			'' as Link, '' as Thumbnail, '' as Abstract, '' as Author, '' as GroupDate, '' as CallToAction, '' as Topic
 			from GetThesePagesPrime 
 			<cfif Isdate("#Val(ARGUMENTS.Month)#/1/#Val(ARGUMENTS.Year)#")>
 				<cfset ThisDate=CreateDate(Val(ARGUMENTS.Year),Val(ARGUMENTS.Month),1)>
@@ -393,6 +448,7 @@
 			<cfset ThisAbstract="">
 			<cfset ThisAuthor="">
 			<cfset ThisCallToAction="">
+			<cfset ThisTopic="">
 			<cfif IsWDDX(CategoryLocalePropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#CategoryLocalePropertiesPacket#" output="sCategoryProperties">
 				<cfif StructKeyExists(sCategoryProperties,"CategoryImageRepresentative") AND Trim(StructFind(sCategoryProperties,"CategoryImageRepresentative")) IS NOT "">
@@ -456,6 +512,13 @@
 				<cfset QuerySetCell(GetThesePages,"CallToAction",ThisCallToAction,CurrentRow)>
 			</cfif>
 			<cfset QuerySetCell(GetThesePages,"GroupDate",CreateDate(year(PublishDateTime),month(PublishDateTime),1),CurrentRow)>
+			
+			<cfinvoke component="com.Taxonomy.TopicHandler"
+				method="GetRelatedTopics"
+				EntityID="#Val(CategoryID)#"
+				EntityName="t_Category"
+				returnvariable="getTopics">
+			<cfset QuerySetCell(GetThesePages,"Topic",ValueList(getTopics.TopicName),CurrentRow)>
 		</cfoutput>
 		
 		<cfreturn GetThesePages>	

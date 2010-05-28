@@ -281,6 +281,7 @@ insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelIma
 insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 75,'3WCAT','MT Blog',-40,20,null,0
 insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 76,'3WCAT','Topic',40,50,null,0
 insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 77,'3WCAT','Blog Entry',40,60,null,0
+insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 78,'3WCAT','Blog',40,70,null,0
 insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 100,'EN','English',60,10,null,null
 insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 101,'ES','Spanish',60,20,null,null
 insert t_label ( LabelID,LabelCode,LabelName,LabelGroupID,LabelPriority,LabelImage,LabelParent )  select 102,'DE','German',60,30,null,null

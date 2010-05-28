@@ -81,6 +81,19 @@
 		</cfif>
 	</cffunction>
 	
+	<cffunction name="GetAllCategoryType" output="false" returntype="query">
+		
+		<cfset var LOCAL=StructNew()>
+		
+		<cfquery name="LOCAL.GetAllCategoryType" datasource="#APPLICATION.DSN#">
+			SELECT		*
+			FROM		t_Label
+			WHERE		LabelGroupID= <cfqueryparam value="40" cfsqltype="cf_sql_integer">
+			ORDER BY	LabelName
+		</cfquery>
+		<cfreturn LOCAL.GetAllCategoryType>
+	</cffunction>
+	
 	<cffunction name="GetContent" output="false" returntype="boolean">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
@@ -121,9 +134,8 @@
 
 		<cfquery name="GetBlog" datasource="#APPLICATION.DSN#">
 			SELECT	t_Category_2.CategoryName as BlogName, t_Category_2.CategoryID as BlogID, t_Category_2.CategoryAlias as BlogAlias
-			FROM	t_Category AS t_Category_1 INNER JOIN
-                    t_Category AS t_Category_2 ON t_Category_1.ParentID = t_Category_2.CategoryID  
-			WHERE 	t_Category_1.CategoryTypeID=<cfqueryparam value="77" cfsqltype="cf_sql_integer">
+			FROM	t_Category AS t_Category_2
+			WHERE 	t_Category_2.CategoryTypeID=<cfqueryparam value="78" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfreturn GetBlog>
 	</cffunction>

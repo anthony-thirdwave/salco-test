@@ -98,11 +98,17 @@
 
 	<!--- Determine field restrictions based on category type --->
 	<cfset this.sFields=StructNew()>
-	<cfset BaseFieldList="CategoryName,TemplateID,PublishDateTime,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID,useSSL"><!--- charlie --->
-	<cfloop index="ThisCategoryTypeID" list="-1,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77">
+	<cfset BaseFieldList="CategoryName,TemplateID,CategoryAlias,CategoryTypeID,CategoryActive,ParentID,PropertiesID,useSSL"><!--- charlie --->
+	<cfinvoke component="com.ContentManager.CategoryHandler"
+		method="GetAllCategoryType"
+		returnVariable="GetAllCategoryType">
+	<cfloop index="ThisCategoryTypeID" list="-1,#ValueList(GetAllCategoryType.LabelID)#">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="60,63,70"><!--- Content --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,aOwner,AllowComments,CommentNotificationEmail">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
+			</cfcase>
+			<cfcase value="78"><!--- Blog --->
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID">
 			</cfcase>
 			<cfcase value="67"><!--- News List --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
@@ -1176,13 +1182,13 @@
 				SELECT * FROM t_Label WHERE LabelGroupID=40 AND
 				<cfswitch expression="#GetParentCategory.CategoryTypeID#">
 					<cfcase value="65"><!--- Website --->
-						LabelID IN (60,61,75)<!--- Only content, system --->
+						LabelID IN (60,61,75,78)<!--- Only content, system --->
 					</cfcase>
-					<cfcase value="60"><!--- Content --->
-						LabelID  IN (60,61,75,66,77) <!--- Content, System, Blog, Article, Journal, blog Entry --->
+					<cfcase value="60,78"><!--- Content --->
+						LabelID  IN (60,61,75,66,77,78) <!--- Content, System, Blog, Article, Journal, blog Entry --->
 					</cfcase>
 					<cfcase value="61"><!--- system --->
-						LabelID IN (60,61,67,71,73,74,66,76) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
+						LabelID IN (60,61,67,71,73,74,66,76,78) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
 					</cfcase>
 					<cfcase value="76"><!--- topic --->
 						LabelID IN (61,76) <!--- System, Topic --->

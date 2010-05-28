@@ -99,10 +99,10 @@
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
 			</cfcase>
 			<cfcase value="254"><!--- Blog Entry Listing --->
-				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID,InheritID">
 			</cfcase>
 			<cfcase value="255"><!--- Blog Navigation --->
-				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID">
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID,InheritID">
 			</cfcase>
 			<cfcase value="256"><!--- Article Listing --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">

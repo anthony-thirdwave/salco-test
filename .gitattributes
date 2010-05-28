@@ -445,9 +445,12 @@ code/webroot/common/modules/utils/getbranchfromroot.cfm -text
 code/webroot/common/modules/utils/hyperlinkURLs.cfm -text
 code/webroot/common/modules/utils/safeSubmit.cfm -text
 code/webroot/common/modules/utils/validateEmail.cfm -text
+code/webroot/common/process/BlogRSSGenerate.cfm -text
 code/webroot/common/process/ContentGenerate.cfm -text
 code/webroot/common/process/RSSUpdate.cfm -text
 code/webroot/common/process/VerityUpdate.cfm -text
+code/webroot/common/process/_hourly.cfm -text
+code/webroot/common/process/_nightly.cfm -text
 code/webroot/common/scripts/articleSelector.js -text
 code/webroot/common/scripts/categorySelector.js -text
 code/webroot/common/scripts/dragdrop.js -text

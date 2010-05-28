@@ -537,7 +537,7 @@
 			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset BlogID=GetSource.SourceID>
-		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogListing.cfm"" BlogCategoryID=""#Val(BlogID)#"">">
+		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogListing.cfm"" BlogID=""#Val(BlogID)#"">">
 	</cfcase>
 	<cfcase value="255"><!--- Blog Navigation --->
 		<cfset BlogID="-1">
@@ -547,7 +547,7 @@
 			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset BlogID=GetSource.SourceID>
-		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogNav.cfm"" BlogCategoryID=""#Val(BlogID)#"">">
+		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogNav.cfm"" BlogID=""#Val(BlogID)#"">">
 	</cfcase>
 	<cfcase value="222"><!--- List of Files --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
