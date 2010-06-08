@@ -1,5 +1,11 @@
 <cfparam name="ATTRIBUTES.BlogID" default="#REQUEST.CurrentCategoryID#">
-	
+
+<cfif NOT IsDefined("REQUEST.MyBlogHandler")>
+	<cfobject component="com.ContentManager.BlogHandler"
+		name="REQUEST.MyBlogHandler">
+	<cfset REQUEST.MyBlogHandler.init()>
+</cfif>
+
 <cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
 	<cfprocresult name="qGetCategoryBasicDetails" maxrows="1">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ATTRIBUTES.BlogID)#" null="No">
@@ -18,8 +24,9 @@
 		<cfset PageQueryString=ListLast(PageAction,"?")>
 	</cfif>
 	
-	<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntries" returnVariable="qBlogEntries">
+	<cfinvoke component="#REQUEST.MyBlogHandler#" method="GetBlogEntries" returnVariable="qBlogEntries">
 		<cfinvokeargument name="BlogID" value="#ATTRIBUTES.BlogID#">
+		<cfinvokeargument name="Quick" value="1">
 	</cfinvoke>
 	
 	<cfquery name="GetThesePages" dbtype="query">
@@ -38,7 +45,7 @@
 	</cfoutput>
 	</ul>
 	
-	<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntriesByTopic" returnVariable="qGetBlogEntriesByTopic">
+	<cfinvoke component="#REQUEST.MyBlogHandler#" method="GetBlogEntriesByTopic" returnVariable="qGetBlogEntriesByTopic">
 		<cfinvokeargument name="BlogID" value="#ATTRIBUTES.BlogID#">
 	</cfinvoke>
 	

@@ -304,6 +304,7 @@
 			statusText = "Not Found">
 	</cfif>
 	<cfset CALLER.NoContent="0">
+	<cfset CALLER.AllowComments="0">
 	<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
 		<cfprocresult name="GetErrorPage" maxrows="1">
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#APPLICATION.CategoryID404Page#" null="No">

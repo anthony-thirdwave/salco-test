@@ -7,6 +7,7 @@ code/db/cms_db_creation_scripts/LoadData.sql -text
 code/db/cms_db_creation_scripts/README.txt -text
 code/webroot/.htaccess -text
 code/webroot/Application.cfc -text
+code/webroot/com/ContentManager/BlogHandler.cfc -text
 code/webroot/com/ContentManager/Category.cfc -text
 code/webroot/com/ContentManager/CategoryHandler.cfc -text
 code/webroot/com/ContentManager/CategoryLocale.cfc -text
