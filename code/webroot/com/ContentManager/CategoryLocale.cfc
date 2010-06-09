@@ -289,26 +289,6 @@
 					</cfquery>
 					<cfset thisCategoryLocaleID=InsertCategory.NewCategoryLocaleID>
 					<cfset this.SetProperty("CategoryLocaleID",thisCategoryLocaleID)>
-				
-					<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
-					<!--- Move files to its final resting place --->
-					<cfif ARGUMENTS.WebrootPath is not "">
-						<cfset Destination=this.GetResourcePath("images")>
-						<cfset Destination=ReplaceNoCase("#ARGUMENTS.WebrootPath##Destination#","/","\","all")>
-						<cfset Destination=ReplaceNoCase("#Destination#","\\","\","all")>
-						<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle">
-							<cfset Source=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetProperty('#ThisImage#')#","/","\","all")>
-							<cfset Source=ReplaceNoCase("#Source#","\\","\","all")>
-							<cfif FileExists(Source)>							
-								<cffile action="MOVE" source="#Source#" destination="#Destination#">
-								<cfset DestinationToSave="#this.GetResourcePath('images')##ListLast(this.GetProperty('#ThisImage#'),'/')#">
-								<cfset DestinationToSave=ReplaceNoCase(DestinationToSave,"//","/","all")>
-								<cfset this.SetProperty("#ThisImage#","#DestinationToSave#")>
-								<cfset SetVariable("This#ThisImage#","#DestinationToSave#")>
-							</cfif>
-							
-						</cfloop>
-					</cfif>
 				</cftransaction>
 				<cfif Val(ARGUMENTS.UserID) GT "0">
 					<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
@@ -338,6 +318,30 @@
 						Operation="modify"
 						EntityName="#this.GetProperty('CategoryLocaleName')#">
 				</cfif>
+			</cfif>
+			
+			<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
+			<!--- Move files to its final resting place --->
+			<cfif ARGUMENTS.WebrootPath is not "">
+				<cfset ThisDestinationDirectory=this.GetResourcePath("images")>
+				<cfset ThisDestinationDirectory=ReplaceNoCase("#ARGUMENTS.WebrootPath##ThisDestinationDirectory#","/","\","all")>
+				<cfset ThisDestinationDirectory=ReplaceNoCase("#ThisDestinationDirectory#","\\","\","all")>
+				<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+					<cfset OriginalPath=this.GetProperty("#ThisImage#")>
+					<cfset Source=ExpandPath(OriginalPath)>
+					<cfif FileExists(Source) and left(Source,Len(ThisDestinationDirectory)) is not ThisDestinationDirectory>
+						<cfif left(OriginalPath,len("/common/incoming")) IS "/common/incoming">
+							<cfset fileoperation="move">
+						<cfelse>
+							<cfset fileoperation="copy">
+						</cfif>
+						<cffile action="#fileoperation#" source="#Source#" destination="#ThisDestinationDirectory#">
+						<cfset DestinationToSave="#this.GetResourcePath('images')##ListLast(OriginalPath,'/')#">
+						<cfset DestinationToSave=ReplaceNoCase(DestinationToSave,"//","/","all")>
+						<cfset this.SetProperty("#ThisImage#","#DestinationToSave#")>
+						<cfset SetVariable("This#ThisImage#","#DestinationToSave#")>
+					</cfif>
+				</cfloop>
 			</cfif>
 			
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
