@@ -13,7 +13,10 @@
 
 		<!--- if we've come here manually, then clear the session --->
 		<cfif structKeyExists(session, "sessionID")>
-
+			
+			<cfparam name="SESSION.cftoken" default="#cookie.cftoken#">
+			<cfparam name="SESSION.cfid" default="#cookie.cfid#">
+			
 			<!--- grab a copy of cfid and cftoken --->
 			<cfset local.cfid = session.cfid />
 			<cfset local.cftoken = session.cftoken />
