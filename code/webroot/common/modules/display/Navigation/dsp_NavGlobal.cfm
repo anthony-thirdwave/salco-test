@@ -1,58 +1,41 @@
-<cfscript>
-	aTopNav = ArrayNew(1);
-	sNavElem = StructNew();
+<cfset ThisCategoryID=1>
+<cfquery name="GetLastCache" datasource="#APPLICATION.DSN#" maxrows="1">
+	SELECT     MAX(CacheDateTime) AS CacheDateTime
+	FROM         t_Category where ParentID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="CF_SQL_INTEGER">
+</cfquery>
 
-	sNavElem["name"] = "About";
-	sNavElem["alias"] = "about";
-	sNavElem["id"] = 917;
-	ArrayAppend(aTopNav,Duplicate(sNavElem));
-</cfscript>
+<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\+GlobalNav_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
 
-<!-- Main Navigation Snippet -->
-<div id="mainNavigation">
-    <ul class="menuCSS">
-		<cfloop from="1" to="#ArrayLen(aTopNav)#" index="i">
-			<cfoutput>
-				<cfset thisNavElem = aTopNav[i]>
-				<cfset class = "">
-				<cfif ListFind(CategoryThreadList,thisNavElem.id)>
-					<cfset class = "active">
-				</cfif>
-				<cfif i EQ ArrayLen(aTopNav)>
-					<cfif class NEQ "">
-						<cfset class = "#class# last">
-					<cfelse>
-						<cfset class = "last">
-					</cfif>
-				</cfif>
-				<li<cfif class NEQ ""> class="#class#"</cfif>><a href="#APPLICATION.utilsObj.parseCategoryUrl(thisNavElem.alias)#">#thisNavElem.name#</a></li>
-			</cfoutput>
-		</cfloop>
-	</ul>
-
-
-
-<!--- create main nav struct - nav elements will display in order listed --->
-<cfscript>
-	aMainNav = ArrayNew(1);
-	sNavElem = StructNew();
-
-	sNavElem["name"] = "Inspiration";
-	sNavElem["alias"] = "inspiration";
-	sNavElem["id"] = 1160;
-	sNavElem["styleid"] = "n-insp";
-	ArrayAppend(aMainNav,Duplicate(sNavElem));
-
-
-</cfscript>
-
-	<ul id="nav-main">
-		<cfloop from="1" to="#ArrayLen(aMainNav)#" index="i">
-			<cfoutput>
-				<cfset thisNavElem = aMainNav[i]>
-				<li id="#thisNavElem.styleid#"<cfif ListFind(CategoryThreadList,thisNavElem.id)> class="active"</cfif>><a href="#APPLICATION.utilsObj.parseCategoryUrl(thisNavElem.alias)#">#thisNavElem.name#</a></li>
-			</cfoutput>
-		</cfloop>
-	</ul>
-</div> <!-- end #header -->
+<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
+	<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+		<cfprocresult name="GetTopCategories">
+		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="displayOrder" value="" null="Yes">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
+		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#ThisCategoryID#" null="NO">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="#APPLICATION.lVisibleCategoryTypeID#" null="No">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+		<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="No">
+	</cfstoredproc>
+	<cfsaveContent Variable="FileContents">
+		<cfif GetTopCategories.RecordCount GT "0">
+			<div id="mainNavigation"><!-- Start of Main Navigation Elements -->
+				<ul id="nav-main" class="menuCSS menu-#CategoryAlias#">
+                   <cfoutput query="GetTopCategories" group="CategoryID">
+                       <cfif Trim(CategoryURLDerived) IS "">
+                           <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
+                       <cfelse>
+                           <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
+                       </cfif>
+                       <li><a href="#ThisURL#">#CategoryNameDerived#</a></li>
+                   </cfoutput>
+				</ul>
+			</div><!-- End of Main Navigation Elements -->
+		</cfif>
+	</cfsaveContent>
+	<cffile action="WRITE" file="#APPLICATION.ExecuteTempDir##ExecuteTempFile#" output="#FileContents#" addnewline="Yes">
+</cfif>
+<cfinclude template="#APPLICATION.TempMapping##ExecuteTempFile#">
 

@@ -30,7 +30,7 @@
 		</cfif>
 	</cfif>
 	
-	<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntriesByTopic" returnVariable="qGetBlogEntriesByTopic">
+	<cfinvoke component="com.ContentManager.BlogHandler" method="GetBlogEntriesByTopic" returnVariable="qGetBlogEntriesByTopic">
 		<cfinvokeargument name="BlogID" value="#Val(BlogID)#">
 	</cfinvoke>
 	
@@ -59,7 +59,7 @@
 			<cfset RSSLink="http://#CGI.HTTP_Host##APPLICATION.utilsObj.parseCategoryUrl(GetBlog.CategoryAlias)#?topic=#GetTopic.CategoryAlias#">
 		</cfif>
 		
-		<cfinvoke component="com.ContentManager.ContentManagerHandler" method="GetBlogEntries" returnVariable="GetBlogEntries">
+		<cfinvoke component="com.ContentManager.BlogHandler" method="GetBlogEntries" returnVariable="GetBlogEntries">
 			<cfinvokeargument name="BlogID" value="#Val(BlogID)#">
 			<cfif ThisTopic IS NOT "All">
 				<cfinvokeargument name="TopicAlias" value="#GetTopic.CategoryAlias#">
