@@ -415,13 +415,15 @@
 					<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 						Lookup="Category"
 						KeyID="#ThisCategoryID#">
+					<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails" returnVariable="qGetCategoryBasicDetails"
+						CategoryID="#ThisCategoryID#">	
 					<cfif Val(ARGUMENTS.UserID) GT "0">
 						<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
 							UserID="#ARGUMENTS.UserID#"
 							Entity="Category"
 							KeyID="#thisCategoryID#"
 							Operation="Touch"
-							EntityName="#ThisContentName#">
+							EntityName="#qGetCategoryBasicDetails.CategoryName#">
 					</cfif>
 				</cfloop>
 			<cfelse>
@@ -429,12 +431,14 @@
 					Lookup="Content"
 					KeyID="#thisContentID#">
 				<cfif Val(ARGUMENTS.UserID) GT "0">
+					<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails" returnVariable="qGetCategoryBasicDetails"
+						CategoryID="#ThisCategoryID#">	
 					<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
 						UserID="#ARGUMENTS.UserID#"
 						Entity="Category"
 						KeyID="#thisCategoryID#"
 						Operation="Touch"
-						EntityName="#ThisContentName#">
+						EntityName="#qGetCategoryBasicDetails.CategoryName#">
 				</cfif>
 			</cfif>
 			
@@ -457,6 +461,10 @@
 						LocaleID="#LocaleID#">
 				</cfoutput>
 			</cfif>
+			
+			<cfinvoke component="/com/ContentManager/ContentHandler" method="TestAndTouchIfRepeated" returnVariable="success"
+				ContentID="#ThisContentID#"
+				Datasource="#APPLICATION.DSN#">
 			
 			<cfreturn true>
 		<cfelse>
@@ -915,6 +923,9 @@
 						</cfquery>
 					</cfoutput>
 				</cftransaction>
+				<cfinvoke component="/com/ContentManager/ContentHandler" method="TestAndTouchIfRepeated" returnVariable="success"
+					ContentID="#ThisContentID#"
+					Datasource="#sProductionSiteInformation.ProductionDBDSN#">
 				<cfset RemoteDirectories=ArrayNew(1)>
 				<cfset RemoteDirectories[1]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('images')#">
 				<cfset RemoteDirectories[2]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('documents')#">
@@ -970,7 +981,6 @@
 			<cfset ThisContentID=this.GetProperty("ContentID")>
 			<cfset ThisPropertiesID=this.GetProperty("PropertiesID")>
 			
-			
 			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisContentID#">
 			     <cfinvokeargument name="columnList" value="ContentID">
@@ -1001,6 +1011,10 @@
 					SET IDENTITY_INSERT t_Properties OFF
 				</cfquery>
 			</cfoutput>
+			
+			<cfinvoke component="/com/ContentManager/ContentHandler" method="TestAndTouchIfRepeated" returnVariable="success"
+				ContentID="#ThisContentID#"
+				Datasource="#sProductionSiteInformation.ProductionDBDSN#">
 			
 			<cfif this.GetProperty("InheritID") GT "1800"><!--- If this elt is inherited, then update all sub pages' cache timestamp --->
 				<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#sProductionSiteInformation.ProductionDBDSN#" 

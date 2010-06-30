@@ -1279,7 +1279,10 @@
 		<cfif this.GetProperty("CategoryID") GT "0">
 			<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#APPLICATION.DSN#" table="t_Category" Column="CategoryID" ParentColumn="ParentID">
 			<cfquery name="CheckIfContainContent" datasource="#APPLICATION.DSN#">
-				SELECT * FROM t_Content WHERE CategoryID IN (<cfqueryparam value="#branch#" cfsqltype="cf_sql_integer" list="yes">)
+				SELECT ContentID FROM qry_GetContentLocaleMeta 
+				WHERE 
+				CategoryID IN (<cfqueryparam value="#branch#" cfsqltype="cf_sql_integer" list="yes">) AND
+				ContentPositionID <> <cfqueryparam value="403" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif CheckIfContainContent.RecordCount GT "0">
 				<cfreturn false>

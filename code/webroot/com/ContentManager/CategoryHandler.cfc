@@ -71,7 +71,7 @@
 			</cfquery>
 			<cfset ReturnCandidateAlias="#CandidateAlias#-1">
 			<cfset FoundHighAlias="">
-			<cfoutput query="GetRecentAlias">#CategoryAlias#
+			<cfoutput query="GetRecentAlias">
 				<cfif IsNumeric(ListLast(CategoryAlias,"-")) and ListLast(CategoryAlias,"-") GT Val(FoundHighAlias)>
 					<cfset ReturnCandidateAlias="#CandidateAlias#-#IncrementValue(ListLast(GetRecentAlias.CategoryAlias,'-'))#">
 					<cfset FoundHighAlias=ListLast(CategoryAlias,"-")>
@@ -148,14 +148,18 @@
 		<cfset var CheckAlias = "">
 
 		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
-			SELECT t_Content.ContentID, ContentLocaleID
-			FROM         t_Content LEFT OUTER JOIN
-	                      t_ContentLocale ON t_Content.ContentID = t_ContentLocale.ContentID
-			WHERE CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> and localeID=<cfqueryparam value="#Val(ARGUMENTS.LocaleID)#" cfsqltype="cf_sql_integer">
-			order by t_Content.contentId,ContentLocaleID
+			SELECT 		t_Content.ContentID, ContentLocaleID, ContentTypeID
+			FROM   		t_Content 
+			INNER JOIN 	t_ContentLocale ON t_Content.ContentID = t_ContentLocale.ContentID
+			INNER JOIN	t_ContentLocaleMeta ON t_Content.ContentID = t_ContentLocaleMeta.ContentID
+			WHERE		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> 
+			AND			t_ContentLocale.localeID=<cfqueryparam value="#Val(ARGUMENTS.LocaleID)#" cfsqltype="cf_sql_integer">
+			AND			t_ContentLocaleMeta.contentPositionId <> <cfqueryparam value="403" cfsqltype="cf_sql_integer"> 
+			ORDER BY	t_Content.contentId, ContentLocaleID
 		</cfquery>
 		<cfreturn CheckAlias>
 	</cffunction>
+	
 	<cffunction name="GetNavCategoryQuery" output="false" returntype="query">
 
 		<!--- init variables --->
@@ -168,6 +172,7 @@
 		</cfquery>
 		<cfreturn GetAllCategories>
 	</cffunction>
+	
 	<cffunction name="GetCategoryTypeID" returntype="numeric" output="false">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
@@ -263,7 +268,7 @@
 		</cfif>
 
 		<cfquery datasource="#ARGUMENTS.Datasource#">
-		EXEC sp_generateDisplayOrder #Val(ARGUMENTS.SourceParentID)#
+			EXEC sp_generateDisplayOrder #Val(ARGUMENTS.SourceParentID)#
 		</cfquery>
 
 		<cfreturn true>
@@ -335,6 +340,7 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
+	
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="ResourceType" required="true">
@@ -463,6 +469,7 @@
 		</cfif>
 		<cfreturn true>
 	</cffunction>
+	
 	<cffunction name="GetCategoryFrontEndPermissions" output="false" returntype="query">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
@@ -719,9 +726,6 @@
 
 	</cffunction>
 
-
-
-	<!--- scrub an alias --->
 	<cffunction name="scrubAlias" output="false" returntype="string">
 		<cfargument name="alias" type="string" default="">
 

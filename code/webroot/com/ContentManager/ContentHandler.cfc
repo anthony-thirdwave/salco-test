@@ -1,23 +1,7 @@
 <cfcomponent output="false">
 	
-	<cffunction name="CheckDuplicateAlias" output="false" returntype="boolean">
-		<cfargument name="CandidateAlias" default="" type="string" required="true">
-		<cfargument name="ContentID" default="" type="numeric" required="true">
-		
-		<!--- init variables --->
-		<cfset var CheckAlias = "">
-		
-		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
-			SELECT		*
-			FROM		t_Content
-			WHERE		ContentAlias = <cfqueryparam value="#Trim(ARGUMENTS.CandidateAlias)#" cfsqltype="cf_sql_varchar">
-			AND			ContentID <> <cfqueryparam value="#val(ARGUMENTS.ContentID)#" cfsqltype="cf_sql_integer">
-		</cfquery>
-		<cfif CheckAlias.RecordCount IS NOT "0">
-			<cfreturn false>
-		<cfelse>
-			<cfreturn true>
-		</cfif>
+	<cffunction name="init" returntype="CategoryHandler">
+		<cfreturn this>
 	</cffunction>
 	
 	<cffunction name="GetContentQuery" output="false" returntype="query">
@@ -100,7 +84,6 @@
 		<cfreturn GetEvents>
 	</cffunction>
 	
-	
 	<cffunction name="GetContentSourceID" output="false" returntype="numeric">
 		<cfargument name="ContentID" required="true" type="numeric">
 		
@@ -130,6 +113,7 @@
 		</cfinvoke>
 		<cfreturn Test>
 	</cffunction>
+	
 	<cffunction name="GetPositionQuery" output="false" returntype="query">
 		
 		<!--- init variables --->
@@ -145,6 +129,7 @@
 		</cfinvoke>
 		<cfreturn Test>
 	</cffunction>
+	
 	<cffunction name="AdjustPriorities" returntype="boolean" output="false">
 		<cfargument name="sNewPriorities" required="true">
 		
@@ -183,6 +168,7 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
+	
 	<cffunction name="ContentActiveBitUpdate" returntype="boolean" output="false">
 		<cfargument name="ContentID" required="true">
 		<cfargument name="ContentActive" required="true">
@@ -200,6 +186,7 @@
 		</cfif>
 		<cfreturn false>
 	</cffunction>
+	
 	<cffunction name="CreateResourcePath" returntype="boolean" output="true">
 		<cfargument name="ContentID" required="true">
 		<cfargument name="WebrootPath" required="true">
@@ -209,7 +196,6 @@
 		<cfset var DirDone = "">
 		<cfset var DirectoryToCreate = "">
 		<cfset var i = "">
-		
 		
 		<cfif Val(ARGUMENTS.ContentID) LTE "0">
 			<cfreturn false>
@@ -227,6 +213,7 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
+	
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="ContentID" required="true">
 		<cfargument name="ResourceType" required="true">
@@ -254,6 +241,7 @@
 		</cfif>
 		<cfreturn ReturnString>
 	</cffunction>
+	
 	<cffunction name="GetResourceFilePath" returntype="string" output="false">
 		<cfargument name="ContentID" required="true">
 		<cfargument name="ResourceType" required="true">
@@ -408,7 +396,6 @@
 			endToken="]]"
 			returnvariable="local.lExtracted">
 		<cfreturn local.lExtracted>
-		
 	</cffunction>
 	
 	<cffunction name="UpdatePriorityByContentDate" returntype="boolean" output="false">
@@ -483,5 +470,29 @@
 			WHERE	ContentID = <cfqueryparam value="#Val(ARGUMENTS.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfreturn Check.ContentName>
+	</cffunction>
+	
+	<cffunction name="TestAndTouchIfRepeated" output="false" returntype="string">
+		<cfargument name="ContentID" default="-1" type="numeric" required="true">
+		<cfargument name="Datasource" default="#APPLICATION.DSN#" type="String" required="true">
+		
+		<!--- init variables --->
+		<cfset var LOCAL=StructNew()>
+				
+		<cfquery name="LOCAL.TestIfIamRepeated" datasource="#ARGUMENTS.Datasource#">
+			select categoryID from qry_GetContent
+			where 
+			ContentTypeID=<cfqueryparam value="206" cfsqltype="cf_sql_integer"> and 
+			SourceID=<cfqueryparam value="#Val(ARGUMENTS.ContentID)#" cfsqltype="cf_sql_integer"> 
+		</cfquery>
+		
+		<cfif LOCAL.TestIfIamRepeated.RecordCount GT "0">
+			<cfquery name="UpdateCacheDateTimeofRepeated" datasource="#ARGUMENTS.Datasource#">
+				update t_Category set CacheDateTime=GetDate()
+				Where CategoryID IN (<cfqueryparam value="#ValueList(LOCAL.TestIfIamRepeated.CategoryID)#" cfsqltype="cf_sql_integer" List="yes">)
+			</cfquery>
+		</cfif>
+		
+		<cfreturn LOCAL.TestIfIamRepeated.RecordCount>
 	</cffunction>
 </cfcomponent>

@@ -190,26 +190,27 @@
 			Entity="Category"
 			KeyID="#CategoryID#"
 			Operation="create">
-
 		<tr valign="top">
 			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
 		</tr>
 
 		<cfinvoke component="com.utils.tracking" method="GetPageLastModified" returnVariable="ReturnString"
 			CategoryID="#CategoryID#">
-
-		<tr valign="top">
-			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
-		</tr>
-
+		<cfif ReturnString IS NOT "No Information">
+			<tr valign="top">
+				<td class="datacontent1 sdatacontent1">#ReturnString#</td>
+			</tr>
+		</cfif>
+		
 		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Category"
 			KeyID="#CategoryID#"
 			Operation="savelive">
-
-		<tr valign="top">
-			<td class="datacontent1 sdatacontent1">#ReturnString#</td>
-		</tr>
+		<cfif ReturnString IS NOT "No Information">
+			<tr valign="top">
+				<td class="datacontent1 sdatacontent1">#ReturnString#</td>
+			</tr>
+		</cfif>
 		<!-- end second column -->
         </table>
         </td>

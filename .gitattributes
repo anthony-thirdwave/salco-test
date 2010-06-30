@@ -58,6 +58,7 @@ code/webroot/common/admin/MasterView/ContentModify.cfm -text
 code/webroot/common/admin/MasterView/LocaleModify.cfm -text
 code/webroot/common/admin/MasterView/_InitMasterView.cfm -text
 code/webroot/common/admin/MasterView/index.cfm -text
+code/webroot/common/admin/MasterView/recentChanges.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/index.cfm -text
 code/webroot/common/admin/RedirectManager/edit.cfm -text

@@ -18,22 +18,23 @@
 		</cfstoredproc>
 		
 		<cfquery name="LOCAL.GetBlogEntriesByTopic" datasource="#APPLICATION.DSN#">
-			SELECT	dbo.t_TopicRelated.TopicID, t_Category_1.CategoryName AS TopicName, 
-					t_Category_1.CategoryAlias AS TopicAlias, 
-					dbo.t_TopicRelated.EntityID, dbo.t_TopicRelated.EntityName,  
-					t_Category_2.CategoryID, t_Category_2.CategoryName, t_Category_2.CategoryAlias, 
-					t_Category_2.DisplayLevel, t_Category_2.DisplayOrder, 
-					t_Category_2.CategoryActive, t_Category_1.DisplayOrder AS TopicDisplayOrder
-			FROM    	dbo.t_Category AS t_Category_1 
-			INNER JOIN	dbo.t_TopicRelated ON t_Category_1.CategoryID = dbo.t_TopicRelated.TopicID 
-			INNER JOIN	dbo.t_Category AS t_Category_2 ON dbo.t_TopicRelated.EntityID = t_Category_2.CategoryID 
-			AND 		dbo.t_TopicRelated.EntityName = <cfqueryparam value="t_Category" cfsqltype="CF_SQL_VARCHAR"> 
-			AND 		t_Category_2.CategoryTypeID = <cfqueryparam cfsqltype="cf_sql_integer" value="77">
-			WHERE 		t_Category_2.DisplayOrder like <cfqueryparam value="#LOCAL.GetRoot.DisplayOrder#%" cfsqltype="CF_SQL_VARCHAR">
+			SELECT	t_TopicRelated.TopicID, t_Category_1.CategoryName AS TopicName, t_Category_1.CategoryAlias AS TopicAlias, t_TopicRelated.EntityID, 
+					t_TopicRelated.EntityName, t_Category_2.CategoryID, t_Category_2.CategoryName, t_Category_2.CategoryAlias, t_Category_2.DisplayLevel, 
+					t_Category_2.DisplayOrder, t_Category_2.CategoryActive, t_Category_1.DisplayOrder AS TopicDisplayOrder, t_Category_2.CategoryTypeID
+			FROM    t_Category AS t_Category_1 RIGHT OUTER JOIN
+					t_TopicRelated ON t_Category_1.CategoryID = t_TopicRelated.TopicID RIGHT OUTER JOIN
+					t_Category AS t_Category_2 ON t_TopicRelated.EntityID = t_Category_2.CategoryID AND 
+					t_TopicRelated.EntityName = <cfqueryparam value="t_category" cfsqltype="CF_SQL_VARCHAR"> AND 
+					t_Category_2.CategoryTypeID = <cfqueryparam cfsqltype="cf_sql_integer" value="77">
+			WHERE 	
+					t_Category_2.DisplayOrder like <cfqueryparam value="#LOCAL.GetRoot.DisplayOrder#%" cfsqltype="CF_SQL_VARCHAR"> AND
+					t_Category_2.CategoryActive=<cfqueryparam cfsqltype="cf_sql_integer" value="1"> AND
+					t_Category_2.CategoryTypeID = <cfqueryparam cfsqltype="cf_sql_integer" value="77">
 			<cfif ARGUMENTS.TopicAlias IS NOT "">
-				AND		t_Category_1.CategoryAlias=<cfqueryparam value="#ARGUMENTS.TopicAlias#" cfsqltype="CF_SQL_VARCHAR">
+				And t_Category_1.CategoryAlias=<cfqueryparam value="#ARGUMENTS.TopicAlias#" cfsqltype="CF_SQL_VARCHAR">
 			</cfif>
-			ORDER BY	TopicDisplayOrder
+			ORDER BY
+					TopicDisplayOrder
 		</cfquery>
 		<cfreturn LOCAL.GetBlogEntriesByTopic>
 	</cffunction>
