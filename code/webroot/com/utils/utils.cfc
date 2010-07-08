@@ -277,18 +277,20 @@
 	<cffunction name="OutputDateTime" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 
+		<cfset var local = structNew()>
+
 		<cfif ARGUMENTS.String IS NOT "" and IsDate(ARGUMENTS.String)>
-			<cfset ReturnString="#dateFormat(ARGUMENTS.String,'mmm dd yyyy')# #TimeFormat(ARGUMENTS.String,'h:mmtt')#">
-			<cfset ThisDate=CreateDate(Year(ARGUMENTS.String),month(ARGUMENTS.String),day(ARGUMENTS.String))>
-			<cfset ThisNow=CreateDate(Year(now()),month(now()),day(now()))>
-			<cfif DateCompare(ThisDate,DateAdd("d",1,ThisNow)) IS "0">
-				<cfreturn "#ReturnString# (Tomorrow)">
-			<cfelseif DateCompare(ThisDate,DateAdd("d",-1,ThisNow)) IS "0">
-				<cfreturn "#ReturnString# (Yesterday)">
-			<cfelseif DateCompare(ThisDate,ThisNow) IS "0">
+			<cfset local.ReturnString="#dateFormat(ARGUMENTS.String,'mmm dd yyyy')# #TimeFormat(ARGUMENTS.String,'h:mmtt')#">
+			<cfset local.ThisDate=CreateDate(Year(ARGUMENTS.String),month(ARGUMENTS.String),day(ARGUMENTS.String))>
+			<cfset local.ThisNow=CreateDate(Year(now()),month(now()),day(now()))>
+			<cfif DateCompare(local.ThisDate,DateAdd("d",1,local.ThisNow)) IS "0">
+				<cfreturn "#local.ReturnString# (Tomorrow)">
+			<cfelseif DateCompare(local.ThisDate,DateAdd("d",-1,local.ThisNow)) IS "0">
+				<cfreturn "#local.ReturnString# (Yesterday)">
+			<cfelseif DateCompare(local.ThisDate,local.ThisNow) IS "0">
 				<cfreturn "#dateFormat(ARGUMENTS.String,'mmm dd yyyy')# #TimeFormat(ARGUMENTS.String,'h:mmtt')# (Today)">
 			<cfelse>
-				<cfreturn "#ReturnString#">
+				<cfreturn "#local.ReturnString#">
 			</cfif>
 		<cfelse>
 			<cfreturn "&nbsp;">
