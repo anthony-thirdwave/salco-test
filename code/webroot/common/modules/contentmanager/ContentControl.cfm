@@ -30,6 +30,7 @@
 	<cfcase value="201"><!--- HTML --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
 			<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
+			<cfset FileContents="#application.utilsObj.ObscureEMail(FileContents)#">
 		</cfif>
 	</cfcase>
 	<cfcase value="202"><!--- HTML & Text --->
@@ -50,7 +51,7 @@
 						InputText="#HTMLTemplate#"
 						returnVariable="HTMLTemplate"
 						Token1="[[text#i#]]"
-						Value1="#application.utilsObj.ReplaceMarks(application.utilsObj.RemoveLeadingPTag(ATTRIBUTES.sContentBody.aText[i]))#">
+						Value1="#application.utilsObj.ObscureEMail(application.utilsObj.ReplaceMarks(application.utilsObj.RemoveLeadingPTag(ATTRIBUTES.sContentBody.aText[i])))#">
 				</cfloop>
 				<cfset FileContents="#HTMLTemplate#">
 			</cfif>
@@ -406,7 +407,7 @@
 								<cfset ThisOutput=ReplaceNoCase(ThisOutput,"[[#ThisToken#]]",ThissHTML[ThisTokenName],"all")>
 							</cfif>
 						</cfloop>
-						<cfset FileContents=application.utilsObj.ReplaceMarks(ThisOutput)>
+						<cfset FileContents=application.utilsObj.ObscureEMail(application.utilsObj.ReplaceMarks(ThisOutput))>
 					</cfif>
 				</cfif>
 			</cfif>

@@ -767,4 +767,67 @@
 		<cfreturn local.returnUrl />
 	</cffunction>
 
+	<cfscript>
+		/**
+		* Searches a string for email addresses.
+		* Based on the idea by Gerardo Rojas and the isEmail UDF by Jeff Guillaume.
+		* New TLDs
+		*
+		* @param str      String to search. (Required)
+		* @return Returns a list.
+		* @author Raymond Camden (ray@camdenfamily.com)
+		* @version 2, September 21, 2006
+		*/
+	function getEmails(str) {
+	    var email = "(['_a-z0-9-]+(\.['_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*\.(([a-z]{2,3})|(aero|coop|info|museum|name|jobs|travel)))";
+	    var res = "";
+	    var marker = 1;
+	    var matches = "";
+	    
+	    matches = reFindNoCase(email,str,marker,marker);
+	
+	    while(matches.len[1] gt 0) {
+	        res = listAppend(res,mid(str,matches.pos[1],matches.len[1]));
+	        marker = matches.pos[1] + matches.len[1];
+	        matches = reFindNoCase(email,str,marker,marker);        
+	    }
+	    return res;
+	}
+	</cfscript>
+	
+	<cfscript>
+	/**
+	* When given an email address this function will return the address in a format safe from email harvesters.
+	* Minor edit by Rob Brooks-Bilson (rbils@amkor.com)
+	* Update now converts all characters in the email address to unicode, not just the @ symbol. (by author)
+	*
+	* @param EmailAddress      Email address you want to make safe. (Required)
+	* @param Mailto      Boolean (Yes/No). Indicates whether to return formatted email address as a mailto link. Default is No. (Optional)
+	* @return Returns a string
+	* @author Seth Duffey (rbils@amkor.comsduffey@ci.davis.ca.us)
+	* @version 2, May 2, 2002
+	*/
+	function EmailAntiSpam(EmailAddress) {
+	    var i = 1;
+	    var antiSpam = "";
+	    for (i=1; i LTE len(EmailAddress); i=i+1) {
+	        antiSpam = antiSpam & "&##" & asc(mid(EmailAddress,i,1)) & ";";
+	    }
+	    if ((ArrayLen(Arguments) eq 2) AND (Arguments[2] is "Yes")) return "<a href=" & "mailto:" & antiSpam & ">" & antiSpam & "</a>";
+	    else return antiSpam;
+	}
+	</cfscript>
+	
+	<cffunction name="ObscureEMail" returntype="string" output="No">
+		<cfargument name="String" default="" type="String" required="true">
+		<cfset ReturnString=ARGUMENTS.String>
+		<cfset GetEmailList=getEmails(ReturnString)>
+		
+		<cfloop index="email" list="#GetEmailList#" delimiters=",">
+			<cfset ReturnEmail=EmailAntiSpam("#email#","no")>
+			<cfset ReturnString=replace(ReturnString,email,ReturnEmail,"all")>
+		</cfloop>
+		<cfreturn ReturnString>
+	</cffunction>
+
 </cfcomponent>
