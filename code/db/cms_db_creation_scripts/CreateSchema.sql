@@ -549,7 +549,7 @@ CREATE TABLE [dbo].[t_User](
 	[LastName] [nvarchar](64) NULL,
 	[Title] [nvarchar](64) NULL,
 	[OrganizationName] [nvarchar](64) NULL,
-	[UserLogin] [varchar](16) NULL,
+	[UserLogin] [varchar](128) NULL,
 	[UserPassword] [varchar](16) NULL,
 	[EmailAddress] [varchar](128) NULL,
 	[PhoneNumber] [varchar](24) NULL,
