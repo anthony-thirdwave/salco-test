@@ -2,7 +2,7 @@
 
 <!---
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2007 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -44,96 +44,7 @@
  * limitation with the cfc invocation.
 --->
 
-
-
-
-
-<!---<cfinclude template="/common/modules/utils/fckutils.cfm">--->
-<!---
- * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2007 Frederico Caldeira Knabben
- *
- * == BEGIN LICENSE ==
- *
- * Licensed under the terms of any of the following licenses at your
- * choice:
- *
- *  - GNU General Public License Version 2 or later (the "GPL")
- *    http://www.gnu.org/licenses/gpl.html
- *
- *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
- *    http://www.gnu.org/licenses/lgpl.html
- *
- *  - Mozilla Public License Version 1.1 or later (the "MPL")
- *    http://www.mozilla.org/MPL/MPL-1.1.html
- *
- * == END LICENSE ==
- *
- * ColdFusion integration.
- * This function is used by FCKeditor module to check browser compatibility
- --->
-
-<cffunction name="FCKeditor_IsCompatibleBrowser" output="false">
-<cfscript>
-	var sAgent = lCase( cgi.HTTP_USER_AGENT );
-	var isCompatibleBrowser = false;
-	var stResult = "";
-	var sBrowserVersion = "";
-
-	// check for Internet Explorer ( >= 5.5 )
-	if( find( "msie", sAgent ) and not find( "mac", sAgent ) and not find( "opera", sAgent ) )
-	{
-		// try to extract IE version
-		stResult = reFind( "msie ([5-9]\.[0-9])", sAgent, 1, true );
-		if( arrayLen( stResult.pos ) eq 2 )
-		{
-			// get IE Version
-			sBrowserVersion = mid( sAgent, stResult.pos[2], stResult.len[2] );
-			if( sBrowserVersion GTE 5.5 )
-				isCompatibleBrowser = true;
-		}
-	}
-	// check for Gecko ( >= 20030210+ )
-	else if( find( "gecko/", sAgent ) )
-	{
-		// try to extract Gecko version date
-		// stResult = reFind( "gecko/(200[3-9][0-1][0-9][0-3][0-9])", sAgent, 1, true );
-		stResult = reFind( "gecko/([0-9]{8})", sAgent, 1, true );
-		if( arrayLen( stResult.pos ) eq 2 )
-		{
-			// get Gecko build (i18n date)
-			sBrowserVersion = mid( sAgent, stResult.pos[2], stResult.len[2] );
-			if( sBrowserVersion GTE 20030210 )
-				isCompatibleBrowser = true;
-		}
-	}
-	else if( find( "opera/", sAgent ) )
-	{
-		// try to extract Opera version
-		stResult = reFind( "opera/([0-9]+\.[0-9]+)", sAgent, 1, true );
-		if( arrayLen( stResult.pos ) eq 2 )
-		{
-			if ( mid( sAgent, stResult.pos[2], stResult.len[2] ) gte 9.5)
-				isCompatibleBrowser = true;
-		}
-	}
-	else if( find( "applewebkit", sAgent ) )
-	{
-		// try to extract Gecko version date
-		stResult = reFind( "applewebkit/([0-9]+)", sAgent, 1, true );
-		if( arrayLen( stResult.pos ) eq 2 )
-		{
-			if( mid( sAgent, stResult.pos[2], stResult.len[2] ) gte 522 )
-				isCompatibleBrowser = true;
-		}
-	}
-
-</cfscript>
-
-	<cfreturn isCompatibleBrowser>
-</cffunction>
-
-
+<cfinclude template="/common/scripts/fckeditor/fckutils.cfm">
 
 <cffunction
 	name="Create"
@@ -162,7 +73,6 @@
 	<cfparam name="this.basePath" type="string" default="/fckeditor/" />
 	<cfparam name="this.checkBrowser" type="boolean" default="true" />
 	<cfparam name="this.config" type="struct" default="#structNew()#" />
-
 	<cfscript>
 	// display the html editor or a plain textarea?
 	if( isCompatible() )
@@ -202,19 +112,21 @@
 	hint="Create a textarea field for non-compatible browsers."
 >
 	<cfset var result = "" />
+	<cfset var sWidthCSS = "" />
+	<cfset var sHeightCSS = "" />
 
 	<cfscript>
-	// append unit "px" for numeric width and/or height values
-	if( isNumeric( this.width ) )
-		this.width = this.width & "px";
-	if( isNumeric( this.height ) )
-		this.height = this.height & "px";
-	</cfscript>
+	if( Find( "%", this.width ) gt 0)
+		sWidthCSS = this.width;
+	else
+		sWidthCSS = this.width & "px";
 
-	<cfscript>
-	result = result & "<div>" & chr(13) & chr(10);
-	result = result & "<textarea name=""#this.instanceName#"" rows=""4"" cols=""40"" style=""WIDTH: #this.width#; HEIGHT: #this.height#"">#HTMLEditFormat(this.value)#</textarea>" & chr(13) & chr(10);
-	result = result & "</div>" & chr(13) & chr(10);
+	if( Find( "%", this.width ) gt 0)
+		sHeightCSS = this.height;
+	else
+		sHeightCSS = this.height & "px";
+
+	result = "<textarea name=""#this.instanceName#"" rows=""4"" cols=""40"" style=""width: #sWidthCSS#; height: #sHeightCSS#"">#HTMLEditFormat(this.value)#</textarea>" & chr(13) & chr(10);
 	</cfscript>
 	<cfreturn result />
 </cffunction>
@@ -239,15 +151,13 @@
 	sURL = this.basePath & "editor/fckeditor.html?userdir=" & Trim(this.UserDir) &"&InstanceName=" & this.instanceName;
 	// append toolbarset name to the url
 	if( len( this.toolbarSet ) )
-		sURL = sURL & "&Toolbar=" & this.toolbarSet;
+		sURL = sURL & "&amp;Toolbar=" & this.toolbarSet;
 	</cfscript>
 
 	<cfscript>
-	result = result & "<div>" & chr(13) & chr(10);
 	result = result & "<input type=""hidden"" id=""#this.instanceName#"" name=""#this.instanceName#"" value=""#HTMLEditFormat(this.value)#"" style=""display:none"" />" & chr(13) & chr(10);
 	result = result & "<input type=""hidden"" id=""#this.instanceName#___Config"" value=""#GetConfigFieldString()#"" style=""display:none"" />" & chr(13) & chr(10);
 	result = result & "<iframe id=""#this.instanceName#___Frame"" src=""#sURL#"" width=""#this.width#"" height=""#this.height#"" frameborder=""0"" scrolling=""no""></iframe>" & chr(13) & chr(10);
-	result = result & "</div>" & chr(13) & chr(10);
 	</cfscript>
 	<cfreturn result />
 </cffunction>
@@ -262,7 +172,7 @@
 	<cfset var sParams = "" />
 	<cfset var key = "" />
 	<cfset var fieldValue = "" />
-	<cfset var fieldName = "" />
+	<cfset var fieldLabel = "" />
 	<cfset var lConfigKeys = "" />
 	<cfset var iPos = "" />
 
@@ -280,7 +190,7 @@
 	lConfigKeys = lConfigKeys & ",FillEmptyBlocks,FormatSource,FormatOutput,FormatIndentator";
 	lConfigKeys = lConfigKeys & ",StartupFocus,ForcePasteAsPlainText,AutoDetectPasteFromWord,ForceSimpleAmpersand";
 	lConfigKeys = lConfigKeys & ",TabSpaces,ShowBorders,SourcePopup,ToolbarStartExpanded,ToolbarCanCollapse";
-	lConfigKeys = lConfigKeys & ",IgnoreEmptyParagraphValue,PreserveSessionOnFileBrowser,FloatingPanelsZIndex,TemplateReplaceAll,TemplateReplaceCheckbox";
+	lConfigKeys = lConfigKeys & ",IgnoreEmptyParagraphValue,FloatingPanelsZIndex,TemplateReplaceAll,TemplateReplaceCheckbox";
 	lConfigKeys = lConfigKeys & ",ToolbarLocation,ToolbarSets,EnterMode,ShiftEnterMode,Keystrokes";
 	lConfigKeys = lConfigKeys & ",ContextMenu,BrowserContextMenuOnCtrl,FontColors,FontNames,FontSizes";
 	lConfigKeys = lConfigKeys & ",FontFormats,StylesXmlPath,TemplatesXmlPath,SpellChecker,IeSpellDownloadUrl";
@@ -300,7 +210,7 @@
 		if( iPos GT 0 )
 		{
 			if( len( sParams ) )
-				sParams = sParams & "&";
+				sParams = sParams & "&amp;";
 
 			fieldValue = this.config[key];
 			fieldName = listGetAt( lConfigKeys, iPos );

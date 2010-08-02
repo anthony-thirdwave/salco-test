@@ -5,7 +5,7 @@
 <cfparam name="ATTRIBUTES.Width">
 <cfparam name="ATTRIBUTES.toolbar" default="Default">
 <cfscript>
-	fckEditor = createObject("component", "com.utils.fckeditor");
+	fckEditor = createObject("component", "/com/utils/fckeditor");
 	fckEditor.instanceName="#ATTRIBUTES.fieldname#";
 	fckEditor.basePath="/common/scripts/fckeditor/";
 	fckEditor.value="#ATTRIBUTES.Content#";

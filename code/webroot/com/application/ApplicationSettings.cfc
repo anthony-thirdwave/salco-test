@@ -188,15 +188,6 @@
 		<!--- more parameters --->
 		<cfset APPLICATION.DefaultLocaleID = 1 />
 
-		<!--- UserFilesPath is the same as upload path, but with the slashes in the opposite
-		direction and a slash as the prefix --->
-		<cfset APPLICATION.UserFilesPath = replace(APPLICATION.UploadPath, "\", "/", "all") />
-
-		<!--- add the prefix "/" if it doesn't exist --->
-		<cfif left(APPLICATION.UserFilesPath, 1) neq "/">
-			<cfset APPLICATION.UserFilesPath = "/" & APPLICATION.UserFilesPath />
-		</cfif>
-
 		<cfset APPLICATION.ImageFileExtensionList = ".jpg;.gif;.jpeg;.jpe;.swf;.png" />
 		<cfset APPLICATION.DocumentFileExtensionList = ".pdf;.txt;.eps;.doc;.hqx;.sea;.ppt;.mov;.zip;.sit;.indt;.mpg;.mp3;.mp4;.xls;.key" />
 		<cfset APPLICATION.MasterFileExtensionList = listAppend(APPLICATION.ImageFileExtensionList,APPLICATION.DocumentFileExtensionList,";") />
