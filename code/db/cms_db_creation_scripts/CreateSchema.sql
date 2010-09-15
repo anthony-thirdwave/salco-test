@@ -2091,7 +2091,7 @@ FROM         (SELECT     CategoryName, CategoryAlias, CategoryID, OperationID, O
                                               LastName, Rank() OVER (Partition BY CategoryAlias
                        ORDER BY TrackingDateTime DESC) AS Rank
 FROM         dbo.qry_GetTracking INNER JOIN
-                      dbo.t_Category ON dbo.qry_GetTracking.KeyID = dbo.t_Category.CategoryID AND dbo.qry_GetTracking.Entity = 't_Category') 
+                      dbo.t_Category ON dbo.qry_GetTracking.KeyID = dbo.t_Category.CategoryID AND dbo.qry_GetTracking.Entity = ''t_Category'') 
 MostRecentOperations
 WHERE     Rank = 1
  
