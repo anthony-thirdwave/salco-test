@@ -26,7 +26,7 @@
 
 <cfset QueryString="">
 <cfloop index="ThisParam" list="ParamTitle,ParamStatusID,ParamOrderBy,ParamCascade">
-	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#Evaluate(ThisParam)#">
+	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#variables[ThisParam]#">
 </cfloop>
 <cf_AddToQueryString queryString="#QueryString#" Name="mvca" value="1">
 <cf_AddToQueryString queryString="#QueryString#" Name="MVMode" value="publish">
@@ -107,13 +107,13 @@
 		<cfset lCategoryLocaleIDToPublish="">
 		<cfloop index="i" from="1" to="#NumItems#" step="1">
 			<cftry>
-				<cfset ThisCategoryLocaleID=REQUEST.SimpleDecrypt(URLDecode(Evaluate("EditCategoryLocaleID#i#")))>
+				<cfset ThisCategoryLocaleID=REQUEST.SimpleDecrypt(URLDecode(FORM["EditCategoryLocaleID#i#"]))>
 				<cfcatch>
 					<cfset ThisCategoryLocaleID="-1">
 				</cfcatch>
 			</cftry>
 			<cftry>
-				<cfset ThisCategoryID=REQUEST.SimpleDecrypt(URLDecode(Evaluate("EditCategoryID#i#")))>
+				<cfset ThisCategoryID=REQUEST.SimpleDecrypt(URLDecode(FORM["EditCategoryID#i#"]))>
 				<cfcatch>
 					<cfset ThisCategoryID="-1">
 				</cfcatch>
@@ -122,15 +122,15 @@
 			<cfparam name="SaveLive_#i#" default="0">
 			<cfparam name="RequestSaveLive_#i#" default="0">
 			<cfif ThisCategoryLocaleID GT "0" and ThisCategoryID GT "0">
-				<cfif Evaluate("SaveLive_#i#")>
+				<cfif variables["SaveLive_#i#"]>
 					<!--- Add this page to the list of pages to publish live --->
 					<cfset lCategoryLocaleIDToPublish=ListAppend(lCategoryLocaleIDToPublish,ThisCategoryLocaleID)>
 					<!--- Set status to live --->
 					<cfset SetVariable("WorkflowStatusID_#i#",18000)><!--- 18000 is "live" --->
-					<cfif Evaluate("WorkflowStatusID_#i#") GT "0">
+					<cfif variables["WorkflowStatusID_#i#"] GT "0">
 						<cfquery name="UpdateWorkflowStatusID" datasource="#APPLICATION.DSN#">
 							update t_CategoryLocale Set
-							WorkflowStatusID=<cfqueryparam value="#Evaluate('WorkflowStatusID_#i#')#" cfsqltype="cf_sql_integer">
+							WorkflowStatusID=<cfqueryparam value="#variables['WorkflowStatusID_#i#']#" cfsqltype="cf_sql_integer">
 							WHERE
 							CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 						</cfquery>
@@ -141,7 +141,7 @@
 								CategoryID="#ThisCategoryID#">
 						</cfif>
 					</cfif>
-					<cfif Evaluate("WorkflowStatusID_#i#") IS "18002"><!--- If article is changed to archive --->
+					<cfif variables["WorkflowStatusID_#i#"] IS "18002"><!--- If article is changed to archive --->
 						<!--- Mark it on live too --->
 						<cfset lCategoryLocaleIDToDeactivate=ListAppend(lCategoryLocaleIDToDeactivate,ThisCategoryLocaleID)>
 					</cfif>
@@ -159,7 +159,7 @@
 					</cfif>
 				</cfif>
 
-				<cfif Evaluate("RequestSaveLive_#i#")>
+				<cfif variables["RequestSaveLive_#i#"]>
 					<cfset MyWorkflowRequest=CreateObject("component","com.workflow.request")>
 					<cfset MyWorkflowRequest.Constructor(-1)>
 					<cfset MyWorkflowRequest.SetProperty("FromUserID",SESSION.AdminUserID)>
@@ -288,7 +288,7 @@
 		<cfoutput query="GetCategoryList" group="CategoryID">
 			<cfset QueryAddRow(GetFinal)>
 			<cfloop index="ThisCol" list="#GetCategoryList.ColumnList#">
-				<cfset QuerySetCell(GetFinal,ThisCol,Evaluate(ThisCol))>
+				<cfset QuerySetCell(GetFinal,ThisCol,GetCategoryList[ThisCol][GetCategoryList.currentrow])>
 			</cfloop>
 		</cfoutput>
 
@@ -342,7 +342,7 @@
 		<cfif ATTRIBUTES.ObjectAction IS "SearchResults">
 			<cf_AddToQueryString queryString="#FormQueryString#" Name="mvca" value="2">
 			<cfloop index="ThisParam" list="ParamTitle,ParamStatusID,ParamOrderBy,ParamCascade">
-				<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#Evaluate(ThisParam)#">
+				<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#variables[ThisParam]#">
 			</cfloop>
 			<cfoutput><form action="#FormPage#?#QueryString#" method="post"></cfoutput>
 			<cfset Counter="0">

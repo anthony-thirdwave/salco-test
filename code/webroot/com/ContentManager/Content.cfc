@@ -13,8 +13,8 @@
 	<cfproperty name="InheritID" type="numeric" default="">
 	<cfproperty name="ContentDate1" type="date" default="">
 	<cfproperty name="ContentDate2" type="date" default="">
-	
-	<!--- Custom Properties  --->	
+
+	<!--- Custom Properties  --->
 	<cfproperty name="ContentAbstract" type="string" default="">
 	<cfproperty name="ShowProductRangeID" type="numeric" default="">
 	<cfproperty name="ShowNavigationRangeID" type="numeric" default="">
@@ -25,7 +25,7 @@
 	<cfproperty name="SourceCategoryID" type="numeric" default="">
 	<cfproperty name="OwnerEmail" type="string" default="">
 	<cfproperty name="OwnerName" type="string" default="">
-	
+
 	<cfset structInsert(sPropertyDisplayName,"ContentID","content ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryID","category ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"ContentName","content name",1)>
@@ -38,7 +38,7 @@
 	<cfset structInsert(sPropertyDisplayName,"InheritID","inherit ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"ContentDate1","date",1)>
 	<cfset structInsert(sPropertyDisplayName,"ContentDate2","date",1)>
-	
+
 	<!--- Custom Properties  --->
 	<cfset structInsert(sPropertyDisplayName,"ContentAbstract","content abstract",1)>
 	<cfset structInsert(sPropertyDisplayName,"ShowProductRangeID","show product range",1)>
@@ -50,7 +50,7 @@
 	<cfset structInsert(sPropertyDisplayName,"SourceCategoryID","source category id",1)>
 	<cfset structInsert(sPropertyDisplayName,"OwnerEmail","Owner Email",1)>
 	<cfset structInsert(sPropertyDisplayName,"OwnerName","Owner Name",1)>
-	
+
 	<cfset this.sFields=StructNew()>
 	<cfset BaseFieldList="ContentName,CategoryID,ContentTypeID,ContentPositionID,ContentActive,propertiesID,ContentPriority,ContentAbstract">
 	<cfinvoke component="com.ContentManager.ContentHandler"
@@ -133,12 +133,12 @@
 			</cfdefaultcase>
 		</cfswitch>
 	</cfloop>
-	
+
 	<cffunction name="GetRestrictionsPropertyList" returnType="string" output="false">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnString = "">
-		
+
 		<cfif ListFindNoCase(StructKeyList(this),"ContentTypeID")>
 			<cfset ReturnString=this.sFields[this.ContentTypeID]>
 		<cfelse>
@@ -146,16 +146,16 @@
 		</cfif>
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="constructor" returntype="boolean" output="false">
 		<cfargument name="ID" default="0" type="numeric" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var ThisProperty = "">
 		<cfset var GetItems = "">
 		<cfset var GetContentProperties = "">
 		<cfset var sProperties = "">
-		
+
 		<!--- Typically, use set methods in contructor. --->
 		<cfset this.SetProperty("ContentID","-1")>
 		<cfset this.SetProperty("CategoryID","-1")>
@@ -169,7 +169,7 @@
 		<cfset this.SetProperty("InheritID","1800")>
 		<cfset this.SetProperty("ContentDate1","#Now()#")>
 		<cfset this.SetProperty("ContentDate2","")>
-		
+
 		<!--- Custom Properties  --->
 		<cfset this.SetProperty("ContentAbstract","")>
 		<cfset this.SetProperty("ShowProductRangeID","")>
@@ -181,7 +181,7 @@
 		<cfset this.SetProperty("SourceCategoryID","0")>
 		<cfset this.SetProperty("OwnerEmail","")>
 		<cfset this.SetProperty("OwnerName","")>
-		
+
 		<cfif Val(ARGUMENTS.ID) GT 0>
 			<!--- If id is greater than 0, load from DB. --->
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
@@ -225,11 +225,11 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="save" returntype="boolean" output="true">
 		<cfargument name="WebrootPath" required="false">
 		<cfargument name="UserID" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var thisContentID = "">
 		<cfset var thisCategoryID = "">
@@ -263,7 +263,7 @@
 		<cfset var GetLocales = "">
 		<cfset var success = "">
 		<cfset var wProperties = "">
-		
+
 		<cfif IsCorrect()>
 			<cfset thisContentID=this.GetProperty("ContentID")>
 			<cfset thisCategoryID=this.GetProperty("CategoryID")>
@@ -281,7 +281,7 @@
 				<cfset thisContentPriority=Val(this.GetProperty("ContentPriority"))>
 			</cfif>
 			<cfset thisSourceID=Val(this.GetProperty("SourceID"))>
-			
+
 			<cfset ThisContentAbstract=this.GetProperty("ContentAbstract")>
 			<cfset ThisShowProductRangeID=this.GetProperty("ShowProductRangeID")>
 			<cfset ThisShowNavigationRangeID=this.GetProperty("ShowNavigationRangeID")>
@@ -292,7 +292,7 @@
 			<cfset ThisSourceCategoryID=this.GetProperty("SourceCategoryID")>
 			<cfset ThisOwnerEmail=this.GetProperty("OwnerEMail")>
 			<cfset ThisOwnerName=this.GetProperty("OwnerName")>
-			
+
 			<cfif Val(thisContentID) LTE "0">
 				<cftransaction>
 					<cfquery name="InsertProperties" datasource="#APPLICATION.DSN#">
@@ -303,7 +303,7 @@
 					</cfquery>
 					<cfset thisPropertiesID=InsertProperties.NewTeaserID>
 					<cfset this.SetProperty("PropertiesID",InsertProperties.NewTeaserID)>
-					
+
 					<cfif Val(ThisContentPriority) IS "0">
 						<cfquery name="GetNextPriority" datasource="#APPLICATION.DSN#">
 							SELECT max(ContentPriority) as MaxPriority FROM t_Content WHERE CategoryID=#Val(thisCategoryID)#
@@ -311,7 +311,7 @@
 						<cfset ThisContentPriority=Val(GetNextPriority.MaxPriority)+10>
 						<cfset this.SetProperty("ContentPriority",ThisContentPriority)>
 					</cfif>
-					
+
 					<cfquery name="InsertContent" datasource="#APPLICATION.DSN#">
 						SET NOCOUNT ON
 						INSERT INTO t_Content (
@@ -344,7 +344,7 @@
 					<cfset ThisContentID=InsertContent.NewContentID>
 					<cfset this.SetProperty("ContentID",InsertContent.NewContentID)>
 					<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
-					
+
 				</cftransaction>
 				<cfif Val(ARGUMENTS.UserID) GT "0">
 					<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
@@ -381,7 +381,7 @@
 			</cfif>
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
 				SELECT	t_Properties.PropertiesID,t_Properties.PropertiesPacket
-				FROM	t_Properties 
+				FROM	t_Properties
 				WHERE	PropertiesID = <cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif isWDDX(GetProperties.PropertiesPacket)>
@@ -400,23 +400,23 @@
 			<cfset DevNull=StructInsert(sProperties,"SourceCategoryID","#trim(ThisSourceCategoryID)#",1)>
 			<cfset DevNull=StructInsert(sProperties,"OwnerEMail","#trim(ThisOwnerEmail)#",1)>
 			<cfset DevNull=StructInsert(sProperties,"OwnerName","#trim(ThisOwnerName)#",1)>
-			
+
 			<cfwddx action="CFML2WDDX" input="#sProperties#" output="wProperties">
 			<cfquery name="UpdateContent" datasource="#APPLICATION.DSN#">
 				UPDATE t_Properties
 				SET PropertiesPacket=<cfqueryparam value="#Trim(wProperties)#" cfsqltype="cf_sql_varchar">
 				WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
-			
+
 			<cfif ThisInheritID GT "1800"><!--- If this elt is inherited, then update all sub pages' cache timestamp --->
-				<CF_getbranch item="#ThisCategoryID#" DataSource="#APPLICATION.DSN#" 
+				<CF_getbranch item="#ThisCategoryID#" DataSource="#APPLICATION.DSN#"
 					table="t_Category" Column="CategoryID" ParentColumn="ParentID">
 				<cfloop index="ThisCategoryID" list="#Branch#">
 					<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 						Lookup="Category"
 						KeyID="#ThisCategoryID#">
 					<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails" returnVariable="qGetCategoryBasicDetails"
-						CategoryID="#ThisCategoryID#">	
+						CategoryID="#ThisCategoryID#">
 					<cfif Val(ARGUMENTS.UserID) GT "0">
 						<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
 							UserID="#ARGUMENTS.UserID#"
@@ -432,7 +432,7 @@
 					KeyID="#thisContentID#">
 				<cfif Val(ARGUMENTS.UserID) GT "0">
 					<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails" returnVariable="qGetCategoryBasicDetails"
-						CategoryID="#ThisCategoryID#">	
+						CategoryID="#ThisCategoryID#">
 					<cfinvoke component="/com/utils/tracking" method="track" returnVariable="success"
 						UserID="#ARGUMENTS.UserID#"
 						Entity="Category"
@@ -441,11 +441,11 @@
 						EntityName="#qGetCategoryBasicDetails.CategoryName#">
 				</cfif>
 			</cfif>
-			
+
 			<cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
 				select * from t_locale
 			</cfquery>
-			
+
 			<cfif ThisContentTypeID IS "235">
 				<cfoutput query="GetLocales">
 					<cfinvoke component="com.ContentManager.ContentHandler" method="UpdatePriorityByEventDate" returnVariable="success"
@@ -453,7 +453,7 @@
 						LocaleID="#LocaleID#">
 				</cfoutput>
 			</cfif>
-			
+
 			<cfif ThisContentTypeID IS "221">
 				<cfoutput query="GetLocales">
 					<cfinvoke component="com.ContentManager.ContentHandler" method="UpdatePriorityByContentDate" returnVariable="success"
@@ -461,27 +461,27 @@
 						LocaleID="#LocaleID#">
 				</cfoutput>
 			</cfif>
-			
+
 			<cfinvoke component="/com/ContentManager/ContentHandler" method="TestAndTouchIfRepeated" returnVariable="success"
 				ContentID="#ThisContentID#"
 				Datasource="#APPLICATION.DSN#">
-			
+
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="AdjustPriorities" returntype="boolean" output="false">
 		<cfargument name="sNewPriorities" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisContentID = "">
 		<cfset var UpdateRank = "">
 		<cfset var GetCategoryID = "">
 		<cfset var GetCatsAgain = "">
 		<cfset var UpdateAgain = "">
-		
+
 		<cfif IsStruct(ARGUMENTS.sNewPriorities) AND ListLen(StructKeyList(sNewPriorities)) GT "0">
 			<cfloop index="ThisContentID" list="#StructKeyList(sNewPriorities)#">
 				<cfquery name="UpdateRank" datasource="#APPLICATION.DSN#">
@@ -499,7 +499,7 @@
 			<cfoutput query="GetCatsAgain">
 				<cfquery name="UpdateAgain" datasource="#APPLICATION.DSN#">
 					UPDATE t_Content
-					SET ContentPriority = <cfqueryparam value="#val(evaluate('#CurrentRow#*10'))#" cfsqltype="cf_sql_integer">
+					SET ContentPriority = <cfqueryparam value="#val(CurrentRow * 10)#" cfsqltype="cf_sql_integer">
 					WHERE ContentID=<cfqueryparam value="#Val(ContentID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfoutput>
@@ -512,12 +512,12 @@
 	<cffunction name="SetProperty" returntype="boolean" output="false">
 		<cfargument name="Property" required="true" type="string">
 		<cfargument name="Value" required="true" type="any">
-		
+
 		<!--- init variables --->
 		<cfset var Test = "">
-		
+
 		<cfset ARGUMENTS.Property=Trim(ARGUMENTS.Property)>
-				
+
 		<cfif IsSimpleValue(ARGUMENTS.Value)>
 			<cfset ARGUMENTS.Value=Trim(ARGUMENTS.Value)>
 
@@ -527,31 +527,31 @@
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("ContentDate1,ContentDate2",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
 				<cfif NOT IsDate(ARGUMENTS.Value)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a valid date.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("ContentName",ARGUMENTS.Property) AND Trim(ARGUMENTS.Value) IS "">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 				<cfreturn false>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("CategoryID,ContentTypeID,ContentPositionID",ARGUMENTS.Property) AND val(ARGUMENTS.Value) LTE "0">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 				<cfreturn false>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("ContentName",ARGUMENTS.Property)>
 				<cfif Len(ARGUMENTS.Value) GT "128">
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","The #sPropertyDisplayName[ARGUMENTS.Property]# can only be 128 characters long.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("SourceID",ARGUMENTS.Property)>
 				<cfif StructKeyExists(this,"ContentTypeID") and ListFindNoCase("206,245",this.ContentTypeID)>
 					<cfif val(ARGUMENTS.Value) LTE "0">
@@ -560,7 +560,7 @@
 					</cfif>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("lArticleID",ARGUMENTS.Property)>
 				<cfif StructKeyExists(this,"ContentTypeID") and this.ContentTypeID IS "214">
 					<cfif trim(ARGUMENTS.Value) IS "">
@@ -569,7 +569,7 @@
 					</cfif>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("CategoryID,ContentTypeID,ContentPositionID,InheritID",ARGUMENTS.Property)>
 				<cfif Val(ARGUMENTS.Value) GT "0">
 					<cfswitch expression="#ARGUMENTS.Property#">
@@ -692,18 +692,18 @@
 				</cfif>
 			</cfif>
 		</cfif>
-		
+
 		<cfset SetVariable("this.#ARGUMENTS.Property#","#ARGUMENTS.Value#")>
 		<cfset deleteError(ARGUMENTS.Property)>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetProperty" returntype="Any" output="false">
 		<cfargument name="Property" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfif IsInError(ARGUMENTS.Property)>
 			<cfreturn GetErrorValue(ARGUMENTS.Property)>
 		<cfelse>
@@ -711,13 +711,13 @@
 			<cfreturn ReturnValue>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="CreateResourcePath" returntype="boolean" output="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="CreateResourcePath"
 			returnVariable="ReturnValue"
@@ -725,13 +725,13 @@
 			WebrootPath="#ARGUMENTS.WebrootPath#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="ResourceType" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourcePath"
 			returnVariable="ReturnValue"
@@ -739,14 +739,14 @@
 			ResourceType="#ARGUMENTS.ResourceType#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetResourceFilePath" returntype="string" output="false">
 		<cfargument name="ResourceType" required="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfinvoke component="com.ContentManager.ContentHandler"
 			method="GetResourceFilePath"
 			returnVariable="ReturnValue"
@@ -755,7 +755,7 @@
 			WebrootPath="#ARGUMENTS.WebrootPath#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetContentTypeName" returnType="String" output="false">
 		<cfset var ReturnString="">
 		<cfset var Test="">
@@ -768,13 +768,13 @@
 		<cfset ReturnString="#ValueList(Test.LabelName)#">
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="GetSiblingQuery" returnType="query" output="false">
-		
+
 		<!--- init variables --->
 		<cfset var ThisCategoryID = "">
 		<cfset var GetSiblingQuery = "">
-		
+
 		<cfset ThisCategoryID=this.GetProperty("CategoryID")>
 		<cfif ThisCategoryID LTE "0">
 			<cfset ThisCategoryID="-1">
@@ -790,11 +790,11 @@
 		</cfquery>
 		<cfreturn GetSiblingQuery>
 	</cffunction>
-	
+
 	<cffunction name="Delete" returnType="boolean" output="1">
 		<cfargument name="TrashPath" required="true">
 		<cfargument name="UserID" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ThisContentID = "">
 		<cfset var MyContentLocale = "">
@@ -819,7 +819,8 @@
 		<cfset var success = "">
 		<cfset var sProductionSiteInformation = "">
 		<cfset var List = "">
-		
+		<cfset var connectionName = APPLICATION.utilsObj.createUniqueId()>
+
 		<cfif ARGUMENTS.TrashPath IS NOT "" and this.GetProperty("ContentID") GT "0">
 			<cfset ThisContentID=this.GetProperty("ContentID")>
 			<!--- First delete content locale records --->
@@ -842,7 +843,7 @@
 					<cfset MyContent.Delete(ARGUMENTS.TrashPath,ARGUMENTS.UserID)>
 				</cfoutput>
 			</cfif>
-			
+
 			<cftransaction>
 				<!--- Create trash paths --->
 				<cfset DirDone="">
@@ -858,7 +859,7 @@
 				</cfloop>
 				<cfset DestImages="#DirectoryToCreate#\images\">
 				<cfset DestDocs="#DirectoryToCreate#\documents\">
-				
+
 				<cfquery name="SelectProps" datasource="#APPLICATION.DSN#">
 					SELECT PropertiesID FROM t_Content WHERE ContentID=<cfqueryparam value="#ThisContentID#" cfsqltype="cf_sql_integer">
 				</cfquery>
@@ -871,8 +872,8 @@
 				<cfquery name="deleteContent3" datasource="#APPLICATION.DSN#">
 					DELETE FROM t_properties WHERE PropertiesID=<cfqueryparam value="#Val(SelectProps.PropertiesID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
-				
-				
+
+
 				<cfset DirDone="">
 				<cfloop index="i" from="1" to="#Len(ThisContentID)#" step="1">
 					<cfset DirectoryToCreate="#APPLICATION.WebRootPath##APPLICATION.ContentResourcesPath##DirDone##Mid(ThisContentID,i,1)#">
@@ -894,7 +895,7 @@
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Content"
 				KeyID="#thisContentID#">
-				
+
 			<cfif Val(ARGUMENTS.UserID) GT "0">
 				<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 					UserID="#ARGUMENTS.UserID#"
@@ -903,12 +904,12 @@
 					Operation="delete"
 					EntityName="#This.GetProperty('ContentName')#">
 			</cfif>
-			
-			<cfinvoke component="com.ContentManager.CategoryHandler" 
+
+			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#this.GetProperty('CategoryID')#">
-				
+
 			<cfif IsStruct(sProductionSiteInformation)>
 				<cftransaction>
 					<cfquery name="SelectContentFromProd" datasource="#sProductionSiteInformation.ProductionDBDSN#">
@@ -930,33 +931,43 @@
 				<cfset RemoteDirectories[1]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('images')#">
 				<cfset RemoteDirectories[2]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('documents')#">
 				<cfset RemoteDirectories[3]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('generated')#">
+
+				<!--- open the ftp connection to the production site --->
+				<cfftp	action="open"
+						username="#sProductionSiteInformation.ProductionFTPUserLogin#"
+						password="#sProductionSiteInformation.ProductionFTPPassword#"
+						server="#sProductionSiteInformation.ProductionFTPHost#"
+						stoponerror="NO"
+						connection="#connectionName#">
+
 				<cfloop index="i" from="1" to="3" step="1">
 					<cfset ThisDirectory=Replace(RemoteDirectories[i],"//","/","All")>
-					<cfftp action="LISTDIR" server="#sProductionSiteInformation.ProductionFTPHost#" 
-						username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-						password="#sProductionSiteInformation.ProductionFTPPassword#" 
+					<cfftp action="LISTDIR"
 						stoponerror="No" name="List" directory="#ThisDirectory#"
-						connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
+						connection="#connectionName#"
 						Passive="No">
 					<cfoutput query="List">
 						<cfif NOT IsDirectory>
-							<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
-								username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-								password="#sProductionSiteInformation.ProductionFTPPassword#" 
+							<cfftp action="REMOVE"
 								stoponerror="No"
 								item="#Path#"
-								connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
+								connection="#connectionName#"
 								Passive="No">
 						</cfif>
 					</cfoutput>
 				</cfloop>
+
+				<!--- close the connection --->
+				<cfftp	action="close"
+						stopOnError="NO"
+						connection="#connectionName#">
 			</cfif>
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="SaveToProduction" returntype="string" output="true">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="UserID" required="true">
@@ -971,16 +982,16 @@
 		<cfset var sProductionSiteInformation = "">
 		<cfset var success = "">
 		<cfset var SaveResults = "">
-		
-		<cfinvoke component="com.ContentManager.CategoryHandler" 
+
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetProductionSiteInformation"
 			returnVariable="sProductionSiteInformation"
 			CategoryID="#this.GetProperty('CategoryID')#">
-		
+
 		<cfif IsCorrect() And IsStruct(sProductionSiteInformation)>
 			<cfset ThisContentID=this.GetProperty("ContentID")>
 			<cfset ThisPropertiesID=this.GetProperty("PropertiesID")>
-			
+
 			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisContentID#">
 			     <cfinvokeargument name="columnList" value="ContentID">
@@ -991,7 +1002,7 @@
 			     <cfinvokeargument name="sourcePassword" value="#APPLICATION.SourcePassword#">
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
-			
+
 			<cfquery name="GetProps" datasource="#APPLICATION.DSN#">
 				select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ThisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
@@ -1011,13 +1022,13 @@
 					SET IDENTITY_INSERT t_Properties OFF
 				</cfquery>
 			</cfoutput>
-			
+
 			<cfinvoke component="/com/ContentManager/ContentHandler" method="TestAndTouchIfRepeated" returnVariable="success"
 				ContentID="#ThisContentID#"
 				Datasource="#sProductionSiteInformation.ProductionDBDSN#">
-			
+
 			<cfif this.GetProperty("InheritID") GT "1800"><!--- If this elt is inherited, then update all sub pages' cache timestamp --->
-				<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#sProductionSiteInformation.ProductionDBDSN#" 
+				<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#sProductionSiteInformation.ProductionDBDSN#"
 					table="t_Category" Column="CategoryID" ParentColumn="ParentID">
 				<cfloop index="ThisCategoryID" list="#Branch#">
 					<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
@@ -1035,33 +1046,33 @@
 				FTPRootPath="#sProductionSiteInformation.ProductionFTPRootPath#"
 				FTPUserLogin="#sProductionSiteInformation.ProductionFTPUserLogin#"
 				FTPPassword="#sProductionSiteInformation.ProductionFTPPassword#">
-			
+
 			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#ARGUMENTS.UserID#"
 				Entity="Content"
 				KeyID="#ThisContentID#"
 				Operation="savelive"
 				EntityName="#This.Getproperty('ContentName')#">
-				
+
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetContentTypeIDSetQuery" returnType="Query" output="false">
-		
+
 		<!--- init variables --->
 		<cfset var GetParentCategory = "">
 		<cfset var GetCategoryTypes = "">
-		
+
 		<cfquery name="GetParentCategory" datasource="#APPLICATION.DSN#">
-			SELECT CategoryTypeID,CategoryName,CategoryAlias FROM t_Category 
+			SELECT CategoryTypeID,CategoryName,CategoryAlias FROM t_Category
 			WHERE CategoryID=<cfqueryparam value="#val(this.GetProperty('CategoryID'))#" cfsqltype="cf_sql_integer">
 		</cfquery>
-		
+
 		<cfquery name="GetCategoryTypes" datasource="#APPLICATION.DSN#">
-			SELECT * FROM t_Label WHERE LabelGroupID=70 AND 
+			SELECT * FROM t_Label WHERE LabelGroupID=70 AND
 			<cfswitch expression="#GetParentCategory.CategoryTypeID#">
 				<cfcase value="73"><!--- Gallery --->
 					LabelID IN (212)<!--- Only image --->

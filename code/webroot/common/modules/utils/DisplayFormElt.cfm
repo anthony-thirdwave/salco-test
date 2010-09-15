@@ -11,7 +11,7 @@
 <cfif ATTRIBUTES.ObjectName Is "">
 	<cfparam name="ATTRIBUTES.DefaultValue" default="">
 <cfelse>
-	<cfparam name="ATTRIBUTES.DefaultValue" default="#Evaluate('CALLER.#ATTRIBUTES.ObjectName#.GetProperty(''#ATTRIBUTES.PropertyName#'')')#">
+	<cfparam name="ATTRIBUTES.DefaultValue" default="#CALLER[ATTRIBUTES.ObjectName].GetProperty(ATTRIBUTES.PropertyName)#">
 </cfif>
 <cfparam name="ATTRIBUTES.Checked" default="1">
 <cfparam name="ATTRIBUTES.Required" default="N">
@@ -74,10 +74,9 @@
 	</cfif>
 <cfelseif ATTRIBUTES.ObjectAction IS "Validate">
 	<cfif ATTRIBUTES.ObjectName is not "">
-		<cfset TempStr="CALLER.#ATTRIBUTES.ObjectName#.IsInError('#ATTRIBUTES.PropertyName#')">
-		<cfif Evaluate(TempStr)>
+		<cfif CALLER[ATTRIBUTES.ObjectName].IsInError(ATTRIBUTES.PropertyName)>
 			<cfset ShowForm="1">
-			<cfset Message=Evaluate("CALLER.#ATTRIBUTES.ObjectName#.getErrorMessage('#ATTRIBUTES.PropertyName#')")>
+			<cfset Message=CALLER[ATTRIBUTES.ObjectName].getErrorMessage(ATTRIBUTES.PropertyName)>
 		</cfif>
 	<cfelse>
 		<cfif ATTRIBUTES.ForceError IS "Y">
@@ -96,7 +95,7 @@
 			<cfset ShowForm="1">
 			<cfset Message="#ATTRIBUTES.ValidationMessage#">
 		</cfif>
-		<cfif ATTRIBUTES.Required IS "Y" and ATTRIBUTES.type IS "file" AND Trim(Evaluate("#ATTRIBUTES.varName#FileObject")) IS "">
+		<cfif ATTRIBUTES.Required IS "Y" and ATTRIBUTES.type IS "file" AND Trim(FORM["#ATTRIBUTES.varName#FileObject"]) IS "">
 			<cfset ShowForm="1">
 			<cfset Message="#ATTRIBUTES.ValidationMessage#">
 		</cfif>
@@ -141,7 +140,7 @@
 			</cfif>
 		</cfif>
 		<cfif Len(ATTRIBUTES.Required) GT "2"><!--- Expression rather than boolean --->
-			<cfset Result=Evaluate("#ATTRIBUTES.Required#")>
+			<cfset Result=ATTRIBUTES.Required>
 			<cfif ATTRIBUTES.type IS "select">
 				<cfif Result>
 					<cfif ATTRIBUTES.DefaultValue GT "0">
@@ -240,7 +239,7 @@
 		<cfcase value="text,password" delimiters=",">
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ATTRIBUTES.ObjectAction IS "Validate">
-				<!--- Show input only when: 1) ShowForm  or 2) value is not required 
+				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
 					<input type="#Trim(ATTRIBUTES.type)#" name="#ATTRIBUTES.VarName#" value="#htmleditformat(ATTRIBUTES.DefaultValue)#" size="#ATTRIBUTES.Size#" maxlength="#ATTRIBUTES.MaxLength#" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"</cfif><cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>&nbsp;<cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
@@ -256,14 +255,13 @@
 		<cfcase value="checkbox">
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ShowForm>
-				<input type="checkbox" name="#ATTRIBUTES.VarName#" value="1" <cfif (IsDefined("CALLER.#ATTRIBUTES.VarName#") AND Val(Evaluate("CALLER.#ATTRIBUTES.VarName#"))) OR Val(ATTRIBUTES.DefaultValue)>checked</cfif> <cfif ATTRIBUTES.FormEltStyle IS NOT ""> style="#ATTRIBUTES.FormEltStyle#"<cfelse> class="checkbox"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>
+				<input type="checkbox" name="#ATTRIBUTES.VarName#" value="1" <cfif (IsDefined("CALLER.#ATTRIBUTES.VarName#") AND Val(CALLER[ATTRIBUTES.VarName])) OR Val(ATTRIBUTES.DefaultValue)>checked</cfif> <cfif ATTRIBUTES.FormEltStyle IS NOT ""> style="#ATTRIBUTES.FormEltStyle#"<cfelse> class="checkbox"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>
 			<cfelse>
 				<cfif ATTRIBUTES.ObjectName is not "">
-					<cfset TempStr="CALLER.#ATTRIBUTES.ObjectName#.GetProperty('#ATTRIBUTES.PropertyName#')">
-					<cfset CheckMe=Evaluate("#TempStr#")>
+					<cfset CheckMe=CALLER[ATTRIBUTES.ObjectName].GetProperty(ATTRIBUTES.PropertyName)>
 				<cfelse>
 					<cfif IsDefined("CALLER.#ATTRIBUTES.VarName#")>
-						<cfset CheckMe=Evaluate("CALLER.#ATTRIBUTES.VarName#")>
+						<cfset CheckMe=CALLER[ATTRIBUTES.VarName]>
 					<cfelse>
 						<cfset CheckMe="0">
 					</cfif>
@@ -275,7 +273,7 @@
 		<cfcase value="YesNo">
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ShowForm>
-				<cfif (IsDefined("CALLER.#ATTRIBUTES.VarName#") AND Evaluate("CALLER.#ATTRIBUTES.VarName#")) OR ATTRIBUTES.DefaultValue>
+				<cfif (IsDefined("CALLER.#ATTRIBUTES.VarName#") AND CALLER[ATTRIBUTES.VarName]) OR ATTRIBUTES.DefaultValue>
 					<cfset Checked="1">
 				<cfelse>
 					<cfset Checked="0">
@@ -284,11 +282,10 @@
 				&nbsp;&nbsp;&nbsp; <input type="radio" name="#ATTRIBUTES.VarName#" value="0" <cfif NOT Checked>checked</cfif> <cfif ATTRIBUTES.FormEltStyle IS NOT ""> style="#ATTRIBUTES.FormEltStyle#"<cfelse> class="checkbox"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>> <span style="width:40px;">#ATTRIBUTES.NoMark#</span>
 			<cfelse>
 				<cfif ATTRIBUTES.ObjectName is not "">
-					<cfset TempStr="CALLER.#ATTRIBUTES.ObjectName#.GetProperty('#ATTRIBUTES.PropertyName#')">
-					<cfset CheckMe=Evaluate("#TempStr#")>
+					<cfset CheckMe=CALLER[ATTRIBUTES.ObjectName].GetProperty(ATTRIBUTES.PropertyName)>
 				<cfelse>
 					<cfif IsDefined("CALLER.#ATTRIBUTES.VarName#")>
-						<cfset CheckMe=Evaluate("CALLER.#ATTRIBUTES.VarName#")>
+						<cfset CheckMe=CALLER[ATTRIBUTES.VarName]>
 					<cfelse>
 						<cfset CheckMe="0">
 					</cfif>
@@ -297,14 +294,14 @@
 			</cfif>
 			#EndTag#
 		</cfcase>
-		
+
 		<cfcase value="checkbox2">
 			<TD bgcolor="#ATTRIBUTES.TDBGColor2#">
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm">
 				<input type="checkbox" name="#ATTRIBUTES.VarName#" value="1" <cfif IsDefined("#ATTRIBUTES.VarName#") >checked</cfif> <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"<cfelse>class="checkbox"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>
 			<cfelse>
 				<cfif IsDefined("#ATTRIBUTES.VarName#")>
-					<cfset CheckMe=Evaluate("#ATTRIBUTES.VarName#")>
+					<cfset CheckMe=variables[ATTRIBUTES.VarName]>
 				<cfelse>
 					<cfset CheckMe="0">
 				</cfif>
@@ -316,7 +313,7 @@
 		<cfcase value="textarea">
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ATTRIBUTES.ObjectAction IS "Validate">
-				<!--- Show input only when: 1) ShowForm  or 2) value is not required 
+				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
 					<textarea cols="#ATTRIBUTES.Cols#" rows="#ATTRIBUTES.Rows#" name="#ATTRIBUTES.VarName#" wrap="virtual" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"<cfelse>class="textarea"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>#HTMLEditFormat(ATTRIBUTES.DefaultValue)#</textarea>
@@ -331,7 +328,7 @@
 		<cfcase value="select"><!--- single select --->
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ATTRIBUTES.ObjectAction IS "Validate">
-				<!--- Show input only when: 1) ShowForm  or 2) value is not required 
+				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
 					<cfif ListLen(ATTRIBUTES.OptionValues,"}^^{") IS NOT "1" OR 1><!--- "or 1" Fix for one elt option lists --->
@@ -355,7 +352,7 @@
 		<cfcase value="MultiSelect"><!--- Multiple select --->
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ATTRIBUTES.ObjectAction IS "Validate">
-				<!--- Show input only when: 1) ShowForm  or 2) value is not required 
+				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
 					<select name="#ATTRIBUTES.VarName#" multiple size="#ATTRIBUTES.Size#" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>
@@ -367,11 +364,11 @@
 				</cfif>
 			</cfif>
 			#EndTag#
-		</cfcase>	
+		</cfcase>
 		<cfcase value="File">
 			#BeginningTag#
 			<cfif ATTRIBUTES.ObjectAction IS "ShowForm" OR ATTRIBUTES.ObjectAction IS "Validate">
-				<!--- Show input only when: 1) ShowForm  or 2) value is not required 
+				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
 					<cfif FileExists("#APPLICATION.WebrootPath##ATTRIBUTES.DefaultValue#") and ATTRIBUTES.SupressView IS NOT "Y">
@@ -386,7 +383,7 @@
 					<cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
 				<cfelse>
 					<cfparam name="#ATTRIBUTES.VarName#FileObject" default="">
-					<cfif Trim(Evaluate("#ATTRIBUTES.VarName#FileObject")) IS "" or ATTRIBUTES.ObjectName IS NOT "">
+					<cfif Trim(FORM["#ATTRIBUTES.varName#FileObject"]) IS "" or ATTRIBUTES.ObjectName IS NOT "">
 						<cfif FileExists(ReplaceNoCase("#APPLICATION.WebrootPath##ReplaceNocase(ATTRIBUTES.DefaultValue,'/','\','all')#","\\","\","All")) and ATTRIBUTES.SupressView IS NOT "Y">
 							<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(ATTRIBUTES.DefaultValue,'.')#") GT "0">
 								<img src="#ATTRIBUTES.DefaultValue#"  border="1"><BR>
@@ -397,11 +394,11 @@
 						<input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
 						<cfset CALLER.FileServerPath="">
 					<cfelseif isdefined("ATTRIBUTES.Tempdir") and ATTRIBUTES.Tempdir IS NOT "">
-						<cffile action="UPLOAD" 
+						<cffile action="UPLOAD"
 							filefield="#ATTRIBUTES.VarName#FileObject"
 							destination="#ATTRIBUTES.Tempdir#"
 							nameconflict="OVERWRITE">
-						<cfset FileServerPath=File.ServerDirectory & "/" & File.ServerFile>					
+						<cfset FileServerPath=File.ServerDirectory & "/" & File.ServerFile>
 						<cfset FileServerPath=Replace(FileServerPath,"#ATTRIBUTES.WebRootPath#", "/", "ALL")>
 						<cfset FileServerPath=Replace(FileServerPath,"//","/","All")>
 						<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(FileServerPath,'.')#") GT "0" and ATTRIBUTES.SupressView IS NOT "Y">

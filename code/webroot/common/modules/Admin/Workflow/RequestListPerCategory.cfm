@@ -16,7 +16,7 @@
 <cfset QueryString="">
 <cfset SearchFormVariables="ParamStatusID,ParamTypeID,ParamOrderBy">
 <cfloop index="ThisParam" list="#SearchFormVariables#">
-	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#Evaluate(ThisParam)#">
+	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#variables[ThisParam]#">
 </cfloop>
 <cf_AddToQueryString queryString="#QueryString#" Name="mvca" value="1">
 <cfset ThisPageQueryString="#querystring#">
@@ -33,21 +33,21 @@
 	<cfset EditQueryString=ListLast(ATTRIBUTES.EditAction,"?")>
 </cfif>
 
-<cfinvoke component="com.workflow.RequestHandler" method="GetRequestTypes" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequestTypes"
 	returnVariable="GetRequestTypes">
-	
+
 <!----- mark a request as processed ----->
 <cfif IsDefined ("form.action")>
 	<cfloop index="i" from="1" to="#Numwf#" step="1">
 		<cfparam name="FORM.wfid_#i#" default="-1">
-		<cfset ThisWorkflowID=Evaluate("FORM.wfid_#i#")>
+		<cfset ThisWorkflowID=FORM["wfid_#i#"]>
 		<cfif IsDefined("wfid_mark_#i#")>
 			<cfset SetThis=1>
 		<cfelse>
 			<cfset SetThis=0>
 		</cfif>
 		<cfif ThisWorkflowID GT "0">
-			<cfinvoke component="com.workflow.RequestHandler" method="ToggleDismiss" 
+			<cfinvoke component="com.workflow.RequestHandler" method="ToggleDismiss"
 				Dismiss="#SetThis#"
 				RequestID="#Val(ThisWorkflowID)#"
 				returnVariable="Success">
@@ -56,13 +56,13 @@
 	<cfset processedMessage="Your selections have been processed">
 </cfif>
 
-<cfinvoke component="com.workflow.RequestHandler" method="GetRequestByCategory" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequestByCategory"
 	ParamStatusID="#ParamStatusID#"
 	ParamTypeID="#ParamTypeID#"
 	ParamOrderBy="#ParamOrderBy#"
 	CategoryID="#Val(ATTRIBUTES.CategoryID)#"
 	returnVariable="GetWF">
-	
+
 <p><cfoutput>#processedMessage#</cfoutput></p>
 
 <cf_AddToQueryString queryString="#FormQueryString#" Name="1" value="1" OmitList="#SearchFormVariables#">
@@ -72,7 +72,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 
 	<TR><td colspan="5" align="right" class="bordertop2">
-	<strong>Show</strong> 
+	<strong>Show</strong>
 	<select name="ParamStatusID"  onchange="this.form.submit()">>
 	<option value="-1" <cfif ParamStatusID EQ -1>selected</cfif>>All</option>
 	<option value="1" <cfif ParamStatusID EQ 1>selected</cfif>>Dismissed Requests</option>

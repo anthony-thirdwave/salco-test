@@ -80,11 +80,11 @@
 			<cfreturn ReturnCandidateAlias>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetAllCategoryType" output="false" returntype="query">
-		
+
 		<cfset var LOCAL=StructNew()>
-		
+
 		<cfquery name="LOCAL.GetAllCategoryType" datasource="#APPLICATION.DSN#">
 			SELECT		*
 			FROM		t_Label
@@ -93,7 +93,7 @@
 		</cfquery>
 		<cfreturn LOCAL.GetAllCategoryType>
 	</cffunction>
-	
+
 	<cffunction name="GetContent" output="false" returntype="boolean">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
@@ -139,7 +139,7 @@
 		</cfquery>
 		<cfreturn GetBlog>
 	</cffunction>
-	
+
 	<cffunction name="GetContentAndContentLocale" output="false" returntype="query">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 		<cfargument name="LocaleID" default="" type="numeric" required="true">
@@ -149,17 +149,17 @@
 
 		<cfquery name="CheckAlias" datasource="#APPLICATION.DSN#">
 			SELECT 		t_Content.ContentID, ContentLocaleID, ContentTypeID
-			FROM   		t_Content 
+			FROM   		t_Content
 			INNER JOIN 	t_ContentLocale ON t_Content.ContentID = t_ContentLocale.ContentID
 			INNER JOIN	t_ContentLocaleMeta ON t_Content.ContentID = t_ContentLocaleMeta.ContentID
-			WHERE		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> 
+			WHERE		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 			AND			t_ContentLocale.localeID=<cfqueryparam value="#Val(ARGUMENTS.LocaleID)#" cfsqltype="cf_sql_integer">
-			AND			t_ContentLocaleMeta.contentPositionId <> <cfqueryparam value="403" cfsqltype="cf_sql_integer"> 
+			AND			t_ContentLocaleMeta.contentPositionId <> <cfqueryparam value="403" cfsqltype="cf_sql_integer">
 			ORDER BY	t_Content.contentId, ContentLocaleID
 		</cfquery>
 		<cfreturn CheckAlias>
 	</cffunction>
-	
+
 	<cffunction name="GetNavCategoryQuery" output="false" returntype="query">
 
 		<!--- init variables --->
@@ -172,7 +172,7 @@
 		</cfquery>
 		<cfreturn GetAllCategories>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryTypeID" returntype="numeric" output="false">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
@@ -246,7 +246,7 @@
 			<cfoutput query="GetCatsAgain">
 				<cfquery name="UpdateAgain" datasource="#APPLICATION.DSN#">
 					UPDATE t_Category
-					SET CategoryPriority = <cfqueryparam value="#val(evaluate('#CurrentRow#*10'))#" cfsqltype="cf_sql_integer">
+					SET CategoryPriority = <cfqueryparam value="#val(CurrentRow * 10)#" cfsqltype="cf_sql_integer">
 					WHERE CategoryID=<cfqueryparam value="#Val(CategoryID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			</cfoutput>
@@ -340,7 +340,7 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="CategoryID" required="true">
 		<cfargument name="ResourceType" required="true">
@@ -431,19 +431,28 @@
 		<cfset var DirectoryToCreate = "">
 		<cfset var ThisDirectoryFragment = "">
 		<cfset var i = "">
+		<cfset var connectionName = APPLICATION.utilsObj.createUniqueId()>
+		<cfset var ftpResult = structNew()>
 
 		<cfmodule template="/common/modules/utils/ExplodeString.cfm" Delimiter="/" String="#ARGUMENTS.CategoryID#" ReturnVarName="PathFragment">
 		<cfset FinalPath=Replace("#ARGUMENTS.FTPRootPath##APPLICATION.CategoryResourcesPath##PathFragment#","\","/","All")>
 		<cfset CreateFolders="no">
-		<cfloop index="ThisDirectoryFragment" list="/,/images/,/documents/,/generated/">
-			<cfftp action="EXISTSDIR"
-				server="#ARGUMENTS.FTPHost#"
+
+		<!--- open the ftp connection to the production site --->
+		<cfftp	action="open"
 				username="#ARGUMENTS.FTPUserLogin#"
 				password="#ARGUMENTS.FTPPassword#"
-				stoponerror="No"
-				directory="#FinalPath##ThisDirectoryFragment#"
-				connection="FTP_#ReplaceNoCase(ARGUMENTS.FTPHost,'.','','all')#">
-			<cfif cfftp.returnValue IS "no">
+				server="#ARGUMENTS.FTPHost#"
+				stoponerror="NO"
+				connection="#connectionName#">
+
+		<cfloop index="ThisDirectoryFragment" list="/,/images/,/documents/,/generated/">
+			<cfftp	action="EXISTSDIR"
+					stoponerror="NO"
+					result="ftpResult"
+					directory="#FinalPath##ThisDirectoryFragment#"
+					connection="#connectionName#">
+			<cfif ftpResult.returnValue IS "no">
 				<cfset CreateFolders="Yes">
 			</cfif>
 		</cfloop>
@@ -455,21 +464,24 @@
 				<cfset DirDone="#DirDone##Mid(ARGUMENTS.CategoryID,i,1)#/">
 				<cfloop index="ThisDirectoryFragment" list="/,/images/,/documents/,/generated/">
 					<cfftp action="CREATEDIR"
-						directory="#DirectoryToCreate##ThisDirectoryFragment#"
-						server="#ARGUMENTS.FTPHost#"
-						username="#ARGUMENTS.FTPUserLogin#"
-						password="#ARGUMENTS.FTPPassword#"
-						stoponerror="No"
-						connection="FTP_#ReplaceNoCase(ARGUMENTS.FTPHost,'.','','all')#">
+					directory="#DirectoryToCreate##ThisDirectoryFragment#"
+					stoponerror="NO"
+					connection="#connectionName#">
 					created dir: #DirectoryToCreate##ThisDirectoryFragment#<BR>
 				</cfloop>
 			</cfloop>
 		<cfelse>
 			#FinalPath# already exists skipping<BR>
 		</cfif>
+
+		<!--- close the connection --->
+		<cfftp	action="close"
+				stopOnError="NO"
+				connection="#connectionName#">
+
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryFrontEndPermissions" output="false" returntype="query">
 		<cfargument name="CategoryID" default="" type="numeric" required="true">
 

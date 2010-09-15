@@ -2,7 +2,7 @@
 	name="MyCommentHandler">
 <cfset MyCommentHandler.init()>
 
-<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm"
 	Page="Comment Manager"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | Comment Manager">
 	<div class="dashModuleWide">
@@ -15,21 +15,21 @@
 </cfif>
 <cfif IsDefined("FORM.Submit")>
 	<cfquery name="DeleteHighlight" datasource="#APPLICATION.USER_DSN#">
-		update t_Comment 
+		update t_Comment
 		set HideURL=0
 		WHERE EntityName = <cfqueryparam cfsqltype="cf_sql_carchar" value="#URL.EntityName#">
 		AND EntityID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.EntityID#">
 	</cfquery>
 	<cfif IsDefined("FORM.commentID") AND FORM.commentID NEQ "">
 		<cfquery name="deleteComments" datasource="#APPLICATION.USER_DSN#">
-			DELETE FROM t_Comment 
+			DELETE FROM t_Comment
 			WHERE CommentID IN (<cfqueryparam value="#FORM.commentID#" cfsqltype="cf_sql_integer" list="yes">)
 		</cfquery>
 		<p><strong>The selected comments were deleted.</strong></p>
 	</cfif>
 	<cfif IsDefined("FORM.HideURLCommentID") AND FORM.HideURLCommentID NEQ "">
 		<cfquery name="HighlightComments" datasource="#APPLICATION.USER_DSN#">
-			update t_Comment 
+			update t_Comment
 			set HideURL=1
 			WHERE CommentID IN (<cfqueryparam value="#FORM.HideURLCommentID#" cfsqltype="cf_sql_integer" list="yes">)
 		</cfquery>
@@ -38,8 +38,7 @@
 	<cfloop index="i" list="#form.Fieldnames#">
 		<cfif findnocase("commentname",i)>
 			<cfset CommentID = Replace(i,"COMMENTNAME_","")>
-			<cfset CommentName = "form.#i#">
-			<cfset CommentName = "#evaluate(commentname)#">
+			<cfset CommentName = form[i]>
 			<cfif CommentName NEQ "">
 				<cfquery name="UpdateComments" datasource="#APPLICATION.USER_DSN#">
 					Update T_Comment
@@ -50,8 +49,7 @@
 		</cfif>
 		<cfif findnocase("commenttext",i)>
 			<cfset CommentID = Replace(i,"COMMENTTEXT_","")>
-			<cfset CommentName = "form.#i#">
-			<cfset CommentName = "#evaluate(commentname)#">
+			<cfset CommentName = form[i]>
 			<cfif CommentName NEQ "">
 				<cfquery name="UpdateComments" datasource="#APPLICATION.USER_DSN#">
 					Update T_Comment
@@ -78,7 +76,7 @@ function confirmDelete(){
 </script>
 
 <cfquery name="getComments" datasource="#APPLICATION.USER_DSN#">
-	SELECT LinkURL,Comment,DateCreated,Name,CommentID,HideURL, UserFirstName, UserLastName, EmailAddress FROM qry_GetComment 
+	SELECT LinkURL,Comment,DateCreated,Name,CommentID,HideURL, UserFirstName, UserLastName, EmailAddress FROM qry_GetComment
 	WHERE EntityName = <cfqueryparam cfsqltype="cf_sql_varchar" value="#URL.EntityName#">
 	AND EntityID = <cfqueryparam cfsqltype="cf_sql_integer" value="#URL.EntityID#">
 	ORDER BY DateCreated DESC
@@ -90,7 +88,7 @@ function confirmDelete(){
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
 	<td colspan="3" align="right">
-		<a href="/common/admin/CommentManager/">Back to list</a> / 
+		<a href="/common/admin/CommentManager/">Back to list</a> /
 		<a href="javascript:selectAll(true);">Select All</a> / <a href="javascript:selectAll(false);">Deselect All</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	&nbsp;&nbsp;<input type="submit" name="submit" value="Update Selected" onClick="return confirmDelete();">
 	&nbsp;&nbsp;

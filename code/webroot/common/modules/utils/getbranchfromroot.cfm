@@ -1,27 +1,31 @@
 <cfsilent><!-- Begin getbranchfromroot.cfm -->
 <cfparam name="ATTRIBUTES.AliasList" default="">
-<cfquery name="GetDetailOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#" datasource="#APPLICATION.DSN#" cachedwithin="#CreateTimeSpan(0,0,0,30)#">
+<cfset ATTRIBUTES.nextCategoryID = val(ATTRIBUTES.ThisCategoryID) + 1>
+<cfquery name="GetDetailOf#ATTRIBUTES.nextCategoryID#" datasource="#APPLICATION.DSN#" cachedwithin="#CreateTimeSpan(0,0,0,30)#">
 	SELECT	parentid
 	FROM	t_Category
 	WHERE	CategoryID = <cfqueryparam value="#val(ATTRIBUTES.ThisCategoryID)#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfquery name="GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#" datasource="#APPLICATION.DSN#" cachedwithin="#CreateTimeSpan(0,0,0,30)#">
+<cfquery name="GetParentOf#ATTRIBUTES.nextCategoryID#" datasource="#APPLICATION.DSN#" cachedwithin="#CreateTimeSpan(0,0,0,30)#">
 	SELECT	CategoryName,CategoryID,CategoryAlias
 	FROM	t_Category
-	WHERE	CategoryID = <cfqueryparam value="#val(Evaluate("GetDetailOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.parentid"))#" cfsqltype="cf_sql_integer">
+	WHERE	CategoryID = <cfqueryparam value="#val(Evaluate("GetDetailOf#ATTRIBUTES.nextCategoryID#.parentid"))#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfif Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.recordcount") IS NOT "0">
-	<cfset NameList=ListPrepend(ATTRIBUTES.NameList, application.utilsObj.RemoveHTML(Replace(Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryName"),","," ","all")))>
-	<cfset IDList=ListPrepend(ATTRIBUTES.IDList, Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryID"))>
-	<cfset AliasList=ListPrepend(ATTRIBUTES.AliasList, Evaluate("GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryAlias"))>
-	<cfmodule template="getbranchfromroot.cfm" ThisCategoryID="#Evaluate('GetParentOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.CategoryID')#" NameList="#NameList#" IDList="#IDList#" AliasList="#AliasList#">
+
+<cfif variables["GetParentOf#ATTRIBUTES.nextCategoryID#"].recordcount>
+	<!--- grab the parentCategoryID for the cfmodule argument --->
+	<cfset ATTRIBUTES.parentCategoryID = variables["GetParentOf#ATTRIBUTES.nextCategoryID#"].CategoryID>
+	<cfset NameList=ListPrepend(ATTRIBUTES.NameList, application.utilsObj.RemoveHTML(Replace(variables["GetParentOf#ATTRIBUTES.nextCategoryID#"].CategoryName,","," ","all")))>
+	<cfset IDList=ListPrepend(ATTRIBUTES.IDList,variables["GetParentOf#ATTRIBUTES.nextCategoryID#"].CategoryID)>
+	<cfset AliasList=ListPrepend(ATTRIBUTES.AliasList, variables["GetParentOf#ATTRIBUTES.nextCategoryID#"].CategoryAlias)>
+	<cfmodule template="getbranchfromroot.cfm" ThisCategoryID="#ATTRIBUTES.parentCategoryID#" NameList="#NameList#" IDList="#IDList#" AliasList="#AliasList#">
 	<cfset CALLER.NameList=NameList>
 	<cfset CALLER.IDList=IDList>
 	<cfset CALLER.AliasList=AliasList>
 <cfelse>
 	<!--- Get out of here --->
 	<cfset CALLER.NameList=ATTRIBUTES.NameList>
-	<cfset CALLER.IDList=ListPrepend(ATTRIBUTES.IDList,val(Evaluate("GetDetailOf#IncrementValue(Val(ATTRIBUTES.ThisCategoryID))#.parentid")))>
+	<cfset CALLER.IDList=ListPrepend(ATTRIBUTES.IDList,val(variables["GetDetailOf#ATTRIBUTES.nextCategoryID#"].parentid))>
 	<cfset CALLER.AliasList=ATTRIBUTES.AliasList>
 </cfif>
 <!-- End getbranchfromroot.cfm --></cfsilent>

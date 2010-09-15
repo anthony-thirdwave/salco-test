@@ -43,8 +43,32 @@
  * Do not use path names with a "." (dot) in the name. This is a coldfusion
  * limitation with the cfc invocation.
 --->
-
+<!---
 <cfinclude template="/common/scripts/fckeditor/fckutils.cfm">
+--->
+
+<!--- init this component --->
+<cffunction name="init" access="public" output="false" returntype="fckeditor" hint="Init this component">
+	<cfargument name="instanceName" default="">
+	<cfargument name="basePath" default="/common/scripts/fckeditor/">
+	<cfargument name="value" default="">
+	<cfargument name="width" default="100%">
+	<cfargument name="height" default="200">
+	<cfargument name="userDir" default="/common/incoming/">
+	<cfargument name="toolbarset" default="Default">
+	<cfargument name="checkBrowser" type="boolean" default="true">
+	<cfargument name="config" type="struct" default="#structNew()#">
+
+	<cfset var local = structNew()>
+
+	<cfloop collection="#arguments#" item="local.itr">
+		<!--- create variables matching the arguments in the component's "this" scope --->
+		<cfset this[local.itr] = arguments[local.itr]>
+	</cfloop>
+
+	<cfreturn this>
+</cffunction>
+
 
 <cffunction
 	name="Create"
@@ -64,15 +88,6 @@
 	hint="Retrieves the editor HTML"
 >
 
-	<cfparam name="this.instanceName" type="string" />
-	<cfparam name="this.width" type="string" default="100%" />
-	<cfparam name="this.height" type="string" default="200" />
-	<cfparam name="this.UserDir" type="string" default="/common/incoming/" />
-	<cfparam name="this.toolbarSet" type="string" default="Default" />
-	<cfparam name="this.value" type="string" default="" />
-	<cfparam name="this.basePath" type="string" default="/fckeditor/" />
-	<cfparam name="this.checkBrowser" type="boolean" default="true" />
-	<cfparam name="this.config" type="struct" default="#structNew()#" />
 	<cfscript>
 	// display the html editor or a plain textarea?
 	if( isCompatible() )
@@ -226,7 +241,65 @@
 	}
 	return sParams;
 	</cfscript>
+</cffunction>
 
+<!--- This function is used by FCKeditor module to check browser compatibility --->
+<cffunction name="FCKeditor_IsCompatibleBrowser" returntype="boolean" output="false">
+
+	<cfset var local = structNew()>
+
+	<cfscript>
+		local.sAgent = lCase( cgi.HTTP_USER_AGENT );
+		local.isCompatibleBrowser = false;
+
+		// check for Internet Explorer ( >= 5.5 )
+		if( find( "msie", local.sAgent ) and not find( "mac", local.sAgent ) and not find( "opera", local.sAgent ) )
+		{
+			// try to extract IE version
+			local.stResult = reFind( "msie ([5-9]\.[0-9])", local.sAgent, 1, true );
+			if( arrayLen( local.stResult.pos ) eq 2 )
+			{
+				// get IE Version
+				local.sBrowserVersion = mid( local.sAgent, local.stResult.pos[2], local.stResult.len[2] );
+				if( local.sBrowserVersion GTE 5.5 )
+					local.isCompatibleBrowser = true;
+			}
+		}
+		// check for Gecko ( >= 20030210+ )
+		else if( find( "gecko/", local.sAgent ) )
+		{
+			// try to extract Gecko version date
+			local.stResult = reFind( "gecko/([0-9]{8})", local.sAgent, 1, true );
+			if( arrayLen( local.stResult.pos ) eq 2 )
+			{
+				// get Gecko build (i18n date)
+				local.sBrowserVersion = mid( local.sAgent, local.stResult.pos[2], local.stResult.len[2] );
+				if( local.sBrowserVersion GTE 20030210 )
+					local.isCompatibleBrowser = true;
+			}
+		}
+		else if( find( "opera/", local.sAgent ) )
+		{
+			// try to extract Opera version
+			local.stResult = reFind( "opera/([0-9]+\.[0-9]+)", local.sAgent, 1, true );
+			if( arrayLen( local.stResult.pos ) eq 2 )
+			{
+				if ( mid( local.sAgent, local.stResult.pos[2], local.stResult.len[2] ) gte 9.5)
+					local.isCompatibleBrowser = true;
+			}
+		}
+		else if( find( "applewebkit", local.sAgent ) )
+		{
+			// try to extract Gecko version date
+			local.stResult = reFind( "applewebkit/([0-9]+)", local.sAgent, 1, true );
+			if( arrayLen( local.stResult.pos ) eq 2 )
+			{
+				if( mid( local.sAgent, local.stResult.pos[2], local.stResult.len[2] ) gte 522 )
+					local.isCompatibleBrowser = true;
+			}
+		}
+		return local.isCompatibleBrowser;
+	</cfscript>
 </cffunction>
 
 </cfcomponent>

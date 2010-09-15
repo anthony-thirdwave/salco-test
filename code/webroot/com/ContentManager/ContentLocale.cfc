@@ -1244,7 +1244,7 @@
 			</cfif>
 			<cfloop index="i" from="1" to="#ListLen(ThisFileList,';')#" step="1">
 				<cfset OriginalName=Trim(ListGetAt(ThisFileList,i,";"))>
-				<cfif IsDefined("#ARGUMENTS.FormFileFieldName##i#FileObject") AND Evaluate("#ARGUMENTS.FormFileFieldName##i#FileObject") IS NOT "">
+				<cfif IsDefined("#ARGUMENTS.FormFileFieldName##i#FileObject") AND variables["#ARGUMENTS.FormFileFieldName##i#FileObject"] IS NOT "">
 					<cffile action="UPLOAD"
 						filefield="#ARGUMENTS.FormFileFieldName##i#FileObject"
 						destination="#UploadDirectory#"
@@ -1438,6 +1438,8 @@
 		<cfset var success="">
 		<cfset var ThisCategoryID="">
 		<cfset var sProductionSiteInformation="">
+		<cfset var connectionName = APPLICATION.utilsObj.createUniqueId()>
+		<cfset var ftpResult = structNew()>
 
 		<cfif ARGUMENTS.TrashPath IS NOT "" and this.GetProperty("ContentLocaleID") GT "0">
 			<cftransaction>
@@ -1533,30 +1535,41 @@
 				<cfif SelectContentFromProd.RecordCount GT "0">
 					<cfset ThisFileList=this.GetFileList(1)>
 					<cfif ListLen(ThisFileList,";") GT "0">
+
+						<!--- open the ftp connection to the production site --->
+						<cfftp	action="open"
+								username="#sProductionSiteInformation.ProductionFTPUserLogin#"
+								password="#sProductionSiteInformation.ProductionFTPPassword#"
+								server="#sProductionSiteInformation.ProductionFTPHost#"
+								stoponerror="NO"
+								connection="#connectionName#">
+
 						<cfloop index="ThisFile" list="#ThisFileList#" delimiters=";">
 							<cfif Left(ThisFile,7) IS NOT "/common">
 								<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
 								RemoteFile: #RemoteFile#->
-								<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#"
-									username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-									password="#sProductionSiteInformation.ProductionFTPPassword#"
-									stoponerror="No"
+								<cfftp action="EXISTSFILE"
+									stoponerror="NO"
+									result="ftpResult"
 									remotefile="#RemoteFile#"
-									connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-									Passive="No">
-								<cfif cfftp.returnValue IS "Yes">
-									<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
-										username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-										password="#sProductionSiteInformation.ProductionFTPPassword#"
-										stoponerror="No"
-										Passive="No"
+									connection="#connectionName#"
+									Passive="NO">
+								<cfif ftpResult.returnValue IS "Yes">
+									<cfftp action="REMOVE"
+										stoponerror="NO"
+										Passive="NO"
 										item="#RemoteFile#"
-										connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
+										connection="#connectionName#"
 										timeout="60">
 									Removed!
 								</cfif><BR>
 							</cfif>
 						</cfloop>
+
+						<!--- close the connection --->
+						<cfftp	action="close"
+								stopOnError="NO"
+								connection="#connectionName#">
 					</cfif>
 				</cfif>
 			</cfif>

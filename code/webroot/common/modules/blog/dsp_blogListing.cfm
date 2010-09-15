@@ -21,9 +21,9 @@
 <cfparam name="StartRow" default="1">
 <!--- End Initialize Pagination (why so much?)--->
 
-<cfset BlogEntriesRecordCount=Evaluate("REQUEST.qBlogEntries_#ATTRIBUTES.BlogID#.RecordCount")>
+<cfset BlogEntriesRecordCount=REQUEST["qBlogEntries_#ATTRIBUTES.BlogID#"].RecordCount>
 
-<cfif BlogEntriesRecordCount gt "0">
+<cfif BlogEntriesRecordCount>
 	<div class="blogListing">
 	<cfoutput query="REQUEST.qBlogEntries_#ATTRIBUTES.BlogID#" group="CategoryID" maxrows="#SearchNUM#" startrow="#StartRow#">
 		<h2><a href="#Link#">#CategoryNameDerived#</a></h2>

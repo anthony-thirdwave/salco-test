@@ -93,34 +93,34 @@
 		</cfloop>
 	<cfelse>
 		<!--- if the form is submitted, load the form values into the object --->
-	
+
 		<!--- Handling MyCategory --->
 		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID">
 			<cfparam name="FORM.#ThisProperty#" default="">
-			<cfset MyCategory.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
+			<cfset MyCategory.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
 		<cfloop index="ThisImage" list="">
 			<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
 				<cfset MyCategory.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 			</cfif>
 		</cfloop>
-	
+
 		<!--- Handling MyCategoryLocale --->
 		<cfset MyCategoryLocale.SetCategoryTypeID(CategoryTypeID)>
 		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride">
 			<cfparam name="FORM.#ThisProperty#" default="">
-			<cfset MyCategoryLocale.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
+			<cfset MyCategoryLocale.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
-	
+
 		<cfloop index="ThisImage" list="#lImageName#">
 			<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
 				<cfset MyCategoryLocale.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 			<cfelseif IsDefined("FORM.#ThisImage#")>
-				<cfset MyCategoryLocale.SetProperty(ThisImage,evaluate("FORM.#ThisImage#"))>
+				<cfset MyCategoryLocale.SetProperty(ThisImage, FORM[ThisImage])>
 			</cfif>
 		</cfloop>
 
-<!---		
+<!---
 		<!--- If Article, Handle MyArticle --->
 		<cfif MyCategory.GetProperty("CategoryTypeID") EQ 66>
 			<cfloop index="ThisProperty" list="JournalCategoryID,ContributorName,Date,Abstract,ContributorBio,ContributorBioExtended,Quote">
@@ -131,12 +131,12 @@
 				<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
 					<cfset MyArticle.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 				<cfelseif IsDefined("FORM.#ThisImage#")>
-					<cfset MyArticle.SetProperty(ThisImage,evaluate("FORM.#ThisImage#"))>
+					<cfset MyArticle.SetProperty(ThisImage, FORM[ThisImage])>
 				</cfif>
 			</cfloop>
 		</cfif>
 		--->
-		
+
 	</cfif>
 </cfif>
 
@@ -158,7 +158,7 @@
 		<cfset PageTitle="#PageTitle# : #MyCategory.GetProperty('CategoryName')#">
 	</cfif>
 </cfif>
-<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm"
 	Page="#PageTitle#"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | <a href=""/common/admin/masterview/"">Content Manager</A> | #PageTitle#">
 
@@ -185,10 +185,10 @@
 			<form action="#Location#?#querystring#" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="PageAction" value="Validate#PageAction#">
 		</cfoutput>
-		
+
 		<cfif SESSION.AdminCurrentAdminLocaleID IS NOT APPLICATION.DefaultLocaleID and PageAction IS "Edit">
-			<cfinvoke component="com.ContentManager.CategoryHandler" 
-					method="GetOtherCategoryLocale" 
+			<cfinvoke component="com.ContentManager.CategoryHandler"
+					method="GetOtherCategoryLocale"
 					returnVariable="GetOtherCategoryLocale"
 					CategoryID="#EditCategoryID#">
 			<cfif ValueList(GetOtherCategoryLocale.CategoryLocaleID) IS NOT MyCategoryLocale.GetProperty("CategoryLocaleID")>
@@ -203,7 +203,7 @@
 				</select> <input type="submit" name="ButLoad2" value="Load"></div>
 			</cfif>
 		</cfif>
-		
+
 		<div>
 			<div class="box1">
 				<div class="boxtop1"><div></div></div>
@@ -225,8 +225,8 @@
 							<cfset FormMode="Validate">
 						</cfif>
 					<cfelse>
-						<cfinvoke component="com.ContentManager.CategoryHandler" 
-							method="GetOtherCategoryLocale" 
+						<cfinvoke component="com.ContentManager.CategoryHandler"
+							method="GetOtherCategoryLocale"
 							returnVariable="GetOtherCategoryLocale"
 							CategoryID="#EditCategoryID#">
 						<cfif ValueList(GetOtherCategoryLocale.CategoryLocaleID) IS MyCategoryLocale.GetProperty("CategoryLocaleID")>
@@ -236,10 +236,10 @@
 						</cfif>
 					</cfif>
 				</cfif>
-				
+
 				<cfinclude template="/common/modules/ContentManager/Category/form.cfm">
 				</table>
-		
+
 				</div>
 			</div>
 		</div>
@@ -303,8 +303,8 @@
 			<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#" omitlist="PageAction">
 			<form action="#Location#?#querystring#" method="post" enctype="multipart/form-data">
 		</cfoutput>
-		
-		
+
+
 		<div>
 			<div class="box1">
 				<div class="boxtop1"><div></div></div>
@@ -391,28 +391,28 @@
 				<cfset MyCategory.SetProperty("CategoryPriority",10+val(MaxCategoryPriority))>
 			</cfif>
 			<cfset MyCategory.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-			
-		
+
+
 			<!--- if article, make sure categoryid is set --->
 	<!---		<cfif MyCategory.GetProperty("CategoryTypeID") EQ 66 AND (Val(MyArticle.GetProperty("CategoryID")) NEQ MyCategory.GetProperty("CategoryID"))>
 				<cfset MyArticle.SaveCategoryID(MyCategory.GetProperty("CategoryID"))>
 			</cfif> --->
-			
+
 			<cfloop index="ThisImage" list="#lImageName#">
 				<cfif Evaluate("FORM.Delete#ThisImage#") IS "1">
 					<cfset MyCategoryLocale.FileRemove(APPLICATION.WebrootPath,"#ThisImage#")>
 				</cfif>
 			</cfloop>
-			
+
 			<cfif DeleteLocaleRecord>
 				<cfset MyCategoryLocale.Delete(APPLICATION.TrashPath,SESSION.AdminUserID)>
 			<cfelse>
 				<cfset MyCategoryLocale.SetProperty("CategoryID",MyCategory.GetProperty("CategoryID"))>
 				<cfset MyCategoryLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 			</cfif>
-			
+
 			<cfif MyCategoryLocale.GetCategoryTypeID() IS "73" and IsDefined("NumImportFiles") and NumImportFiles GT "0"><!--- This is a gallery  --->
-							
+
 				<cfloop index="i" from="1" to="#NumImportFiles#" step="1">
 					<cfset ThisFileName=Evaluate("ImageFile_#i#")>
 					<cfset ThisFileImageName=Evaluate("ImageName_#i#")>
@@ -438,16 +438,16 @@
 					<cfset MyContentLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 				</cfloop>
 			</cfif>
-			
-			<!--- do ultraseek indexing 
-			<cfinvoke component="com.UltraSeek.Search" 
-				method="IndexByCategoryID" 
+
+			<!--- do ultraseek indexing
+			<cfinvoke component="com.UltraSeek.Search"
+				method="IndexByCategoryID"
 				CategoryID="#MyCategory.GetProperty('CategoryID')#"/>--->
 			<!--- update summary --->
 			<!---
 			<cfmodule template="/common/process/populateCategorySummary.cfm" CategoryID="#MyCategory.GetProperty('CategoryID')#">
 			--->
-			
+
 			<cfif Trim(ReturnURL) IS "">
 				<cfset Location=GetToken(ATTRIBUTES.ListPage,1,"?")>
 				<cfset querystring=GetToken(ATTRIBUTES.ListPage,2,"?")>
@@ -462,7 +462,7 @@
 		</form>
 	</cfcase>
 	<cfcase value="CommitAdd,CommitEdit">
-	
+
 	</cfcase>
 	<cfcase value="ValidateDelete">
 		<div class="dashModuleWide">
@@ -470,7 +470,7 @@
 		<div class="boxtop2"><div></div></div>
 		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Delete?</div>
 		<div class="ModuleBody2">
-		
+
 		<cfoutput>
 			<cfset Location=GetToken(FormAction,1,"?")>
 			<cfset querystring=GetToken(FormAction,2,"?")>

@@ -8,7 +8,7 @@
 		INNER JOIN	t_Permissions
 	ON			qry_GetCategoryWithCategoryLocale.CategoryID = t_Permissions.CategoryID
 	WHERE		qry_GetCategoryWithCategoryLocale.CategoryID = <cfqueryparam value="#Val(MVCid)#" cfsqltype="cf_sql_integer">
-	AND 		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="true">) 
+	AND 		UserGroupID IN (<cfqueryparam value="#ListAppend(SESSION.AdminUserGroupIDList, APPLICATION.SuperAdminUserGroupID)#" cfsqltype="cf_sql_integer" list="true">)
 </cfquery>
 
 <cfif GetCategoryDetails.RecordCount GT "0">
@@ -28,10 +28,11 @@
 <cfloop index="ThisAction" list="#lPermissionActions#">
 	<cfset StructInsert(sPermissions,"#ThisAction#","0","1")>
 </cfloop>
+
 <cfoutput query="GetCategoryDetails">
 	<cfloop index="ThisAction" list="#lPermissionActions#">
-		<cfif evaluate("#ThisAction#")>
-			<cfset StructInsert(sPermissions,"#ThisAction#","#evaluate('#ThisAction#')#","1")>
+		<cfif GetCategoryDetails[ThisAction][GetCategoryDetails.currentrow]>
+			<cfset sPermissions[ThisAction] = GetCategoryDetails[ThisAction][GetCategoryDetails.currentrow]>
 		</cfif>
 	</cfloop>
 </cfoutput>
@@ -201,7 +202,7 @@
 				<td class="datacontent1 sdatacontent1">#ReturnString#</td>
 			</tr>
 		</cfif>
-		
+
 		<cfinvoke component="com.utils.tracking" method="GetTracking" returnVariable="ReturnString"
 			Entity="Category"
 			KeyID="#CategoryID#"

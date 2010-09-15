@@ -1,6 +1,6 @@
 <!---
 Name:			Editable.CFC
-Purpose:	All CFC's that wish to make use of the standard 
+Purpose:	All CFC's that wish to make use of the standard
 					data validation handling should extend this tag
 Author:		Nathan Wesling
 Date:			Jan 5, 2003
@@ -13,11 +13,11 @@ Date:			Jan 5, 2003
 	<!--- Get Property List --->
 	<cffunction name="getPropertyList" returntype="string" output="false">
 		<cfreturn structkeylist(this)>
-	</cffunction>		
+	</cffunction>
 
 	<!--- Property Display Name Lookup --->
 	<cfset sPropertyDisplayName = structNew()>
-	
+
 	<!--- GetPropertyDisplayName
 				If you overwrite sPropertyDisplayName in the parent object, you can make use of this method.
 	--->
@@ -38,14 +38,14 @@ Date:			Jan 5, 2003
 		<cfargument name="errorMessage" required="true" type="string">
 		<cfset This.Error.add(arguments.errorKey,arguments.errorValue,arguments.errorMessage)>
 		<cfreturn true>
-	</cffunction>		
+	</cffunction>
 
 	<!--- Is In Error --->
 	<cffunction name="isInError" returntype="any" output="false">
 		<cfargument name="key" required="true" type="string">
 		<cfreturn This.Error.isInError(key)>
 	</cffunction>
-	
+
 	<!--- Get Error Value --->
 	<cffunction name="getErrorValue" returntype="any" output="false">
 		<cfargument name="key" required="true" type="string">
@@ -71,17 +71,17 @@ Date:			Jan 5, 2003
 
 	<!--- GetAllErrorMessages --->
 	<cffunction name="getAllErrorMessages" returntype="array" output="false">
-		
+
 		<!--- init variables --->
 		<cfset var messageCollection = This.Error.getErrorMessages()>
 		<cfset var properties = structkeylist(this)>
 		<cfset var subErrorMessages = "">
 		<cfset var errorMessageCount = "">
 		<cfset var property = "">
-		
+
 		<cfloop list="#properties#" index="property">
-			<cfif isObject(evaluate("this." & property)) and property is not "error">
-				<cfset subErrorMessages = evaluate("this." & property).getAllErrorMessages()>
+			<cfif isObject(this[property]) and property is not "error">
+				<cfset subErrorMessages = this[property].getAllErrorMessages()>
 				<cfloop from="1" to="#arrayLen(subErrorMessages)#" index="errorMessageCount">
 					<cfset arrayappend(messageCollection,subErrorMessages[errorMessageCount])>
 				</cfloop>
@@ -89,19 +89,19 @@ Date:			Jan 5, 2003
 		</cfloop>
 		<cfreturn messageCollection>
 	</cffunction>
-	
+
 	<!--- IsCorrect --->
 	<cffunction name="isCorrect" returntype="boolean" output="false">
-		
+
 		<!--- init variables --->
 		<cfset var state = not This.Error.hasErrorOccurred()>
 		<cfset var subState = true>
 		<cfset var property = "">
-		
+
 		<cfif state is true>
 			<cfloop list="#this.getPropertyList()#" index="property">
-				<cfif isObject(evaluate("this." & property)) and property is not "error">
-					<cfset subState = evaluate("this." & property).IsCorrect()>
+				<cfif isObject(this[property]) and property is not "error">
+					<cfset subState = this[property].IsCorrect()>
 					<cfif subState is false>
 						<cfreturn substate>
 					</cfif>
@@ -110,17 +110,17 @@ Date:			Jan 5, 2003
 		</cfif>
 		<cfreturn state>
 	</cffunction>
-	
+
 	<cffunction name="GetVerboseError" returntype="struct" output="true">
 		<cfargument name="Error" required="false" type="struct">
 		<cfargument name="ErrorPrefix" required="false" type="string">
-		
+
 		<!--- init variables --->
 		<cfset var TempStruct = "">
 		<cfset var ErrorFieldList = "">
 		<cfset var ThisErrorField = "">
 		<cfset var ThisElement = "">
-		
+
 		<cfif Not IsDefined("ARGUMENTS.Error")>
 			<cfset ARGUMENTS.Error=StructNew()>
 		</cfif>
@@ -136,9 +136,9 @@ Date:			Jan 5, 2003
 		</cfif>
 		<cfset StructAppend(ARGUMENTS.Error,TempStruct)>
 		<cfloop index="ThisElement" list="#StructKeyList(This)#">
-			<cfif IsObject(Evaluate("this.#ThisElement#")) AND ThisElement IS NOT "Error">
+			<cfif IsObject(this[ThisElement]) AND ThisElement IS NOT "Error">
 				<cfset TempStruct=StructNew()>
-				<cfset TempStruct=this["#ThisElement#"].GetVerboseError(ARGUMENTS.Error,ListAppend(ARGUMENTS.ErrorPrefix,ThisElement))>
+				<cfset TempStruct=this[ThisElement].GetVerboseError(ARGUMENTS.Error,ListAppend(ARGUMENTS.ErrorPrefix,ThisElement))>
 				<cfset ErrorFieldList=StructKeyList(TempStruct,"_")>
 				<cfloop index="ThisErrorField" list="#ErrorFieldList#">
 					<cfif StructKeyExists(TempStruct,ThisErrorField)>

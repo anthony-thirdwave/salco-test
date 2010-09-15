@@ -7,13 +7,13 @@
 	<cfif Left(ThisAttribute,5) IS "Token">
 		<cfset thisIndex=ReplaceNoCase(ThisAttribute,"Token","","All")>
 		<cfif IsNumeric(thisIndex) AND Val(ThisIndex) GT "0">
-			<cfset aTokens[ThisIndex]=Evaluate("ATTRIBUTES.#ThisAttribute#")>
+			<cfset aTokens[ThisIndex]=ATTRIBUTES[ThisAttribute]>
 			<cfset sToken=StructNew()>
-			<cfset StructInsert(sToken,"Token",Evaluate("ATTRIBUTES.Token#thisIndex#"),1)>
-			<cfif IsDefined("ATTRIBUTES.Value#thisIndex#") AND Evaluate("ATTRIBUTES.Value#thisIndex#") IS NOT "">
-				<cfset StructInsert(sToken,"Value",Evaluate("ATTRIBUTES.Value#thisIndex#"),1)>
+			<cfset sToken.Token = ATTRIBUTES["Token#thisIndex#"]>
+			<cfif IsDefined("ATTRIBUTES.Value#thisIndex#") AND ATTRIBUTES["Value#thisIndex#"] IS NOT "">
+				<cfset sToken.Value = ATTRIBUTES["Value#thisIndex#"]>
 			<cfelse>
-				<cfset StructInsert(sToken,"Value","",1)>
+				<cfset sToken.Value = "">
 			</cfif>
 			<cfset aToken[ThisIndex]=sToken>
 		</cfif>

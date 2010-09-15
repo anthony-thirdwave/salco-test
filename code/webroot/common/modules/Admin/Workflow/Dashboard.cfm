@@ -22,7 +22,7 @@
 
 <cfset QueryString="">
 <cfloop index="ThisParam" list="ParamTitle,ParamCategoryID,ParamTypeID,ParamStatusID,ParamOrderBy">
-	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#Evaluate(ThisParam)#">
+	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#variables[ThisParam]#">
 </cfloop>
 <cf_AddToQueryString queryString="#QueryString#" Name="mvca" value="1">
 <cfset ThisPageQueryString="#querystring#">
@@ -65,7 +65,7 @@
 <cfset sType=StructNew()>
 <cfquery name="GetType" datasource="#APPLICATION.DSN#">
 	SELECT		*
-	FROM		t_label 
+	FROM		t_label
 	WHERE		LabelGroupID = <cfqueryparam value="40" cfsqltype="cf_sql_integer">
 	AND			LabelID IN (<cfqueryparam value="#ShowOnlyCategoryTypeID#" cfsqltype="cf_sql_integer" list="yes">)
 	AND			LabelID != <cfqueryparam value="76" cfsqltype="cf_sql_integer"> <!--- Not in Journal --->
@@ -116,7 +116,7 @@
 		<cftransaction>
 			<cfloop index="i" from="1" to="#NumItems#" step="1">
 				<cftry>
-					<cfset ThisCategoryLocaleID=REQUEST.SimpleDecrypt(URLDecode(Evaluate("EditCategoryLocaleID#i#")))>
+					<cfset ThisCategoryLocaleID=REQUEST.SimpleDecrypt(URLDecode(FORM["EditCategoryLocaleID#i#"]))>
 					<cfcatch>
 						<cfset ThisCategoryLocaleID="-1">
 					</cfcatch>
@@ -124,22 +124,21 @@
 				<cfparam name="WorkflowStatusID_#i#" default="0">
 				<cfparam name="SaveLive_#i#" default="0">
 				<cfif ThisCategoryLocaleID GT "0">
-					<cfif Evaluate("SaveLive_#i#")>
+					<cfif variables["SaveLive_#i#"]>
 						<cfset lCategoryLocaleIDToPublish=ListAppend(lCategoryLocaleIDToPublish,ThisCategoryLocaleID)>
 						<!--- <cfset SetVariable("WorkflowStatusID_#i#",18000)> --->
 					</cfif>
-					<cfif Evaluate("WorkflowStatusID_#i#") GT "0">
+					<cfif variables["WorkflowStatusID_#i#"] GT "0">
 						<cfquery name="UpdateWorkflowStatusID" datasource="#APPLICATION.DSN#">
 							UPDATE	t_CategoryLocale
-							SET		WorkflowStatusID = <cfqueryparam value="#Evaluate('WorkflowStatusID_#i#')#" cfsqltype="cf_sql_integer">
+							SET		WorkflowStatusID = <cfqueryparam value="#variables['WorkflowStatusID_#i#']#" cfsqltype="cf_sql_integer">
 							WHERE	CategoryLocaleID = <cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 					</cfif>
-					<cfif Evaluate("WorkflowStatusID_#i#") IS "18002"><!--- If article is changed to archive --->
+					<cfif variables["WorkflowStatusID_#i#"] IS "18002"><!--- If article is changed to archive --->
 						<!--- Mark it on live too --->
 						<cfset lCategoryLocaleIDToDeactivate=ListAppend(lCategoryLocaleIDToDeactivate,ThisCategoryLocaleID)>
 					</cfif>
-
 				</cfif>
 			</cfloop>
 		</cftransaction>
@@ -153,7 +152,7 @@
 				<cftransaction>
 					<cfloop index="ThisCategoryLocaleID" list="#lCategoryLocaleIDToDeactivate#">
 						<cfquery name="UpdateWorkflowStatusID" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-							UPDATE	t_CategoryLocale 
+							UPDATE	t_CategoryLocale
 							SET		WorkflowStatusID = <cfqueryparam value="18002" cfsqltype="cf_sql_integer">,
 									CategoryLocaleActive = <cfqueryparam value="0" cfsqltype="cf_sql_integer">
 							WHERE	CategoryLocaleID = <cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
@@ -212,7 +211,7 @@
 			<cfset QuerySetCell(GetTopCategories3,"CategoryID",CategoryID)>
 			<cfset QuerySetCell(GetTopCategories3,"pSaveLive",pSaveLive)>
 		</cfoutput>
-		
+
 		<Cfquery name="GetTopCategories" dbtype="query">
 			SELECT * FROM GetTopCategories3 order by DisplayORder
 		</cfquery>
@@ -249,15 +248,15 @@
 			and ParentID IN (<cfqueryparam value="#lCategoryIDPermission#" cfsqltype="cf_sql_integer" list="yes">)
 			ORDER BY #sOrderBy[ParamOrderBy]#
 		</cfquery>
-		
+
 		<cfset GetFinal = QueryNew(GetCategoryList.ColumnList)>
 		<cfoutput query="GetCategoryList" group="CategoryID">
 			<cfset QueryAddRow(GetFinal)>
 			<cfloop index="ThisCol" list="#GetCategoryList.ColumnList#">
-				<cfset QuerySetCell(GetFinal,ThisCol,Evaluate(ThisCol))>
+				<cfset QuerySetCell(GetFinal,ThisCol,GetCategoryList[ThisCol][GetCategoryList.currentrow])>
 			</cfloop>
 		</cfoutput>
-		
+
 
 		<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<cf_AddToQueryString queryString="#FormQueryString#" Name="mvca" value="1" OmitList="ParamTitle,ParamCategoryID,ParamTypeID,ParamStatusID,ParamOrderBy">
@@ -311,7 +310,7 @@
 		</select>
 		</TD>
 		<TD class="borderbottom2">
-		
+
 		</TD>
 		<TD align="right" class="borderbottom2"><input type="submit" value="Filter"></TD>
 		</TR>
@@ -323,7 +322,7 @@
 		<cfif ATTRIBUTES.ObjectAction IS "SearchResults">
 			<cf_AddToQueryString queryString="#FormQueryString#" Name="mvca" value="2">
 			<cfloop index="ThisParam" list="ParamTitle,ParamCategoryID,ParamTypeID,ParamStatusID,ParamOrderBy">
-				<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#Evaluate(ThisParam)#">
+				<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#variables[ThisParam]#">
 			</cfloop>
 			<cfoutput><form action="#FormPage#?#QueryString#" method="post"></cfoutput>
 			<cfset Counter="0">
@@ -362,7 +361,7 @@
 					<TD>
 						by #UserLogin# on #REQUEST.OutputDateTime(TrackingDateTime)#
 					</TD>
-					
+
 					<input type="hidden" name="EditCategoryLocaleID#Counter#" value="#URLEncodedFormat(REQUEST.SimpleEncrypt(Val(CategoryLocaleID)))#">
 
 					<TD nowrap align="right">
@@ -374,8 +373,8 @@
 					<cf_AddToQueryString queryString="#QueryString#" Name="ReturnURL" value="#FormPage#?#ThisPageQueryString#">
 					<a href="#RequestPage#?#QueryString#">Send Request</A><cfif ProductionDBDSN IS NOT ""><br>
 						<cfquery name="testlive" datasource="#ProductionDBDSN#">
-							SELECT	CategoryActivePrime 
-							FROM	qry_GetArticleStatus 
+							SELECT	CategoryActivePrime
+							FROM	qry_GetArticleStatus
 							WHERE	CategoryID = <cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
 						</cfquery>
 						<cfif testlive.RecordCount IS "0">
@@ -394,10 +393,10 @@
 				</cfoutput>
 				<tr><td colspan="8">
 				<cf_AddToQueryString QueryString="#ThisPageQueryString#" name="1" value="1" OmitList="SearchNum,StartRow">
-				<cfmodule template="/common/modules/admin/pagination.cfm" 
-					StartRow="#StartRow#" 
-					SearchNum="#SearchNum#" 
-					RecordCount="#GetFinal.RecordCount#" 
+				<cfmodule template="/common/modules/admin/pagination.cfm"
+					StartRow="#StartRow#"
+					SearchNum="#SearchNum#"
+					RecordCount="#GetFinal.RecordCount#"
 					FieldList="#QueryString#">
 				</TD></tr>
 				<tr><td colspan="8">

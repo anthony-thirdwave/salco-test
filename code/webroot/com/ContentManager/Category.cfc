@@ -702,7 +702,7 @@
 				EntityID="#Val(ThisCategoryID)#"
 				EntityName="t_Category"
 				lTopicID="#thisLTopicID#">
-				
+
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
 				SELECT t_Properties.PropertiesID,t_Properties.PropertiesPacket
 				FROM t_Properties
@@ -1279,8 +1279,8 @@
 		<cfif this.GetProperty("CategoryID") GT "0">
 			<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#APPLICATION.DSN#" table="t_Category" Column="CategoryID" ParentColumn="ParentID">
 			<cfquery name="CheckIfContainContent" datasource="#APPLICATION.DSN#">
-				SELECT ContentID FROM qry_GetContentLocaleMeta 
-				WHERE 
+				SELECT ContentID FROM qry_GetContentLocaleMeta
+				WHERE
 				CategoryID IN (<cfqueryparam value="#branch#" cfsqltype="cf_sql_integer" list="yes">) AND
 				ContentPositionID <> <cfqueryparam value="403" cfsqltype="cf_sql_integer">
 			</cfquery>
@@ -1331,6 +1331,7 @@
 		<cfset var sProductionSiteInformation = "">
 		<cfset var success = "">
 		<cfset var List = "">
+		<cfset var connectionName = APPLICATION.utilsObj.createUniqueId()>
 
 		<cfif this.ValidateDelete() and ARGUMENTS.TrashPath IS NOT "">
 			<CF_getbranch item="#this.GetProperty('CategoryID')#" DataSource="#APPLICATION.DSN#" table="t_Category" Column="CategoryID" ParentColumn="ParentID">
@@ -1427,37 +1428,50 @@
 						</cfquery>
 					</cfoutput>
 				</cftransaction>
-				<cfoutput query="SelectCategory">
-					<cfmodule template="/common/modules/utils/ExplodeString.cfm" string="#CategoryID#" Delimiter="/" ReturnVarName="ThisPath">
-					<cfset RemoteDirectories=ArrayNew(1)>
-					<cfset RemoteDirectories[1]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('images')#">
-					<cfset RemoteDirectories[2]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('documents')#">
-					<cfset RemoteDirectories[3]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('generated')#">
-					<cfloop index="i" from="1" to="3" step="1">
-						<cfset ThisDirectory=Replace(RemoteDirectories[i],"\","/","All")>
-						<cfset ThisDirectory=Replace(ThisDirectory,"//","/","All")>
-						<cfftp action="LISTDIR"
-							server="#sProductionSiteInformation.ProductionFTPHost#"
+
+				<cfif SelectCategory.recordcount>
+
+					<!--- open the ftp connection to the production site --->
+					<cfftp	action="open"
 							username="#sProductionSiteInformation.ProductionFTPUserLogin#"
 							password="#sProductionSiteInformation.ProductionFTPPassword#"
-							stoponerror="No"
-							name="List"
-							directory="#ThisDirectory#"
-							connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-							Passive="No">
-						<cfloop query="List">
-							<cfif NOT IsDirectory>
-								<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
-								username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-								password="#sProductionSiteInformation.ProductionFTPPassword#"
-								stoponerror="No"
-								item="#Path#"
-								connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-								Passive="No">
-							</cfif>
+							server="#sProductionSiteInformation.ProductionFTPHost#"
+							stoponerror="NO"
+							connection="#connectionName#">
+
+					<cfoutput query="SelectCategory">
+						<cfmodule template="/common/modules/utils/ExplodeString.cfm" string="#CategoryID#" Delimiter="/" ReturnVarName="ThisPath">
+						<cfset RemoteDirectories=ArrayNew(1)>
+						<cfset RemoteDirectories[1]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('images')#">
+						<cfset RemoteDirectories[2]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('documents')#">
+						<cfset RemoteDirectories[3]="#sProductionSiteInformation.ProductionFTPRootPath##this.GetResourcePath('generated')#">
+						<cfloop index="i" from="1" to="3" step="1">
+							<cfset ThisDirectory=Replace(RemoteDirectories[i],"\","/","All")>
+							<cfset ThisDirectory=Replace(ThisDirectory,"//","/","All")>
+
+							<cfftp action="LISTDIR"
+								stoponerror="NO"
+								name="List"
+								directory="#ThisDirectory#"
+								connection="#connectionName#"
+								Passive="NO">
+							<cfloop query="List">
+								<cfif NOT IsDirectory>
+									<cfftp action="REMOVE"
+									stoponerror="NO"
+									item="#Path#"
+									connection="#connectionName#"
+									Passive="NO">
+								</cfif>
+							</cfloop>
 						</cfloop>
-					</cfloop>
-				</cfoutput>
+					</cfoutput>
+
+					<!--- close the connection --->
+					<cfftp	action="close"
+							stopOnError="NO"
+							connection="#connectionName#">
+				</cfif>
 			</cfif>
 			<cfreturn true>
 		<cfelse>
@@ -1606,7 +1620,7 @@
 				EntityName="t_Category"
 				lTopicID="#this.GetProperty('lTopicID')#"
 				DSN="#sProductionSiteInformation.ProductionDBDSN#">
-				
+
 			<!--- Create the directories on the production server --->
 			<!--- Open connection to the ftp server --->
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="CreateRemoteFolders" returnVariable="success"

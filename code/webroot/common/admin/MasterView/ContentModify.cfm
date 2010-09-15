@@ -101,7 +101,7 @@
 		<cfif SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID OR Right(PageAction,3) IS "Add">
 			<cfloop index="ThisProperty" list="ContentName,ContentTypeID,CategoryID,ContentActive,ContentIndexed,ShowProductRangeID,ShowNavigationRangeID,ShowQuestionRangeID,lArticleID,InheritID,SourceCategoryID,ContentDate1,ContentDate2,DisplayModeID,lTopicID,OwnerName,OwnerEmail,lPageID">
 				<cfparam name="FORM.#ThisProperty#" default="">
-				<cfset MyContent.SetProperty("#ThisProperty#",Evaluate("FORM.#ThisProperty#"))>
+				<cfset MyContent.SetProperty("#ThisProperty#",FORM[ThisProperty])>
 			</cfloop>
 			<cfif MyContent.GetProperty("ContentTypeID") IS NOT "235">
 				<cfif isDefined("FORM.SourceID")>
@@ -129,7 +129,7 @@
 
 		<cfloop index="ThisProperty" list="ContentLocaleName,ContentLocaleActive,ContentAbstract,HTML,HTMLTemplate,Text,SubTitle,LinkURL,TextPosition,TitleTypeID,DefaultContentLocale,Location,lStateProvince,PageActionURL,NumItems,AllowMultipleRegistrations,lRelatedCategoryID,lMTCategoryIDRestrict,lMTCategoryIDAllow,CSSID,CSSClass,NumberOfMonths,lArticleCategoryID,ShowEventRangeID">
 			<cfparam name="FORM.#ThisProperty#" default="">
-			<cfset MyContentLocale.SetProperty("#ThisProperty#",Evaluate("FORM.#ThisProperty#"))>
+			<cfset MyContentLocale.SetProperty("#ThisProperty#",FORM[ThisProperty])>
 		</cfloop>
 		<cfif MyContent.GetProperty("ContentTypeID") IS "234" and IsDefined("SourceID")>
 			<cfset MyContentLocale.SetContentTemplateID(SourceID)>
@@ -201,8 +201,8 @@
 			<cfset aText=arrayNew(1)>
 			<cfloop index="r" from="1" to="#NumText#" step="1">
 				<cfparam name="aText_#r#" default="">
-				<cfif Trim(Evaluate("aText_#r#")) IS NOT "">
-					<cfset ArrayAppend(aText,Trim(Evaluate("aText_#r#")))>
+				<cfif len(Trim(variables["aText_#r#"]))>
+					<cfset ArrayAppend(aText,Trim(variables["aText_#r#"]))>
 				</cfif>
 			</cfloop>
 			<cfif Trim(aText_New) IS NOT "">
@@ -219,14 +219,14 @@
 					<cfparam name="FORM.LinkTitle_#r#" default="">
 					<cfparam name="FORM.LinkCaption_#r#" default="">
 					<cfparam name="FORM.LinkDelete_#r#" default="0">
-					<cfif Trim(Evaluate("FORM.LinkURL_#r#")) NEQ "" AND Evaluate("FORM.LinkDelete_#r#") EQ 0>
-						<cfif Trim(Evaluate("FORM.LinkTitle_#r#")) EQ "">
-							<Cfset SetVariable("FORM.LinkTitle_#r#",Evaluate("FORM.LinkURL_#r#"))>
+					<cfif len(Trim(FORM["LinkURL_#r#"])) AND FORM["LinkDelete_#r#"] EQ 0>
+						<cfif not len(Trim(FORM["LinkTitle_#r#"]))>
+							<Cfset SetVariable("FORM.LinkTitle_#r#",FORM["LinkURL_#r#"])>
 						</cfif>
 						<cfset sElement=StructNew()>
-						<cfset StructInsert(sElement,"Title",Evaluate("FORM.LinkTitle_#r#"),1)>
-						<cfset StructInsert(sElement,"Caption",Evaluate("FORM.LinkCaption_#r#"),1)>
-						<cfset StructInsert(sElement,"URL",Evaluate("FORM.LinkURL_#r#"),1)>
+						<cfset StructInsert(sElement,"Title",FORM["LinkTitle_#r#"],1)>
+						<cfset StructInsert(sElement,"Caption",FORM["LinkCaption_#r#"],1)>
+						<cfset StructInsert(sElement,"URL",FORM["LinkURL_#r#"],1)>
 						<cfset ArrayAppend(aLink,sElement)>
 					</cfif>
 				</cfloop>
@@ -264,7 +264,7 @@
 			<cfset MyContentLocale.FormFileListUpload("Image","#APPLICATION.WebrootPath#")>
 		</cfif>
 		<cfloop index="ThisImage" list="Image,ImageRollover,Flash,ImageLarge,File,ImageThumbnail">
-			<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
+			<cfif IsDefined("FORM.#ThisImage#FileObject") AND len(trim(FORM["#ThisImage#FileObject"]))>
 				<cfset MyContentLocale.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 			</cfif>
 		</cfloop>
@@ -284,9 +284,9 @@
 				<cfparam name="ThumbnailPath_#r#" default="">
 				<cfparam name="FileDelete_#r#" default="0">
 				<cfparam name="FileSize_#r#" default="0">
-				<cfif Evaluate("FileName_#r#") IS NOT "" AND Evaluate("FileDelete_#r#") IS "0">
+				<cfif len(trim(variables["FileName_#r#"])) AND variables["FileDelete_#r#"] IS "0">
 					<cfloop index="ThisImage" list="MainFilePath,ThumbnailPath">
-						<cfif IsDefined("FORM.#ThisImage#_#r#FileObject") AND evaluate("FORM.#ThisImage#_#r#FileObject") IS NOT "">
+						<cfif IsDefined("FORM.#ThisImage#_#r#FileObject") AND len(trim(FORM["#ThisImage#_#r#FileObject"]))>
 							<cffile action="UPLOAD"
 								filefield="FORM.#ThisImage#_#r#FileObject"
 								destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
@@ -301,29 +301,31 @@
 						</cfif>
 					</cfloop>
 					<cfset sElement=StructNew()>
-					<cfset StructInsert(sElement,"FileName",Evaluate("FileName_#r#"),1)>
-					<cfset StructInsert(sElement,"FileSubTitle",Evaluate("FileSubtitle_#r#"),1)>
-					<cfset StructInsert(sElement,"Author",Evaluate("Author_#r#"),1)>
-					<cfset StructInsert(sElement,"FileDuration",Evaluate("FileDuration_#r#"),1)>
-					<cfset StructInsert(sElement,"FileKeywords",Evaluate("FileKeywords_#r#"),1)>
-					<cfset StructInsert(sElement,"FileDateTimeStamp",Evaluate("FileDateTimeStamp_#r#"),1)>
-					<cfset StructInsert(sElement,"FileCaption",Evaluate("FileCaption_#r#"),1)>
-					<cfset StructInsert(sElement,"FilePath",Evaluate("MainFilePath_#r#"),1)>
-					<cfset StructInsert(sElement,"ThumbnailPath",Evaluate("ThumbnailPath_#r#"),1)>
-					<cfset StructInsert(sElement,"FileSize",Evaluate("FileSize_#r#"),1)>
-					<cfset StructInsert(sElement,"Order",Evaluate("Order_#r#"),1)>
-					<cfif Evaluate("MainFilePath_#r#") IS NOT "">
-						<cfset ThisDir="#application.utilsObj.GetPathFromURL(Evaluate('MainFilePath_#r#'))#">
+					<cfset StructInsert(sElement,"FileName",variables["FileName_#r#"],1)>
+					<cfset StructInsert(sElement,"FileSubTitle",variables["FileSubtitle_#r#"],1)>
+					<cfset StructInsert(sElement,"Author",variables["Author_#r#"],1)>
+					<cfset StructInsert(sElement,"FileDuration",variables["FileDuration_#r#"],1)>
+					<cfset StructInsert(sElement,"FileKeywords",variables["FileKeywords_#r#"],1)>
+					<cfset StructInsert(sElement,"FileDateTimeStamp",variables["FileDateTimeStamp_#r#"],1)>
+					<cfset StructInsert(sElement,"FileCaption",variables["FileCaption_#r#"],1)>
+					<cfset StructInsert(sElement,"FilePath",variables["MainFilePath_#r#"],1)>
+					<cfset StructInsert(sElement,"ThumbnailPath",variables["ThumbnailPath_#r#"],1)>
+					<cfset StructInsert(sElement,"FileSize",Evariables["FileSize_#r#"],1)>
+					<cfset StructInsert(sElement,"Order",variables["Order_#r#"],1)>
+					<cfif len(trim(variables["MainFilePath_#r#"]))>
+						<cfset ThisDir=application.utilsObj.GetPathFromURL(variables["MainFilePath_#r#"])>
 						<cfset ThisDir=ListDeleteAt(ThisDir,ListLen(ThisDir,"\"),"\")>
 						<cfdirectory action="LIST" directory="#ThisDir#" name="qDir">
 						<cfquery name="qDir2" dbtype="query">
-							select * from qDir Where Name='#ListLast(Evaluate('MainFilePath_#r#'),'/')#'
+							SELECT	*
+							FROM	qDir
+							WHERE	Name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ListLast(variables['MainFilePath_#r#'],'/')#">
 						</cfquery>
 						<cfif Val(qDir2.Size) GT "0">
 							<cfset StructInsert(sElement,"FileSize",Val(qDir2.Size),1)>
 						</cfif>
 					</cfif>
-					<cfset ThisKey="#NumberFormat(Val(Evaluate('Order_#r#')),'000')#_#application.utilsObj.Scrub(Evaluate('FileName_#r#'))#">
+					<cfset ThisKey=NumberFormat(Val(variables["Order_#r#"]),'000') & "_" & application.utilsObj.Scrub(variables["FileName_#r#"])>
 					<cfset StructInsert(sView,ThisKey,sElement,"1")>
 					<cfset lOrder=ListAppend(lOrder,ThisKey)>
 				</cfif>
@@ -335,10 +337,10 @@
 				<Cfset ArrayAppend(aView,sView[ThisOrder])>
 			</cfloop>
 
-			<cfif Isdefined("FORM.FileName_New") AND Trim(FORM.FileName_New) IS NOT "">
+			<cfif Isdefined("FORM.FileName_New") AND len(trim(FORM.FileName_New))>
 				<cfloop index="ThisImage" list="MainFilePath">
 					<cfparam name="#ThisImage#_New" default="">
-					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND evaluate("FORM.#ThisImage#_NewFileObject") IS NOT "">
+					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND len(trim(FORM["#ThisImage#_NewFileObject"]))>
 						<cffile action="UPLOAD"
 							filefield="FORM.#ThisImage#_newFileObject"
 							destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
@@ -667,7 +669,7 @@
 					<cfset MyContentLocale.Delete(APPLICATION.TrashPath,SESSION.AdminUserID)>
 				<cfelse>
 					<cfloop index="ThisImage" list="Image,flash,ImageLarge">
-						<cfif IsDefined("FORM.Delete#ThisImage#") AND Evaluate("FORM.Delete#ThisImage#") IS "1">
+						<cfif IsDefined("FORM.Delete#ThisImage#") AND FORM["Delete#ThisImage#"] IS "1">
 							<cfset MyContentLocale.FileRemove(APPLICATION.WebrootPath,"#ThisImage#")>
 						</cfif>
 					</cfloop>

@@ -29,13 +29,13 @@
 	Config.Enabled = true ;
 
 	// Path to uploaded files relative to the document root.
-	config.userFilesPath = URL.userdir;
+	Config.userFilesPath = URL.userdir;
 
 	// Use this to force the server path if FCKeditor is not running directly off
 	// the root of the application or the FCKeditor directory in the URL is a virtual directory
 	// or a symbolic link / junction
 	// Example: C:\inetpub\wwwroot\myDocs\
-	config.serverPath = expandPath(config.userFilesPath);
+	Config.serverPath = "#APPLICATION.WebRootPath##config.userFilesPath#" ;
 
 	// Due to security issues with Apache modules, it is recommended to leave the
 	// following setting enabled.
@@ -119,7 +119,7 @@
 	Config.FileTypesAbsolutePath 			= StructNew() ;
 	Config.QuickUploadPath 					= StructNew() ;
 	Config.QuickUploadAbsolutePath 			= StructNew() ;
-	
+
 	if (config.userFilesPath == '/common/incoming/') {
 		Config.AllowedExtensions["File"]	 	= "7z,aiff,asf,avi,bmp,csv,doc,fla,flv,gif,gz,gzip,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,ods,odt,pdf,png,ppt,pxd,qt,ram,rar,rm,rmi,rmvb,rtf,sdc,sitd,swf,sxc,sxw,tar,tgz,tif,tiff,txt,vsd,wav,wma,wmv,xls,xml,zip" ;
 		Config.DeniedExtensions["File"] 		= "" ;
@@ -127,21 +127,21 @@
 		Config.FileTypesAbsolutePath["File"] 	= config.serverPath;
 		Config.QuickUploadPath["File"] 			= Config.FileTypesPath["File"] ;
 		Config.QuickUploadAbsolutePath["File"] 	= Config.FileTypesAbsolutePath["File"] ;
-	
+
 		Config.AllowedExtensions["Image"] 		= "bmp,gif,jpeg,jpg,png" ;
 		Config.DeniedExtensions["Image"] 		= "" ;
 		Config.FileTypesPath["Image"] 			= Config.UserFilesPath;
 		Config.FileTypesAbsolutePath["Image"] 	= config.serverPath ;
 		Config.QuickUploadPath["Image"] 		= Config.FileTypesPath["Image"] ;
 		Config.QuickUploadAbsolutePath["Image"] = Config.FileTypesAbsolutePath["Image"] ;
-	
+
 		Config.AllowedExtensions["Flash"] 		= "swf,flv" ;
 		Config.DeniedExtensions["Flash"] 		= "" ;
 		Config.FileTypesPath["Flash"] 			= Config.UserFilesPath;
 		Config.FileTypesAbsolutePath["Flash"] 	= config.serverPath;
 		Config.QuickUploadPath["Flash"] 		= Config.FileTypesPath["Flash"] ;
 		Config.QuickUploadAbsolutePath["Flash"] = Config.FileTypesAbsolutePath["Flash"] ;
-	
+
 		Config.AllowedExtensions["Media"] 		= "aiff,asf,avi,bmp,fla,flv,gif,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,png,qt,ram,rm,rmi,rmvb,swf,tif,tiff,wav,wma,wmv" ;
 		Config.DeniedExtensions["Media"] 		= "" ;
 		Config.FileTypesPath["Media"] 			= Config.UserFilesPath;
@@ -156,21 +156,21 @@
 		Config.FileTypesAbsolutePath["File"] 	= iif( Config.ServerPath eq "", de(""), de(Config.ServerPath & 'documents\') ) ;
 		Config.QuickUploadPath["File"] 			= Config.FileTypesPath["File"] ;
 		Config.QuickUploadAbsolutePath["File"] 	= Config.FileTypesAbsolutePath["File"] ;
-	
+
 		Config.AllowedExtensions["Image"] 		= "bmp,gif,jpeg,jpg,png" ;
 		Config.DeniedExtensions["Image"] 		= "" ;
 		Config.FileTypesPath["Image"] 			= Config.UserFilesPath & 'images/' ;
 		Config.FileTypesAbsolutePath["Image"] 	= iif( Config.ServerPath eq "", de(""), de(Config.ServerPath & 'images\') ) ;
 		Config.QuickUploadPath["Image"] 		= Config.FileTypesPath["Image"] ;
 		Config.QuickUploadAbsolutePath["Image"] = Config.FileTypesAbsolutePath["Image"] ;
-	
+
 		Config.AllowedExtensions["Flash"] 		= "swf,flv" ;
 		Config.DeniedExtensions["Flash"] 		= "" ;
 		Config.FileTypesPath["Flash"] 			= Config.UserFilesPath & 'flash/' ;
 		Config.FileTypesAbsolutePath["Flash"] 	= iif( Config.ServerPath eq "", de(""), de(Config.ServerPath & 'flash\') ) ;
 		Config.QuickUploadPath["Flash"] 		= Config.FileTypesPath["Flash"] ;
 		Config.QuickUploadAbsolutePath["Flash"] = Config.FileTypesAbsolutePath["Flash"] ;
-	
+
 		Config.AllowedExtensions["Media"] 		= "aiff,asf,avi,bmp,fla,flv,gif,jpeg,jpg,mid,mov,mp3,mp4,mpc,mpeg,mpg,png,qt,ram,rm,rmi,rmvb,swf,tif,tiff,wav,wma,wmv" ;
 		Config.DeniedExtensions["Media"] 		= "" ;
 		Config.FileTypesPath["Media"] 			= Config.UserFilesPath & 'media/' ;

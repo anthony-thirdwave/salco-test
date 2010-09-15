@@ -3,11 +3,11 @@
 	<cfset StatusMessage=ATTRIBUTES.StatusMessage>
 </cfif>
 <cfif IsDefined("URL.cvid") and isDefined("SESSION.mb_#URL.cvid#")>
-	<cfset StatusMessage=Evaluate("SESSION.mb_#URL.cvid#")>
+	<cfset StatusMessage=SESSION["mb_#URL.cvid#"]>
 	<cfset SetVariable("SESSION.mb_#URL.cvid#","")>
 </cfif>
 <cfif IsDefined("URL.svid")>
-	<cfset StatusMessage=Evaluate("SESSION.mb_#URL.svid#")>
+	<cfset StatusMessage=SESSION["mb_#URL.svid#"]>
 </cfif>
 <cfif IsDefined("URL.sem")>
 	<cfset StatusMessage="Transaction declined\n\nYour credit card was entered incorrectly or was not authorized. Please re-enter your credit card information or use a new credit card for this transaction.">

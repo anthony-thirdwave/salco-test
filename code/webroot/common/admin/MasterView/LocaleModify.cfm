@@ -34,13 +34,13 @@
 </cfif>
 
 <cfif IsDefined("FORM.TemplateID")>
-	
+
 	<!--- if the form is submitted, load the form values into the object --->
 
 	<!--- Handling MyLocale --->
 	<cfloop index="ThisProperty" list="TemplateID,DefaultEventRegistrationModeID,VerisignID,CustomHeadHTML"><!--- juno --->
 		<cfparam name="FORM.#ThisProperty#" default="">
-		<cfset MyLocale.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
+		<cfset MyLocale.SetProperty("#ThisProperty#",FORM[ThisProperty])>
 	</cfloop>
 </cfif>
 
@@ -57,7 +57,7 @@
 <cfif EditLocaleID GT "0">
 	<cfset PageTitle="#MyLocale.GetProperty('LocaleName')# Settings">
 </cfif>
-<cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
+<cfmodule template="/common/modules/admin/dsp_Admin.cfm"
 	Page="Page Details"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | #PageTitle#">
 
@@ -77,17 +77,17 @@
 			<form action="#Location#?#querystring#" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="PageAction" value="Validate#PageAction#">
 		</cfoutput>
-		
+
 		<tr valign="top">
 		<TD bgcolor="white" width="100%"><table width="100%" cellspacing="1" cellpadding="2">
 		<cfset FormMode="ShowForm">
-		
+
 		<cfinclude template="/common/modules/ContentManager/Locale/form.cfm">
 		</table></TD></TR>
 		<TR><TD bgcolor="white">
 		<div align="right"><input type="image" src="/common/images/admin/button_apply.png" name="ButSubmit" value="Apply"></div></form>
-		
-		
+
+
 		<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="SaveToProduction">
 			<p align="right"><form action="#Location#?#querystring#" method="post"><input type="image" src="/common/images/admin/button_saveSetProd.png" value="Save Settings to Production"></form></p>
 		</TD></TR></table>
@@ -100,7 +100,7 @@
 			<cfset Location=GetToken(FormAction,1,"?")>
 			<cfset querystring=GetToken(FormAction,2,"?")>
 			<cfif PageAction IS "ValidateAdd">
-				
+
 			<cfelse>
 				<cf_AddToQueryString querystring="#QueryString#" name="lid" value="#lid#">
 			</cfif>
@@ -111,7 +111,7 @@
 		</table>
 		<cfif MyLocale.isCorrect()>
 			<cfset MyLocale.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
-						
+
 			<cfif Trim(ReturnURL) IS "">
 				<cfset Location=GetToken(ATTRIBUTES.ListPage,1,"?")>
 				<cfset querystring=GetToken(ATTRIBUTES.ListPage,2,"?")>
@@ -127,7 +127,7 @@
 		</TD></form></TR></table>
 	</cfcase>
 	<cfcase value="CommitAdd,CommitEdit">
-	
+
 	</cfcase>
 	<cfcase value="ValidateDelete">
 		<cfoutput>

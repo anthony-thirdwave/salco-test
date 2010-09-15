@@ -31,7 +31,7 @@
 		<!----- spb ----->
 		<cfloop index="ThisProperty" list="WorkflowRequestTypeID,Message">
 			<cfparam name="FORM.#ThisProperty#" default="">
-			<cfset MyWorkflowRequest.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
+			<cfset MyWorkflowRequest.SetProperty("#ThisProperty#",FORM[ThisProperty])>
 		</cfloop>
 		<cfset ThisLToUserID="">
 		<cfset ThisLToUserGroupID="">
@@ -46,7 +46,7 @@
 		<cfset MyWorkflowRequest.SetProperty("LToUserGroupID","#ThisLToUserGroupID#")>
 		<cfset MyWorkflowRequest.Save()>
 		<cfset MyWorkflowRequest.Send(AppliesToSubPages,CCRequest)>
-	
+
 		<cflocation url="/common/modules/utils/_MessageBox.cfm?StatusMessage=#URLEncodedFormat('Your request has been sent.')#&Location=#URLencodedFormat(ReturnURL)#" addtoken="No">
 	</cfif>
 </cfif>

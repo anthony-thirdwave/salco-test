@@ -109,7 +109,7 @@
 						<cfset queryAddColumn(local.flattenedCategoriesSorted,local.l,"varchar",arrayNew(1))>
 					</cfif>
 
-					<cfset querySetCell(local.flattenedCategoriesSorted,local.l,evaluate("local.getCategoryById.#local.l#"))>
+					<cfset querySetCell(local.flattenedCategoriesSorted,local.l, local.getCategoryById[local.l])>
 				</cfloop>
 			</cfloop>
 

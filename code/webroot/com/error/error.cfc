@@ -42,7 +42,7 @@
 	<cffunction name="getErrorValue" returntype="any" output="false">
 		<cfargument name="key" required="true" type="string">
 		<cfif (this.isInError(key))>
-			<cfreturn evaluate("this.ErrorStruct." & arguments.key & ".value")>
+			<cfreturn this.ErrorStruct[arguments.key].value>
 		<cfelse>
 			<cfreturn false>
 		</cfif>

@@ -15,7 +15,7 @@
 <cfset QueryString="">
 <cfset SearchFormVariables="ParamFolder,ParamStatusID,ParamTypeID,ParamOrderBy">
 <cfloop index="ThisParam" list="#SearchFormVariables#">
-	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#Evaluate(ThisParam)#">
+	<cf_AddToQueryString queryString="#QueryString#" Name="#ThisParam#" value="#variables[ThisParam]#">
 </cfloop>
 <cf_AddToQueryString queryString="#QueryString#" Name="mvca" value="1">
 <cfset ThisPageQueryString="#querystring#">
@@ -32,7 +32,7 @@
 	<cfset EditQueryString=ListLast(ATTRIBUTES.EditAction,"?")>
 </cfif>
 
-<cfinvoke component="com.workflow.RequestHandler" method="GetRequestTypes" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequestTypes"
 	returnVariable="GetRequestTypes">
 
 <!----- mark a request as processed ----->
@@ -41,14 +41,14 @@
 		<cfset lCategoryIDToPublish="">
 		<cfloop index="i" from="1" to="#Numwf#" step="1">
 			<cfparam name="FORM.wfid_#i#" default="-1">
-			<cfset ThisWorkflowID=Evaluate("FORM.wfid_#i#")>
+			<cfset ThisWorkflowID=FORM["wfid_#i#"]>
 			<cfif IsDefined("wfid_mark_#i#")>
 				<cfset SaveThis=1>
 			<cfelse>
 				<cfset SaveThis=0>
 			</cfif>
 			<cfif ThisWorkflowID GT "0" and SaveThis IS "1">
-				<cfinvoke component="com.workflow.RequestHandler" method="GetRequest" 
+				<cfinvoke component="com.workflow.RequestHandler" method="GetRequest"
 					WorkflowRequestID="#Val(ThisWorkflowID)#"
 					returnVariable="GetWF">
 				<cfset lCategoryIDToPublish=ListAppend(lCategoryIDToPublish,GetWF.CategoryID)>
@@ -60,7 +60,7 @@
 				returnVariable="ThisCategoryLocaleID"
 				CategoryID="#ThisCategoryID#"
 				LocaleID="#APPLICATION.DefaultLocaleID#">
-				
+
 			<!--- Mark page as "live" --->
 			<cfquery name="UpdateWorkflowStatusID" datasource="#APPLICATION.DSN#">
 				update t_CategoryLocale Set
@@ -68,7 +68,7 @@
 				WHERE
 				CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 			</cfquery>
-			
+
 			<!--- Create snap shot --->
 			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetCategoryBasicDetails"
@@ -108,7 +108,7 @@
 	<cfelse>
 		<cfloop index="i" from="1" to="#Numwf#" step="1">
 			<cfparam name="FORM.wfid_#i#" default="-1">
-			<cfset ThisWorkflowID=Evaluate("FORM.wfid_#i#")>
+			<cfset ThisWorkflowID=FORM["wfid_#i#"]>
 			<cfif IsDefined("wfid_mark_#i#")>
 				<cfset SetThis=1>
 			<cfelse>
@@ -144,17 +144,17 @@
 		<cfset thisSortOrder="Order By WorkflowRequestDateTime DESC">
 	</cfdefaultcase>
 </cfswitch>
-<!----- /sort the results -----> 
+<!----- /sort the results ----->
 
 
-<cfinvoke component="com.workflow.RequestHandler" method="GetRequests" 
+<cfinvoke component="com.workflow.RequestHandler" method="GetRequests"
 	UserID="#SESSION.AdminUserID#"
 	UserGroupIDList="#SESSION.AdminUserGroupIDList#"
 	ParamStatusID="#ParamStatusID#"
 	ParamTypeID="#ParamTypeID#"
 	ParamOrderBy="#ParamOrderBy#"
 	returnVariable="GetWF">
-	
+
 <p><cfoutput>#processedMessage#</cfoutput></p>
 
 <cf_AddToQueryString queryString="#FormQueryString#" Name="1" value="1" OmitList="#SearchFormVariables#">
@@ -164,7 +164,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <cfif ATTRIBUTES.DisplayMode IS NOT "DashBoard">
 	<TR><TD colspan="6">
-	<!--- <strong>Folder</strong> 
+	<!--- <strong>Folder</strong>
 	<select name="ParamFolder" onchange="this.form.submit()">
 		<option value="inbox" <cfif ParamFolder EQ "inbox">selected</cfif>>Inbox</option>
 		<option value="outbox" <cfif ParamFolder EQ "outbox">selected</cfif>>Outbox</option>
@@ -213,7 +213,7 @@
 				<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
 				<tr valign="top">
 				<td>
-					#FromFirstName# #FromMiddleName# #FromLastName# 
+					#FromFirstName# #FromMiddleName# #FromLastName#
 					<cfif FromEmailAddress IS NOT "">
 						<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 					</cfif>
@@ -222,7 +222,7 @@
 				#WorkflowRequestTypeName#<br>
 				#REQUEST.OutputDateTime(WorkFlowRequestDateTime)#</td>
 				<td nowrap align="left">
-				
+
 				<!--- if this is not a facility manager request --->
 				<cfif getWF.categoryId neq 12>
 					<a href="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#" target="_blank" title="Preview"><img src="/common/images/admin/icon_magnify.gif" border="0"/></a>
@@ -230,7 +230,7 @@
 					<a href="#EditPage#?#QueryString#" title="Edit"><img src="/common/images/admin/icon_edit.gif" border="0"/></A>
 					<cf_AddToQueryString queryString="#EditQueryString#" Name="mvcid" value="#CategoryID#">
 					<a href="mailto:?body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
-				
+
 				<!--- else, this is a facility manager request - everything should go to the facility manager index --->
 				<cfelse>
 					<cf_AddToQueryString queryString="#QueryString#" Name="mvcid" value="#CategoryID#">
@@ -283,7 +283,7 @@
 					<input type="hidden" name="wfid_#Counter#" value="#WorkflowRequestID#"/>
 				</td>
 			<td>
-				#FromFirstName# #FromMiddleName# #FromLastName# 
+				#FromFirstName# #FromMiddleName# #FromLastName#
 				<cfif FromEmailAddress IS NOT "">
 					<a href="mailto:#FromEmailAddress#?subject=#WorkflowRequestTypeName#: #CategoryName#&body=%0A%0A%0A%0A%0A%0A%0APage: #CategoryName#%0AView: http://#REQUEST.CGIHTTPHost##APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#%0AEdit: #URLEncodedFormat('http://#REQUEST.CGIHTTPHost##EditPage#?#QueryString#')#" Title="Email"><img src="/common/images/admin/icon_email.gif" border="0"/></A>
 				</cfif>

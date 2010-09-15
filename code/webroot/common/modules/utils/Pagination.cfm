@@ -15,7 +15,7 @@
 		<table border="0" cellspacing="0" cellpadding="0">
 			<tr valign="top">
 				<td nowrap>
-				
+
 		<CFIF ATTRIBUTES.StartRow GT ATTRIBUTES.SearchNum>
 			<cfset NewStartRow=ATTRIBUTES.StartRow-ATTRIBUTES.SearchNum>
 			<cf_AddToQueryString querystring="#FieldList#" name="StartRow" value="#NewStartRow#">
@@ -29,7 +29,7 @@
 					<tr valign="top">
 		<cfset outputstr="">
 		<cfloop index="i" from ="1" to="#Ceiling(ATTRIBUTES.RecordCount/ATTRIBUTES.SearchNum)#" step="1">
-			<cfif "#Evaluate(ATTRIBUTES.StartRow)#" IS (SearchNum*(i-1))+1>
+			<cfif ATTRIBUTES.StartRow IS (SearchNum*(i-1))+1>
 				<cfset outputstr="#outputstr##i#">
 			<cfelse>
 				<cfset NewStartRow=(SearchNum*(i-1))+1>
@@ -52,5 +52,5 @@
 		<cfelse>
 			<span class="capsBlackLink">NEXT &raquo;</span>
 		</CFIF></td></tr></table>
-	</cfif>			
+	</cfif>
 </cfoutput>

@@ -9,7 +9,7 @@
 	<cfproperty name="LocaleID" type="numeric" default="">
 	<cfproperty name="PropertiesID" type="numeric" default="">
 	<cfproperty name="DefaultCategoryLocale" type="boolean" default="">
-	
+
 	<!--- Custom Properties --->
 	<cfproperty name="CategoryImageOff" type="string" default="">
 	<cfproperty name="CategoryImageOn" type="string" default="">
@@ -27,7 +27,7 @@
 	<cfproperty name="Byline2" type="string" default="">
 	<cfproperty name="Title" type="string" default="">
 	<cfproperty name="PageTitleOverride" type="string" default="">
-	
+
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleID","category locale ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryID","category ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleName","category locale name",1)>
@@ -45,23 +45,23 @@
 	<cfset structInsert(sPropertyDisplayName,"MetaDescription","meta description",1)>
 	<cfset structInsert(sPropertyDisplayName,"DefaultCategoryLocale","default category locale",1)>
 	<cfset structInsert(sPropertyDisplayName,"CSSID","CSS id",1)>
-	<cfset structInsert(sPropertyDisplayName,"CSSClass","CSS class",1)>	
+	<cfset structInsert(sPropertyDisplayName,"CSSClass","CSS class",1)>
 	<cfset structInsert(sPropertyDisplayName,"CallToActionURL","Call To Action URL",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleNameAlternative","alternative category locale name",1)>
 	<cfset structInsert(sPropertyDisplayName,"Byline1","Byline 1",1)>
 	<cfset structInsert(sPropertyDisplayName,"Byline2","Byline 2",1)>
 	<cfset structInsert(sPropertyDisplayName,"Title","Title 2",1)>
 	<cfset structInsert(sPropertyDisplayName,"PageTitleOverride","page title override",1)>
-	
+
 	<cfset this.CategoryTypeID="-1">
-	
+
 	<cfset this.sFields=StructNew()>
 	<cfinvoke component="com.ContentManager.CategoryHandler"
 		method="GetAllCategoryType"
 		returnVariable="GetAllCategoryType">
 	<cfloop index="ThisCategoryTypeID" list="#ValueList(GetAllCategoryType.LabelID)#">
 		<cfswitch expression="#ThisCategoryTypeID#">
-			
+
 				<!--- Not Used --->
 				<cfcase value="64"><!--- Product --->
 					<cfset this.sFields[ThisCategoryTypeID]="CSSID,CallToActionURL">
@@ -87,17 +87,17 @@
 			</cfdefaultcase>
 		</cfswitch>
 	</cfloop>
-	
+
 	<cffunction name="constructor" returntype="boolean" output="true">
 		<cfargument name="ID" default="0" type="numeric" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var ThisProperty = "">
 		<cfset var GetItems = "">
 		<cfset var GetCategoryTypeID = "">
 		<cfset var GetCategoryProperties = "">
 		<cfset var sProperties = "">
-		
+
 		<!--- Typically, use set methods in contructor. --->
 		<cfset this.SetProperty("CategoryLocaleID","-1")>
 		<cfset this.SetProperty("LocaleID","-1")>
@@ -107,7 +107,7 @@
 		<cfset this.SetProperty("CategoryLocaleURL","")>
 		<cfset this.SetProperty("PropertiesID","-1")>
 		<cfset this.SetProperty("DefaultCategoryLocale","0")>
-		
+
 		<cfset this.SetProperty("CategoryImageOff","")>
 		<cfset this.SetProperty("CategoryImageOn","")>
 		<cfset this.SetProperty("CategoryImageRollover","")>
@@ -124,7 +124,7 @@
 		<cfset this.SetProperty("Byline2","")>
 		<cfset this.SetProperty("Title","")>
 		<cfset this.SetProperty("PageTitleOverride","")>
-		
+
 		<cfif Val(ARGUMENTS.ID) GT 0>
 			<!--- If id is greater than 0, load from DB. --->
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
@@ -167,11 +167,11 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="save" returntype="boolean" output="false">
 		<cfargument name="WebrootPath" required="false">
 		<cfargument name="UserID" required="false">
-		
+
 		<!--- init variables --->
 		<cfset var thisCategoryLocaleID = "">
 		<cfset var thisCategoryID = "">
@@ -213,7 +213,7 @@
 		<cfset var ThisCategoryName = "">
 		<cfset var success = "">
 		<cfset var wProperties = "">
-		
+
 		<cfif IsCorrect()>
 			<cfset thisCategoryLocaleID=this.GetProperty("CategoryLocaleID")>
 			<cfset thisCategoryID=this.GetProperty("CategoryID")>
@@ -223,7 +223,7 @@
 			<cfset thisPropertiesID=this.GetProperty("PropertiesID")>
 			<cfset thisCategoryLocaleURL=this.GetProperty("CategoryLocaleURL")>
 			<cfset thisDefaultCategoryLocale=this.GetProperty("DefaultCategoryLocale")>
-			
+
 			<cfset thisCategoryImageOff=this.GetProperty("CategoryImageOff")>
 			<cfset thisCategoryImageOn=this.GetProperty("CategoryImageOn")>
 			<cfset thisCategoryImageRollover=this.GetProperty("CategoryImageRollover")>
@@ -240,22 +240,22 @@
 			<cfset thisByline2=this.GetProperty("Byline2")>
 			<cfset thisTitle=this.GetProperty("Title")>
 			<cfset thisPageTitleOverride=this.GetProperty("PageTitleOverride")>
-			
-			<cfinvoke component="com.ContentManager.CategoryHandler" 
-				method="GetCategoryName" 
+
+			<cfinvoke component="com.ContentManager.CategoryHandler"
+				method="GetCategoryName"
 				returnVariable="ThisCategoryName"
 				CategoryID="#this.GetProperty('CategoryID')#">
 			<cfif thisCategoryLocaleName IS ThisCategoryName>
 				<cfset thisCategoryLocaleName="">
 				<cfset this.SetProperty("CategoryLocaleName","")>
 			</cfif>
-			
+
 			<cfif Val(thisCategoryLocaleID) LTE "0">
 				<cfquery name="GetParentID" datasource="#APPLICATION.DSN#">
-					select ParentID from t_Category 
+					select ParentID from t_Category
 					where CategoryID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
-				
+
 				<cftransaction>
 					<cfquery name="InsertProperties" datasource="#APPLICATION.DSN#">
 						SET NOCOUNT ON
@@ -265,7 +265,7 @@
 					</cfquery>
 					<cfset thisPropertiesID=InsertProperties.NewTeaserID>
 					<cfset this.SetProperty("PropertiesID",thisPropertiesID)>
-					
+
 					<cfquery name="InsertCategory" datasource="#APPLICATION.DSN#">
 						SET NOCOUNT ON
 						INSERT INTO t_CategoryLocale (
@@ -283,7 +283,7 @@
 						<cfqueryparam value="#Trim(ThisCategoryLocaleURL)#" cfsqltype="cf_sql_varchar">,
 						<cfqueryparam value="#val(ThisCategoryLocaleActive)#" cfsqltype="cf_sql_integer">,
 						<cfqueryparam value="#Val(thisPropertiesID)#" cfsqltype="cf_sql_integer">,
-						<cfqueryparam value="#Val(ThisDefaultCategoryLocale)#" cfsqltype="cf_sql_integer">						
+						<cfqueryparam value="#Val(ThisDefaultCategoryLocale)#" cfsqltype="cf_sql_integer">
 						)
 						SELECT NewCategoryLocaleID=@@Identity
 					</cfquery>
@@ -319,7 +319,7 @@
 						EntityName="#this.GetProperty('CategoryLocaleName')#">
 				</cfif>
 			</cfif>
-			
+
 			<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
 			<!--- Move files to its final resting place --->
 			<cfif ARGUMENTS.WebrootPath is not "">
@@ -343,10 +343,10 @@
 					</cfif>
 				</cfloop>
 			</cfif>
-			
+
 			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
 				SELECT t_Properties.PropertiesID,t_Properties.PropertiesPacket
-				FROM t_Properties 
+				FROM t_Properties
 				WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif isWDDX(GetProperties.PropertiesPacket)>
@@ -354,7 +354,7 @@
 			<cfelse>
 				<cfset sProperties=StructNew()>
 			</cfif>
-			
+
 			<cfif FileExists("#application.utilsObj.GetPathFromURL(ThisCategoryImageOff)#")>
 				<cf_ImageSize file="#application.utilsObj.GetPathFromURL(ThisCategoryImageOff)#">
 				<cfset ImageWidth=Width>
@@ -362,7 +362,7 @@
 			<cfelse>
 				<cfset DevNull=StructInsert(sProperties,"ImageWidth","0","1")>
 			</cfif>
-			
+
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageOff","#Trim(ThisCategoryImageOff)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageOn","#Trim(ThisCategoryImageOn)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageRollover","#Trim(ThisCategoryImageRollover)#","1")>
@@ -379,18 +379,18 @@
 			<cfset DevNull=StructInsert(sProperties,"Byline2","#Trim(ThisByline2)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"Title","#Trim(ThisTitle)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"PageTitleOverride","#Trim(ThisPageTitleOverride)#","1")>
-			
+
 			<cfwddx action="CFML2WDDX" input="#sProperties#" output="wProperties">
 			<cfquery name="UpdateContent" datasource="#APPLICATION.DSN#">
 				UPDATE t_Properties
 				SET PropertiesPacket=<cfqueryparam value="#Trim(wProperties)#" cfsqltype="cf_sql_varchar">
 				WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
-			
+
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Category"
 				KeyID="#thisCategoryID#">
-			
+
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
@@ -400,12 +400,12 @@
 	<cffunction name="SetProperty" returntype="boolean" output="false">
 		<cfargument name="Property" required="true" type="string">
 		<cfargument name="Value" required="true" type="any">
-		
+
 		<!--- init variables --->
 		<cfset var Test = "">
-		
+
 		<cfset ARGUMENTS.Property=Trim(ARGUMENTS.Property)>
-		
+
 		<cfif IsSimpleValue(ARGUMENTS.Value)>
 			<cfset ARGUMENTS.Value=Trim(ARGUMENTS.Value)>
 
@@ -415,31 +415,31 @@
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
 				<cfif NOT IsDate(ARGUMENTS.Value)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a valid date.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("",ARGUMENTS.Property) AND Trim(ARGUMENTS.Value) IS "">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 				<cfreturn false>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("LocaleID",ARGUMENTS.Property) AND val(ARGUMENTS.Value) LTE "0">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 				<cfreturn false>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("CategoryLocaleName",ARGUMENTS.Property)>
 				<cfif Len(ARGUMENTS.Value) GT "128">
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","The #sPropertyDisplayName[ARGUMENTS.Property]# can only be 128 characters long.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-			
+
 			<cfif ListFindNoCase("CategoryID,LocaleID",ARGUMENTS.Property)>
 				<cfif Val(ARGUMENTS.Value) GT "0">
 					<cfswitch expression="#ARGUMENTS.Property#">
@@ -477,18 +477,18 @@
 				</cfif>
 			</cfif>
 		</cfif>
-		
+
 		<cfset SetVariable("this.#ARGUMENTS.Property#","#ARGUMENTS.Value#")>
 		<cfset deleteError(ARGUMENTS.Property)>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetProperty" returntype="Any" output="false">
 		<cfargument name="Property" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfif IsInError(ARGUMENTS.Property)>
 			<cfreturn GetErrorValue(ARGUMENTS.Property)>
 		<cfelse>
@@ -496,28 +496,28 @@
 			<cfreturn ReturnValue>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetCategoryTypeID" returntype="numeric" output="false">
 		<cfreturn this.CategoryTypeID>
 	</cffunction>
-	
+
 	<cffunction name="SetCategoryTypeID" returntype="boolean" output="false">
 		<cfargument name="NewCategoryTypeID" required="true">
 		<cfset this.CategoryTypeID=ARGUMENTS.NewCategoryTypeID>
 		<cfreturn true>
 	</cffunction>
-	
+
 	<cffunction name="GetRestrictionsPropertyList" returnType="string" output="false">
 		<cfset var ReturnString=this.sFields[this.GetCategoryTypeID()]>
 		<cfreturn ReturnString>
 	</cffunction>
-	
+
 	<cffunction name="CreateResourcePath" returntype="boolean" output="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="CreateResourcePath"
 			returnVariable="ReturnValue"
@@ -525,13 +525,13 @@
 			WebrootPath="#ARGUMENTS.WebrootPath#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetResourcePath" returntype="string" output="false">
 		<cfargument name="ResourceType" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetResourcePath"
 			returnVariable="ReturnValue"
@@ -539,14 +539,14 @@
 			ResourceType="#ARGUMENTS.ResourceType#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="GetResourceFilePath" returntype="string" output="false">
 		<cfargument name="ResourceType" required="true">
 		<cfargument name="WebrootPath" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var ReturnValue = "">
-		
+
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetResourceFilePath"
 			returnVariable="ReturnValue"
@@ -555,17 +555,17 @@
 			WebrootPath="#ARGUMENTS.WebrootPath#">
 		<cfreturn ReturnValue>
 	</cffunction>
-	
+
 	<cffunction name="FormFileUpload" returntype="boolean" output="1">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="Property" required="true">
 		<cfargument name="FormFileFieldName" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var UploadDirectory = "">
 		<cfset var UploadedFile = "">
 		<cfset var FilePath = "">
-		
+
 		<cfif ARGUMENTS.FormFileFieldName IS "" OR ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
 		<cfelseif ListFindNoCase(StructkeyList(this),ARGUMENTS.Property) LTE "0">
@@ -575,7 +575,7 @@
 			<cfset UploadDirectory=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('images')#","/","\","All")>
 			<cfset UploadDirectory=ReplaceNoCase(UploadDirectory,"\\","\","all")>
 			<cfset this.CreateResourcePath(ARGUMENTS.WebrootPath)>
-			<cffile action="UPLOAD" 
+			<cffile action="UPLOAD"
 				filefield="#ARGUMENTS.FormFileFieldName#"
 				destination="#UploadDirectory#"
 				nameconflict="MakeUnique">
@@ -594,14 +594,14 @@
 			</cfif>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="FileRemove" returnType="boolean" output="false">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="Property" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var FileToDelete = "">
-		
+
 		<cfif ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
 		<cfelseif ListFindNoCase(StructkeyList(this),ARGUMENTS.Property) LTE "0">
@@ -617,7 +617,7 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="ValidateDelete" returnType="boolean" output="false">
 		<cfif this.GetProperty("CategoryLocaleID") GT "0">
 			<cfreturn true>
@@ -625,11 +625,11 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="Delete" returnType="boolean" output="1">
 		<cfargument name="TrashPath" required="true">
 		<cfargument name="UserID" required="true">
-		
+
 		<!--- init variables --->
 		<cfset var thisCategoryLocaleID = "">
 		<cfset var thisCategoryID = "">
@@ -651,7 +651,9 @@
 		<cfset var DELETEMEssages = "">
 		<cfset var success = "">
 		<cfset var sProductionSiteInformation = "">
-		
+		<cfset var connectionName = APPLICATION.utilsObj.createUniqueId()>
+		<cfset var ftpResult = structNew()>
+
 		<cfif this.ValidateDelete() and ARGUMENTS.TrashPath IS NOT "">
 			<cftransaction>
 				<cfset ThisCategoryLocaleID=this.GetProperty("CategoryLocaleID")>
@@ -678,7 +680,7 @@
 				</cfloop>
 				<cfset DestImages="#DirectoryToCreate#\images\">
 				<cfset DestDocs="#DirectoryToCreate#\documents\">
-				
+
 				<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
 				<cfloop index="ThisImageName" list="#lImage#">
 					<cfset OriginalName=this.GetProperty(thisImageName)>
@@ -697,7 +699,7 @@
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="CategoryID"
 				KeyID="#thisCategoryID#">
-				
+
 			<cfif Val(ARGUMENTS.UserID) GT "0">
 				<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 					UserID="#ARGUMENTS.UserID#"
@@ -706,12 +708,12 @@
 					Operation="delete"
 					EntityName="#this.GetProperty('CategoryLocaleName')#">
 			</cfif>
-			
+
 			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetProductionSiteInformation"
 				returnVariable="sProductionSiteInformation"
 				CategoryID="#this.GetProperty('CategoryID')#">
-				
+
 			<cfif IsStruct(sProductionSiteInformation) and sProductionSiteInformation.ProductionDBDSN is not "">
 				<cftransaction>
 					<cfquery name="SelectCategory" datasource="#sProductionSiteInformation.ProductionDBDSN#">
@@ -726,34 +728,45 @@
 						</cfquery>
 					</cfoutput>
 				</cftransaction>
-				
+
 				<cfif SelectCategory.RecordCount GT "0">
 					<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+
+					<!--- open the ftp connection to the production site --->
+					<cfftp	action="open"
+							username="#sProductionSiteInformation.ProductionFTPUserLogin#"
+							password="#sProductionSiteInformation.ProductionFTPPassword#"
+							server="#sProductionSiteInformation.ProductionFTPHost#"
+							stoponerror="NO"
+							connection="#connectionName#">
+
 					<cfloop index="ThisImageName" list="#lImage#">
 						<cfset ThisFile=this.GetProperty(thisImageName)>
 						<cfif ThisFile IS NOT "">
 							<cfset RemoteFile=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisFile#","//","/","All")>
 							RemoteFile: #RemoteFile#->
-							<cfftp action="EXISTSFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
-								username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-								password="#sProductionSiteInformation.ProductionFTPPassword#"
-								stoponerror="No"
+							<cfftp action="EXISTSFILE"
+								stoponerror="NO"
+								result="ftpResult"
 								remotefile="#RemoteFile#"
-								connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
-								Passive="No">
-							<cfif cfftp.returnValue IS "Yes">
-								<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#"
-									username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-									password="#sProductionSiteInformation.ProductionFTPPassword#"
-									stoponerror="No"
-									Passive="No"
+								connection="#connectionName#"
+								Passive="NO">
+							<cfif ftpResult.returnValue IS "Yes">
+								<cfftp action="REMOVE"
+									stoponerror="NO"
+									Passive="NO"
 									item="#RemoteFile#"
-									connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#"
+									connection="#connectionName#"
 									timeout="60">
 								Removed!
 							</cfif><BR>
 						</cfif>
 					</cfloop>
+
+					<!--- close the connection --->
+					<cfftp	action="close"
+							stopOnError="NO"
+							connection="#connectionName#">
 				</cfif>
 			</cfif>
 			<cfreturn true>
@@ -761,7 +774,7 @@
 			<cfreturn false>
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="GetContent" returnType="Query" output="true">
 		<cfset var ThisCategoryLocaleID=this.GetProperty("CategoryLocaleID")>
 		<cfset var GetContent = "">
@@ -770,7 +783,7 @@
 		</cfquery>
 		<cfreturn GetContent>
 	</cffunction>
-	
+
 	<cffunction name="SaveToProduction" returntype="boolean" output="true">
 		<cfargument name="WebrootPath" required="true">
 		<cfargument name="UserID" required="true">
@@ -794,8 +807,8 @@
 		<cfset var sProductionSiteInformation = "">
 		<cfset var success = "">
 		<cfset var SaveResults = "">
-		
-		<cfinvoke component="com.ContentManager.CategoryHandler" 
+
+		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetProductionSiteInformation"
 			returnVariable="sProductionSiteInformation"
 			CategoryID="#this.GetProperty('CategoryID')#">
@@ -804,7 +817,7 @@
 			<cfset ThisCategoryID=this.GetProperty("CategoryID")>
 			<cfset ThisPropertiesID=this.GetProperty("PropertiesID")>
 			<cfset ThisLocaleID=this.GetProperty("LocaleID")>
-			
+
 			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisCategoryLocaleID#">
 			     <cfinvokeargument name="columnList" value="CategoryLocaleID">
@@ -815,7 +828,7 @@
 			     <cfinvokeargument name="sourcePassword" value="#APPLICATION.SourcePassword#">
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
-			
+
 			<cfinvoke component="com.PostToProduction.postToProduction" method="postLive">
 			     <cfinvokeargument name="valueList" value="#ThisCategoryID#,#ThisLocaleID#">
 			     <cfinvokeargument name="columnList" value="CategoryID,LocaleID">
@@ -826,7 +839,7 @@
 			     <cfinvokeargument name="sourcePassword" value="#APPLICATION.SourcePassword#">
 				 <cfinvokeargument name="destinationDSN" value="#sProductionSiteInformation.ProductionDBName#">
 			</cfinvoke>
-			
+
 			<cfquery name="GetProps" datasource="#APPLICATION.DSN#">
 				select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ThisPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
@@ -846,10 +859,10 @@
 					SET IDENTITY_INSERT t_Properties OFF
 				</cfquery>
 			</cfoutput>
-		
+
 			<!--- Create the directories on the production server --->
 			<!--- Open connection to the ftp server --->
-			
+
 			<cfif 0>
 				<cfinvoke component="com.ContentManager.CategoryHandler" method="CreateRemoteFolders" returnVariable="success"
 					CategoryID="#ThisCategoryID#"
@@ -858,16 +871,16 @@
 					FTPUserLogin="#sProductionSiteInformation.ProductionFTPUserLogin#"
 					FTPPassword="#sProductionSiteInformation.ProductionFTPPassword#">
 			</cfif>
-			
+
 			<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
-			
+
 			<cfloop index="ThisImage" list="#lImageName#">
 				<cfif this.GetProperty(ThisImage) is not "">
 					<cfset Source=application.utilsObj.GetPathFromURL(this.GetProperty(ThisImage))>
 					<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##this.GetProperty(ThisImage)#","//","/","All")>
-					<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
+					<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#"
 						username="#sProductionSiteInformation.ProductionFTPUserLogin#"
-						password="#sProductionSiteInformation.ProductionFTPPassword#" 
+						password="#sProductionSiteInformation.ProductionFTPPassword#"
 						stoponerror="No"
 						localfile="#Source#"
 						remotefile="#Destination#"
@@ -877,14 +890,14 @@
 					#Destination#|#CFFTP.ErrorCode#|#CFFTP.ErrorText#</p>
 				</cfif>
 			</cfloop>
-		
+
 			<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
 				UserID="#ARGUMENTS.UserID#"
 				Entity="CategoryLocale"
 				KeyID="#ThisCategoryLocaleID#"
 				Operation="savelive"
 				EntityName="#this.GetProperty('CategoryLocaleName')#">
-				
+
 			<cfreturn true>
 		<cfelse>
 			<cfreturn false>
