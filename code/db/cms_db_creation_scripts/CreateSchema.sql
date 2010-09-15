@@ -2079,6 +2079,20 @@ FROM         dbo.t_UserGroup INNER JOIN
 
 
 GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetTracking]'))
+EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetTracking]
+AS
+SELECT     dbo.t_Tracking.*, dbo.t_User.UserLogin AS UserLogin, dbo.t_Label.LabelName AS OperationName, dbo.t_Label.LabelCode AS OperationCode, dbo.t_User.FirstName, dbo.t_User.LastName
+FROM         dbo.t_Tracking LEFT OUTER JOIN
+                      dbo.t_User ON dbo.t_Tracking.UserID = dbo.t_User.UserID LEFT OUTER JOIN
+                      dbo.t_Label ON dbo.t_Tracking.OperationID = dbo.t_Label.LabelID
+' 
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -2095,20 +2109,6 @@ FROM         dbo.qry_GetTracking INNER JOIN
 MostRecentOperations
 WHERE     Rank = 1
  
-' 
-
-GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[qry_GetTracking]'))
-EXEC dbo.sp_executesql @statement = N'CREATE VIEW [dbo].[qry_GetTracking]
-AS
-SELECT     dbo.t_Tracking.*, dbo.t_User.UserLogin AS UserLogin, dbo.t_Label.LabelName AS OperationName, dbo.t_Label.LabelCode AS OperationCode, dbo.t_User.FirstName, dbo.t_User.LastName
-FROM         dbo.t_Tracking LEFT OUTER JOIN
-                      dbo.t_User ON dbo.t_Tracking.UserID = dbo.t_User.UserID LEFT OUTER JOIN
-                      dbo.t_Label ON dbo.t_Tracking.OperationID = dbo.t_Label.LabelID
 ' 
 GO
 SET ANSI_NULLS ON
