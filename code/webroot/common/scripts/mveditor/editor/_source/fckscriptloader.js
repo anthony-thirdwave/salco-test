@@ -27,7 +27,7 @@ var FCK_GENERIC_SPECIFIC = 2 ;
 var FCK_SPECIFIC = 3 ;
 
 var FCKScriptLoader = new Object() ;
-FCKScriptLoader.FCKeditorPath = '/fckeditor/' ;
+FCKScriptLoader.FCKeditorPath = '/mveditor/' ;
 
 FCKScriptLoader._Scripts = new Object() ;
 FCKScriptLoader._LoadedScripts = new Object() ;

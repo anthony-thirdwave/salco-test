@@ -50,7 +50,7 @@
 <!--- init this component --->
 <cffunction name="init" access="public" output="false" returntype="fckeditor" hint="Init this component">
 	<cfargument name="instanceName" default="">
-	<cfargument name="basePath" default="/common/scripts/fckeditor/">
+	<cfargument name="basePath" default="/common/scripts/mveditor/">
 	<cfargument name="value" default="">
 	<cfargument name="width" default="100%">
 	<cfargument name="height" default="200">
