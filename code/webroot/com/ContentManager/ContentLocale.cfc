@@ -1244,12 +1244,12 @@
 			</cfif>
 			<cfloop index="i" from="1" to="#ListLen(ThisFileList,';')#" step="1">
 				<cfset OriginalName=Trim(ListGetAt(ThisFileList,i,";"))>
-				<cfif IsDefined("#ARGUMENTS.FormFileFieldName##i#FileObject") AND variables["#ARGUMENTS.FormFileFieldName##i#FileObject"] IS NOT "">
+				<cfif IsDefined("#ARGUMENTS.FormFileFieldName##i#FileObject") AND Evaluate("#ARGUMENTS.FormFileFieldName##i#FileObject") IS NOT "">
 					<cffile action="UPLOAD"
 						filefield="#ARGUMENTS.FormFileFieldName##i#FileObject"
 						destination="#UploadDirectory#"
 						nameconflict="MakeUnique">
-					<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
+					<cfset UploadedFile=application.utilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)>
 					<cfif Val(GetProperty("ContentLocaleID")) LTE "0">
 						<!--- Keep files where they are, since we havent assigned an ID yet. --->
 					<cfelse>
@@ -1324,7 +1324,7 @@
 				filefield="#ARGUMENTS.FormFileFieldName#"
 				destination="#UploadDirectory#"
 				nameconflict="MakeUnique">
-			<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
+			<cfset UploadedFile=application.utilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)>
 			<cfset ThisFileSize=File.FileSize>
 			<cfif ARGUMENTS.Property IS "Flash" and ListFindNoCase("#APPLICATION.ImageFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 				<cffile action="DELETE" file="#UploadedFile#">

@@ -579,7 +579,7 @@
 				filefield="#ARGUMENTS.FormFileFieldName#"
 				destination="#UploadDirectory#"
 				nameconflict="MakeUnique">
-			<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
+			<cfset UploadedFile=application.utilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)>
 			<cfif ListFindNoCase("#APPLICATION.ImageFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 				<cffile action="DELETE" file="#UploadedFile#">
 				<cfset SetProperty("#ARGUMENTS.Property#","")>

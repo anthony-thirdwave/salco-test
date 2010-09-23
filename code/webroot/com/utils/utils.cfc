@@ -274,6 +274,23 @@
 		<cfreturn ReturnString>
 	</cffunction>
 
+	<cffunction name="ScrubUploadedFileName" returntype="string" output="false">
+		<cfargument name="ServerDirectory" default="" type="String" required="true">
+		<cfargument name="ServerFile" default="" type="String" required="true">
+		
+		<cfset ThisExtension=ListLast(ARGUMENTS.ServerFile,".")>
+		<cfset ThisServerFile=ListDeleteAt(ARGUMENTS.ServerFile,ListLen(ARGUMENTS.ServerFile,"."),".")>
+			
+		<cfif reFind("[^A-Za-z0-9_\-\.]", ThisServerFile)>
+			<cfset ThisServerFile="#ARGUMENTS.ServerDirectory#\#this.Scrub(ThisServerFile)#.#ThisExtension#">
+			<cffile action="RENAME" source="#ARGUMENTS.ServerDirectory#/#ARGUMENTS.ServerFile#" destination="#ThisServerFile#">
+			<cfset ReturnString="#ThisServerFile#">
+		<cfelse>
+			<cfset ReturnString="#ARGUMENTS.ServerDirectory#\#ARGUMENTS.ServerFile#">
+		</cfif>
+		<cfreturn ReturnString>
+	</cffunction>
+	
 	<cffunction name="OutputDateTime" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
 
