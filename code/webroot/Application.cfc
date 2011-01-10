@@ -1,7 +1,7 @@
 <cfcomponent displayname="Application">
 
 	<!--- the unique name used in database and directory defaults --->
-	<cfset variables.uniqueName = "cmsdemo" />
+	<cfset variables.uniqueName = "salco" />
 
 	<!--- this variable will override any server defined siteType
 				* for cf8 sites, this is where the site type is set, leaving blank creates "dev" site type
@@ -261,7 +261,7 @@
 			</cfif>
 
 			<!--- display the error page --->
-			<cflocation url="/common/error/errorhandler.cfm" addtoken="false" />
+			<cflocation url="/common/error/404.html" addtoken="false" />
 
 		<cfelse>
 			<cfthrow object="#arguments.exception#"><cfabort>

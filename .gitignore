@@ -1,10 +1,9 @@
 code/collection/*
 code/temp/1/*
 code/temp/2/*
+code/webroot/aspnet_client
 code/webroot/common/incoming/documents/*
 code/webroot/common/incoming/images/*
-code/webroot/incoming/*
-code/webroot/incoming/Image/*
 code/webroot/resources/category/*
 code/webroot/resources/content/*
 code/webroot/resources/images/*

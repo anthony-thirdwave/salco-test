@@ -7,6 +7,7 @@ RewriteRule ^(/)$ $1 [L,QSA]
 
 # Ignore all admin tool pages.
 RewriteRule ^(common/admin.*)$ $1 [L,QSA]
+RewriteRule ^(development.*)$ $1 [L,QSA]
 
 #DYNAMIC_CONTENT
 

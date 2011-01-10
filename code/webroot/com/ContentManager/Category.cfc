@@ -1185,13 +1185,19 @@
 						LabelID IN (60,61,75,78)<!--- Only content, system --->
 					</cfcase>
 					<cfcase value="60,78"><!--- Content --->
-						LabelID  IN (60,61,75,66,77,78) <!--- Content, System, Blog, Article, Journal, blog Entry --->
+						LabelID  IN (60,61,62,75,66,77,78) <!--- Content, System, Blog, Article, Journal, blog Entry --->
 					</cfcase>
 					<cfcase value="61"><!--- system --->
 						LabelID IN (60,61,67,71,73,74,66,76,78) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
 					</cfcase>
 					<cfcase value="76"><!--- topic --->
 						LabelID IN (61,76) <!--- System, Topic --->
+					</cfcase>
+					<cfcase value="62"><!--- Product Family --->
+						LabelID IN (63,64,60) <!--- System, Topic --->
+					</cfcase>
+					<cfcase value="63,64"><!--- Product Series, Product--->
+						LabelID IN (63,64.60) <!--- System, Topic --->
 					</cfcase>
 					<cfdefaultcase><!--- --->
 						LabelID NOT IN (61,60)
