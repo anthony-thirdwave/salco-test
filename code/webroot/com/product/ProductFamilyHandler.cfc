@@ -1,34 +1,42 @@
 <cffunction name="GetProductFamilyAttributeStructure" output="false" returntype="struct">
 	<cfargument name="CategoryID" default="" type="numeric" required="true">
 	<cfargument name="LanguageID" default="" type="numeric" required="true">
-	<cfset sReturn=StructNew()>
-	<cfquery name="Get" datasource="#APPLICATION.DSN#">
+	
+	<cfset VAR LOCAL=StructNew()>
+	
+	<cfset LOCAL.sReturn=StructNew()>
+	<cfquery name="LOCAL.Get" datasource="#APPLICATION.DSN#">
 		SELECT ProductFamilyAttributeID, ProductFamilyAttributeName,LanguageID FROM qry_GetProductFamilyAttribute 
-		WHERE CategoryID=#Val(ARGUMENTS.CategoryID)# and LanguageID=#Val(ARGUMENTS.LanguageID)#
+		WHERE 
+		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> and 
+		LanguageID=<cfqueryparam value="#Val(ARGUMENTS.LanguageID)#" cfsqltype="cf_sql_integer">
 		order by ProductFamilyAttributeID,LanguageID DESC
 	</cfquery>
 	<!--- In the query get english (100) last.  --->
-	<cfoutput query="Get" group="ProductFamilyAttributeID">
-		<cfset ThisName="">
+	<cfoutput query="LOCAL.Get" group="ProductFamilyAttributeID">
+		<cfset LOCAL.ThisName="">
 		<cfoutput group="LanguageID">
-			<cfif ProductFamilyAttributeName IS NOT "" and THisName IS "">
-				<cfset ThisName=ProductFamilyAttributeName>
+			<cfif LOCAL.Get.ProductFamilyAttributeName IS NOT "" and LOCAL.ThisName IS "">
+				<cfset LOCAL.ThisName=LOCAL.Get.ProductFamilyAttributeName>
 			</cfif>
 		</cfoutput>
-		<cfset StructInsert(sReturn,ProductFamilyAttributeID,ThisName)>
+		<cfset StructInsert(LOCAL.sReturn,LOCAL.Get.ProductFamilyAttributeID,LOCAL.ThisName)>
 	</cfoutput>
-	<cfreturn sReturn>
+	<cfreturn LOCAL.sReturn>
 </cffunction>
 
 <cffunction name="GetDefaultLanguageID" output="false" returntype="numeric">
 	<cfargument name="LocaleID" default="" type="numeric" required="true">
-	<cfquery name="test" datasource="#APPLICATION.DSN#">
+	
+	<cfset VAR LOCAL=StructNew()>
+	
+	<cfquery name="LOCAL.test" datasource="#APPLICATION.DSN#">
 		SELECT	t_Locale.LanguageID AS LanguageID
 		FROM	t_Locale 
-		WHERE	LocaleID=#Val(ARGUMENTS.LocaleID)#
+		WHERE	LocaleID=<cfqueryparam value="#Val(ARGUMENTS.LocaleID)#" cfsqltype="cf_sql_integer">
 	</cfquery>
-	<cfif test.RecordCount IS NOT "0">
-		<cfreturn test.LanguageID>
+	<cfif LOCAL.test.RecordCount IS NOT "0">
+		<cfreturn LOCAL.test.LanguageID>
 	<cfelse>
 		<cfreturn APPLICATION.DefaultLanguageID>
 	</cfif>
@@ -36,12 +44,17 @@
 
 <cffunction name="GetProductFamilyLanguages" returntype="query" output="false">
 	<cfargument name="CategoryID" default="" type="numeric" required="true">
-	<cfquery name="GetLanguages" datasource="#APPLICATION.DSN#">
+	
+	<cfset VAR LOCAL=StructNew()>
+	
+	<cfquery name="LOCAL.GetLanguages" datasource="#APPLICATION.DSN#">
 		select LabelID as LanguageID, LabelName as LanguageName from 
 		dbo.t_Label INNER JOIN
 		dbo.t_ProductAttribute ON dbo.t_Label.LabelID = dbo.t_ProductAttribute.LanguageID
-		Where CategoryID=#Val(ARGUMENTS.CategoryID)# and ProductFamilyAttributeID=515
+		Where 
+		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> and 
+		ProductFamilyAttributeID=<cfqueryparam value="515" cfsqltype="cf_sql_integer">
 		order by LanguageName
 	</cfquery>
-	<cfreturn GetLanguages>
+	<cfreturn LOCAL.GetLanguages>
 </cffunction>

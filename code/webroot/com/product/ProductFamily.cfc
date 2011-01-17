@@ -7,6 +7,7 @@
 	<cfproperty name="aProductFamilyAttribute" type="array" default="">
 	<cfproperty name="aProductFamilyFeature" type="array" default="">
 	<cfproperty name="aProductFamilyView" type="array" default="">
+	<cfproperty name="aProductFamilyDownload" type="array" default="">
 	
 	<cfset structInsert(sPropertyDisplayName,"CategoryID","category ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"LanguageID","language ID",1)>
@@ -17,6 +18,7 @@
 	<cfset structInsert(sPropertyDisplayName,"aProductFamilyAttribute","array of product family attributes",1)>
 	<cfset structInsert(sPropertyDisplayName,"aProductFamilyFeature","product feature array",1)>
 	<cfset structInsert(sPropertyDisplayName,"aProductFamilyView","product view array",1)>
+	<cfset structInsert(sPropertyDisplayName,"aProductFamilyDownload","product download array",1)>
 	<cfset structInsert(sPropertyDisplayName,"ProductFamilyBrochurePathOverride","product family brochure path overrides",1)>
 	
 	<cfset this.sAttributeID=StructNew()>
@@ -47,6 +49,7 @@
 		<cfset this.SetProperty("aProductFamilyAttribute",aBlank)>
 		<cfset this.SetProperty("aProductFamilyFeature",aBlank)>
 		<cfset this.SetProperty("aProductFamilyView",aBlank)>
+		<cfset this.SetProperty("aProductFamilyDownload",aBlank)>
 		
 		<cfif Val(ARGUMENTS.ID) GT 0 AND Val(ARGUMENTS.LanguageID) GT "0">
 			<!--- If id is greater than 0, load from DB. --->
@@ -84,7 +87,10 @@
 			
 			<cfquery name="GetView" datasource="#APPLICATION.DSN#">
 				select * from qry_GetResource
-				WHERE KeyID=#Val(ARGUMENTS.ID)# and Entity='t_Category' and languageID=#Val(ARGUMENTS.LanguageID)#
+				WHERE KeyID=#Val(ARGUMENTS.ID)# and 
+				Entity='t_Category' and 
+				languageID=#Val(ARGUMENTS.LanguageID)# and
+				ResourceTypeID=9000
 				Order by ResourcePriority
 			</cfquery>
 			<cfif GetView.RecordCount GT "0">
@@ -100,6 +106,29 @@
 					<cfset arrayAppend(aBlank,sViewElt)>
 				</cfoutput>
 				<cfset this.SetProperty("aProductFamilyView",aBlank)>
+			</cfif>
+			
+			<cfquery name="GetDownload" datasource="#APPLICATION.DSN#">
+				select * from qry_GetResource
+				WHERE KeyID=#Val(ARGUMENTS.ID)# and 
+				Entity='t_Category' and 
+				languageID=#Val(ARGUMENTS.LanguageID)# and
+				ResourceTypeID=9001
+				Order by ResourcePriority
+			</cfquery>
+			<cfif GetDownload.RecordCount GT "0">
+				<cfset aBlank=ArrayNew(1)>
+				<cfoutput query="GetDownload">
+					<cfset sViewElt=StructNew()>
+					<Cfset StructInsert(sViewElt,"ResourceID",ResourceID,1)>
+					<Cfset StructInsert(sViewElt,"ResourceName",ResourceName,1)>
+					<Cfset StructInsert(sViewElt,"ResourceText",ResourceText,1)>
+					<Cfset StructInsert(sViewElt,"MainFilePath",MainFilePath,1)>
+					<Cfset StructInsert(sViewElt,"ThumbnailFilePath",ThumbnailFilePath,1)>
+					<Cfset StructInsert(sViewElt,"SpecificationSetID",SpecificationSetID,1)>
+					<cfset arrayAppend(aBlank,sViewElt)>
+				</cfoutput>
+				<cfset this.SetProperty("aProductFamilyDownload",aBlank)>
 			</cfif>
 			
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
@@ -157,6 +186,7 @@
 			<cfset ThisAAttr=this.GetProperty("aProductFamilyAttribute")>
 			<cfset thisaProductFamilyFeature=this.GetProperty("aProductFamilyFeature")>
 			<cfset thisaProductFamilyView=this.GetProperty("aProductFamilyView")>
+			<cfset thisaProductFamilyDownload=this.GetProperty("aProductFamilyDownload")>
 			
 			<cftransaction>
 				<cfloop index="ThisID" list="#this.lAttributeID#">
@@ -347,106 +377,21 @@
 					<cfquery name="DeleteOthers2" datasource="#APPLICATION.DSN#">
 						DELETE from t_TextBlockLanguage WHERE TextBlockID=#Val(ThisID)# and LanguageID=#Val(thisLanguageID)#
 					</cfquery>
-					<!---
-						<cfquery name="DeleteOthers2" datasource="#APPLICATION.DSN#">
-							UPDATE t_TextBlockLanguage set Languageid=#-Val(ThisLanguageID)# 
-							WHERE TextBlockID=#Val(ThisID)# AND LanguageID = #Val(ThisLanguageID)# 
-						</cfquery>
-						<!--- delete only if last remaining --->
-						<cfquery name="DeleteThis" datasource="#APPLICATION.DSN#">
-							DELETE from t_TextBlock WHERE TextBlockID=#Val(ThisID)#
-						</cfquery>
-					--->
 				</cfloop>
 				
-				<!--- Start of save of product family views --->
-				<cfquery name="GetPrev" datasource="#APPLICATION.DSN#">
-					select * from qry_GetResource
-					WHERE KeyID=#Val(thisCategoryID)# and Entity='t_Category' and languageID=#Val(ThisLanguageID)#
-					Order by ResourcePriority
-				</cfquery>
-				<cfset OriginalList=ValueList(GetPrev.ResourceID)>
-				<cfset NewList="">
-				<cfloop index="r" from="1" to="#ArrayLen(thisaProductFamilyView)#">
-					<cfif thisaProductFamilyView[r].ResourceID GT "0">
-						<cfset NewList=ListAppend(NewList,thisaProductFamilyView[r].ResourceID)>
-					</cfif>
-				</cfloop>
+				<cfinvoke component="/com/product/ResourceHandler" method="SaveResource" returnVariable="bSuccess">
+					<cfinvokeargument name="aResource" value="#thisaProductFamilyView#">
+					<cfinvokeargument name="CategoryID" value="#ThisCategoryID#">
+					<cfinvokeargument name="LanguageID" value="#ThisLanguageID#">
+					<cfinvokeargument name="ResourceTypeID" value="9000">
+				</cfinvoke>
 				
-				<CF_Venn
-					ListA="#OriginalList#"
-					ListB="#NewList#"
-					AnotB="ListToDelete">
-					
-				<cfloop index="r" from="1" to="#ArrayLen(thisaProductFamilyView)#">
-					<cfset ThisPriority=r*10>
-					<cfset ThisSpecificationSetID=thisaProductFamilyView[r].SpecificationSetID>
-					<cfif thisaProductFamilyView[r].ResourceID GT "0">
-						<cfset ThisResourceID=thisaProductFamilyView[r].ResourceID>
-						<cfquery name="update" datasource="#APPLICATION.DSN#">
-							update t_Resource Set
-							ResourcePriority=#Val(ThisPriority)#,
-							SpecificationSetID=#Val(ThisSpecificationSetID)#
-							WHERE ResourceID=#Val(ThisResourceID)#
-						</cfquery>
-						<cfquery name="Test" datasource="#APPLICATION.DSN#">
-							select * from t_ResourceLanguage WHERE ResourceID=#Val(ThisResourceID)# and LanguageID=#Val(ThisLanguageID)#
-						</cfquery>
-						<cfif Test.RecordCount IS "0">
-							<cfquery name="insert" datasource="#APPLICATION.DSN#">
-								Insert into t_ResourceLanguage 
-								(ResourceName, ResourceText, MainFilePath, ThumbnailFilePath, ResourceID, LanguageID)
-								VALUES
-								(N'#Trim(thisaProductFamilyView[r].ResourceName)#',
-								N'#Trim(thisaProductFamilyView[r].ResourceText)#',
-								 '#Trim(thisaProductFamilyView[r].MainFilePath)#', '#Trim(thisaProductFamilyView[r].ThumbnailFilePath)#',#Val(ThisResourceID)#, #Val(ThisLanguageID)#)
-							</cfquery>
-						<cfelse>
-							<cfquery name="update" datasource="#APPLICATION.DSN#">
-								update t_ResourceLanguage Set
-								ResourceName=N'#Trim(thisaProductFamilyView[r].ResourceName)#',
-								ResourceText=N'#Trim(thisaProductFamilyView[r].ResourceText)#',
-								MainFilePath='#Trim(thisaProductFamilyView[r].MainFilePath)#', 
-								ThumbnailFilePath='#Trim(thisaProductFamilyView[r].ThumbnailFilePath)#'
-								WHERE ResourceID=#Val(ThisResourceID)# and LanguageID=#Val(ThisLanguageID)#
-							</cfquery>
-						</cfif>
-					<Cfelse>
-						<cfquery name="insert" datasource="#APPLICATION.DSN#">
-							SET NOCOUNT ON
-							INSERT INTO t_Resource 
-							(Entity, KeyID, ResourcePriority, SpecificationSetID)
-							VALUES
-							('t_Category', #Val(thisCategoryID)# , #Val(ThisPriority)#, #Val(ThisSpecificationSetID)#)
-							SELECT NewID=@@Identity
-						</cfquery>
-						<cfset ThisResourceID=insert.NewID>
-						<cfquery name="insert" datasource="#APPLICATION.DSN#">
-							Insert into t_ResourceLanguage 
-							(ResourceName, ResourceText, MainFilePath, ThumbnailFilePath, ResourceID, LanguageID)
-							VALUES
-							(N'#Trim(thisaProductFamilyView[r].ResourceName)#', N'#Trim(thisaProductFamilyView[r].ResourceText)#' ,'#Trim(thisaProductFamilyView[r].MainFilePath)#', '#Trim(thisaProductFamilyView[r].ThumbnailFilePath)#',#Val(ThisResourceID)#, #Val(ThisLanguageID)#)
-						</cfquery>
-					</cfif>
-				</cfloop>
-				
-				<cfloop index="ThisID" list="#ListToDelete#">
-					<!--- Add file delete routines here --->
-					<cfquery name="DeleteOthers2" datasource="#APPLICATION.DSN#">
-						DELETE FROM t_ResourceLanguage
-						WHERE ResourceID=#Val(ThisID)# AND LanguageID = #Val(ThisLanguageID)#
-					</cfquery>
-					<!---
-					<cfquery name="DeleteOthers2" datasource="#APPLICATION.DSN#">
-						UPDATE t_ResourceLanguage SET LanguageID = #-Val(ThisLanguageID)#
-						WHERE ResourceID=#Val(ThisID)# AND LanguageID = #Val(ThisLanguageID)#
-					</cfquery>
-					
-					<cfquery name="DeleteThis" datasource="#APPLICATION.DSN#">
-						DELETE from t_Resource WHERE ResourceID=#Val(ThisID)#
-					</cfquery>
-					--->
-				</cfloop>
+				<cfinvoke component="/com/product/ResourceHandler" method="SaveResource" returnVariable="bSuccess">
+					<cfinvokeargument name="aResource" value="#thisaProductFamilyDownload#">
+					<cfinvokeargument name="CategoryID" value="#ThisCategoryID#">
+					<cfinvokeargument name="LanguageID" value="#ThisLanguageID#">
+					<cfinvokeargument name="ResourceTypeID" value="9001">
+				</cfinvoke>
 				
 			</cftransaction>
 			
@@ -593,7 +538,7 @@
 				filefield="#ARGUMENTS.FormFileFieldName#"
 				destination="#UploadDirectory#"
 				nameconflict="MakeUnique">
-			<cfset UploadedFile=REQUEST.ScrubFileName(File.ServerDirectory,File.ServerFile)>
+			<cfset UploadedFile="#File.ServerDirectory#\#APPLICATION.UtilsObj.ScrubFileName(File.ServerFile)#">
 			<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 				<cffile action="DELETE" file="#UploadedFile#">
 				<cfset SetProperty("#ARGUMENTS.Property#","")>

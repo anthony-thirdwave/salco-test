@@ -38,7 +38,7 @@
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageOff","off image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageOn","on image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageRollover","highlight image",1)>
-	<cfset structInsert(sPropertyDisplayName,"CategoryImageHeader","header image",1)>
+	<cfset structInsert(sPropertyDisplayName,"CategoryImageHeader","hero image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageTitle","title image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageRepresentative","representative image",1)>
 	<cfset structInsert(sPropertyDisplayName,"MetaKeywords","meta keywords",1)>
@@ -61,14 +61,16 @@
 		returnVariable="GetAllCategoryType">
 	<cfloop index="ThisCategoryTypeID" list="#ValueList(GetAllCategoryType.LabelID)#">
 		<cfswitch expression="#ThisCategoryTypeID#">
-
+			<cfcase value="62"><!--- Product Family--->
+				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRollover">
+			</cfcase>
+			<cfcase value="64"><!--- Product --->
+				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader">
+			</cfcase>
+			<cfcase value="63"><!--- Product Series--->
+				<cfset this.sFields[ThisCategoryTypeID]="CSSClass">
+			</cfcase>
 				<!--- Not Used --->
-				<cfcase value="64"><!--- Product --->
-					<cfset this.sFields[ThisCategoryTypeID]="CSSID,CallToActionURL">
-				</cfcase>
-				<cfcase value="63"><!--- Product Series--->
-					<cfset this.sFields[ThisCategoryTypeID]="CSSClass">
-				</cfcase>
 				<cfcase value="69"><!--- Press Release--->
 					<cfset this.sFields[ThisCategoryTypeID]="Byline1,Byline2">
 				</cfcase>

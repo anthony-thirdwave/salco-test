@@ -148,10 +148,10 @@
 					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
 				</cfcase>
 				<cfcase value="62"><!--- Product Family --->
-					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed,ProductBrandLogoID,ProductProgramTypeID,ColorID">
+					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed">
 				</cfcase>
 				<cfcase value="64"><!--- Product --->
-					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed,ProductConsoleTypeID,ColorID">
+					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,ShowInNavigation,CategoryIndexed">
 				</cfcase>
 			<!--- End Not Used --->
 			<cfdefaultcase><!--- Default --->

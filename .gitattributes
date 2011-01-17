@@ -344,6 +344,7 @@ code/webroot/common/images/vertbar.full.length.gif -text
 code/webroot/common/images/wgt_aigalogo.gif -text
 code/webroot/common/images/wgt_close_monochrome.gif -text
 code/webroot/common/images/wgt_sendemail_monochrome.gif -text
+code/webroot/common/images/widget_arrow_bottom_grey.gif -text
 code/webroot/common/images/widget_arrow_down.gif -text
 code/webroot/common/images/widget_arrow_down2.gif -text
 code/webroot/common/images/widget_arrow_down_grey.gif -text
@@ -351,6 +352,7 @@ code/webroot/common/images/widget_arrow_left.gif -text
 code/webroot/common/images/widget_arrow_left_grey.gif -text
 code/webroot/common/images/widget_arrow_right.gif -text
 code/webroot/common/images/widget_arrow_right_grey.gif -text
+code/webroot/common/images/widget_arrow_top_grey.gif -text
 code/webroot/common/images/widget_arrow_up.gif -text
 code/webroot/common/images/widget_arrow_up2.gif -text
 code/webroot/common/images/widget_arrow_up_grey.gif -text

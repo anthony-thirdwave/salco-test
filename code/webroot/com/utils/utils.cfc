@@ -113,7 +113,18 @@
 		<cfreturn local.returnValue>
 	</cffunction>
 
-
+	<cffunction name="ScrubUploadedFileName" returntype="string" output="false">
+		<cfargument name="ServerDirectory" default="" type="String" required="true">
+		<cfargument name="ServerFile" default="" type="String" required="true">
+		
+		<cfif scrubFileName(ARGUMENTS.ServerFile) IS NOT ARGUMENTS.ServerFile>
+			<cffile action="RENAME" source="#ARGUMENTS.ServerDirectory#/#ARGUMENTS.ServerFile#" destination="#ARGUMENTS.ServerDirectory#\#scrubFileName(ARGUMENTS.ServerFile)#">
+			<cfset ReturnString="#ARGUMENTS.ServerDirectory#\#scrubFileName(ARGUMENTS.ServerFile)#">
+		<cfelse>
+			<cfset ReturnString="#ARGUMENTS.ServerDirectory#\#ARGUMENTS.ServerFile#">
+		</cfif>
+		<cfreturn ReturnString>
+	</cffunction>
 
 
 	<cffunction name="RemoveHTML" returntype="string" output="false">

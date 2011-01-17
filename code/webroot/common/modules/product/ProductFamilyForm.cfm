@@ -43,25 +43,12 @@
 
 <cfif OpenAndCloseFormTables><table width="100%"></cfif>
 
-<TR><TD bgcolor="bac0c9" colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><TD><b>Product Family Details</b></TD>
+<TR><TD colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0"><TR><TD></TD>
 
 <TD align="right">
-<cfif FormMode IS "ShowForm" and SESSION.AdminUserLocaleID IS "1" and 0>
-	<select name="NewLanguageID">
-		<cfoutput query="qLanguages">
-			<option value="#LabelID#" <cfif FormLanguageID IS LabelID>selected</cfif>> #LabelName#</option>
-		</cfoutput>
-	</select>
-	<input type="submit" name="ButSubmitSavePassThru" value="Apply & Switch Language">
-<cfelse>
-	<cfoutput query="qLanguages">
-		<cfif FormLanguageID IS LabelID>Product Family Language: #LabelName#</cfif>
-	</cfoutput>
-</cfif>
-	
 </TD></TR></table></TD></TR>
 <cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
-	<TR><TD bgcolor="bac0c9" colspan="3" align="right">Load Product Family Data From: 
+	<TR><TD colspan="3" align="right">Load Product Family Data From: 
 	<select name="plclid">
 		<option value="-1">Select...</option>
 		<cfoutput query="qProductLanguages">
@@ -80,7 +67,7 @@
 	caption="Product Family Description" 
 	ObjectName="MyProductFamily"
 	PropertyName="ProductFamilyDescription"
-	cols="40" rows="10"
+	cols="60" rows="6"
 	EscapeCRLF="No"
 	Required="N">
 	
@@ -88,7 +75,7 @@
 <cfset sImageName=StructNew()>
 <cfset StructInsert(sImageName,"ProductFamilyBrochurePath","Family Brochure File",1)>
 
-<cfloop index="ThisImage" list="ProductFamilyBrochurePath">
+<cfloop index="ThisImage" list="">
 	<cfparam name="Delete#ThisImage#" default="0">
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
@@ -107,17 +94,9 @@
 			Required="N">
 	</cfif>
 </cfloop>
-
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-	ObjectAction="#FormMode#"
-	type="checkbox" 
-	caption="Override all product brochures?"
-	ObjectName="MyProductFamily"
-	PropertyName="ProductFamilyBrochurePathOverride"
-	Required="N">
 	
-<TR><TD bgcolor="bac0c9" colspan="3"><b>Key Features</b></TD></TR>
-<TR><TD bgcolor="bac0c9"></TD><TD colspan="2" bgcolor="EAEAEA">
+<TR><TD colspan="3"><b>Key Features</b></TD></TR>
+<TR><TD></TD><TD colspan="2">
 <table width="100%"><TR><TD>
 <cfset aProductFamilyFeature=MyProductFamily.GetProperty("aProductFamilyFeature")>
 <TR><TD><strong>Text</strong></TD><TD><cfif ShowAdmin><strong>Spec Set</strong></cfif></TD><TD><cfif ArrayLen(aProductFamilyFeature) GT "0" and FormMode IS "ShowForm" and ShowAdmin><strong>Remove?</strong></cfif></TD></TR>
@@ -125,8 +104,8 @@
 
 <cfloop index="fi" from="1" to="#ArrayLen(aProductFamilyFeature)#" step="1">
 	<cfif FormMode IS "ShowForm">
-		<TR><TD>
-		<cfoutput><textarea cols="40" rows="5" name="KeyFeatureText_#fi#">#HTMLEditFormat(aProductFamilyFeature[fi].TextBlock)#</textarea></cfoutput>
+		<tr valign="top"><TD>
+		<cfoutput><textarea cols="60" rows="3" name="KeyFeatureText_#fi#">#HTMLEditFormat(aProductFamilyFeature[fi].TextBlock)#</textarea></cfoutput>
 		</TD><TD>
 		<cfif ShowAdmin>
 		<cfoutput><select name="KeyFeatureSpecificationSetID_#fi#"></cfoutput>
@@ -157,7 +136,7 @@
 <cfoutput><input type="hidden" name="NumKeyFeatures" value="#fi#"></cfoutput>
 <cfif FormMode IS "ShowForm">
 	<TR><TD>
-		<textarea cols="40" rows="5" name="KeyFeatureText_New"></textarea>
+		<textarea cols="60" rows="3" name="KeyFeatureText_New"></textarea>
 		</TD>
 	<TD>
 	<cfif ShowAdmin>
@@ -175,22 +154,14 @@
 </TD></TR>
 
 
-<TR><TD bgcolor="bac0c9" colspan="3"><b>Views</b></TD></TR>
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
-	ObjectAction="#FormMode#"
-	type="text"
-	caption="Product View Label" 
-	ObjectName="MyProductFamily"
-	PropertyName="ProductViewLabel"
-	size="40" maxlength="128"
-	Required="N">
-	
-<TR><TD bgcolor="bac0c9"></TD><TD colspan="2" bgcolor="EAEAEA">
+<TR><TD colspan="3"><b>Images</b></TD></TR>
+
+<TR><TD></TD><TD colspan="2">
 <table width="100%"><TR><TD>
 <cfset aProductFamilyView=MyProductFamily.GetProperty("aProductFamilyView")>
 <TR>
 <TD><strong>Name</strong></TD>
-<TD><strong>Text</strong></TD>
+<TD><strong>Caption</strong></TD>
 <TD><strong>File</strong></TD>
 <TD></TD>
 <TD><cfif ShowAdmin><strong>Spec Set</strong></cfif></TD>
@@ -202,17 +173,17 @@
 	<cfif FormMode IS "ShowForm"><cfoutput>
 		<tr valign="top">
 		<TD>
-		<input type="text" name="ResourceName_#fi#" value="#aProductFamilyView[fi].ResourceName#" size="20" maxlength="128">
+		<input type="text" name="ResourceName_Image_#fi#" value="#aProductFamilyView[fi].ResourceName#" size="20" maxlength="128">
 		</TD>
 		<TD>
-		<textarea cols="40" rows="5" name="ResourceText_#fi#">#aProductFamilyView[fi].ResourceText#</textarea>
+		<textarea cols="60" rows="3" name="ResourceText_Image_#fi#">#aProductFamilyView[fi].ResourceText#</textarea>
 		</TD>
 		
-		<TD>Main:<BR><cfif aProductFamilyView[fi].MainFilePath IS NOT ""><img src="#aProductFamilyView[fi].MainFilePath#"></cfif><input type="hidden" name="MainFilePath_#fi#" value="#aProductFamilyView[fi].MainFilePath#"><BR>
-		<input type="file" name="MainFilePath_#fi#FileObject"><br>
+		<TD>Main:<BR><cfif aProductFamilyView[fi].MainFilePath IS NOT ""><img src="#aProductFamilyView[fi].MainFilePath#" width="50"></cfif><input type="hidden" name="MainFilePath_Image_#fi#" value="#aProductFamilyView[fi].MainFilePath#"><BR>
+		<input type="file" name="MainFilePath_Image_#fi#FileObject"><br>
 		Thumbnail:<BR>
-		<cfif aProductFamilyView[fi].ThumbnailFilePath IS NOT ""><img src="#aProductFamilyView[fi].ThumbnailFilePath#"></cfif><input type="hidden" name="ThumbnailFilePath_#fi#" value="#aProductFamilyView[fi].ThumbnailFilePath#"><BR>
-		<input type="file" name="ThumbnailFilePath_#fi#FileObject">
+		<cfif aProductFamilyView[fi].ThumbnailFilePath IS NOT ""><img src="#aProductFamilyView[fi].ThumbnailFilePath#"></cfif><input type="hidden" name="ThumbnailFilePath_Image_#fi#" value="#aProductFamilyView[fi].ThumbnailFilePath#"><BR>
+		<input type="file" name="ThumbnailFilePath_Image_#fi#FileObject">
 		</TD>
 		<!--- sort icons --->
 		<TD nowrap>
@@ -226,48 +197,48 @@
 			</cfif>
 		</TD><!--- end sort icons ---><TD>
 		<cfif ShowAdmin>
-			<cfoutput><select name="ResourceSpecificationSetID_#fi#"></cfoutput>
+			<cfoutput><select name="ResourceSpecificationSetID_Image_#fi#"></cfoutput>
 			<cfloop query="qSpecificationType">
 				<option value="#qSpecificationType.LabelID#" <cfif qSpecificationType.LabelID IS aProductFamilyView[fi].SpecificationSetID>selected</cfif>>#qSpecificationType.LabelName#</option>
 			</cfloop></select>
 		<cfelse>
-			<cfoutput><input type="hidden" name="ResourceSpecificationSetID_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].SpecificationSetID)#"></cfoutput>
+			<cfoutput><input type="hidden" name="ResourceSpecificationSetID_Image_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].SpecificationSetID)#"></cfoutput>
 		</cfif></TD>
 		
-		<TD><cfif ShowAdmin><cfoutput><input type="checkbox" name="ResourceDelete_#fi#" value="1"></cfoutput></cfif>
-		</TD></TR><input type="hidden" name="ResourceID_#fi#" value="#URLEncodedFormat(Encrypt(aProductFamilyView[fi].ResourceID,APPLICATION.Key))#"></cfoutput>
+		<TD><cfif ShowAdmin><cfoutput><input type="checkbox" name="ResourceDelete_Image_#fi#" value="1"></cfoutput></cfif>
+		</TD></TR><input type="hidden" name="ResourceID_Image_#fi#" value="#URLEncodedFormat(Encrypt(aProductFamilyView[fi].ResourceID,APPLICATION.Key))#"></cfoutput>
 	<cfelse>
 		<cfoutput><TR>
 		<TD>#aProductFamilyView[fi].ResourceName#</TD>
 		<TD>#aProductFamilyView[fi].ResourceText#</TD>
 		<TD>
-		Main:<BR><img src="#aProductFamilyView[fi].MainFilePath#"><input type="hidden" name="MainFilePath_#fi#" value="#aProductFamilyView[fi].MainFilePath#"><BR>
-		Thumbnail:<BR><img src="#aProductFamilyView[fi].ThumbnailFilePath#"><input type="hidden" name="ThumbnailFilePath_#fi#" value="#aProductFamilyView[fi].ThumbnailFilePath#"></TD>
+		Main:<BR><img src="#aProductFamilyView[fi].MainFilePath#"><input type="hidden" name="MainFilePath_Image_#fi#" value="#aProductFamilyView[fi].MainFilePath#"><BR>
+		Thumbnail:<BR><img src="#aProductFamilyView[fi].ThumbnailFilePath#"><input type="hidden" name="ThumbnailFilePath_Image_#fi#" value="#aProductFamilyView[fi].ThumbnailFilePath#"></TD>
 		<TD></TD>
 		<TD><cfloop query="qSpecificationType"><cfif qSpecificationType.LabelID IS aProductFamilyView[fi].SpecificationSetID>#qSpecificationType.LabelName#</cfif></cfloop></TD>
 		<TD>
-		<input type="hidden" name="ResourceSpecificationSetID_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].SpecificationSetID)#">
-		<input type="hidden" name="ResourceName_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].ResourceName)#">
-		<input type="hidden" name="ResourceText_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].ResourceText)#">
-		<input type="hidden" name="ResourceID_#fi#" value="#URLEncodedFormat(Encrypt(aProductFamilyView[fi].ResourceID,APPLICATION.Key))#"></TD></tR></cfoutput>
+		<input type="hidden" name="ResourceSpecificationSetID_Image_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].SpecificationSetID)#">
+		<input type="hidden" name="ResourceName_Image_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].ResourceName)#">
+		<input type="hidden" name="ResourceText_Image_#fi#" value="#HTMLEditFormat(aProductFamilyView[fi].ResourceText)#">
+		<input type="hidden" name="ResourceID_Image_#fi#" value="#URLEncodedFormat(Encrypt(aProductFamilyView[fi].ResourceID,APPLICATION.Key))#"></TD></tR></cfoutput>
 	</cfif>
 </cfloop>
-<cfoutput><input type="hidden" name="NumViews" value="#fi#"></cfoutput>
+<cfoutput><input type="hidden" name="NumImages" value="#fi#"></cfoutput>
 <cfif FormMode IS "ShowForm">
 	<tr valign="top">
 		<TD>
-		<input type="text" name="ResourceName_New" value="" size="20" maxlength="128">
+		<input type="text" name="ResourceName_image_New" value="" size="20" maxlength="128">
 		</TD>
 		<TD>
-		<textarea cols="40" rows="5" name="ResourceText_New"></textarea>
+		<textarea cols="60" rows="3" name="ResourceText_image_New"></textarea>
 		</TD>
 		<TD>Main:<BR>
-		<input type="file" name="MainFilePath_NewFileObject"><br>
+		<input type="file" name="MainFilePath_image_NewFileObject"><br>
 		Thumbnail:<BR>
-		<input type="file" name="ThumbnailFilePath_NewFileObject"></TD>
+		<input type="file" name="ThumbnailFilePath_image_NewFileObject"></TD>
 		<TD></TD>
 		<TD><cfif ShowAdmin>
-	<select name="ResourceSpecificationSetID_new">
+	<select name="ResourceSpecificationSetID_image_new">
 	<cfoutput query="qSpecificationType">
 		<option value="#LabelID#">#LabelName#</option>
 	</cfoutput>
@@ -275,19 +246,111 @@
 	</TD>
 	<TD></TD></TR>
 	
-	<TR><TD colspan="6" align="right"><input type="submit" value="Update Views"></TD></TR>
+	<TR><TD colspan="6" align="right"><input type="submit" value="Update Images"></TD></TR>
 </cfif>
 
 </table>
 </TD></TR>
 
-<!--- <TR><TD bgcolor="bac0c9" colspan="3"><b>
+<TR><TD colspan="3"><b>Downloads</b></TD></TR>
+
+<TR><TD></TD><TD colspan="2">
+<table width="100%"><TR><TD>
+<cfset aProductFamilyDownload=MyProductFamily.GetProperty("aProductFamilyDownload")>
+<TR>
+<TD><strong>Name</strong></TD>
+<TD><strong>Caption</strong></TD>
+<TD><strong>File</strong></TD>
+<TD></TD>
+<TD><cfif ShowAdmin><strong>Spec Set</strong></cfif></TD>
+<TD><cfif ArrayLen(aProductFamilyDownload) GT "0" and FormMode IS "ShowForm" and ShowAdmin><strong>Remove?</strong></cfif></TD>
+</TR>
+
+
+<cfloop index="fi" from="1" to="#ArrayLen(aProductFamilyDownload)#" step="1">
+	<cfif FormMode IS "ShowForm"><cfoutput>
+		<tr valign="top">
+		<TD>
+		<input type="text" name="ResourceName_Download_#fi#" value="#aProductFamilyDownload[fi].ResourceName#" size="20" maxlength="128">
+		</TD>
+		<TD>
+		<textarea cols="60" rows="3" name="ResourceText_Download_#fi#">#aProductFamilyDownload[fi].ResourceText#</textarea>
+		</TD>
+		
+		<TD>Main:<BR><cfif aProductFamilyDownload[fi].MainFilePath IS NOT ""><a href="#aProductFamilyDownload[fi].MainFilePath#" target="_blank">#ListLast(aProductFamilyDownload[fi].MainFilePath,"/")#</a></cfif><input type="hidden" name="MainFilePath_Download_#fi#" value="#aProductFamilyDownload[fi].MainFilePath#"><BR>
+		<input type="file" name="MainFilePath_Download_#fi#FileObject">
+		</TD>
+		<!--- sort icons --->
+		<TD nowrap>
+			<!--- need put the sort module in here --->
+			<cfif ArrayLen(aProductFamilyDownload) GT "1" and ShowAdmin> <!--- more views than 1 and user is master admin, show sort options --->
+				<cfmodule template="/common/modules/product/ProductArraySort.cfm"
+					ThisArray="#aProductFamilyDownload#"
+					ThisFormID="downloads"
+					IsDisplay="1"
+					SortIndex="#fi#">
+			</cfif>
+		</TD><!--- end sort icons ---><TD>
+		<cfif ShowAdmin>
+			<cfoutput><select name="ResourceSpecificationSetID_Download_#fi#"></cfoutput>
+			<cfloop query="qSpecificationType">
+				<option value="#qSpecificationType.LabelID#" <cfif qSpecificationType.LabelID IS aProductFamilyDownload[fi].SpecificationSetID>selected</cfif>>#qSpecificationType.LabelName#</option>
+			</cfloop></select>
+		<cfelse>
+			<cfoutput><input type="hidden" name="ResourceSpecificationSetID_Download_#fi#" value="#HTMLEditFormat(aProductFamilyDownload[fi].SpecificationSetID)#"></cfoutput>
+		</cfif></TD>
+		
+		<TD><cfif ShowAdmin><cfoutput><input type="checkbox" name="ResourceDelete_Download_#fi#" value="1"></cfoutput></cfif>
+		</TD></TR><input type="hidden" name="ResourceID_Download_#fi#" value="#URLEncodedFormat(Encrypt(aProductFamilyDownload[fi].ResourceID,APPLICATION.Key))#"></cfoutput>
+	<cfelse>
+		<cfoutput><TR>
+		<TD>#aProductFamilyDownload[fi].ResourceName#</TD>
+		<TD>#aProductFamilyDownload[fi].ResourceText#</TD>
+		<TD>
+		Main:<BR><a href="#aProductFamilyDownload[fi].MainFilePath#" target="_blank">#ListLast(aProductFamilyDownload[fi].MainFilePath,"/")#</a><input type="hidden" name="MainFilePath_Download_#fi#" value="#aProductFamilyDownload[fi].MainFilePath#"></TD>
+		<TD></TD>
+		<TD><cfloop query="qSpecificationType"><cfif qSpecificationType.LabelID IS aProductFamilyDownload[fi].SpecificationSetID>#qSpecificationType.LabelName#</cfif></cfloop></TD>
+		<TD>
+		<input type="hidden" name="ResourceSpecificationSetID_Download_#fi#" value="#HTMLEditFormat(aProductFamilyDownload[fi].SpecificationSetID)#">
+		<input type="hidden" name="ResourceName_Download_#fi#" value="#HTMLEditFormat(aProductFamilyDownload[fi].ResourceName)#">
+		<input type="hidden" name="ResourceText_Download_#fi#" value="#HTMLEditFormat(aProductFamilyDownload[fi].ResourceText)#">
+		<input type="hidden" name="ResourceID_Download_#fi#" value="#URLEncodedFormat(Encrypt(aProductFamilyDownload[fi].ResourceID,APPLICATION.Key))#"></TD></tR></cfoutput>
+	</cfif>
+</cfloop>
+<cfoutput><input type="hidden" name="NumDownloads" value="#fi#"></cfoutput>
+<cfif FormMode IS "ShowForm">
+	<tr valign="top">
+		<TD>
+		<input type="text" name="ResourceName_Download_New" value="" size="20" maxlength="128">
+		</TD>
+		<TD>
+		<textarea cols="60" rows="3" name="ResourceText_Download_New"></textarea>
+		</TD>
+		<TD>Main:<BR>
+		<input type="file" name="MainFilePath_Download_NewFileObject"></TD>
+		<TD></TD>
+		<TD><cfif ShowAdmin>
+	<select name="ResourceSpecificationSetID_Download_new">
+	<cfoutput query="qSpecificationType">
+		<option value="#LabelID#">#LabelName#</option>
+	</cfoutput>
+	</select></cfif>
+	</TD>
+	<TD></TD></TR>
+	
+	<TR><TD colspan="6" align="right"><input type="submit" value="Update Downloads"></TD></TR>
+</cfif>
+
+</table>
+</TD></TR>
+
+<!--- <TR><TD colspan="3"><b>
 <cfdump var="#MyCategory.getAllErrorMessages()#">
 </b></TD></TR> --->
-<TR><TD bgcolor="bac0c9" colspan="3"><b>Product Family Comparison Chart</b></TD></TR>
+<TR><TD colspan="3"><b>Product Family Comparison Chart</b></TD></TR>
 
 <cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
-	<TR><TD bgcolor="bac0c9" colspan="3" align="right">Load Family Comparison Chart Only From: 
+	<TR><TD colspan="3" align="right">Load Family Comparison Chart Only From: 
 	<select name="plclid2">
 		<option value="-1">Select...</option>
 		<cfoutput query="qProductLanguages">
@@ -300,7 +363,7 @@
 </cfif>
 
 
-<TR><TD bgcolor="bac0c9">&nbsp;</TD><TD colspan="2" bgcolor="EAEAEA">
+<TR><TD>&nbsp;</TD><TD colspan="2">
 <cfset aAttr=MyProductFamily.GetProperty("aProductFamilyAttribute")>
 <table width="100%">
 <TR><TD>&nbsp;</TD>

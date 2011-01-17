@@ -6,16 +6,16 @@
 <cfif Attributes.IsDisplay eq 0> <!--- process --->
 	<!--- ordering logic (going to need ones for both the reviews and key features), or better, a function that handles this, takes an index, an arrayname --->
 	<cfloop index="r" from="1" to="#ArrayLen(Attributes.ThisArray)#" step="1"> <!--- loop through array of items --->				
-		<cfif isdefined("#Attributes.ThisFormID#_ButtonSubmit_up_#r#.x") OR isdefined("#Attributes.ThisFormID#_ButtonSubmit_down_#r#.x") OR isdefined("#Attributes.ThisFormID#_ButtonSubmit_bottom_#r#.x") OR isdefined("#Attributes.ThisFormID#_ButtonSubmit_top_#r#.x")> <!--- if submitted (up or down --->
-			<cfif isdefined("#Attributes.ThisFormID#_ButtonSubmit_up_#r#.x")> <!--- up --->
+		<cfif isdefined("#Attributes.ThisFormID#_ButtonSubmit_up_#r#") OR isdefined("#Attributes.ThisFormID#_ButtonSubmit_down_#r#") OR isdefined("#Attributes.ThisFormID#_ButtonSubmit_bottom_#r#") OR isdefined("#Attributes.ThisFormID#_ButtonSubmit_top_#r#")> <!--- if submitted (up or down --->
+			<cfif isdefined("#Attributes.ThisFormID#_ButtonSubmit_up_#r#")> <!--- up --->
 				<cfset TempStruct=Attributes.ThisArray[r]> <!--- hold the one in r --->
 				<cfset Attributes.ThisArray[r]=Attributes.ThisArray[r-1]> <!--- set r as the next one --->
 				<cfset Attributes.ThisArray[r-1]=TempStruct> <!--- move the temp back in --->
-			<cfelseif isdefined("#Attributes.ThisFormID#_ButtonSubmit_down_#r#.x")> <!--- down --->
+			<cfelseif isdefined("#Attributes.ThisFormID#_ButtonSubmit_down_#r#")> <!--- down --->
 				<cfset TempStruct=Attributes.ThisArray[r]>
 				<cfset Attributes.ThisArray[r]=Attributes.ThisArray[r+1]>
 				<cfset Attributes.ThisArray[r+1]=TempStruct>
-			<cfelseif isdefined("#Attributes.ThisFormID#_ButtonSubmit_top_#r#.x")> <!--- top --->
+			<cfelseif isdefined("#Attributes.ThisFormID#_ButtonSubmit_top_#r#")> <!--- top --->
 			<!--- here we will need to hold everything on top of the moving one, or we just loop through moving one at a time --->
 				<cfset thisTop = r-2/>
 				<cfloop index="q" from="0" to="#thisTop#" step="1">
@@ -24,7 +24,7 @@
 					<cfset Attributes.ThisArray[thisItem]=Attributes.ThisArray[thisItem-1]>
 					<cfset Attributes.ThisArray[thisItem-1]=TempStruct>
 				</cfloop>
-			<cfelseif isdefined("#Attributes.ThisFormID#_ButtonSubmit_bottom_#r#.x")> <!--- bottom --->
+			<cfelseif isdefined("#Attributes.ThisFormID#_ButtonSubmit_bottom_#r#")> <!--- bottom --->
 				<cfset thisbottom = #ArrayLen(Attributes.ThisArray)#-1/>
 				<cfloop index="q" from="#r#" to="#thisbottom#" step="1">
 					<cfset TempStruct=Attributes.ThisArray[q]>
@@ -34,6 +34,7 @@
 			</cfif> <!--- up or down --->
 		</cfif> <!--- end is submitted --->
 	</cfloop> <!--- end loop through array of items --->
+	<cfset CALLER.ReturnSortArray=Attributes.ThisArray>
 <cfelse> <!--- is display --->
 	<cfoutput>
 		

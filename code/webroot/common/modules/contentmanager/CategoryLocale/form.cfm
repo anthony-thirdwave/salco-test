@@ -221,11 +221,11 @@
 	<cfset sImageName=StructNew()>
 	<cfset StructInsert(sImageName,"CategoryImageOff","Navigation Image: Off",1)>
 	<cfset StructInsert(sImageName,"CategoryImageOn","Navigation Image: On",1)>
-	<cfset StructInsert(sImageName,"CategoryImageRollover","Navigation Image: Rollover",1)>
+	<cfset StructInsert(sImageName,"CategoryImageRollover","Navigation Rollover Image",1)>
 	<cfif MyCategory.GetProperty("CategoryTypeID") EQ 66>
 		<cfset StructInsert(sImageName,"CategoryImageHeader","Featured Thumbnail <small>(285 x 128)</small>",1)>
 	<cfelse>
-		<cfset StructInsert(sImageName,"CategoryImageHeader","Header Image",1)>
+		<cfset StructInsert(sImageName,"CategoryImageHeader","Hero Image",1)>
 	</cfif>
 	<cfset StructInsert(sImageName,"CategoryImageTitle","Title Image",1)>
 	<cfset StructInsert(sImageName,"CategoryImageRepresentative","Thumbnail Image <small>(75px x 75px)</small>",1)>

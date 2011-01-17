@@ -180,6 +180,7 @@
 					</cfif>
 				</cfif>
 			</cfloop>
+			
 			<cfif 0>
 				<cfloop index="r" from="1" to="#ArrayLen(aAttr)#" step="1">
 					<cfif isdefined("ButtonSubmit_up_#r#.x") OR isdefined("ButtonSubmit_down_#r#.x")>
@@ -258,46 +259,46 @@
 			
 			<cfset MyProductFamily.SetProperty("aProductFamilyFeature",aProductFamilyFeature)>
 			
+			<!--- Start of Product Family Images handling --->
 			<cfset aProductFamilyView=arrayNew(1)>
 			<cfset lIndexToDelete="">
-			<cfloop index="r" from="1" to="#NumViews#" step="1">
-				<cfparam name="ResourceID_#r#" default="-1">
-				<cfparam name="ResourceName_#r#" default="">
-				<cfparam name="ResourceText_#r#" default="">
-				<cfparam name="MainFilePath_#r#" default="">
-				<cfparam name="ThumbnailFilePath_#r#" default="">
-				<cfparam name="ResourceDelete_#r#" default="0">
-				<cfparam name="ResourceSpecificationSetID_#r#" default="8000">
+			<cfloop index="r" from="1" to="#NumImages#" step="1">
+				<cfparam name="ResourceID_image_#r#" default="-1">
+				<cfparam name="ResourceName_image_#r#" default="">
+				<cfparam name="ResourceText_image_#r#" default="">
+				<cfparam name="MainFilePath_image_#r#" default="">
+				<cfparam name="ThumbnailFilePath_image_#r#" default="">
+				<cfparam name="ResourceDelete_image_#r#" default="0">
+				<cfparam name="ResourceSpecificationSetID_image_#r#" default="8000">
 				<cfset ThisResourceID="-1">
 				<cftry>
-					<cfset ThisResourceID=Decrypt(URLDecode(Evaluate("ResourceID_#r#")),APPLICATION.Key)>
+					<cfset ThisResourceID=Decrypt(URLDecode(Evaluate("ResourceID_image_#r#")),APPLICATION.Key)>
 					<cfcatch><cfset ThisResourceID="-1"></cfcatch>
 				</cftry>
 				
-				<cfif (Evaluate("ResourceName_#r#") IS NOT "" or Evaluate("ResourceText_#r#") IS NOT "") AND Evaluate("ResourceDelete_#r#") IS "0">
+				<cfif (Evaluate("ResourceName_image_#r#") IS NOT "" or Evaluate("ResourceText_image_#r#") IS NOT "") AND Evaluate("ResourceDelete_image_#r#") IS "0">
 					<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
-						<cfif IsDefined("FORM.#ThisImage#_#r#FileObject") AND evaluate("FORM.#ThisImage#_#r#FileObject") IS NOT "">
+						<cfif IsDefined("FORM.#ThisImage#_image_#r#FileObject") AND evaluate("FORM.#ThisImage#_image_#r#FileObject") IS NOT "">
 							<cffile action="UPLOAD" 
-								filefield="FORM.#ThisImage#_#r#FileObject" 
+								filefield="FORM.#ThisImage#_image_#r#FileObject" 
 								destination="#MyCategory.GetResourceFilePath('images',APPLICATION.WebrootPath)#"
 								nameconflict="MAKEUNIQUE">
-							<cfset UploadedFile=REQUEST.ScrubFileName(File.ServerDirectory,File.ServerFile)>
+							<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
 							<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 								<cffile action="DELETE" file="#UploadedFile#">
-								<!--- add AddError('aProductFamilyView') here --->
 							<cfelse>
-								<cfset SetVariable("#ThisImage#_#r#",REQUEST.GetURLFromPath(UploadedFile))>
+								<cfset SetVariable("#ThisImage#_image_#r#",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
 							</cfif>
 						</cfif>
 					</cfloop>
-					<cfif (Evaluate("ResourceName_#r#") IS NOT "" or Evaluate("ResourceText_#r#") IS NOT "")>
+					<cfif (Evaluate("ResourceName_image_#r#") IS NOT "" or Evaluate("ResourceText_image_#r#") IS NOT "")>
 						<cfset sElement=StructNew()>
 						<cfset StructInsert(sElement,"ResourceID",ThisResourceID,1)>
-						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_#r#"),1)>
-						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_#r#"),1)>
-						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_#r#"),1)>
-						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_#r#"),1)>
-						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_#r#"),1)>
+						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_image_#r#"),1)>
+						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_image_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_image_#r#"),1)>
+						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_image_#r#"),1)>
+						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_image_#r#"),1)>
 						<cfset ArrayAppend(aProductFamilyView,sElement)>
 					<cfelse>
 						<cfif ThisResourceID GT "0">
@@ -317,53 +318,151 @@
 				ThisFormID="views"
 				IsDisplay="0">
 			
-			<cfif IsDefined("ResourceName_New") AND (Trim(ResourceName_New) IS NOT "" or Trim(ResourceText_New) IS NOT "")>
-				<cfparam name="ResourceSpecificationSetID_new" default="8000">
+			<cfif IsDefined("ResourceName_image_new") AND (Trim(ResourceName_image_new) IS NOT "" or Trim(ResourceText_image_new) IS NOT "")>
+				<cfparam name="ResourceSpecificationSetID_image_new" default="8000">
 				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
-					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND evaluate("FORM.#ThisImage#_NewFileObject") IS NOT "">
+					<cfif IsDefined("FORM.#ThisImage#_image_newFileObject") AND evaluate("FORM.#ThisImage#_image_newFileObject") IS NOT "">
 						<cffile action="UPLOAD" 
-							filefield="FORM.#ThisImage#_newFileObject" 
+							filefield="FORM.#ThisImage#_image_newFileObject" 
 							destination="#MyCategory.GetResourceFilePath('images',APPLICATION.WebrootPath)#"
 							nameconflict="MAKEUNIQUE">
-						<cfset UploadedFile=REQUEST.ScrubFileName(File.ServerDirectory,File.ServerFile)>
+						<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
 						<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 							<cffile action="DELETE" file="#UploadedFile#">
 							<!--- add AddError('aProductFamilyView') here --->
 						<cfelse>
-							<cfset SetVariable("#ThisImage#_New",REQUEST.GetURLFromPath(UploadedFile))>
+							<cfset SetVariable("#ThisImage#_image_new",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
 						</cfif>
 					</cfif>
 				</cfloop>
 				
 				<cfset sElement=StructNew()>
 				<cfset StructInsert(sElement,"ResourceID",-1,1)>
-				<cfset StructInsert(sElement,"ResourceName",ResourceName_New,1)>
-				<cfset StructInsert(sElement,"ResourceText",ResourceText_New,1)>
-				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_new,1)>
-				<cfif IsDefined("MainFilePath_New") AND MainFilePath_New IS NOT "">
-					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_New,1)>
+				<cfset StructInsert(sElement,"ResourceName",ResourceName_image_new,1)>
+				<cfset StructInsert(sElement,"ResourceText",ResourceText_image_new,1)>
+				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_image_new,1)>
+				<cfif IsDefined("MainFilePath_image_new") AND MainFilePath_image_new IS NOT "">
+					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_image_new,1)>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
 				</cfif>
-				<cfif IsDefined("ThumbnailFilePath_new") AND ThumbnailFilePath_new IS NOT "">
-					<cfset StructInsert(sElement,"ThumbnailFilePath",ThumbnailFilePath_new,1)>
+				<cfif IsDefined("ThumbnailFilePath_image_new") AND ThumbnailFilePath_image_new IS NOT "">
+					<cfset StructInsert(sElement,"ThumbnailFilePath",ThumbnailFilePath_image_new,1)>
 				<cfelse>
 					<cfset StructInsert(sElement,"ThumbnailFilePath","",1)>
 				</cfif>
 				<cfset ArrayAppend(aProductFamilyView,sElement)>
 			</cfif>
+			
+			<!--- Start of Product Family Downloads handling --->
+			<cfset aProductFamilyDownload=arrayNew(1)>
+			<cfset lIndexToDelete="">
+			<cfloop index="r" from="1" to="#NumDownloads#" step="1">
+				<cfparam name="ResourceID_download_#r#" default="-1">
+				<cfparam name="ResourceName_download_#r#" default="">
+				<cfparam name="ResourceText_download_#r#" default="">
+				<cfparam name="MainFilePath_download_#r#" default="">
+				<cfparam name="ThumbnailFilePath_download_#r#" default="">
+				<cfparam name="ResourceDelete_download_#r#" default="0">
+				<cfparam name="ResourceSpecificationSetID_download_#r#" default="8000">
+				<cfset ThisResourceID="-1">
+				<cftry>
+					<cfset ThisResourceID=Decrypt(URLDecode(Evaluate("ResourceID_download_#r#")),APPLICATION.Key)>
+					<cfcatch><cfset ThisResourceID="-1"></cfcatch>
+				</cftry>
+				
+				<cfif (Evaluate("ResourceName_download_#r#") IS NOT "" or Evaluate("ResourceText_download_#r#") IS NOT "") AND Evaluate("ResourceDelete_download_#r#") IS "0">
+					<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
+						<cfif IsDefined("FORM.#ThisImage#_download_#r#FileObject") AND evaluate("FORM.#ThisImage#_download_#r#FileObject") IS NOT "">
+							<cffile action="UPLOAD" 
+								filefield="FORM.#ThisImage#_download_#r#FileObject" 
+								destination="#MyCategory.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
+								nameconflict="MAKEUNIQUE">
+							<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
+							<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
+								<cffile action="DELETE" file="#UploadedFile#">
+								<!--- add AddError('aProductFamilyDownload') here --->
+							<cfelse>
+								<cfset SetVariable("#ThisImage#_download_#r#",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
+							</cfif>
+						</cfif>
+					</cfloop>
+					<cfif (Evaluate("ResourceName_download_#r#") IS NOT "" or Evaluate("ResourceText_download_#r#") IS NOT "")>
+						<cfset sElement=StructNew()>
+						<cfset StructInsert(sElement,"ResourceID",ThisResourceID,1)>
+						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_download_#r#"),1)>
+						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_download_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_download_#r#"),1)>
+						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_download_#r#"),1)>
+						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_download_#r#"),1)>
+						<cfset ArrayAppend(aProductFamilyDownload,sElement)>
+					<cfelse>
+						<cfif ThisResourceID GT "0">
+							<cfset lIndexToDelete=ListAppend(lIndexToDelete,r)>
+						</cfif>
+					</cfif>
+				<cfelse>
+					<cfif ThisResourceID GT "0">
+						<cfset lIndexToDelete=ListAppend(lIndexToDelete,r)>
+					</cfif>
+				</cfif>
+			</cfloop>
+			
+			<!--- sort views --->
+			<cfmodule template="/common/modules/product/ProductArraySort.cfm"
+				ThisArray="#aProductFamilyDownload#"
+				ThisFormID="downloads"
+				IsDisplay="0">
+			
+			<cfif IsDefined("ResourceName_download_new") AND (Trim(ResourceName_download_new) IS NOT "" or Trim(ResourceText_download_new) IS NOT "")>
+				<cfparam name="ResourceSpecificationSetID_download_new" default="8000">
+				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
+					<cfif IsDefined("FORM.#ThisImage#_download_newFileObject") AND evaluate("FORM.#ThisImage#_download_newFileObject") IS NOT "">
+						<cffile action="UPLOAD" 
+							filefield="FORM.#ThisImage#_download_newFileObject" 
+							destination="#MyCategory.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
+							nameconflict="MAKEUNIQUE">
+						<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
+						<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
+							<cffile action="DELETE" file="#UploadedFile#">
+							<!--- add AddError('aProductFamilyDownload') here --->
+						<cfelse>
+							<cfset SetVariable("#ThisImage#_download_new",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
+						</cfif>
+					</cfif>
+				</cfloop>
+				
+				<cfset sElement=StructNew()>
+				<cfset StructInsert(sElement,"ResourceID",-1,1)>
+				<cfset StructInsert(sElement,"ResourceName",ResourceName_download_new,1)>
+				<cfset StructInsert(sElement,"ResourceText",ResourceText_download_new,1)>
+				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_download_new,1)>
+				<cfif IsDefined("MainFilePath_download_new") AND MainFilePath_download_new IS NOT "">
+					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_download_new,1)>
+				<cfelse>
+					<cfset StructInsert(sElement,"MainFilePath","",1)>
+				</cfif>
+				<cfif IsDefined("ThumbnailFilePath_download_new") AND ThumbnailFilePath_download_new IS NOT "">
+					<cfset StructInsert(sElement,"ThumbnailFilePath",ThumbnailFilePath_download_new,1)>
+				<cfelse>
+					<cfset StructInsert(sElement,"ThumbnailFilePath","",1)>
+				</cfif>
+				<cfset ArrayAppend(aProductFamilyDownload,sElement)>
+			</cfif>
+			
 			<cfset MyProductFamily.SetProperty("aProductFamilyView",aProductFamilyView)>
+			<cfset MyProductFamily.SetProperty("aProductFamilyDownload",aProductFamilyDownload)>
 			
 			<cfif IsDefined("FORM.ButLoad") AND Val(plclid) GTE "1">
 				<cfset SourceProductFamily=CreateObject("component","com.Product.ProductFamily")>
-				<cfset SourceProductFamily.Constructor(Val(EditCategoryID),REQUEST.SimpleDecrypt(plclid))>
-				<cfloop index="PropertyToCopy" list="ProductFamilyDescription,ProductViewLabel,ProductFamilyBrochurePath,ProductFamilyBrochurePathOverride,aProductFamilyFeature,aProductFamilyView">
+				<cfset SourceProductFamily.Constructor(Val(EditCategoryID),APPLICATION.UtilsObj.SimpleDecrypt(plclid))>
+				<cfloop index="PropertyToCopy" list="ProductFamilyDescription,ProductViewLabel,ProductFamilyBrochurePath,ProductFamilyBrochurePathOverride,aProductFamilyFeature,aProductFamilyView,aProductFamilyDownload">
 					<cfset MyProductFamily.SetProperty("#PropertyToCopy#",SourceProductFamily.GetProperty("#PropertyToCopy#"))>
 				</cfloop>
 			</cfif>
 			<cfif IsDefined("FORM.ButLoad3") AND Val(plclid2) GTE "1">
 				<cfset SourceProductFamily=CreateObject("component","com.Product.ProductFamily")>
-				<cfset SourceProductFamily.Constructor(Val(EditCategoryID),REQUEST.SimpleDecrypt(plclid2))>
+				<cfset SourceProductFamily.Constructor(Val(EditCategoryID),APPLICATION.UtilsObj.SimpleDecrypt(plclid2))>
 				<cfloop index="PropertyToCopy" list="aProductFamilyAttribute">
 					<cfset MyProductFamily.SetProperty("#PropertyToCopy#",SourceProductFamily.GetProperty("#PropertyToCopy#"))>
 				</cfloop>	
@@ -375,7 +474,7 @@
 		<cfset MyProduct=CreateObject("component","com.Product.Product")>
 		<cfset MyProduct.Constructor(Val(EditCategoryID),FormLanguageID)>
 		
-		<cfif IsDefined("FORM.CategoryName") AND IsDefined("FORM.ProductLongName")>
+		<cfif IsDefined("FORM.CategoryName") AND IsDefined("FORM.ProductDescription")>
 			
 			<cfloop index="ThisProperty" list="ProductLongName,ProductShortName,ProductPositioningSentence,ProductDescription,CallToActionURLDeprecated,VideoURL,ColorConfiguratorURL">
 				<cfparam name="FORM.#ThisProperty#" default="">
@@ -383,6 +482,7 @@
 			</cfloop>
 			<cfloop index="ThisImage" list="BrochurePath,CompareGymBrochurePath,ProductThumbnailPath,ProductThumbnailHoverPath,ProductImageSourcePath,ProductImageStorePath">
 				<cfparam name="FORM.Delete#ThisImage#" default="0">
+				<cfparam name="FORM.#ThisImage#" default="">
 				<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
 					<cfset MyProduct.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 				<cfelseif Evaluate("FORM.Delete#ThisImage#") IS "1">
@@ -426,113 +526,52 @@
 				<cfset ArrayAppend(aProductFeature,sElement)>
 			</cfif>
 			
-			<cfset aBullet=arrayNew(1)>
-			<cfset lIndexToDelete="">
-			<cfloop index="r" from="1" to="#NumBullets#" step="1">
-				<cfparam name="BulletID_#r#" default="-1">
-				<cfparam name="BulletText_#r#" default="">
-				<cfparam name="BulletDelete_#r#" default="0">
-				<cfparam name="BulletSpecificationSetID_#r#" default="8000">
-				<cfset ThisBulletID="-1">
-				<cftry>
-					<cfset ThisBulletID=Decrypt(URLDecode(Evaluate("BulletID_#r#")),APPLICATION.Key)>
-					<cfcatch><cfset ThisBulletID="-1"></cfcatch>
-				</cftry>
-				<cfif Evaluate("BulletText_#r#") IS NOT "" AND Evaluate("BulletDelete_#r#") IS "0">
-					<cfset sElement=StructNew()>
-					<cfset StructInsert(sElement,"TextBlockID",ThisBulletID,1)>
-					<cfset StructInsert(sElement,"TextBlock",Evaluate("BulletText_#r#"),1)>
-					<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("BulletSpecificationSetID_#r#"),1)>
-					<cfset ArrayAppend(aBullet,sElement)>
-				<cfelse>
-					<cfif ThisBulletID GT "0">
-						<cfset lIndexToDelete=ListAppend(lIndexToDelete,r)>
-					</cfif>
-				</cfif>
-			</cfloop>
-			
-			<cfif IsDefined("BulletText_New") AND  Trim(BulletText_New) IS NOT "">
-				<cfparam name="BulletSpecificationSetID_new" default="8000">
-				<cfset sElement=StructNew()>
-				<cfset StructInsert(sElement,"TextBlockID",-1,1)>
-				<cfset StructInsert(sElement,"TextBlock",BulletText_New,1)>
-				<cfset StructInsert(sElement,"SpecificationSetID",BulletSpecificationSetID_new,1)>
-				<cfset ArrayAppend(aBullet,sElement)>
-			</cfif>
-			
-			<cfset aProductReview=arrayNew(1)>
-			<cfset lIndexToDelete="">
-			<cfloop index="r" from="1" to="#NumReviews#" step="1">
-				<cfparam name="ReviewID_#r#" default="-1">
-				<cfparam name="ReviewSource_#r#" default="">
-				<cfparam name="ReviewText_#r#" default="">
-				<cfparam name="ReviewDelete_#r#" default="0">
-				<cfset ThisReviewID="-1">
-				<cftry>
-					<cfset ThisReviewID=Decrypt(URLDecode(Evaluate("ReviewID_#r#")),APPLICATION.Key)>
-					<cfcatch><cfset ThisReviewID="-1"></cfcatch>
-				</cftry>
-				<cfif Evaluate("ReviewText_#r#") IS NOT "" AND Evaluate("ReviewSource_#r#") IS NOT "" AND Evaluate("ReviewDelete_#r#") IS "0">
-					<cfset sElement=StructNew()>
-					<cfset StructInsert(sElement,"TextBlockID",ThisReviewID,1)>
-					<cfset StructInsert(sElement,"TextBlock",Evaluate("ReviewText_#r#"),1)>
-					<cfset StructInsert(sElement,"TextBlockName",Evaluate("ReviewSource_#r#"),1)>
-					<cfset ArrayAppend(aProductReview,sElement)>
-				<cfelse>
-					<cfif ThisReviewID GT "0">
-						<cfset lIndexToDelete=ListAppend(lIndexToDelete,r)>
-					</cfif>
-				</cfif>
-			</cfloop>
-			
-			<cfif IsDefined("ReviewText_New") and IsDefined("ReviewSource_New")  aND Trim(ReviewText_New) IS NOT "" and Trim(ReviewSource_New) IS NOT "">
-				<cfset sElement=StructNew()>
-				<cfset StructInsert(sElement,"TextBlockID",-1,1)>
-				<cfset StructInsert(sElement,"TextBlock",ReviewText_New,1)>
-				<cfset StructInsert(sElement,"TextBlockName",ReviewSource_New,1)>
-				<cfset ArrayAppend(aProductReview,sElement)>
-			</cfif>
-			
+			<!--- sort keyfeatures --->
+			<cfmodule template="/common/modules/product/ProductArraySort.cfm"
+				ThisArray="#aProductFeature#"
+				ThisFormID="keyfeature"
+				IsDisplay="0">
+				
+			<!--- Start of Product Family Images handling --->
 			<cfset aProductView=arrayNew(1)>
 			<cfset lIndexToDelete="">
-			<cfloop index="r" from="1" to="#NumViews#" step="1">
-				<cfparam name="ResourceID_#r#" default="-1">
-				<cfparam name="ResourceName_#r#" default="">
-				<cfparam name="ResourceText_#r#" default="">
-				<cfparam name="MainFilePath_#r#" default="">
-				<cfparam name="ThumbnailFilePath_#r#" default="">
-				<cfparam name="ResourceDelete_#r#" default="0">
-				<cfparam name="ResourceSpecificationSetID_#r#" default="8000">
+			<cfloop index="r" from="1" to="#NumImages#" step="1">
+				<cfparam name="ResourceID_image_#r#" default="-1">
+				<cfparam name="ResourceName_image_#r#" default="">
+				<cfparam name="ResourceText_image_#r#" default="">
+				<cfparam name="MainFilePath_image_#r#" default="">
+				<cfparam name="ThumbnailFilePath_image_#r#" default="">
+				<cfparam name="ResourceDelete_image_#r#" default="0">
+				<cfparam name="ResourceSpecificationSetID_image_#r#" default="8000">
 				<cfset ThisResourceID="-1">
 				<cftry>
-					<cfset ThisResourceID=Decrypt(URLDecode(Evaluate("ResourceID_#r#")),APPLICATION.Key)>
+					<cfset ThisResourceID=Decrypt(URLDecode(Evaluate("ResourceID_image_#r#")),APPLICATION.Key)>
 					<cfcatch><cfset ThisResourceID="-1"></cfcatch>
 				</cftry>
 				
-				<cfif Evaluate("ResourceName_#r#") IS NOT "" AND Evaluate("ResourceDelete_#r#") IS "0">
+				<cfif (Evaluate("ResourceName_image_#r#") IS NOT "" or Evaluate("ResourceText_image_#r#") IS NOT "") AND Evaluate("ResourceDelete_image_#r#") IS "0">
 					<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
-						<cfif IsDefined("FORM.#ThisImage#_#r#FileObject") AND evaluate("FORM.#ThisImage#_#r#FileObject") IS NOT "">
+						<cfif IsDefined("FORM.#ThisImage#_image_#r#FileObject") AND evaluate("FORM.#ThisImage#_image_#r#FileObject") IS NOT "">
 							<cffile action="UPLOAD" 
-								filefield="FORM.#ThisImage#_#r#FileObject" 
+								filefield="FORM.#ThisImage#_image_#r#FileObject" 
 								destination="#MyCategory.GetResourceFilePath('images',APPLICATION.WebrootPath)#"
 								nameconflict="MAKEUNIQUE">
-							<cfset UploadedFile=REQUEST.ScrubFileName(File.ServerDirectory,File.ServerFile)>
+							<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
 							<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 								<cffile action="DELETE" file="#UploadedFile#">
-								<!--- add AddError('aProductViews') here --->
 							<cfelse>
-								<cfset SetVariable("#ThisImage#_#r#",REQUEST.GetURLFromPath(UploadedFile))>
+								<cfset SetVariable("#ThisImage#_image_#r#",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
 							</cfif>
 						</cfif>
 					</cfloop>
-					<cfif Evaluate("MainFilePath_#r#") IS NOT "">
+					<cfif (Evaluate("ResourceName_image_#r#") IS NOT "" or Evaluate("ResourceText_image_#r#") IS NOT "")>
 						<cfset sElement=StructNew()>
 						<cfset StructInsert(sElement,"ResourceID",ThisResourceID,1)>
-						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_#r#"),1)>
-						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_#r#"),1)>
-						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_#r#"),1)>
-						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_#r#"),1)>
-						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_#r#"),1)>
+						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_image_#r#"),1)>
+						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_image_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_image_#r#"),1)>
+						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_image_#r#"),1)>
+						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_image_#r#"),1)>
 						<cfset ArrayAppend(aProductView,sElement)>
 					<cfelse>
 						<cfif ThisResourceID GT "0">
@@ -551,56 +590,141 @@
 				ThisArray="#aProductView#"
 				ThisFormID="views"
 				IsDisplay="0">
-			<!--- sort reviews --->
-			<cfmodule template="/common/modules/product/ProductArraySort.cfm"
-				ThisArray="#aProductReview#"
-				ThisFormID="review"
-				IsDisplay="0">
-			<!--- sort keyfeatures --->
-			<cfmodule template="/common/modules/product/ProductArraySort.cfm"
-				ThisArray="#aProductFeature#"
-				ThisFormID="keyfeature"
-				IsDisplay="0">
-			<!--- sort bullets --->
-			<cfmodule template="/common/modules/product/ProductArraySort.cfm"
-				ThisArray="#aBullet#"
-				ThisFormID="Bullet"
-				IsDisplay="0">
 			
-			<cfif IsDefined("ResourceName_New") AND Trim(ResourceName_New) IS NOT "">
-				<cfparam name="ResourceSpecificationSetID_new" default="8000">
+			<cfif IsDefined("ResourceName_image_new") AND (Trim(ResourceName_image_new) IS NOT "" or Trim(ResourceText_image_new) IS NOT "")>
+				<cfparam name="ResourceSpecificationSetID_image_new" default="8000">
 				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
-					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND evaluate("FORM.#ThisImage#_NewFileObject") IS NOT "">
+					<cfif IsDefined("FORM.#ThisImage#_image_newFileObject") AND evaluate("FORM.#ThisImage#_image_newFileObject") IS NOT "">
 						<cffile action="UPLOAD" 
-							filefield="FORM.#ThisImage#_newFileObject" 
+							filefield="FORM.#ThisImage#_image_newFileObject" 
 							destination="#MyCategory.GetResourceFilePath('images',APPLICATION.WebrootPath)#"
 							nameconflict="MAKEUNIQUE">
-						<cfset UploadedFile=REQUEST.ScrubFileName(File.ServerDirectory,File.ServerFile)>
+						<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
 						<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 							<cffile action="DELETE" file="#UploadedFile#">
-							<!--- add AddError('aProductViews') here --->
+							<!--- add AddError('aProductView') here --->
 						<cfelse>
-							<cfset SetVariable("#ThisImage#_New",REQUEST.GetURLFromPath(UploadedFile))>
+							<cfset SetVariable("#ThisImage#_image_new",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
 						</cfif>
 					</cfif>
 				</cfloop>
 				
-				<cfif IsDefined("MainFilePath_New") AND MainFilePath_New IS NOT "">
-					<cfset sElement=StructNew()>
-					<cfset StructInsert(sElement,"ResourceID",-1,1)>
-					<cfset StructInsert(sElement,"ResourceName",ResourceName_New,1)>
-					<cfset StructInsert(sElement,"ResourceText",ResourceText_New,1)>
-					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_New,1)>
-					<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_new,1)>
-					<cfif IsDefined("ThumbnailFilePath_new") AND ThumbnailFilePath_new IS NOT "">
-						<cfset StructInsert(sElement,"ThumbnailFilePath",ThumbnailFilePath_new,1)>
-					<cfelse>
-						<cfset StructInsert(sElement,"ThumbnailFilePath","",1)>
-					</cfif>
-					<cfset ArrayAppend(aProductView,sElement)>
+				<cfset sElement=StructNew()>
+				<cfset StructInsert(sElement,"ResourceID",-1,1)>
+				<cfset StructInsert(sElement,"ResourceName",ResourceName_image_new,1)>
+				<cfset StructInsert(sElement,"ResourceText",ResourceText_image_new,1)>
+				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_image_new,1)>
+				<cfif IsDefined("MainFilePath_image_new") AND MainFilePath_image_new IS NOT "">
+					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_image_new,1)>
+				<cfelse>
+					<cfset StructInsert(sElement,"MainFilePath","",1)>
 				</cfif>
+				<cfif IsDefined("ThumbnailFilePath_image_new") AND ThumbnailFilePath_image_new IS NOT "">
+					<cfset StructInsert(sElement,"ThumbnailFilePath",ThumbnailFilePath_image_new,1)>
+				<cfelse>
+					<cfset StructInsert(sElement,"ThumbnailFilePath","",1)>
+				</cfif>
+				<cfset ArrayAppend(aProductView,sElement)>
 			</cfif>
 			
+			<!--- Start of Product Family Downloads handling --->
+			<cfset aProductDownload=arrayNew(1)>
+			<cfset lIndexToDelete="">
+			<cfloop index="r" from="1" to="#NumDownloads#" step="1">
+				<cfparam name="ResourceID_download_#r#" default="-1">
+				<cfparam name="ResourceName_download_#r#" default="">
+				<cfparam name="ResourceText_download_#r#" default="">
+				<cfparam name="MainFilePath_download_#r#" default="">
+				<cfparam name="ThumbnailFilePath_download_#r#" default="">
+				<cfparam name="ResourceDelete_download_#r#" default="0">
+				<cfparam name="ResourceSpecificationSetID_download_#r#" default="8000">
+				<cfset ThisResourceID="-1">
+				<cftry>
+					<cfset ThisResourceID=Decrypt(URLDecode(Evaluate("ResourceID_download_#r#")),APPLICATION.Key)>
+					<cfcatch><cfset ThisResourceID="-1"></cfcatch>
+				</cftry>
+				
+				<cfif (Evaluate("ResourceName_download_#r#") IS NOT "" or Evaluate("ResourceText_download_#r#") IS NOT "") AND Evaluate("ResourceDelete_download_#r#") IS "0">
+					<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
+						<cfif IsDefined("FORM.#ThisImage#_download_#r#FileObject") AND evaluate("FORM.#ThisImage#_download_#r#FileObject") IS NOT "">
+							<cffile action="UPLOAD" 
+								filefield="FORM.#ThisImage#_download_#r#FileObject" 
+								destination="#MyCategory.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
+								nameconflict="MAKEUNIQUE">
+							<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
+							<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
+								<cffile action="DELETE" file="#UploadedFile#">
+								<!--- add AddError('aProductDownload') here --->
+							<cfelse>
+								<cfset SetVariable("#ThisImage#_download_#r#",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
+							</cfif>
+						</cfif>
+					</cfloop>
+					<cfif (Evaluate("ResourceName_download_#r#") IS NOT "" or Evaluate("ResourceText_download_#r#") IS NOT "")>
+						<cfset sElement=StructNew()>
+						<cfset StructInsert(sElement,"ResourceID",ThisResourceID,1)>
+						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_download_#r#"),1)>
+						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_download_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_download_#r#"),1)>
+						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_download_#r#"),1)>
+						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_download_#r#"),1)>
+						<cfset ArrayAppend(aProductDownload,sElement)>
+					<cfelse>
+						<cfif ThisResourceID GT "0">
+							<cfset lIndexToDelete=ListAppend(lIndexToDelete,r)>
+						</cfif>
+					</cfif>
+				<cfelse>
+					<cfif ThisResourceID GT "0">
+						<cfset lIndexToDelete=ListAppend(lIndexToDelete,r)>
+					</cfif>
+				</cfif>
+			</cfloop>
+			
+			<!--- sort views --->
+			<cfmodule template="/common/modules/product/ProductArraySort.cfm"
+				ThisArray="#aProductDownload#"
+				ThisFormID="downloads"
+				IsDisplay="0">
+			
+			<cfif IsDefined("ResourceName_download_new") AND (Trim(ResourceName_download_new) IS NOT "" or Trim(ResourceText_download_new) IS NOT "")>
+				<cfparam name="ResourceSpecificationSetID_download_new" default="8000">
+				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
+					<cfif IsDefined("FORM.#ThisImage#_download_newFileObject") AND evaluate("FORM.#ThisImage#_download_newFileObject") IS NOT "">
+						<cffile action="UPLOAD" 
+							filefield="FORM.#ThisImage#_download_newFileObject" 
+							destination="#MyCategory.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
+							nameconflict="MAKEUNIQUE">
+						<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
+						<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
+							<cffile action="DELETE" file="#UploadedFile#">
+							<!--- add AddError('aProductDownload') here --->
+						<cfelse>
+							<cfset SetVariable("#ThisImage#_download_new",APPLICATION.UtilsObj.GetURLFromPath(UploadedFile))>
+						</cfif>
+					</cfif>
+				</cfloop>
+				
+				<cfset sElement=StructNew()>
+				<cfset StructInsert(sElement,"ResourceID",-1,1)>
+				<cfset StructInsert(sElement,"ResourceName",ResourceName_download_new,1)>
+				<cfset StructInsert(sElement,"ResourceText",ResourceText_download_new,1)>
+				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_download_new,1)>
+				<cfif IsDefined("MainFilePath_download_new") AND MainFilePath_download_new IS NOT "">
+					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_download_new,1)>
+				<cfelse>
+					<cfset StructInsert(sElement,"MainFilePath","",1)>
+				</cfif>
+				<cfif IsDefined("ThumbnailFilePath_download_new") AND ThumbnailFilePath_download_new IS NOT "">
+					<cfset StructInsert(sElement,"ThumbnailFilePath",ThumbnailFilePath_download_new,1)>
+				<cfelse>
+					<cfset StructInsert(sElement,"ThumbnailFilePath","",1)>
+				</cfif>
+				<cfset ArrayAppend(aProductDownload,sElement)>
+			</cfif>
+			
+			<cfset MyProduct.SetProperty("aProductView",aProductView)>
+			<cfset MyProduct.SetProperty("aProductDownload",aProductDownload)>
 			
 			<cfset aProductAttribute=ArrayNew(1)>
 			<cfloop index="r" from="1" to="#NumAttributes#" step="1">
@@ -635,9 +759,6 @@
 			
 			
 			<cfset MyProduct.SetProperty("aProductFeature",aProductFeature)>
-			<cfset MyProduct.SetProperty("aProductBullet",aBullet)>
-			<cfset MyProduct.SetProperty("aProductReview",aProductReview)>
-			<cfset MyProduct.SetProperty("aProductView",aProductView)>
 			<cfset MyProduct.SetProperty("aProductAttribute",aProductAttribute)>
 			<cfif MyProduct.IsCorrect()>
 				<cfset MyProduct.Save(APPLICATION.WebrootPath,SESSION.UserID)>
@@ -646,7 +767,7 @@
 			
 			<cfif IsDefined("FORM.ButLoad") AND Val(plclid) GTE "1">
 				<cfset SourceProduct=CreateObject("component","com.Product.Product")>
-				<cfset SourceProduct.Constructor(Val(EditCategoryID),REQUEST.SimpleDecrypt(plclid))>
+				<cfset SourceProduct.Constructor(Val(EditCategoryID),APPLICATION.UtilsObj.SimpleDecrypt(plclid))>
 				<cfloop index="PropertyToCopy" list="ProductLongName,ProductShortName,ProductPositioningSentence,ProductDescription,CallToActionURLDeprecated,VideoURL,ColorConfiguratorURL,BrochurePath,CompareGymBrochurePath,ProductImagePath,ProductThumbnailPath,ProductThumbnailHoverPath,ProductImageSourcePath,ProductImageStorePath,aProductFeature,aProductBullet,aProductReview,aProductView,aProductAttribute">
 					<cfset MyProduct.SetProperty("#PropertyToCopy#",SourceProduct.GetProperty("#PropertyToCopy#"))>
 				</cfloop>
@@ -654,7 +775,7 @@
 			
 			<cfif IsDefined("FORM.ButLoad3") AND Val(plclid2) GTE "1"><!--- load only specs table --->
 				<cfset SourceProduct=CreateObject("component","com.Product.Product")>
-				<cfset SourceProduct.Constructor(Val(EditCategoryID),REQUEST.SimpleDecrypt(plclid2))>
+				<cfset SourceProduct.Constructor(Val(EditCategoryID),APPLICATION.UtilsObj.SimpleDecrypt(plclid2))>
 				<cfloop index="PropertyToCopy" list="aProductAttribute">
 					<cfset MyProduct.SetProperty("#PropertyToCopy#",SourceProduct.GetProperty("#PropertyToCopy#"))>
 				</cfloop>
@@ -910,8 +1031,6 @@
 			</div>
 		</div>
 		<cfset FormValid="No">
-		<cfdump var="#MyCategory#">
-			<cfdump var="#MyCategoryLocale#">
 		<cfif MyCategoryLocale.GetCategoryTypeID() IS "73"><!--- This is a gallery  --->
 			<cfif IsDefined("lFileToImport") and lFileToImport IS NOT "">
 				<cfset FormValid="No">
