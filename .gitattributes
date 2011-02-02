@@ -369,10 +369,16 @@ code/webroot/common/modules/product/ProductDetail.cfm -text
 code/webroot/common/modules/product/ProductFamilyAttributes.cfm -text
 code/webroot/common/modules/product/ProductFamilyChart.cfm -text
 code/webroot/common/modules/product/ProductFamilyForm.cfm -text
+code/webroot/common/modules/product/ProductFamilyOrphan.cfm -text
 code/webroot/common/modules/product/ProductFamilySheet.cfm -text
 code/webroot/common/modules/product/ProductForm.cfm -text
 code/webroot/common/modules/product/ProductImages.cfm -text
+code/webroot/common/modules/product/ProductImport.cfm -text
+code/webroot/common/modules/product/ProductImportHelper.cfm -text
+code/webroot/common/modules/product/ProductImportHelper2.cfm -text
 code/webroot/common/modules/product/ProductListing.cfm -text
+code/webroot/common/modules/product/ProductOutline.cfm -text
+code/webroot/common/modules/product/ProductOutlineHelper.cfm -text
 code/webroot/common/modules/product/ProductSheet.cfm -text
 code/webroot/common/modules/product/ProductSheetDriver.cfm -text
 code/webroot/common/modules/product/dsp_PromoText.cfm -text
