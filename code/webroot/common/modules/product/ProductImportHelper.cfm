@@ -26,7 +26,7 @@
 			<cfset ThisCategoryID="-1">
 		</cfif>
 			
-		<cfif Val(ThisCategoryID) LTE "0">
+		<cfif Val(ThisCategoryID) GTE "0">
 			<br>importing...
 			<cfhttp url="http://www.salco.dev09.thirdwavellc.com/common/modules/product/productImportHelper2.cfm?NodeID=#GetDetail.NodeID#" method="GET" resolveurl="false">
 			results(<cfoutput>#Trim(CFHTTP.FileContent)#</cfoutput>)

@@ -94,17 +94,26 @@
 		cols="80" rows="10"
 		EscapeCRLF="No"
 		Required="N">
-	
+		
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="Part Number" 
+		ObjectName="MyProduct"
+		PropertyName="PartNumber"
+		size="40" maxlength="128"
+		Required="N">	
+		
 	<cfset sImageName=StructNew()>
 	<cfset StructInsert(sImageName,"BrochurePath","Brochure File",1)>
 	<cfset StructInsert(sImageName,"ProductImagePath","Product Image",1)>
 	<cfset StructInsert(sImageName,"ProductThumbnailPath","Product Thumbnail Image",1)>
 	<cfset StructInsert(sImageName,"ProductThumbnailHoverPath","Product Thumbnail Hover Image",1)>
-	<cfset StructInsert(sImageName,"CompareGymBrochurePath","Compare Gym Brochure File",1)>
+	<cfset StructInsert(sImageName,"PublicDrawing","Public Drawing",1)>
 	<cfset StructInsert(sImageName,"ProductImageSourcePath","Image Source (500x420px)<br>Use this image to generate image for use in the LF Store and product configurator.",1)>
 	<cfset StructInsert(sImageName,"ProductImageStorePath","Store Image ",1)>
 	
-	<cfloop index="ThisImage" list="">
+	<cfloop index="ThisImage" list="PublicDrawing">
 		<cfparam name="Delete#ThisImage#" default="0">
 		<cfif ListFindNoCase("ProductThumbnailHoverPath,ProductThumbnailPath,ProductImageSourcePath,ProductImageStorePath",ThisImage) and FormLanguageID IS NOT APPLICATION.DefaultLanguageID>
 			<cfset ThisFormMode="validate">
