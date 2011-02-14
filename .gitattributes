@@ -470,8 +470,15 @@ code/webroot/common/process/_hourly.cfm -text
 code/webroot/common/process/_nightly.cfm -text
 code/webroot/common/scripts/articleSelector.js -text
 code/webroot/common/scripts/categorySelector.js -text
+code/webroot/common/scripts/common.js -text
 code/webroot/common/scripts/dragdrop.js -text
 code/webroot/common/scripts/instantedit.js -text
+code/webroot/common/scripts/jquery-1.4.2.min.js -text
+code/webroot/common/scripts/jquery-ui-1.8.7.custom.min.js -text
+code/webroot/common/scripts/jquery.client.js -text
+code/webroot/common/scripts/jquery.cycle.js -text
+code/webroot/common/scripts/jquery.nestedAccordion.js -text
+code/webroot/common/scripts/jquery.ui.tabs.js -text
 code/webroot/common/scripts/mveditor/editor/_source/classes/fckcontextmenu.js -text
 code/webroot/common/scripts/mveditor/editor/_source/classes/fckdataprocessor.js -text
 code/webroot/common/scripts/mveditor/editor/_source/classes/fckdocumentfragment_gecko.js -text
