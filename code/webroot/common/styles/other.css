@@ -1,0 +1,20 @@
+
+/* pagination */
+
+div.pagination {
+text-align: right;
+}
+
+ul.pagination li {
+display: inline;
+list-style-type: none;
+padding-right: 15px;
+}
+
+img {
+	border:0;
+}
+
+#tabsRotate a p {
+	color: white;
+}

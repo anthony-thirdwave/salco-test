@@ -1060,6 +1060,10 @@ code/webroot/common/scripts/scriptaculous/test/unit/string_test.html -text
 code/webroot/common/scripts/scriptaculous/test/unit/unittest_test.html -text
 code/webroot/common/styles/admin.css -text
 code/webroot/common/styles/adminIE.css -text
+code/webroot/common/styles/jquery-ui-1.8.7.custom.css -text
+code/webroot/common/styles/other.css -text
+code/webroot/common/styles/salco_global[!!-~]-[!!-~]Copy.css -text
+code/webroot/common/styles/salco_global.css -text
 code/webroot/content.cfm -text
 code/webroot/index.cfm -text
 code/webroot/robots.txt -text
