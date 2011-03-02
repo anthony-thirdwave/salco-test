@@ -8,9 +8,9 @@
 	<cfproperty name="ProductDescription" type="string" default="">
 	<cfproperty name="CallToActionURLDeprecated" type="string" default="">
 	<cfproperty name="VideoURL" type="string" default="">
-	<cfproperty name="ColorConfiguratorURL" type="string" default="">
+	<cfproperty name="PartNumber" type="string" default="">
 	<cfproperty name="BrochurePath" type="string" default="">
-	<cfproperty name="CompareGymBrochurePath" type="string" default="">
+	<cfproperty name="PublicDrawing" type="string" default="">
 	<cfproperty name="ProductImagePath" type="string" default="">
 	<cfproperty name="ProductThumbnailPath" type="string" default="">
 	<cfproperty name="ProductThumbnailHoverPath" type="string" default="">
@@ -31,9 +31,9 @@
 	<cfset structInsert(sPropertyDisplayName,"ProductDescription","description",1)>
 	<cfset structInsert(sPropertyDisplayName,"CallToActionURLDeprecated","category URL",1)>
 	<cfset structInsert(sPropertyDisplayName,"VideoURL","video URL",1)>
-	<cfset structInsert(sPropertyDisplayName,"ColorConfiguratorURL","color configurator URL",1)>
+	<cfset structInsert(sPropertyDisplayName,"PartNumber","part number",1)>
 	<cfset structInsert(sPropertyDisplayName,"BrochurePath","brochure",1)>
-	<cfset structInsert(sPropertyDisplayName,"CompareGymBrochurePath","compare gym brochure",1)>
+	<cfset structInsert(sPropertyDisplayName,"PublicDrawing","compare gym brochure",1)>
 	<cfset structInsert(sPropertyDisplayName,"ProductImagePath","on image",1)>
 	<cfset structInsert(sPropertyDisplayName,"ProductThumbnailPath","highlight image",1)>
 	<cfset structInsert(sPropertyDisplayName,"ProductThumbnailHoverPath","thumbmnail hover image",1)>
@@ -46,23 +46,25 @@
 	<cfset structInsert(sPropertyDisplayName,"aProductDownload","product download array",1)>
 	<cfset structInsert(sPropertyDisplayName,"aProductAttribute","product attributes array",1)>
 	
+	<!--- If these change, make sure to change in handler too. --->
 	<cfset this.sAttributeID=StructNew()>
-	<cfset StructInsert(this.sAttributeID,"ProductLongName","390",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductShortName","2638",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductPositioningSentence","391",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductDescription","392",1)>
-	<cfset StructInsert(this.sAttributeID,"CallToActionURLDeprecated","393",1)>
-	<cfset StructInsert(this.sAttributeID,"VideoURL","394",1)>
-	<cfset StructInsert(this.sAttributeID,"ColorConfiguratorURL","930",1)>
-	<cfset StructInsert(this.sAttributeID,"BrochurePath","395",1)>
-	<cfset StructInsert(this.sAttributeID,"CompareGymBrochurePath","1216",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductImagePath","396",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductThumbnailPath","397",1)><!--- Will always come from English --->
-	<cfset StructInsert(this.sAttributeID,"ProductThumbnailHoverPath","1314",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductImageSourcePath","2642",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductImageStorePath","2643",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductLongName","4",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductShortName","5",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductPositioningSentence","6",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductDescription","7",1)>
+	<cfset StructInsert(this.sAttributeID,"CallToActionURLDeprecated","8",1)>
+	<cfset StructInsert(this.sAttributeID,"VideoURL","9",1)>
+	<cfset StructInsert(this.sAttributeID,"PartNumber","10",1)>
+	<cfset StructInsert(this.sAttributeID,"BrochurePath","11",1)>
+	<cfset StructInsert(this.sAttributeID,"PublicDrawing","12",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductImagePath","13",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductThumbnailPath","14",1)><!--- Will always come from English --->
+	<cfset StructInsert(this.sAttributeID,"ProductThumbnailHoverPath","15",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductImageSourcePath","16",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductImageStorePath","17",1)>
+	<cfset StructInsert(this.sAttributeID,"PublicDrawingSize","23",1)>
 	
-	<cfset this.lAttributeID="390,391,392,393,394,395,396,397,930,1216,1314,2638,2642,2643">
+	<cfset this.lAttributeID="4,5,6,7,8,9,10,11,12,13,14,15,16,17,23">
 	<cfset this.sAttribute=StructNew()>
 	<cfloop index="ThisKey" list="#StructKeyList(this.sAttributeID)#">
 		<cfset StructInsert(this.sAttribute,this.sAttributeID[thisKey],ThisKey,1)>
@@ -81,9 +83,10 @@
 		<cfset this.SetProperty("ProductDescription","")>
 		<cfset this.SetProperty("CallToActionURLDeprecated","")>
 		<cfset this.SetProperty("VideoURL","")>
-		<cfset this.SetProperty("ColorConfiguratorURL","")>
+		<cfset this.SetProperty("PartNumber","")>
 		<cfset this.SetProperty("BrochurePath","")>
-		<cfset this.SetProperty("CompareGymBrochurePath","")>
+		<cfset this.SetProperty("PublicDrawing","")>
+		<cfset this.SetProperty("PublicDrawingSize","")>
 		<cfset this.SetProperty("ProductImagePath","")>
 		<cfset this.SetProperty("ProductThumbnailPath","")>
 		<cfset this.SetProperty("ProductThumbnailHoverPath","")>
@@ -113,7 +116,7 @@
 			<cfquery name="GetItemsEnglish" datasource="#APPLICATION.DSN#">
 				SELECT * FROM t_ProductAttribute
 				WHERE 
-				ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="397,1314" list="yes">) AND 
+				ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="14,15" list="yes">) AND 
 				CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(APPLICATION.DefaultLanguageID)#">
 			</cfquery>
@@ -220,6 +223,7 @@
 					<Cfset StructInsert(sViewElt,"ResourceText",ResourceText,1)>
 					<Cfset StructInsert(sViewElt,"MainFilePath","",1)>
 					<Cfset StructInsert(sViewElt,"ThumbnailFilePath","",1)>
+					<Cfset StructInsert(sViewElt,"MainFileSize",ResourceSize,1)>
 					<cfif StructKeyExists(sViewMainFilePath,ResourceID)>
 						<Cfset StructInsert(sViewElt,"MainFilePath",sViewMainFilePath[ResourceID],1)>
 					</cfif>
@@ -268,6 +272,7 @@
 					<Cfset StructInsert(sDownloadElt,"ResourceText",ResourceText,1)>
 					<Cfset StructInsert(sDownloadElt,"MainFilePath","",1)>
 					<Cfset StructInsert(sDownloadElt,"ThumbnailFilePath","",1)>
+					<Cfset StructInsert(sDownloadElt,"MainFileSize",ResourceSize,1)>
 					<cfif StructKeyExists(sDownloadMainFilePath,ResourceID)>
 						<Cfset StructInsert(sDownloadElt,"MainFilePath",sDownloadMainFilePath[ResourceID],1)>
 					</cfif>
@@ -344,9 +349,10 @@
 			<cfset thisProductDescription=this.GetProperty("ProductDescription")>
 			<cfset thisCallToActionURLDeprecated=this.GetProperty("CallToActionURLDeprecated")>
 			<cfset thisVideoURL=this.GetProperty("VideoURL")>
-			<cfset thisColorConfiguratorURL=this.GetProperty("ColorConfiguratorURL")>
+			<cfset thisPartNumber=this.GetProperty("PartNumber")>
 			<cfset thisBrochurePath=this.GetProperty("BrochurePath")>
-			<cfset thisCompareGymBrochurePath=this.GetProperty("CompareGymBrochurePath")>
+			<cfset thisPublicDrawing=this.GetProperty("PublicDrawing")>
+			<cfset thisPublicDrawingSize=this.GetProperty("PublicDrawingSize")>
 			<cfset thisProductImagePath=this.GetProperty("ProductImagePath")>
 			<cfset thisProductThumbnailPath=this.GetProperty("ProductThumbnailPath")>
 			<cfset thisProductThumbnailHoverPath=this.GetProperty("ProductThumbnailHoverPath")>
@@ -358,6 +364,11 @@
 			<cfset thisAProductView=this.GetProperty("AProductView")>
 			<cfset thisAProductDownload=this.GetProperty("aProductDownload")>
 			<cfset thisAProductAttribute=this.GetProperty("AProductAttribute")>
+			
+			<cfif thisPublicDrawing IS NOT "" and FileExists(ExpandPath(thisPublicDrawing))>
+				<cfset thisPublicDrawingSize=GetFileInfo(ExpandPath(thisPublicDrawing)).Size>
+				<cfset this.SetProperty("PublicDrawingSize",thisPublicDrawingSize)>
+			</cfif>
 			
 			<cfif thisProductThumbnailHoverPath IS "" and thisProductImageSourcePath IS NOT "">
 				<cfinvoke component="/com/utils/image" 
@@ -708,7 +719,7 @@
 					</cfquery>
 				</cfif>
 			</cfloop>
-			
+						
 			<cfinvoke component="/com/ContentManager/CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
 				Lookup="Category"
 				KeyID="#thisProductID#">
@@ -750,7 +761,7 @@
 				<cfreturn false>
 			</cfif>
 			
-			<cfif ListFindNoCase("ProductLongName,ProductShortName,CallToActionURLDeprecated,ColorConfiguratorURL,VideoURL",ARGUMENTS.Property)>
+			<cfif ListFindNoCase("ProductLongName,ProductShortName,CallToActionURLDeprecated,PartNumber,VideoURL",ARGUMENTS.Property)>
 				<cfif Len(ARGUMENTS.Value) GT "256">
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","The #sPropertyDisplayName[ARGUMENTS.Property]# can only be 256 characters long.")>
 					<cfreturn false>
@@ -957,7 +968,7 @@
 			<cfreturn false>
 		<cfelse>
 			<cfmodule template="/common/modules/utils/ExplodeString.cfm" String="#this.GetProperty('ProductID')#" ReturnVarName="PathFragment">
-			<cfif ListFindNoCase("BrochurePathFileObject,CompareGymBrochurePath",FormFileFieldName)>
+			<cfif ListFindNoCase("BrochurePathFileObject,PublicDrawing",Property)>
 				<cfset UploadDirectory=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('documents')#","/","\","All")>
 			<cfelse>
 				<cfset UploadDirectory=ReplaceNoCase("#ARGUMENTS.WebrootPath##this.GetResourcePath('images')#","/","\","All")>
@@ -968,11 +979,11 @@
 				filefield="#ARGUMENTS.FormFileFieldName#"
 				destination="#UploadDirectory#"
 				nameconflict="MakeUnique">
-			<cfset UploadedFile="#File.ServerDirectory#\#APPLICATION.UtilsObj.ScrubFileName(File.ServerFile)#">
+			<cfset UploadedFile="#APPLICATION.UtilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)#">
 			<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 				<cffile action="DELETE" file="#UploadedFile#">
 				<cfset SetProperty("#ARGUMENTS.Property#","")>
-				<cfset AddError(ARGUMENTS.Property,"","The #sPropertyDisplayName[ARGUMENTS.Property]# must be an image.")>
+				<cfset AddError(ARGUMENTS.Property,"","The #sPropertyDisplayName[ARGUMENTS.Property]# must be an valid document.")>
 				<cfreturn false>
 			<cfelse>
 				<cfset FilePath=ReplaceNoCase(UploadedFile,ARGUMENTS.WebrootPath,"/","All")>

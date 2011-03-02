@@ -158,7 +158,9 @@
 			<cfcase value="252"><!--- Recent Discussions --->
 				<cfset this.sFields[ThisContentTypeID]="NumItems,LinkURL,lMTCategoryIDRestrict,lMTCategoryIDAllow">
 			</cfcase>
-
+			<cfcase value="256"><!--- Text Slide Show --->
+				<cfset this.sFields[ThisContentTypeID]="aLink">
+			</cfcase>
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisContentTypeID]="">
 			</cfdefaultcase>

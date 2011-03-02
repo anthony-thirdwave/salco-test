@@ -21,14 +21,15 @@
 	<cfset structInsert(sPropertyDisplayName,"aProductFamilyDownload","product download array",1)>
 	<cfset structInsert(sPropertyDisplayName,"ProductFamilyBrochurePathOverride","product family brochure path overrides",1)>
 	
+	<!--- If these change, make sure to change in handler too. --->
 	<cfset this.sAttributeID=StructNew()>
-	<cfset StructInsert(this.sAttributeID,"ProductFamilyDescription","515",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductViewLabel","1223",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductFamilyBrochurePath","1224",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductFamilyBenchMarkDate","1225",1)>
-	<cfset StructInsert(this.sAttributeID,"ProductFamilyBrochurePathOverride","1441",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductFamilyDescription","18",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductViewLabel","19",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductFamilyBrochurePath","20",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductFamilyBenchMarkDate","21",1)>
+	<cfset StructInsert(this.sAttributeID,"ProductFamilyBrochurePathOverride","22",1)>
 	
-	<cfset this.lAttributeID="515,1223,1224,1225,1441">
+	<cfset this.lAttributeID="18,19,20,21,22">
 	<cfset this.sAttribute=StructNew()>
 	<cfloop index="ThisKey" list="#StructKeyList(this.sAttributeID)#">
 		<cfset StructInsert(this.sAttribute,this.sAttributeID[thisKey],ThisKey,1)>
@@ -102,6 +103,7 @@
 					<Cfset StructInsert(sViewElt,"ResourceText",ResourceText,1)>
 					<Cfset StructInsert(sViewElt,"MainFilePath",MainFilePath,1)>
 					<Cfset StructInsert(sViewElt,"ThumbnailFilePath",ThumbnailFilePath,1)>
+					<Cfset StructInsert(sViewElt,"MainFileSize",ResourceSize,1)>
 					<Cfset StructInsert(sViewElt,"SpecificationSetID",SpecificationSetID,1)>
 					<cfset arrayAppend(aBlank,sViewElt)>
 				</cfoutput>
@@ -125,6 +127,7 @@
 					<Cfset StructInsert(sViewElt,"ResourceText",ResourceText,1)>
 					<Cfset StructInsert(sViewElt,"MainFilePath",MainFilePath,1)>
 					<Cfset StructInsert(sViewElt,"ThumbnailFilePath",ThumbnailFilePath,1)>
+					<Cfset StructInsert(sViewElt,"MainFileSize",ResourceSize,1)>
 					<Cfset StructInsert(sViewElt,"SpecificationSetID",SpecificationSetID,1)>
 					<cfset arrayAppend(aBlank,sViewElt)>
 				</cfoutput>

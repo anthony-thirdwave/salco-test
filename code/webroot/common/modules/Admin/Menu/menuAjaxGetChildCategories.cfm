@@ -170,7 +170,7 @@
 			<img src="<cfif StructKeyExists(sIconsNoChild,CategoryTypeID)>#StructFind(sIconsNoChild,CategoryTypeID)#<cfelse>#StructFind(sIconsNoChild,"default")#</cfif>" border="0">
 		</cfif>
 		<!--- link to category MV --->
-		<a href="#thisHREF#" title="#thisTitle#"><span<cfif thisClass NEQ ""> class="#thisClass#"</cfif><cfif isInitPath> style="font-weight:bold;"</cfif>>#CategoryName#</span></a>
+		<a href="#thisHREF#" title="#thisTitle#"><span<cfif thisClass NEQ ""> class="#thisClass#"</cfif><cfif isInitPath> style="font-weight:bold;"</cfif>>#CategoryName# <cfif CategoryTypeID IS "64">(#CategoryAlias#)</cfif></span></a>
 		<!--- if has child categories, add child category container --->
 		<cfif checkChildren.RecordCount GT 0>
 		<div id="#thisIdPrefix#categoryChildContainer_#CategoryID#" class="childContent" style="display:<cfif isInitPath AND ListLen(ATTRIBUTES.thisCatIDInitList) GT 0>block<cfelse>none</cfif>; ">

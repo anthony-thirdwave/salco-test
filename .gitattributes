@@ -68,6 +68,7 @@ code/webroot/common/admin/MasterView/LocaleModify.cfm -text
 code/webroot/common/admin/MasterView/_InitMasterView.cfm -text
 code/webroot/common/admin/MasterView/index.cfm -text
 code/webroot/common/admin/MasterView/recentChanges.cfm -text
+code/webroot/common/admin/ProductManager/index.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/crud_PulldownOptions.cfm -text
 code/webroot/common/admin/PulldownOptionsManager/index.cfm -text
 code/webroot/common/admin/RedirectManager/edit.cfm -text
@@ -88,6 +89,7 @@ code/webroot/common/error/cfservertest.cfm -text
 code/webroot/common/error/errorhandler.cfm -text
 code/webroot/common/error/errortest.cfm -text
 code/webroot/common/error/process404.cfm -text
+code/webroot/common/flash/jarisplayer.swf -text
 code/webroot/common/images/ContentManager/Thumbs.db -text
 code/webroot/common/images/ContentManager/Widget_Addcategory.gif -text
 code/webroot/common/images/ContentManager/Widget_Addcontent.gif -text
@@ -302,8 +304,10 @@ code/webroot/common/images/template/home_intermodel.jpg -text
 code/webroot/common/images/template/home_locomotive.jpg -text
 code/webroot/common/images/template/home_railyard.jpg -text
 code/webroot/common/images/template/home_tankcar.jpg -text
+code/webroot/common/images/template/hopper_car_01.gif -text
 code/webroot/common/images/template/ico_red_dot.png -text
 code/webroot/common/images/template/ico_red_square.png -text
+code/webroot/common/images/template/loading.gif -text
 code/webroot/common/images/template/page_back.jpg -text
 code/webroot/common/images/template/page_back_home.jpg -text
 code/webroot/common/images/template/red_line.png -text
@@ -319,6 +323,7 @@ code/webroot/common/images/template/side_bar_top_sp.png -text
 code/webroot/common/images/template/span_back.png -text
 code/webroot/common/images/template/sprite_home_nav_right.png -text
 code/webroot/common/images/template/sprite_tabs_download.png -text
+code/webroot/common/images/template/sprite_tabs_sub_sidenav.jpg -text
 code/webroot/common/images/template/sprite_tabs_sub_sidenav.png -text
 code/webroot/common/images/template/vid_thumb.png -text
 code/webroot/common/images/template/video_holder.png -text
@@ -371,8 +376,9 @@ code/webroot/common/modules/Admin/_secure.cfm -text
 code/webroot/common/modules/Admin/dsp_MostRecent.cfm -text
 code/webroot/common/modules/Admin/dsp_admin.cfm -text
 code/webroot/common/modules/Contact/ContactForm.cfm -text
-code/webroot/common/modules/Contact/captcha.jpg -text
-code/webroot/common/modules/Contact/contact_captcha.cfm -text
+code/webroot/common/modules/Contact/actContactForm.cfm -text
+code/webroot/common/modules/Contact/actSupportForm.cfm -text
+code/webroot/common/modules/Contact/supportForm.cfm -text
 code/webroot/common/modules/News/NewsListing.cfm -text
 code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserForm.cfm -text
@@ -403,6 +409,8 @@ code/webroot/common/modules/display/Navigation/dsp_NavBreadcrumb.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavFooter.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavGeneric.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavGlobal.cfm -text
+code/webroot/common/modules/display/Navigation/dsp_NavProduct.cfm -text
+code/webroot/common/modules/display/Navigation/dsp_NavProductHelper.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavR.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavRHelper.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavSub.cfm -text
@@ -415,9 +423,11 @@ code/webroot/common/modules/emailAFriend/emailAFriend.cfm -text
 code/webroot/common/modules/product/CopyProductImages.cfm -text
 code/webroot/common/modules/product/ProductArraySort.cfm -text
 code/webroot/common/modules/product/ProductDetail.cfm -text
+code/webroot/common/modules/product/ProductDetailOther.cfm -text
 code/webroot/common/modules/product/ProductFamilyAttributes.cfm -text
 code/webroot/common/modules/product/ProductFamilyChart.cfm -text
 code/webroot/common/modules/product/ProductFamilyForm.cfm -text
+code/webroot/common/modules/product/ProductFamilyListing.cfm -text
 code/webroot/common/modules/product/ProductFamilyOrphan.cfm -text
 code/webroot/common/modules/product/ProductFamilySheet.cfm -text
 code/webroot/common/modules/product/ProductForm.cfm -text
@@ -430,8 +440,10 @@ code/webroot/common/modules/product/ProductOutline.cfm -text
 code/webroot/common/modules/product/ProductOutlineHelper.cfm -text
 code/webroot/common/modules/product/ProductSheet.cfm -text
 code/webroot/common/modules/product/ProductSheetDriver.cfm -text
+code/webroot/common/modules/product/_ProductFamilyDetail.cfm -text
 code/webroot/common/modules/product/dsp_PromoText.cfm -text
 code/webroot/common/modules/product/dsp_resource.cfm -text
+code/webroot/common/modules/product/productFamilyDetail.cfm -text
 code/webroot/common/modules/search/SearchForm.cfm -text
 code/webroot/common/modules/search/dspSearchResults.cfm -text
 code/webroot/common/modules/search/search.cfm -text
@@ -960,6 +972,17 @@ code/webroot/common/scripts/mveditor/fckstyles.xml -text
 code/webroot/common/scripts/mveditor/fcktemplates.xml -text
 code/webroot/common/scripts/mveditor/fckutils.cfm -text
 code/webroot/common/scripts/pngfix.js -text
+code/webroot/common/scripts/projekktor.min.js -text
+code/webroot/common/scripts/projekktor/buffering.gif -text
+code/webroot/common/scripts/projekktor/maccaco-load.gif -text
+code/webroot/common/scripts/projekktor/maccaco.png -text
+code/webroot/common/scripts/projekktor/maccaco_.png -text
+code/webroot/common/scripts/projekktor/noise.gif -text
+code/webroot/common/scripts/projekktor/player.png -text
+code/webroot/common/scripts/projekktor/start.png -text
+code/webroot/common/scripts/projekktor/style.css -text
+code/webroot/common/scripts/projekktor/theme_id.diz -text
+code/webroot/common/scripts/projekktor/theme_preview.jpg -text
 code/webroot/common/scripts/prototype.js -text
 code/webroot/common/scripts/scriptaculous/CHANGELOG -text
 code/webroot/common/scripts/scriptaculous/MIT-LICENSE -text
@@ -1062,9 +1085,9 @@ code/webroot/common/styles/admin.css -text
 code/webroot/common/styles/adminIE.css -text
 code/webroot/common/styles/jquery-ui-1.8.7.custom.css -text
 code/webroot/common/styles/other.css -text
-code/webroot/common/styles/salco_global[!!-~]-[!!-~]Copy.css -text
 code/webroot/common/styles/salco_global.css -text
 code/webroot/content.cfm -text
+code/webroot/favicon.ico -text
 code/webroot/index.cfm -text
 code/webroot/robots.txt -text
 prototype/Salco[!!-~]Public[!!-~]Website/5.6.0.2089.version -text

@@ -1,3 +1,4 @@
+<cfsetting showdebugoutput="No" RequestTimeOut=50000>
 <cfparam name="ATTRIBUTES.NodeID" default="0">
 <cfset REQUEST.lProblemID="">
 <cfif 0>

@@ -32,11 +32,10 @@
 		<cfsaveContent Variable="FileContents">
 			<cfset MyProduct=CreateObject("component","com.Product.Product")>
 			<cfset MyProduct.Constructor(Val(ATTRIBUTES.ProductID),ATTRIBUTES.LanguageID)>
-			<cfset aView=MyProduct.GetProperty("aProductView")>
 			<cfset aProductFeature=MyProduct.GetProperty("aProductFeature")>
 			<cfset aDownload=MyProduct.GetProperty("aProductDownload")>
 			
-			<cfset lProps="PublicDrawing,ProductDescription,PartNumber">
+			<cfset lProps="PublicDrawing,PublicDrawingSize,ProductDescription,PartNumber">
 			<cfloop index="ThisProp" list="#lProps#">
 				<cfset SetVariable("This#ThisProp#",MyProduct.GetProperty(ThisProp))>
 			</cfloop>
@@ -48,14 +47,6 @@
 				</cfif>
 			</cfloop>
 			<cfset aProductFeature = tempArray>
-			
-			<cfset tempArray = ArrayNew(1)>
-			<cfloop index="i" from="1" to="#ArrayLen(aView)#" step="1">
-				<cfif aView[i].SpecificationSetID EQ ATTRIBUTES.SpecificationSetID or aView[i].SpecificationSetID IS "">
-					<cfset ArrayAppend(tempArray,aView[i])>
-				</cfif>
-			</cfloop>
-			<cfset aView = tempArray>
 			
 			<cfset tempArray = ArrayNew(1)>
 			<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
@@ -74,7 +65,7 @@
 				<p>#ThisProductDescription#</p>
 				
 				<cfif ArrayLen(aProductFeature) GT "0">
-					<h3>Features</h3>
+					<h4>Features</h4>
 					<ul>
 					<cfloop index="i" from="1" to="#ArrayLen(aProductFeature)#" step="1">
 						<li>#aProductFeature[i].TextBlock#</li>
@@ -83,23 +74,12 @@
 				</cfif>
 				
 				<cfif ArrayLen(aDownload) GT "0">
-					<h3>Downloads</h3>
-					<ul>
-					<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
-						<li><a href="#aDownload[i].MainFilePath#">#aView[i].ResourceName#</a><br/>
-						#aView[i].ResourceText#
-						</li>
+					<h4>Downloads</h4><cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
+						<p><a href="#aDownload[i].MainFilePath#" target="_blank">#aDownload[i].ResourceName#</a>
+						(#UCase(ListLast(aDownload[i].MainFilePath,"."))#<cfif StructKeyExists(aDownload[i],"MainFileSize") AND Val(aDownload[i].MainFileSize) GT "0">, #Ceiling(aDownload[i].MainFileSize/1024)#KB</cfif>)<br/>
+						#aDownload[i].ResourceText#
+						</p>
 					</cfloop>
-					</ul>
-				</cfif>
-				
-				<cfif ArrayLen(aView) GT "0">
-					<h3>Additional Images</h3>
-					<ul>
-					<cfloop index="i" from="1" to="#ArrayLen(aView)#" step="1">
-						<li><a href="#aView[i].MainFilePath#"><cfif aView[i].ThumbnailFilePath IS NOT "">#aView[i].ThumbnailFilePath#<cfelse>#aView[i].ResourceName#</cfif></a></li>
-					</cfloop>
-					</ul>
 				</cfif>
 				
 			</cfoutput>

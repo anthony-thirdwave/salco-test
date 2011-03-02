@@ -1,5 +1,5 @@
 <cfset sMenu=StructNew()>
-<cfset sMenuList="Dashboard,Content Manager,User Manager,Redirect Manager,Support">
+<cfset sMenuList="Dashboard,Content Manager,Product List,User Manager,Redirect Manager,Support">
 
 
 <cfloop index="ThisElt" list="#sMenuList#">
@@ -15,6 +15,11 @@
 			<cfset StructInsert(sMenuElt,"link","/common/admin/masterview/index.cfm",1)>
 			<cfset StructInsert(sMenuElt,"lUserGroupID","#APPLICATION.AdminUserGroupID#,#APPLICATION.ContentEditorUserGroupID#",1)>
 			<cfset StructInsert(sMenuElt,"Description","The content manager is used to drive the navigation and add/edit/delete pages from the site.",1)>
+		</cfcase>
+		<cfcase value="Product List">
+			<cfset StructInsert(sMenuElt,"link","/common/admin/ProductManager/index.cfm",1)>
+			<cfset StructInsert(sMenuElt,"lUserGroupID","#APPLICATION.AdminUserGroupID#",1)>
+			<cfset StructInsert(sMenuElt,"Description","View list of products in the system.",1)>
 		</cfcase>
 		<cfcase value="User Manager">
 			<cfset StructInsert(sMenuElt,"link","/common/admin/UserManager/index.cfm",1)>

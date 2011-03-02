@@ -3,7 +3,7 @@
 <cfparam name="EditCategoryID" default="-1">
 <cfparam name="EditParentID" default="-1">
 <cfparam name="EditCategoryLocaleID" default="-1">
-<cfparam name="EditLocaleID" default="#APPLICATION.DefaultLocaleID#">
+<cfparam name="EditLocaleID" default="#SESSION.AdminCurrentAdminLocaleID#">
 <cfparam name="CurrentLanguageID" default="100">
 <cfparam name="FormLanguageID" default="#CurrentLanguageID#">
 <cfset OpenAndCloseFormTables="no">
@@ -28,16 +28,23 @@
 <cfif IsDefined("URL.cid")>
 	<cfset EditCategoryID=Decrypt(URL.cid,APPLICATION.Key)>
 </cfif>
+<cfif IsDefined("URL.CFGridKey")>
+	<cfset EditCategoryID=URL.CFGridKey>
+</cfif>
+<cfset CID=Encrypt(EditCategoryID,APPLICATION.Key)>
+
 <cfif IsDefined("URL.pid")>
 	<cfset EditParentID=Decrypt(URL.pid,APPLICATION.Key)>
 <cfelse>
 	<cfparam name="EditParentID" default="-1">
 </cfif>
 <cfset PID=Encrypt(EditParentID,APPLICATION.Key)>
+
 <cfif IsDefined("URL.lid")>
 	<cfset EditLocaleID=Decrypt(URL.lid,APPLICATION.Key)>
 </cfif>
 <cfset lid=Encrypt(EditLocaleID,APPLICATION.Key)>
+
 <cfif EditCategoryID GT "0">
 	<cfinvoke component="com.ContentManager.CategoryHandler"
 		method="GetCategoryLocaleID"
@@ -299,6 +306,10 @@
 						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_image_#r#"),1)>
 						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_image_#r#"),1)>
 						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_image_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFileSize","",1)>
+						<cfif FileExists(ExpandPath(Evaluate("MainFilePath_image_#r#")))>
+							<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(Evaluate("MainFilePath_image_#r#"))).Size,1)>
+						</cfif>
 						<cfset ArrayAppend(aProductFamilyView,sElement)>
 					<cfelse>
 						<cfif ThisResourceID GT "0">
@@ -341,8 +352,12 @@
 				<cfset StructInsert(sElement,"ResourceName",ResourceName_image_new,1)>
 				<cfset StructInsert(sElement,"ResourceText",ResourceText_image_new,1)>
 				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_image_new,1)>
+				<cfset StructInsert(sElement,"MainFileSize","",1)>
 				<cfif IsDefined("MainFilePath_image_new") AND MainFilePath_image_new IS NOT "">
 					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_image_new,1)>
+					<cfif FileExists(ExpandPath(MainFilePath_image_new))>
+						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(MainFilePath_image_new)).Size,1)>
+					</cfif>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
 				</cfif>
@@ -395,6 +410,10 @@
 						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_download_#r#"),1)>
 						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_download_#r#"),1)>
 						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_download_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFileSize","",1)>
+						<cfif FileExists(ExpandPath(Evaluate("MainFilePath_download_#r#")))>
+							<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(Evaluate("MainFilePath_download_#r#"))).Size,1)>
+						</cfif>
 						<cfset ArrayAppend(aProductFamilyDownload,sElement)>
 					<cfelse>
 						<cfif ThisResourceID GT "0">
@@ -437,8 +456,12 @@
 				<cfset StructInsert(sElement,"ResourceName",ResourceName_download_new,1)>
 				<cfset StructInsert(sElement,"ResourceText",ResourceText_download_new,1)>
 				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_download_new,1)>
+				<cfset StructInsert(sElement,"MainFileSize","",1)>
 				<cfif IsDefined("MainFilePath_download_new") AND MainFilePath_download_new IS NOT "">
 					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_download_new,1)>
+					<cfif FileExists(ExpandPath(MainFilePath_download_new))>
+						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(MainFilePath_download_new)).Size,1)>
+					</cfif>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
 				</cfif>
@@ -476,11 +499,11 @@
 		
 		<cfif IsDefined("FORM.CategoryName") AND IsDefined("FORM.ProductDescription")>
 			
-			<cfloop index="ThisProperty" list="ProductLongName,ProductShortName,ProductPositioningSentence,ProductDescription,CallToActionURLDeprecated,VideoURL,ColorConfiguratorURL">
+			<cfloop index="ThisProperty" list="ProductLongName,ProductShortName,ProductPositioningSentence,ProductDescription,CallToActionURLDeprecated,VideoURL,PartNumber">
 				<cfparam name="FORM.#ThisProperty#" default="">
 				<cfset MyProduct.SetProperty("#ThisProperty#","#Evaluate('FORM.#ThisProperty#')#")>
 			</cfloop>
-			<cfloop index="ThisImage" list="BrochurePath,CompareGymBrochurePath,ProductThumbnailPath,ProductThumbnailHoverPath,ProductImageSourcePath,ProductImageStorePath">
+			<cfloop index="ThisImage" list="BrochurePath,PublicDrawing,ProductThumbnailPath,ProductThumbnailHoverPath,ProductImageSourcePath,ProductImageStorePath">
 				<cfparam name="FORM.Delete#ThisImage#" default="0">
 				<cfparam name="FORM.#ThisImage#" default="">
 				<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
@@ -570,6 +593,20 @@
 						<cfset StructInsert(sElement,"ResourceName",Evaluate("ResourceName_image_#r#"),1)>
 						<cfset StructInsert(sElement,"ResourceText",Evaluate("ResourceText_image_#r#"),1)>
 						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_image_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFileSize","",1)>
+						<cfif FileExists(ExpandPath(Evaluate("MainFilePath_image_#r#")))>
+							<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(Evaluate("MainFilePath_image_#r#"))).Size,1)>
+						</cfif>
+						<cfif (Evaluate("ThumbnailFilePath_image_#r#") IS "" and Evaluate("MainFilePath_image_#r#") IS NOT "") or (IsDefined("FORM.MainFilePath_image_#r#FileObject") AND evaluate("FORM.MainFilePath_image_#r#FileObject") IS NOT "")>
+							<cfinvoke component="/com/utils/image" 
+								method="ResizeGalleryThumbnail" 
+								returnVariable="ThisImage"
+								WebrootPath="#APPLICATION.WebrootPath#"
+								Source="#Evaluate('MainFilePath_image_#r#')#"
+								Width="54"
+								Height="54">
+							<cfset SetVariable("ThumbnailFilePath_image_#r#",ThisImage)>
+						</cfif>
 						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_image_#r#"),1)>
 						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_image_#r#"),1)>
 						<cfset ArrayAppend(aProductView,sElement)>
@@ -614,8 +651,12 @@
 				<cfset StructInsert(sElement,"ResourceName",ResourceName_image_new,1)>
 				<cfset StructInsert(sElement,"ResourceText",ResourceText_image_new,1)>
 				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_image_new,1)>
+				<cfset StructInsert(sElement,"MainFileSize","",1)>
 				<cfif IsDefined("MainFilePath_image_new") AND MainFilePath_image_new IS NOT "">
 					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_image_new,1)>
+					<cfif FileExists(ExpandPath(MainFilePath_image_new))>
+						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(MainFilePath_image_new).Size,1)>
+					</cfif>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
 				</cfif>
@@ -668,6 +709,10 @@
 						<cfset StructInsert(sElement,"MainFilePath",Evaluate("MainFilePath_download_#r#"),1)>
 						<cfset StructInsert(sElement,"ThumbnailFilePath",Evaluate("ThumbnailFilePath_download_#r#"),1)>
 						<cfset StructInsert(sElement,"SpecificationSetID",Evaluate("ResourceSpecificationSetID_download_#r#"),1)>
+						<cfset StructInsert(sElement,"MainFileSize","",1)>
+						<cfif FileExists(ExpandPath(Evaluate("MainFilePath_download_#r#")))>
+							<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(Evaluate("MainFilePath_download_#r#"))).Size,1)>
+						</cfif>
 						<cfset ArrayAppend(aProductDownload,sElement)>
 					<cfelse>
 						<cfif ThisResourceID GT "0">
@@ -710,8 +755,12 @@
 				<cfset StructInsert(sElement,"ResourceName",ResourceName_download_new,1)>
 				<cfset StructInsert(sElement,"ResourceText",ResourceText_download_new,1)>
 				<cfset StructInsert(sElement,"SpecificationSetID",ResourceSpecificationSetID_download_new,1)>
+				<cfset StructInsert(sElement,"MainFileSize","",1)>
 				<cfif IsDefined("MainFilePath_download_new") AND MainFilePath_download_new IS NOT "">
 					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_download_new,1)>
+					<cfif FileExists(ExpandPath(MainFilePath_download_new))>
+						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(MainFilePath_download_new).Size,1)>
+					</cfif>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
 				</cfif>
@@ -768,7 +817,7 @@
 			<cfif IsDefined("FORM.ButLoad") AND Val(plclid) GTE "1">
 				<cfset SourceProduct=CreateObject("component","com.Product.Product")>
 				<cfset SourceProduct.Constructor(Val(EditCategoryID),APPLICATION.UtilsObj.SimpleDecrypt(plclid))>
-				<cfloop index="PropertyToCopy" list="ProductLongName,ProductShortName,ProductPositioningSentence,ProductDescription,CallToActionURLDeprecated,VideoURL,ColorConfiguratorURL,BrochurePath,CompareGymBrochurePath,ProductImagePath,ProductThumbnailPath,ProductThumbnailHoverPath,ProductImageSourcePath,ProductImageStorePath,aProductFeature,aProductBullet,aProductReview,aProductView,aProductAttribute">
+				<cfloop index="PropertyToCopy" list="ProductLongName,ProductShortName,ProductPositioningSentence,ProductDescription,CallToActionURLDeprecated,VideoURL,PartNumber,BrochurePath,PublicDrawing,ProductImagePath,ProductThumbnailPath,ProductThumbnailHoverPath,ProductImageSourcePath,ProductImageStorePath,aProductFeature,aProductBullet,aProductReview,aProductView,aProductAttribute">
 					<cfset MyProduct.SetProperty("#PropertyToCopy#",SourceProduct.GetProperty("#PropertyToCopy#"))>
 				</cfloop>
 			</cfif>

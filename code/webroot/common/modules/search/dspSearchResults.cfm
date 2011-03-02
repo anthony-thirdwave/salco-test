@@ -1,28 +1,21 @@
-<cfset Counter="1">
+<ul class="searchResults">
 <CFOUTPUT QUERY="ContentSearch" MAXROWS="#SearchNUM#" STARTROW="#StartRow#">
-	<h4><a href="/content.cfm/#url#">#Title#</a></h4>
-	Site location: #categoryTreeLinks(categorytree,custom4,3,' &gt; ')#<br/>
-	<p>
+	<li><a href="#url#">#Title#</a>
 	<cfif Custom1 neq "">
 		<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#REReplace(Custom1, '<[^>]*>','','All')#" NumChars="140"><br />
 	</cfif>
-	<cfif len(custom3)>
-		Topics: #searchLink('topic',custom3)#<br/>
-	</cfif>
-	<cfif len(category)>
-		Keywords: #searchLink('metakeyword',category)#<br/>
-	</cfif>
-	</p>
-	<cfset Counter=Counter+1>
+	<a href="#url#">#url#</a>
+	</li>
 </CFOUTPUT>
-<div class="pagination">
+
+
 <cf_AddToQueryString QueryString="#FormQueryString#" name="oa" value="2" OmitList="SearchNum,StartRow">
 <cf_AddToQueryString QueryString="#QueryString#" name="searchTxt" value="#searchTxt#">
 <cfmodule template="/common/modules/utils/pagination.cfm"
 	StartRow="#StartRow#" SearchNum="#SearchNum#"
 	RecordCount="#ContentSearch.RecordCount#"
-	FieldList="#QueryString#">
-</div>
+	FieldList="#QueryString#"
+	Label="Search Results">
 
 <cffunction name="searchLink" output="false">
 	<cfargument name="searchType">
@@ -34,7 +27,7 @@
 	<cfset local.links = "">
 	<cfloop list="#arguments.searchList#" index="local.i" delimiters=",">
 		<cfset local.linkSubStr = "">
-		<cfset local.linkSubStr = "<a href='#APPLICATION.utilsObj.parseCategoryUrl(arguments.searchAlias)#?#arguments.searchType#=#urlencodedformat(trim(local.i))#'>#trim(local.i)#</a>">
+		<cfset local.linkSubStr = "<a href='#APPLICATION.MyCategoryHandler.parseCategoryUrl(arguments.searchAlias)#?#arguments.searchType#=#urlencodedformat(trim(local.i))#'>#trim(local.i)#</a>">
 		<cfset local.links = local.links & " " & local.linkSubStr>
 	</cfloop>
 	<!--- <cfdump var="#local.links#"> --->

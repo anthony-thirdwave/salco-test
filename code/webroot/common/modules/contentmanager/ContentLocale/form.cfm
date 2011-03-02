@@ -736,7 +736,7 @@
 					<cfoutput>
 					<tr valign="top">
 						<td><input type="text" name="LinkTitle_#li#" value="#aLink[li].Title#" size="20" maxlength="255"></td>
-						<td><input type="text" name="LinkCaption_#li#" value="#aLink[li].Caption#" size="40" maxlength="255"></td>
+						<td><textarea cols="50" rows="4" name="LinkCaption_#li#">#aLink[li].Caption#</textarea></td>
 						<td><input type="text" name="LinkURL_#li#" value="#aLink[li].URL#" size="40" maxlength="255"></td>
 						<td nowrap>
 							<cfoutput><cfif ArrayLen(aLink) GT "1">
@@ -753,9 +753,9 @@
 						<td>#aLink[li].Caption#</td>
 						<td>
 							<a href="#aLink[li].URL#" target="_blank">#aLink[li].URL#</a>
-							<input type="hidden" name="LinkTitle_#li#" value="#aLink[li].Title#">
-							<input type="hidden" name="LinkCaption_#li#" value="#aLink[li].Caption#">
-							<input type="hidden" name="LinkURL_#li#" value="#aLink[li].URL#">
+							<input type="hidden" name="LinkTitle_#li#" value="#HTMLEditFormat(aLink[li].Title)#">
+							<input type="hidden" name="LinkCaption_#li#" value="#HTMLEditFormat(aLink[li].Caption)#">
+							<input type="hidden" name="LinkURL_#li#" value="#HTMLEditFormat(aLink[li].URL)#">
 						</td>
 						<td colspan="2">&nbsp;</td>
 					</tr>
@@ -766,7 +766,7 @@
 	<cfif FormMode IS "ShowForm">
 		<tr valign="top">
 			<td><input type="text" name="LinkTitle_New" value="" size="20" maxlength="255"></td>
-			<td><input type="text" name="LinkCaption_New" value="" size="40" maxlength="255"></td>
+			<td><textarea cols="50" rows="4" name="LinkCaption_New"></textarea></td>
 			<td><input type="text" name="LinkURL_New" value="" size="40" maxlength="255"></td>
 			<td colspan="2">&nbsp;</td>
 		</tr>

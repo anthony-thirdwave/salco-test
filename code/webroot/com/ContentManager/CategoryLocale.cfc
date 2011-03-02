@@ -62,7 +62,7 @@
 	<cfloop index="ThisCategoryTypeID" list="#ValueList(GetAllCategoryType.LabelID)#">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="62"><!--- Product Family--->
-				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRollover">
+				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRepresentative,CategoryImageRollover">
 			</cfcase>
 			<cfcase value="64"><!--- Product --->
 				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader">

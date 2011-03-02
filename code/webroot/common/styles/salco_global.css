@@ -292,6 +292,7 @@ ul.carsSub a {
 	height: 17px;
 	color:white;
 	padding: 5px 0 0 20px;
+	display:block;
 }
 ul.carsSub {
 	background: url(/common/images/template/red_head.jpg) left top no-repeat #ed1c24!important;
@@ -506,6 +507,9 @@ ul.carsSub ul {
 	padding-right: 10px;
 }
 table.featuredDownloads td {
+	padding: 6px;	
+}
+table.featuredDownloads th {
 	padding: 6px;	
 }
 .grayCol td {

@@ -617,29 +617,51 @@
 			</cfif>
 		</cfif>
 	</cfcase>
-	<cfcase value="255x"><!--- List of Links --->
+	<cfcase value="256"><!--- List of Links / Text Slide Show --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aLink") AND IsArray(ATTRIBUTES.sContentBody.aLink) AND ArrayLen(ATTRIBUTES.sContentBody.aLink) GT 0>
-			<cfset aLink = ATTRIBUTES.sContentBody.aLink>
+			<cfset aLink=ATTRIBUTES.sContentBody.aLink>
 			<cfsavecontent variable="FileContents">
 				<cfoutput>
-				<ul style="margin:0px; padding:15px;">
-				<cfloop from="1" to="#ArrayLen(aLink)#" index="i">
-					<cfset sLink = aLink[i]>
-					<cfif IsStruct(sLink) AND StructKeyExists(sLink,"URL") AND sLink.URL NEQ "">
-						<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
-							<cfset thisName = sLink.Title>
-						<cfelse>
-							<cfset thisName = sLink.URL>
+					<div id="tabsRotate">
+					<cfloop from="1" to="#ArrayLen(aLink)#" index="i">
+						<cfset sLink=aLink[i]>
+						<cfif IsStruct(sLink) AND StructKeyExists(sLink,"URL") AND sLink.URL NEQ "">
+							<cfset thisCaption="">
+							<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
+								<cfset thisName=sLink.Title>
+							<cfelse>
+								<cfset thisName=sLink.URL>
+							</cfif>
+							<cfif StructKeyExists(sLink,"Caption") AND sLink.Caption NEQ "">
+								<cfset thisCaption=sLink.Caption>
+							</cfif>
+							<div id="homeContChange#i#" class="content">
+								<strong><em>#thisName#</em></strong>
+								<cfif thisCaption is not ""><a href="#sLink.URL#"><p>#thisCaption#</p></a></cfif>
+							</div>
 						</cfif>
-						<li><a href="#Replace(sLink.URL,"&","&amp;","all")#" target="_blank">#thisName#</a></li>
-					</cfif>
-				</cfloop>
-				</ul>
+					</cfloop>
+					<ul class="homeNavRight" id="homeNavRight">
+					<cfloop from="1" to="#ArrayLen(aLink)#" index="i">
+						<cfset sLink=aLink[i]>
+						<cfif IsStruct(sLink) AND StructKeyExists(sLink,"URL") AND sLink.URL NEQ "">
+							<cfset thisCaption="">
+							<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
+								<cfset thisName=sLink.Title>
+							<cfelse>
+								<cfset thisName=sLink.URL>
+							</cfif>
+							<li><a href="##homeContChange#i#"><em>#thisName#</em></a></li>
+						</cfif>
+					</cfloop>
+					</ul>
+					<div class="clearFix"></div>
+					</div>
 				</cfoutput>
 			</cfsavecontent>
 		</cfif>
 	</cfcase>
-	<cfcase value="256"><!--- Article Listing --->
+	<cfcase value="256x"><!--- Article Listing --->
 		<cfquery name="getThisCategory" datasource="#APPLICATION.DSN#">
 			SELECT CategoryTypeID,CategoryName,CategoryAlias FROM t_Category
 			WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.CurrentCategoryID#">

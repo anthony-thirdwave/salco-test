@@ -1,3 +1,4 @@
+<cfsetting showdebugoutput="0" RequestTimeOut="60000">
 <cfparam name="ATTRIBUTES.NodeID" default="-1">
 <cfparam name="ATTRIBUTES.Level" default="1">
 
@@ -28,7 +29,7 @@
 			
 		<cfif Val(ThisCategoryID) GTE "0">
 			<br>importing...
-			<cfhttp url="http://www.salco.dev09.thirdwavellc.com/common/modules/product/productImportHelper2.cfm?NodeID=#GetDetail.NodeID#" method="GET" resolveurl="false">
+			<cfhttp url="http://www.salco.dev09.thirdwavellc.com/common/modules/product/productImportHelper2.cfm?NodeID=#GetDetail.NodeID#" method="GET" resolveurl="false" Timeout="60000">
 			results(<cfoutput>#Trim(CFHTTP.FileContent)#</cfoutput>)
 			done!
 		<cfelse>

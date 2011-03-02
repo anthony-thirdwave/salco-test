@@ -11,20 +11,6 @@
 	<cfset ContentTypeIDList=ListAppend(ContentTypeIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
-<cfinvoke component="com.ContentManager.CategoryHandler" 
-	method="GetNavCategoryQuery" 
-	returnVariable="ValidParents">
-<cfset CategoryIDList="">
-<cfoutput query="ValidParents">
-	<cfset Gutter="">
-	<cfloop index="i" from="1" to="#DisplayLevel#" step="1">
-		<cfset Gutter="#Gutter#&nbsp;&nbsp;">
-	</cfloop>
-	<cfset CategoryIDList=ListAppend(CategoryIDList,"{#CategoryID#|#Gutter##CategoryName#}","^^")>
-</cfoutput>
-<cfset SourceCategoryIDList=ListPrepend(CategoryIDList,"{-1|Use This Page}","^^")>
-<cfset CategoryIDList=ListPrepend(CategoryIDList,"{-1|None (Top Level)}","^^")>
-
 <cfif ListFindNoCase(Restrictions,"InheritID")>
 	<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="qInheritIDList">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
@@ -264,6 +250,20 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"SourceCategoryID")>
+	<cfinvoke component="com.ContentManager.CategoryHandler" 
+		method="GetNavCategoryQuery" 
+		returnVariable="ValidParents">
+	<cfset CategoryIDList="">
+	<cfoutput query="ValidParents">
+		<cfset Gutter="">
+		<cfloop index="i" from="1" to="#DisplayLevel#" step="1">
+			<cfset Gutter="#Gutter#&nbsp;&nbsp;">
+		</cfloop>
+		<cfset CategoryIDList=ListAppend(CategoryIDList,"{#CategoryID#|#Gutter##CategoryName#}","^^")>
+	</cfoutput>
+	<cfset SourceCategoryIDList=ListPrepend(CategoryIDList,"{-1|Use This Page}","^^")>
+	<cfset CategoryIDList=ListPrepend(CategoryIDList,"{-1|None (Top Level)}","^^")>
+
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
 		type="select"

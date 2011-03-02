@@ -107,311 +107,6 @@
 		<cfreturn "">
 	</cffunction>
 	
-	<cffunction name="GetProductCombinationDetails" returntype="struct" output="false" access="remote">
-		<cfargument name="ProductAlias1" default="" type="string" required="true">
-		<cfargument name="ProductAlias2" default="" type="string" required="true">
-		<cfargument name="LocaleID" default="" type="string" required="true">
-		<cfargument name="LanguageID" default="" type="string" required="true">
-		
-		<cfset sReturn=StructNew()>
-		
-		<cfquery name="GetProductID1" datasource="#APPLICATION.DSN#" maxrows="1">
-			select CategoryID from t_category
-			WHERE CategoryAlias=<cfqueryparam value="#Trim(ARGUMENTS.ProductAlias1)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
-		</cfquery>
-		
-		<cfquery name="GetProductID2" datasource="#APPLICATION.DSN#" maxrows="1">
-			select CategoryID from t_Category
-			WHERE CategoryAlias=<cfqueryparam value="#Trim(ARGUMENTS.ProductAlias2)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
-		</cfquery>
-		
-		<cfinvoke component="/com/Product/ProductCombinationHandler"
-			method="GetProductCombinationID" 
-			returnVariable="ThisProductCombinationID"
-			ProductID1="#Val(GetProductID1.CategoryID)#"
-			ProductID2="#Val(GetProductID2.CategoryID)#"
-			LanguageID="#Val(ARGUMENTS.LanguageID)#">
-		<cfset UsingDefaultCombination="no">
-		<cfif Val(ThisProductCombinationID) LTE "0">
-			<cfinvoke component="/com/Product/ProductCombinationHandler"
-				method="GetProductCombinationID" 
-				returnVariable="ThisProductCombinationID"
-				ProductID1="#Val(GetProductID1.CategoryID)#"
-				ProductID2="#Val(GetProductID2.CategoryID)#"
-				LanguageID="#Val(APPLICATION.DefaultLanguageID)#">
-			<cfset UsingDefaultCombination="Yes">
-		</cfif>
-		
-		<cfset MyCombination=CreateObject("component","com.Product.ProductCombination")>
-		<cfset MyCombination.Constructor(ThisProductCombinationID,ARGUMENTS.LanguageID)>
-		
-		<cfset ColumnList="CombinationID,ProductCombinationDescription,LargeImageURL,LargeImageURLPrint,ZoomImageURL,ProductCombinationPrice,CallToActionURL">
-		<cfset qReturn=QueryNew(ColumnList)>
-		
-		<cfif Val(MyCombination.GetProperty("CombinationID")) GT "0">
-			<cfset QueryAddRow(qReturn,1)>
-			<cfif UsingDefaultCombination>
-				<cfset QuerySetCell(qReturn,"ProductCombinationPrice","")>
-			<cfelse>
-				<cfset QuerySetCell(qReturn,"ProductCombinationPrice",MyCombination.GetProperty("ProductCombinationPrice"))>
-			</cfif>
-			<cfset QuerySetCell(qReturn,"CombinationID",MyCombination.GetProperty("CombinationID"))>
-			<cfset PromoText="">
-			<cfquery name="GetFrontProductPage" datasource="#APPLICATION.DSN#">
-				select CategoryID from t_Category Where 
-				SourceID=<cfqueryparam value="#GetProductID1.CategoryID#" cfsqltype="CF_SQL_INTEGER"> and
-				CategoryTypeID=<cfqueryparam value="164" cfsqltype="CF_SQL_INTEGER">
-			</cfquery>
-			<cfinvoke component="/com/product/producthandler" method="GetLinkedProductPage" returnVariable="qLinkedPage"
-				ProductID="#GetProductID1.CategoryID#"
-				CategoryID="#GetFrontProductPage.CategoryID#"
-				LocaleID="#ARGUMENTS.LocaleID#">
-			<cfif isWddx(qLinkedPage.CategoryLocalePropertiesPacket)>
-				<cfwddx action="WDDX2CFML" input="#qLinkedPage.CategoryLocalePropertiesPacket#" output="sLinkedPageProps">
-				<cfif StructKeyExists(sLinkedPageProps,"sPromoText")>
-					<cfif IsStruct(sLinkedPageProps.sPromoText)>
-						<cfset ThisSPromoText=sLinkedPageProps.sPromoText>
-						<cfif StructKeyExists(ThisSPromoText,ARGUMENTS.ProductAlias2)>
-							<cfset PromoText=ThisSPromoText[ARGUMENTS.ProductAlias2]>
-						</cfif>
-					</cfif>
-				</cfif>
-			</cfif>
-			<cfset ThisProductCombinationDescription=MyCombination.GetProperty("ProductCombinationDescription")>
-			<cfif PromoText IS NOT "">
-				<cfset ThisProductCombinationDescription="<font color=""##FF0000""><b>#PromoText#</b></font><br>#ThisProductCombinationDescription#">
-			</cfif>
-			<cfset QuerySetCell(qReturn,"ProductCombinationDescription",ThisProductCombinationDescription)>
-			<cfif MyCombination.GetProperty("ProductCombinationImagePath") IS NOT "">
-				<cfif APPLICATION.Production>
-					<cfset QuerySetCell(qReturn,"ZoomImageURL","http://www.salco.com#MyCombination.GetProperty('ProductCombinationImagePath')#")>
-				<cfelse>
-					<cfset QuerySetCell(qReturn,"ZoomImageURL","http://www.staging.salco.01.thirdwaveweb.com#MyCombination.GetProperty('ProductCombinationImagePath')#")>
-				</cfif>
-			</cfif>
-			
-			<cfif MyCombination.GetProperty("ProductCombinationFlashZoomPath") IS NOT "">
-				<cfif APPLICATION.Production>
-					<cfset QuerySetCell(qReturn,"ZoomImageURL","http://www.salco.com#MyCombination.GetProperty('ProductCombinationFlashZoomPath')#")>
-				<cfelse>
-					<cfset QuerySetCell(qReturn,"ZoomImageURL","http://www.staging.salco.01.thirdwaveweb.com#MyCombination.GetProperty('ProductCombinationFlashZoomPath')#")>
-				</cfif>
-			</cfif>
-			
-			<cfif MyCombination.GetProperty("ProductCombinationThumbnailPath") IS NOT "">
-				<cfif APPLICATION.Production>
-					<cfset QuerySetCell(qReturn,"LargeImageURL","http://www.salco.com#MyCombination.GetProperty('ProductCombinationThumbnailPath')#")>
-					<cfset QuerySetCell(qReturn,"LargeImageURLPrint","http://www.salco.com#MyCombination.GetProperty('ProductCombinationThumbnailPath')#")>
-				<cfelse>
-					<cfset QuerySetCell(qReturn,"LargeImageURL","http://www.staging.salco.01.thirdwaveweb.com#MyCombination.GetProperty('ProductCombinationThumbnailPath')#")>
-					<cfset QuerySetCell(qReturn,"LargeImageURLPrint","http://www.staging.salco.01.thirdwaveweb.com#MyCombination.GetProperty('ProductCombinationThumbnailPath')#")>
-				</cfif>
-			</cfif>
-			
-			<cfif MyCombination.GetProperty("ProductCombinationFlashPath") IS NOT "">
-				<cfif APPLICATION.Production>
-					<cfset QuerySetCell(qReturn,"LargeImageURL","http://www.salco.com#MyCombination.GetProperty('ProductCombinationFlashPath')#")>
-				<cfelse>
-					<cfset QuerySetCell(qReturn,"LargeImageURL","http://www.staging.salco.01.thirdwaveweb.com#MyCombination.GetProperty('ProductCombinationFlashPath')#")>
-				</cfif>
-			</cfif>
-			
-			<cfif ARGUMENTS.LocaleID IS "2">
-				<cfset ThisURL=MyCombination.GetProperty("ProductCombinationCallToActionURL")>
-				<cfset QuerySetCell(qReturn,"CallToActionURL",ThisURL)>
-			</cfif>
-		</cfif>
-		
-		<cfset sGeneral=StructNew()>
-		<cfset StructInsert(sGeneral,"ProductCombination",qReturn)>
-		
-		<cfinvoke 
-			component="/com/Product/ProductHandler" 
-			method="GetProductBasicDetail"
-			ProductAlias="#ARGUMENTS.ProductAlias1#"
-			LocaleID="#Val(ARGUMENTS.LocaleID)#"
-			LanguageID="#Val(ARGUMENTS.LanguageID)#"
-			returnvariable="Result1">
-			
-		<cfset StructInsert(sGeneral,"Product1",Result1)>
-		
-		<cfinvoke 
-			component="/com/Product/ProductHandler" 
-			method="GetProductBasicDetail"
-			ProductAlias="#ARGUMENTS.ProductAlias2#"
-			LocaleID="#Val(ARGUMENTS.LocaleID)#"
-			LanguageID="#Val(ARGUMENTS.LanguageID)#"
-			returnvariable="Result2">
-			
-		<cfset StructInsert(sGeneral,"Product2",Result2)>
-		
-		<cfinvoke 
-			component="/com/Product/ProductHandler" 
-			method="GetProductFeature"
-			ProductAlias="#ARGUMENTS.ProductAlias1#"
-			LanguageID="#ARGUMENTS.LanguageID#"
-			returnvariable="Product1Features">
-		<cfif Product1Features.RecordCount IS "0">
-			<cfinvoke 
-				component="/com/Product/ProductHandler" 
-				method="GetProductFeature"
-				ProductAlias="#ARGUMENTS.ProductAlias1#"
-				LanguageID="#APPLICATION.DefaultLanguageID#"
-				returnvariable="Product1Features">
-		</cfif>
-		<cfset StructInsert(sGeneral,"Product1Features",Product1Features)>
-		
-		<cfinvoke 
-			component="/com/Product/ProductHandler" 
-			method="GetProductFeature"
-			ProductAlias="#ARGUMENTS.ProductAlias2#"
-			LanguageID="#ARGUMENTS.LanguageID#"
-			returnvariable="Product2Features">
-		<cfif Product2Features.RecordCount IS "0">
-			<cfinvoke 
-				component="/com/Product/ProductHandler" 
-				method="GetProductFeature"
-				ProductAlias="#ARGUMENTS.ProductAlias2#"
-				LanguageID="#APPLICATION.DefaultLanguageID#"
-				returnvariable="Product2Features">
-		</cfif>
-		<cfset StructInsert(sGeneral,"Product2Features",Product2Features)>
-		
-		<cfset StructInsert(sReturn,"General",sGeneral)>
-		
-		<cfset sReadout=StructNew()>
-		<cfset StructInsert(sReadout,"SummaryParagraph","")>
-		<cfset StructInsert(sReadout,"Title","Electronic Readouts")>
-		<cfinvoke 
-			component="/com/Product/ProductSpecsHandler" 
-			method="GetProductSpecs"
-			ProductAlias="#ARGUMENTS.ProductAlias2#"
-			LanguageID="#ARGUMENTS.LanguageID#"
-			returnvariable="ResultReadouts">
-		<cfif ResultReadouts.RecordCount IS "0">
-			<cfinvoke 
-				component="/com/Product/ProductSpecsHandler" 
-				method="GetProductSpecs"
-				ProductAlias="#ARGUMENTS.ProductAlias2#"
-				LanguageID="#APPLICATION.DefaultLanguageID#"
-				returnvariable="ResultReadouts">
-		</cfif>
-		
-		<cfset ColumnList3="ItemValue">
-		<cfset qConsoleReadOut=QueryNew(ColumnList3)>
-		
-		<cfoutput query="ResultReadouts">
-			<cfset ThisItemValue="">
-			<cfif ItemValue IS "S">
-				<cfset ThisItemValue="#ItemName#">
-			<cfelseif ListFindNoCase("O,-",ItemValue)>
-				<cfset ThisItemValue="">
-			<cfelseif ItemValue IS NOT "">
-				<cfset ThisItemValue="#ItemValue#">
-			</cfif>
-			<cfif ThisItemValue IS NOT "">
-				<cfset QueryAddRow(qConsoleReadOut,1)>
-				<cfset QuerySetCell(qConsoleReadOut,"ItemValue",ThisItemValue)>
-			</cfif>
-		</cfoutput>
-		
-		<cfset StructInsert(sReadout,"ItemList",qConsoleReadOut)>
-		<cfset StructInsert(sReturn,"Readouts",sReadout)>
-		
-		
-		<cfset sSpecs=StructNew()>
-		<cfset StructInsert(sSpecs,"SummaryParagraph","")>
-		<cfset StructInsert(sSpecs,"Title","Specifications")>
-		<cfinvoke 
-			component="/com/Product/ProductSpecsHandler" 
-			method="GetProductSpecs"
-			ProductAlias="#ARGUMENTS.ProductAlias1#"
-			LanguageID="#ARGUMENTS.LanguageID#"
-			returnvariable="ResultReadouts">
-		<cfif ResultReadouts.RecordCount IS "0">
-			<cfinvoke 
-				component="/com/Product/ProductSpecsHandler" 
-				method="GetProductSpecs"
-				ProductAlias="#ARGUMENTS.ProductAlias1#"
-				LanguageID="#APPLICATION.DefaultLanguageID#"
-				returnvariable="ResultReadouts">
-		</cfif>
-		<cfset StructInsert(sSpecs,"ItemList",ResultReadouts)>
-		<cfset StructInsert(sReturn,"Specs",sSpecs)>
-		
-		
-		<cfset aPrograms=ArrayNew(1)>
-		
-		<cfset ThisProgramID="-1">
-		<cfquery name="GetProps" datasource="#APPLICATION.DSN#">
-			select PropertiesPacket from qry_GetCategory Where CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(GetProductID2.CategoryID)#">
-		</cfquery>
-		<cfif IsWddx(GetProps.PropertiesPacket)>
-			<cfwddx action="WDDX2CFML" input="#GetProps.PropertiesPacket#" output="sCat">
-			<cfif StructKeyExists(sCat,"ProductProgramTypeID") and Val(sCat.ProductProgramTypeID) GT "0">
-				<cfset ThisProgramID=Val(sCat.ProductProgramTypeID)>
-			</cfif>
-		</cfif>
-		
-		<cfif Val(ThisProgramID) GT "0">
-			<cfquery name="GetProg" datasource="#APPLICATION.DSN#" maxrows="1">
-				select ContentID from t_Content Where CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisProgramID)#"> and ContentTypeID=<cfqueryparam cfsqltype="cf_sql_integer" value="222">
-				order by ContentPriority
-			</cfquery>
-			<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
-				<cfprocresult name="GetContent">
-				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(GetProg.ContentID)#" null="No">
-				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#Val(ARGUMENTS.LocaleID)#" null="No">
-				<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
-			</cfstoredproc>
-			<cfif IsWddx(GetContent.ContentBody)>
-				<cfwddx action="WDDX2CFML" input="#GetContent.ContentBody#" output="sContentBody">
-				<cfif StructKeyExists(sContentBody,"aFile") AND IsArray(sContentBody.aFile) AND ArrayLen(sContentBody.aFile) GT "0">
-					<cfset ColumnList2="ItemName,ItemText,ItemImageURL">
-					<cfset qProgram=QueryNew(ColumnList2)>
-					<Cfset LastDataBlockName=sContentBody.aFile[1].FileName>
-					<cfloop index="pi" from="1" to="#ArrayLen(sContentBody.aFile)#" step="1">
-						<cfif sContentBody.aFile[pi].FileCaption IS "">
-							<cfset ThisDataBlockName="#sContentBody.aFile[pi].FileName#">
-						</cfif>
-						<cfif LastDataBlockName IS NOT ThisDataBlockName>
-							<cfset s1=StructNew()>
-							<cfset StructInsert(s1,"DataBlockName","#LastDataBlockName#")>
-							<cfset StructInsert(s1,"ItemsList",qProgram)>
-							<cfset ArrayAppend(aPrograms,s1)>
-							<cfset qProgram=QueryNew(ColumnList2)>
-							<cfset LastDataBlockName=ThisDataBlockName>
-						</cfif>
-						<cfif sContentBody.aFile[pi].FileCaption IS NOT "">
-							<cfset QueryAddRow(qProgram,1)>
-							<cfset QuerySetCell(qProgram,"ItemName","#sContentBody.aFile[pi].FileName#")>
-							<cfset QuerySetCell(qProgram,"ItemText","#sContentBody.aFile[pi].FileCaption#")>
-							<cfif APPLICATION.Production>
-								<cfset QuerySetCell(qProgram,"ItemImageURL","http://www.salco.com#sContentBody.aFile[pi].FilePath#")>
-							<cfelse>
-								<cfset QuerySetCell(qProgram,"ItemImageURL","http://www.staging.salco.01.thirdwaveweb.com#sContentBody.aFile[pi].FilePath#")>
-							</cfif>
-						</cfif>
-					</cfloop>
-					<cfset s1=StructNew()>
-					<cfset StructInsert(s1,"DataBlockName","#LastDataBlockName#")>
-					<cfset StructInsert(s1,"ItemsList",qProgram)>
-					<cfset ArrayAppend(aPrograms,s1)>
-					<cfset qProgram=QueryNew(ColumnList2)>
-					<cfset LastDataBlockName=ThisDataBlockName>
-				</cfif>
-			</cfif>
-		</cfif>
-		
-		<cfset sPrograms=StructNew()>
-		<cfset StructInsert(sPrograms,"SummaryParagraph","Click on any of the workouts listed below for a more detailed description.")>
-		<cfset StructInsert(sPrograms,"ItemsList",aPrograms)>
-		
-		<cfset StructInsert(sReturn,"Programs",sPrograms)>
-		
-		<cfreturn sReturn>
-	</cffunction>
-	
 	<cffunction name="GetProductFamilyProducts" returntype="query" output="false" access="remote">
 		<cfargument name="ProductFamilyAlias" default="" type="string" required="true">
 		<cfargument name="LocaleID" default="" type="string" required="true">
@@ -502,99 +197,6 @@
 		</cfif>
 		
 		<cfreturn qReturn>
-	</cffunction>
-	
-	<cffunction name="GetProductFamilyBrochureOverride" returntype="string" output="false">
-		<cfargument name="ProductID" default="" type="numeric" required="true">
-		<cfargument name="LocaleID" default="" type="numeric" required="true">
-		<cfargument name="LanguageID" default="" type="numeric" required="true">
-		
-		<cfset ReturnValue="0">
-		
-		<cfinvoke component="/com/Product/ProductHandler"
-			method="GetProductFamilyID"
-			returnVariable="CurrentProductFamilyID"
-			ProductID="#ARGUMENTS.ProductID#">
-		<!--- First check if there is brochure at the product family level--->	
-		<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
-			SELECT * FROM t_ProductAttribute
-			WHERE ProductFamilyAttributeID=<cfqueryparam cfsqltype="cf_sql_integer" value="1441"> AND 
-			CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(CurrentProductFamilyID)#"> and 
-			languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#">
-		</cfquery>
-		
-		<cfoutput query="GetItems">
-			<cfif AttributeValue IS NOT "">
-				<Cfset ReturnValue="#Val(AttributeValue)#">
-			</cfif>
-		</cfoutput>
-		
-		<cfreturn ReturnValue>
-	</cffunction>
-	
-	<cffunction name="GetProductFamilyBrochure" returntype="string" output="false">
-		<cfargument name="ProductID" default="" type="numeric" required="true">
-		<cfargument name="LocaleID" default="" type="numeric" required="true">
-		<cfargument name="LanguageID" default="" type="numeric" required="true">
-		
-		<cfset ReturnValue="">
-		
-		<cfinvoke component="/com/Product/ProductHandler"
-			method="GetProductFamilyID"
-			returnVariable="CurrentProductFamilyID"
-			ProductID="#ARGUMENTS.ProductID#">
-		<!--- First check if there is brochure at the product family level--->	
-		<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
-			SELECT * FROM t_ProductAttribute
-			WHERE ProductFamilyAttributeID=<cfqueryparam cfsqltype="cf_sql_integer" value="1224"> AND 
-			CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(CurrentProductFamilyID)#"> and 
-			languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#">
-		</cfquery>
-		
-		<cfoutput query="GetItems">
-			<cfif AttributeValue IS NOT "">
-				<Cfset ReturnValue="#AttributeValue#">
-			</cfif>
-		</cfoutput>
-		
-		<cfif ReturnValue IS "">
-			<!--- else check the support page --->
-			<cfquery name="GetProductFamilyName" datasource="#APPLICATION.DSN#">
-				select CategoryName,ParentID from t_Category Where CategoryID=#Val(CurrentProductFamilyID)#
-			</cfquery>
-			<cfquery name="GetName" datasource="#APPLICATION.DSN#">
-				select CategoryName from t_Category Where CategoryID=#Val(GetProductFamilyName.ParentID)#
-			</cfquery>
-			<cfquery name="GetContentID" datasource="#APPLICATION.DSN#">
-				select ContentID 
-				from qry_GetContent
-				WHERE ContentActive=1 and ContentTypeID=222 and CategoryAlias='downloadbrochure_1' and ContentName='#GetName.CategoryName#'
-			</cfquery>
-			<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
-				<cfprocresult name="GetContent">
-				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(GetContentID.ContentID)#" null="No">
-				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#ARGUMENTS.LocaleID#" null="No">
-				<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
-			</cfstoredproc>
-			<cfquery name="GetProperties" datasource="#APPLICATION.DSN#">
-				select PropertiesPacket 
-				from t_Properties 
-				WHERE PropertiesID=#Val(GetContent.contentLocalePropertiesID)#
-			</cfquery>
-			
-			<cfif IsWDDX(GetContent.ContentBody)>
-				<cfwddx action="WDDX2CFML" input="#GetContent.ContentBody#" output="sProperties">
-				<cfif StructKeyExists(sProperties,"aFile") AND IsArray(sProperties.aFile)>
-					<cfloop index="i" from="1" to="#ArrayLen(sProperties.aFile)#" step="1">
-						<cfif Trim(sProperties.AFile[i].FileName) is Trim(GetProductFamilyName.CategoryName)>
-							<cfset ReturnValue="#sProperties.AFile[i].FilePath#">
-							<cfreturn ReturnValue>
-						</cfif>
-					</cfloop>
-				</cfif>
-			</cfif>
-		</cfif>
-		<cfreturn ReturnValue>
 	</cffunction>
 	
 	<cffunction name="GetProductLanguages" returntype="query" output="false">
@@ -856,300 +458,6 @@
 		<cfreturn qReturn>
 	</cffunction>
 	
-	<cffunction name="DeactivateProduct" output="false" returntype="boolean">
-		<cfargument name="CategoryID" default="" type="numeric" required="true">
-		<cfargument name="LocaleID" default="" type="numeric" required="true">
-		<cfargument name="UserID" default="" type="numeric" required="true">
-		<cfargument name="SaveToProduction" default="0" type="boolean" required="false">
-		
-		<cfquery name="GetCategoryTypeID" datasource="#APPLICATION.DSN#">
-			SELECT CategoryTypeID FROM  t_Category 
-			WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(ARGUMENTS.CategoryID)#">
-		</cfquery>
-		
-		<!--- IF Category Exists --->
-		<cfif GetCategoryTypeID.RecordCount GT 0>
-			
-			<cfset thisCategoryTypeID = GetCategoryTypeID.CategoryTypeID>
-			
-			<cfswitch expression="#thisCategoryTypeID#">
-				<cfcase value="62"><!--- Product Family --->
-					<!--- GET ALL 'Content W/ Product Family' Categories for this Product Family --->
-					<cfquery name="getProdFamCategories" datasource="#APPLICATION.DSN#">
-						SELECT CategoryID AS CatID FROM t_Category
-						WHERE SourceID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(ARGUMENTS.CategoryID)#">
-						AND CategoryTypeID = <cfqueryparam cfsqltype="cf_sql_integer" value="162">
-					</cfquery>
-					
-					<cfoutput query="getProdFamCategories">
-						<!--- if master locale, deactivate category --->
-						<cfif Val(ARGUMENTS.LocaleID) EQ 1>
-							<cfquery name="DeactivateProdFamCategory" datasource="#APPLICATION.DSN#">
-								UPDATE t_Category
-									SET CategoryActive = <cfqueryparam cfsqltype="cf_sql_integer" value="0">
-								WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(CatID)#">
-							</cfquery>
-							
-							<cfif ARGUMENTS.SaveToProduction>
-								<cfinvoke component="/com/ContentManager/CategoryHandler" 
-									method="GetProductionSiteInformation"
-									returnVariable="sProductionSiteInformation"
-									CategoryID="#val(CatID)#">
-								<cfif IsStruct(sProductionSiteInformation)>
-									<cfquery name="DeactivateProdFamCategory_Production" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-										UPDATE t_Category
-											SET CategoryActive = 0, CachedateTime=getdate()
-										WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(CatID)#">
-									</cfquery>
-								</cfif>
-							</cfif>
-						</cfif>
-						
-						<!--- Try to get 'Content W/ Product Family' Category Locale --->
-						<cfquery name="getProdFamCategoryLocale" datasource="#APPLICATION.DSN#" maxrows="1">
-							SELECT CategoryLocaleID FROM t_CategoryLocale
-							WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(CatID)#">
-							AND LocaleID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(ARGUMENTS.LocaleID)#">
-						</cfquery>
-						<!--- If Category Locale exists deactivate, else create a new one, deactivate and save  --->
-						<cfif getProdFamCategoryLocale.RecordCount GT 0>
-							<cfquery name="UpdateCategoryLocale" datasource="#APPLICATION.DSN#">
-								UPDATE t_CategoryLocale
-									SET CategoryLocaleActive = <cfqueryparam cfsqltype="cf_sql_integer" value="0">
-								WHERE CategoryLocaleID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(getProdFamCategoryLocale.CategoryLocaleID)#">
-							</cfquery>
-							<cfif ARGUMENTS.SaveToProduction>
-								<cfset thisCategoryLocale = CreateObject("component","com.ContentManager.CategoryLocale")>
-								<cfset thisCategoryLocale.Constructor(val(getProdFamCategoryLocale.CategoryLocaleID))>
-								<cfset thisCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-								<cfset ThisCategoryIDToSave=thisCategoryLocale.GetProperty("CategoryID")>
-								<cfinvoke component="/com/ContentManager/CategoryHandler" 
-									method="GetProductionSiteInformation"
-									returnVariable="sProductionSiteInformation"
-									CategoryID="#val(ThisCategoryIDToSave)#">
-								<cfif IsStruct(sProductionSiteInformation)>
-									<cfquery name="TouchCache" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-										UPDATE t_Category
-											SET CachedateTime=getdate()
-										WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(ThisCategoryIDToSave)#">
-									</cfquery>
-								</cfif>
-							</cfif>
-						<cfelse>
-							<cfset thisCategoryLocale = CreateObject("component","com.ContentManager.CategoryLocale")>
-							<cfset thisCategoryLocale.Constructor()>
-							<cfset thisCategoryLocale.SetProperty("CategoryID",val(CatID))>
-							<cfset thisCategoryLocale.SetProperty("LocaleID",ARGUMENTS.LocaleID)>
-							<cfset thisCategoryLocale.SetProperty("CategoryLocaleActive",0)>
-							<cfset thisCategoryLocale.Save(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-							<cfif ARGUMENTS.SaveToProduction>
-								<cfset thisCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-								<cfset ThisCategoryIDToSave=thisCategoryLocale.GetProperty("CategoryID")>
-								<cfinvoke component="/com/ContentManager/CategoryHandler" 
-									method="GetProductionSiteInformation"
-									returnVariable="sProductionSiteInformation"
-									CategoryID="#val(ThisCategoryIDToSave)#">
-								<cfif IsStruct(sProductionSiteInformation)>
-									<cfquery name="TouchCache" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-										UPDATE t_Category
-											SET CachedateTime=getdate()
-										WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#val(ThisCategoryIDToSave)#">
-									</cfquery>
-								</cfif>
-							</cfif>
-						</cfif>
-					</cfoutput>
-				</cfcase>
-				
-				<cfcase value="64"><!--- Product --->
-					<!--- GET ALL 'Content W/ Product' Categories for this Product --->
-					<cfquery name="getProdCategories" datasource="#APPLICATION.DSN#">
-						SELECT CategoryID AS CatID FROM t_Category
-						WHERE SourceID = #val(ARGUMENTS.CategoryID)#
-						AND CategoryTypeID = 164
-					</cfquery>
-					<cfoutput query="getProdCategories">
-						<!--- if master locale, deactivate category --->
-						<cfif Val(ARGUMENTS.LocaleID) EQ 1>
-							<cfquery name="DeactivateProdCategory" datasource="#APPLICATION.DSN#">
-								UPDATE t_Category
-									SET CategoryActive = 0
-								WHERE CategoryID = #val(CatID)#
-							</cfquery>
-							
-							<cfif ARGUMENTS.SaveToProduction>
-								<cfinvoke component="/com/ContentManager/CategoryHandler" 
-									method="GetProductionSiteInformation"
-									returnVariable="sProductionSiteInformation"
-									CategoryID="#val(CatID)#">
-								<cfif IsStruct(sProductionSiteInformation)>
-									<cfquery name="DeactivateProdCategory_Production" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-										UPDATE t_Category
-											SET CategoryActive = 0, CachedateTime=getdate()
-										WHERE CategoryID = #val(CatID)#
-									</cfquery>
-								</cfif>
-							</cfif>
-						</cfif>
-						<!--- Try to get 'Content W/ Product' Category Locale --->
-						<cfquery name="getProdCategoryLocale" datasource="#APPLICATION.DSN#" maxrows="1">
-							SELECT CategoryLocaleID FROM t_CategoryLocale
-							WHERE CategoryID = #val(CatID)#
-							AND LocaleID = #val(ARGUMENTS.LocaleID)#
-						</cfquery>
-						<!--- If Category Locale exists deactivate, else create a new one, deactivate and save  --->
-						<cfif getProdCategoryLocale.RecordCount GT 0>
-							<cfquery name="UpdateCategoryLocale" datasource="#APPLICATION.DSN#">
-								UPDATE t_CategoryLocale
-									SET CategoryLocaleActive = 0
-								WHERE CategoryLocaleID = #val(getProdCategoryLocale.CategoryLocaleID)#
-							</cfquery>
-							<cfif ARGUMENTS.SaveToProduction>
-								<cfset thisCategoryLocale = CreateObject("component","com.ContentManager.CategoryLocale")>
-								<cfset thisCategoryLocale.Constructor(val(getProdCategoryLocale.CategoryLocaleID))>
-								<cfset thisCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-								<cfset ThisCategoryIDToSave=thisCategoryLocale.GetProperty("CategoryID")>
-								<cfinvoke component="/com/ContentManager/CategoryHandler" 
-									method="GetProductionSiteInformation"
-									returnVariable="sProductionSiteInformation"
-									CategoryID="#val(ThisCategoryIDToSave)#">
-								<cfif IsStruct(sProductionSiteInformation)>
-									<cfquery name="TouchCache" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-										UPDATE t_Category
-											SET CachedateTime=getdate()
-										WHERE CategoryID = #val(ThisCategoryIDToSave)#
-									</cfquery>
-								</cfif>
-							</cfif>
-						<cfelse>
-							<cfset thisCategoryLocale = CreateObject("component","com.ContentManager.CategoryLocale")>
-							<cfset thisCategoryLocale.Constructor()>
-							<cfset thisCategoryLocale.SetProperty("CategoryID",val(CatID))>
-							<cfset thisCategoryLocale.SetProperty("LocaleID",ARGUMENTS.LocaleID)>
-							<cfset thisCategoryLocale.SetProperty("CategoryLocaleActive",0)>
-							<cfset thisCategoryLocale.Save(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-							<cfif ARGUMENTS.SaveToProduction>
-								<cfset thisCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-								<cfset ThisCategoryIDToSave=thisCategoryLocale.GetProperty("CategoryID")>
-								<cfinvoke component="/com/ContentManager/CategoryHandler" 
-									method="GetProductionSiteInformation"
-									returnVariable="sProductionSiteInformation"
-									CategoryID="#val(ThisCategoryIDToSave)#">
-								<cfif IsStruct(sProductionSiteInformation)>
-									<cfquery name="TouchCache" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-										UPDATE t_Category
-											SET CachedateTime=getdate()
-										WHERE CategoryID = #val(ThisCategoryIDToSave)#
-									</cfquery>
-								</cfif>
-							</cfif>
-						</cfif>
-					</cfoutput>
-				</cfcase>
-				<!--- IF 'Content' get sourceID and call deactivate  --->
-				<cfcase value="162,163,164">
-					<cfset retval = 0>
-					<cfquery name="getSourceID" datasource="#APPLICATION.DSN#" maxrows="1">
-						SELECT SourceID FROM t_Category
-						WHERE CategoryID = #val(ARGUMENTS.CategoryID)#
-					</cfquery>
-					<cfif getSourceID.RecordCount GT 0>
-						<cfinvoke component="/com/Product/ProductHandler" method="DeactivateProduct" 
-							returnVariable="retval"
-							CategoryID="#val(getSourceID.SourceID)#"
-							LocaleID="#ARGUMENTS.LocaleID#"
-							UserID="#ARGUMENTS.UserID#"
-							SaveToProduction="#ARGUMENTS.SaveToProduction#">
-					</cfif>
-					<cfreturn retval>
-				</cfcase>
-				
-			</cfswitch>
-			
-			<!--- IF 'Product', deactivate locale --->
-			<cfif ListFind("62,64",thisCategoryTypeID)>
-				<cfquery name="CheckCategoryLocale" datasource="#APPLICATION.DSN#" maxrows="1">
-					SELECT CategoryLocaleID FROM  t_CategoryLocale 
-					WHERE CategoryID = #val(ARGUMENTS.CategoryID)#
-					AND LocaleID = #val(ARGUMENTS.LocaleID)#
-				</cfquery>
-				
-				<!--- if master locale, deactivate category --->
-				<cfif Val(ARGUMENTS.LocaleID) EQ 1>
-					<cfquery name="DeactivateProduct" datasource="#APPLICATION.DSN#">
-						UPDATE t_Category
-							SET CategoryActive = 0
-						WHERE CategoryID = #val(ARGUMENTS.CategoryID)#
-					</cfquery>
-					
-					<cfif ARGUMENTS.SaveToProduction>
-						<cfinvoke component="/com/ContentManager/CategoryHandler" 
-							method="GetProductionSiteInformation"
-							returnVariable="sProductionSiteInformation"
-							CategoryID="#val(ARGUMENTS.CategoryID)#">
-						<cfif IsStruct(sProductionSiteInformation)>
-							<cfquery name="DeactivateProduct_Production" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								UPDATE t_Category
-									SET CategoryActive = 0, CachedateTime=getdate()
-								WHERE CategoryID = #val(ARGUMENTS.CategoryID)#
-							</cfquery>
-						</cfif>
-					</cfif>
-				</cfif>
-				
-				<!--- If Category Locale exists deactivate, else create a new one, deactivate and save  --->
-				<cfif CheckCategoryLocale.RecordCount GT 0>
-					<cfquery name="UpdateCategoryLocale" datasource="#APPLICATION.DSN#">
-						UPDATE t_CategoryLocale
-							SET CategoryLocaleActive = 0
-						WHERE CategoryLocaleID = #val(CheckCategoryLocale.CategoryLocaleID)#
-					</cfquery>
-					<cfif ARGUMENTS.SaveToProduction>
-						<cfset thisCategoryLocale = CreateObject("component","com.ContentManager.CategoryLocale")>
-						<cfset thisCategoryLocale.Constructor(val(CheckCategoryLocale.CategoryLocaleID))>
-						<cfset thisCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-						<cfset ThisCategoryIDToSave=thisCategoryLocale.GetProperty("CategoryID")>
-						<cfinvoke component="/com/ContentManager/CategoryHandler" 
-							method="GetProductionSiteInformation"
-							returnVariable="sProductionSiteInformation"
-							CategoryID="#val(ThisCategoryIDToSave)#">
-						<cfif IsStruct(sProductionSiteInformation)>
-							<cfquery name="TouchCache" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								UPDATE t_Category
-									SET CachedateTime=getdate()
-								WHERE CategoryID = #val(ThisCategoryIDToSave)#
-							</cfquery>
-						</cfif>
-					</cfif>
-				<cfelse>
-					<cfset thisCategoryLocale = CreateObject("component","com.ContentManager.CategoryLocale")>
-					<cfset thisCategoryLocale.Constructor()>
-					<cfset thisCategoryLocale.SetProperty("CategoryID",ARGUMENTS.CategoryID)>
-					<cfset thisCategoryLocale.SetProperty("LocaleID",ARGUMENTS.LocaleID)>
-					<cfset thisCategoryLocale.SetProperty("CategoryLocaleActive",0)>
-					<cfset thisCategoryLocale.Save(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-					<cfif ARGUMENTS.SaveToProduction>
-						<cfset thisCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,ARGUMENTS.UserID)>
-						<cfset ThisCategoryIDToSave=thisCategoryLocale.GetProperty("CategoryID")>
-						<cfinvoke component="/com/ContentManager/CategoryHandler" 
-							method="GetProductionSiteInformation"
-							returnVariable="sProductionSiteInformation"
-							CategoryID="#val(ThisCategoryIDToSave)#">
-						<cfif IsStruct(sProductionSiteInformation)>
-							<cfquery name="TouchCache" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-								UPDATE t_Category
-									SET CachedateTime=getdate()
-								WHERE CategoryID = #val(ThisCategoryIDToSave)#
-							</cfquery>
-						</cfif>
-					</cfif>
-				</cfif>
-			</cfif>
-			<cfreturn 1>
-		</cfif>
-		<cfreturn 0>
-	</cffunction>
-	
 	<cffunction name="GetProductSpecs" returntype="query" output="false" access="remote">
 		<cfargument name="ProductAlias" default="" type="string" required="true">
 		<cfargument name="LanguageID" default="" type="numeric" required="true">
@@ -1270,20 +578,187 @@
 		<cfreturn qReturn>
 	</cffunction>
 	
-	<cffunction name="GetlConsoleAlias" returntype="string" output="false">
-		<cfargument name="ProductID" default="" type="numeric" required="true">
-		<cfquery name="GetConsoles" datasource="#APPLICATION.DSN#">
-			SELECT     t_Console.CategoryAlias AS ConsoleAlias
-			FROM         t_Category t_Console INNER JOIN
-                      t_ProductCombination ON t_Console.CategoryID = t_ProductCombination.ProductID2
-			where ProductCombinationActive=1 and ProductID1=#Val(ARGUMENTS.ProductID)# and LanguageID=100
+	<cffunction name="GetProductAttributeStruct" returntype="struct" output="false">
+		
+		<cfset VAR LOCAL=StructNew()>
+		<cfset LOCAL.sAttributeID=StructNew()>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductLongName","4",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductShortName","5",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductPositioningSentence","6",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductDescription","7",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"CallToActionURLDeprecated","8",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"VideoURL","9",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"PartNumber","10",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"BrochurePath","11",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"PublicDrawing","12",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductImagePath","13",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductThumbnailPath","14",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductThumbnailHoverPath","15",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductImageSourcePath","16",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"ProductImageStorePath","17",1)>
+		<cfset StructInsert(LOCAL.sAttributeID,"PublicDrawingSize","23",1)>
+		<cfreturn LOCAL.sAttributeID>
+	</cffunction>
+	
+	<cffunction name="GetTopProductFamily" returntype="query" output="false">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+			<cfprocresult name="LOCAL.GetTopProductFamily">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="displayOrder" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="7" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="62" null="No">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
+		</cfstoredproc>
+		
+		<cfreturn LOCAL.GetTopProductFamily>
+	</cffunction>
+	
+	<cffunction name="GetPublicDrawing" returntype="query" output="false">
+		<cfargument name="TopProductFamilyID" default="" type="numeric" required="true">
+		<cfargument name="OrderBy" default="CategoryName" type="string" required="true">
+		<cfargument name="OrderAsc" default="1" type="numeric" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfif ListFindNoCase("CategoryName,PartNumber",ARGUMENTS.OrderBy) IS "0">
+			<cfset ARGUMENTS.OrderBy="CategoryName">
+		</cfif>
+		
+		<cfset LOCAL.ColumnList="ProductID,ProductName,PartNumber,PublicDrawing,PublicDrawingSize,TopProductFamilyAlias,TopProductFamilyName">
+		<cfset LOCAL.qReturn=QueryNew(ColumnList)>
+		
+		<cfset LOCAL.qGetTopProductFamily=GetTopProductFamily()>
+		
+		<cfquery name="LOCAL.GetAttributes" datasource="#APPLICATION.DSN#">
+			SELECT CategoryID, CategoryName, DisplayOrder, ProductFamilyAttributeID, AttributeValue
+			from qry_GetCategoryAttribute
+			Where ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="10,12,23" list="yes">)
+			order by CategoryID, ProductFamilyAttributeID
 		</cfquery>
-		<cfset ReturnList="">
-		<cfoutput query="GetConsoles">
-			<cfif ListFindNoCase(ReturnList,ConsoleAlias) is "0">
-				<cfset ReturnList=ListAppend(ReturnList,ConsoleAlias)>
+
+		<cfoutput query="LOCAL.GetAttributes" group="CategoryID">
+			<cfset LOCAL.sElement=StructNew()>
+			
+			<cfset StructInsert(LOCAL.sElement,"ProductID",LOCAL.GetAttributes.CategoryID)>
+			<cfset StructInsert(LOCAL.sElement,"ProductName",LOCAL.GetAttributes.CategoryName)>
+			<cfset StructInsert(LOCAL.sElement,"PartNumber","")>
+			<cfset StructInsert(LOCAL.sElement,"PublicDrawing","")>
+			<cfset StructInsert(LOCAL.sElement,"PublicDrawingSize","")>
+			<cfset StructInsert(LOCAL.sElement,"TopProductFamilyAlias","")>
+			<cfset StructInsert(LOCAL.sElement,"TopProductFamilyName","")>
+			
+			<cfloop query="LOCAL.qGetTopProductFamily">
+				<cfif Left(LOCAL.GetAttributes.DisplayOrder,Len(LOCAL.qGetTopProductFamily.DisplayOrder)) IS LOCAL.qGetTopProductFamily.DisplayOrder>
+					<cfset StructInsert(LOCAL.sElement,"TopProductFamilyAlias",LOCAL.qGetTopProductFamily.CategoryAlias,1)>
+					<cfset StructInsert(LOCAL.sElement,"TopProductFamilyName",LOCAL.qGetTopProductFamily.CategoryName,1)>
+				</cfif>
+			</cfloop>
+			
+			<cfoutput group="ProductFamilyAttributeID">
+				<cfswitch expression="#LOCAL.GetAttributes.ProductFamilyAttributeID#">
+					<cfcase value="10">
+						<cfset StructInsert(LOCAL.sElement,"PartNumber",LOCAL.GetAttributes.AttributeValue,1)>
+					</cfcase>
+					<cfcase value="12">
+						<cfset StructInsert(LOCAL.sElement,"PublicDrawing",LOCAL.GetAttributes.AttributeValue,1)>
+					</cfcase>
+					<cfcase value="23">
+						<cfset StructInsert(LOCAL.sElement,"PublicDrawingSize",Val(LOCAL.GetAttributes.AttributeValue),1)>
+					</cfcase>
+				</cfswitch>
+			</cfoutput>
+			
+			<cfif LOCAL.sElement.PublicDrawing IS NOT "" and FileExists(ExpandPath(LOCAL.sElement.PublicDrawing))>
+				<cfset QueryAddRow(LOCAL.qReturn,1)>
+				<cfset QuerySetCell(LOCAL.qReturn,"ProductID",LOCAL.sElement.ProductID)>
+				<cfset QuerySetCell(LOCAL.qReturn,"ProductName",LOCAL.sElement.ProductName)>
+				<cfset QuerySetCell(LOCAL.qReturn,"PartNumber",LOCAL.sElement.PartNumber)>
+				<cfset QuerySetCell(LOCAL.qReturn,"PublicDrawing",LOCAL.sElement.PublicDrawing)>
+				<cfset QuerySetCell(LOCAL.qReturn,"PublicDrawingSize",LOCAL.sElement.PublicDrawingSize)>
+				<cfset QuerySetCell(LOCAL.qReturn,"TopProductFamilyAlias",LOCAL.sElement.TopProductFamilyAlias)>
+				<cfset QuerySetCell(LOCAL.qReturn,"TopProductFamilyName",LOCAL.sElement.TopProductFamilyName)>
 			</cfif>
 		</cfoutput>
-		<cfreturn ReturnList>
+
+		<cfreturn LOCAL.qReturn>
+	</cffunction>
+	
+	<cffunction name="GetProductReport" output="false" access="remote">
+		<cfargument name="page" default="">
+		<cfargument name="pageSize" default="">
+		<cfargument name="cfgridsortcolumn" default="">
+		<cfargument name="cfgridsortdirection" default="">
+		<cfargument name="productName" type="string" default="">
+		<cfargument name="PartNumber" type="string" default="">
+		<cfargument name="productFamilyName" type="string" default="">
+		<cfargument name="description" type="string" default="">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfset LOCAL.ColumnList="ProductID,ProductName,ProductFamilyName,ProductFamilyID,PartNumber,ProductDescription,Edit,DisplayOrder">
+		<cfset LOCAL.qReturn=QueryNew(ColumnList)>
+		
+		<cfset LOCAL.qGetTopProductFamily=GetTopProductFamily()>
+		
+		<cfquery name="LOCAL.GetProductList" datasource="#APPLICATION.DSN#">
+			SELECT CategoryID, CategoryName, DisplayOrder, ProductFamilyAttributeID, AttributeValue, ParentCategoryName, ParentCategoryAlias, ParentID
+			from qry_GetProduct
+			Where ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="7,10" list="yes">)
+			order by DisplayOrder, ProductFamilyAttributeID
+		</cfquery>
+
+		<cfoutput query="LOCAL.GetProductList" group="CategoryID">
+			<cfset QueryAddRow(LOCAL.qReturn,1)>
+			<cfset QuerySetCell(LOCAL.qReturn,"ProductID",LOCAL.GetProductList.CategoryID)>
+			<cfset QuerySetCell(LOCAL.qReturn,"ProductName",LOCAL.GetProductList.CategoryName)>
+			<cfset QuerySetCell(LOCAL.qReturn,"ProductFamilyName",LOCAL.GetProductList.ParentCategoryName)>
+			<cfset QuerySetCell(LOCAL.qReturn,"ProductFamilyID",LOCAL.GetProductList.ParentID)>
+			<cfset QuerySetCell(LOCAL.qReturn,"DisplayOrder",LOCAL.GetProductList.DisplayOrder)>
+			<cfset QuerySetCell(LOCAL.qReturn,"Edit","<img src=""/common/images/admin/icon_edit.gif"" width=""12"" height=""12"" />")>
+			<cfoutput group="ProductFamilyAttributeID">
+				<cfswitch expression="#LOCAL.GetProductList.ProductFamilyAttributeID#">
+					<cfcase value="7">
+						<cfset QuerySetCell(LOCAL.qReturn,"ProductDescription",LOCAL.GetProductList.AttributeValue)>
+					</cfcase>
+					<cfcase value="10">
+						<cfset QuerySetCell(LOCAL.qReturn,"PartNumber",LOCAL.GetProductList.AttributeValue)>
+					</cfcase>
+				</cfswitch>
+			</cfoutput>
+		</cfoutput>
+
+		<cfquery name="LOCAL.qReturn" dbtype="query">
+			select * from [LOCAL].qReturn where 1=1
+			<cfif trim(arguments.productName) neq "">
+				AND lower(productName) LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.productName#%">
+			</cfif>
+			<cfif trim(arguments.PartNumber) neq "">
+				AND lower(PartNumber) LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.PartNumber#%">
+			</cfif>
+			<cfif trim(arguments.productFamilyName) neq "">
+				AND lower(productFamilyName) LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.productFamilyName#%">
+			</cfif>
+			<cfif trim(arguments.description) neq "">
+				AND lower(ProductDescription) LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.description#%">
+			</cfif>
+			<cfif trim(arguments.cfgridsortcolumn) neq "">
+				ORDER BY #arguments.cfgridsortcolumn# #arguments.cfgridsortdirection#
+			<cfelse>
+				order by DisplayOrder
+			</cfif>
+		</cfquery>
+		
+		<cfif isNumeric(arguments.page) and isNumeric(arguments.pageSize)>
+			<cfreturn queryConvertForGrid(LOCAL.qReturn, arguments.page, arguments.pageSize)>
+		<cfelse>
+			<cfreturn LOCAL.qReturn>
+		</cfif>
 	</cffunction>
 </cfcomponent>

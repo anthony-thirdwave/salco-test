@@ -78,7 +78,7 @@
 
 	<!--- File Upload doesn't have to Return XML, so it must be intercepted before anything. --->
 	<cfif sCommand eq "FileUpload">
-		<cfset FileUpload( sResourceType, sCurrentFolder, sCommand )>
+		<cfset MVFileUpload( sResourceType, sCurrentFolder, sCommand )>
 		<cfabort>
 	</cfif>
 

@@ -1,5 +1,6 @@
-<cfparam name="ATTRIBUTES.NodeID" default="0">
-<cfparam name="REQUEST.MaxRows" default="6000">
+<cfsetting showdebugoutput="0" RequestTimeOut="60000">
+<cfparam name="ATTRIBUTES.NodeID" default="1">
+<cfparam name="REQUEST.MaxRows" default="200000">
 <cfparam name="REQUEST.Counter" default="0">
 
 <cfdump var="#REQUEST.MaxRows#"><br>
@@ -28,6 +29,6 @@
 <cfsavecontent variable="ProductList">
 <cfmodule template="/common/modules/product/ProductImportHelper.cfm"
 	NodeID="#ATTRIBUTES.NodeID#"
-	Level="0">
+	Level="1">
 </cfsavecontent>
 <cfoutput>#ProductList#</cfoutput>

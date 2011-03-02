@@ -21,18 +21,16 @@
 	</cfstoredproc>
 	<cfsaveContent Variable="FileContents">
 		<cfif GetTopCategories.RecordCount GT "0">
-			<div id="mainNavigation"><!-- Start of Main Navigation Elements -->
-				<ul id="nav-main" class="menuCSS menu-#CategoryAlias#">
-                   <cfoutput query="GetTopCategories" group="CategoryID">
-                       <cfif Trim(CategoryURLDerived) IS "">
-                           <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
-                       <cfelse>
-                           <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
-                       </cfif>
-                       <li><a href="#ThisURL#">#CategoryNameDerived#</a></li>
-                   </cfoutput>
-				</ul>
-			</div><!-- End of Main Navigation Elements -->
+			<ul id="mainNav" class="nav">
+				<cfoutput query="GetTopCategories" group="CategoryID">
+                    <cfif Trim(CategoryURLDerived) IS "">
+                    	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
+					<cfelse>
+                    	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
+                    </cfif>
+                	<li><a href="#ThisURL#">#CategoryNameDerived#</a></li>
+				</cfoutput>
+			</ul>
 		</cfif>
 	</cfsaveContent>
 	<cffile action="WRITE" file="#APPLICATION.ExecuteTempDir##ExecuteTempFile#" output="#FileContents#" addnewline="Yes">

@@ -236,10 +236,10 @@
 		<textarea cols="60" rows="3" name="ResourceText_Image_#fi#">#aProductView[fi].ResourceText#</textarea>
 		</TD>
 		
-		<TD>Main:<BR><cfif aProductView[fi].MainFilePath IS NOT ""><img src="#aProductView[fi].MainFilePath#" width="50"></cfif><input type="hidden" name="MainFilePath_Image_#fi#" value="#aProductView[fi].MainFilePath#"><BR>
+		<TD>Main:<BR><a href="#aProductView[fi].MainFilePath#" target="_blank"><img src="#aProductView[fi].ThumbnailFilePath#" border="0"></a><input type="hidden" name="MainFilePath_Image_#fi#" value="#aProductView[fi].MainFilePath#"><BR>
 		<input type="file" name="MainFilePath_Image_#fi#FileObject"><br>
 		Thumbnail:<BR>
-		<cfif aProductView[fi].ThumbnailFilePath IS NOT ""><img src="#aProductView[fi].ThumbnailFilePath#"></cfif><input type="hidden" name="ThumbnailFilePath_Image_#fi#" value="#aProductView[fi].ThumbnailFilePath#"><BR>
+		<input type="hidden" name="ThumbnailFilePath_Image_#fi#" value="#aProductView[fi].ThumbnailFilePath#"><BR>
 		<input type="file" name="ThumbnailFilePath_Image_#fi#FileObject">
 		</TD>
 		<!--- sort icons --->

@@ -29,11 +29,15 @@
 		<cfelse>
 			<cfset ThisURL = "#APPLICATION.utilsObj.parseCategoryUrl(GetCategoryDetail.CategoryAlias)#" />
 		</cfif>
-		<li><a href="#ThisURL#">#GetCategoryDetail.CategoryNameDerived#</a>
+		<li><a href="#ThisURL#" <cfif ATTRIBUTES.Level IS "1">class="sideNavLink"</cfif>>#GetCategoryDetail.CategoryNameDerived#</a>
 	</cfoutput>
 </cfif>
 <cfif GetCategoryList.recordcount GT "0">
-	<ul>
+	<cfif ATTRIBUTES.Level IS "0">
+		<ul id="acc3" class="accordion">
+	<cfelse>
+		<ul>
+	</cfif>
 	<cfoutput query="GetCategoryList">
 		<cfmodule template="/common/modules/display/navigation/dsp_NavRHelper.cfm" 
 			CategoryID="#val(GetCategoryList.CategoryID)#" 

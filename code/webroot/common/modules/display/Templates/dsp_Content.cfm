@@ -1,32 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<cfif IsDefined("REQUEST.OverrideBaseHREF")>
-	<cfoutput><base href="#REQUEST.OverrideBaseHREF#"></cfoutput>
-</cfif>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/common/styles/salco_global.css" rel="stylesheet" type="text/css" />
+<link href="/common/styles/other.css" rel="stylesheet" type="text/css" />
+<link href="/common/scripts/projekktor/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/common/scripts/jquery-1.5.1.min.js"></script>
+<cfswitch expression="#TemplateID#">
+	<cfcase value="22"><!--- home --->
+		<script type="text/javascript" src="/common/scripts/jquery.cycle.js"></script>
+		<script type="text/javascript" src="/common/scripts/jquery-ui-1.8.7.custom.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#tabsRotate").tabs({ fx: { opacity: 'toggle' } }).tabs('rotate', 10000);
+				$('#tabsRotate').hover(function(){
+						$(this).tabs('rotate', 10000, false);
+					},function(){
+						$(this).tabs({ fx: { opacity: 'toggle' } }).tabs('rotate', 10000);
+					}
+				);
+			});
+		</script>
+		
+		<script> 
+			$(document).ready(function() { 
+				$('#imageRotate').cycle({
+					fx: 'fade', 
+					speed: 2500,
+				});
+			});
+		</script>
+		
+		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
+		<script type="text/javascript" src="/common/scripts/common.js"></script>
+	</cfcase>
+	<cfdefaultcase>
+		<script type="text/javascript" src="/common/scripts/jquery.nestedAccordion.js"></script>
+		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
+		<script type="text/javascript" src="/common/scripts/projekktor.min.js"></script>
+		<script type="text/javascript" src="/common/scripts/common.js"></script>
+	</cfdefaultcase>
+</cfswitch>
 
-<!-- import standard styles -->
-<style type="text/css">
-	@import url(/common/styles/default.css);
-</style>
-<!-- import styles for IE, additional conditional comments may be needed -->
-<!--[if IE]>
-	<style type="text/css">
-		@import url(/common/styles/ie.css);
-	</style>
-<![endif]-->
-
-<!--- Remove CF comment if you need to emulate ie7 in ie8
-<!-- Force IE8 to emulate IE7 -->
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" /> --->
-
-<!--- Add Coldfusion browser detection --->
-<!---
-<cfset OSBrow = "browser,OS,path to style sheet; browser,OS,path to style sheet">
-<!-- import addtional style sheets -->
-<cfinclude template="/common/modules/browsertest/browserdet.cfm">
---->
+<cfif CategoryTypeID IS "64">
+	<cfoutput>
+		<script>
+			$(document).ready(function() { 
+				$("##linkEx#REQUEST.CurrentCategoryID#").click();
+			});
+		</script>
+	</cfoutput>
+</cfif>
 <cfoutput>
 	<!--- These tags are managed by the CMS. --->
 	<cfif Trim(PageTitleOverride) EQ "">
@@ -49,90 +73,171 @@
 </cfoutput>
 </head>
 <cfoutput>
-	<body id="#CSSID#" class="#CSSClass#">
-</cfoutput><a name="top"></a>
-<!-- Main Element Container (wrapper) -->
-<div id="wrapper">
-	<!-- Header Elements Container (header) -->
-	<div id="header">
-		<!-- Logo Content -->
-		<div id="logoContainer">
-			<cfoutput><a href="#APPLICATION.utilsObj.parseCategoryUrl('/')#"><img src="/common/images/template/header_logo.gif" border="0" alt="#APPLICATION.CompanyName#" /></a></cfoutput>
+	<body id="#CSSID#" class="#CSSClass#"><a name="top"></a>
+</cfoutput>
+
+<div class="holderCenter">
+	<div id="holderMastHead">
+		<div id="holderNavMain">
+			<div style="padding-left:22px"><cfoutput><a href="#APPLICATION.utilsObj.parseCategoryUrl('/')#"><img src="/common/images/template/salco_logo_masthead.png" alt="salco" /></a></cfoutput></div>
+			<cfinclude template="/common/modules/Display/Navigation/dsp_NavGlobal.cfm">
 		</div>
-		<!-- Utility Navigation and items -->
-		<div id="utilityNavigation">
+		<div id="holderNavSearch" style="padding-right:25px;">
 			<cfoutput>
-			<form id="search" action="#APPLICATION.utilsObj.parseCategoryUrl('search')#" method="get">
-				<input id="search-text" type="text" name="searchTxt"<cfif IsDefined("URL.searchTxt")> value="#URL.searchTxt#"</cfif> />
-				<input id="search-btn" type="image" src="/common/images/template/btn-search.gif" alt="Search" />
+			<form action="#APPLICATION.utilsObj.parseCategoryUrl('search')#" method="get">
+				<input class="backSearch" name="search" type="text" <cfif IsDefined("URL.searchTxt")> value="#HTMLEditFormat(URL.searchTxt)#"</cfif>/><input class="btnSearch" name="" type="submit" value=" " />
 			</form>
 			</cfoutput>
+			<cfmodule template="/common/modules/Display/Navigation/dsp_NavSub.cfm"
+				ParentID="14"
+				CSSID=""
+				CSSClass="nav searchLinks">
 		</div>
-		<!-- to clear out floats -->
-		<div class="clearit"></div>
-		<!-- main navigation -->
-		<cfinclude template="/common/modules/Display/Navigation/dsp_NavGlobal.cfm">
+		<div class="clearFix"></div>
+		<div class="redLine"></div>
+		<cfmodule template="/common/modules/Display/Navigation/dsp_NavSub.cfm"
+			ParentID="7"
+			CSSID="subNav"
+			CSSClass="nav">
 	</div>
-	<!-- clear floats -->
-	<div class="clearit"></div>
-	<!-- Main Content Container -->
-	<div id="contentContainer">
-		<!-- Sub Content Containers -->
-		<!-- start left column -->
-		<div id="leftColumn">
-			<!--- Including side navigation, here or in right column  --->
-			<cfsavecontent variable="sectionNav">
-				<cfmodule template="/common/modules/display/dsp_NavSubPages.cfm" CategoryID="#CurrentCategoryID#">
-			</cfsavecontent>
-			<cfif Trim(sectionNav) NEQ "">
-				<cfoutput>#sectionNav#</cfoutput>
-			</cfif>
-		</div>
-		<!-- end of left column -->
-		<!-- start of center column -->
-		<div id="centerColumn">
-			<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
-			<cfswitch expression="#AllowComments#">
-			<cfcase value="1"><!--- Allow comments --->
-				<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
-					EntityName="t_Category" 
-					EntityID="#CurrentCategoryID#"
-					CommentNotificationEmail="#CommentNotificationEmail#"
-					PageTitle="#CurrentCategoryName#">
-			</cfcase>
-			<cfcase value="2"><!--- Display comments but not form --->
-				<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
-					EntityName="t_Category" 
-					EntityID="#CurrentCategoryID#" 
-					AllowComments="0"
-					CommentNotificationEmail="#CommentNotificationEmail#"
-					PageTitle="#CurrentCategoryName#">
-			</cfcase>
-			<cfcase value="3"><!--- Display comments and archive message but not form --->
-				<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
-					EntityName="t_Category" 
-					EntityID="#CurrentCategoryID#" 
-					AllowComments="0"
-					DisplayArchiveMessage="1"
-					CommentNotificationEmail="#CommentNotificationEmail#"
-					PageTitle="#CurrentCategoryName#">
-			</cfcase>
+	
+	<cfswitch expression="#TemplateID#">
+		<cfcase value="22">
+			<div class="subBackHome">
+				<div class="contentHome">
+					<div class="homeLeft">
+						<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
+						<div id="pageFooter">
+							<cfinclude template="/common/modules/Display/Navigation/dsp_NavFooter.cfm">
+						</div>
+					</div>
+					<div class="homeRight">
+						<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+					</div>
+					<div class="clearFix"></div>
+				</div>
+			</div>
+		</cfcase>
+		<cfcase value="23"><!--- "wide" template --->
+			<div class="subBack">
+				<div class="holderFull">
+					<div class="holderFullHeaderSp">
+						<div class="spHolder">	
+							<div class="pad40">
+								<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">
+								<cfoutput><h1>#CurrentCategoryName#</h1></cfoutput>
+							</div>
+						</div>
+						<div class="clearFix"></div>
+					</div>
+					<div class="holderFullSp">
+						<div class="spLeft">
+							<div style="padding:0px 40px 60px 40px">
+								<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
+							</div>
+						</div>
+						<div class="spRight">
+							<img src="common/images/side_bar_top_sp.png"/>
+							<div style="padding: 0 15px 0 15px;">
+								<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+							</div>
+						</div>
+						<div class="clearFix"></div>
+					</div>
+				</div>
+			</div>
+		</cfcase>
+		<cfdefaultcase>
+			<div class="subBack">
+				<div class="contBack">
+					<div class="gradSM">
+						<!---- START CONTENT --->
+						<cfif ListFind("62,64",CategoryTypeID)>
+							<cfif ListLen(CategoryThreadList) GTE "4">
+								<ul id="acc3">
+								<li class="treeHeader"><cfoutput>#ListGetAt(CategoryThreadName,3)#</cfoutput></li>
+								<cfmodule template="/common/modules/display/navigation/dsp_NavProduct.cfm" CategoryID="#ListGetAt(CategoryThreadList,4)#">
+								</ul>
+							</cfif>
+						<cfelseif ListLen(CategoryThreadList) GTE "3">
+							<cfsavecontent variable="LeftNav">
+								<cfmodule template="/common/modules/display/navigation/dsp_NavR.cfm" CategoryID="#ListGetAt(CategoryThreadList,3)#">
+							</cfsavecontent>
+							<cfif Trim(LeftNav) IS NOT "">
+								<cfoutput>#LeftNav#</cfoutput>
+							<cfelse>
+								<ul id="acc3" class="accordion">Placeholder</ul>
+							</cfif>
+						</cfif>
+						<div class="holderWide">
+							<div class="holderWideHeader"></div>
+							<div class="holderWideBack">
+								<div class="fade">
+									<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">
+									<cfif ListFind("62,64",CategoryTypeID) IS "0"><cfoutput><h1>#CurrentCategoryName#</h1></cfoutput></cfif>
+									<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
+									<cfswitch expression="#AllowComments#">
+										<cfcase value="1"><!--- Allow comments --->
+											<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
+												EntityName="t_Category" 
+												EntityID="#CurrentCategoryID#"
+												CommentNotificationEmail="#CommentNotificationEmail#"
+												PageTitle="#CurrentCategoryName#">
+										</cfcase>
+										<cfcase value="2"><!--- Display comments but not form --->
+											<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
+												EntityName="t_Category" 
+												EntityID="#CurrentCategoryID#" 
+												AllowComments="0"
+												CommentNotificationEmail="#CommentNotificationEmail#"
+												PageTitle="#CurrentCategoryName#">
+										</cfcase>
+										<cfcase value="3"><!--- Display comments and archive message but not form --->
+											<cfmodule template="/common/modules/Comments/dsp_comments.cfm" 
+												EntityName="t_Category" 
+												EntityID="#CurrentCategoryID#" 
+												AllowComments="0"
+												DisplayArchiveMessage="1"
+												CommentNotificationEmail="#CommentNotificationEmail#"
+												PageTitle="#CurrentCategoryName#">
+										</cfcase>
+									</cfswitch>
+									</div>
+								</div>
+							</div>
+							<cfif sIncludeFileBlank[402] IS NOT "1">
+								<div class="sideBar">
+									<div class="sideBarTop"></div>
+									<div class="sideBarContent">
+										<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+									</div>
+									<div class="sideBarBot"></div>
+								</div>
+							</cfif>
+							<div class="clearFix"></div>
+						</div>
+					</div>
+					<div class="holderWideFooter"></div>
+				</div>
+				<div id="pageFooter">
+					<cfinclude template="/common/modules/Display/Navigation/dsp_NavFooter.cfm">
+				</div>
+				
+			</cfdefaultcase>
 		</cfswitch>
-	  	</div>
-		<!-- end of center column -->
-		<!-- start of right column -->
-		<div id="rightColumn">
-			<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
-		</div>
-		<!-- end of right column -->
-		<!-- clear floats -->
-		<div class="clearit"></div>
 	</div>
-	<!-- footer navigation -->
-	<cfinclude template="/common/modules/Display/Navigation/dsp_NavFooter.cfm">
-</div>
+<cfif APPLICATION.Production>
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-8851532-4");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+</cfif>
 </body>
 </html>
-
 <!--- clear the variables scope to slow coldfusion memory leak --->
 <cfset structClear(variables)>

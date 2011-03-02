@@ -148,14 +148,16 @@
 			<cfif LOCAL.Test.RecordCount IS "0">
 				<cfquery name="LOCAL.insert" datasource="#APPLICATION.DSN#">
 					Insert into t_ResourceLanguage 
-					(ResourceName, ResourceText, MainFilePath, ThumbnailFilePath, ResourceID, LanguageID)
+					(ResourceName, ResourceText, MainFilePath, ThumbnailFilePath, ResourceID, LanguageID, ResourceSize)
 					VALUES
 					(<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ResourceName)#" cfsqltype="cf_sql_varchar">,
 					<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ResourceText)#" cfsqltype="cf_sql_varchar">,
 					<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].MainFilePath)#" cfsqltype="cf_sql_varchar">,
 					<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ThumbnailFilePath)#" cfsqltype="cf_sql_varchar">,
+					<cfqueryparam value="#Val(ARGUMENTS.aResource[LOCAL.r].MainFileSize)#" cfsqltype="cf_sql_integer">,
 					<cfqueryparam value="#Val(LOCAL.ThisResourceID)#" cfsqltype="cf_sql_integer">,
-					<cfqueryparam value=">#Val(ARGUMENTS.LanguageID)#" cfsqltype="cf_sql_integer">)
+					<cfqueryparam value=">#Val(ARGUMENTS.LanguageID)#" cfsqltype="cf_sql_integer">,
+					<cfqueryparam value="#Val(ARGUMENTS.aResource[LOCAL.r].MainFileSize)#" cfsqltype="cf_sql_integer">)
 				</cfquery>
 			<cfelse>
 				<cfquery name="LOCAL.update" datasource="#APPLICATION.DSN#">
@@ -163,7 +165,8 @@
 					ResourceName=<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ResourceName)#" cfsqltype="cf_sql_varchar">,
 					ResourceText=<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ResourceText)#" cfsqltype="cf_sql_varchar">,
 					MainFilePath=<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].MainFilePath)#" cfsqltype="cf_sql_varchar">,
-					ThumbnailFilePath=<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ThumbnailFilePath)#" cfsqltype="cf_sql_varchar">
+					ThumbnailFilePath=<cfqueryparam value="#Trim(ARGUMENTS.aResource[LOCAL.r].ThumbnailFilePath)#" cfsqltype="cf_sql_varchar">,
+					ResourceSize=<cfqueryparam value="#Val(ARGUMENTS.aResource[LOCAL.r].MainFileSize)#" cfsqltype="cf_sql_integer">
 					WHERE ResourceID=<cfqueryparam value="#Val(LOCAL.ThisResourceID)#" cfsqltype="cf_sql_integer"> and 
 					LanguageID=<cfqueryparam value="#Val(ARGUMENTS.LanguageID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
@@ -196,7 +199,7 @@
 		</cfif>
 		
 		<cfloop index="LOCAL.ThisFileType" list="MainFilePath,ThumbnailFilePath">
-			<cfif StructFind(ARGUMENTS.aResource[LOCAL.r],LOCAL.ThisFileType IS NOT "" AND left(StructFind(ARGUMENTS.aResource[LOCAL.r],LOCAL.ThisFileType),len("/common/incoming")) IS "/common/incoming">
+			<cfif StructFind(ARGUMENTS.aResource[LOCAL.r],LOCAL.ThisFileType) IS NOT "" AND left(StructFind(ARGUMENTS.aResource[LOCAL.r],LOCAL.ThisFileType),len("/common/incoming")) IS "/common/incoming">
 				<cfset LOCAL.SourceFile=ExpandPath(StructFind(ARGUMENTS.aResource[LOCAL.r],LOCAL.ThisFileType))>
 				<cfif ListFindNoCase("#APPLICATION.ImageFileExtensionList#",".#ListLast(LOCAL.SourceFile,'.')#",";") GT "0">
 					<cfset ThisDestinationDirectory="#DestinationDirectoryImages#">

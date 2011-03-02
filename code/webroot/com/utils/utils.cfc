@@ -4,6 +4,11 @@
 		<cfreturn this>
 	</cffunction>
 
+	<cffunction name="AddBreaks" returntype="string" output="false">
+		<cfargument name="String" default="" type="String" required="true">
+		<cfreturn ReplaceNoCase(ARGUMENTS.String,"#Chr(10)#", "<br />","ALL")>
+	</cffunction>
+	
 	<cffunction name="extractByToken" output="true" returntype="string">
 		<cfargument name="content" required="yes" type="string">
 		<cfargument name="startToken" required="no" type="string" default="[[">
@@ -113,7 +118,7 @@
 		<cfreturn local.returnValue>
 	</cffunction>
 
-	<cffunction name="ScrubUploadedFileName" returntype="string" output="false">
+	<cffunction name="ScrubUploadedFileName2" returntype="string" output="false">
 		<cfargument name="ServerDirectory" default="" type="String" required="true">
 		<cfargument name="ServerFile" default="" type="String" required="true">
 		

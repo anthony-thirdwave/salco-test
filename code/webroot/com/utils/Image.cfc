@@ -95,7 +95,6 @@
 		</cfif>
 	</cffunction>
 
-
 	<cffunction access="public" name="Desaturate" output="true" returntype="string">
 		<cfargument name="WebrootPath" type="string" required="1"/>
 		<cfargument name="Source" type="string" required="1"/>
@@ -140,7 +139,6 @@
 		</cfif>
 	</cffunction>
 
-
 	<cffunction access="public" name="GetImageInfo" output="false" returntype="struct">
 		<cfargument name="WebrootPath" type="string" required="true"/>
 		<cfargument name="Source" type="string" required="true"/>
@@ -171,4 +169,67 @@
 		<cfreturn local.sInfo>
 	</cffunction>
 
+	<cffunction access="public" name="ResizeGalleryThumbnail" output="False" returntype="string">
+		<cfargument name="WebrootPath" type="string" required="1"/>
+		<cfargument name="Source" type="string" required="1"/>
+		<cfargument name="Width" type="string" required="1"/>
+		<cfargument name="Height" type="string" required="1"/>
+		
+		<cfset TargetRatio=Width/Height>
+		
+		<cfif ARGUMENTS.Source IS NOT "" AND Val(ARGUMENTS.Width) GT "0">
+			<cfset ThisSource="#ARGUMENTS.WebrootPath##ARGUMENTS.Source#">
+			<cfset ThisSource=ReplaceNoCase(ThisSource,"/","\","ALL")>
+			<cfset ThisSource=ReplaceNoCase(ThisSource,"\\","\","ALL")>
+			
+			<cfif FileExists(ThisSource)>
+				<cfimage action="Info"
+					structname="ImageInfo"
+					source="#ThisSource#">
+				<cfset GoAhead="No">
+				
+				<cfif ImageInfo.Width IS NOT Val(ARGUMENTS.Width) AND ImageInfo.Width GT "0" AND ImageInfo.Height IS NOT Val(ARGUMENTS.Height) AND ImageInfo.Height GT "0">
+					<cfset GoAhead="Yes">
+				</cfif>
+				<cfif GoAhead>
+					<cfset ThisRatio=ImageInfo.Width/ImageInfo.height>
+					<cfset ThisImageName=Reverse(ListRest(Reverse(ThisSource),"."))>
+					<cfset ThisImageExt=ListLast(ThisSource,".")>
+					<cfset NewImagePath="#ThisImageName#_resized_#Val(ARGUMENTS.Width)#x#Val(ARGUMENTS.Height)#.#ThisImageExt#">
+					<cfset NewImageURL=ReplaceNoCase(NewImagePath,ARGUMENTS.WebrootPath,"/","All")>
+					<cfset NewImageURL=ReplaceNoCase(NewImageURL,"\","/","All")>
+					<cfset NewImageURL=ReplaceNoCase(NewImageURL,"//","/","All")>
+					<cfoutput>
+						Source: #ThisSource#<BR>
+						ThisImageName: #ThisImageName#<br>
+						ThisImageExt: #ThisImageExt#<br>
+						NewImagePath: #NewImagePath#<br>
+						NewImageURL: #NewImageURL#<br>
+					</cfoutput>
+					<cfimage source="#ThisSource#" name="myImage">
+					<cfif ThisRatio LTE TargetRatio><!--- Source Image is taller--->
+						<cfset imageResize(myImage,ARGUMENTS.Width,"")>
+						<cfif ThisRatio NEQ TargetRatio>
+							<cfset NewHeight=ImageGetHeight(myImage)>
+							<cfset Offset=Fix((NewHeight-ARGUMENTS.Height)/2)>
+							<cfset ImageCrop(myImage,0,OffSet,ARGUMENTS.Width,ARGUMENTS.Height)>
+						</cfif>
+					<cfelse><!--- SourceImage is wider --->
+						<cfset NewWidth=Round((ARGUMENTS.Height/ImageInfo.Height)*ImageInfo.Width)>
+						<cfset imageResize(myImage,NewWidth,"")>
+						<cfset Offset=Fix((NewWidth-ARGUMENTS.Width)/2)>
+						<cfset ImageCrop(myImage,Offset,0,ARGUMENTS.Width,ARGUMENTS.Height)>
+					</cfif>
+					<cfimage source="#myImage#" action="write" destination="#NewImagePath#" overwrite="yes">
+					<cfreturn NewImageURL>
+				<cfelse>
+					<cfreturn ARGUMENTS.Source>
+				</cfif>
+			<cfelse>
+				<cfreturn "">
+			</cfif>
+		<cfelse>
+			<cfreturn "">
+		</cfif>
+	</cffunction>
 </cfcomponent>

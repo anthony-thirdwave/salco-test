@@ -36,6 +36,8 @@
 <cfset CALLER.CommentNotificationEmail="">
 <cfset CALLER.CSSID="">
 <cfset CALLER.CSSClass="">
+<cfset CALLER.CategoryImageHeader="">
+<cfset REQUEST.CategoryImageHeader="">
 
 <cfset DenyAccess="0">
 <cfset LoginPageCacheDateTime="">
@@ -85,9 +87,12 @@
 
 	<cfif IsWDDX(GetPage.CategoryLocalePropertiesPacket)>
 		<cfwddx action="WDDX2CFML" input="#GetPage.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
-		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride">
+		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader">
 			<cfif StructKeyExists(sCategoryProperties,"#ThisProp#") AND Trim(StructFind(sCategoryProperties, "#ThisProp#")) IS NOT "">
 				<cfset Setvariable("CALLER.#ThisProp#",StructFind(sCategoryProperties, "#ThisProp#"))>
+				<cfif ThisProp IS "CategoryImageHeader">
+					<cfset REQUEST.CategoryImageHeader=StructFind(sCategoryProperties, "#ThisProp#")>
+				</cfif>
 			</cfif>
 		</cfloop>
 	</cfif>
@@ -194,35 +199,6 @@
 
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
 	<cfset REQUEST.AllowComments=CALLER.AllowComments>
-	
-	
-	<!--- handle security --->
-<!---
-	<!--- First check if anyone is logging in via persistant right column form --->
-	<cfif IsDefined("FORM.EditMemberLoginID") and IsDefined("FORM.EditMemberPassword")>
-		<cfset SESSION.UserLogin = Trim(FORM.EditMemberLoginID)>
-		<cfset SESSION.UserPassword = Trim(FORM.EditMemberPassword)>
-		<cf_CheckMember
-			MemberLoginID="#SESSION.UserLogin#"
-			MemberPassword="#SESSION.UserPassword#"
-			datasource="#APPLICATION.IMISDSN#"
-			CheckLoginDisabledFlag="no">
-	</cfif>
-
-	<!--- Then (re)check against any security rules for current page --->
-	<cfmodule template="/common/modules/security/_security.cfm"
-		categorythreadlist="#CALLER.CategoryThreadList#"
-		DenyAccessVar="DenyAccess"
-		LoginPageAliasVar="LoginPageAlias">
-
-	<cfif DenyAccess>
-		<cfquery name="GetLoginModule" datasource="#APPLICATION.DSN#" maxrows="1">
-			SELECT CategoryID, CacheDateTime
-			FROM t_Category WHERE CategoryAlias=<cfqueryparam value="#LoginPageAlias#" cfsqltype="cf_sql_varchar">
-		</cfquery>
-		<cfset LoginPageCacheDateTime="#GetLoginModule.CacheDateTime#">
-		<cfset LoginPageCategoryID="#GetLoginModule.CategoryID#">
-	</cfif>  --->
 
 	<cfloop index="ThisContentPositionID" list="#lPosition#">
 		<cfset recacheThis = false>
@@ -237,18 +213,40 @@
 			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#GetPage.CategoryAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(CALLER.CacheDateTime,'yyyymmdd')##TimeFormat(CALLER.CacheDateTime,'HHmmss')#.cfm">
 		</cfif>
 		<cfset StructInsert(CALLER.sIncludeFile,ThisContentPositionID,"#APPLICATION.TempMapping##ExecuteTempFile#",1)>
-			<cfif DenyAccess>
-				<cfset CategoryIDPrime="#Val(LoginPageCategoryID)#">
-			<cfelse>
-				<cfset CategoryIDPrime="#Val(CALLER.CurrentCategoryID)#">
-			</cfif>
+		<cfif DenyAccess>
+			<cfset CategoryIDPrime="#Val(LoginPageCategoryID)#">
+		<cfelse>
+			<cfset CategoryIDPrime="#Val(CALLER.CurrentCategoryID)#">
+		</cfif>
+		<cfif CALLER.CategoryTypeID IS "64">
+			<cfset CategoryThreadListPrime=ListInsertAt(CALLER.CategoryThreadList,2,"5687")>
+		<cfelseif CALLER.CategoryTypeID IS "62">
+			<cfset CategoryThreadListPrime=ListInsertAt(CALLER.CategoryThreadList,2,"5688")>
+		<cfelse>
+			<cfset CategoryThreadListPrime=CALLER.CategoryThreadList>
+		</cfif>
 		<cfinvoke component="#REQUEST.MyContentManager#"
 			method="GetColumnContentIDList"
 			returnVariable="lContentID"
 			CategoryID="#CategoryIDPrime#"
 			LocaleID="#APPLICATION.LocaleID#"
 			ContentPositionID="#ThisContentPositionID#"
-			CategoryThreadList="#CALLER.CategoryThreadList#">
+			CategoryThreadList="#CategoryThreadListPrime#">
+		<cfif ListLen(lContentID) IS "0" and ListFind("62,64",CALLER.CategoryTypeID)>
+			<cfif CALLER.CategoryTypeID IS "64">
+				<cfset CategoryIDPrime=5687>
+			<cfelseif CALLER.CategoryTypeID IS "62">
+				<cfset CategoryIDPrime=5688>
+			</cfif>
+			<cfset CategoryThreadListPrime=ListDeleteAt(CALLER.CategoryThreadList,2)>
+			<cfinvoke component="#REQUEST.MyContentManager#"
+				method="GetColumnContentIDList"
+				returnVariable="lContentID"
+				CategoryID="#CategoryIDPrime#"
+				LocaleID="#APPLICATION.LocaleID#"
+				ContentPositionID="#ThisContentPositionID#"
+				CategoryThreadList="#CategoryThreadListPrime#">
+		</cfif>
 		<cfif ListLen(lContentID) IS "0">
 			<cfset StructInsert(CALLER.sIncludeFileBlank,ThisContentPositionID,"1",1)>
 		<cfelse>
@@ -263,7 +261,7 @@
 				CategoryID="#Val(CategoryIDPrime)#"
 				LocaleID="#APPLICATION.LocaleID#"
 				ContentPositionID="#ThisContentPositionID#"
-				CategoryThreadList="#CALLER.CategoryThreadList#"
+				CategoryThreadList="#CategoryThreadListPrime#"
 				PreviewSourceContentID="#Val(ATTRIBUTES.PreviewSourceContentID)#"
 				PreviewTargetContentID="#Val(ATTRIBUTES.PreviewTargetContentID)#">
 			<cfif ThisContentPositionID is "401" and CALLER.NoContent IS "1">
@@ -381,4 +379,4 @@
 
 <cfset REQUEST.CategoryThreadList=CALLER.CategoryThreadList>
 <cfset REQUEST.SecurityDenyAccess=DenyAccess>
-
+<cfset REQUEST.CurrentCategoryName=CALLER.CurrentCategoryName>

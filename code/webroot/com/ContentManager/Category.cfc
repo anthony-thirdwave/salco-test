@@ -1194,7 +1194,7 @@
 						LabelID IN (61,76) <!--- System, Topic --->
 					</cfcase>
 					<cfcase value="62"><!--- Product Family --->
-						LabelID IN (63,64,60) <!--- System, Topic --->
+						LabelID IN (62,63,64,60) <!--- System, Topic --->
 					</cfcase>
 					<cfcase value="63,64"><!--- Product Series, Product--->
 						LabelID IN (63,64.60) <!--- System, Topic --->

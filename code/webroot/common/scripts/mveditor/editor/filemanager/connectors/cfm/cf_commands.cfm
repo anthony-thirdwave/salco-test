@@ -23,7 +23,7 @@
  * in the ColdFusion Connector (MX 6.0 and above).
 --->
 
-<cffunction name="FileUpload" returntype="void" output="true">
+<cffunction name="MVFileUpload" returntype="void" output="true">
 	<cfargument name="resourceType" type="string" required="yes" default="">
 	<cfargument name="currentFolder" type="string" required="yes" default="">
 	<cfargument name="sCommand" type="string" required="yes" default="">

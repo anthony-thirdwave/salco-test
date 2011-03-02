@@ -68,4 +68,4 @@
 	<cfset SendUploadResults( "1", "", "", "Invalid type specified" ) >
 </cfif>
 
-<cfset FileUpload( sType, sCurrentFolder, sCommand )>
+<cfset MVFileUpload( sType, sCurrentFolder, sCommand )>

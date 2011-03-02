@@ -122,7 +122,7 @@
 			<cfoutput>
 				<cfset variables.newSearchTerm = replace(contentSearchStatus.suggestedQuery,"<typo>","","ALL")>
 				<div>
-					Did you mean <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#variables.newSearchTerm#</a>?
+					Did you mean <a href="#APPLICATION.MyCategoryHandler.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#variables.newSearchTerm#</a>?
 				</div>
 			</cfoutput>
 			

@@ -37,14 +37,14 @@
 		<cfset APPLICATION.TempMapping = "/#local.uniqueName#_www_temp/" />
 
 		<!--- default contact info --->
-		<cfset APPLICATION.contactEmail = "info@thirdwavellc.com" />
-		<cfset APPLICATION.CompanyName = "Thirdwave, LLC" />
-		<cfset APPLICATION.CompanyStreet = "15 W. Hubbard, ##300" />
-		<cfset APPLICATION.CompanyCity = "Chicago" />
-		<cfset APPLICATION.CompanyState = "IL" />
-		<cfset APPLICATION.CompanyZip = "60654" />
-		<cfset APPLICATION.CompanyPhone = "312.329.1960" />
-		<cfset APPLICATION.CompanySlogan = "Put your slogan here" />
+		<cfset APPLICATION.contactEmail = "contact@salcoproducts.com" />
+		<cfset APPLICATION.CompanyName = "Salco Products" />
+		<cfset APPLICATION.CompanyStreet = "" />
+		<cfset APPLICATION.CompanyCity = "" />
+		<cfset APPLICATION.CompanyState = "" />
+		<cfset APPLICATION.CompanyZip = "" />
+		<cfset APPLICATION.CompanyPhone = "" />
+		<cfset APPLICATION.CompanySlogan = "" />
 
 		<!--- default misc. cms application scope variables --->
 		<cfset APPLICATION.uniqueName = local.uniqueName />
@@ -262,7 +262,6 @@
 			<cfset APPLICATION.LocaleCode = local.GetThisLocale.LocaleCode />
 		</cfoutput>
 
-
 		<cfquery name="APPLICATION.GetStateProvinces" datasource="#APPLICATION.DSN#">
 			SELECT		stateProvinceId, stateProvinceCode, stateProvinceName, countryCode, priority
 		    FROM 		t_StateProvince
@@ -270,6 +269,11 @@
 			ORDER BY 	priority
 		</cfquery>
 
+		<cfquery name="APPLICATION.GetCountries" datasource="#APPLICATION.DSN#">
+			SELECT		countryId, countryCode, countryName, priority
+			FROM		t_Country
+			ORDER BY	IsNull(priority, 10000), CountryName
+		</cfquery>
 
 		<cfreturn true />
 	</cffunction>
