@@ -3,7 +3,7 @@
 <cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfparam name="form.email" default="">
 <cfif APPLICATION.Production>
-	<cfset Mailer_ToAddress="support@salcoproducts.com">
+	<cfset Mailer_ToAddress="sales@salcoproducts.com">
 <cfelse>
 	<cfset Mailer_ToAddress="thomas@newermedia.com">
 </cfif>

@@ -13,7 +13,21 @@ $(document).ready(function() {
 			splithash=getHash.split("#")
 			$("#linkEx"+splithash[1]).click();
 		}
+			$(".sideBarContent a.email").bind("click",function(e){e.preventDefault(); 
+				
+				getNameinfo=$(this).text();
+				getNameinfo=getNameinfo.split(" ");
+				document.location="/page/contact-us-form?contact="+getNameinfo[1]+"_"+getNameinfo[2];
+																				   
+			});
 			
+			$(".sideBarContent a.alphaemail").bind("click",function(e){e.preventDefault(); 
+				
+				getNameinfo=$(this).text();
+				getNameinfo=getNameinfo.split(" ");
+				document.location="/page/contact-us-form?contact="+getNameinfo[0]+"_"+getNameinfo[1];
+																				   
+			});
 	 });
 
 	
@@ -84,14 +98,27 @@ function adjVideoTitles(){
 	
 	
 	for(i=0;i<numberofVideos;i++){
+		
 		if($(".holderCenter .vidTable td").eq(i).children().children().html() !=null){
 		tempL=$(".holderCenter .vidTable td").eq(i).children().children().html().length;
-		tempTitle=$(".holderCenter .vidTable td").eq(i).children().children().html().toString();
 		
-		if(tempL>55){
-			$(".holderCenter .vidTable td").eq(i).children().children().attr("title", tempTitle);
-			$(".holderCenter .vidTable td").eq(i).children().children().html(tempTitle.slice(0,54)+"  &#8230;");/**/
-			tempTitle="test"
+			tempTitle=$(".holderCenter .vidTable td").eq(i).children().children().html().toString();
+			
+			if(tempL>55){
+				$(".holderCenter .vidTable td").eq(i).children().children().attr("title", tempTitle);
+				if(document.all){
+					tempTitle=tempTitle.replace(/&nbsp;/,' ')
+					
+					}
+				try{	
+				$(".holderCenter .vidTable td").eq(i).children().children().html(tempTitle.slice(0,54)+"  &#8230;");
+				}
+				catch(e){
+					//fails on ie for what seems to be unrelated reason
+					//alert(e.message)
+					//stiffling error messages for that reason.
+					}
+				tempTitle="test";
 			}
 		}
 	}
@@ -139,6 +166,21 @@ function getNavItems(nn){
 	}
 }
 
+var stopAt="";
+var startAt=0;
+function getNavItemsAuto(nnn){
+		pathtomenu="/common/modules/display/Navigation/dsp_NavProductHelper.cfm?CategoryID="
+		
+		nnnf=nnn.split(",");
+		stopAt=nnnf.length;
+		$("#expander"+nnnf[startAt]).addClass("navLoading");
+		$("#expander"+nnnf[startAt]).removeClass("empty");
+		$("#linkEx"+nnnf[startAt]).html("- ");
+		$("#expander"+nnnf[startAt]).load(pathtomenu+nnnf+" ul", function(){initNav(); rebinder(nnn); startAt++; if(startAt<stopAt){getNavItemsAuto(nnn);}});
+	
+}
+
+
 function closeNavItems(nn){
 	doublejep=true;
 	$("#expander"+nn+" a").children().unbind();
@@ -169,3 +211,8 @@ function rebinder(nn){
 		$("#expander"+nn).parent().children().eq(0).unbind().bind("click",function(e){e.preventDefault(); closeNavItems($(this).attr("href"));$(this).blur();});
 	}
 	}
+	
+function highlightRegion(region){
+	$(".sideBarContent .office").parent().addClass("hidden");
+	$("#"+region).removeClass("hidden")
+}

@@ -29,6 +29,8 @@
 					speed: 2500,
 				});
 			});
+			
+			
 		</script>
 		
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
@@ -42,11 +44,15 @@
 	</cfdefaultcase>
 </cfswitch>
 
-<cfif CategoryTypeID IS "64">
+<cfif ListFindNoCase("62,64",CategoryTypeID) and ListLen(CategoryThreadList) GTE "5">
 	<cfoutput>
 		<script>
-			$(document).ready(function() { 
-				$("##linkEx#REQUEST.CurrentCategoryID#").click();
+			$(document).ready(function() {
+				<cfset ThisList="">
+				<cfloop index="i" from="5" to="#ListLen(CategoryThreadList)#" step="1">
+					<cfset ThisList=ListAppend(ThisList,ListGetAt(CategoryThreadList,i))>
+				</cfloop>
+				getNavItemsAuto('#ThisList#');
 			});
 		</script>
 	</cfoutput>
@@ -85,7 +91,7 @@
 		<div id="holderNavSearch" style="padding-right:25px;">
 			<cfoutput>
 			<form action="#APPLICATION.utilsObj.parseCategoryUrl('search')#" method="get">
-				<input class="backSearch" name="search" type="text" <cfif IsDefined("URL.searchTxt")> value="#HTMLEditFormat(URL.searchTxt)#"</cfif>/><input class="btnSearch" name="" type="submit" value=" " />
+				<input class="backSearch" name="searchTxt" type="text" <cfif IsDefined("URL.searchTxt")> value="#HTMLEditFormat(URL.searchTxt)#"</cfif>/><input class="btnSearch" type="submit"/>
 			</form>
 			</cfoutput>
 			<cfmodule template="/common/modules/Display/Navigation/dsp_NavSub.cfm"
@@ -206,13 +212,18 @@
 								</div>
 							</div>
 							<cfif sIncludeFileBlank[402] IS NOT "1">
-								<div class="sideBar">
-									<div class="sideBarTop"></div>
-									<div class="sideBarContent">
-										<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+								<cfsavecontent variable="ThisRightColumnContent">
+									<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+								</cfsavecontent>
+								<cfif Trim(ThisRightColumnContent) IS NOT "">
+									<div class="sideBar">
+										<div class="sideBarTop"></div>
+										<div class="sideBarContent">
+											<cfoutput>#ThisRightColumnContent#</cfoutput>
+										</div>
+										<div class="sideBarBot"></div>
 									</div>
-									<div class="sideBarBot"></div>
-								</div>
+								</cfif>
 							</cfif>
 							<div class="clearFix"></div>
 						</div>

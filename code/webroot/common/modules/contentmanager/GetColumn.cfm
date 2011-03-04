@@ -73,14 +73,16 @@
 			</cfif>
 			<cfswitch expression="#APPLICATION.ApplicationName#">
 				<cfdefaultcase>
-					<cfsavecontent variable="FileContents">
-						#FileContents#
-						<!-- START OF "#GetContent.ContentNameDerived#" CONTENT BLOCK (#GetContent.ContentID#) -->
-						<div id="#ThisCSSID#" class="#lcase(application.utilsObj.scrub(GetContent.ContentTypeName))# #ThisAdditionalCSSClass# position#ContentCounter#">
-							#Title# #TheseFileContents#
-						</div>
-						<!-- END OF "#GetContent.ContentNameDerived#" CONTENT BLOCK -->
-					</cfsavecontent>
+					<cfif Trim("#FileContents##Title##TheseFileContents#") IS NOT "">
+						<cfsavecontent variable="FileContents">
+							#FileContents#
+							<!-- START OF "#GetContent.ContentNameDerived#" CONTENT BLOCK (#GetContent.ContentID#) -->
+							<div id="#ThisCSSID#" class="#lcase(application.utilsObj.scrub(GetContent.ContentTypeName))# #ThisAdditionalCSSClass# position#ContentCounter#">
+								#Title# #TheseFileContents#
+							</div>
+							<!-- END OF "#GetContent.ContentNameDerived#" CONTENT BLOCK -->
+						</cfsavecontent>
+					</cfif>
 				</cfdefaultcase>
 			</cfswitch>
 		</cfif>

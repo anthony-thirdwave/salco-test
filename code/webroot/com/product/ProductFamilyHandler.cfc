@@ -383,7 +383,7 @@
 		<!--- Has sub product families --->
 		<cfquery name="LOCAL.GetChildrenPrime" datasource="#APPLICATION.DSN#">
 			select 	Count(CategoryID) as Count, ParentID from t_Category
-			Where	ParentID IN (<cfqueryparam value="#LOCAL.GetProductFamilyList.CategoryID#" cfsqltype="cf_sql_integer" list="yes">)
+			Where	ParentID IN (<cfqueryparam value="#ValueList(LOCAL.GetProductFamilyList.CategoryID)#" cfsqltype="cf_sql_integer" list="yes">)
 			and		CategoryTypeID=<cfqueryparam value="62" cfsqltype="cf_sql_integer">
 			Group By ParentID
 			ORDER BY ParentID

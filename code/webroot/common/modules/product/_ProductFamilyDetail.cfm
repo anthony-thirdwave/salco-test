@@ -23,7 +23,7 @@
 		FROM         t_Category
 		WHERE     CategoryID IN (#ATTRIBUTES.ProductFamilyID#)
 	</cfquery>
-	<CFSET ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductFamilyDetail_v1.0_#ATTRIBUTES.ProductFamilyID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
+	<CFSET ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductFamilyDetail_v1.1_#ATTRIBUTES.ProductFamilyID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
 	<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
 		<cfsaveContent Variable="FileContents">
 			<cfset MyProductFamily=CreateObject("component","com.Product.ProductFamily")>

@@ -35,6 +35,7 @@
 		<cfset APPLICATION.ContentPath = "content\" />
 		<cfset APPLICATION.CollectionName = "#local.uniqueName#_#local.siteType#_content_locale_" />
 		<cfset APPLICATION.TempMapping = "/#local.uniqueName#_www_temp/" />
+		<cfset APPLICATION.RootPath=arguments.pathPrefix>
 
 		<!--- default contact info --->
 		<cfset APPLICATION.contactEmail = "contact@salcoproducts.com" />
@@ -190,7 +191,7 @@
 		<cfset APPLICATION.DefaultLanguageID = 100 />
 
 		<cfset APPLICATION.ImageFileExtensionList = ".jpg;.gif;.jpeg;.jpe;.swf;.png" />
-		<cfset APPLICATION.DocumentFileExtensionList = ".pdf;.txt;.eps;.doc;.hqx;.sea;.ppt;.mov;.zip;.sit;.indt;.mpg;.mp3;.mp4;.xls;.key" />
+		<cfset APPLICATION.DocumentFileExtensionList = ".pdf;.txt;.eps;.doc;.hqx;.sea;.ppt;.mov;.zip;.sit;.indt;.mpg;.mp3;.mp4;.xls;.key;.vcf" />
 		<cfset APPLICATION.MasterFileExtensionList = listAppend(APPLICATION.ImageFileExtensionList,APPLICATION.DocumentFileExtensionList,";") />
 
 		<!--- This is the e-mail address to which error reports should be sent.

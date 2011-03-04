@@ -2,7 +2,7 @@
 	<cfset ATTRIBUTES.Action=URL.soa>
 </cfif>
 <cfparam name="ATTRIBUTES.SiteCategoryID" default="-1">
-<cfparam name="ATTRIBUTES.FormAction" default="#CGI.Path_Info#?#CGI.Query_String#">
+<cfparam name="ATTRIBUTES.FormAction" default="#CGI.REQUEST_URI#?#CGI.Query_String#">
 <cfparam name="sc" default="1">
 
 <cfset ThisCollectionName="#Application.CollectionName##APPLICATION.LocaleID#">
@@ -18,23 +18,9 @@
 
 
 <cfparam name="searchTxt" default="">
-<cfparam name="metakeyword" default="">
-<cfparam name="categorytree" default="">
-<cfparam name="topic" default="">
+<cfparam name="SearchCategory" default="">
 
-<cfif structKeyExists(url,"metakeyword")>
-	<cfset metakeyword = url.metakeyword>
-</cfif>
-
-<cfif structKeyExists(url,"topic")>
-	<cfset topic = url.topic>
-</cfif>
-
-<cfif structKeyExists(url,"categorytree")>
-	<cfset categorytree = url.categorytree>
-</cfif>
-
-<cfset blnCanSearch = len(trim(searchTxt)) OR len(trim(metakeyword)) or len(trim(topic))>
+<cfset blnCanSearch = len(trim(searchTxt)) OR len(trim(SearchCategory))>
 
 <cfif not blnCanSearch>
 	<cfoutput>#sStatusCode[2]#</cfoutput>
@@ -49,62 +35,33 @@
 	<!---  simple search --->
 	<!--- searching with the categorytree is hundreds of times slower,
 		  so only search with it if necessary --->  
-	<cfif not len(trim(categorytree))>	
-		<CFSEARCH NAME="ContentSearch"
-			COLLECTION="#ThisCollectionName#"
-		 	TYPE="simple"
-			CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-			status="contentSearchStatus"
-			suggestions="always">  
-	<cfelse>  
-		<CFSEARCH NAME="ContentSearch"
-			COLLECTION="#ThisCollectionName#"
-			TYPE="simple"
-			CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-			status="contentSearchStatus"
-			suggestions="always"
-			categorytree="#categorytree#">  
-	</cfif>
+	<CFSEARCH NAME="ContentSearch"
+		COLLECTION="#ThisCollectionName#"
+	 	TYPE="simple"
+		CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
+		status="contentSearchStatus"
+		suggestions="always">  
+
 	
 	<cfif ContentSearch.RecordCount eq 0>
 		<!---  natural search --->
 		<!--- see above for why the 2 cfsearches: categorytree is slow --->
-		<cfif not len(trim(categorytree))>  
-			<CFSEARCH NAME="ContentSearch"
-				COLLECTION="#ThisCollectionName#"
-				TYPE="natural"
-				CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-				status="contentSearchStatus"
-				suggestions="always">
-		<cfelse>
-			<CFSEARCH NAME="ContentSearch"
-				COLLECTION="#ThisCollectionName#"
-				TYPE="natural"
-				CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-				status="contentSearchStatus"
-				suggestions="always"
-				categorytree="#categorytree#">
-		</cfif>	
+		<CFSEARCH NAME="ContentSearch"
+			COLLECTION="#ThisCollectionName#"
+			TYPE="natural"
+			CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
+			status="contentSearchStatus"
+			suggestions="always">
 	</cfif>
 	
 	<cfif ContentSearch.recordcount>
-		 <cfif len(metakeyword)>
-			<cfif not len(trim(categorytree))>  
-				<CFSEARCH NAME="ContentSearch"
-					COLLECTION="#ThisCollectionName#"
-					CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-					status="contentSearchStatus"
-					suggestions="always"
-					category="#metakeyword#" /> 
-			<cfelse>
-				<CFSEARCH NAME="ContentSearch"
-					COLLECTION="#ThisCollectionName#"
-					CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-					status="contentSearchStatus"
-					suggestions="always"
-					categorytree="#categorytree#"
-					category="#metakeyword#" /> 
-			</cfif>  
+		 <cfif len(SearchCategory)>
+			<CFSEARCH NAME="ContentSearch"
+				COLLECTION="#ThisCollectionName#"
+				CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
+				status="contentSearchStatus"
+				suggestions="always"
+				category="#SearchCategory#" /> 
 		</cfif>
 	</cfif> 
 	
@@ -122,7 +79,7 @@
 			<cfoutput>
 				<cfset variables.newSearchTerm = replace(contentSearchStatus.suggestedQuery,"<typo>","","ALL")>
 				<div>
-					Did you mean <a href="#APPLICATION.MyCategoryHandler.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#variables.newSearchTerm#</a>?
+					Did you mean <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#variables.newSearchTerm#</a>?
 				</div>
 			</cfoutput>
 			
