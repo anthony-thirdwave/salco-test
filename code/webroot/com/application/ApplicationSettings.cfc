@@ -140,7 +140,7 @@
 			<cfset APPLICATION.SourceDBServer = "" />
 			<cfset APPLICATION.SourceLogin = "" />
 			<cfset APPLICATION.SourcePassword = "" />
-			<cfset APPLICATION.Production = "yes" />
+			<cfset APPLICATION.Production = true />
 			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = APPLICATION.applicationName />
 
 			<!---	set custom httpServer and httpsServer - *both* must be set to work properly

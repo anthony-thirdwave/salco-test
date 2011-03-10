@@ -19,13 +19,23 @@
 	<cfoutput>
 		<form action="#APPLICATION.utilsObj.parseCategoryUrl('search')#">
 		<input type="hidden" name="lsc" value="#lsc#">
-		<input type="hidden" name="SearchTxt" value="#SearchTxt#">
-		<select name="SearchCategory">
-		<cfloop index="ThisSearchCategory" list="#lsc#">
-			<option value="#ThisSearchCategory#" <cfif SearchCategory IS ThisSearchCategory>selected</cfif>>#sSearchCategory[ThisSearchCategory]#</option>
-		</cfloop>
-		</select>
-		<input type="submit" value="Filter Search Results">
+		<div class="formRow">
+			<label for="SearchTxt">Search Term</label>
+			<input type="text" name="SearchTxt" id="SearchTxt" value="#HTMLEditFormat(SearchTxt)#">
+		</div>
+		
+		<div class="formRow">
+			<label for="SearchCategory">Filter</label>
+			<select name="SearchCategory" id="SearchCategory">
+				<option value="" <cfif SearchCategory IS "">selected</cfif>>All</option>
+			<cfloop index="ThisSearchCategory" list="#lsc#">
+				<option value="#ThisSearchCategory#" <cfif SearchCategory IS ThisSearchCategory>selected</cfif>>#sSearchCategory[ThisSearchCategory]#</option>
+			</cfloop>
+			</select>
+		</div>
+		<div class="formRow submit">
+			<input type="submit" value="Search">
+		</div>
 		</form>
 	</cfoutput>
 </cfif>

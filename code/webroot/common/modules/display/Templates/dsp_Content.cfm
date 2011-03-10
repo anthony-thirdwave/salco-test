@@ -12,25 +12,21 @@
 		<script type="text/javascript" src="/common/scripts/jquery-ui-1.8.7.custom.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				$("#tabsRotate").tabs({ fx: { opacity: 'toggle' } }).tabs('rotate', 10000);
+				$("#tabsRotate").tabs({ fx: { opacity: 'toggle' } });/*.tabs('rotate', 10000);*/
 				$('#tabsRotate').hover(function(){
 						$(this).tabs('rotate', 10000, false);
 					},function(){
-						$(this).tabs({ fx: { opacity: 'toggle' } }).tabs('rotate', 10000);
+						$(this).tabs({ fx: { opacity: 'toggle' } })/*.tabs('rotate', 10000)*/;
 					}
 				);
 			});
-		</script>
 		
-		<script> 
 			$(document).ready(function() { 
 				$('#imageRotate').cycle({
 					fx: 'fade', 
 					speed: 2500,
 				});
 			});
-			
-			
 		</script>
 		
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
@@ -41,21 +37,26 @@
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
 		<script type="text/javascript" src="/common/scripts/projekktor.min.js"></script>
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
+        <script type="text/javascript" src="/common/scripts/swfobject.js"></script>
 	</cfdefaultcase>
 </cfswitch>
 
-<cfif ListFindNoCase("62,64",CategoryTypeID) and ListLen(CategoryThreadList) GTE "5">
-	<cfoutput>
-		<script>
-			$(document).ready(function() {
-				<cfset ThisList="">
-				<cfloop index="i" from="5" to="#ListLen(CategoryThreadList)#" step="1">
-					<cfset ThisList=ListAppend(ThisList,ListGetAt(CategoryThreadList,i))>
-				</cfloop>
-				getNavItemsAuto('#ThisList#');
-			});
-		</script>
-	</cfoutput>
+<cfif ListFindNoCase("62,64",CategoryTypeID)>
+	<cfif ListLen(CategoryThreadList) GTE "5">
+		<cfoutput>
+			<script>
+				$(document).ready(function() {
+					<cfset ThisList="">
+					<cfloop index="i" from="5" to="#ListLen(CategoryThreadList)#" step="1">
+						<cfset ThisList=ListAppend(ThisList,ListGetAt(CategoryThreadList,i))>
+					</cfloop>
+					getNavItemsAuto('#ThisList#');
+				});
+			</script>
+		</cfoutput>
+	</cfif>
+	<script type="text/javascript" src="/common/scripts/jquery.smart_autocomplete.js"></script>
+	<script type="text/javascript" src="/common/scripts/typeahead.js"></script>
 </cfif>
 <cfoutput>
 	<!--- These tags are managed by the CMS. --->
@@ -124,7 +125,7 @@
 				</div>
 			</div>
 		</cfcase>
-		<cfcase value="23"><!--- "wide" template --->
+		<cfcase value="23,1502"><!--- "Left" template --->
 			<div class="subBack">
 				<div class="holderFull">
 					<div class="holderFullHeaderSp">
@@ -142,12 +143,17 @@
 								<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
 							</div>
 						</div>
-						<div class="spRight">
-							<img src="common/images/side_bar_top_sp.png"/>
-							<div style="padding: 0 15px 0 15px;">
-								<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+						<cfsavecontent variable="RightContent">
+							<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+						</cfsavecontent>
+						<cfif Trim(RightContent) IS NOT "">
+							<div class="spRight">
+								<img src="common/images/side_bar_top_sp.png"/>
+								<div style="padding: 0 15px 0 15px;">
+									<cfoutput>#RightContent#</cfoutput>
+								</div>
 							</div>
-						</div>
+						</cfif>
 						<div class="clearFix"></div>
 					</div>
 				</div>
@@ -159,6 +165,11 @@
 					<div class="gradSM">
 						<!---- START CONTENT --->
 						<cfif ListFind("62,64",CategoryTypeID)>
+							<div id="typeahead">
+                                <input id="searchProd" value="Product Search..." />
+                                <div id="q"></div>
+                                <div id="returns"></div>
+                            </div>
 							<cfif ListLen(CategoryThreadList) GTE "4">
 								<ul id="acc3">
 								<li class="treeHeader"><cfoutput>#ListGetAt(CategoryThreadName,3)#</cfoutput></li>
@@ -172,7 +183,7 @@
 							<cfif Trim(LeftNav) IS NOT "">
 								<cfoutput>#LeftNav#</cfoutput>
 							<cfelse>
-								<ul id="acc3" class="accordion">Placeholder</ul>
+								<div id="emptyleftcolumn"></div>
 							</cfif>
 						</cfif>
 						<div class="holderWide">

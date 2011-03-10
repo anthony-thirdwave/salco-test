@@ -6,6 +6,25 @@
 <cfif Len(Trim(lastName)) Eq 0>
 	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for last name.</li>">
 </cfif>
+<cfif Len(Trim(address1)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for address 1.</li>">
+</cfif>
+<cfif Len(Trim(city)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for city.</li>">
+</cfif>
+<cfif Len(Trim(state)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for state.</li>">
+</cfif>
+<cfif Len(Trim(zip)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for zip.</li>">
+</cfif>
+<cfif Len(Trim(country)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for country.</li>">
+</cfif>
+<cfif Len(Trim(message)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a message.</li>">
+</cfif>
+
 <cfif Len(Trim(emai)) Eq 0>
 	<cfset ErrorMessage= ErrorMessage & "<li>Please enter a value for email.</li>">
 <cfelse>
@@ -13,7 +32,7 @@
 	<cfif ValidateEmailStatus GTE "200">
 		<cfset ErrorMessage= ErrorMessage & "<li>Email entered is not formatted correctly.</li>">
 	<cfelse>
-		<cfparam name="FORM.Mailer_FromAddress" default="#form.emai#">
+		<cfset Mailer_FromAddress="#form.emai#">
 	</cfif>
 </cfif>
 
@@ -22,8 +41,11 @@
 </cfif>
 
 <cfif len(trim(ErrorMessage)) EQ 0>
-	<cfmail	to="#FORM.Mailer_ToAddress#" from="#FORM.Mailer_FromAddress#"
-			type="html" subject="Contact Form Submission: #form.Firstname# #form.LastName#">
+	<cfif Mailer_ToAddress IS NOT "sales@salcoproducts.com">
+		<cfset Mailer_ToAddress=ListAppend(Mailer_ToAddress,"sales@salcoproducts.com")>
+	</cfif>
+	<cfmail	to="#Mailer_ToAddress#" from="#Mailer_FromAddress#"
+			type="html" subject="#Mailer_Subject#">
 	<table>
 		<tr>
 		<td colspan="2"><b>Contact Form Submission</b><br>

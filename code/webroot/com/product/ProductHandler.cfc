@@ -621,7 +621,7 @@
 	</cffunction>
 	
 	<cffunction name="GetPublicDrawing" returntype="query" output="false">
-		<cfargument name="TopProductFamilyID" default="" type="numeric" required="true">
+		<cfargument name="TopProductFamilyAlias" default="" type="string" required="true">
 		<cfargument name="OrderBy" default="CategoryName" type="string" required="true">
 		<cfargument name="OrderAsc" default="1" type="numeric" required="true">
 		
@@ -687,6 +687,13 @@
 			</cfif>
 		</cfoutput>
 
+		<cfquery name="LOCAL.qReturn" dbtype="query">
+			select * from [LOCAL].qReturn
+			<cfif ARGUMENTS.TopProductFamilyAlias IS NOT "">
+				WHERE TopProductFamilyAlias=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.TopProductFamilyAlias#">
+			</cfif>
+			order by ProductName
+		</cfquery>
 		<cfreturn LOCAL.qReturn>
 	</cffunction>
 	
@@ -702,13 +709,13 @@
 		
 		<cfset VAR LOCAL=StructNew()>
 		
-		<cfset LOCAL.ColumnList="ProductID,ProductName,ProductFamilyName,ProductFamilyID,PartNumber,ProductDescription,Edit,DisplayOrder">
+		<cfset LOCAL.ColumnList="ProductID,ProductName,ProductAlias,ProductFamilyName,ProductFamilyID,PartNumber,ProductDescription,Edit,DisplayOrder">
 		<cfset LOCAL.qReturn=QueryNew(ColumnList)>
 		
 		<cfset LOCAL.qGetTopProductFamily=GetTopProductFamily()>
 		
 		<cfquery name="LOCAL.GetProductList" datasource="#APPLICATION.DSN#">
-			SELECT CategoryID, CategoryName, DisplayOrder, ProductFamilyAttributeID, AttributeValue, ParentCategoryName, ParentCategoryAlias, ParentID
+			SELECT CategoryID, CategoryName, CategoryAlias, DisplayOrder, ProductFamilyAttributeID, AttributeValue, ParentCategoryName, ParentCategoryAlias, ParentID
 			from qry_GetProduct
 			Where ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="7,10" list="yes">)
 			order by DisplayOrder, ProductFamilyAttributeID
@@ -718,6 +725,7 @@
 			<cfset QueryAddRow(LOCAL.qReturn,1)>
 			<cfset QuerySetCell(LOCAL.qReturn,"ProductID",LOCAL.GetProductList.CategoryID)>
 			<cfset QuerySetCell(LOCAL.qReturn,"ProductName",LOCAL.GetProductList.CategoryName)>
+			<cfset QuerySetCell(LOCAL.qReturn,"ProductAlias",LOCAL.GetProductList.CategoryAlias)>
 			<cfset QuerySetCell(LOCAL.qReturn,"ProductFamilyName",LOCAL.GetProductList.ParentCategoryName)>
 			<cfset QuerySetCell(LOCAL.qReturn,"ProductFamilyID",LOCAL.GetProductList.ParentID)>
 			<cfset QuerySetCell(LOCAL.qReturn,"DisplayOrder",LOCAL.GetProductList.DisplayOrder)>

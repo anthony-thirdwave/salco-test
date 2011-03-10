@@ -79,7 +79,7 @@
 			<cfoutput>
 				<cfset variables.newSearchTerm = replace(contentSearchStatus.suggestedQuery,"<typo>","","ALL")>
 				<div>
-					Did you mean <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#variables.newSearchTerm#</a>?
+					Did you mean <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#HTMLEditFormat(variables.newSearchTerm)#</a>?
 				</div>
 			</cfoutput>
 			
@@ -95,7 +95,7 @@
 				 <p>No search results</p>
 			  <cfelse>
 				 
-				 Results for<cfoutput> #variables.newSearchTerm#</cfoutput><br/>
+				 <h3>Results for<cfoutput> "#HTMLEditFormat(variables.newSearchTerm)#"</cfoutput></h3>
 			  
 				 <cfinclude template="dspSearchResults.cfm">
 			  </cfif>	

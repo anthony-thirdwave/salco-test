@@ -1,34 +1,47 @@
 var browserWars=$.client.browser;
 
-$(document).ready(function() { 
-				
-			browserWars=browserWars.toLowerCase();			   	   
-			$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));});
-			$("body").addClass(browserWars);
-			
-			initNav();	
-			
-			getHash=location.hash;
-		if(getHash.length>0){
-			splithash=getHash.split("#")
-			$("#linkEx"+splithash[1]).click();
+$(document).ready(function() {
+
+	browserWars=browserWars.toLowerCase();			   	   
+	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));});
+	$("body").addClass(browserWars);
+
+	initNav();	
+	getHash=location.hash;
+
+	if(getHash.length>0){
+		splithash=getHash.split("#")
+		$("#linkEx"+splithash[1]).click();
+	}
+	$(".sideBarContent a.email").bind("click",function(e){e.preventDefault(); 
+		
+		getNameinfo=$(this).text();
+		getNameinfo=getNameinfo.split(" ");
+		document.location="/page/contact-us-form?contact="+getNameinfo[1]+"_"+getNameinfo[2];
+																		   
+	});
+	
+	$(".sideBarContent a.alphaemail").bind("click",function(e){e.preventDefault(); 
+		
+		getNameinfo=$(this).text();
+		getNameinfo=getNameinfo.split(" ");
+		document.location="/page/contact-us-form?contact="+getNameinfo[0]+"_"+getNameinfo[1];
+																		   
+	});
+	
+	$("input#searchProd").bind("focus", function(e) {e.preventDefault(); 
+		if(this.value == "Product Search..." || this.value == "Product Search...") {
+			this.value = "";
 		}
-			$(".sideBarContent a.email").bind("click",function(e){e.preventDefault(); 
-				
-				getNameinfo=$(this).text();
-				getNameinfo=getNameinfo.split(" ");
-				document.location="/page/contact-us-form?contact="+getNameinfo[1]+"_"+getNameinfo[2];
-																				   
-			});
-			
-			$(".sideBarContent a.alphaemail").bind("click",function(e){e.preventDefault(); 
-				
-				getNameinfo=$(this).text();
-				getNameinfo=getNameinfo.split(" ");
-				document.location="/page/contact-us-form?contact="+getNameinfo[0]+"_"+getNameinfo[1];
-																				   
-			});
-	 });
+	});
+	
+	$("input#searchProd").bind("blur", function(e) {e.preventDefault(); 
+		if(this.value == "") {
+			this.value = "Product Search...";
+		}
+	});
+	
+ });
 
 	
 	
@@ -76,17 +89,26 @@ $(document).ready(function() {
 		$(activeTab).show(); //Fade in the active content
 		return false;
 	});
-	
+	try{
 	projekktor('#salcoPlayer', {
 	playerFlashMP4:		'/common/flash/jarisplayer.swf'
-    });
+    });}
+catch(e){
+	//stiffle
+	}
 	
 	if(!document.all){
 	adjVideoTitles()/**/}else{setTimeout("adjVideoTitles()",1500)}
 });
 
 $("html").addClass("js");
-$.fn.accordion.defaults.container = false; 
+
+try{
+
+$.fn.accordion.defaults.container = false; }
+catch(e){
+	//stiffle
+	}
 $(function() {
 	$("#acc3").accordion({initShow : "#current"});
 	$("html").removeClass("js");

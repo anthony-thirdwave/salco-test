@@ -69,18 +69,28 @@
 		
 		<cfset VAR LOCAL=StructNew()>
 		
-		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
-			<cfprocresult name="LOCAL.GetProductListPrime">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ARGUMENTS.LocaleID)#" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#val(ARGUMENTS.ProductFamilyID)#" null="NO">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="64" null="No">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
-			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
-		</cfstoredproc>
+		<cfif APPLICATION.GetAllLocale.RecordCount GT "1">
+			<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+				<cfprocresult name="LOCAL.GetProductListPrime">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ARGUMENTS.LocaleID)#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#val(ARGUMENTS.ProductFamilyID)#" null="NO">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="64" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="No">
+			</cfstoredproc>
+		<cfelse>
+			<cfquery name="LOCAL.GetProductListPrime" datasource="#APPLICATION.DSN#">
+				select *, CategoryName as CategoryNameDerived from t_Category
+				where ParentID=<cfqueryparam value="#val(ARGUMENTS.ProductFamilyID)#" cfsqltype="cf_sql_integer"> AND
+				CategoryTypeID=<cfqueryparam value="64" cfsqltype="cf_sql_integer"> AND
+				CategoryActive=<cfqueryparam value="1" cfsqltype="cf_sql_integer"> AND
+				ShowInNavigation=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
+			</cfquery>
+		</cfif>
 		
 		<cfset SetVariable("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#",LOCAL.GetProductListPrime)>
 		

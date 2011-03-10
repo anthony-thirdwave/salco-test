@@ -1,27 +1,38 @@
 <cfparam name="formsubmit" default="0">
 <cfparam name="showform" default="1">
+<cfparam name="LabelTo" default="">
 <cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
 <cfparam name="form.email" default="">
 <cfparam name="form.To" default="">
+<cfset LabelTo="Customer Service">
 
-<cfif APPLICATION.Production>
-	<cfset Mailer_ToAddress="sales@salcoproducts.com">
-<cfelse>
-	<cfset Mailer_ToAddress="thomas@newermedia.com">
-</cfif>
+<cfset Mailer_ToAddress="sales@salcoproducts.com">
 <cfset Mailer_FromAddress="noreply@salcoproducts.com">
 
 <cfset ErrorMessage="">
 
 <!---  set params ----> 
-<cfset ReqiredformFiledList="firstName,lastName,emai,message">
-<cfset NonReqiredformFiledList="address1,address2,city,state,zip,country">
-<cfloop index="i" list="#ReqiredformFiledList#">
+<cfset RequiredFormFieldList="firstName,lastName,emai,message,address1,city,state,zip,country">
+<cfset NonRequiredFormFieldList="address2">
+<cfloop index="i" list="#RequiredFormFieldList#">
 	<cfparam name="form.#i#" default="">
 </cfloop>
-<cfloop index="i" list="#NonReqiredformFiledList#">
+<cfloop index="i" list="#NonRequiredFormFieldList#">
 	<cfparam name="form.#i#" default="">
 </cfloop>
+
+<cfif IsDefined("ATTRIBUTES.sContact") and isStruct(ATTRIBUTES.sContact) and isDefined("contact")>
+	<cfif StructKeyExists(ATTRIBUTES.sContact,contact)>
+		<cfset Mailer_ToAddress=ATTRIBUTES.sContact[contact]>
+		<cfset LabelTo=HTMLEditFormat(Replace(contact,"_"," ","All"))>
+	</cfif>
+</cfif>
+
+<cfset Mailer_Subject="Contact Form Submission: #form.Firstname# #form.LastName#">
+<cfif APPLICATION.Production>
+<cfelse>
+	<cfset Mailer_Subject="#Mailer_Subject# TESTING ONLY!">
+</cfif>
 
 <cfif formsubmit EQ 1>
 	<cfinclude template="actContactForm.cfm">
@@ -47,6 +58,12 @@
 			<input name="email" type="text" class="hpfield" value=""/>
 			<!--- ==================================================== --->
 			<!--- enter form fields here --->
+			<cfif LabelTo IS NOT "">
+				<div class="formRow">
+					<label>To</label>
+					<strong>#LabelTo#</strong>
+				</div>
+			</cfif>
 			<div class="formRow<cfif formsubmit EQ 1 and len(trim(firstName)) eq 0> errorTxt</cfif>">
 				<label for="firstName">First Name *</label>
 				<cfinput name="firstName" id="firstName" maxlength="50" type="text" value="#form.firstName#" />

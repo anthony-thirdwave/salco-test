@@ -531,7 +531,7 @@
 				caption="Text" 
 				ObjectName="MyContentLocale"
 				PropertyName="Text"
-				cols="80" rows="25"
+				cols="100" rows="25"
 				EscapeCRLF="No"
 				Required="Y">
 		</cfif>

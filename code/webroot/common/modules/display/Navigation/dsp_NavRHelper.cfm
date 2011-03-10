@@ -18,10 +18,10 @@
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="#APPLICATION.lVisibleCategoryTypeID#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
-	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="Yes">
+	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="No">
 </cfstoredproc>
 
-<cfif ATTRIBUTES.Level IS NOT "0">
+<cfif ATTRIBUTES.Level IS NOT "0" and GetCategoryDetail.ShowInNavigation IS "1">
 	<cfoutput query="GetCategoryDetail">
 		<cfset ThisUrl = "" />
 		<cfif len(trim(GetCategoryDetail.CategoryURLDerived))>
@@ -32,6 +32,7 @@
 		<li><a href="#ThisURL#" <cfif ATTRIBUTES.Level IS "1">class="sideNavLink"</cfif>>#GetCategoryDetail.CategoryNameDerived#</a>
 	</cfoutput>
 </cfif>
+
 <cfif GetCategoryList.recordcount GT "0">
 	<cfif ATTRIBUTES.Level IS "0">
 		<ul id="acc3" class="accordion">
