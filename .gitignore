@@ -1,13 +1,17 @@
+code/Lost[!!-~]&[!!-~]Found
 code/collection/*
+code/resources
 code/temp/1/*
 code/temp/2/*
 code/webroot/aspnet_client
+code/webroot/common/images/Thumbs.db
 code/webroot/common/images/template/*.db
 code/webroot/common/incoming/documents/*
 code/webroot/common/incoming/images/*
 code/webroot/common/modules/Contact/Thumbs.db
 code/webroot/resources/category/*
 code/webroot/resources/content/*
+code/webroot/resources/external/dwfparts
 code/webroot/resources/images/*
 code/webroot/scratchpad.cfm
 code/workarea/trash/resources/category/*
