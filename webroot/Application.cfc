@@ -7,7 +7,7 @@
 				* for cf8 sites, this is where the site type is set, leaving blank creates "dev" site type
 				* for cf9 sites, if server.siteType is set, if this should be "" unless
 					a site type override is needed --->
-	<cfset variables.overrideSiteType="staging">
+	<cfset variables.overrideSiteType="production">
 
 	<!--- figure out the siteType --->
 	<cfinvoke method="determineSiteType" returnvariable="variables.siteType">
