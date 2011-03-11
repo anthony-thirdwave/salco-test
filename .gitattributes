@@ -279,6 +279,8 @@ code/webroot/common/images/spacer.gif -text
 code/webroot/common/images/template/btn_contact_sumbit.png -text
 code/webroot/common/images/template/btn_search.png -text
 code/webroot/common/images/template/captcha_test.jpg -text
+code/webroot/common/images/template/contactf.png -text
+code/webroot/common/images/template/contactm.png -text
 code/webroot/common/images/template/content_back.png -text
 code/webroot/common/images/template/content_back_wide.png -text
 code/webroot/common/images/template/content_bottom.png -text
@@ -314,6 +316,7 @@ code/webroot/common/images/template/page_back_home.jpg -text
 code/webroot/common/images/template/red_line.png -text
 code/webroot/common/images/template/salco_logo_masthead.png -text
 code/webroot/common/images/template/salco_search_back.png -text
+code/webroot/common/images/template/salcocontactmap.png -text
 code/webroot/common/images/template/search_back.png -text
 code/webroot/common/images/template/side_bar_bak.png -text
 code/webroot/common/images/template/side_bar_bak_sp.png -text
@@ -321,6 +324,7 @@ code/webroot/common/images/template/side_bar_bot.png -text
 code/webroot/common/images/template/side_bar_bot_sp.png -text
 code/webroot/common/images/template/side_bar_top.png -text
 code/webroot/common/images/template/side_bar_top_sp.png -text
+code/webroot/common/images/template/side_nav_back.png -text
 code/webroot/common/images/template/span_back.png -text
 code/webroot/common/images/template/sprite_home_nav_right.png -text
 code/webroot/common/images/template/sprite_tabs_download.png -text

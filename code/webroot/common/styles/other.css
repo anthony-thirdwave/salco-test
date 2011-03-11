@@ -420,10 +420,7 @@ ul#acc3 #productNav ul li ul{
 	z-index:1;
 }
 
-.sideBar {
-	position:relative;
-	z-index:20;
-}
+
 
 .hidden{
 	display:none;
@@ -448,6 +445,26 @@ ul#acc3 #productNav ul li ul{
 	font-size:0px;
 	vertical-align:top;
 }
+
+.position1NoTopPadding{
+	padding-top:0px;
+	}
+
+.contactUsAlpha{
+	border:1px solid #ED1C24;
+	padding:5px;
+	color:#ED1C24;
+	font-style:italic;
+	width:60%;
+	font-size:11px;
+	margin:15px 0px 0px 150px;
+}
+
+.contactUsAlpha a{
+	color:#ED1C24;
+	text-decoration:underline;
+}
+
 
 /* cfgrid style */
 
@@ -512,5 +529,37 @@ border:2px solid #000;
 }
 	
 #returns a:focus, #returns a:active, .selected{
-		background: #CCC;
+		background: #EBEBEB;
 	}
+	
+table.featuredDownloads tbody tr:nth-child(odd) td  {
+	background-color: #EBEBEB;
+}
+
+table.featuredDownloads tbody tr[valign='top'] td  {
+	background: none;
+}
+
+table.featuredDownloads tbody tr[valign='top'] td.evenRow, table.featuredDownloads tbody tr[valign='top'] + tr td.evenRow  {
+	background-color:#EBEBEB !important;
+}
+
+table.featuredDownloads tbody tr[valign='top'] td.oddRow, table.featuredDownloads tbody tr[valign='top'] + tr td.oddRow  {
+	background-color:#fff !important;
+}
+
+table.featuredDownloads tbody tr:nth-child(even) td  {
+	background-color: #fff !important;
+}
+
+.explorer featuredDownloads td.grayCol  {
+	background-color: #EBEBEB !important;
+}
+
+.rightSubmit input{
+	margin-left:390px !important;
+}
+
+#wide2 .holderFullSp{
+	background-image: url(/common/images/template/holder_sp_back2.png);
+}

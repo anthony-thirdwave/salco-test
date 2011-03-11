@@ -8,7 +8,9 @@ $(document).ready(function(){
 			return false;
 		}
 		if(e.keyCode==13){
-			gotoPage()
+			e.preventDefault();
+			gotoPage();
+			return false;
 		}
 	});
 	
@@ -16,11 +18,7 @@ $(document).ready(function(){
 			setTimeout("blurred()",1500)
 	});
 	
-	/*$("#searchProd").focus(function(e){
-			
-	});*/
 	
-	/*$("#searchProd").bind("blur",function(){clearTimeout(cDown);});*/
 });
 
 function blurred(){
@@ -30,7 +28,7 @@ function blurred(){
 
 var elementStart=1;
 function getResults(ec) {
-	//clearTimeout(cDown);
+	if(ec != 13){
 	$("#returns").attr("style","display:block");
 	vals=$("#searchProd").val();
 	uvals=vals;
@@ -56,12 +54,25 @@ function getResults(ec) {
 			$("#returns").attr("style","display:none");
 		}
 	}
+  }
 }
-	
+	var arrDir="";
 function gotoElements(kc){
 	$("#returns a").parent().removeClass("selected");
 	linkLength=$("#returns a").length-1;
 	if(kc==40){
+				if(arrDir=="up"){
+					if(elementStart<linkLength){
+						
+					elementStart=elementStart+2;
+						
+					}
+				else {
+					elementStart=0;
+				}
+				
+			}
+				arrDir="down";
 		$("#returns a").eq(elementStart).parent().addClass("selected");
 		if(elementStart<linkLength){
 			elementStart++;
@@ -72,7 +83,17 @@ function gotoElements(kc){
 	}
 		
 	if(kc==38){
-		if(elementStart==0){
+		if(arrDir=="down"){
+				if(elementStart>0){
+					elementStart=elementStart-2;
+				}
+				else {
+					elementStart=linkLength;
+				}
+			
+		}
+		arrDir="up";
+		if(elementStart<0){
 			elementStart=linkLength;
 		}
 		$("#returns a").eq(elementStart).parent().addClass("selected");
@@ -86,6 +107,7 @@ function gotoElements(kc){
 }
 
 function gotoPage(){
+	
 	if($("#returns li.selected a").length>0){
 		window.location=$("#returns li.selected a").attr("href");
 	}

@@ -33,7 +33,7 @@
 			</cfloop>
 			</select>
 		</div>
-		<div class="formRow submit">
+		<div class="formRow submit rightSubmit">
 			<input type="submit" value="Search">
 		</div>
 		</form>
@@ -56,15 +56,18 @@
 		<cfset ThisRowClass="oddRow">
 	</cfif>
 	<tr valign="top">
-	<td class="tableLeft #ThisRowClass#" valign="middle">#CurrentRow+StartRow-1#</td>
-	<td class="#ThisRowClass#" valign="middle"><a href="#url#">#Title#</a></td>
-	<td class="tableRight #ThisRowClass#" valign="middle" align="Left">#APPLICATION.utilsObj.removeHTML(Custom1)#</td></tr>
+	<td class="tableLeft #ThisRowClass#">#CurrentRow+StartRow-1#</td>
+	<td class="#ThisRowClass#"><a href="#url#">#Title#</a></td>
+	<td class="tableRight #ThisRowClass#" align="Left">
+		<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#APPLICATION.utilsObj.removeHTML(Custom1)#" NumChars="250">
+	</td></tr>
 	<cfif CurrentRow MOD SearchNum IS "0" or CurrentRow IS ContentSearch.RecordCount>
 		<cfset ThisRowClass="#ThisRowClass# tableBot">
 	</cfif>
 	<tr>
 	<td class="tableLeft #ThisRowClass#"></td>
-	<td class="tableRight #ThisRowClass#" colspan="2">#categoryTreeLinks(CategoryTree,Custom4,2," &gt; ")#</td></tr>
+	<td class="tableRight #ThisRowClass#" colspan="2">#categoryTreeLinks(CategoryTree,Custom4,2," &gt; ")#</td>
+	</tr>
 </CFOUTPUT>
 </tbody>
 </table>

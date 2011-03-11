@@ -114,7 +114,7 @@
 			
 			<!--- ==================================================== --->
 			
-			<div class="formRow submit">
+			<div class="formRow submit rightSubmit">
 				<input type="submit" name="submit" value="" title=" Send Inquiry " />
 			</div>
 		</cfform>

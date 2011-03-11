@@ -192,13 +192,14 @@ var stopAt="";
 var startAt=0;
 function getNavItemsAuto(nnn){
 		pathtomenu="/common/modules/display/Navigation/dsp_NavProductHelper.cfm?CategoryID="
-		
+		nnn=nnn.toString();
 		nnnf=nnn.split(",");
 		stopAt=nnnf.length;
 		$("#expander"+nnnf[startAt]).addClass("navLoading");
 		$("#expander"+nnnf[startAt]).removeClass("empty");
 		$("#linkEx"+nnnf[startAt]).html("- ");
-		$("#expander"+nnnf[startAt]).load(pathtomenu+nnnf+" ul", function(){initNav(); rebinder(nnn); startAt++; if(startAt<stopAt){getNavItemsAuto(nnn);}});
+		
+		$("#expander"+nnnf[startAt]).load(pathtomenu+nnnf[startAt]+" ul", function(){initNav(); rebinder(nnnf[startAt]); startAt++; if(startAt<stopAt){getNavItemsAuto(nnnf);}});
 	
 }
 

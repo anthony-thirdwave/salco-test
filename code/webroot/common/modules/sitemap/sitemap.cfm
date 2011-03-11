@@ -1,3 +1,5 @@
+<cfsetting showdebugoutput="No" RequestTimeOut="60000">
+
 <cfparam name="ATTRIBUTES.SiteCategoryID" default="1">
 
 <cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">

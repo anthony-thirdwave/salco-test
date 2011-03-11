@@ -670,11 +670,11 @@ ul#acc3 li {
 	float:right;
 	
 }
-.featuredDownloads td {
-	background: white;	
-}
-.oddRow {
-	background: #EBEBEB!important;
+/*.featuredDownloads td {
+	background: #fff;	
+}*/
+.explorer .featuredDownloads td.oddRow, .explorer .featuredDownloads td.grayCol {
+	background: #EBEBEB !important;
 }
 /**
 .imageRight {

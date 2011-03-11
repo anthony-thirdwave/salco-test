@@ -41,7 +41,8 @@
 				returnVariable="qGetTopProductFamily">
 			<div class="downloadContent" id="downloadContent1">
 				<table class="featuredDownloads" width="100%" border="0" cellspacing="0" cellpadding="0">
-					<tr>
+					<thead>
+                    <tr>
 						<th align="left">Product</th>
 						<th>Part No</th>
 						<th>File</th>
@@ -54,18 +55,23 @@
 						</select>
 						</th></form>
 					</tr>
+                    </thead>
+                    <tbody>
 					<cfoutput query="qGetPublicDrawing" MAXROWS="#SearchNUM#" STARTROW="#StartRow#">
 						<cfset class="">
+						<cfset classTR="">
 						<cfif CurrentRow MOD 2 IS "0">
 							<cfset class="grayCol">
+							<cfset classTR="odd">
 						</cfif>
-						<tr>
+						<tr class="#classTR#">
 							<td valign="top" class="#class#">#ProductName#</td>
 							<td valign="top" class="#class#">#PartNumber#</td>
 							<td valign="top" class="#class#" nowrap><a href="#PublicDrawing#" target="_blank">#ucase(ListLast(PublicDrawing,"."))# #Round(PublicDrawingSize/1024)#kb</a></td>
 							<td valign="top" class="#class#">#TopProductFamilyName#</td>
 						</tr>
 					</cfoutput>
+                    </tbody>
 				</table>
 				
 				<cf_AddToQueryString QueryString="#FormQueryString#" name="ParamTopProductFamilyAlias" value="#ParamTopProductFamilyAlias#" OmitList="SearchNum,StartRow">
