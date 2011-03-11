@@ -1,0 +1,1 @@
+<cfinclude template="/common/admin/dashboard/index.cfm">

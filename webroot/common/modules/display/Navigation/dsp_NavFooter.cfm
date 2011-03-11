@@ -1,0 +1,1 @@
+<cfoutput>&copy;#Year(now())# Salco Products, Inc. <a href="/content.cfm/legal">Legal</a> <a href="/content.cfm/sitemap">Sitemap</a></cfoutput>
