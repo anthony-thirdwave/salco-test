@@ -227,7 +227,14 @@ ul#acc3 #productNav ul li:first-child{
 	background:none;
 	
 	}/**/
+
+ul#acc3 #productNav ul:first-child{
+	margin-bottom:-5px;
+	}/**/
 	
+ul#acc3 {
+	 padding-bottom:10px;
+	}
 
 	
 ul#acc3 #productNav ul li ul li:first-child{
@@ -676,13 +683,14 @@ ul#acc3 li{
 }
 
 .expander-span{
-	display:inline-block;
+	display: table-cell;
 	width:8px;
 	}
 
 .ie7 ul#acc3 #productNav ul li:first-child{
 	background-color:none;
 	background:#000 url(/common/images/template/sprite_tabs_sub_sidenav.png) no-repeat left top;
+	margin-bottom:-3px;
 	}
 	
 .ie7 ul#acc3 #productNav ul ul{
@@ -691,16 +699,12 @@ ul#acc3 li{
 	padding-left:0px;
 }	
 	
-.ie7 ul#acc3 #productNav a{
-	display:inline !important;
-}	
 	
 .ie7 ul#acc3 #productNav ul ul li:first-child{
 	background:none;}
 	
 .ie7 ul#acc3 #productNav ul ul li:first-child a, .ie7 ul#acc3 #productNav ul li:first-child a:hover, .ie7 ul#acc3 #productNav ul li a:hover[data-HasChildren="true"]{
 	background:none;
-	display:inline !important;
 }
 	
 .ie7 ul#acc3 #productNav ul li ul{
@@ -708,9 +712,7 @@ ul#acc3 li{
 	margin:0px;
 }
 
-.ie7 ul#acc3 #productNav ul li a:first-child  {
-	margin-left:-15px;
-}
+
 
 .ie7 #acc3 li ul li a.trigger:hover{width:auto;!important}
 
@@ -723,13 +725,12 @@ ul#acc3 li{
 	padding-right:15px;
 }
 
-.ie7 ul#acc3 #productNav ul li div[id^="expander"] ul li{
-	margin-left:35px;
+.ie7 li#productNav{
+	background-position:left 3px;
+	margin-top:-2px;
+	magin-bottom:-3px;
 }
 
-.ie7 ul#acc3 #productNav ul li div[id^="expander"] ul li ul li{
-	margin-left:15px;
-}/**/
 
 .ie7 #typeahead{
 	position:relative;
@@ -750,4 +751,13 @@ ul#acc3 li{
 
 .ie7AccordionSpacerFix{
 	height:50px;
+}
+
+.keepingitReal {
+	display:table-row;
+}
+
+#productNav ul li .keepingitReal a{	
+	display:table-cell !important;
+	vertical-align:top;
 }
