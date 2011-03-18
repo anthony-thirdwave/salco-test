@@ -33,7 +33,11 @@ div.partsNav {
 	background-position:0px -1px;}
 	
 .explorer .btnSearch{
-	margin:0px 0px 0px -1px;
+	margin:-1px 0px 0px -1px;
+}
+
+.ie7 .btnSearch{
+	/*margin-top:0px;*/
 }
 
 .explorer .backSearch {
@@ -55,6 +59,11 @@ div.partsNav {
 
 .homeRight {
 	min-height:500px;
+}
+
+.ie7 .homeRight{
+	height:546px;
+	max-height:inherit;
 }
 
 .homeRight div[id^='homeContChange']{
@@ -218,6 +227,8 @@ ul#acc3 #productNav ul li:first-child{
 	background:none;
 	
 	}/**/
+	
+
 	
 ul#acc3 #productNav ul li ul li:first-child{
 	padding-left:25px;
@@ -532,6 +543,11 @@ border:2px solid #000;
 		background: #EBEBEB;
 	}
 	
+#returns li li:hover{
+	/*background:#CCC;*/
+	cursor:pointer;
+}
+	
 table.featuredDownloads tbody tr:nth-child(odd) td  {
 	background-color: #EBEBEB;
 }
@@ -562,4 +578,168 @@ table.featuredDownloads tbody tr:nth-child(even) td  {
 
 #wide2 .holderFullSp{
 	background-image: url(/common/images/template/holder_sp_back2.png);
+}
+
+#imageRotate {
+
+	height:561px !important;
+	
+
+}
+
+.homeRail, .homeHop{
+	margin-top:5px;
+	}
+	
+.homeRail{
+	background-position:-1px top;	
+}
+
+.ie7 #imageRotate .homeTank, .ie7 #imageRotate .homeInter, .ie7 #imageRotate .homeHop, .ie7 #imageRotate .homeRail{
+	height:601px !important;
+	margin-top:-15px;
+	}
+	
+.ie9 #imageRotate .homeTank, .ie9 #imageRotate .homeInter, .ie9 #imageRotate .homeHop, .ie9 #imageRotate .homeRail{
+	background-position: -3px inherit !important;
+	}
+
+
+.chrome .homeRail{
+	background-position:-1px -1px;	
+}
+
+.explorer .homeRail{
+	background-position:2px -1px;	
+}
+	
+.homeTank{
+	margin-top:3px;
+	background-position:-1px 1px;
+	/*border-right:3px solid #A10C10;*/
+	}
+	
+.explorer .homeTank{
+	background-position:2px 1px;
+	}
+	
+.homeInter{
+	margin-top:5px;
+	background-position:-1px top;
+}
+
+.explorer .homeInter{
+	background-position:2px top;
+}
+
+
+.homeHop{
+	margin-top:4px;
+	background-position:0px top;
+	}
+	
+.explorer .homeHop{
+	margin-top:4px;
+	background-position:2px top;
+	}
+
+#pageFooter{
+	background:none;
+
+	position:relative;
+	z-index:5000;
+}
+
+.ie7 #imageRotate {
+	margin-top:0px !important;
+	height:580px !important;
+	position:relative;
+	background-position:0px -15px;
+	overflow:visible !important;
+}
+
+
+
+
+.ie7 #imageRotate div{
+	background-position:1px top;
+	height:580px !important;
+}
+
+.text-slide-show a:hover{
+	text-decoration:none;
+}
+
+
+
+.ie7 ul#acc3 #productNav ul li:first-child{
+	background-color:none;
+	background:#000 url(/common/images/template/sprite_tabs_sub_sidenav.png) no-repeat left top;
+	}
+	
+.ie7 ul#acc3 #productNav ul ul{
+	background-color:red;
+	margin-left:-500px;
+	padding-left:0px;
+}	
+	
+.ie7 ul#acc3 #productNav a{
+	display:inline !important;
+}	
+	
+.ie7 ul#acc3 #productNav ul ul li:first-child{
+	background:none;}
+	
+.ie7 ul#acc3 #productNav ul ul li:first-child a, .ie7 ul#acc3 #productNav ul li:first-child a:hover, .ie7 ul#acc3 #productNav ul li a:hover[data-HasChildren="true"]{
+	background:none;
+	display:inline !important;
+}
+	
+.ie7 ul#acc3 #productNav ul li ul{
+	padding:0px;
+	margin:0px;
+}
+
+.ie7 ul#acc3 #productNav ul li a:first-child  {
+	margin-left:-15px;
+}
+
+.ie7 #acc3 li ul li a.trigger:hover{width:auto;!important}
+
+.ie7 ul#acc3 #productNav ul li a[data-HasChildren="true"],  .ie7 ul#acc3 #productNav ul li ul li a[data-HasChildren="true"] {
+	padding-left:5px;
+}
+
+.ie7 ul#acc3 #productNav ul li div[id^="expander"]{
+	margin-left:-15px;
+	padding-right:15px;
+}
+
+.ie7 ul#acc3 #productNav ul li div[id^="expander"] ul li{
+	margin-left:35px;
+}
+
+.ie7 ul#acc3 #productNav ul li div[id^="expander"] ul li ul li{
+	margin-left:15px;
+}
+
+.ie7 #typeahead{
+	position:relative;
+	margin-bottom:-50px;
+	margin-left:5px;
+	padding-top:5px;
+	}
+	
+.ie7 #typeahead input{
+	width:145px;
+}
+
+.ie7 #typeahead #returns{
+	margin:22px 0px 0px -152px;
+}
+
+.ie7 .clearit{clear:both; height:1px; overflow:hidden;}
+
+.ie7AccordionSpacerFix{
+	height:50px;
 }

@@ -1,3 +1,4 @@
+<cfparam name="ATTRIBUTES.ThankYouPage" default="/page/thank-you">
 <cfparam name="formsubmit" default="0">
 <cfparam name="showform" default="1">
 <cfparam name="LabelTo" default="">
@@ -11,8 +12,10 @@
 
 <cfset ErrorMessage="">
 
+<cfset lSubject="Hopper Cars,Intermodal Containers,Rail/Yard Accessories,Tank Cars,Other">
+
 <!---  set params ----> 
-<cfset RequiredFormFieldList="firstName,lastName,emai,message,address1,city,state,zip,country">
+<cfset RequiredFormFieldList="firstName,lastName,emai,message,company,subject,phone">
 <cfset NonRequiredFormFieldList="address2">
 <cfloop index="i" list="#RequiredFormFieldList#">
 	<cfparam name="form.#i#" default="">
@@ -20,6 +23,7 @@
 <cfloop index="i" list="#NonRequiredFormFieldList#">
 	<cfparam name="form.#i#" default="">
 </cfloop>
+<cfparam name="FORM.method" default="email">
 
 <cfif IsDefined("ATTRIBUTES.sContact") and isStruct(ATTRIBUTES.sContact) and isDefined("contact")>
 	<cfif StructKeyExists(ATTRIBUTES.sContact,contact)>
@@ -32,6 +36,9 @@
 <cfif APPLICATION.Production>
 <cfelse>
 	<cfset Mailer_Subject="#Mailer_Subject# TESTING ONLY!">
+	<cfif 1>
+		<cfset Mailer_ToAddress="thomas@newermedia.com">
+	</cfif>
 </cfif>
 
 <cfif formsubmit EQ 1>
@@ -44,7 +51,8 @@
 		</div>
 	<cfelse>
 		<cfset showform="0">
-		<div class="formSuccess"><b>Your request has been sent.</b> Thank you!<br /><br /> 
+		<div class="formSuccess"><b>Your request has been sent.</b> Thank you!<br /><br />
+		<cflocation url="#ATTRIBUTES.ThankYouPage#" addtoken="No">
 	</cfif>
 </cfif>
 
@@ -64,6 +72,15 @@
 					<strong>#LabelTo#</strong>
 				</div>
 			</cfif>
+			<div class="formRow">
+				<label for="subject">Subject</label>
+				<select name="subject">
+					<option value="">Select...</option>
+				<cfloop index="ThisSubject" list="#lSubject#">
+					<option value="#ThisSubject#"<cfif subject IS ThisSubject> selected</cfif>>#ThisSubject#</option>
+				</cfloop>
+				</select>
+			</div>
 			<div class="formRow<cfif formsubmit EQ 1 and len(trim(firstName)) eq 0> errorTxt</cfif>">
 				<label for="firstName">First Name *</label>
 				<cfinput name="firstName" id="firstName" maxlength="50" type="text" value="#form.firstName#" />
@@ -73,40 +90,23 @@
 				<cfinput name="lastName" id="lastName" maxlength="50" type="text" value="#form.lastName#" />
 			</div>
 			<div class="formRow">
-				<label for="address1">Address Line 1</label>
-				<cfinput name="address1" id="address1" maxlength="50" type="text" value="#form.address1#" />
+				<label for="company">Company</label>
+				<cfinput name="company" id="company" maxlength="50" type="text" value="#form.company#" />
 			</div>
 			<div class="formRow">
-				<label for="address2">Address Line 2</label>
-				<cfinput name="address2" id="address2" maxlength="50" type="text" value="#form.address2#" />
-			</div>
-			<div class="formRow">
-				<label for="city">City</label>
-				<cfinput name="city" id="city" maxlength="20" type="text" value="#form.city#" />
-			</div>
-			<div class="formRow">
-				<label for="state">State</label>
-				<cfselect name="state" id="state" query="APPLICATION.GetStateProvinces" selected="#form.state#"
-					queryposition="below" value="stateprovinceName" display="stateprovinceName">
-					<option value="" selected="selected"></option>
-				</cfselect>
-			</div>
-			<div class="formRow">
-				<label for="zip">Zip</label>
-				<cfinput name="zip" id="zip" maxlength="20" type="text" value="#form.zip#" />
-			</div>
-			<div class="formRow">
-				<label for="country">Country</label>
-				<cfselect name="country" id="country" query="APPLICATION.GetCountries" selected="#form.country#"
-						queryposition="below" value="CountryName" display="CountryName">
-						<option value="" selected="selected"></option>
-				</cfselect>
+				<label for="Phone">Phone Number *</label>
+				<cfinput name="Phone" id="Phone" maxlength="20" type="text" value="#form.Phone#" />
 			</div>
 			<div class="formRow<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
 				<label for="emai">Email *</label>
 				<cfinput name="emai" id="emai" maxlength="50" type="text" value="#form.emai#" />
 			</div>
-			
+			<div class="formRow">
+				<label for="state">Preferred method of contact</label>
+				<input type="radio" name="method" value="email"<cfif method IS NOT "Phone"> checked</cfif>> Email 
+				&nbsp;&nbsp;&nbsp;
+				<input type="radio" name="method" value="phone"<cfif method IS "Phone"> checked</cfif>> Phone<br>
+			</div>
 			<div class="formRow memo<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
 				<label for="message">Message *</label>
 				<cftextarea name="message">#FORM.message#</cftextarea>
@@ -117,6 +117,7 @@
 			<div class="formRow submit rightSubmit">
 				<input type="submit" name="submit" value="" title=" Send Inquiry " />
 			</div>
+			<p>Note that * indicates a required field.</p>
 		</cfform>
 	</cfoutput>
 </cfif>

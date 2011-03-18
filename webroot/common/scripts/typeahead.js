@@ -21,6 +21,10 @@ $(document).ready(function(){
 	
 });
 
+
+
+
+
 function blurred(){
 	$("#returns").html("");
 	$("#returns").attr("style","display:none");
@@ -41,11 +45,27 @@ function getResults(ec) {
 			preventer=false;
 			if(uvals!= $("#searchProd").val()){
 				$("#returns").attr("style","display:block");
-				getResults();
+				getResults(ec);
 				elementStart=1;
 						
 			}
 			$("#returns a").eq(0).parent().addClass("selected");
+			
+			$("#returns li li").hover(function(){
+											$("#returns li li").removeClass("selected")
+											arrDir="down";
+											elementStart=$("#returns li").index(this);
+											$(this).attr("class","selected");
+											})
+			
+			$("#returns li").bind("click", function(e){
+													e.preventDefault();
+													
+						if($(this).children("a").eq(0).attr("href")!=null){
+														
+						window.location=$(this).children("a").eq(0).attr("href");
+													}
+			});
 		});
 	}
 	else {

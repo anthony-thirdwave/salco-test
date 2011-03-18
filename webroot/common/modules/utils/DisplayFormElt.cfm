@@ -382,7 +382,7 @@
 					<input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
 					<cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
 				<cfelse>
-					<cfparam name="#ATTRIBUTES.VarName#FileObject" default="">
+					<cfparam name="FORM.#ATTRIBUTES.VarName#FileObject" default="">
 					<cfif Trim(FORM["#ATTRIBUTES.varName#FileObject"]) IS "" or ATTRIBUTES.ObjectName IS NOT "">
 						<cfif FileExists(ReplaceNoCase("#APPLICATION.WebrootPath##ReplaceNocase(ATTRIBUTES.DefaultValue,'/','\','all')#","\\","\","All")) and ATTRIBUTES.SupressView IS NOT "Y">
 							<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(ATTRIBUTES.DefaultValue,'.')#") GT "0">

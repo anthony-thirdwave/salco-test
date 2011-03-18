@@ -60,7 +60,7 @@
 		<cfset APPLICATION.GeneratorMeta = "Thirdwave MasterView" />
 		<cfset APPLICATION.GeneratorContentMeta = "MasterView by Thirdwave, LLC 312.329.1960" />
 		<cfset APPLICATION.CategoryAlias404Page="404-page">
-		<cfset APPLICATION.CategoryID404Page="-1">
+		<cfset APPLICATION.CategoryID404Page="5701">
 		<cfset APPLICATION.defaultSiteCategoryID="1">
 
 		<!---
