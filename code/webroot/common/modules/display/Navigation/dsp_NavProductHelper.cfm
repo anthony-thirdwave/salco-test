@@ -1,6 +1,6 @@
 <cfparam name="URL.CategoryID" default="-1000">
 <cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
-	<cfprocresult name="GetCategoryList">
+	<cfprocresult name="GetCategoryListPrime">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(APPLICATION.LocaleID)#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
@@ -11,6 +11,10 @@
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
 </cfstoredproc>
+<cfquery name="GetCategoryList" dbtype="query">
+	select * from GetCategoryListPrime
+	order by CategoryName
+</cfquery>
 <cfif GetCategoryList.RecordCount GT "0">
 	<cfquery name="GetChildrenPrime" datasource="#APPLICATION.DSN#">
 		select 	Count(CategoryID) as Count, ParentID from t_Category

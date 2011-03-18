@@ -9,6 +9,7 @@ code/webroot/common/images/template/*.db
 code/webroot/common/incoming/documents/*
 code/webroot/common/incoming/images/*
 code/webroot/common/modules/Contact/Thumbs.db
+code/webroot/crawfish2011
 code/webroot/resources/category/*
 code/webroot/resources/content/*
 code/webroot/resources/external/dwfparts

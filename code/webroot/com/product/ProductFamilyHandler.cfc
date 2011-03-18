@@ -248,7 +248,7 @@
 		
 		<cfquery name="LOCAL.GetProductList" dbtype="query">
 			select * from [LOCAL].GetProductList
-			order by DisplayOrder
+			order by CategoryNameDerived
 		</cfquery>
 		
 		<cfreturn LOCAL.GetProductList>
@@ -410,9 +410,29 @@
 			</cfif>
 		</cfoutput>
 		
+		<!--- Has sub product families --->
+		<cfquery name="LOCAL.GetProductsPrime" datasource="#APPLICATION.DSN#">
+			select 	Count(CategoryID) as Count, ParentID from t_Category
+			Where	ParentID IN (<cfqueryparam value="#ValueList(LOCAL.GetProductFamilyList.CategoryID)#" cfsqltype="cf_sql_integer" list="yes">)
+			and		CategoryTypeID=<cfqueryparam value="64" cfsqltype="cf_sql_integer">
+			Group By ParentID
+			ORDER BY ParentID
+		</cfquery>
+		<cfset QueryAddColumn(LOCAL.GetProductFamilyList,"HasProducts",ArrayNew(1))>
+		<cfoutput query="LOCAL.GetProductFamilyList">
+			<cfquery name="LOCAL.GetProducts" dbtype="query">
+				select * from [LOCAL].GetProductsPrime where ParentID=<cfqueryparam value="#LOCAL.GetProductFamilyList.CategoryID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+			<cfif LOCAL.GetProducts.RecordCount GT "0">
+				<cfset QuerySetCell(LOCAL.GetProductFamilyList,"HasProducts",1,LOCAL.GetProductFamilyList.CurrentRow)>
+			<cfelse>
+				<cfset QuerySetCell(LOCAL.GetProductFamilyList,"HasProducts",0,LOCAL.GetProductFamilyList.CurrentRow)>
+			</cfif>
+		</cfoutput>
+		
 		<cfquery name="LOCAL.GetProductFamilyList" dbtype="query">
 			select * from [LOCAL].GetProductFamilyList
-			order by DisplayOrder
+			order by CategoryNameDerived
 		</cfquery>
 		
 		<cfreturn LOCAL.GetProductFamilyList>

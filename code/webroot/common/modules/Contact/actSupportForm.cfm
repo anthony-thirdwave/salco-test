@@ -1,6 +1,11 @@
 <cfparam name="ErrorMessage" default="">
 
-
+<cfif Len(Trim(firstName)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter your first name.</li>">
+</cfif>
+<cfif Len(Trim(lastName)) Eq 0>
+	<cfset ErrorMessage= ErrorMessage & "<li>Please enter your last name.</li>">
+</cfif>
 <cfif Len(Trim(phone)) Eq 0>
 	<cfset ErrorMessage= ErrorMessage & "<li>Please enter your phone number.</li>">
 </cfif>
@@ -43,7 +48,7 @@
 		<td>#form.CompanyName#</td>
 	</tr>
 	<tr>
-		<td><b>Phone</b></td>
+		<td><b>Phone:</b></td>
 		<td>#form.phone#</td>
 	</tr>
 	<tr>

@@ -35,7 +35,7 @@
 	<cfinclude template="menuAjaxIconStructInc.cfm">
 	
 	<cfquery name="GetParentName" datasource="#APPLICATION.DSN#">
-		SELECT	CategoryName
+		SELECT	CategoryName, CategoryTypeID
 		FROM	t_Category
 		WHERE	CategoryID = <cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
 	</cfquery>
@@ -58,7 +58,11 @@
 		<cfif IsNumeric(ATTRIBUTES.ParentChooserInitID)>
 		AND				c.CategoryID <> <cfqueryparam value="#ATTRIBUTES.ParentChooserInitID#" cfsqltype="cf_sql_integer">
 		</cfif>
-		ORDER BY		clm.CategoryLocalePriority
+		<cfif ListFindNoCase("62,63,64",GetParentName.CategoryTypeID)>
+			ORDER BY		c.CategoryName
+		<cfelse>
+			ORDER BY		clm.CategoryLocalePriority
+		</cfif>
 	</cfquery>
 	<cfset lCatIDs = ValueList(GetCategories.CategoryID)>
 	<cfif ListLen(lCatIDs) EQ 0>

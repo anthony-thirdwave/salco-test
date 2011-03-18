@@ -453,6 +453,7 @@ code/webroot/common/modules/product/dsp_PromoText.cfm -text
 code/webroot/common/modules/product/dsp_resource.cfm -text
 code/webroot/common/modules/product/productFamilyDetail.cfm -text
 code/webroot/common/modules/search/SearchForm.cfm -text
+code/webroot/common/modules/search/dspSearchFormFilter.cfm -text
 code/webroot/common/modules/search/dspSearchResults.cfm -text
 code/webroot/common/modules/search/search.cfm -text
 code/webroot/common/modules/search/tagCloud.cfm -text
@@ -984,11 +985,13 @@ code/webroot/common/scripts/mveditor/fckutils.cfm -text
 code/webroot/common/scripts/pngfix.js -text
 code/webroot/common/scripts/projekktor.min.js -text
 code/webroot/common/scripts/projekktor/buffering.gif -text
+code/webroot/common/scripts/projekktor/jarisplayer.swf -text
 code/webroot/common/scripts/projekktor/maccaco-load.gif -text
 code/webroot/common/scripts/projekktor/maccaco.png -text
 code/webroot/common/scripts/projekktor/maccaco_.png -text
 code/webroot/common/scripts/projekktor/noise.gif -text
 code/webroot/common/scripts/projekktor/player.png -text
+code/webroot/common/scripts/projekktor/projekktor.min.js -text
 code/webroot/common/scripts/projekktor/start.png -text
 code/webroot/common/scripts/projekktor/style.css -text
 code/webroot/common/scripts/projekktor/theme_id.diz -text
@@ -1101,6 +1104,7 @@ code/webroot/common/styles/salco_global.css -text
 code/webroot/content.cfm -text
 code/webroot/favicon.ico -text
 code/webroot/index.cfm -text
+code/webroot/legacyLinks.txt -text
 code/webroot/robots.txt -text
 prototype/Salco[!!-~]Public[!!-~]Website/5.6.0.2089.version -text
 prototype/Salco[!!-~]Public[!!-~]Website/AnnotationFieldSet/00/a578dc12175240c7b2bf9adb4d5b7c00/a578dc12175240c7b2bf9adb4d5b7c00.rppkg -text

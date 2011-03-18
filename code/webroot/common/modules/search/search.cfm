@@ -54,15 +54,12 @@
 			suggestions="always">
 	</cfif>
 	
-	<cfif ContentSearch.recordcount>
-		 <cfif len(SearchCategory)>
-			<CFSEARCH NAME="ContentSearch"
-				COLLECTION="#ThisCollectionName#"
-				CRITERIA="#lcase(htmlEditFormat(searchTxt))#"
-				status="contentSearchStatus"
-				suggestions="always"
-				category="#SearchCategory#" /> 
-		</cfif>
+	<cfif ContentSearch.recordcount and SearchCategory IS NOT "">
+		 <cfquery name="ContentSearch" dbtype="query">
+		 	select * from ContentSearch 
+			Where Category=<cfqueryparam value="#SearchCategory#" cfsqltype="cf_sql_varchar">
+			order by rank
+		 </cfquery>
 	</cfif> 
 	
 	<cfif structKeyExists(url,"showdump") and url.showdump>
@@ -72,41 +69,43 @@
 	
 	<cfif ContentSearch.RecordCount eq 0>
 	<!--- <p>No search results</p> --->
-	
-	
 		<cfif isDefined("contentSearchStatus")>
+			<cfset NewSearchTerm="">
 			<cfif structKeyExists(contentSearchStatus,"suggestedQuery")>
-			<cfoutput>
-				<cfset variables.newSearchTerm = replace(contentSearchStatus.suggestedQuery,"<typo>","","ALL")>
-				<div>
-					Did you mean <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#HTMLEditFormat(variables.newSearchTerm)#</a>?
-				</div>
-			</cfoutput>
-			
-			
-			<CFSEARCH NAME="ContentSearch"
-				COLLECTION="#ThisCollectionName#"
-				TYPE="natural"
-				CRITERIA="#lcase(htmlEditFormat(variables.newSearchTerm))#"
-				status="contentSearchStatus"
-				suggestions="always">	
-				
-			  <cfif ContentSearch.recordcount eq 0>
-				 <p>No search results</p>
-			  <cfelse>
-				 
-				 <h3>Results for<cfoutput> "#HTMLEditFormat(variables.newSearchTerm)#"</cfoutput></h3>
-			  
-				 <cfinclude template="dspSearchResults.cfm">
-			  </cfif>	
-				
+				<cfset newSearchTerm = replace(contentSearchStatus.suggestedQuery,"<typo>","","ALL")>
 			</cfif>
-		<cfelse>	
-			<p>No search results</p>
-			
+			<cfif newSearchTerm IS NOT "">
+				<cfoutput>
+					<div>
+						Did you mean <a href="#APPLICATION.utilsObj.parseCategoryUrl('search')#?searchTxt=#urlencodedformat(variables.newSearchTerm)#">#HTMLEditFormat(variables.newSearchTerm)#</a>?
+					</div>
+				</cfoutput>
+				
+				<cfif ContentSearch.RecordCount IS "0">
+					<CFSEARCH NAME="ContentSearch"
+						COLLECTION="#ThisCollectionName#"
+						TYPE="natural"
+						CRITERIA="#lcase(htmlEditFormat(variables.newSearchTerm))#"
+						status="contentSearchStatus"
+						suggestions="always">	
+					<cfif ContentSearch.recordcount eq 0>
+						<cfinclude template="/common/modules/search/dspSearchFormFilter.cfm">
+						<p>No search results</p>
+					<cfelse>
+						<h3>Results for<cfoutput> "#HTMLEditFormat(variables.newSearchTerm)#"</cfoutput></h3>
+						<cfinclude template="dspSearchResults.cfm">
+					</cfif>
+				<cfelse>
+					<cfinclude template="dspSearchResults.cfm">
+				</cfif>
+			<cfelse>
+				<cfinclude template="/common/modules/search/dspSearchFormFilter.cfm">
+				<p>No search results</p>	
+			</cfif>
+		<cfelse>
+			<cfinclude template="/common/modules/search/dspSearchFormFilter.cfm">
+			<p>No search results</p>			
 		</cfif>
-	
-	
 	<cfelse>	
 		<cfinclude template="dspSearchResults.cfm">
 	</cfif>

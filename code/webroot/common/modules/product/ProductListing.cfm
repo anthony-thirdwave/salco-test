@@ -4,6 +4,7 @@
 <cfparam name="ATTRIBUTES.ProductFamilyID" default="-1">
 <cfparam name="ATTRIBUTES.Mode" default="Default">
 <cfparam name="ATTRIBUTES.Title" default="">
+<cfparam name="ATTRIBUTES.OmitCurrentProduct" default="no">
 
 <cfparam name="ATTRIBUTES.SpecificationSetID" default="8000">
 <cfif IsDefined("APPLICATION.LanguageID")>
@@ -58,7 +59,14 @@
 				LanguageID="#ATTRIBUTES.LanguageID#"
 				StartRow="#StartRow#"
 				MaxRows="#SearchNum#">
-		
+			
+			<cfif ATTRIBUTES.OmitCurrentProduct and Val(ATTRIBUTES.ProductID) GT "0">
+				<cfquery name="qGetProductList" dbtype="query">
+					select * from qGetProductList
+					where CategoryID <> <cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.ProductID#">
+					order by CategoryNameDerived
+				</cfquery>
+			</cfif>
 			
 			<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
 			<cfif qGetProductList.RecordCount GT "0">
@@ -88,7 +96,7 @@
 						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#">#qGetProductList.CategoryNameDerived#</a></td>
 						<td class="#ThisRowClass#" valign="middle"  align="Left">#Ucase(qGetProductList.PartNumber)#</td>
 						<td class="tableRight #ThisRowClass#" valign="middle" align="Left">
-						<cfif qGetProductList.PublicDrawing IS NOT ""><a href="#qGetProductList.PublicDrawing#" target="_blank">CAD Drawing</a></cfif>
+						<cfif qGetProductList.PublicDrawing IS NOT ""><a href="#qGetProductList.PublicDrawing#" target="_blank">CAD Drawing</a><cfelse>&nbsp;</cfif>
 						</td>
 					</tr>
 				</cfoutput></tbody>
@@ -100,6 +108,12 @@
 					Path="/common/modules/product/ProductListing.cfm"
 					FieldList="ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#"
 					Label="Products">
+			<cfelse>
+				<cfif ATTRIBUTES.OmitCurrentProduct>
+				
+				<cfelse>
+					<h3>Product List Coming Soon</h3>
+				</cfif>
 			</cfif>
 			</div>
 		</cfdefaultcase>
