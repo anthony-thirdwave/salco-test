@@ -87,13 +87,13 @@
 				
 				<script type="text/javascript">
 					$(document).ready(function() {
-						$("html").addClass("js");
+						/*$("html").addClass("js");
 							$.fn.accordion.defaults.container = false; 
 							$(function() {
 								$("#acc3").accordion({initShow : "#current"});
 								$("html").removeClass("js");
 								return false;
-						});
+						});*/
 						$("#sub").accordion({
 						  obj: "div", 
 						  wrapper: "div", 

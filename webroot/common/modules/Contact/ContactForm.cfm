@@ -2,7 +2,7 @@
 <cfparam name="formsubmit" default="0">
 <cfparam name="showform" default="1">
 <cfparam name="LabelTo" default="">
-<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
+<cfparam name="FormAction" default="#CGI.REQUEST_URI#?#CGI.QUERY_STRING#">
 <cfparam name="form.email" default="">
 <cfparam name="form.To" default="">
 <cfset LabelTo="Customer Service">
