@@ -186,19 +186,27 @@ function initNav(){
 					$(createA).attr("class","expander");
 					$(createA).attr("id","linkEx"+hodCat);
 					$(createA).html("+ ");
-					$("#productNav ul li").eq(i).prepend(createA);
+					
 					createDiv=document.createElement("div");
 					$(createDiv).attr("id","expander"+hodCat);
 					$(createDiv).attr("class","empty");
+					
+					tempHolds=$("#productNav ul li").eq(i).html();
+					
+					$("#productNav ul li").eq(i).html("<div class='keepingitReal'>"+tempHolds+"</div>");
+					$("#productNav ul li").eq(i).children().prepend(createA);
 					$("#productNav ul li").eq(i).append(createDiv);
 					$("#productNav ul li").eq(i).attr("class","mm");
+					
 				}
 				
 				if(hasChildren=="false"){
 					createA2=document.createElement("span");
 					$(createA2).attr("class","expander-span");
 					$(createA2).html("&nbsp;&nbsp;");
-					$("#productNav ul li").eq(i).prepend(createA2);
+					tempHolds=$("#productNav ul li").eq(i).html();
+					$("#productNav ul li").eq(i).html("<div class='keepingitReal'>"+tempHolds+"</div>");
+					$("#productNav ul li").eq(i).children().prepend(createA2);
 				}
 			}
 		}
@@ -245,32 +253,43 @@ function getNavItemsAuto(nnn){
 
 function closeNavItems(nn){
 	doublejep=true;
-	$("#expander"+nn+" a").children().unbind();
+	testing="a[href='"+nn+"']"
 	
-	$("#expander"+nn).parent().children().eq(0).html("+ ");
+	
+	$("#expander"+nn+" a").children().children().unbind();
+	
+	$(testing).html("+ ");
+	if(document.all && $.browser.version == "7.0" && nn.indexOf("/")>-1){
+		nn=nn.split("/");
+		nnL=nn.length-1;
+		nn=nn[nnL]
+	}
+
+	
 	$("#expander"+nn).empty();
 	
-	setTimeout(function(){ reapplieit(nn)},100);
+	setTimeout(function(){ reapplieit(testing,nn)},100);
 	
 	
 }
 
-function reapplieit(nn){
-	$("#expander"+nn).parent().children().eq(0).unbind().bind("click",function(e){
+function reapplieit(nn,iefix){
+	$(nn).unbind().bind("click",function(e){
 																			   e.preventDefault(); 
 																			   getNavItems($(this).attr("href"));
 																			   $(this).html("- ");
 																			   $(this).blur(); 														   
 																			   });
-	$("#expander"+nn).parent().children().eq(0).html("+ ");
-	$("#expander"+nn).addClass("empty");
+	$(nn).html("+ ");
+	$("#expander"+iefix).addClass("empty");
+	
 	doublejep=false;
 }
 
 function rebinder(nn){
 	if(doublejep==false){
 		$("#expander"+nn).removeClass("navLoading");
-		$("#expander"+nn).parent().children().eq(0).unbind().bind("click",function(e){e.preventDefault(); closeNavItems($(this).attr("href"));$(this).blur();});
+		$("#expander"+nn).parent().children().eq(0).children().eq(0).unbind().bind("click",function(e){e.preventDefault(); closeNavItems($(this).attr("href"));$(this).blur();});
 	}
 	}
 	
