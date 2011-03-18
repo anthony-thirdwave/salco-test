@@ -655,7 +655,7 @@
 				<cfif IsDefined("MainFilePath_image_new") AND MainFilePath_image_new IS NOT "">
 					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_image_new,1)>
 					<cfif FileExists(ExpandPath(MainFilePath_image_new))>
-						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(MainFilePath_image_new).Size,1)>
+						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(MainFilePath_image_new)).Size,1)>
 					</cfif>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
@@ -759,7 +759,7 @@
 				<cfif IsDefined("MainFilePath_download_new") AND MainFilePath_download_new IS NOT "">
 					<cfset StructInsert(sElement,"MainFilePath",MainFilePath_download_new,1)>
 					<cfif FileExists(ExpandPath(MainFilePath_download_new))>
-						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(MainFilePath_download_new).Size,1)>
+						<cfset StructInsert(sElement,"MainFileSize",GetFileInfo(ExpandPath(MainFilePath_download_new)).Size,1)>
 					</cfif>
 				<cfelse>
 					<cfset StructInsert(sElement,"MainFilePath","",1)>
