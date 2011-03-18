@@ -194,10 +194,10 @@ function initNav(){
 					$("#productNav ul li").eq(i).attr("class","mm");
 				}
 				
-				if(hasChildren=="true"){
-					createA2=document.createElement("a");
-					$(createA2).attr("href","javascript:void(0)");
-					$(createA2).attr("class","expander");
+				if(hasChildren=="false"){
+					createA2=document.createElement("span");
+					$(createA2).attr("class","expander-span");
+					$(createA2).html("&nbsp;&nbsp;");
 					$("#productNav ul li").eq(i).prepend(createA2);
 				}
 			}
