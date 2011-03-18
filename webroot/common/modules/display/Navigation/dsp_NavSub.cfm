@@ -24,7 +24,7 @@
 	</cfstoredproc>
 	<cfsaveContent Variable="FileContents">
 		<cfif GetTopCategories.RecordCount GT "0">
-			<cfoutput><ul id="#ATTRIBUTES.CSSID#" class="#ATTRIBUTES.CSSClass#"></cfoutput>
+			<cfoutput><ul <cfif ATTRIBUTES.CSSID IS NOT "">id="#ATTRIBUTES.CSSID#"</cfif> class="#ATTRIBUTES.CSSClass#"></cfoutput>
 				<cfoutput query="GetTopCategories" group="CategoryID">
                     <cfif Trim(CategoryURLDerived) IS "">
                     	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
