@@ -6,6 +6,7 @@ code/temp/2/*
 code/webroot/aspnet_client
 code/webroot/common/images/Thumbs.db
 code/webroot/common/images/template/*.db
+code/webroot/common/images/template/home_images_back/*.db
 code/webroot/common/incoming/documents/*
 code/webroot/common/incoming/images/*
 code/webroot/common/modules/Contact/Thumbs.db
