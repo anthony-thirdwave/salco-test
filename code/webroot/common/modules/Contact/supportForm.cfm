@@ -1,7 +1,7 @@
 <cfparam name="ATTRIBUTES.ThankYouPage" default="/page/thank-you">
 <cfparam name="formsubmit" default="0">
 <cfparam name="showform" default="1">
-<cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
+<cfparam name="FormAction" default="#CGI.REQUEST_URI#?#CGI.QUERY_STRING#">
 <cfparam name="form.email" default="">
 <cfif APPLICATION.Production>
 	<cfset Mailer_ToAddress="sales@salcoproducts.com">
