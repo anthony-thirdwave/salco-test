@@ -1124,7 +1124,6 @@
 							name="List"
 							directory="#ThisDirectory#"
 							connection="FTP_#ReplaceNoCase(sProductionSiteInformation.ProductionFTPHost,'.','','all')#">
-						<cfa_dump var="#list#">
 						<cfloop query="List">
 							<cfif NOT IsDirectory>
 								<cfftp action="REMOVE" server="#sProductionSiteInformation.ProductionFTPHost#" username="#sProductionSiteInformation.ProductionFTPUserLogin#" password="#sProductionSiteInformation.ProductionFTPPassword#" 
@@ -1298,9 +1297,9 @@
 					<cfquery name="insert" datasource="#sProductionSiteInformation.ProductionDBDSN#">
 						SET IDENTITY_INSERT t_Resource ON
 						INSERT INTO t_Resource 
-						(ResourceID, Entity, KeyID, ResourcePriority,SpecificationSetID)
+						(ResourceID, Entity, KeyID, ResourcePriority,SpecificationSetID, ResourceTypeID)
 						VALUES
-						(#Val(ResourceID)#,'#Entity#', #Val(KeyID)# , #Val(ResourcePriority)#,#Val(SpecificationSetID)#)
+						(#Val(ResourceID)#,'#Entity#', #Val(KeyID)# , #Val(ResourcePriority)#,#Val(SpecificationSetID)#,#Val(ResourceTypeID)#)
 						SET IDENTITY_INSERT t_Resource OFF
 					</cfquery>
 				</cfoutput>
@@ -1308,13 +1307,13 @@
 					<cfoutput query="GetPrevResourceLanguageStaging">
 						<cfquery name="insert" datasource="#sProductionSiteInformation.ProductionDBDSN#">
 							Insert into t_ResourceLanguage 
-							(ResourceID, ResourceName, ResourceText, LanguageID, MainFilePath, ThumbnailFilePath)
+							(ResourceID, ResourceName, ResourceText, LanguageID, MainFilePath, ThumbnailFilePath, ResourceSize)
 							VALUES
-							(#Val(ResourceID)#, N'#ResourceName#', N'#ResourceText#', #Val(LanguageID)#, '#MainFilePath#', '#ThumbnailFilePath#')
+							(#Val(ResourceID)#, N'#ResourceName#', N'#ResourceText#', #Val(LanguageID)#, '#MainFilePath#', '#ThumbnailFilePath#', #Val(ResourceSize)#)
 						</cfquery>
 						<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
 							<cfset ThisImageValue=Evaluate("#ThisImage#")>
-							<cfif ThisImageValue IS NOT "">
+							<cfif ThisImageValue IS NOT "" and left(ThisImageValue,Len("/resources/category/")) IS "/resources/category/">
 								<cfset Source=REQUEST.GetPathFromURL(ThisImageValue)>
 								<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisImageValue#","//","/","All")>
 								<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
