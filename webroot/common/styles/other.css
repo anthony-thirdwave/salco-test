@@ -673,12 +673,12 @@ table.featuredDownloads tbody tr:nth-child(even) td  {
 ul#acc3 li{
 	padding-top:3px;
 	padding-bottom:3px;
-	display:table-row;
 }
 
-ul#acc3 li a{
-	display:table-cell !important;
-}
+.expander-span{
+	display:inline-block;
+	width:8px;
+	}
 
 .ie7 ul#acc3 #productNav ul li:first-child{
 	background-color:none;
@@ -708,7 +708,7 @@ ul#acc3 li a{
 	margin:0px;
 }
 
-/*.ie7 ul#acc3 #productNav ul li a:first-child  {
+.ie7 ul#acc3 #productNav ul li a:first-child  {
 	margin-left:-15px;
 }
 
@@ -729,7 +729,7 @@ ul#acc3 li a{
 
 .ie7 ul#acc3 #productNav ul li div[id^="expander"] ul li ul li{
 	margin-left:15px;
-}*/
+}/**/
 
 .ie7 #typeahead{
 	position:relative;

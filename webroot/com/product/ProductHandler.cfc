@@ -639,7 +639,8 @@
 		<cfquery name="LOCAL.GetAttributes" datasource="#APPLICATION.DSN#">
 			SELECT CategoryID, CategoryName, DisplayOrder, ProductFamilyAttributeID, AttributeValue
 			from qry_GetCategoryAttribute
-			Where ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="10,12,23" list="yes">)
+			Where ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="10,12,23" list="yes">) AND
+			CategoryActive=<cfqueryparam cfsqltype="cf_sql_integer" value="1">
 			order by CategoryID, ProductFamilyAttributeID
 		</cfquery>
 
