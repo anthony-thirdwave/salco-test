@@ -1,3 +1,4 @@
+<cfparam name="ATTRIBUTES.ThankYouPage" default="/page/thank-you">
 <cfparam name="formsubmit" default="0">
 <cfparam name="showform" default="1">
 <cfparam name="FormAction" default="#CGI.SCRIPT_NAME#?#CGI.QUERY_STRING#">
@@ -33,6 +34,7 @@
 	<cfelse>
 		<cfset showform="0">
 		<div class="formSuccess"><b>Your request has been sent.</b> Thank you!<br /><br /> 
+		<cflocation url="#ATTRIBUTES.ThankYouPage#" addtoken="No">
 	</cfif>
 </cfif>
 
@@ -47,11 +49,11 @@
 			<!--- ==================================================== --->
 			<!--- enter form fields here --->
 			<div class="formRow">
-				<label for="firstName">First Name</label>
+				<label for="firstName">First Name *</label>
 				<cfinput name="firstName" id="firstName" maxlength="50" type="text" value="#form.firstName#" />
 			</div>
 			<div class="formRow">
-				<label for="lastName">Last Name</label>
+				<label for="lastName">Last Name *</label>
 				<cfinput name="lastName" id="lastName" maxlength="50" type="text" value="#form.lastName#" />
 			</div>
 			<div class="formRow">
@@ -82,6 +84,7 @@
 			<div class="formRow submit rightSubmit">
 				<input type="submit" name="submit" value="" title=" Send Inquiry " />
 			</div>
+			<p>Note that * indicates a required field.</p>
 		</cfform>
 	</cfoutput>
 </cfif>

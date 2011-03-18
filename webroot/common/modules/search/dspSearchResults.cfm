@@ -1,44 +1,4 @@
-<cfset sSearchCategory=StructNew()>
-
-<cfset sSearchCategory["Product-hopper-car"]="Hopper Cars">
-<cfset sSearchCategory["Product-intermodal-containers"]="Intermodal Container">
-<cfset sSearchCategory["Product-railyard-accessories"]="Rail/Yard Accessories">
-<cfset sSearchCategory["Product-tank-cars"]="Tank Cars">
-<cfset sSearchCategory["SiteContent"]="Site">
-
-
-<cfif NOT IsDefined("lsc")>
-	<cfquery name="GetContentSearchCategory" dbtype="query">
-		select distinct(Category) from ContentSearch
-		order by Category
-	</cfquery>
-	<cfset lsc=ValueList(GetContentSearchCategory.Category)>
-</cfif>
-
-<cfif ListLen(lsc) GT "1">
-	<cfoutput>
-		<form action="#APPLICATION.utilsObj.parseCategoryUrl('search')#">
-		<input type="hidden" name="lsc" value="#lsc#">
-		<div class="formRow">
-			<label for="SearchTxt">Search Term</label>
-			<input type="text" name="SearchTxt" id="SearchTxt" value="#HTMLEditFormat(SearchTxt)#">
-		</div>
-		
-		<div class="formRow">
-			<label for="SearchCategory">Filter</label>
-			<select name="SearchCategory" id="SearchCategory">
-				<option value="" <cfif SearchCategory IS "">selected</cfif>>All</option>
-			<cfloop index="ThisSearchCategory" list="#lsc#">
-				<option value="#ThisSearchCategory#" <cfif SearchCategory IS ThisSearchCategory>selected</cfif>>#sSearchCategory[ThisSearchCategory]#</option>
-			</cfloop>
-			</select>
-		</div>
-		<div class="formRow submit rightSubmit">
-			<input type="submit" value="Search">
-		</div>
-		</form>
-	</cfoutput>
-</cfif>
+<cfinclude template="/common/modules/search/dspSearchFormFilter.cfm">
 
 <table class="featuredDownloads" border="0" cellspacing="0" cellpadding="0" width="100%">
 <thead>
@@ -49,7 +9,7 @@
 </tr>
 </thead>
 <tbody>
-<CFOUTPUT QUERY="ContentSearch" MAXROWS="#SearchNUM#" STARTROW="#StartRow#">
+<cfoutput query="ContentSearch" maxrows="#SearchNUM#" startrow="#StartRow#">
 	<cfif CurrentRow MOD 2 IS "1">
 		<cfset ThisRowClass="evenRow">
 	<cfelse>
@@ -68,7 +28,7 @@
 	<td class="tableLeft #ThisRowClass#"></td>
 	<td class="tableRight #ThisRowClass#" colspan="2">#categoryTreeLinks(CategoryTree,Custom4,2," &gt; ")#</td>
 	</tr>
-</CFOUTPUT>
+</cfoutput>
 </tbody>
 </table>
 
@@ -94,7 +54,7 @@
 		<cfset local.linkSubStr = "<a href='#APPLICATION.MyCategoryHandler.parseCategoryUrl(arguments.searchAlias)#?#arguments.searchType#=#urlencodedformat(trim(local.i))#'>#trim(local.i)#</a>">
 		<cfset local.links = local.links & " " & local.linkSubStr>
 	</cfloop>
-	<!--- <cfdump var="#local.links#"> --->
+	
 	<cfreturn local.links>
 </cffunction>
 

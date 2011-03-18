@@ -103,7 +103,7 @@
 						  initShow : "div.outer:first",
 						  event : "click",
 						  collapsible : true, // {true} - makes the accordion fully collapsible, {false} - forces one section to be open at any time
-						  standardExpansible : true, //if {true}, the functonality will be standard Expand/Collapse without 'accordion' effect
+						  standardExpansible : true //if {true}, the functonality will be standard Expand/Collapse without 'accordion' effect
 						});
 					});
 				</script>
@@ -129,18 +129,23 @@
 								LanguageID="#ATTRIBUTES.LanguageID#">
 							<cfif qGetProductFamilyListSub.RecordCount GT "0">
 								<cfloop query="qGetProductFamilyListSub">
-									<cfif qGetProductFamilyListSub.HasSubProductFamilies IS "0">
-										<h4 class="subAcHd"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyListSub.CategoryAlias)#">#qGetProductFamilyListSub.CategoryNameDerived#</a></h4>
-									<cfelse>
-										<h4 class="subAcHd">#qGetProductFamilyListSub.CategoryNameDerived#</h4>
-										<div class="inner subAcCont">
+									<cfif qGetProductFamilyListSub.HasSubProductFamilies>
+										<cfif qGetProductFamilyListSub.HasProducts>
+											<h4 class="subAcHd">#qGetProductFamilyListSub.CategoryNameDerived#</h4>
+											<div class="inner subAcCont">
+												<cfif qGetProductFamilyListSub.ProductFamilyDescription IS NOT "">
+													<p>#APPLICATION.utilsObj.AddBreaks(qGetProductFamilyListSub.ProductFamilyDescription)#</p>
+												</cfif>
+												<cfmodule template="/common/modules/product/productListing.cfm" ProductID="#qGetProductFamilyListSub.CategoryID#">
+											</div>
+										<cfelse>
+											<h4 class="subAcHd"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyListSub.CategoryAlias)#">#qGetProductFamilyListSub.CategoryNameDerived#</a></h4>
 											<cfif qGetProductFamilyListSub.ProductFamilyDescription IS NOT "">
 												<p>#APPLICATION.utilsObj.AddBreaks(qGetProductFamilyListSub.ProductFamilyDescription)#</p>
 											</cfif>
-											<cfif qGetProductFamilyListSub.HasSubProductFamilies IS "0">
-												<cfmodule template="/common/modules/product/productListing.cfm" ProductID="#qGetProductFamilyListSub.CategoryID#">
-											</cfif>
-										</div>
+										</cfif>
+									<cfelse>
+										<h4 class="subAcHd"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyListSub.CategoryAlias)#">#qGetProductFamilyListSub.CategoryNameDerived#</a></h4>
 									</cfif>
 								</cfloop>
 							<cfelse>
@@ -151,6 +156,16 @@
 					</cfoutput>
 				</div>
 				</div>
+			</cfcase>
+			<cfcase value="Simple">
+				<dl>
+				<cfoutput query="qGetProductFamilyList">
+					<dt><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyList.CategoryAlias)#">#qGetProductFamilyList.CategoryNameDerived#</a></dt>
+					<cfif qGetProductFamilyList.ProductFamilyDescription IS NOT "">
+						<dd>#APPLICATION.utilsObj.AddBreaks(qGetProductFamilyList.ProductFamilyDescription)#</dd>
+					</cfif>				
+				</cfoutput>
+				</dl>
 			</cfcase>
 			<cfdefaultcase>
 				<cfoutput query="qGetProductFamilyList">

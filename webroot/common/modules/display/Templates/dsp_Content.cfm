@@ -24,20 +24,26 @@
 			$(document).ready(function() { 
 				$('#imageRotate').cycle({
 					fx: 'fade', 
-					speed: 2500,
+					speed: 2500
 				});
+				
+				
 			});
 		</script>
+        
+       
 		
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
 	</cfcase>
 	<cfdefaultcase>
-		<script type="text/javascript" src="/common/scripts/jquery.nestedAccordion.js"></script>
+		<!-- --><script type="text/javascript" src="/common/scripts/jquery.nestedAccordion.js"></script> 
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
 		<script type="text/javascript" src="/common/scripts/projekktor.min.js"></script>
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
-        <script type="text/javascript" src="/common/scripts/swfobject.js"></script>
+       
+		
+         <!--- <script type="text/javascript" src="/common/scripts/swfobject.js"></script> --->
 	</cfdefaultcase>
 </cfswitch>
 
@@ -185,6 +191,8 @@
 							<cfelse>
 								<div id="emptyleftcolumn"></div>
 							</cfif>
+						<cfelse>
+							<div id="emptyleftcolumn"></div>
 						</cfif>
 						<div class="holderWide">
 							<div class="holderWideHeader"></div>
@@ -219,6 +227,9 @@
 												PageTitle="#CurrentCategoryName#">
 										</cfcase>
 									</cfswitch>
+                                        <!--[if IE 7]>
+                                        <div class="ie7AccordionSpacerFix">&nbsp;</div>
+                                        <![endif]-->
 									</div>
 								</div>
 							</div>

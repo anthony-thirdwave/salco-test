@@ -41,8 +41,34 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	if(document.all && $.browser.version == "7.0"){
+		//
+		runIECorrections();
+		$("body").addClass("ie7");
+	}
+	
+	if(document.all && $.browser.version == "9.0"){
+		
+		$("body").addClass("ie9");
+	}
+	
  });
 
+	function runIECorrections(){
+		
+			if($("body").attr("class")=="product-family explorer" || $("body").attr("class")=="product explorer"){
+				getNav=$("#productNav").html();
+				$("#productNav").remove();
+				createLI=document.createElement("li");
+				$(createLI).attr("id","productNav");
+				$(createLI).html(getNav);
+				$("#acc3").append(createLI);
+				$(".expander").bind("click",function(e){e.preventDefault(); getNavItems($(this).attr("href"));$(this).html("- ");$(this).blur();
+																																			  });
+				$("body").addClass("ie7");
+			}
+		}
 	
 	
 	function getPage(pagetoget,pid){setit=" #"+pid+" div"; 
@@ -177,6 +203,12 @@ function initNav(){
 var doublejep=false;
 
 function getNavItems(nn){
+	if(document.all && $.browser.version == "7.0" || $.browser.version == "8.0"){
+			nn=nn.toString();
+			nn=nn.split("/");
+			nn=nn[nn.length-1];
+			
+		}
 	if(doublejep==true){
 		
 		}
