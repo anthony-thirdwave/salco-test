@@ -19,13 +19,17 @@
 	<td class="tableLeft #ThisRowClass#">#CurrentRow+StartRow-1#</td>
 	<td class="#ThisRowClass#"><a href="#url#">#Title#</a></td>
 	<td class="tableRight #ThisRowClass#" align="Left">
-		<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#APPLICATION.utilsObj.removeHTML(Custom1)#" NumChars="250">
+		<cfif APPLICATION.utilsObj.removeHTML(Custom1) IS NOT "">
+			<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#APPLICATION.utilsObj.removeHTML(Custom1)#" NumChars="250">
+		<cfelse>
+			&nbsp;
+		</cfif>
 	</td></tr>
 	<cfif CurrentRow MOD SearchNum IS "0" or CurrentRow IS ContentSearch.RecordCount>
 		<cfset ThisRowClass="#ThisRowClass# tableBot">
 	</cfif>
 	<tr>
-	<td class="tableLeft #ThisRowClass#"></td>
+	<td class="tableLeft #ThisRowClass#">&nbsp;</td>
 	<td class="tableRight #ThisRowClass#" colspan="2">#categoryTreeLinks(CategoryTree,Custom4,2," &gt; ")#</td>
 	</tr>
 </cfoutput>

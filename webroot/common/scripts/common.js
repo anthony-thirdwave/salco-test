@@ -135,10 +135,10 @@ $.fn.accordion.defaults.container = false; }
 catch(e){
 	//stiffle
 	}
-$(function() {
+/*$(function() {
 	$("#acc3").accordion({initShow : "#current"});
 	$("html").removeClass("js");
-});
+});*/
 
 //to adjust video titles lengths
 function adjVideoTitles(){
@@ -192,6 +192,13 @@ function initNav(){
 					$(createDiv).attr("class","empty");
 					$("#productNav ul li").eq(i).append(createDiv);
 					$("#productNav ul li").eq(i).attr("class","mm");
+				}
+				
+				if(hasChildren=="true"){
+					createA2=document.createElement("a");
+					$(createA2).attr("href","javascript:void(0)");
+					$(createA2).attr("class","expander");
+					$("#productNav ul li").eq(i).prepend(createA2);
 				}
 			}
 		}

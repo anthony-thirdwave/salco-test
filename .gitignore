@@ -16,3 +16,4 @@ webroot/resources/external/dwfparts
 webroot/resources/images/*
 webroot/scratchpad.cfm
 workarea/trash/resources/category/*
+workarea/trash/resources/content/*
