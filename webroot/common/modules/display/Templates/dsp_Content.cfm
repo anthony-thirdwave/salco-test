@@ -50,7 +50,7 @@
 <cfif ListFindNoCase("62,64",CategoryTypeID)>
 	<cfif ListLen(CategoryThreadList) GTE "5">
 		<cfoutput>
-			<script>
+			<script type="text/javascript">
 				$(document).ready(function() {
 					<cfset ThisList="">
 					<cfloop index="i" from="5" to="#ListLen(CategoryThreadList)#" step="1">

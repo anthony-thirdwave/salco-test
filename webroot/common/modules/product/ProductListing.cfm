@@ -94,8 +94,8 @@
 					</cfif>
 					<tr>
 						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#">#qGetProductList.CategoryNameDerived#</a></td>
-						<td class="#ThisRowClass#" valign="middle"  align="Left">#Ucase(qGetProductList.PartNumber)#</td>
-						<td class="tableRight #ThisRowClass#" valign="middle" align="Left">
+						<td class="#ThisRowClass#" valign="middle"  align="left">#Ucase(qGetProductList.PartNumber)#</td>
+						<td class="tableRight #ThisRowClass#" valign="middle" align="left">
 						<cfif qGetProductList.PublicDrawing IS NOT ""><a href="#qGetProductList.PublicDrawing#" target="_blank">CAD Drawing</a><cfelse>&nbsp;</cfif>
 						</td>
 					</tr>
