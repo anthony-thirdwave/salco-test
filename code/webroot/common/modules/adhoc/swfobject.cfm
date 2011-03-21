@@ -1,0 +1,1 @@
+<script src="/common/scripts/swfobject.js" type="text/javascript" />
