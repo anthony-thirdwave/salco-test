@@ -31,7 +31,7 @@
                     	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
 					<cfelse>
                     	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
-						<cfif Left(CategoryURLDerived,7) IS "http://">
+						<cfif Left(CategoryURLDerived,4) IS "http">
 							<cfset ThisTarget="target=""_blank""">
 						</cfif>
                     </cfif>
