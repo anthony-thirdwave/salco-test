@@ -982,6 +982,7 @@ webroot/common/scripts/mveditor/fckstyles.xml -text
 webroot/common/scripts/mveditor/fcktemplates.xml -text
 webroot/common/scripts/mveditor/fckutils.cfm -text
 webroot/common/scripts/pngfix.js -text
+webroot/common/scripts/projekktor.js -text
 webroot/common/scripts/projekktor.min.js -text
 webroot/common/scripts/projekktor/buffering.gif -text
 webroot/common/scripts/projekktor/jarisplayer.swf -text
