@@ -31,7 +31,7 @@
 		<cfset var curResult = "">
 		
 		<!--- Run the post to production destination process stored procedure --->	
-		<cfstoredproc procedure="sp_postToProduction_productionProcess" datasource="#ARGUMENTS.destinationDSN#">
+		<cfstoredproc procedure="usp_postToProduction_productionProcess" datasource="#ARGUMENTS.destinationDSN#">
 			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@valueList" value="#arguments.valueList#">
 			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@columnList" value="#arguments.columnList#">
 			<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@tableName" value="#arguments.tableName#">
