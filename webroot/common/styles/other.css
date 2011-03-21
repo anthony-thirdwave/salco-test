@@ -677,9 +677,14 @@ table.featuredDownloads tbody tr:nth-child(even) td  {
 	text-decoration:none;
 }
 
-ul#acc3 li{
+/* ul#acc3 li{
 	padding-top:3px;
 	padding-bottom:3px;
+} */
+
+#video-detail ul#acc3 li{
+	padding-top:0px;
+	padding-bottom:0px;
 }
 
 .expander-span{
@@ -761,3 +766,6 @@ ul#acc3 li{
 	display:table-cell !important;
 	vertical-align:top;
 }
+
+.ie8 .mapInfos{
+	margin-bottom:0px;}

@@ -48,6 +48,11 @@ $(document).ready(function() {
 		$("body").addClass("ie7");
 	}
 	
+	if(document.all && $.browser.version == "8.0"){
+		//
+		$("body").addClass("ie8");
+	}
+	
 	if(document.all && $.browser.version == "9.0"){
 		
 		$("body").addClass("ie9");
@@ -115,13 +120,10 @@ $(document).ready(function() {
 		$(activeTab).show(); //Fade in the active content
 		return false;
 	});
-	try{
+
 	projekktor('#salcoPlayer', {
-	playerFlashMP4:		'/common/flash/jarisplayer.swf'
-    });}
-catch(e){
-	//stiffle
-	}
+		playerFlashMP4: '/common/flash/jarisplayer.swf'
+	});
 	
 	if(!document.all){
 	adjVideoTitles()/**/}else{setTimeout("adjVideoTitles()",1500)}
@@ -135,10 +137,12 @@ $.fn.accordion.defaults.container = false; }
 catch(e){
 	//stiffle
 	}
-/*$(function() {
+$(function() {
+		   if(!$("body").hasClass("product-family") || !$("body").hasClass("product")){
 	$("#acc3").accordion({initShow : "#current"});
 	$("html").removeClass("js");
-});*/
+		   }
+});
 
 //to adjust video titles lengths
 function adjVideoTitles(){
