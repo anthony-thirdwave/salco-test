@@ -51,6 +51,21 @@
 				<cfset MyCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.AdminUserID))>
 				saved #ThisCategoryID# category locale: #GetTickCount()-StartTickCount#<BR>
 			</cfif>
+			<cfswitch expression="#MyCategory.GetProperty('CategoryTypeID')#">
+				<cfcase value="62">
+					<cfset MyProductFamily=CreateObject("component","com.Product.ProductFamily")>
+					<cfset MyProductFamily.Constructor(Val(ThisCategoryID),SESSION.CurrentAdminLanguageID)>
+					<cfset MyProductFamily.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.UserID))>
+					<cfoutput>saved #ThisCategoryID# product family: #GetTickCount()-StartTickCount#<BR></cfoutput>
+				</cfcase>
+				<cfcase value="64">
+					<cfset MyProduct=CreateObject("component","com.Product.Product")>
+					<cfset MyProduct.Constructor(Val(ThisCategoryID),SESSION.CurrentAdminLanguageID)>
+					<cfset MyProduct.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.UserID))>
+					<cfoutput>saved #ThisCategoryID# product: #GetTickCount()-StartTickCount#<BR></cfoutput>
+				</cfcase>
+			</cfswitch>
+			
 			<cfinvoke component="com.ContentManager.CategoryHandler" method="GetContentAndContentLocale" returnVariable="qContent"
 				CategoryID="#ThisCategoryID#"
 				LocaleID="#SESSION.AdminCurrentAdminLocaleID#">
