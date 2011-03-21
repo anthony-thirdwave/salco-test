@@ -387,6 +387,7 @@ webroot/common/modules/News/NewsListing.cfm -text
 webroot/common/modules/User/GetUserPermissions.cfm -text
 webroot/common/modules/User/UserForm.cfm -text
 webroot/common/modules/User/UserObject.cfm -text
+webroot/common/modules/adhoc/swfobject.cfm -text
 webroot/common/modules/blog/dsp_blogListing.cfm -text
 webroot/common/modules/blog/dsp_blogNav.cfm -text
 webroot/common/modules/browsertest/browserdet.cfm -text
