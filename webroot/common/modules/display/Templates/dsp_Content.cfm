@@ -30,20 +30,15 @@
 				
 			});
 		</script>
-        
-       
-		
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
 	</cfcase>
 	<cfdefaultcase>
-		<!-- --><script type="text/javascript" src="/common/scripts/jquery.nestedAccordion.js"></script> 
+		<script type="text/javascript" src="/common/scripts/jquery.nestedAccordion.js"></script> 
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
 		<script type="text/javascript" src="/common/scripts/projekktor.min.js"></script>
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
-       
-		
-         <!--- <script type="text/javascript" src="/common/scripts/swfobject.js"></script> --->
+		<script type="text/javascript" src="/common/scripts/swfobject.js"></script>
 	</cfdefaultcase>
 </cfswitch>
 
@@ -77,7 +72,6 @@
 	<meta name="generator" content="#APPLICATION.GeneratorMeta#" />
 	<meta name="generator-content" content="#APPLICATION.GeneratorContentMeta#" />
 	<meta name="dc.title" content="#HTMLEditFormat(CurrentCategoryName)#" />
-
 	<!--- include meta --->
 	<cfif IsDefined("PageType")>
 		<meta name="dc.type" content="#PageType#" />
