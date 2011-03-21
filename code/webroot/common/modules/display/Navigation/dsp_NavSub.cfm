@@ -24,14 +24,18 @@
 	</cfstoredproc>
 	<cfsaveContent Variable="FileContents">
 		<cfif GetTopCategories.RecordCount GT "0">
+			<cfset ThisTarget="">
 			<cfoutput><ul <cfif ATTRIBUTES.CSSID IS NOT "">id="#ATTRIBUTES.CSSID#"</cfif> class="#ATTRIBUTES.CSSClass#"></cfoutput>
 				<cfoutput query="GetTopCategories" group="CategoryID">
                     <cfif Trim(CategoryURLDerived) IS "">
                     	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
 					<cfelse>
                     	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
+						<cfif Left(CategoryURLDerived,7) IS "http://">
+							<cfset ThisTarget="target=""_blank""">
+						</cfif>
                     </cfif>
-                	<li><a href="#ThisURL#">#CategoryNameDerived#</a></li>
+                	<li><a href="#ThisURL#" #ThisTarget#>#CategoryNameDerived#</a></li>
 				</cfoutput>
 			</ul>
 		</cfif>
