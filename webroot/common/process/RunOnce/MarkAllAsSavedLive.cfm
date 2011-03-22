@@ -1,6 +1,6 @@
-<cfoutput query="GetAllCats">
+<cfquery name="GetAllCats" datasource="#APPLICATION.DSN#">
 	select * from t_category order by CategoryID
-</cfoutput>
+</cfquery>
 
 <cfoutput query="GetAllCats">
 	<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
