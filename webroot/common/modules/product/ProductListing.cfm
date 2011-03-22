@@ -31,6 +31,15 @@
 </cfif>
 
 <cfif Val(ATTRIBUTES.ProductFamilyID) GT "0" AND Val(ATTRIBUTES.LanguageID) GT "0">
+	<cfif ListLast(GetBaseTemplatePath(),"\") IS "ProductListing.cfm">
+		<cfif (ListLen(CGI.HTTP_Referer,"/") GTE "2" and FindNoCase("salco",ListGetAt(CGI.HTTP_Referer,2,"/")) IS "0") or CGI.HTTP_Referer IS "">
+			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+				method="GetCategoryBasicDetails" 
+				returnVariable="qGetCategoryBasicDetails"
+				CategoryID="#ATTRIBUTES.ProductFamilyID#">
+			<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(qGetCategoryBasicDetails.CategoryAlias)#" addtoken="No">
+		</cfif>
+	</cfif>
 	<cfinvoke component="/com/product/productFamilyHandler" 
 		method="GetProductListBasic" 
 		returnVariable="qGetProductListBasic"
