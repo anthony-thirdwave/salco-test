@@ -486,6 +486,7 @@ webroot/common/modules/utils/validateEmail.cfm -text
 webroot/common/process/BlogRSSGenerate.cfm -text
 webroot/common/process/ContentGenerate.cfm -text
 webroot/common/process/RSSUpdate.cfm -text
+webroot/common/process/RunOnce/MarkAllAsSavedLive.cfm -text
 webroot/common/process/VerityUpdate.cfm -text
 webroot/common/process/_hourly.cfm -text
 webroot/common/process/_nightly.cfm -text
