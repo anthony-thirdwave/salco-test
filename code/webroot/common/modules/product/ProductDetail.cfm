@@ -75,7 +75,7 @@
 				
 				<cfif ArrayLen(aDownload) GT "0" or ThisPublicDrawing IS NOT "">
 					<h4>Downloads</h4>
-					<cfif ThisPublicDrawing IS NOT "">
+					<cfif ThisPublicDrawing IS NOT "" and FileExists(ExpandPath(ThisPublicDrawing))>
 						<p><a href="#ThisPublicDrawing#" target="_blank">CAD Drawing</a>
 						(#UCase(ListLast(ThisPublicDrawing,"."))#<cfif Val(ThisPublicDrawingSize) GT "0">, #Ceiling(ThisPublicDrawingSize/1024)#KB</cfif>)<br/>
 						</p>
