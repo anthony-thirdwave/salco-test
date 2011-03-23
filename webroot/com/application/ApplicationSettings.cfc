@@ -197,7 +197,7 @@
 		<!--- This is the e-mail address to which error reports should be sent.
 		 It is possible to specify more than one address by making this a
 		 semicolon-delimited list. --->
-		<cfset APPLICATION.ErrorMailTo = "application.errors@thirdwavellc.com" />
+		<cfset APPLICATION.ErrorMailTo = "thomas@newermedia.com" />
 		<cfset APPLICATION.ErrorMailFrom = "#local.uniqueName#-Error@thirdwavellc.com" />
 
 
