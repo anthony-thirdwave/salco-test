@@ -769,3 +769,33 @@ ul.accordion li {
 
 .ie8 .mapInfos{
 	margin-bottom:0px;}
+	
+.product-family #sub{
+	margin-left:0px;
+}
+
+.product-family .fade .subordion{
+	min-width:480px;
+}
+
+.product-family #sub h4 a, .product-family .new, .featuredDownloads, .product-family .new p{
+	width:480px;
+}
+
+.product-family .new .pagination p{
+	width:auto !important;
+	padding-left:20px !important;
+	padding-right:0px !important;
+}
+
+.product-family .pagination{
+	margin-right:43px;
+}
+
+.product-family ul.pagination{
+	margin-right:0px;
+}
+
+.product-family ul.pagination li:last-child{
+	padding-right:0px;
+}

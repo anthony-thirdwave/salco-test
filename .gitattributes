@@ -86,6 +86,7 @@ code/webroot/common/admin/login.cfm -text
 code/webroot/common/admin/logoff.cfm -text
 code/webroot/common/admin/support/admin.cfm -text
 code/webroot/common/admin/support/index.cfm -text
+code/webroot/common/error/404.html -text
 code/webroot/common/error/cfservertest.cfm -text
 code/webroot/common/error/errorhandler.cfm -text
 code/webroot/common/error/errortest.cfm -text
