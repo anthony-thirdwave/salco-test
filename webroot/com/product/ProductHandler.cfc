@@ -677,12 +677,15 @@
 			</cfoutput>
 			
 			<cfif LOCAL.sElement.PublicDrawing IS NOT "" and FileExists(ExpandPath(LOCAL.sElement.PublicDrawing))>
+				<cfif Val(LOCAL.sElement.PublicDrawingSize) IS "0">
+					<cfset LOCAL.sElement.PublicDrawingSize=GetFileInfo(ExpandPath(LOCAL.sElement.PublicDrawing)).Size>
+				</cfif>
 				<cfset QueryAddRow(LOCAL.qReturn,1)>
 				<cfset QuerySetCell(LOCAL.qReturn,"ProductID",LOCAL.sElement.ProductID)>
 				<cfset QuerySetCell(LOCAL.qReturn,"ProductName",LOCAL.sElement.ProductName)>
 				<cfset QuerySetCell(LOCAL.qReturn,"PartNumber",LOCAL.sElement.PartNumber)>
 				<cfset QuerySetCell(LOCAL.qReturn,"PublicDrawing",LOCAL.sElement.PublicDrawing)>
-				<cfset QuerySetCell(LOCAL.qReturn,"PublicDrawingSize",LOCAL.sElement.PublicDrawingSize)>
+				<cfset QuerySetCell(LOCAL.qReturn,"PublicDrawingSize",Val(LOCAL.sElement.PublicDrawingSize))>
 				<cfset QuerySetCell(LOCAL.qReturn,"TopProductFamilyAlias",LOCAL.sElement.TopProductFamilyAlias)>
 				<cfset QuerySetCell(LOCAL.qReturn,"TopProductFamilyName",LOCAL.sElement.TopProductFamilyName)>
 			</cfif>
