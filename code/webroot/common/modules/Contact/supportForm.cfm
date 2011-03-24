@@ -8,7 +8,7 @@
 <cfelse>
 	<cfset Mailer_ToAddress="thomas@newermedia.com">
 </cfif>
-<cfset Mailer_FromAddress="noreply@salcoproducts.com">
+<cfset Mailer_FromAddress="noreply@salcoproducts.net">
 
 <cfset ErrorMessage="">
 
