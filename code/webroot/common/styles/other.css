@@ -66,6 +66,20 @@ div.partsNav {
 	max-height:inherit;
 }
 
+.ie8 .homeRight{
+	height:502px;
+	max-height:502px;
+}
+
+.ie7 #tabsRotate .content{
+	min-height:113px;
+	height:113px;
+}
+
+.ie8 #tabsRotate .content{
+	min-height:113px;
+	height:113px;
+}
 .homeRight div[id^='homeContChange']{
 	min-height:120px;
 	}
