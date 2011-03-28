@@ -62,7 +62,7 @@
 		<cfset APPLICATION.CategoryAlias404Page="404-page">
 		<cfset APPLICATION.CategoryID404Page="5701">
 		<cfset APPLICATION.defaultSiteCategoryID="1">
-
+		<cfset APPLICATION.StagingURL="http://staging.salco.01.thirdwaveweb.com" />
 		<!---
 			determine how content.cfm is called - default .htaccess is formatted to deal with the following permutations
 			a) "/content.cfm" - non seo links (e.g. "http://www.thirdwavellc.com/content.cfm/about")
@@ -95,9 +95,6 @@
 			<cfset APPLICATION.SourceLogin = "cfmx" />
 			<cfset APPLICATION.SourcePassword = "st34l1n" />
 			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = APPLICATION.applicationName />
-
-			<!--- only used if dev --->
-			<cfset APPLICATION.StagingURL = "http://staging.#local.uniqueName#.com" />
 
 			<!---	set custom httpServer and httpsServer - *both* must be set to work properly
 					e.g.: http://www.mySite.com and https://secure.mySite.com --->
