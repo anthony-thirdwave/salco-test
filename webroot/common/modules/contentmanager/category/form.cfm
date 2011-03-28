@@ -208,7 +208,7 @@
 	</cfif>
 </cfif>
 
-<cfif ListFindNoCase(Restrictions,"AllowComments")>
+<cfif ListFindNoCase(Restrictions,"AllowComments") and 0>
 	<cfset AllowCommentOptionList="{0|No Comments}^^{1|Allow Comments}^^{2|Display Comments Only}^^{3|Display Comments and Archive Message}">
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
@@ -220,7 +220,7 @@
 		Required="Y">
 </cfif>
 
-<cfif ListFindNoCase(Restrictions,"CommentNotificationEmail")>
+<cfif ListFindNoCase(Restrictions,"CommentNotificationEmail") and 0>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -240,7 +240,7 @@
 		PropertyName="AllowBackToTop">
 </cfif>
 
-<cfif ListFindNoCase(Restrictions,"useSSL")>
+<cfif ListFindNoCase(Restrictions,"useSSL") and 0>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
 		type="checkbox"
