@@ -459,7 +459,7 @@ webroot/common/modules/search/dspSearchResults.cfm -text
 webroot/common/modules/search/search.cfm -text
 webroot/common/modules/search/tagCloud.cfm -text
 webroot/common/modules/sitemap/SitemapHelper.cfm -text
-webroot/common/modules/sitemap/sitemap.cfm -text
+webroot/common/modules/sitemap/_sitemapGenerate.cfm -text
 webroot/common/modules/sitemap/sitemap_xml.cfm -text
 webroot/common/modules/utils/AddToQueryString.cfm -text
 webroot/common/modules/utils/Copy[!!-~]of[!!-~]DisplayFormElt.cfm -text
