@@ -19,12 +19,14 @@
 
 <cfoutput query="GetAttributes">
 	<cfif AttributeValue IS NOT "">
-		<cfif Left(AttributeValue,"12") IS "W:\DWF Parts">
+		<cfif Left(AttributeValue,"12") IS "W:\DWF Parts" or Left(AttributeValue,"12") IS "W:/DWF Parts">
 			<hr>
 			Original Value: #AttributeValue#<br>
-			<cfset NewValue=Replace(AttributeValue,"W:\DWF Parts","/resources/external/dwfparts")>
-			<cfset NewValue=Replace(NewValue,"\","/","All")>
+			<cfset NewValue=ReplaceNoCase(AttributeValue,"W:\DWF Parts","/resources/external/dwfparts")>
+			<cfset NewValue=ReplaceNoCase(NewValue,"W:/DWF Parts","/resources/external/dwfparts")>
+			<cfset NewValue=ReplaceNoCase(NewValue,"\","/","All")>
 			<cfset Source=ReplaceNoCase(AttributeValue,"W:\","D:\websites.staging\salco\Resources\W\")>
+			<cfset Source=ReplaceNoCase(Source,"W:/","D:\websites.staging\salco\Resources\W\")>
 			<cfquery name="SetAttributes1" datasource="#APPLICATION.DSN#">
 				update t_ProductAttribute set AttributeValue='#NewValue#'
 				where CategoryID=#Val(CategoryID)# and ProductFamilyAttributeID=12
