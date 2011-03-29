@@ -31,6 +31,7 @@
 			});
 		</script>
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
+		<script type="text/javascript" src="/common/scripts/projekktor/projekktor.min.js"></script>
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
 	</cfcase>
 	<cfdefaultcase>
