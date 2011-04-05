@@ -46,19 +46,8 @@
 
 
 <cfif MyProduct.GetConsoleProductFamilyID() gt "0">
-	<cfif ProductPageMode IS NOT "Console">
 		<TD style="padding-right:30px;"><b>Product Details</b></TD>
-		<cf_AddToQueryString querystring="#ProductFormQueryString#" name="ReturnURL" value="#ReturnURL#">
-		<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="#PageAction#">
-		<cf_AddToQueryString querystring="#QueryString#" name="ProductPageMode" value="Console">
-		<cfoutput><TD style="padding-left:30px;padding-right:30px;"><a href="#ProductFormLocation#?#querystring#">Console Details</A></TD></cfoutput>
-	<cfelse>
-		<cf_AddToQueryString querystring="#ProductFormQueryString#" name="ReturnURL" value="#ReturnURL#">
-		<cf_AddToQueryString querystring="#QueryString#" name="PageAction" value="#PageAction#">
-		<cf_AddToQueryString querystring="#QueryString#" name="ProductPageMode" value="Product">
-		<cfoutput><TD style="padding-right:30px;"><a href="#ProductFormLocation#?#querystring#">Product Details</A></TD></cfoutput>
-		<TD style="padding-left:30px;padding-right:30px;"><strong>Console Details</strong></TD>
-	</cfif>
+		<TD>&nbsp;</TD>
 	<TD align="right"><cfoutput query="qLanguages"><cfif FormLanguageID IS LabelID>Product Language: #LabelName#</cfif></cfoutput></TD></TR>
 	<TR><TD colspan="3">&nbsp;</TD></TR>
 <cfelse>
@@ -88,7 +77,7 @@
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
 		type="textarea"
-		caption="Product Description" 
+		caption="Product Description (imported from M2M)" 
 		ObjectName="MyProduct"
 		PropertyName="ProductDescription"
 		cols="80" rows="10"
@@ -98,7 +87,7 @@
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
 		type="text"
-		caption="Part Number" 
+		caption="Part Number  (imported from M2M)" 
 		ObjectName="MyProduct"
 		PropertyName="PartNumber"
 		size="40" maxlength="128"
@@ -109,7 +98,7 @@
 	<cfset StructInsert(sImageName,"ProductImagePath","Product Image",1)>
 	<cfset StructInsert(sImageName,"ProductThumbnailPath","Product Thumbnail Image",1)>
 	<cfset StructInsert(sImageName,"ProductThumbnailHoverPath","Product Thumbnail Hover Image",1)>
-	<cfset StructInsert(sImageName,"PublicDrawing","Public Drawing",1)>
+	<cfset StructInsert(sImageName,"PublicDrawing","Public Drawing  (imported from M2M)",1)>
 	<cfset StructInsert(sImageName,"ProductImageSourcePath","Image Source (500x420px)<br>Use this image to generate image for use in the LF Store and product configurator.",1)>
 	<cfset StructInsert(sImageName,"ProductImageStorePath","Store Image ",1)>
 	
@@ -406,7 +395,7 @@
 		returnVariable="sGetProductFamilyAttribute"
 		CategoryID="#MyProduct.GetProductFamilyID()#"
 		LanguageID="#FormLanguageID#">
-	
+
 	<cfinvoke component="/com/utils/database" method="GenericLookup" returnVariable="qOptions">
 		<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 		<cfinvokeargument name="TableName" value="t_Label">
@@ -415,73 +404,79 @@
 		<cfinvokeargument name="SortFieldName" value="LabelPriority">
 		<cfinvokeargument name="SortOrder" value="Asc">
 	</cfinvoke>
-	<TR><TD colspan="3"><b>Attributes</b></TD></TR>
-	<cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
-		<TR><TD colspan="3" align="right">Load Product Specifications Only From: 
-		<select name="plclid2">
-			<option value="-1">Select...</option>
-			<cfoutput query="qProductLanguages">
-				<cfif FormLanguageID IS NOT LanguageID>
-					<option value="#REQUEST.SimpleEncrypt(LanguageID)#">#LanguageName#</option>
-				</cfif>
-			</cfoutput>
-		</select> <!--- <input type="submit" name="ButLoad2" value="Load"> --->
-		<input type="submit" name="ButLoad3" value="Load"></TD></TR>
-	</cfif>
 	
-	<TR><TD></TD><TD colspan="2">
 	<cfset aProductAttribute=MyProduct.GetProperty("aProductAttribute")>
-	<table width="100%">
 	
-	<TR><TD><strong>Name</strong></TD><TD><strong>Value</strong></TD></TR>
-	
-	
-	<cfloop index="fi" from="1" to="#ArrayLen(aProductAttribute)#" step="1">
-		<cfif StructKeyExists(sGetProductFamilyAttribute,aProductAttribute[fi].ProductFamilyAttributeID)>
-			<cfif FormMode IS "ShowForm">
-				<tr valign="top"><TD>
-				<cfswitch expression="#aProductAttribute[fi].ProductFamilyAttributeTypeID#">
-					<cfcase value="600"><b></cfcase><cfcase value="601">&nbsp;&nbsp;</cfcase><cfdefaultcase>&nbsp;&nbsp;&nbsp;&nbsp;</cfdefaultcase>
-				</cfswitch>
-				<cfoutput>#sGetProductFamilyAttribute[aProductAttribute[fi].ProductFamilyAttributeID]#</cfoutput></TD>
-				<TD>
-				<cfif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "603">
-					<cfoutput><input type="text" name="AttributeValue_#fi#" value="#HTMLEditFormat(aProductAttribute[fi].AttributeValue)#" size="80" maxlength="1000"></cfoutput>
-				<cfelseif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "602">
-					<cfoutput><select name="AttributeValueID_#fi#"></cfoutput>
-						<cfoutput query="qOptions">
-							<option value="#labelID#" <cfif aProductAttribute[fi].AttributeValueID IS LabelID>selected</cfif>>#LabelName#</option>
-						</cfoutput>
-					</select>
-				</cfif></TD></TR>
-			<cfelse>
-				<TR><TD><cfswitch expression="#aProductAttribute[fi].ProductFamilyAttributeTypeID#">
-					<cfcase value="600"></cfcase><cfcase value="601">&nbsp;&nbsp;</cfcase><cfdefaultcase>&nbsp;&nbsp;&nbsp;&nbsp;</cfdefaultcase>
-				</cfswitch>
-				<cfoutput>#sGetProductFamilyAttribute[aProductAttribute[fi].ProductFamilyAttributeID]#</cfoutput></TD>
-				<TD>
-				<cfif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "603">
-					<cfoutput>#aProductAttribute[fi].AttributeValue#</cfoutput>
-				<cfelseif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "602">
-					<cfoutput query="qOptions">
-						<cfif aProductAttribute[fi].AttributeValueID IS LabelID>#LabelName#</cfif>
-					</cfoutput>
-				</cfif>
-				</TD></tR>
-				<cfoutput><input type="hidden" name="AttributeValue_#fi#" value="#HTMLEditFormat(aProductAttribute[fi].AttributeValue)#" size="80">
-				<input type="hidden" name="AttributeValueID_#fi#" value="#aProductAttribute[fi].AttributeValueID#"></cfoutput>
-			</cfif>
-			<cfoutput>
-				<input type="hidden" name="ProductFamilyAttributeID_#fi#" value="#URLEncodedFormat(Encrypt(aProductAttribute[fi].ProductFamilyAttributeID,APPLICATION.Key))#">
-				<input type="hidden" name="ProductFamilyAttributeTypeID_#fi#" value="#URLEncodedFormat(Encrypt(aProductAttribute[fi].ProductFamilyAttributeTypeID,APPLICATION.Key))#">
-			</cfoutput>
+	<cfif ArrayLen(aProductAttribute) IS "0">
+		<input type="hidden" name="NumAttributes" value="0">
+	<cfelse>
+		<TR><TD colspan="3"><b>Attributes</b></TD></TR>
+		<cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
+			<TR><TD colspan="3" align="right">Load Product Specifications Only From: 
+			<select name="plclid2">
+				<option value="-1">Select...</option>
+				<cfoutput query="qProductLanguages">
+					<cfif FormLanguageID IS NOT LanguageID>
+						<option value="#REQUEST.SimpleEncrypt(LanguageID)#">#LanguageName#</option>
+					</cfif>
+				</cfoutput>
+			</select> <!--- <input type="submit" name="ButLoad2" value="Load"> --->
+			<input type="submit" name="ButLoad3" value="Load"></TD></TR>
 		</cfif>
-	</cfloop>
-	<cfoutput><input type="hidden" name="NumAttributes" value="#ArrayLen(aProductAttribute)#"></cfoutput>
-	</table>
-	
-	</TD></TR>
-
+		
+		<TR><TD></TD><TD colspan="2">
+		
+		<table width="100%">
+		
+		<TR><TD><strong>Name</strong></TD><TD><strong>Value</strong></TD></TR>
+		
+		
+		<cfloop index="fi" from="1" to="#ArrayLen(aProductAttribute)#" step="1">
+			<cfif StructKeyExists(sGetProductFamilyAttribute,aProductAttribute[fi].ProductFamilyAttributeID)>
+				<cfif FormMode IS "ShowForm">
+					<tr valign="top"><TD>
+					<cfswitch expression="#aProductAttribute[fi].ProductFamilyAttributeTypeID#">
+						<cfcase value="600"><b></cfcase><cfcase value="601">&nbsp;&nbsp;</cfcase><cfdefaultcase>&nbsp;&nbsp;&nbsp;&nbsp;</cfdefaultcase>
+					</cfswitch>
+					<cfoutput>#sGetProductFamilyAttribute[aProductAttribute[fi].ProductFamilyAttributeID]#</cfoutput></TD>
+					<TD>
+					<cfif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "603">
+						<cfoutput><input type="text" name="AttributeValue_#fi#" value="#HTMLEditFormat(aProductAttribute[fi].AttributeValue)#" size="80" maxlength="1000"></cfoutput>
+					<cfelseif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "602">
+						<cfoutput><select name="AttributeValueID_#fi#"></cfoutput>
+							<cfoutput query="qOptions">
+								<option value="#labelID#" <cfif aProductAttribute[fi].AttributeValueID IS LabelID>selected</cfif>>#LabelName#</option>
+							</cfoutput>
+						</select>
+					</cfif></TD></TR>
+				<cfelse>
+					<TR><TD><cfswitch expression="#aProductAttribute[fi].ProductFamilyAttributeTypeID#">
+						<cfcase value="600"></cfcase><cfcase value="601">&nbsp;&nbsp;</cfcase><cfdefaultcase>&nbsp;&nbsp;&nbsp;&nbsp;</cfdefaultcase>
+					</cfswitch>
+					<cfoutput>#sGetProductFamilyAttribute[aProductAttribute[fi].ProductFamilyAttributeID]#</cfoutput></TD>
+					<TD>
+					<cfif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "603">
+						<cfoutput>#aProductAttribute[fi].AttributeValue#</cfoutput>
+					<cfelseif aProductAttribute[fi].ProductFamilyAttributeTypeID IS "602">
+						<cfoutput query="qOptions">
+							<cfif aProductAttribute[fi].AttributeValueID IS LabelID>#LabelName#</cfif>
+						</cfoutput>
+					</cfif>
+					</TD></tR>
+					<cfoutput><input type="hidden" name="AttributeValue_#fi#" value="#HTMLEditFormat(aProductAttribute[fi].AttributeValue)#" size="80">
+					<input type="hidden" name="AttributeValueID_#fi#" value="#aProductAttribute[fi].AttributeValueID#"></cfoutput>
+				</cfif>
+				<cfoutput>
+					<input type="hidden" name="ProductFamilyAttributeID_#fi#" value="#URLEncodedFormat(Encrypt(aProductAttribute[fi].ProductFamilyAttributeID,APPLICATION.Key))#">
+					<input type="hidden" name="ProductFamilyAttributeTypeID_#fi#" value="#URLEncodedFormat(Encrypt(aProductAttribute[fi].ProductFamilyAttributeTypeID,APPLICATION.Key))#">
+				</cfoutput>
+			</cfif>
+		</cfloop>
+		<cfoutput><input type="hidden" name="NumAttributes" value="#ArrayLen(aProductAttribute)#"></cfoutput>
+		</table>
+		
+		</TD></TR>
+	</cfif>
 <cfelse><!--- Console Options --->
 	
 	<cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
