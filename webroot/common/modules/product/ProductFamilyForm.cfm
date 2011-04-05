@@ -344,138 +344,139 @@
 </table>
 </TD></TR>
 
-<!--- <TR><TD colspan="3"><b>
-<cfdump var="#MyCategory.getAllErrorMessages()#">
-</b></TD></TR> --->
-<TR><TD colspan="3"><b>Product Family Comparison Chart</b></TD></TR>
-
-<cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
-	<TR><TD colspan="3" align="right">Load Family Comparison Chart Only From: 
-	<select name="plclid2">
-		<option value="-1">Select...</option>
-		<cfoutput query="qProductLanguages">
-			<cfif FormLanguageID IS NOT LanguageID>
-				<option value="#REQUEST.SimpleEncrypt(LanguageID)#">#LanguageName#</option>
-			</cfif>
-		</cfoutput>
-	</select> <!--- <input type="submit" name="ButLoad2" value="Load"> --->
-	<input type="submit" name="ButLoad3" value="Load"></TD></TR>
-</cfif>
-
-
-<TR><TD>&nbsp;</TD><TD colspan="2">
-<cfset aAttr=MyProductFamily.GetProperty("aProductFamilyAttribute")>
-<table width="100%">
-<TR><TD>&nbsp;</TD>
-<TD><cfif ArrayLen(aAttr) GT "0" and NOT ShowAdmin><strong>English</strong></cfif></TD>
-<TD><strong>Name</strong></TD>
-<TD><cfif ArrayLen(aAttr) GT "0" and ShowAdmin><strong>Type</strong></cfif></TD>
-<TD><cfif ArrayLen(aAttr) GT "0" and ShowAdmin><strong>Order</strong></cfif></TD>
-<TD><cfif ShowAdmin><strong>Spec Set</strong></cfif></TD>
-<TD><strong><cfif ArrayLen(aAttr) GT "0" and FormMode IS "ShowForm" and ShowAdmin>Master </cfif>Remove?</strong></TD></TR>
-<cfloop index="i" from="1" to="#ArrayLen(aAttr)#" step="1">
-	<cfif FormMode IS "ShowForm">
-		<tr valign="top">
-		<cfoutput><TD>#i#</TD>
-		<TD style="color:##999999">
-		<cfif NOT ShowAdmin>
-			<cfquery name="GetThis" datasource="#APPLICATION.DSN#" maxrows="1">
-				SELECT ProductFamilyAttributeName FROM qry_GetProductFamilyAttribute 
-				WHERE LanguageID=#Val(APPLICATION.DefaultLanguageID)# and 
-				ProductFamilyAttributeID=#Val(aAttr[i].ProductFamilyAttributeID)#
-			</cfquery>
-			<cfif GetThis.RecordCount IS "1">
-				<span title="#aAttr[i].ProductFamilyAttributeID#">#GetThis.ProductFamilyAttributeName#</span>
-			<cfelse>
-				<span title="#aAttr[i].ProductFamilyAttributeID#">[deleted]</span>
-			</cfif>
-		</cfif></TD>
-		<TD>
-		<input type="text" name="AttributeName_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeName)#" maxlength="255" size="80" <cfif StructKeyExists(aAttr[i],"ProductFamilyAttributeNameDefault")>title="#aAttr[i].ProductFamilyAttributeNameDefault#"></cfif></cfoutput>
-		</TD><TD>
-		<cfif ShowAdmin>
-			<cfoutput><select name="AttributeTypeID_#i#"></cfoutput>
-				<cfoutput query="qAttributeType">
-					<option value="#LabelID#" <cfif LabelID IS aAttr[i].ProductFamilyAttributeTypeID>selected</cfif>>#LabelName#</option>
-				</cfoutput>
-			</select>
-		<cfelse>
-			<cfoutput><input type="hidden" name="AttributeTypeID_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeTypeID)#"></cfoutput>
-		</cfif>
-		</TD><TD nowrap>
-			<cfif ShowAdmin>
-				<cfif 0>
-					<cfoutput><cfif ArrayLen(aAttr) GT "1" and ShowAdmin>
-					<cfif i IS NOT "1"><input type="image" name="ButtonSubmit_up_#i#" value="up_#i#" src="/common/images/widget_arrow_up.gif"><cfelse><img src="/common/images/widget_arrow_up_grey.gif"></cfif><cfif i IS NOT ArrayLen(aAttr)><input type="image" name="ButtonSubmit_down_#i#" value="down_#i#" src="/common/images/widget_arrow_down.gif"><cfelse><img src="/common/images/widget_arrow_down_grey.gif"></cfif>
-					</cfif></cfoutput>
-				<cfelse>
-					<cfoutput><input type="text" size="3" name="AttributePriority_#i#" value="#i*10#"></cfoutput>
-				</cfif>
-			<cfelse>
-				<cfoutput><input type="hidden" name="AttributePriority_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributePriority)#"></cfoutput>
-			</cfif>
-		</TD>
-		<TD>
-		<cfif ShowAdmin>
-		<cfoutput><select name="AttributeSpecificationSetID_#i#"></cfoutput>
-				<cfoutput query="qSpecificationType">
-					<option value="#LabelID#" <cfif LabelID IS aAttr[i].SpecificationSetID>selected</cfif>>#LabelName#</option>
-				</cfoutput>
-			</select>
-		<cfelse>
-			<cfoutput><input type="hidden" name="AttributeSpecificationSetID_#i#" value="#HTMLEditFormat(aAttr[i].SpecificationSetID)#"></cfoutput>
-		</cfif>
-		</TD>
-		<TD>
-		<cfif ShowAdmin><cfoutput><input type="checkbox" name="AttributeDelete_#i#" value="1"></cfoutput>
-		<cfelse><cfoutput><input type="checkbox" name="AttributeDeleteSoft_#i#" value="1"></cfoutput></cfif>
-		</TD></TR>
-		<cfoutput><input type="hidden" name="AttributeID_#i#" value="#URLEncodedFormat(Encrypt(aAttr[i].ProductFamilyAttributeID,APPLICATION.Key))#"></cfoutput>
-	<cfelse>
-		<cfoutput><TR><TD>#i#</TD><TD></TD><TD>#aAttr[i].ProductFamilyAttributeName#</TD></cfoutput>
-		<TD>
-		<cfoutput>
-			<input type="hidden" name="AttributeName_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeName)#">
-			<input type="hidden" name="AttributeTypeID_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeTypeID)#">
-			<input type="hidden" name="AttributePriority_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributePriority)#">
-			<input type="hidden" name="AttributeSpecificationSetID_#i#" value="#HTMLEditFormat(aAttr[i].SpecificationSetID)#">
-		</cfoutput>
-		<cfoutput query="qAttributeType">
-			<cfif LabelID IS aAttr[i].ProductFamilyAttributeTypeID>#LabelName#</cfif>
-		</cfoutput>
-		</TD><TD></TD>
-		
-		<TD>
-		<cfoutput query="qSpecificationType">
-			<cfif LabelID IS aAttr[i].SpecificationSetID>#LabelName#</cfif>
-		</cfoutput>
-		</TD>
-		<TD></TD></tR>
-	</cfif>
-</cfloop>
-<cfoutput><input type="hidden" name="NumAttributes" value="#ArrayLen(aAttr)#"></cfoutput>
-<cfif FormMode IS "ShowForm" and ShowAdmin>
-	<TR><TD></TD><TD></TD><TD>
-		<input type="text" name="AttributeName_New" value="" maxlength="255" size="80">
-		</TD><TD>
-		<select name="AttributeTypeID_New">
-			<cfoutput query="qAttributeType">
-				<option value="#LabelID#">#LabelName#</option>
-			</cfoutput>
-		</select>
-	</TD><TD>&nbsp;</TD>
+<cfif 1>
+	<input type="hidden" name="NumAttributes" value="0">
+<cfelse>
+	<TR><TD colspan="3"><b>Product Family Comparison Chart</b></TD></TR>
 	
-		<TD>
-	<select name="AttributeSpecificationSetID_new">
-	<cfoutput query="qSpecificationType">
-		<option value="#LabelID#">#LabelName#</option>
-	</cfoutput>
-	</select>
-	</TD>
-	<TD></TD></TR>
-	<TR><TD colspan="7" align="right"><input type="submit" value="Update Chart"></TD></TR>
+	<cfif FormLanguageID IS NOT APPLICATION.DefaultLanguageID and qProductLanguages.RecordCount GTE "1">
+		<TR><TD colspan="3" align="right">Load Family Comparison Chart Only From: 
+		<select name="plclid2">
+			<option value="-1">Select...</option>
+			<cfoutput query="qProductLanguages">
+				<cfif FormLanguageID IS NOT LanguageID>
+					<option value="#REQUEST.SimpleEncrypt(LanguageID)#">#LanguageName#</option>
+				</cfif>
+			</cfoutput>
+		</select> <!--- <input type="submit" name="ButLoad2" value="Load"> --->
+		<input type="submit" name="ButLoad3" value="Load"></TD></TR>
+	</cfif>
+	
+	
+	<TR><TD>&nbsp;</TD><TD colspan="2">
+	<cfset aAttr=MyProductFamily.GetProperty("aProductFamilyAttribute")>
+	<table width="100%">
+	<TR><TD>&nbsp;</TD>
+	<TD><cfif ArrayLen(aAttr) GT "0" and NOT ShowAdmin><strong>English</strong></cfif></TD>
+	<TD><strong>Name</strong></TD>
+	<TD><cfif ArrayLen(aAttr) GT "0" and ShowAdmin><strong>Type</strong></cfif></TD>
+	<TD><cfif ArrayLen(aAttr) GT "0" and ShowAdmin><strong>Order</strong></cfif></TD>
+	<TD><cfif ShowAdmin><strong>Spec Set</strong></cfif></TD>
+	<TD><strong><cfif ArrayLen(aAttr) GT "0" and FormMode IS "ShowForm" and ShowAdmin>Master </cfif>Remove?</strong></TD></TR>
+	<cfloop index="i" from="1" to="#ArrayLen(aAttr)#" step="1">
+		<cfif FormMode IS "ShowForm">
+			<tr valign="top">
+			<cfoutput><TD>#i#</TD>
+			<TD style="color:##999999">
+			<cfif NOT ShowAdmin>
+				<cfquery name="GetThis" datasource="#APPLICATION.DSN#" maxrows="1">
+					SELECT ProductFamilyAttributeName FROM qry_GetProductFamilyAttribute 
+					WHERE LanguageID=#Val(APPLICATION.DefaultLanguageID)# and 
+					ProductFamilyAttributeID=#Val(aAttr[i].ProductFamilyAttributeID)#
+				</cfquery>
+				<cfif GetThis.RecordCount IS "1">
+					<span title="#aAttr[i].ProductFamilyAttributeID#">#GetThis.ProductFamilyAttributeName#</span>
+				<cfelse>
+					<span title="#aAttr[i].ProductFamilyAttributeID#">[deleted]</span>
+				</cfif>
+			</cfif></TD>
+			<TD>
+			<input type="text" name="AttributeName_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeName)#" maxlength="255" size="80" <cfif StructKeyExists(aAttr[i],"ProductFamilyAttributeNameDefault")>title="#aAttr[i].ProductFamilyAttributeNameDefault#"></cfif></cfoutput>
+			</TD><TD>
+			<cfif ShowAdmin>
+				<cfoutput><select name="AttributeTypeID_#i#"></cfoutput>
+					<cfoutput query="qAttributeType">
+						<option value="#LabelID#" <cfif LabelID IS aAttr[i].ProductFamilyAttributeTypeID>selected</cfif>>#LabelName#</option>
+					</cfoutput>
+				</select>
+			<cfelse>
+				<cfoutput><input type="hidden" name="AttributeTypeID_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeTypeID)#"></cfoutput>
+			</cfif>
+			</TD><TD nowrap>
+				<cfif ShowAdmin>
+					<cfif 0>
+						<cfoutput><cfif ArrayLen(aAttr) GT "1" and ShowAdmin>
+						<cfif i IS NOT "1"><input type="image" name="ButtonSubmit_up_#i#" value="up_#i#" src="/common/images/widget_arrow_up.gif"><cfelse><img src="/common/images/widget_arrow_up_grey.gif"></cfif><cfif i IS NOT ArrayLen(aAttr)><input type="image" name="ButtonSubmit_down_#i#" value="down_#i#" src="/common/images/widget_arrow_down.gif"><cfelse><img src="/common/images/widget_arrow_down_grey.gif"></cfif>
+						</cfif></cfoutput>
+					<cfelse>
+						<cfoutput><input type="text" size="3" name="AttributePriority_#i#" value="#i*10#"></cfoutput>
+					</cfif>
+				<cfelse>
+					<cfoutput><input type="hidden" name="AttributePriority_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributePriority)#"></cfoutput>
+				</cfif>
+			</TD>
+			<TD>
+			<cfif ShowAdmin>
+			<cfoutput><select name="AttributeSpecificationSetID_#i#"></cfoutput>
+					<cfoutput query="qSpecificationType">
+						<option value="#LabelID#" <cfif LabelID IS aAttr[i].SpecificationSetID>selected</cfif>>#LabelName#</option>
+					</cfoutput>
+				</select>
+			<cfelse>
+				<cfoutput><input type="hidden" name="AttributeSpecificationSetID_#i#" value="#HTMLEditFormat(aAttr[i].SpecificationSetID)#"></cfoutput>
+			</cfif>
+			</TD>
+			<TD>
+			<cfif ShowAdmin><cfoutput><input type="checkbox" name="AttributeDelete_#i#" value="1"></cfoutput>
+			<cfelse><cfoutput><input type="checkbox" name="AttributeDeleteSoft_#i#" value="1"></cfoutput></cfif>
+			</TD></TR>
+			<cfoutput><input type="hidden" name="AttributeID_#i#" value="#URLEncodedFormat(Encrypt(aAttr[i].ProductFamilyAttributeID,APPLICATION.Key))#"></cfoutput>
+		<cfelse>
+			<cfoutput><TR><TD>#i#</TD><TD></TD><TD>#aAttr[i].ProductFamilyAttributeName#</TD></cfoutput>
+			<TD>
+			<cfoutput>
+				<input type="hidden" name="AttributeName_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeName)#">
+				<input type="hidden" name="AttributeTypeID_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributeTypeID)#">
+				<input type="hidden" name="AttributePriority_#i#" value="#HTMLEditFormat(aAttr[i].ProductFamilyAttributePriority)#">
+				<input type="hidden" name="AttributeSpecificationSetID_#i#" value="#HTMLEditFormat(aAttr[i].SpecificationSetID)#">
+			</cfoutput>
+			<cfoutput query="qAttributeType">
+				<cfif LabelID IS aAttr[i].ProductFamilyAttributeTypeID>#LabelName#</cfif>
+			</cfoutput>
+			</TD><TD></TD>
+			
+			<TD>
+			<cfoutput query="qSpecificationType">
+				<cfif LabelID IS aAttr[i].SpecificationSetID>#LabelName#</cfif>
+			</cfoutput>
+			</TD>
+			<TD></TD></tR>
+		</cfif>
+	</cfloop>
+	<cfoutput><input type="hidden" name="NumAttributes" value="#ArrayLen(aAttr)#"></cfoutput>
+	<cfif FormMode IS "ShowForm" and ShowAdmin>
+		<TR><TD></TD><TD></TD><TD>
+			<input type="text" name="AttributeName_New" value="" maxlength="255" size="80">
+			</TD><TD>
+			<select name="AttributeTypeID_New">
+				<cfoutput query="qAttributeType">
+					<option value="#LabelID#">#LabelName#</option>
+				</cfoutput>
+			</select>
+		</TD><TD>&nbsp;</TD>
+		
+			<TD>
+		<select name="AttributeSpecificationSetID_new">
+		<cfoutput query="qSpecificationType">
+			<option value="#LabelID#">#LabelName#</option>
+		</cfoutput>
+		</select>
+		</TD>
+		<TD></TD></TR>
+		<TR><TD colspan="7" align="right"><input type="submit" value="Update Chart"></TD></TR>
+	</cfif>
+	</table>
 </cfif>
-</table>
 
 </TD></TR>
 <cfif OpenAndCloseFormTables></table></cfif>
