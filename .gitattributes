@@ -283,10 +283,13 @@ code/webroot/common/images/template/captcha_test.jpg -text
 code/webroot/common/images/template/contactf.png -text
 code/webroot/common/images/template/contactm.png -text
 code/webroot/common/images/template/content_back.png -text
+code/webroot/common/images/template/content_backIE6.png -text
 code/webroot/common/images/template/content_back_wide.png -text
 code/webroot/common/images/template/content_bottom.png -text
+code/webroot/common/images/template/content_bottomIE6.png -text
 code/webroot/common/images/template/content_bottom_wide.png -text
 code/webroot/common/images/template/content_top.png -text
+code/webroot/common/images/template/content_topIE6.png -text
 code/webroot/common/images/template/content_top_wide.png -text
 code/webroot/common/images/template/content_top_wide_sp.png -text
 code/webroot/common/images/template/fade.jpg -text
@@ -310,6 +313,8 @@ code/webroot/common/images/template/home_tankcar.jpg -text
 code/webroot/common/images/template/hopper_car_01.gif -text
 code/webroot/common/images/template/ico_red_dot.png -text
 code/webroot/common/images/template/ico_red_square.png -text
+code/webroot/common/images/template/ie6_home_nav_right_off.gif -text
+code/webroot/common/images/template/ie6_home_nav_right_on_over.gif -text
 code/webroot/common/images/template/loading.gif -text
 code/webroot/common/images/template/page_back.jpg -text
 code/webroot/common/images/template/page_back_home.jpg -text
@@ -319,6 +324,7 @@ code/webroot/common/images/template/salco_search_back.png -text
 code/webroot/common/images/template/salcocontactmap.png -text
 code/webroot/common/images/template/search_back.png -text
 code/webroot/common/images/template/side_bar_bak.png -text
+code/webroot/common/images/template/side_bar_bakIE6.png -text
 code/webroot/common/images/template/side_bar_bak_sp.png -text
 code/webroot/common/images/template/side_bar_bot.png -text
 code/webroot/common/images/template/side_bar_bot_sp.png -text
@@ -328,6 +334,7 @@ code/webroot/common/images/template/side_nav_back.png -text
 code/webroot/common/images/template/span_back.png -text
 code/webroot/common/images/template/sprite_home_nav_right.png -text
 code/webroot/common/images/template/sprite_tabs_download.png -text
+code/webroot/common/images/template/sprite_tabs_sub_sidenav-redonly.jpg -text
 code/webroot/common/images/template/sprite_tabs_sub_sidenav.jpg -text
 code/webroot/common/images/template/sprite_tabs_sub_sidenav.png -text
 code/webroot/common/images/template/vid_thumb.png -text
@@ -497,6 +504,7 @@ code/webroot/common/scripts/articleSelector.js -text
 code/webroot/common/scripts/categorySelector.js -text
 code/webroot/common/scripts/common.js -text
 code/webroot/common/scripts/dragdrop.js -text
+code/webroot/common/scripts/ie6adjustments.js -text
 code/webroot/common/scripts/instantedit.js -text
 code/webroot/common/scripts/jquery-1.4.2.min.js -text
 code/webroot/common/scripts/jquery-1.5.1.min.js -text
@@ -1103,6 +1111,7 @@ code/webroot/common/scripts/swfobject.js -text
 code/webroot/common/scripts/typeahead.js -text
 code/webroot/common/styles/admin.css -text
 code/webroot/common/styles/adminIE.css -text
+code/webroot/common/styles/ie6pngFix.css -text
 code/webroot/common/styles/jquery-ui-1.8.7.custom.css -text
 code/webroot/common/styles/other.css -text
 code/webroot/common/styles/salco_global.css -text
