@@ -42,6 +42,11 @@ $(document).ready(function() {
 	});
 	
 	
+	if(document.all && $.browser.version == "6.0"){
+			
+		$("body").addClass("ie6");
+	}
+	
 	if(document.all && $.browser.version == "7.0"){
 		//
 		runIECorrections();
@@ -300,4 +305,27 @@ function rebinder(nn){
 function highlightRegion(region){
 	$(".sideBarContent .office").parent().addClass("hidden");
 	$("#"+region).removeClass("hidden")
+}
+var stAT=1;
+function rotateBigSplashImgIE6(){
+	
+	numS=$("#imageRotate div").length-1;
+	$("#imageRotate div").css({display:"none"});
+	$("#imageRotate div").eq(stAT).css({display:"block"});
+	if(stAT < numS){
+			stAT++;
+		}else{
+			stAT=0;
+		}
+	setTimeout("rotateBigSplashImgIE6()", 7500);
+}
+
+function changeHomePageRightColumnContentIE6(tothis){
+	$("#tabsRotate div").css({display:"none"});
+	$(tothis).css({display:"block"});
+	$(".homeNavRight li a").removeClass("active");
+	$(".homeNavRight li a[href='"+tothis+"']").addClass("active");
+	
+	
+	
 }
