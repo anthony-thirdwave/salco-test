@@ -722,6 +722,7 @@
 			SELECT CategoryID, CategoryName, CategoryAlias, DisplayOrder, ProductFamilyAttributeID, AttributeValue, ParentCategoryName, ParentCategoryAlias, ParentID
 			from qry_GetProduct
 			Where ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="7,10" list="yes">)
+			and CategoryActive=<cfqueryparam cfsqltype="cf_sql_integer" value="1">
 			order by DisplayOrder, ProductFamilyAttributeID
 		</cfquery>
 
