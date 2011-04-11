@@ -151,7 +151,7 @@
 			<cfinvokeargument name="rewriteTypePublicId" value="#trim(theRewriteType.publicId)#">
 		</cfinvoke>
 	
-		<cfdump var=#addedRewrite#><cfabort>
+		
 		<cfif addedRewrite.errorMessage.message eq "">
 			<cfset message = "The url redirect was successfully added." />
 			<cfset validated = 1 />
