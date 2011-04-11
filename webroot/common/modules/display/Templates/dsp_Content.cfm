@@ -5,6 +5,8 @@
 <link href="/common/styles/salco_global.css" rel="stylesheet" type="text/css" />
 <link href="/common/styles/other.css" rel="stylesheet" type="text/css" />
 <link href="/common/scripts/projekktor/style.css" rel="stylesheet" type="text/css" />
+
+
 <script type="text/javascript" src="/common/scripts/jquery-1.5.1.min.js"></script>
 <cfswitch expression="#TemplateID#">
 	<cfcase value="22"><!--- home --->
@@ -12,22 +14,30 @@
 		<script type="text/javascript" src="/common/scripts/jquery-ui-1.8.7.custom.min.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				$("#tabsRotate").tabs({ fx: { opacity: 'toggle' } });/*.tabs('rotate', 10000);*/
+					if(document.all && $.browser.version != "6.0" || !document.all){ 				   
+				$("#tabsRotate").tabs({ fx: { opacity: 'toggle' } });
 				$('#tabsRotate').hover(function(){
-						$(this).tabs('rotate', 10000, false);
-					},function(){
-						$(this).tabs({ fx: { opacity: 'toggle' } })/*.tabs('rotate', 10000)*/;
+						$(this).tabs({ fx: { opacity: 'toggle' } });
 					}
 				);
+					}
+					
+					if(document.all && $.browser.version == "6.0"){
+						$("#tabsRotate .content").css({display:"none"});
+						$("#tabsRotate .content").eq(0).css({display:"block"});
+						setTimeout("rotateBigSplashImgIE6()", 7500);
+						$(".homeNavRight li a").bind("click",function(e){e.preventDefault();changeHomePageRightColumnContentIE6($(this).attr("href"))});
+						}
 			});
 		
 			$(document).ready(function() { 
-				$('#imageRotate').cycle({
-					fx: 'fade', 
-					speed: 2500
-				});
+				if(document.all && $.browser.version != "6.0" || !document.all){ 
+					$('#imageRotate').cycle({
+						fx: 'fade', 
+						speed: 2500
+					});
 				
-				
+				}
 			});
 		</script>
 		<script type="text/javascript" src="/common/scripts/jquery.client.js"></script>
@@ -41,6 +51,13 @@
 		<script type="text/javascript" src="/common/scripts/common.js"></script>
 	</cfdefaultcase>
 </cfswitch>
+
+<!--[if lte IE 6]>
+
+<link rel="stylesheet" type="text/css" href="/common/styles/ie6pngFix.css" />
+<script type="text/javascript" src="/common/scripts/ie6adjustments.js"></script>
+
+<![endif]-->
 
 <cfif ListFindNoCase("62,64",CategoryTypeID)>
 	<cfif ListLen(CategoryThreadList) GTE "5">
@@ -128,7 +145,7 @@
 		<cfcase value="23,1502"><!--- "Left" template --->
 			<div class="subBack">
 				<div class="holderFull">
-					<div class="holderFullHeaderSp">
+					<div class="holderFullHeaderSp png">
 						<div class="spHolder">	
 							<div class="pad40">
 								<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">
@@ -189,7 +206,7 @@
 							<div id="emptyleftcolumn"></div>
 						</cfif>
 						<div class="holderWide">
-							<div class="holderWideHeader"></div>
+							<div class="holderWideHeader png">&nbsp;</div>
 							<div class="holderWideBack">
 								<div class="fade">
 									<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">
@@ -233,18 +250,18 @@
 								</cfsavecontent>
 								<cfif Trim(ThisRightColumnContent) IS NOT "">
 									<div class="sideBar">
-										<div class="sideBarTop"></div>
-										<div class="sideBarContent">
+										<div class="sideBarTop png"></div>
+										<div class="sideBarContent ">
 											<cfoutput>#ThisRightColumnContent#</cfoutput>
 										</div>
-										<div class="sideBarBot"></div>
+										<div class="sideBarBot png"></div>
 									</div>
 								</cfif>
 							</cfif>
 							<div class="clearFix"></div>
 						</div>
 					</div>
-					<div class="holderWideFooter"></div>
+					<div class="holderWideFooter png"></div>
 				</div>
 				<div id="pageFooter">
 					<cfinclude template="/common/modules/Display/Navigation/dsp_NavFooter.cfm">
