@@ -178,3 +178,169 @@ a.trigger, .last-child a.trigger, a.trigger:hover, .last-child a.trigger:hover{
 #productNav .keepingitReal a.active{
 	background:none !important;
 }
+
+#wide2 .holderFullSp {
+    background-image: url("/common/images/template/holder_sp_back2-ie6.png");
+}
+
+.holderFullHeaderSp {
+    background-image: url("/common/images/template/holder_sp_top-ie6.png");
+}
+
+
+
+.ppplay,
+.pppause  {
+display:block;
+position: absolute;
+top: 0;
+left: 0;
+background: url("/common/images/ie6controls.png") no-repeat left top transparent !important;
+width: 30px;
+height: 30px;
+cursor: pointer;
+border-right: 1px solid #000;
+margin-top: -5px;
+margin-left: -5px;
+}
+.ppplay:hover {
+background: url("/common/images/ie6controls.png") no-repeat left -35px transparent !important;
+}
+.ppplay:active {
+background: url("/common/images/ie6controls.png") no-repeat left -36px transparent !important;
+}
+
+.pppause {
+display:none;
+background: url("/common/images/ie6controls.png") no-repeat left -70px transparent !important;
+}
+.pppause:hover {
+display:none;
+background: url("/common/images/ie6controls.png") no-repeat left -105px transparent !important;
+}
+.pppause:active {
+display:none;
+background: url("/common/images/ie6controls.png") no-repeat left -106px transparent !important;
+}
+
+.pptimeleft {
+background: none !important;
+}
+.ppvmax  {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+.ppvmax:hover  {
+background: none !important;
+}
+.ppvmax:active  {
+background: none !important;
+}
+
+.ppmute  {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border-right: none !important;
+}
+.ppmute:hover  {
+background: none !important;
+}
+.ppmute:active  {
+background: none !important;
+}
+
+.ppvslider {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+.ppvmarker {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+.ppvknob  {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+.ppnext,
+.ppprev {
+display:block;
+position: absolute;
+top: 0;
+right: 255px;
+background: url("/common/images/ie6controls.png") no-repeat -59px top transparent !important;
+width: 30px;
+height: 30px;
+cursor: pointer;
+border-left:1px solid #413e3e;
+border-right:1px solid #000;
+}
+.ppnext { border-right:none;}
+.ppnext:hover {
+background: url("/common/images/ie6controls.png") no-repeat -59px -35px transparent !important;
+}
+.ppnext:active {
+background: url("/common/images/ie6controls.png") no-repeat -59px -36px transparent !important;
+}
+
+.ppprev {
+right: 284px;
+background: url("/common/images/ie6controls.png") no-repeat -32px top transparent !important;
+}
+
+.ppprev:hover {
+background: url("/common/images/ie6controls.png") no-repeat -32px -35px transparent !important;
+}
+.ppprev:active {
+background: url("/common/images/ie6controls.png") no-repeat -32px -36px transparent !important;
+}
+
+.ppplayhead, .pploaded {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+
+
+

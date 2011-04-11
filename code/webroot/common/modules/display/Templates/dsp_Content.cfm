@@ -145,7 +145,7 @@
 		<cfcase value="23,1502"><!--- "Left" template --->
 			<div class="subBack">
 				<div class="holderFull">
-					<div class="holderFullHeaderSp">
+					<div class="holderFullHeaderSp png">
 						<div class="spHolder">	
 							<div class="pad40">
 								<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">

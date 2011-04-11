@@ -949,3 +949,14 @@ h1 {
 /* styling without javascript */
 #gallery { list-style: none; display: block; }
 #gallery li { float: left; margin: 0 10px 10px 0; }
+
+
+
+
+
+
+/* hide the fullscreen video option */
+
+#salcoPlayer_fsenter {
+display: none !important;
+}
