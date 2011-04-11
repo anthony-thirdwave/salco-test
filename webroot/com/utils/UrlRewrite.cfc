@@ -612,6 +612,7 @@
 	<cfset local.returnStruct.matchingId = 0 />
 	<cfset local.returnStruct.messageKey = "" />
 
+
 	<!--- check first if the source or destination url is both null and restricted from being null
 	- values should already be trimmed! --->
 	<cfif trim(arguments.sourceUrl) eq "">

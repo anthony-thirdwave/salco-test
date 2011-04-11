@@ -16,7 +16,7 @@ RewriteRule ^(development.*)$ $1 [L,QSA]
 RewriteRule ^(resources/.*)$ $1 [L,QSA]
 
 #DYNAMIC_CONTENT
-
+RewriteRule ^foo-bar$ page/test-product-family-1
 #END_DYNAMIC_CONTENT
 
 # Handle content alias in the second level e.g. '/content/about'
@@ -24,3 +24,4 @@ RewriteRule ^(.[^/.]*)/(.[^/.]*)/?$ content.cfm?page=$2 [L,QSA]
 
 # Handle content aliases in the top level e.g. '/about'
 RewriteRule ^(.[^/.]*)/?$ content.cfm?page=$1 [L,QSA]
+
