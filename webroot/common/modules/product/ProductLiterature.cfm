@@ -67,7 +67,7 @@
 						<tr class="#classTR#">
 							<td valign="top" class="#class#">#ProductName#</td>
 							<td valign="top" class="#class#">#PartNumber#</td>
-							<td valign="top" class="#class#" nowrap><a href="#PublicDrawing#" target="_blank">#ucase(ListLast(PublicDrawing,"."))# #Round(PublicDrawingSize/1024)#kb</a></td>
+							<td valign="top" class="#class#" nowrap><a href="#APPLICATION.utilsObj.GetFreewheelLink(PublicDrawing)#" target="_blank">#ucase(ListLast(PublicDrawing,"."))# #Round(PublicDrawingSize/1024)#kb</a></td>
 							<td valign="top" class="#class#">#TopProductFamilyName#</td>
 						</tr>
 					</cfoutput>
