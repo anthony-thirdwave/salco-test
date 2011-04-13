@@ -857,3 +857,17 @@ ul.accordion li {
 	font-size:12px;
 	list-style:circle;
 }
+
+.firefox #imageRotate, .chrome #imageRotate, .safari #imageRotate{
+	width:auto;
+	margin-left:2px;
+}
+
+.firefox .subBackHome, .chrome .subBackHome, .safari .subBackHome{
+	background-position: 2px top;
+}
+
+.ie9 .subBackHome {
+	background-position: 2px 2px !important;
+	background:none;
+}
