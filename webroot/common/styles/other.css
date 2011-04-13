@@ -813,3 +813,14 @@ ul.accordion li {
 .product-family ul.pagination li:last-child{
 	padding-right:0px;
 }
+
+#literature-downloads.ie8 .sideBarContent{
+	padding-bottom:10px;
+}
+
+#literature-downloads .downloadContent{
+	background:#FFF;
+	width:100%;
+	display:block;
+	padding-right:20px;
+}
