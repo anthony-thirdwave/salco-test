@@ -818,8 +818,9 @@ ul.accordion li {
 	padding-bottom:10px;
 }
 
-#literature-downloads.ie8 .downloadContent, #literature-downloads.ie7 .downloadContent{
+#literature-downloads .downloadContent{
 	background:#FFF;
 	width:100%;
 	display:block;
+	padding-right:20px;
 }
