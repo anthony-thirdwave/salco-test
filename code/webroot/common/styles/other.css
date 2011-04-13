@@ -824,3 +824,36 @@ ul.accordion li {
 	display:block;
 	padding-right:20px;
 }
+
+#sitemap .fade ul{
+	margin-bottom:0px;
+	padding-bottom:0px;
+}
+
+#sitemap .fade ul li:nth-child(1) a{
+	display:none;
+}
+
+#sitemap .fade ul li:nth-child(1){
+	list-style:none;
+}
+
+#sitemap .fade ul li ul li a, #sitemap .fade ul li:nth-child(1) ul li a{
+	display:inline-block;
+}
+
+#sitemap .fade ul li:nth-child(1) ul li{
+	list-style:inherit;
+}
+
+#sitemap .fade ul li ul li{
+	font-weight:bold;
+	font-size:14px;
+	list-style:disc;
+}
+
+#sitemap .fade ul li ul li ul li{
+	font-weight: normal;
+	font-size:12px;
+	list-style:circle;
+}
