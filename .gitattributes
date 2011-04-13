@@ -92,7 +92,6 @@ code/webroot/common/error/errorhandler.cfm -text
 code/webroot/common/error/errortest.cfm -text
 code/webroot/common/error/process404.cfm -text
 code/webroot/common/flash/jarisplayer.swf -text
-code/webroot/common/images/ContentManager/Thumbs.db -text
 code/webroot/common/images/ContentManager/Widget_Addcategory.gif -text
 code/webroot/common/images/ContentManager/Widget_Addcontent.gif -text
 code/webroot/common/images/ContentManager/Widget_Addsubcategory.gif -text

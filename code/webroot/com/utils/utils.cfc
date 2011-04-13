@@ -863,4 +863,18 @@
 		<cfreturn ReturnString>
 	</cffunction>
 
+	<cffunction name="GetFreewheelLink" returntype="string" output="No">
+		<cfargument name="DWFFile" default="" type="String" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfif ListLast(ARGUMENTS.DWFFile) IS "dwf">
+			<cfset LOCAL.ReturnString="http://freewheel.autodesk.com/dwf.aspx?path=http://#CGI.Server_Name##ARGUMENTS.DWFFile#">
+		<cfelse>
+			<cfset LOCAL.ReturnString="#ARGUMENTS.DWFFile#">
+		</cfif>
+		
+		<cfreturn LOCAL.ReturnString>
+	</cffunction>
+	
 </cfcomponent>
