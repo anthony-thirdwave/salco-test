@@ -868,7 +868,7 @@
 		
 		<cfset VAR LOCAL=StructNew()>
 		
-		<cfif ListLast(ARGUMENTS.DWFFile) IS "dwf">
+		<cfif ListLast(ARGUMENTS.DWFFile,".") IS "dwf">
 			<cfset LOCAL.ReturnString="http://freewheel.autodesk.com/dwf.aspx?path=http://#CGI.Server_Name##ARGUMENTS.DWFFile#">
 		<cfelse>
 			<cfset LOCAL.ReturnString="#ARGUMENTS.DWFFile#">
