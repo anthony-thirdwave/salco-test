@@ -280,6 +280,7 @@ code/webroot/common/images/spacer.gif -text
 code/webroot/common/images/template/btn_contact_sumbit.png -text
 code/webroot/common/images/template/btn_search.png -text
 code/webroot/common/images/template/captcha_test.jpg -text
+code/webroot/common/images/template/closeLightbox.png -text
 code/webroot/common/images/template/contactf.png -text
 code/webroot/common/images/template/contactm.png -text
 code/webroot/common/images/template/content_back.png -text
@@ -317,6 +318,8 @@ code/webroot/common/images/template/ico_red_dot.png -text
 code/webroot/common/images/template/ico_red_square.png -text
 code/webroot/common/images/template/ie6_home_nav_right_off.gif -text
 code/webroot/common/images/template/ie6_home_nav_right_on_over.gif -text
+code/webroot/common/images/template/lightboxNext.png -text
+code/webroot/common/images/template/lightboxPrev.png -text
 code/webroot/common/images/template/loading.gif -text
 code/webroot/common/images/template/page_back.jpg -text
 code/webroot/common/images/template/page_back_home.jpg -text
