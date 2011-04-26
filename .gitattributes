@@ -519,6 +519,7 @@ code/webroot/common/scripts/jquery.cycle.js -text
 code/webroot/common/scripts/jquery.nestedAccordion.js -text
 code/webroot/common/scripts/jquery.smart_autocomplete.js -text
 code/webroot/common/scripts/jquery.ui.tabs.js -text
+code/webroot/common/scripts/lightbox.js -text
 code/webroot/common/scripts/mveditor/editor/_source/classes/fckcontextmenu.js -text
 code/webroot/common/scripts/mveditor/editor/_source/classes/fckdataprocessor.js -text
 code/webroot/common/scripts/mveditor/editor/_source/classes/fckdocumentfragment_gecko.js -text

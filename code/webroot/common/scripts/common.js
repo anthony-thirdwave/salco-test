@@ -63,6 +63,14 @@ $(document).ready(function() {
 		$("body").addClass("ie9");
 	}
 	
+	
+	
+	if($(".holderGallery").length==1){
+		$(function() {
+$('.holderGallery a').lightBox();
+}); 
+		}
+	
  });
 
 	function runIECorrections(){
