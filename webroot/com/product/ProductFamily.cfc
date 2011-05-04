@@ -787,9 +787,9 @@
 					<cfquery name="insert" datasource="#sProductionSiteInformation.ProductionDBDSN#">
 						SET IDENTITY_INSERT t_Resource ON
 						INSERT INTO t_Resource 
-						(ResourceID, Entity, KeyID, ResourcePriority)
+						(ResourceID, Entity, KeyID, ResourcePriority, SpecificationSetID, ResourceTypeID)
 						VALUES
-						(#Val(ResourceID)#,'#Entity#', #Val(KeyID)# , #Val(ResourcePriority)#)
+						(#Val(ResourceID)#,'#Entity#', #Val(KeyID)# , #Val(ResourcePriority)#, #Val(SpecificationSetID)#, #Val(ResourceTypeID)#)
 						SET IDENTITY_INSERT t_Resource OFF
 					</cfquery>
 				</cfoutput>
