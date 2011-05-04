@@ -871,3 +871,49 @@ ul.accordion li {
 	background-position: 2px 2px !important;
 	background:none;
 }
+
+.clearit{
+	clear:both;
+}
+
+#ie6ModalContainer{
+	position:absolute;
+	z-index:90000;
+	background:#000;
+	display:inline;
+	padding:10px;
+	
+}
+
+#ie6ModalContent{
+	margin:20px auto 0px auto;
+}
+
+.ie6 #ie6ModalTopper{
+	padding-bottom:5px;
+}
+
+.ie6 #ie6ModalTopper h3{
+	float:left;
+}
+
+.ie6 #ie6ModalTopper .modalCloseIE6{
+	position:absolute;
+	right:0px;
+	margin-right:10px;
+}
+
+#ie6ModalFooter{
+	padding:10px;
+}/**/
+
+/* type ahead chrome adjustments for regular content */
+
+.chrome #typeahead{
+	width:auto !important;
+	
+}
+
+.chrome #typeahead #returns{
+	width:672px;
+}
