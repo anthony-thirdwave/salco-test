@@ -612,7 +612,7 @@
 					(#Val(CategoryID)#,#Val(LanguageID)#,#Val(ProductFamilyAttributeID)#,N'#AttributeValue#',#Val(AttributeValueID)#)
 				</cfquery>
 				<cfif left(AttributeValue,Len("/resources/category/")) IS "/resources/category/">
-					<cfset Source=REQUEST.GetPathFromURL(AttributeValue)>
+					<cfset Source=application.utilsObj.GetPathFromURL(AttributeValue)>
 					<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##AttributeValue#","//","/","All")>
 					<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
 						username="#sProductionSiteInformation.ProductionFTPUserLogin#"
@@ -804,7 +804,7 @@
 						<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
 							<cfset ThisImageValue=Evaluate("#ThisImage#")>
 							<cfif ThisImageValue IS NOT "">
-								<cfset Source=REQUEST.GetPathFromURL(ThisImageValue)>
+								<cfset Source=application.utilsObj.GetPathFromURL(ThisImageValue)>
 								<cfset Destination=ReplaceNoCase("#sProductionSiteInformation.ProductionFTPRootPath##ThisImageValue#","//","/","All")>
 								<cfftp action="PUTFILE" server="#sProductionSiteInformation.ProductionFTPHost#" 
 									username="#sProductionSiteInformation.ProductionFTPUserLogin#"
