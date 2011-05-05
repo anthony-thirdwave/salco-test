@@ -439,6 +439,7 @@ webroot/common/modules/product/CopyProductImages.cfm -text
 webroot/common/modules/product/ProductArraySort.cfm -text
 webroot/common/modules/product/ProductDetail.cfm -text
 webroot/common/modules/product/ProductDetailOther.cfm -text
+webroot/common/modules/product/ProductExport.cfm -text
 webroot/common/modules/product/ProductFamilyAttributes.cfm -text
 webroot/common/modules/product/ProductFamilyChart.cfm -text
 webroot/common/modules/product/ProductFamilyForm.cfm -text
