@@ -329,8 +329,11 @@
 				ThisFormID="views"
 				IsDisplay="0">
 			
-			<cfif IsDefined("ResourceName_image_new") AND (Trim(ResourceName_image_new) IS NOT "" or Trim(ResourceText_image_new) IS NOT "")>
+			<cfif IsDefined("ResourceName_image_new") AND (Trim(ResourceName_image_new) IS NOT "" or Trim(ResourceText_image_new) IS NOT "" or Trim(MainFilePath_image_newFileObject) IS NOT "")>
 				<cfparam name="ResourceSpecificationSetID_image_new" default="8000">
+				<cfif ResourceName_image_new IS "">
+					<cfset ResourceName_image_new="Image #ArrayLen(aProductFamilyView)+1#">
+				</cfif>
 				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
 					<cfif IsDefined("FORM.#ThisImage#_image_newFileObject") AND evaluate("FORM.#ThisImage#_image_newFileObject") IS NOT "">
 						<cffile action="UPLOAD" 
@@ -433,8 +436,11 @@
 				ThisFormID="downloads"
 				IsDisplay="0">
 			
-			<cfif IsDefined("ResourceName_download_new") AND (Trim(ResourceName_download_new) IS NOT "" or Trim(ResourceText_download_new) IS NOT "")>
+			<cfif IsDefined("ResourceName_download_new") AND (Trim(ResourceName_download_new) IS NOT "" or Trim(ResourceText_download_new) IS NOT "" or Trim(MainFilePath_download_newFileObject) IS NOT "")>
 				<cfparam name="ResourceSpecificationSetID_download_new" default="8000">
+				<cfif ResourceName_download_new IS "">
+					<cfset ResourceName_download_new="Download #ArrayLen(aProductFamilyDownload)+1#">
+				</cfif>
 				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
 					<cfif IsDefined("FORM.#ThisImage#_download_newFileObject") AND evaluate("FORM.#ThisImage#_download_newFileObject") IS NOT "">
 						<cffile action="UPLOAD" 
@@ -628,8 +634,11 @@
 				ThisFormID="views"
 				IsDisplay="0">
 			
-			<cfif IsDefined("ResourceName_image_new") AND (Trim(ResourceName_image_new) IS NOT "" or Trim(ResourceText_image_new) IS NOT "")>
+			<cfif IsDefined("ResourceName_image_new") AND (Trim(ResourceName_image_new) IS NOT "" or Trim(ResourceText_image_new) IS NOT "" or MainFilePath_image_newFileObject IS NOT "")>
 				<cfparam name="ResourceSpecificationSetID_image_new" default="8000">
+				<cfif ResourceName_image_new IS "">
+					<cfset ResourceName_image_new="Image #ArrayLen(aProductView)+1#">
+				</cfif>
 				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
 					<cfif IsDefined("FORM.#ThisImage#_image_newFileObject") AND evaluate("FORM.#ThisImage#_image_newFileObject") IS NOT "">
 						<cffile action="UPLOAD" 
@@ -732,8 +741,11 @@
 				ThisFormID="downloads"
 				IsDisplay="0">
 			
-			<cfif IsDefined("ResourceName_download_new") AND (Trim(ResourceName_download_new) IS NOT "" or Trim(ResourceText_download_new) IS NOT "")>
+			<cfif IsDefined("ResourceName_download_new") AND (Trim(ResourceName_download_new) IS NOT "" or Trim(ResourceText_download_new) IS NOT "" or Trim(MainFilePath_download_newFileObject) IS NOT "")>
 				<cfparam name="ResourceSpecificationSetID_download_new" default="8000">
+				<cfif ResourceName_download_new IS "">
+					<cfset ResourceName_download_new="Download #ArrayLen(aProductDownload)+1#">
+				</cfif>
 				<cfloop index="ThisImage" list="MainFilePath,ThumbnailFilePath">
 					<cfif IsDefined("FORM.#ThisImage#_download_newFileObject") AND evaluate("FORM.#ThisImage#_download_newFileObject") IS NOT "">
 						<cffile action="UPLOAD" 
