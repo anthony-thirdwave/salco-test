@@ -164,7 +164,7 @@
 									result="tempImage">
 
 							<!--- get the location of the uploaded file --->
-							<cfset tempUploadLocation = tempImage.serverDirectory & "\" & tempImage.serverFile />
+							<cfset tempUploadLocation=application.utilsObj.ScrubUploadedFileName(tempImage.ServerDirectory,tempImage.ServerFile)>
 
 							<!--- create an image handler --->
 							<cfobject component="com.utils.image3w" name="imageObj" />
@@ -291,7 +291,7 @@
 								filefield="FORM.#ThisImage#_#r#FileObject"
 								destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
 								nameconflict="MAKEUNIQUE">
-							<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
+							<cfset UploadedFile=application.utilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)>
 							<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 								<cffile action="DELETE" file="#UploadedFile#">
 								<!--- add AddError('aProductViews') here --->
@@ -345,7 +345,7 @@
 							filefield="FORM.#ThisImage#_newFileObject"
 							destination="#MyContentLocale.GetResourceFilePath('documents',APPLICATION.WebrootPath)#"
 							nameconflict="MAKEUNIQUE">
-						<cfset UploadedFile=File.ServerDirectory & "\" & File.ServerFile>
+						<cfset UploadedFile=application.utilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)>
 						<cfif ListFindNoCase("#APPLICATION.MasterFileExtensionList#",".#ListLast('#File.ServerFile#','.')#",";") LTE "0">
 							<cffile action="DELETE" file="#UploadedFile#">
 							<!--- add AddError('aProductViews') here --->
