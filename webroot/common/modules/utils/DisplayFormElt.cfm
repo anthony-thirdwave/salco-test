@@ -398,7 +398,7 @@
 							filefield="#ATTRIBUTES.VarName#FileObject"
 							destination="#ATTRIBUTES.Tempdir#"
 							nameconflict="OVERWRITE">
-						<cfset FileServerPath=File.ServerDirectory & "/" & File.ServerFile>
+						<cfset FileServerPath=application.utilsObj.ScrubUploadedFileName(File.ServerDirectory,File.ServerFile)>
 						<cfset FileServerPath=Replace(FileServerPath,"#ATTRIBUTES.WebRootPath#", "/", "ALL")>
 						<cfset FileServerPath=Replace(FileServerPath,"//","/","All")>
 						<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(FileServerPath,'.')#") GT "0" and ATTRIBUTES.SupressView IS NOT "Y">

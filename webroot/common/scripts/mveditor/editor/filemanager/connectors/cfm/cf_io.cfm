@@ -294,7 +294,7 @@ window.parent.OnUploadCompleted( #errorNumber#, "#JSStringFormat(fileUrl)#", "#J
 	<!--- Do a cleanup of the file name to avoid possible problems --->
 	<!--- Remove \ / | : ? * " < > and control characters --->
 	<cfset sNewFileName = rereplace( sNewFileName, '\\[.]+|\\+|\/+|\|+|\:+|\?+|\*+|"+|<+|>+|[[:cntrl:]]+', "_", "all" )>
-	<cfset sNewFileName = ReReplace(sNewFileName,"[’\!'/:""+=;?&<>|,]","","all")>
+	<cfset sNewFileName = ReReplace(sNewFileName,"[’\!'/:""+=;%?&<>|,]","","all")>
 	<cfset sNewFileName = ReReplace(sNewFileName,"[ ]"," ","all")>
 	<cfset sNewFileName = ReReplace(sNewFileName,"[ ]","-","all")>
 	

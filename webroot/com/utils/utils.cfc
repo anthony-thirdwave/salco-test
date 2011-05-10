@@ -112,7 +112,7 @@
 		<cfargument name="fileName" type="string" required="yes">
 
 		<cfset var local = structNew() />
-		<cfset local.returnValue=lcase(reReplace(arguments.fileName,"[�\!'/:""+=;?&<>|,]","","all"))>
+		<cfset local.returnValue=lcase(reReplace(arguments.fileName,"[�\!'/:""+=;%?&<>|,]","","all"))>
 		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]"," ","all"))>
 		<cfset local.returnValue=lcase(reReplace(local.returnValue,"[ ]","-","all"))>
 		<cfreturn local.returnValue>
