@@ -63,8 +63,35 @@ $(document).ready(function() {
 		$("body").addClass("ie9");
 	}
 	
- });
-
+	if(browserWars=="explorer" && $.browser.version == "6.0"){
+		bchk=false;
+		}else{
+			bchk=true;
+		}
+	
+	
+		/**/
+			
+			if($(".holderGallery").length==1 && bchk==false){
+				
+				
+				for(i=0;i<$(".holderGallery a").length;i++){
+								tempFile=$(".holderGallery a").eq(i).attr("href");
+								tempDescription=$(".holderGallery a").eq(i).attr("title");
+								tempName=$(".holderGallery a").eq(i).attr("rel");
+								
+								$(".holderGallery a").eq(i).attr("href","javascript:openIE6Modal('"+tempFile+"','"+tempDescription+"','"+tempName+"')");
+							}
+				
+			}
+	if($(".holderGallery").length==1 && bchk==true){
+			$(function() {
+				$('.holderGallery a').lightBox();
+				}); 
+			}
+	
+ 	});
+						   
 	function runIECorrections(){
 		
 			if($("body").attr("class")=="product-family explorer" || $("body").attr("class")=="product explorer"){
@@ -325,7 +352,41 @@ function changeHomePageRightColumnContentIE6(tothis){
 	$(tothis).css({display:"block"});
 	$(".homeNavRight li a").removeClass("active");
 	$(".homeNavRight li a[href='"+tothis+"']").addClass("active");
+}
+
+// extremely simple ie6 no frills modal window
+
+var ie6ModalWindowHTML='<table id="ie6ModalBG" width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"><tr><td>&nbsp;</td></tr></table><div id="ie6ModalContainer"><div id="ie6ModalTopper"><a href="javascript:closeIE6Modal()"><img src="/common/images/template/closeLightbox.png" alt="close" class="modalCloseIE6" /></a><span class="clearit"></span></div><div id="ie6ModalContent"><img id="ie6ModalImage" src="about:blank" alt=""  align="middle" /></div><div id="ie6ModalFooter"></div></div>';
+
+function openIE6Modal(im,imDes,imTitle){
+	$("#ie6ModalBG").remove();
+	$("#ie6ModalContainer").remove();
 	
+	$("body").prepend(ie6ModalWindowHTML);
+	$("#ie6ModalBG").css({position:"absolute",top:"0px",left:"0px",opacity:".50",width:"100%",height:"100%",background:"#343434 none",zIndex:89000});
+	$("#ie6ModalBG").css({height:$(window).height()+"px"});
+	$("#ie6ModalImage").attr("src",im);
+	var imgTitle=imTitle;
+	 imgTitle="<h3>"+imgTitle+"</h3>";
 	
-	
+	$("#ie6ModalImage").load(function(){
+		imgWidth=$("#ie6ModalImage").width();
+		windWidth=$(window).width();
+		if(windWidth>imgWidth){
+			imgC=(windWidth-imgWidth)/2;
+			$("#ie6ModalContainer").css({left:imgC+"px",top:20+"px"});
+			$(".sideBar").css({marginLeft:"850px"});
+		}
+	});
+	$("#ie6ModalTopper").prepend(imgTitle);
+	$("#ie6ModalFooter").prepend(imDes);
+	$("html").css({overflow:"hidden"});
+	window.scrollTo(0,0);
+}
+
+function closeIE6Modal(){
+	$("#ie6ModalBG").remove();
+	$("#ie6ModalContainer").remove();
+	$(".sideBar").css({marginLeft:"680px"});
+	$("html").css({overflow:"auto"});
 }
