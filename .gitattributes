@@ -280,6 +280,7 @@ webroot/common/images/spacer.gif -text
 webroot/common/images/template/btn_contact_sumbit.png -text
 webroot/common/images/template/btn_search.png -text
 webroot/common/images/template/captcha_test.jpg -text
+webroot/common/images/template/closeLightbox.png -text
 webroot/common/images/template/contactf.png -text
 webroot/common/images/template/contactm.png -text
 webroot/common/images/template/content_back.png -text
@@ -317,6 +318,8 @@ webroot/common/images/template/ico_red_dot.png -text
 webroot/common/images/template/ico_red_square.png -text
 webroot/common/images/template/ie6_home_nav_right_off.gif -text
 webroot/common/images/template/ie6_home_nav_right_on_over.gif -text
+webroot/common/images/template/lightboxNext.png -text
+webroot/common/images/template/lightboxPrev.png -text
 webroot/common/images/template/loading.gif -text
 webroot/common/images/template/page_back.jpg -text
 webroot/common/images/template/page_back_home.jpg -text
@@ -517,6 +520,7 @@ webroot/common/scripts/jquery.cycle.js -text
 webroot/common/scripts/jquery.nestedAccordion.js -text
 webroot/common/scripts/jquery.smart_autocomplete.js -text
 webroot/common/scripts/jquery.ui.tabs.js -text
+webroot/common/scripts/lightbox.js -text
 webroot/common/scripts/mveditor/editor/_source/classes/fckcontextmenu.js -text
 webroot/common/scripts/mveditor/editor/_source/classes/fckdataprocessor.js -text
 webroot/common/scripts/mveditor/editor/_source/classes/fckdocumentfragment_gecko.js -text
@@ -1116,6 +1120,7 @@ webroot/common/styles/admin.css -text
 webroot/common/styles/adminIE.css -text
 webroot/common/styles/ie6pngFix.css -text
 webroot/common/styles/jquery-ui-1.8.7.custom.css -text
+webroot/common/styles/lightbox.css -text
 webroot/common/styles/other.css -text
 webroot/common/styles/salco_global.css -text
 webroot/content.cfm -text

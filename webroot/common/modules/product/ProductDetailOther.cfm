@@ -44,49 +44,14 @@
 			
 			<cfoutput>
 				<cfif ArrayLen(aView) GT "0">
-					<script type="text/javascript">document.write("<style type='text/css'> ##gallery { display: none; } </style>");</script>
-					<!--[if lt IE 6]><style media="screen,projection" type="text/css">##gallery { display: block; }</style><![endif]-->
-					<script type="text/javascript">
-						var gal = {
-							init : function() {
-								if (!document.getElementById || !document.createElement || !document.appendChild) return false;
-								if (document.getElementById('gallery')) document.getElementById('gallery').id = 'jgal';
-								var li = document.getElementById('jgal').getElementsByTagName('li');
-								li[0].className = 'activeThm';
-								for (i=0; i<li.length; i++) {
-									li[i].style.backgroundImage = 'url(' + li[i].getElementsByTagName('img')[0].src + ')';
-									li[i].style.backgroundRepeat = 'no-repeat';
-									li[i].title = li[i].getElementsByTagName('img')[0].alt;
-									gal.addEvent(li[i],'click',function() {
-										var im = document.getElementById('jgal').getElementsByTagName('li');
-										for (j=0; j<im.length; j++) {
-											im[j].className = '';
-										}
-										this.className = 'activeThm';
-									});
-								}
-							},
-							addEvent : function(obj, type, fn) {
-								if (obj.addEventListener) {
-									obj.addEventListener(type, fn, false);
-								}
-								else if (obj.attachEvent) {
-									obj["e"+type+fn] = fn;
-									obj[type+fn] = function() { obj["e"+type+fn]( window.event ); }
-									obj.attachEvent("on"+type, obj[type+fn]);
-								}
-							}
-						}
-						
-						gal.addEvent(window,'load', function() {
-							gal.init();
-						});
-					</script>
+					<style type="text/css">
+                    	@import url(/common/styles/lightbox.css);
+                    </style>
 			
 					<div class="holderGallery">
 					<ul id="gallery">
 					<cfloop index="i" from="1" to="#ArrayLen(aView)#" step="1">
-						<li><a href="#aView[i].MainFilePath#" target="_blank"><cfif aView[i].ThumbnailFilePath IS NOT "">#aView[i].ThumbnailFilePath#<cfelse>#aView[i].ResourceName#</cfif></a></li>
+						<li><a href="#aView[i].MainFilePath#" title="#aView[i].ResourceText#" rel="#aView[i].ResourceName#"><img src="<cfif aView[i].ThumbnailFilePath IS NOT "">#aView[i].ThumbnailFilePath#<cfelse>#aView[i].ResourceName#</cfif>" alt="" /></a></li>
 					</cfloop>
 					</ul>
 					</div>
