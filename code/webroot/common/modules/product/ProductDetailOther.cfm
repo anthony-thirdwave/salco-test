@@ -51,7 +51,7 @@
 					<div class="holderGallery">
 					<ul id="gallery">
 					<cfloop index="i" from="1" to="#ArrayLen(aView)#" step="1">
-						<li><a href="#aView[i].MainFilePath#" title="images caption goes here" rel="name goes here"><img src='<cfif aView[i].ThumbnailFilePath IS NOT "">#aView[i].ThumbnailFilePath#<cfelse>#aView[i].ResourceName#</cfif>' alt="" /></a></li>
+						<li><a href="#aView[i].MainFilePath#" title="#aView[i].ResourceText#" rel="#aView[i].ResourceName#"><img src="<cfif aView[i].ThumbnailFilePath IS NOT "">#aView[i].ThumbnailFilePath#<cfelse>#aView[i].ResourceName#</cfif>" alt="" /></a></li>
 					</cfloop>
 					</ul>
 					</div>

@@ -101,3 +101,21 @@
 	width: 13px; 
 	float: right;
 }
+#lightbox-image-details-caption{
+	display:block;
+	clear:both;
+	padding-top:5px !important;
+}
+#lightbox-container-image-caption-box{
+	display:block !important;
+}
+
+.lbNavigation{
+	display:block;
+	margin-top:-10px;
+	height:17px;
+}
+
+#lightbox-nav-btnNext {
+	float:right;
+}

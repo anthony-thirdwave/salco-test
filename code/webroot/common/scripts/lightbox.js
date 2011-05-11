@@ -88,7 +88,7 @@
 		 */
 		function _set_interface() {
 			// Apply the HTML markup into body tag
-			$('body').append('<div id="jquery-overlay"></div><div id="lightbox-background"></div><div id="jquery-lightbox"><div id="lightbox-container-image-data-box"><a href="#" id="lightbox-nav-btnPrev"><img src="' + settings.imageBtnPrev + '" /></a><a href="#" id="lightbox-nav-btnNext"><img src="' + settings.imageBtnNext + '" /></a><span id="lightbox-image-details-currentNumber"></span><span id="galleryTitle"></span><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div><div id="lightbox-container-image-box"><div id="lightbox-container-image"><img id="lightbox-image"><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-caption-box"><span id="lightbox-image-details-caption"></span></div></div>');	
+			$('body').append('<div id="jquery-overlay"></div><div id="lightbox-background"></div><div id="jquery-lightbox"><div id="lightbox-container-image-data-box"><span id="lightbox-image-details-currentNumber"></span><span id="galleryTitle"></span><div id="lightbox-secNav"><a href="#" id="lightbox-secNav-btnClose"><img src="' + settings.imageBtnClose + '"></a></div></div><div id="lightbox-container-image-box"><div id="lightbox-container-image"><img id="lightbox-image"><div id="lightbox-loading"><a href="#" id="lightbox-loading-link"><img src="' + settings.imageLoading + '"></a></div></div></div><div id="lightbox-container-image-caption-box"><span class="lbNavigation"><a href="#" id="lightbox-nav-btnPrev" title="Previous"><img src="' + settings.imageBtnPrev + '" /></a><a href="#" id="lightbox-nav-btnNext" title="Next"><img src="' + settings.imageBtnNext + '" /></a></span><span id="lightbox-image-details-caption"></span><span class="clearit"></span></div></div>');	
 			// Get page sizes
 			var arrPageSizes = ___getPageSize();
 			// Style overlay and show it
@@ -142,7 +142,7 @@
 				$('#lightbox-image,#lightbox-container-image-data-box,#lightbox-image-details-currentNumber').hide();
 			} else {
 				// Hide some elements
-				$('#lightbox-image,#lightbox-nav,#lightbox-nav-btnPrev,#lightbox-nav-btnNext,#lightbox-container-image-data-box,#lightbox-container-image-caption-box,#lightbox-image-details-currentNumber').hide();
+				$('#lightbox-image,#lightbox-nav,#lightbox-nav-btnPrev,#lightbox-nav-btnNext,#lightbox-container-image-data-box,#lightbox-container-image-caption-box,#lightbox-image-details-caption,#lightbox-image-details-currentNumber').hide();
 			}
 			// Image preload process
 			var objImagePreloader = new Image();
@@ -184,14 +184,28 @@
 			$('#lightbox-container-image-data-box').css({ width: intImageWidth });
 			$('#lightbox-container-image-caption-box').css({ width: intImageWidth });
 			$('#lightbox-background').css({ width: intWidth });
-			var lbBgHeight = intImageHeight + $('#lightbox-container-image-data-box').height() + (settings.containerBorderSize * 3);
+			
+					
+					ssIT=0;
+				
+				
+					
+			var lbBgHeight = intImageHeight + $('#lightbox-container-image-data-box').height()+ ssIT + (settings.containerBorderSize * 3);
+			
+			
 			var lightboxLeft = Math.abs((arrPageSizes[0] - $('#lightbox-background').width())/2);
 			$('#lightbox-background').css({
 				left:	lightboxLeft,
 				height: lbBgHeight
 			}).show();
 			
+			setTimeout("testCaption()",1000);
 		};
+		
+		
+		
+		
+		
 		/**
 		 * Show the prepared image
 		 */
@@ -211,7 +225,7 @@
 			$('#lightbox-image-details-caption').hide();
 			if ( settings.imageArray[settings.activeImage][1] ) {
 				$('#lightbox-image-details-caption').html(settings.imageArray[settings.activeImage][1]).show();
-				$('#lightbox-container-image-caption-box').show();
+				$('#lightbox-container-image-caption-box,#lightbox-image-details-caption').show();
 				$('#galleryTitle').html(settings.imageArray[settings.activeImage][2]).show();
 				var newLBHeight = $('#lightbox-background').height() + $('#lightbox-container-image-caption-box').height() + settings.containerBorderSize;
 				$('#lightbox-background').css({height: newLBHeight});
@@ -431,3 +445,22 @@
 		return this.unbind('click').click(_initialize);
 	};
 })(jQuery); // Call and execute the function immediately passing the jQuery object
+
+function testCaption(){
+			if(document.all){
+				
+				if($("#lightbox-image-details-caption").attr("style")=="DISPLAY: none"){
+				
+				$('#lightbox-background').css({height:$('#lightbox-background').height()+15+"px"})
+				
+				}
+				
+				}
+				
+			if($("#lightbox-image-details-caption").attr("style")=="display: none;" || document.getElementById("lightbox-image-details-caption").style.display=="none"){
+				
+				$('#lightbox-background').css({height:$('#lightbox-background').height()+15+"px"})
+				
+				}
+				
+			}
