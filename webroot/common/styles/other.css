@@ -94,7 +94,17 @@ div.partsNav {
 }
 
 .featuredDownloads{
-	width:100%;
+	width:100% !important;
+}
+
+.featuredDownloads.centeredTitle th, .centeredTitle th{
+	
+	vertical-align:top;
+	text-align:center !important;
+}
+
+.featuredDownloads td{
+	/*text-align:left;*/
 }
 
 .fade .subordion {
