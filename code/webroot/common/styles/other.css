@@ -97,7 +97,7 @@ div.partsNav {
 	width:100% !important;
 }
 
-.featuredDownloads th{
+.featuredDownloads.centeredTitle th, .centeredTitle th{
 	
 	vertical-align:top;
 	text-align:center !important;
