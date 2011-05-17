@@ -97,6 +97,16 @@ div.partsNav {
 	width:100% !important;
 }
 
+.featuredDownloads th{
+	
+	vertical-align:top;
+	text-align:center !important;
+}
+
+.featuredDownloads td{
+	/*text-align:left;*/
+}
+
 .fade .subordion {
 	min-width:520px;
 }
