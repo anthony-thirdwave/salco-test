@@ -927,3 +927,15 @@ ul.accordion li {
 .chrome #typeahead #returns{
 	width:672px;
 }
+
+.explorer .ieTableTHFix{
+	width:80px;
+}
+
+.ie6 .ieTableTHFix{
+	width:100px;
+}
+
+.ie7 .ieTableTHFix{
+	width:90px;
+}
