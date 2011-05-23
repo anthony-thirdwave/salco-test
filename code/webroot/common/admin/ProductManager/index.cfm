@@ -5,7 +5,7 @@
 <div class="dashModuleWide">
 	<div class="box2">
 		<div class="boxtop2"><div></div></div>
-		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Users</div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Product List</div>
 		<div class="ModuleBody2">
 <cfif 1>
 	<cfmodule template="/common/modules/product/productGrid.cfm" mode="Admin">
