@@ -166,8 +166,8 @@
 
 		<!--- set source and destination --->
 		<cfset local.returnStruct.source= application.webrootPath & ".htaccess">
-		<cfset local.returnStruct.destination="/webroot" & ReplaceNoCase("#local.sProductionSiteInformation.ProductionFTPRootPath#","//","/","All")>
-
+		<cfset local.returnStruct.destination=ReplaceNoCase("#local.sProductionSiteInformation.ProductionFTPRootPath#","//","/","All")>
+<!--- #local.returnStruct.destination#.htaccess --->
 		<!--- put the file --->
 		<cfftp action="PUTFILE"
 			stoponerror="No"
