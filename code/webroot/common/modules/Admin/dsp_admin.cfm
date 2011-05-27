@@ -39,6 +39,7 @@
     		@import url(/common/styles/adminIE.css);
     	</style>
 	<![endif]-->
+	<script type="text/javascript" src="/common/scripts/admin.js"></script>
 	</head>
 	<body bgcolor="#F1F2E8" topmargin=0 leftmargin=0 marginwidth="0" marginheight="0" link="#0099FF" vlink="navy" alink="003333">
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">

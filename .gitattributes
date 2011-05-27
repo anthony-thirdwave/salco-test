@@ -507,6 +507,7 @@ code/webroot/common/process/RunOnce/savelive.cfm -text
 code/webroot/common/process/VerityUpdate.cfm -text
 code/webroot/common/process/_hourly.cfm -text
 code/webroot/common/process/_nightly.cfm -text
+code/webroot/common/scripts/admin.js -text
 code/webroot/common/scripts/articleSelector.js -text
 code/webroot/common/scripts/categorySelector.js -text
 code/webroot/common/scripts/common.js -text
