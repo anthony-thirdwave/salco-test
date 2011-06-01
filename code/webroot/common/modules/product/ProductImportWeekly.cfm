@@ -1,17 +1,16 @@
 <cfsetting RequestTimeOut="60000">
 <cfparam name="ATTRIBUTES.RangeDays" default="1">
 
-<cfif 0>
-	<cfset My_NewArray = ArrayNew(1)>
-    <cfset My_NewArray[1] = "/FileName"/>
-    <cfset My_NewArray[2] = "#ExpandPath('./Chesser_Report_Inspect.xlsx')#"/>
+<cfif 1>
+	<cfset My_NewArray=ArrayNew(1)>
+    <cfset My_NewArray[1]="/FileName"/>
+    <cfset My_NewArray[2]="#ExpandPath('/resources/external/ProductUpdates/ChesserReport.xlsx')#"/>
     <cfdump var="#My_NewArray#">
 	<cfset objConsole=CreateObject("java","com.salco.productsHierarchyDataImport.ProductsHierarchyData_importConsole")>
 	<cfdump var="#objConsole#"/>
 	<cfset result=objConsole.importStatus(My_NewArray)>
 	<cfoutput>The result is: #result#</cfoutput>
 </cfif>
-
 
 <cfset DateToUse=DateAdd("d",0-Val(ATTRIBUTES.RangeDays),Now())>
 
