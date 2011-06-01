@@ -9,6 +9,10 @@
 	<cfset CurrentQueryString=ListLast(CurrentPageURL,"?")>
 </cfif>
 
+<cfset sModeTitle=StructNew()>
+<cfset sModeTitle["edit"]="Edit">
+<cfset sModeTitle["publish"]="Save Live List">
+
 <cfinclude template="/common/admin/MasterView/_InitMasterView.cfm">
 <cfquery name="GetCategoryDetails" datasource="#Application.DSN#">
 	SELECT		CategoryName,qry_GetCategoryWithCategoryLocale.CategoryID,CategoryAlias, CategoryTypeName,
@@ -87,7 +91,7 @@
 			<div class="tab1">
 				<div class="box1">
 					<div class="boxtop1"><div></div></div>
-					<div class="ModuleTitle1">#Ucase(ThisMode)#</div>
+					<div class="ModuleTitle1">#Ucase(sModeTitle[ThisMode])#</div>
 				</div>
 			</div>
 		<cfelse>
@@ -96,7 +100,7 @@
 			<div class="tab1">
 				<div class="box2">
 					<div class="boxtop2"><div></div></div>
-					<div class="ModuleTitle2"><a href="#CurrentPage#?#QueryString#">#Ucase(ThisMode)#</A></div>
+					<div class="ModuleTitle2"><a href="#CurrentPage#?#QueryString#">#Ucase(sModeTitle[ThisMode])#</a></div>
 				</div>
 			</div>
 		</cfif>
