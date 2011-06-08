@@ -384,6 +384,7 @@ code/webroot/common/modules/Admin/Support/admin.cfm -text
 code/webroot/common/modules/Admin/Support/supportrequest.cfm -text
 code/webroot/common/modules/Admin/Workflow/Dashboard.cfm -text
 code/webroot/common/modules/Admin/Workflow/DashboardMasterView.cfm -text
+code/webroot/common/modules/Admin/Workflow/DashboardSaveLive.cfm -text
 code/webroot/common/modules/Admin/Workflow/RequestDashboard.cfm -text
 code/webroot/common/modules/Admin/Workflow/RequestList.cfm -text
 code/webroot/common/modules/Admin/Workflow/RequestListPerCategory.cfm -text
