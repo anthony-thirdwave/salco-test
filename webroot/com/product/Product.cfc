@@ -16,6 +16,7 @@
 	<cfproperty name="ProductThumbnailHoverPath" type="string" default="">
 	<cfproperty name="ProductImageSourcePath" type="string" default="">
 	<cfproperty name="ProductImageStorePath" type="string" default="">
+	<cfproperty name="PublicDrawingSize" type="string" default="">
 	<cfproperty name="aProductFeature" type="array" default="">
 	<cfproperty name="aProductBullet" type="array" default="">
 	<cfproperty name="aProductReview" type="array" default="">

@@ -194,7 +194,7 @@
 			<cfelseif ATTRIBUTES.Version IS "2">
 				<TD nowrap colspan="3" <cfif ATTRIBUTES.CaptionClass IS NOT "">class="#ATTRIBUTES.CaptionClass#"</cfif> bgcolor="#ATTRIBUTES.TDBGColor1#">#ATTRIBUTES.Caption#<img src="/common/images/spacer.gif" height="15" width="1">#MarkPlaceHolder#&nbsp;</TD></TR>#TRTag#
 			<cfelse>
-				<TD bgcolor="#ATTRIBUTES.TDBGColor1#">#MarkPlaceHolder#</TD><TD nowrap <cfif ATTRIBUTES.CaptionClass IS NOT "">class="#ATTRIBUTES.CaptionClass#"</cfif> bgcolor="#ATTRIBUTES.TDBGColor1#" colspan="2">#ATTRIBUTES.Caption#<cfif ATTRIBUTES.ObjectAction IS "ShowForm"><img src="/common/images/spacer.gif" height="15" width="1"></cfif>&nbsp;<BR>
+				<TD bgcolor="#ATTRIBUTES.TDBGColor1#">#MarkPlaceHolder#</TD><TD nowrap <cfif ATTRIBUTES.CaptionClass IS NOT "">class="#ATTRIBUTES.CaptionClass#"</cfif> bgcolor="#ATTRIBUTES.TDBGColor1#" colspan="2">#ATTRIBUTES.Caption#<cfif ATTRIBUTES.ObjectAction IS "ShowForm"><img src="/common/images/spacer.gif" height="15" width="1"></cfif>&nbsp;<br />
 				<cfset TDColspan="colspan=""2""">
 				<cfset BeginningTag="">
 			</cfif>
@@ -242,10 +242,10 @@
 				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
-					<input type="#Trim(ATTRIBUTES.type)#" name="#ATTRIBUTES.VarName#" value="#htmleditformat(ATTRIBUTES.DefaultValue)#" size="#ATTRIBUTES.Size#" maxlength="#ATTRIBUTES.MaxLength#" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"</cfif><cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>&nbsp;<cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
+					<input type="#Trim(ATTRIBUTES.type)#" name="#ATTRIBUTES.VarName#" value="#htmleditformat(ATTRIBUTES.DefaultValue)#" size="#ATTRIBUTES.Size#" maxlength="#ATTRIBUTES.MaxLength#" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"</cfif><cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>&nbsp;<cfif Len(trim(Message)) IS NOT "0"><br />#Message#</cfif>
 				<cfelse>
 					<cfif ATTRIBUTES.CreditCard IS "Y">
-						<cfif Len(trim(ATTRIBUTES.DefaultValue)) gt "5">#ReReplace(Mid(ATTRIBUTES.DefaultValue,1,Len(ATTRIBUTES.DefaultValue)-4),"[0-9]","##","All")##right(ATTRIBUTES.DefaultValue,4)#<br></cfif><cfset SESSION.FooBar=ATTRIBUTES.DefaultValue>
+						<cfif Len(trim(ATTRIBUTES.DefaultValue)) gt "5">#ReReplace(Mid(ATTRIBUTES.DefaultValue,1,Len(ATTRIBUTES.DefaultValue)-4),"[0-9]","##","All")##right(ATTRIBUTES.DefaultValue,4)#<br /></cfif><cfset SESSION.FooBar=ATTRIBUTES.DefaultValue>
 					<cfelse>
 						<cfif TRim(ATTRIBUTES.DefaultValue) IS ""><cfif ATTRIBUTES.BlankMessage IS NOT "">#ATTRIBUTES.BlankMessage#</cfif><cfelse><cfif ATTRIBUTES.Money IS "N"><cfif ATTRIBUTES.type IS "Password"><cfloop index="i" from="1" to="#Len(ATTRIBUTES.DefaultValue)#">*</cfloop><cfelse>#ATTRIBUTES.DefaultValue#</cfif><cfelse>#DollarFormat(Val(ATTRIBUTES.DefaultValue))#</cfif></cfif><input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
 					</cfif>
@@ -317,10 +317,10 @@
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
 					<textarea cols="#ATTRIBUTES.Cols#" rows="#ATTRIBUTES.Rows#" name="#ATTRIBUTES.VarName#" wrap="virtual" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"<cfelse>class="textarea"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>#HTMLEditFormat(ATTRIBUTES.DefaultValue)#</textarea>
-					<cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
+					<cfif Len(trim(Message)) IS NOT "0"><br />#Message#</cfif>
 				<cfelse>
 					<cfif Trim(ATTRIBUTES.DefaultValue) IS "">&nbsp;<cfelse>
-					<cfif ATTRIBUTES.EscapeCRLF IS "Y">#Replace(ATTRIBUTES.DefaultValue,"#Chr(10)#", "<BR>","ALL")#<cfelse>#ATTRIBUTES.DefaultValue#</cfif></cfif><input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
+					<cfif ATTRIBUTES.EscapeCRLF IS "Y">#Replace(ATTRIBUTES.DefaultValue,"#Chr(10)#", "<br />","ALL")#<cfelse>#ATTRIBUTES.DefaultValue#</cfif></cfif><input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
 				</cfif>
 			</cfif>
 			#EndTag#
@@ -338,7 +338,7 @@
 								<option value="-1" <cfif ATTRIBUTES.DefaultValue IS "-1">selected</cfif>></option>
 							</cfif>
 							<cfloop index="i" list="#ATTRIBUTES.OptionValues#" delimiters="}^^{"><option value="#GetToken(i,1,'|')#" <cfif ATTRIBUTES.DefaultValue IS GetToken(i,1,'|')>selected</cfif>>#GetToken(i,2,'|')#</option></cfloop>
-						</select><cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
+						</select><cfif Len(trim(Message)) IS NOT "0"><br />#Message#</cfif>
 					<cfelse>
 						<cfloop index="i" list="#ATTRIBUTES.OptionValues#" delimiters="}^^{"><cfif ATTRIBUTES.DefaultValue IS GetToken(i,1,'|')>#GetToken(i,2,'|')#</cfif></cfloop>
 						<input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
@@ -357,7 +357,7 @@
 				<cfif ShowForm>
 					<select name="#ATTRIBUTES.VarName#" multiple size="#ATTRIBUTES.Size#" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif>>
 						<cfloop index="i" list="#ATTRIBUTES.OptionValues#" delimiters="}^^{"><option value="#GetToken(i,1,'|')#" <cfif ListFindNoCase(ATTRIBUTES.DefaultValue,GetToken(i,1,'|'))>selected</cfif>>#GetToken(i,2,'|')#</option></cfloop>
-					</select><cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
+					</select><cfif Len(trim(Message)) IS NOT "0"><br />#Message#</cfif>
 				<cfelse>
 				<cfloop index="i" list="#ATTRIBUTES.OptionValues#" delimiters="}^^{"><cfif ListFindNoCase(ATTRIBUTES.DefaultValue,GetToken(i,1,'|'))>#GetToken(i,2,'|')#</cfif></cfloop>
 				<input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
@@ -371,24 +371,24 @@
 				<!--- Show input only when: 1) ShowForm  or 2) value is not required
 				or 3) when validating, required value is empty  --->
 				<cfif ShowForm>
-					<cfif FileExists("#APPLICATION.WebrootPath##ATTRIBUTES.DefaultValue#") and ATTRIBUTES.SupressView IS NOT "Y">
+					<cfif FileExists(ExpandPath(ATTRIBUTES.DefaultValue)) and ATTRIBUTES.SupressView IS NOT "Y">
 						<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(ATTRIBUTES.DefaultValue,'.')#") GT "0">
-							<img src="#ATTRIBUTES.DefaultValue#"  border="1"><BR>
+							<img src="#ATTRIBUTES.DefaultValue#"  border="1"><br />
 						<cfelse>
-							<a target="_blank" href="#ATTRIBUTES.DefaultValue#">#ListLast(ATTRIBUTES.DefaultValue,"/")#</A><BR>
+							<a target="_blank" href="#ATTRIBUTES.DefaultValue#">#ListLast(ATTRIBUTES.DefaultValue,"/")#</a><br />
 						</cfif>
 					</cfif>
 					<input type="file" name="#ATTRIBUTES.VarName#FileObject" <cfif ATTRIBUTES.FormEltStyle IS NOT "">style="#ATTRIBUTES.FormEltStyle#"<cfelse>class="textbox"</cfif> <cfif ATTRIBUTES.FormEltJavaScript IS NOT "">#ATTRIBUTES.FormEltJavaScript#</cfif> size="#ATTRIBUTES.Size#">
 					<input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
-					<cfif Len(trim(Message)) IS NOT "0"><BR>#Message#</cfif>
+					<cfif Len(trim(Message)) IS NOT "0"><br />#Message#</cfif>
 				<cfelse>
 					<cfparam name="FORM.#ATTRIBUTES.VarName#FileObject" default="">
 					<cfif Trim(FORM["#ATTRIBUTES.varName#FileObject"]) IS "" or ATTRIBUTES.ObjectName IS NOT "">
-						<cfif FileExists(ReplaceNoCase("#APPLICATION.WebrootPath##ReplaceNocase(ATTRIBUTES.DefaultValue,'/','\','all')#","\\","\","All")) and ATTRIBUTES.SupressView IS NOT "Y">
+						<cfif FileExists(ExpandPath(ATTRIBUTES.DefaultValue)) and ATTRIBUTES.SupressView IS NOT "Y">
 							<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(ATTRIBUTES.DefaultValue,'.')#") GT "0">
-								<img src="#ATTRIBUTES.DefaultValue#"  border="1"><BR>
+								<img src="#ATTRIBUTES.DefaultValue#"  border="1"><br />
 							<cfelse>
-								<a target="_blank" href="#ATTRIBUTES.DefaultValue#">#ListLast(ATTRIBUTES.DefaultValue,"/")#</A><BR>
+								<a target="_blank" href="#ATTRIBUTES.DefaultValue#">#ListLast(ATTRIBUTES.DefaultValue,"/")#</a><br />
 							</cfif>
 						</cfif>
 						<input type="hidden" name="#ATTRIBUTES.VarName#" value="#HTMLEditFormat(ATTRIBUTES.DefaultValue)#">
@@ -402,9 +402,9 @@
 						<cfset FileServerPath=Replace(FileServerPath,"#ATTRIBUTES.WebRootPath#", "/", "ALL")>
 						<cfset FileServerPath=Replace(FileServerPath,"//","/","All")>
 						<cfif ListFindNoCase(ATTRIBUTES.ImageExtensionList,".#ListLast(FileServerPath,'.')#") GT "0" and ATTRIBUTES.SupressView IS NOT "Y">
-							<img src="#FileServerPath#" border="1"><BR>
+							<img src="#FileServerPath#" border="1"><br />
 						<cfelse>
-							<a target="_blank" href="#FileServerPath#">#ListLast(FileServerPath,"/")#</A><BR>
+							<a target="_blank" href="#FileServerPath#">#ListLast(FileServerPath,"/")#</a><br />
 						</cfif>
 						<input type="hidden" name="#ATTRIBUTES.VarName#" value="#FileServerPath#">
 						<cfset FileServerPath=Replace(File.ServerDirectory,"/","\","All")>
