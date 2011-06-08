@@ -384,6 +384,7 @@ webroot/common/modules/Admin/Support/admin.cfm -text
 webroot/common/modules/Admin/Support/supportrequest.cfm -text
 webroot/common/modules/Admin/Workflow/Dashboard.cfm -text
 webroot/common/modules/Admin/Workflow/DashboardMasterView.cfm -text
+webroot/common/modules/Admin/Workflow/DashboardSaveLive.cfm -text
 webroot/common/modules/Admin/Workflow/RequestDashboard.cfm -text
 webroot/common/modules/Admin/Workflow/RequestList.cfm -text
 webroot/common/modules/Admin/Workflow/RequestListPerCategory.cfm -text
@@ -455,6 +456,7 @@ webroot/common/modules/product/ProductImages.cfm -text
 webroot/common/modules/product/ProductImport.cfm -text
 webroot/common/modules/product/ProductImportHelper.cfm -text
 webroot/common/modules/product/ProductImportHelper2.cfm -text
+webroot/common/modules/product/ProductImportWeekly.cfm -text
 webroot/common/modules/product/ProductListing.cfm -text
 webroot/common/modules/product/ProductLiterature.cfm -text
 webroot/common/modules/product/ProductLookup.cfm -text
@@ -506,6 +508,7 @@ webroot/common/process/RunOnce/savelive.cfm -text
 webroot/common/process/VerityUpdate.cfm -text
 webroot/common/process/_hourly.cfm -text
 webroot/common/process/_nightly.cfm -text
+webroot/common/scripts/admin.js -text
 webroot/common/scripts/articleSelector.js -text
 webroot/common/scripts/categorySelector.js -text
 webroot/common/scripts/common.js -text
