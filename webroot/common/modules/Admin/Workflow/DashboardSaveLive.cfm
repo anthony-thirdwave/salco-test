@@ -77,7 +77,7 @@
 					returnVariable="bSuccess"
 					UserID="#SESSION.AdminUserID#"
 					LocaleID="#ATTRIBUTES.LocaleID#"
-					lCategoryID="#lCategoryIDToSave#">
+					lCategoryID="#lCategoryIDToPublish#">
 			</cfif>
 		<cfelse>
 			<cfdump var="#lCategoryIDToPublish#">
