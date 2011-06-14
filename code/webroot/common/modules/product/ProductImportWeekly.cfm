@@ -1,5 +1,5 @@
 <cfsetting RequestTimeOut="60000">
-<cfparam name="ATTRIBUTES.RangeDays" default="1">
+<cfparam name="ATTRIBUTES.RangeDays" default="7">
 
 <cfif 1>
 	<cfset My_NewArray=ArrayNew(1)>
