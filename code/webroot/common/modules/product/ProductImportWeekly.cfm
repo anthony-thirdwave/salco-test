@@ -2,6 +2,7 @@
 <cfparam name="ATTRIBUTES.RangeDays" default="7">
 
 <cfif 1>
+	<!--- path is hardcoded for now --->
 	<cfset My_NewArray=ArrayNew(1)>
     <cfset My_NewArray[1]="/FileName"/>
     <cfset My_NewArray[2]="#ExpandPath('/resources/external/ProductUpdates/ChesserReport.xlsx')#"/>
