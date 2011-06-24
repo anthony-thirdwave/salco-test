@@ -140,7 +140,6 @@ $(document).ready(function() {
 
 	//Default Action
 	$(".downloadContent").hide(); //Hide all content
-	$("ul#tabsDownloads li a:first").addClass("tabActive").show(); //Activate first tab
 	$(".downloadContent:first").show(); //Show first tab content
 	
 	//On Click Event
