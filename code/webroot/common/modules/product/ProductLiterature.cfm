@@ -13,12 +13,12 @@
 </cfif>
 <cfset SearchNUM="20">
 
-<cfset lTab="ProductLiterature,Presentations-Catalogs,Charts-Worksheets,Brochures">
+<cfset lTab="ProductLiterature,Charts,Presentations,Instructions">
 <cfset sTabName=StructNew()>
 <cfset StructInsert(sTabName,"ProductLiterature","Product Literature")>
-<cfset StructInsert(sTabName,"Presentations-Catalogs","Presentations/Catalogs")>
-<cfset StructInsert(sTabName,"Charts-Worksheets","Charts/Worksheets")>
-<cfset StructInsert(sTabName,"Brochures","Brochures")>
+<cfset StructInsert(sTabName,"Charts","Charts")>
+<cfset StructInsert(sTabName,"Presentations","Presentations")>
+<cfset StructInsert(sTabName,"Instructions","Instructions")>
 
 <ul id="tabsDownloads" class="nav">
 	<cfloop index="ThisTab" list="#lTab#">
@@ -33,52 +33,52 @@
 	
 	<cfset LOCAL=StructNew()>
 	
-	<cfset QueryAddRow(ARGUMENTS.qDir)>
-	
-	<cfloop index="ThisCol" list="#ARGUMENTS.qSourceRow.ColumnList#">
-		<cfset QuerySetCell(ARGUMENTS.qDir,ThisCol,ARGUMENTS.qSourceRow[ThisCol][1])>
-	</cfloop>
-	
-	<cfif FindNoCase("spanish",ARGUMENTS.qSourceRow.Name)>
-		<cfset QuerySetCell(ARGUMENTS.qDir,"Language","Spanish")>
-	<cfelse>
-		<cfset QuerySetCell(ARGUMENTS.qDir,"Language","English")>
-	</cfif>
-	
-	
-	<cfset LOCAL.ThisTitle=ARGUMENTS.qSourceRow.Name>
-	<cfset LOCAL.ThisTitle=ListDeleteAt(ARGUMENTS.qSourceRow.Name,ListLen(ARGUMENTS.qSourceRow.Name,"."),".")>
-	<cfset QuerySetCell(ARGUMENTS.qDir,"Title",LOCAL.ThisTitle)>
-	
-	<cfset LOCAL.BaseName=ReplaceNoCase(LOCAL.ThisTitle,"_spanish","","all")>
-	<cfset QuerySetCell(ARGUMENTS.qDir,"BaseName",LOCAL.BaseName)>
-	
-	<cfif ARGUMENTS.rootDirectory IS ARGUMENTS.qSourceRow.Directory>
-		<cfset QuerySetCell(ARGUMENTS.qDir,"Folder","Salco")>
-		<cfset QuerySetCell(ARGUMENTS.qDir,"URL","/resources/external/downloads/#ARGUMENTS.qSourceRow.Name#")>
-	<cfelse>
+	<cfif ListLast(ARGUMENTS.qSourceRow.Name,".") IS "pdf">
+		<cfset QueryAddRow(ARGUMENTS.qDir)>
+		
+		<cfloop index="ThisCol" list="#ARGUMENTS.qSourceRow.ColumnList#">
+			<cfset QuerySetCell(ARGUMENTS.qDir,ThisCol,ARGUMENTS.qSourceRow[ThisCol][1])>
+		</cfloop>
+		
+		<cfif FindNoCase("spanish",ARGUMENTS.qSourceRow.Name)>
+			<cfset QuerySetCell(ARGUMENTS.qDir,"Language","Spanish")>
+		<cfelse>
+			<cfset QuerySetCell(ARGUMENTS.qDir,"Language","English")>
+		</cfif>
+		
+		<cfset LOCAL.ThisTitle=ARGUMENTS.qSourceRow.Name>
+		<cfset LOCAL.ThisTitle=ListDeleteAt(ARGUMENTS.qSourceRow.Name,ListLen(ARGUMENTS.qSourceRow.Name,"."),".")>
+		<cfset QuerySetCell(ARGUMENTS.qDir,"Title",LOCAL.ThisTitle)>
+		<cfset QuerySetCell(ARGUMENTS.qDir,"Description","")>
+		
+		<cfset LOCAL.BaseName=ReplaceNoCase(LOCAL.ThisTitle,"_spanish","","all")>
+		<cfset QuerySetCell(ARGUMENTS.qDir,"BaseName",LOCAL.BaseName)>
+		
 		<cfset LOCAL.ThisDirectory=ListLast(ARGUMENTS.qSourceRow.Directory,"\")>
 		<cfset QuerySetCell(ARGUMENTS.qDir,"Folder",LOCAL.ThisDirectory)>
 		<cfset QuerySetCell(ARGUMENTS.qDir,"URL","/resources/external/downloads/#LOCAL.ThisDirectory#/#ARGUMENTS.qSourceRow.Name#")>
-	</cfif>
-
-	<cfif FileExists("#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#") and ListLast(ARGUMENTS.qSourceRow.Name,".") IS "pdf">
-		<cfpdf action="getInfo" name="LOCAL.sInfo" source="#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#">
-		<cfif LOCAL.sInfo.Title IS NOT "">
-			<cfset QuerySetCell(ARGUMENTS.qDir,"Title",LOCAL.sInfo.Title)>
+		
+		<cfif FileExists("#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#") and ListLast(ARGUMENTS.qSourceRow.Name,".") IS "pdf">
+			<cfpdf action="getInfo" name="LOCAL.sInfo" source="#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#">
+			<cfif LOCAL.sInfo.Title IS NOT "">
+				<cfset QuerySetCell(ARGUMENTS.qDir,"Title",LOCAL.sInfo.Title)>
+			</cfif>
+			<cfif LOCAL.sInfo.Subject IS NOT "">
+				<cfset QuerySetCell(ARGUMENTS.qDir,"Description",LOCAL.sInfo.Subject)>
+			</cfif>
 		</cfif>
 	</cfif>
-	
+		
 	<cfreturn ARGUMENTS.qDir>
 </cffunction>
 
 <cfswitch expression="#ActiveTab#">
-	<cfcase value="Presentations-Catalogs,Charts-Worksheets,Brochures">
+	<cfcase value="ProductLiterature,Charts,Presentations,Instructions">
 		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#")>
 		
 		<cfdirectory action="LIST" directory="#DirectoryToRead#" name="qDirPrime">
 		
-		<cfset qDir=QueryNew("#qDirPrime.ColumnList#,Language,Folder,URL,Title,BaseName")>
+		<cfset qDir=QueryNew("#qDirPrime.ColumnList#,Language,Folder,URL,Title,Description,BaseName")>
 		
 		<cfloop query="qDirPrime">
 			<cfif qDirPrime.type IS "dir">
@@ -113,8 +113,8 @@
                     <thead>
                     <tr>
 						<th align="left">Name</th>
+						<th>Description</th>
 						<th>Available Languages</th>
-						<th>Product Family</th>
 					</tr>
                     </thead>
 					<tbody>
@@ -128,12 +128,12 @@
 							</cfif>
 							<tr class="#classTR#">
 								<td valign="top" class="#class#">#Title#</td>
+								<td valign="top" class="#class#">#Description#</td>
 								<td valign="top" class="#class#" nowrap>
 									<cfoutput group="Language">
 										<a href="#URL#" target="_blank">#Language# #Round(Size/1024)#kb</a>
 									</cfoutput>
 								</td>
-								<td valign="top" class="#class#">#Folder#</td>
 							</tr>
 						</cfoutput>
 					</cfoutput>
