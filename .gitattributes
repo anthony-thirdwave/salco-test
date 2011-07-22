@@ -7,6 +7,8 @@ db/cms_db_creation_scripts/LoadData.sql -text
 db/cms_db_creation_scripts/README.txt -text
 webroot/.htaccess -text
 webroot/Application.cfc -text
+webroot/Invitation_Golf_2011.html -text
+webroot/Invitation_Golf_2011.swf -text
 webroot/com/ContentManager/BlogHandler.cfc -text
 webroot/com/ContentManager/Category.cfc -text
 webroot/com/ContentManager/CategoryHandler.cfc -text
@@ -1128,6 +1130,7 @@ webroot/common/styles/other.css -text
 webroot/common/styles/salco_global.css -text
 webroot/content.cfm -text
 webroot/favicon.ico -text
+webroot/golfinvite.pdf -text svneol=unset#unset
 webroot/index.cfm -text
 webroot/legacyLinks.txt -text
 webroot/robots.txt -text
