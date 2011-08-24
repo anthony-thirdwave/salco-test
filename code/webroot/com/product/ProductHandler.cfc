@@ -635,9 +635,9 @@
 		<cfif GetDupeProducts.RecordCount GT "0">
 			<cfquery name="GetDupeProducts2" datasource="#APPLICATION.DSN#" maxrows="1">
 				select CategoryID, AttributeValue FROM t_ProductAttribute
-				WHERE (ProductFamilyAttributeID = 12) AND
+				WHERE (ProductFamilyAttributeID = <cfqueryparam cfsqltype="cf_sql_integer" value="12">) AND
 				CategoryID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#ValueList(GetDupeProducts.CategoryID)#" List="Yes">) AND
-				len(AttributeValue) > 0
+				len(AttributeValue) > <cfqueryparam cfsqltype="cf_sql_integer" value="0">
 			</cfquery>
 			<cfif GetDupeProducts2.AttributeValue IS NOT "">
 				<cfset LOCAL.ReturnValue=GetDupeProducts2.AttributeValue>
