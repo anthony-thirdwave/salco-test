@@ -56,6 +56,14 @@
 			</cfloop>
 			<cfset aDownload = tempArray>
 			
+			<cfif ThisPublicDrawing IS "">
+				<cfinvoke component="/com/product/producthandler" method="GetPublicDrawingDupe" returnVariable="ThisPublicDrawing"
+					PartNo="#ThisPartNumber#">
+				<cfif ThisPublicDrawing IS NOT "" AND FileExists(ExpandPath(ThisPublicDrawing))>
+					<cfset ThisPublicDrawingSize=GetFileInfo(ExpandPath(thisPublicDrawing)).Size>
+				</cfif>
+			</cfif>
+			
 			<cfoutput>
 				<h1>#ThisPartNumber#</h1>
 				<h3>#GetProduct.CategoryNameDerived#</h3>

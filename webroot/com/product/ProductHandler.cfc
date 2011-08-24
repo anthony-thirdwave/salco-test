@@ -620,6 +620,33 @@
 		<cfreturn LOCAL.GetTopProductFamily>
 	</cffunction>
 	
+	<cffunction name="GetPublicDrawingDupe" returntype="string" output="false">
+		<cfargument name="PartNo" default="" type="string" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		<cfset LOCAL.ReturnValue="">
+		
+		<cfquery name="GetDupeProducts" datasource="#APPLICATION.DSN#">
+			select CategoryID FROM t_ProductAttribute
+			WHERE (ProductFamilyAttributeID = 10) AND
+			AttributeValue=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.PartNo#">
+		</cfquery>
+		
+		<cfif GetDupeProducts.RecordCount GT "0">
+			<cfquery name="GetDupeProducts2" datasource="#APPLICATION.DSN#" maxrows="1">
+				select CategoryID, AttributeValue FROM t_ProductAttribute
+				WHERE (ProductFamilyAttributeID = <cfqueryparam cfsqltype="cf_sql_integer" value="12">) AND
+				CategoryID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#ValueList(GetDupeProducts.CategoryID)#" List="Yes">) AND
+				len(AttributeValue) > <cfqueryparam cfsqltype="cf_sql_integer" value="0">
+			</cfquery>
+			<cfif GetDupeProducts2.AttributeValue IS NOT "">
+				<cfset LOCAL.ReturnValue=GetDupeProducts2.AttributeValue>
+			</cfif>
+		</cfif>
+		
+		<cfreturn LOCAL.ReturnValue>
+	</cffunction>
+	
 	<cffunction name="GetPublicDrawing" returntype="query" output="false">
 		<cfargument name="TopProductFamilyAlias" default="" type="string" required="true">
 		<cfargument name="OrderBy" default="CategoryName" type="string" required="true">
