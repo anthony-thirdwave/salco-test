@@ -42,6 +42,69 @@
 		status="contentSearchStatus"
 		suggestions="always">  
 
+	<!--- product no search --->
+	<cfinvoke component="/com/Product/ProductHandler"
+		method="GetProductsByMatchingProductNo"
+		returnVariable="qProducts"
+		PartNo="#lcase(htmlEditFormat(searchTxt))#">
+	<cfif qProducts.RecordCount GT "0">
+		<cfoutput query="qProducts">
+			
+			<cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
+				select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#qProducts.CategoryID#" cfsqltype="cf_sql_integer"> And
+					LanguageID=<cfqueryparam value="#APPLICATION.LanguageID#" cfsqltype="cf_sql_integer">
+            	AND AttributeValue <> ''
+			</cfquery>
+	
+			<cfquery name="GetDescription" dbtype="query">
+            	select * from GetProductProps
+				where ProductFamilyAttributeID=7
+			</cfquery>
+			
+			<cfif GetDescription.AttributeValue IS NOT "">
+				<cfset Custom1="#GetDescription.AttributeValue#">
+			<cfelse>
+				<cfset Custom1="">
+			</cfif>
+					
+			<cfquery name="getCategoryNameTree" datasource="#APPLICATION.dsn#">
+                select dbo.fn_getCategoryNameHierarchyList(<cfqueryparam value="#qProducts.CategoryID#" cfsqltype="cf_sql_integer">) as categoryNameTree
+            </cfquery>
+            <cfset CategoryNameList=getCategoryNameTree.categoryNameTree>
+
+            <cfquery name="getCategoryAliasTree" datasource="#APPLICATION.dsn#">
+                select dbo.fn_getCategoryAliasHierarchyList(<cfqueryparam value="#qProducts.CategoryID#" cfsqltype="cf_sql_integer">) as categoryAliasTree
+            </cfquery>
+            <cfset CategoryTree=getCategoryAliasTree.categoryAliasTree>
+			
+			<cfif ListLen(CategoryTree,"/") GTE "3">
+				<cfset ThisCategory="Product-#ListGetAt(CategoryTree,'3','/')#">
+			<cfelse>
+				<cfset ThisCategory="">
+			</cfif>
+			
+			<cfset QueryAddRow(ContentSearch,1)>
+            <cfset QuerySetCell(ContentSearch, "Category",ThisCategory)>
+            <cfset QuerySetCell(ContentSearch, "CategoryTree", CategoryTree)>
+            <cfset QuerySetCell(ContentSearch, "Custom1", Custom1)>
+            <cfset QuerySetCell(ContentSearch, "Custom2", 64)>
+            <cfset QuerySetCell(ContentSearch, "Custom4", CategoryNameList)>
+            <cfset QuerySetCell(ContentSearch, "Key", CategoryID)>
+            <cfset QuerySetCell(ContentSearch, "Rank",0)>
+            <cfset QuerySetCell(ContentSearch, "RecordsSearched", ContentSearch.RecordsSearched)>
+			<cfset QuerySetCell(ContentSearch, "Score", 1.0000)>
+			<cfset QuerySetCell(ContentSearch, "Size", 0)>
+			<cfset QuerySetCell(ContentSearch, "Summary", Custom1)>
+			<cfset QuerySetCell(ContentSearch, "Title", CategoryName)>
+			<cfset QuerySetCell(ContentSearch, "Type", "text/x-empty")>
+			<cfset QuerySetCell(ContentSearch, "URL", CategoryAlias)>
+		</cfoutput>
+		
+		 <cfquery name="ContentSearch" dbtype="query">
+		 	select * from ContentSearch 
+			order by rank,score,title
+		 </cfquery>
+	</cfif>
 	
 	<cfif ContentSearch.RecordCount eq 0>
 		<!---  natural search --->
