@@ -647,6 +647,22 @@
 		<cfreturn LOCAL.ReturnValue>
 	</cffunction>
 	
+	<cffunction name="GetProductsByMatchingProductNo" returntype="query" output="false">
+		<cfargument name="PartNo" default="" type="string" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfquery name="LOCAL.GetProductsByMatchingProductNo" datasource="#APPLICATION.DSN#">
+			select *
+			FROM	qry_GetCategoryWithCategoryLocale INNER JOIN
+				t_ProductAttribute ON qry_GetCategoryWithCategoryLocale.CategoryId = t_ProductAttribute.CategoryID AND t_ProductAttribute.ProductFamilyAttributeID = 10
+			WHERE	t_ProductAttribute.AttributeValue 
+			LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.PartNo#%">
+		</cfquery>
+		
+		<cfreturn LOCAL.GetProductsByMatchingProductNo>
+	</cffunction>
+	
 	<cffunction name="GetPublicDrawing" returntype="query" output="false">
 		<cfargument name="TopProductFamilyAlias" default="" type="string" required="true">
 		<cfargument name="OrderBy" default="CategoryName" type="string" required="true">
