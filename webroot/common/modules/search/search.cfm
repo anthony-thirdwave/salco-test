@@ -100,10 +100,10 @@
 			<cfset QuerySetCell(ContentSearch, "URL", CategoryAlias)>
 		</cfoutput>
 		
-		 <cfquery name="ContentSearch" dbtype="query">
-		 	select * from ContentSearch 
-			order by rank,score,title
-		 </cfquery>
+		<cfquery name="ContentSearch" dbtype="query">
+			select * from ContentSearch 
+			order by score,title
+		</cfquery>
 	</cfif>
 	
 	<cfif ContentSearch.RecordCount eq 0>
