@@ -20,6 +20,8 @@
 <cfparam name="searchTxt" default="">
 <cfparam name="SearchCategory" default="">
 
+<cfset searchTxt=Trim(searchTxt)>
+
 <cfset blnCanSearch = len(trim(searchTxt)) OR len(trim(SearchCategory))>
 
 <cfif not blnCanSearch>
