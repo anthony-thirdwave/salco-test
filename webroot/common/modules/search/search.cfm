@@ -85,21 +85,28 @@
 				<cfset ThisCategory="">
 			</cfif>
 			
-			<cfset QueryAddRow(ContentSearch,1)>
-            <cfset QuerySetCell(ContentSearch, "Category",ThisCategory)>
-            <cfset QuerySetCell(ContentSearch, "CategoryTree", CategoryTree)>
-            <cfset QuerySetCell(ContentSearch, "Custom1", Custom1)>
-            <cfset QuerySetCell(ContentSearch, "Custom2", 64)>
-            <cfset QuerySetCell(ContentSearch, "Custom4", CategoryNameList)>
-            <cfset QuerySetCell(ContentSearch, "Key", CategoryID)>
-            <cfset QuerySetCell(ContentSearch, "Rank",0)>
-            <cfset QuerySetCell(ContentSearch, "RecordsSearched", ContentSearch.RecordsSearched)>
-			<cfset QuerySetCell(ContentSearch, "Score", 1.0000)>
-			<cfset QuerySetCell(ContentSearch, "Size", 0)>
-			<cfset QuerySetCell(ContentSearch, "Summary", Custom1)>
-			<cfset QuerySetCell(ContentSearch, "Title", CategoryName)>
-			<cfset QuerySetCell(ContentSearch, "Type", "text/x-empty")>
-			<cfset QuerySetCell(ContentSearch, "URL", CategoryAlias)>
+			<cfquery name="TestIfExists" dbtype="query">
+				select * from ContentSearch 
+				where [key]='#CategoryID#'
+			</cfquery>
+			
+			<cfif TestIfExists.RecordCount IS "0">
+				<cfset QueryAddRow(ContentSearch,1)>
+	            <cfset QuerySetCell(ContentSearch, "Category",ThisCategory)>
+	            <cfset QuerySetCell(ContentSearch, "CategoryTree", CategoryTree)>
+	            <cfset QuerySetCell(ContentSearch, "Custom1", Custom1)>
+	            <cfset QuerySetCell(ContentSearch, "Custom2", 64)>
+	            <cfset QuerySetCell(ContentSearch, "Custom4", CategoryNameList)>
+	            <cfset QuerySetCell(ContentSearch, "Key", CategoryID)>
+	            <cfset QuerySetCell(ContentSearch, "Rank",0)>
+	            <cfset QuerySetCell(ContentSearch, "RecordsSearched", ContentSearch.RecordsSearched)>
+				<cfset QuerySetCell(ContentSearch, "Score", 1.0000)>
+				<cfset QuerySetCell(ContentSearch, "Size", 0)>
+				<cfset QuerySetCell(ContentSearch, "Summary", Custom1)>
+				<cfset QuerySetCell(ContentSearch, "Title", CategoryName)>
+				<cfset QuerySetCell(ContentSearch, "Type", "text/x-empty")>
+				<cfset QuerySetCell(ContentSearch, "URL", CategoryAlias)>
+			</cfif>
 		</cfoutput>
 		
 		<cfquery name="ContentSearch" dbtype="query">
