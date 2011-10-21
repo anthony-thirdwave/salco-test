@@ -6,7 +6,6 @@
 	<cfinclude template="ProductImportWeekly_SSIS.cfm">
 </cfif>
 
-
 <cfset DateToUse=DateAdd("d",0-Val(ATTRIBUTES.RangeDays),Now())>
 
 <cfquery name="GetProductsToImport" datasource="#APPLICATION.DSN#">
