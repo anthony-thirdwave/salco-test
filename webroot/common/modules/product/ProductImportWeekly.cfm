@@ -1,31 +1,38 @@
 <cfsetting RequestTimeOut="60000">
 <cfparam name="ATTRIBUTES.RangeDays" default="7">
+<cfset Commit="1">
 
-<cfif 1>
-	<!--- path is hardcoded for now --->
-	<cfset My_NewArray=ArrayNew(1)>
-    <cfset My_NewArray[1]="/FileName"/>
-    <cfset My_NewArray[2]="#ExpandPath('/resources/external/ProductUpdates/ChesserReport.xlsx')#"/>
-    <cfdump var="#My_NewArray#">
-	<cfset objConsole=CreateObject("java","com.salco.productsHierarchyDataImport.ProductsHierarchyData_importConsole")>
-	<cfdump var="#objConsole#"/>
-	<cfset result=objConsole.importStatus(My_NewArray)>
-	<cfoutput>The result is: #result#</cfoutput>
+<cfif 0>
+	<cfinclude template="ProductImportWeekly_SSIS.cfm">
 </cfif>
 
 
 <cfset DateToUse=DateAdd("d",0-Val(ATTRIBUTES.RangeDays),Now())>
 
-<cfquery name="GetProductsToImport">
+<cfquery name="GetProductsToImport" datasource="#APPLICATION.DSN#">
 	select * from t_ProductsHierarchyData 
 	where
 		Update_Datetime >= <cfqueryparam value="#DateToUse#" cfsqltype="cf_sql_timestamp">
+	ORDER BY import_datetime
 </cfquery>
 
-<cfdump var="#GetProductsToImport#">
+<cfdump var="#GetProductsToImport#" expand="no">
+
+<cfset sAttributeID=StructNew()>
+<cfset StructInsert(sAttributeID,"ProductDescription","7",1)><!--- ProductDescription --->
+<cfset StructInsert(sAttributeID,"PartNumber","10",1)><!--- PartNumber --->
+<cfset StructInsert(sAttributeID,"PublicDrawing","12",1)><!--- PublicDrawing --->
+<cfset StructInsert(sAttributeID,"PublicDrawingSize","23",1)><!--- PublicDrawingSize --->
+
+<cfset lAttributeID="7,10,12,23">
+
+<cfset sAttribute=StructNew()>
+<cfloop index="ThisKey" list="#StructKeyList(sAttributeID)#">
+	<cfset StructInsert(sAttribute,sAttributeID[thisKey],ThisKey,1)>
+</cfloop>
 
 <cfoutput query="GetProductsToImport">
-	<cfquery name="GetTargetProduct">
+	<cfquery name="GetTargetProduct" datasource="#APPLICATION.DSN#">
 		select * from qry_GetProduct 
 		where 
 			ProductFamilyAttributeID=<cfqueryparam value="10" cfsqltype="cf_sql_integer"> and 
@@ -43,63 +50,130 @@
 	</cfif>
 	<hr>
 	Importing #GetProductsToImport.FPartNo#<br>
-	ThisFile: #ThisFile# (#ThisFileSize#)<br>
-	Source: #Source#
+	ThisFile: #ThisFile# (Size:#ThisFileSize#)<br>
+	Source: #Source#<br>
+	
+	<cfset ThisProductDescription="#Trim(GetProductsToImport.FSTDMemo)#">
+	<cfset ThisPublicDrawing="#Trim(ThisFile)#">
+	<cfset ThisPublicDrawingSize="#Trim(ThisFileSize)#">
+	<cfset ThisPartNumber="#Trim(GetProductsToImport.FPartNo)#">
 	
 	<cfif GetTargetProduct.RecordCount GTE "1">
 		<!--- update product --->
+		
 		<cfloop query="GetTargetProduct">
+			<cfif Commit>
+				
+				<cfset ThisWasUpdated="0">
+				
+				<cfif hash(GetTargetProduct.CategoryName) IS NOT Hash(Trim(GetProductsToImport.fdescript))>
+					<cfquery name="UpdateCategory" datasource="#APPLICATION.DSN#">
+						update t_Category set CategoryName=<cfqueryparam value="#GetProductsToImport.fdescript#" cfsqltype="cf_sql_varchar">
+						where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
+					</cfquery>
+					<cfset ThisWasUpdated="1">
+					+++Updated Name: #GetTargetProduct.CategoryName# -> #GetProductsToImport.fdescript#<br>
+				</cfif>
+				
+				<cfloop index="ThisID" list="#lAttributeID#">
+					<cfset ThisValue=Evaluate("This#sAttribute[ThisID]#")>
+					<cfquery name="test" datasource="#APPLICATION.DSN#">
+						select * from t_ProductAttribute 
+						WHERE 
+						CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer"> AND 
+						LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
+						ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
+					</cfquery>
+					
+					<cfif Hash(Trim(ThisValue)) IS NOT hash(Trim(test.AttributeValue))>
+						<cfif test.RecordCount GT "0">
+							<cfquery name="update" datasource="#APPLICATION.DSN#">
+								update t_ProductAttribute Set
+								AttributeValue=N'#Trim(ThisValue)#'
+								WHERE 
+								CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer"> AND 
+								LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
+								ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
+							</cfquery>
+							+++Updated #sAttribute[ThisID]#: #Trim(test.AttributeValue)# -> #Trim(ThisValue)#<br>
+						<cfelse>
+							<cfquery name="isnert" datasource="#APPLICATION.DSN#">
+								INSERT INTO t_ProductAttribute 
+								(CategoryID, LanguageID, ProductFamilyAttributeID, AttributeValue)
+								VALUES
+								(<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">, N'#Trim(ThisValue)#')
+							</cfquery>
+							+++Inserted #sAttribute[ThisID]#: #Trim(ThisValue)#<br>
+						</cfif>
+						<cfset ThisWasUpdated="1">
+					</cfif>
+				</cfloop>
+				
+				<cfif ThisWasUpdated>
+					<cfquery name="UpdateDateStamp" datasource="#APPLICATION.DSN#">
+						update t_ProductsHierarchyData 
+						set import_Datetime=<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">
+						Where ID=<cfqueryparam value="#GetProductsToImport.ID#" cfsqltype="cf_sql_integer">
+					</cfquery>
+				
+					<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
+						UserID="1"
+						Entity="Category"
+						KeyID="#Val(GetTargetProduct.CategoryID)#"
+						Operation="modify"
+						EntityName="#Trim(GetProductsToImport.fdescript)#">
+				</cfif>
+				
+			</cfif>
+			UPDATE #GetProductsToImport.fdescript# (CategoryID: #Val(GetTargetProduct.CategoryID)#) ThisWasUpdated: #ThisWasUpdated#<br>
+		</cfloop>
+		
+	<cfelse>
+		<!--- new product --->
+		<cfif Commit>
 			<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
-			<cfset MyCategory.Constructor(Val(GetTargetProduct.CategoryID))>
+			<cfset MyCategory.Constructor(-1)>
 			<cfset MyCategory.SetProperty("CategoryName",GetProductsToImport.fdescript)>
+			<cfset MyCategory.SetProperty("CategoryActive",1)>
+			<cfset MyCategory.SetProperty("ShowInNavigation",1)>
+			<cfset MyCategory.SetProperty("SourceID",GetProductsToImport.ID)>
+			<cfset MyCategory.SetProperty("CategoryTypeID",64)>
+			<cfset MyCategory.SetProperty("ParentID",5731)>
+			<cfinvoke component="com.ContentManager.CategoryHandler"
+				method="CreateAlias"
+				Name="#GetProductsToImport.FPartNo#"
+				CategoryID="-1"
+				returnVariable="thisCategoryAlias">
+			<cfset MyCategory.SetProperty("CategoryAlias",thisCategoryAlias)>
 			<cfset MyCategory.Save(APPLICATION.WebrootPath,1)>
-			
+			<cfset ThisCategoryID=MyCategory.GetProperty("CategoryID")>
+	
 			<cfset MyProduct=CreateObject("component","com.Product.Product")>
-			<cfset MyProduct.Constructor(Val(GetTargetProduct.CategoryID),APPLICATION.DefaultLanguageID)>
+			<cfset MyProduct.Constructor(Val(ThisCategoryID),APPLICATION.DefaultLanguageID)>
 			<cfset MyProduct.SetProperty("ProductDescription",Trim(GetProductsToImport.FSTDMemo))>
 			<cfset MyProduct.SetProperty("PublicDrawing",Trim(ThisFile))>
 			<cfset MyProduct.SetProperty("PublicDrawingSize",Trim(ThisFileSize))>
 			<cfset MyProduct.SetProperty("PartNumber",GetProductsToImport.FPartNo)>
 			<cfset MyProduct.Save(APPLICATION.WebrootPath,1)>
-		</cfloop>
-	<cfelse>
-		<!--- new product --->
-		
-		<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
-		<cfset MyCategory.Constructor(-1)>
-		<cfset MyCategory.SetProperty("CategoryName",GetProductsToImport.fdescript)>
-		<cfset MyCategory.SetProperty("CategoryActive",1)>
-		<cfset MyCategory.SetProperty("ShowInNavigation",1)>
-		<cfset MyCategory.SetProperty("SourceID",GetProductsToImport.ID)>
-		<cfset MyCategory.SetProperty("CategoryTypeID",64)>
-		<cfset MyCategory.SetProperty("ParentID",5731)>
-		<cfinvoke component="com.ContentManager.CategoryHandler"
-			method="CreateAlias"
-			Name="#GetProductsToImport.FPartNo#"
-			CategoryID="-1"
-			returnVariable="thisCategoryAlias">
-		<cfset MyCategory.SetProperty("CategoryAlias",thisCategoryAlias)>
-		<cfset MyCategory.Save(APPLICATION.WebrootPath,1)>
-		<cfset ThisCategoryID=MyCategory.GetProperty("CategoryID")>
+			
+			<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
+			<cfset MyCategoryLocale.Constructor(-1)>
+			<cfset MyCategoryLocale.SetProperty("CategoryID",ThisCategoryID)>
+			<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
+			<cfset MyCategoryLocale.SetCategoryTypeID(64)>
+			
+			<cfset MyCategoryLocale.SetProperty("DefaultCategoryLocale",1)>
+			<cfset MyCategoryLocale.SetProperty("CategoryLocaleActive",1)>
+			<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
+			<cfset MyCategoryLocale.Save(APPLICATION.WebrootPath,1)>
 
-		<cfset MyProduct=CreateObject("component","com.Product.Product")>
-		<cfset MyProduct.Constructor(Val(ThisCategoryID),APPLICATION.DefaultLanguageID)>
-		<cfset MyProduct.SetProperty("ProductDescription",Trim(GetProductsToImport.FSTDMemo))>
-		<cfset MyProduct.SetProperty("PublicDrawing",Trim(ThisFile))>
-		<cfset MyProduct.SetProperty("PublicDrawingSize",Trim(ThisFileSize))>
-		<cfset MyProduct.SetProperty("PartNumber",GetProductsToImport.FPartNo)>
-		<cfset MyProduct.Save(APPLICATION.WebrootPath,1)>
-		
-		<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
-		<cfset MyCategoryLocale.Constructor(-1)>
-		<cfset MyCategoryLocale.SetProperty("CategoryID",ThisCategoryID)>
-		<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
-		<cfset MyCategoryLocale.SetCategoryTypeID(64)>
-		
-		<cfset MyCategoryLocale.SetProperty("DefaultCategoryLocale",1)>
-		<cfset MyCategoryLocale.SetProperty("CategoryLocaleActive",1)>
-		<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
-		<cfset MyCategoryLocale.Save(APPLICATION.WebrootPath,1)>
+			<cfquery name="UpdateDataStamp" datasource="#APPLICATION.DSN#">
+				update t_ProductsHierarchyData 
+				set import_Datetime=<cfqueryparam value="#Now()#" cfsqltype="cf_sql_timestamp">
+				Where ID=<cfqueryparam value="#GetProductsToImport.ID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+		</cfif>
+		CREATE #GetProductsToImport.fdescript# (CategoryID: #Val(ThisCategoryID)#)<br>
 	</cfif>
 	
 </cfoutput>
