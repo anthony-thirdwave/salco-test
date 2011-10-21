@@ -2,6 +2,13 @@
 <cfparam name="ATTRIBUTES.RangeDays" default="7">
 <cfset Commit="1">
 
+<cfset LogFile="productimport_#Year(now())##Month(now())##day(now())#.txt">
+<cfset LogFilePath="#getDirectoryFromPath(getCurrentTemplatePath())#\#LogFile#">
+<cffile action="WRITE" file="#LogFilePath#" output="Log file created #Now()#" addnewline="Yes">
+
+
+
+
 <cfif 0>
 	<cfinclude template="ProductImportWeekly_SSIS.cfm">
 </cfif>
@@ -47,10 +54,15 @@
 	<cfelse>
 		<cfset ThisFileSize="">
 	</cfif>
+	<cfsavecontent variable="LogText">
+	Importing #GetProductsToImport.FPartNo#
+	ThisFile: #ThisFile# (Size:#ThisFileSize#)
+	Source: #Source#
+	</cfsavecontent>
 	<hr>
-	Importing #GetProductsToImport.FPartNo#<br>
-	ThisFile: #ThisFile# (Size:#ThisFileSize#)<br>
-	Source: #Source#<br>
+	#APPLICATION.utilsObj.AddBreaks(LogText)#
+	<br>
+	<cffile action="APPEND" file="#LogFilePath#" output="#LogText#" addnewline="Yes">
 	
 	<cfset ThisProductDescription="#Trim(GetProductsToImport.FSTDMemo)#">
 	<cfset ThisPublicDrawing="#Trim(ThisFile)#">
@@ -71,7 +83,9 @@
 						where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfset ThisWasUpdated="1">
-					+++Updated Name: #GetTargetProduct.CategoryName# -> #GetProductsToImport.fdescript#<br>
+					<cfset LogText="+++Updated Name: #GetTargetProduct.CategoryName# -> #GetProductsToImport.fdescript#">
+					#LogText#<br>
+					<cffile action="APPEND" file="#LogFilePath#" output="#LogText#" addnewline="Yes">
 				</cfif>
 				
 				<cfloop index="ThisID" list="#lAttributeID#">
@@ -94,7 +108,9 @@
 								LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
 								ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
 							</cfquery>
-							+++Updated #sAttribute[ThisID]#: #Trim(test.AttributeValue)# -> #Trim(ThisValue)#<br>
+							<cfset LogText="+++Updated #sAttribute[ThisID]#: #Trim(test.AttributeValue)# -> #Trim(ThisValue)#">
+							#LogText#<br>
+							<cffile action="APPEND" file="#LogFilePath#" output="#LogText#" addnewline="Yes">
 						<cfelse>
 							<cfquery name="isnert" datasource="#APPLICATION.DSN#">
 								INSERT INTO t_ProductAttribute 
@@ -102,7 +118,9 @@
 								VALUES
 								(<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">, N'#Trim(ThisValue)#')
 							</cfquery>
-							+++Inserted #sAttribute[ThisID]#: #Trim(ThisValue)#<br>
+							<cfset LogText="+++Inserted #sAttribute[ThisID]#: #Trim(ThisValue)#">
+							#LogText#<br>
+							<cffile action="APPEND" file="#LogFilePath#" output="#LogText#" addnewline="Yes">
 						</cfif>
 						<cfset ThisWasUpdated="1">
 					</cfif>
@@ -124,7 +142,9 @@
 				</cfif>
 				
 			</cfif>
-			UPDATE #GetProductsToImport.fdescript# (CategoryID: #Val(GetTargetProduct.CategoryID)#) ThisWasUpdated: #ThisWasUpdated#<br>
+			<cfset LogText="UPDATE #GetProductsToImport.fdescript# (CategoryID: #Val(GetTargetProduct.CategoryID)#) ThisWasUpdated: #ThisWasUpdated#">
+			#LogText#<br>
+			<cffile action="APPEND" file="#LogFilePath#" output="#LogText#" addnewline="Yes">
 		</cfloop>
 		
 	<cfelse>
@@ -172,7 +192,10 @@
 				Where ID=<cfqueryparam value="#GetProductsToImport.ID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfif>
-		CREATE #GetProductsToImport.fdescript# (CategoryID: #Val(ThisCategoryID)#)<br>
+		
+		<cfset LogText="CREATE #GetProductsToImport.fdescript# (CategoryID: #Val(ThisCategoryID)#)">
+		#LogText#<br>
+		<cffile action="APPEND" file="#LogFilePath#" output="#LogText#" addnewline="Yes">
 	</cfif>
-	
+	<cffile action="APPEND" file="#LogFilePath#" output="---------------------------------------" addnewline="Yes">
 </cfoutput>

@@ -10,6 +10,7 @@ code/webroot/common/images/template/home_images_back/*.db
 code/webroot/common/incoming/documents/*
 code/webroot/common/incoming/images/*
 code/webroot/common/modules/Contact/Thumbs.db
+code/webroot/common/modules/product/import/*.txt
 code/webroot/common/modules/sitemap/sitemap.cfm
 code/webroot/crawfish2011
 code/webroot/resources/category/*
