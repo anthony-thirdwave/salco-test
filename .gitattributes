@@ -471,6 +471,8 @@ code/webroot/common/modules/product/ProductSheetDriver.cfm -text
 code/webroot/common/modules/product/_ProductFamilyDetail.cfm -text
 code/webroot/common/modules/product/dsp_PromoText.cfm -text
 code/webroot/common/modules/product/dsp_resource.cfm -text
+code/webroot/common/modules/product/import/ProductImportWeekly.cfm -text
+code/webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
 code/webroot/common/modules/product/productFamilyDetail.cfm -text
 code/webroot/common/modules/search/SearchForm.cfm -text
 code/webroot/common/modules/search/dspSearchFormFilter.cfm -text
