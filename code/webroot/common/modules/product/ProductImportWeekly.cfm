@@ -2,7 +2,7 @@
 <cfparam name="ATTRIBUTES.RangeDays" default="7">
 <cfset Commit="1">
 
-<cfif 1>
+<cfif 0>
 	<cfinclude template="ProductImportWeekly_SSIS.cfm">
 </cfif>
 
@@ -49,7 +49,7 @@
 	</cfif>
 	<hr>
 	Importing #GetProductsToImport.FPartNo#<br>
-	ThisFile: #ThisFile# (#ThisFileSize#)<br>
+	ThisFile: #ThisFile# (Size:#ThisFileSize#)<br>
 	Source: #Source#<br>
 	
 	<cfset ThisProductDescription="#Trim(GetProductsToImport.FSTDMemo)#">
@@ -71,6 +71,7 @@
 						where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfset ThisWasUpdated="1">
+					+++Updated Name: #GetTargetProduct.CategoryName# -> #GetProductsToImport.fdescript#<br>
 				</cfif>
 				
 				<cfloop index="ThisID" list="#lAttributeID#">
@@ -83,7 +84,7 @@
 						ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					
-					<cfif Hash(ThisValue) IS NOT hash(test.AttributeValue)>
+					<cfif Hash(Trim(ThisValue)) IS NOT hash(Trim(test.AttributeValue))>
 						<cfif test.RecordCount GT "0">
 							<cfquery name="update" datasource="#APPLICATION.DSN#">
 								update t_ProductAttribute Set
@@ -93,6 +94,7 @@
 								LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
 								ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
 							</cfquery>
+							+++Updated #sAttribute[ThisID]#: #Trim(test.AttributeValue)# -> #Trim(ThisValue)#<br>
 						<cfelse>
 							<cfquery name="isnert" datasource="#APPLICATION.DSN#">
 								INSERT INTO t_ProductAttribute 
@@ -100,6 +102,7 @@
 								VALUES
 								(<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">, N'#Trim(ThisValue)#')
 							</cfquery>
+							+++Inserted #sAttribute[ThisID]#: #Trim(ThisValue)#<br>
 						</cfif>
 						<cfset ThisWasUpdated="1">
 					</cfif>
@@ -121,7 +124,7 @@
 				</cfif>
 				
 			</cfif>
-			UPDATE #GetProductsToImport.fdescript# (#Val(GetTargetProduct.CategoryID)#) ThisWasUpdated: #ThisWasUpdated#<br>
+			UPDATE #GetProductsToImport.fdescript# (CategoryID: #Val(GetTargetProduct.CategoryID)#) ThisWasUpdated: #ThisWasUpdated#<br>
 		</cfloop>
 		
 	<cfelse>
@@ -169,7 +172,7 @@
 				Where ID=<cfqueryparam value="#GetProductsToImport.ID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 		</cfif>
-		CREATE #GetProductsToImport.fdescript# (#Val(ThisCategoryID)#)<br>
+		CREATE #GetProductsToImport.fdescript# (CategoryID: #Val(ThisCategoryID)#)<br>
 	</cfif>
 	
 </cfoutput>
