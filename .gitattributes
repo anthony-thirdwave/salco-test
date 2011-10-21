@@ -459,7 +459,6 @@ webroot/common/modules/product/ProductImages.cfm -text
 webroot/common/modules/product/ProductImport.cfm -text
 webroot/common/modules/product/ProductImportHelper.cfm -text
 webroot/common/modules/product/ProductImportHelper2.cfm -text
-webroot/common/modules/product/ProductImportWeekly.cfm -text
 webroot/common/modules/product/ProductListing.cfm -text
 webroot/common/modules/product/ProductLiterature.cfm -text
 webroot/common/modules/product/ProductLookup.cfm -text
@@ -470,6 +469,8 @@ webroot/common/modules/product/ProductSheetDriver.cfm -text
 webroot/common/modules/product/_ProductFamilyDetail.cfm -text
 webroot/common/modules/product/dsp_PromoText.cfm -text
 webroot/common/modules/product/dsp_resource.cfm -text
+webroot/common/modules/product/import/ProductImportWeekly.cfm -text
+webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
 webroot/common/modules/product/productFamilyDetail.cfm -text
 webroot/common/modules/search/SearchForm.cfm -text
 webroot/common/modules/search/dspSearchFormFilter.cfm -text
