@@ -4,6 +4,8 @@
 <cfparam name="ATTRIBUTES.RequestAction" default="/common/admin/workflow/request.cfm">
 <cfparam name="ATTRIBUTES.ObjectAction" default="SearchResults">
 <cfparam name="ATTRIBUTES.LocaleID" default="#APPLICATION.DefaultLocaleID#">
+<cfparam name="QuickSave" default="0">
+
 
 <cfset QueryString="">
 <cf_AddToQueryString queryString="#QueryString#" Name="mvca" value="1">
@@ -77,7 +79,8 @@
 					returnVariable="bSuccess"
 					UserID="#SESSION.AdminUserID#"
 					LocaleID="#ATTRIBUTES.LocaleID#"
-					lCategoryID="#lCategoryIDToPublish#">
+					lCategoryID="#lCategoryIDToPublish#"
+					QuickSave="#Val(QuickSave)#">
 			</cfif>
 		<cfelse>
 			<cfdump var="#lCategoryIDToPublish#">
@@ -186,6 +189,7 @@
 					<input type="hidden" name="NumItems" value="#Counter#">
 					<TR>
 					<TD colspan="4" align="right">
+					Save only page and product data only (faster)?<input type="checkbox" value="1" name="QuickSave"><br>
 					<input type="submit" name="ButtonSubmit2" tabindex="#Counter#" class="Button" value="Save Live">
 					</TD></form></tr>
 				</cfoutput>
