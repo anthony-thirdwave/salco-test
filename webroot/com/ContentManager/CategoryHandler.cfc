@@ -812,38 +812,90 @@
 		<cfargument name="UserID" default="" type="numeric" required="true">
 		<cfargument name="LocaleID" default="#APPLICATION.LocaleID#" type="numeric" required="true">
 		<cfargument name="lCategoryID" default="" type="string" required="true">
+		<cfargument name="QuickSave" default="0" type="boolean" required="true">
 	
+		<cfinvoke component="com.ContentManager.CategoryHandler"
+			method="GetProductionSiteInformation"
+			returnVariable="sProductionSiteInformation"
+			CategoryID="#ListFirst(ARGUMENTS.lCategoryID)#">
+		<cfif IsStruct(sProductionSiteInformation) and StructKeyExists(sProductionSiteInformation,"ProductionDBDSN") and sProductionSiteInformation["ProductionDBDSN"] IS NOT "">
+			<cfset ProductionDBDSN=sProductionSiteInformation["ProductionDBDSN"]>
+		<cfelse>
+			<cfset ProductionDBDSN="">
+		</cfif>
+
 		<cfset StartTickCount=GetTickCount()>
 		<cfloop index="ThisCategoryID" list="#ARGUMENTS.lCategoryID#">
+			<cfif ARGUMENTS.QuickSave>
+				<cfset SaveThis="0">
+				<cfif ProductionDBDSN IS NOT "">
+					<cfquery name="testlive" datasource="#ProductionDBDSN#">
+						select CategoryID from t_Category
+						Where CategoryID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="cf_sql_integer">
+					</cfquery>
+					<cfif TestLive.RecordCount IS "0">
+						<cfset SaveThis="1">
+					</cfif>
+				</cfif>
+			<cfelse>
+				<cfset SaveThis="1">
+			</cfif>
+			
 			<cfset MyCategory=CreateObject("component","/com/ContentManager/Category")>
 			<cfset MyCategory.Constructor(Val(ThisCategoryID))>
 			<cfset MyCategory.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
 			<cfoutput>saved #ThisCategoryID# category: #GetTickCount()-StartTickCount#<BR></cfoutput>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetCategoryLocaleID" returnVariable="CategoryLocaleID"
-				CategoryID="#ThisCategoryID#"
-				LocaleID="#ARGUMENTS.LocaleID#">
-			<cfif Val(CategoryLocaleID) GT "0">
-				<cfset MyCategoryLocale=CreateObject("component","/com/ContentManager/CategoryLocale")>
-				<cfset MyCategoryLocale.Constructor(Val(CategoryLocaleID))>
-				<cfset MyCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
-				saved #ThisCategoryID# category locale: #GetTickCount()-StartTickCount#<BR>
+			
+			<cfif SaveThis>
+				<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetCategoryLocaleID" returnVariable="CategoryLocaleID"
+					CategoryID="#ThisCategoryID#"
+					LocaleID="#ARGUMENTS.LocaleID#">
+				<cfif Val(CategoryLocaleID) GT "0">
+					<cfset MyCategoryLocale=CreateObject("component","/com/ContentManager/CategoryLocale")>
+					<cfset MyCategoryLocale.Constructor(Val(CategoryLocaleID))>
+					<cfset MyCategoryLocale.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
+					<cfoutput>saved #ThisCategoryID# category locale: #GetTickCount()-StartTickCount#<BR></cfoutput>
+				</cfif>
+				<cfset ThisCategoryTypeID="#MyCategory.GetProperty('CategoryTypeID')#">
+			<cfelse>
+				<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails"
+					CategoryID="#ThisCategoryID#" returnvariable="qGetCategoryBasicDetails">
+				<cfset ThisCategoryTypeID=qGetCategoryBasicDetails.CategoryTypeID>
+				<cfoutput>skipped #ThisCategoryID# category locales (quicksave): #GetTickCount()-StartTickCount#<BR></cfoutput>
 			</cfif>
-			<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetContentAndContentLocale" returnVariable="qContent"
-				CategoryID="#ThisCategoryID#"
-				LocaleID="#ARGUMENTS.LocaleID#">
-			<cfif qContent.RecordCount GT "0">
-				<cfoutput query="qContent" group="ContentID">
-					<cfset MyContent=CreateObject("component","/com/ContentManager/Content")>
-					<cfset MyContent.Constructor(Val(ContentID))>
-					<cfset MyContent.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
-					saved #ContentID# content #GetTickCount()-StartTickCount#<BR>
-					<cfoutput group="ContentLocaleID">
-						<cfset MyContentLocale=CreateObject("component","/com/ContentManager/ContentLocale")>
-						<cfset MyContentLocale.Constructor(Val(ContentLocaleID))>
-						<cfset MyContentLocale.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
-						saved #ContentLocaleID# content locale #GetTickCount()-StartTickCount#<BR>
+			
+			<cfswitch expression="#ThisCategoryTypeID#">
+				<cfcase value="62">
+					<cfset MyProductFamily=CreateObject("component","com.Product.ProductFamily")>
+					<cfset MyProductFamily.Constructor(Val(ThisCategoryID),SESSION.CurrentAdminLanguageID)>
+					<cfset MyProductFamily.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.UserID))>
+					<cfoutput>saved #ThisCategoryID# product family: #GetTickCount()-StartTickCount#<BR></cfoutput>
+				</cfcase>
+				<cfcase value="64">
+					<cfset MyProduct=CreateObject("component","com.Product.Product")>
+					<cfset MyProduct.Constructor(Val(ThisCategoryID),SESSION.CurrentAdminLanguageID)>
+					<cfset MyProduct.SaveToProduction(APPLICATION.WebrootPath,Val(SESSION.UserID))>
+					<cfoutput>saved #ThisCategoryID# product: #GetTickCount()-StartTickCount#<BR></cfoutput>
+				</cfcase>
+			</cfswitch>
+			<cfif SaveThis>
+				<cfinvoke component="/com/ContentManager/CategoryHandler" method="GetContentAndContentLocale" returnVariable="qContent"
+					CategoryID="#ThisCategoryID#"
+					LocaleID="#ARGUMENTS.LocaleID#">
+				<cfif qContent.RecordCount GT "0">
+					<cfoutput query="qContent" group="ContentID">
+						<cfset MyContent=CreateObject("component","/com/ContentManager/Content")>
+						<cfset MyContent.Constructor(Val(ContentID))>
+						<cfset MyContent.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
+						saved #ContentID# content #GetTickCount()-StartTickCount#<BR>
+						<cfoutput group="ContentLocaleID">
+							<cfset MyContentLocale=CreateObject("component","/com/ContentManager/ContentLocale")>
+							<cfset MyContentLocale.Constructor(Val(ContentLocaleID))>
+							<cfset MyContentLocale.SaveToProduction(APPLICATION.WebrootPath,Val(ARGUMENTS.UserID))>
+							saved #ContentLocaleID# content locale #GetTickCount()-StartTickCount#<BR>
+						</cfoutput>
 					</cfoutput>
-				</cfoutput>
+				</cfif>
 			</cfif>
 		</cfloop>
 		<cfreturn true>
