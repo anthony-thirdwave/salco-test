@@ -60,6 +60,37 @@
 		<cfreturn LOCAL.GetLanguages>
 	</cffunction>
 	
+	<cffunction name="GetProductListProto" returntype="string" output="false">
+		<cfargument name="ProductFamilyID" default="" type="numeric" required="true">
+		<cfargument name="LocaleID" default="#APPLICATION.LocaleID#" type="numeric" required="true">
+		<cfargument name="LanguageID" default="#APPLICATION.LanguageID#" type="numeric" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfquery name="LOCAL.GetProductListProto" datasource="#APPLICATION.DSN#">
+			select t_Category.CategoryID, t_Category.CategoryTypeID, t_Category.SourceID, t_category.CategoryName as CategoryNameDerived
+				FROM	t_Category LEFT OUTER JOIN
+						t_Category AS t_Category_1 ON t_Category.SourceID = t_Category_1.CategoryID
+				WHERE	t_Category.ParentID=<cfqueryparam value="#val(ARGUMENTS.ProductFamilyID)#" cfsqltype="cf_sql_integer">
+					AND (t_Category.CategoryTypeID=<cfqueryparam value="64" cfsqltype="cf_sql_integer"> OR
+                      		(t_Category.CategoryTypeID=<cfqueryparam value="80" cfsqltype="cf_sql_integer"> AND 
+							 t_Category_1.CategoryTypeID=<cfqueryparam value="64" cfsqltype="cf_sql_integer">)
+						)
+					AND t_category.CategoryActive=<cfqueryparam value="1" cfsqltype="cf_sql_integer"> 
+					AND	t_category.ShowInNavigation=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
+				Order by CategoryNameDerived
+		</cfquery>
+		
+		<cfset LOCAL.lCategoryID="">
+		<cfoutput query="LOCAL.GetProductListProto">
+			<cfset LOCAL.lCategoryID=ListAppend(LOCAL.lCategoryID,LOCAL.GetProductListProto.CategoryID)>
+		</cfoutput>
+		
+		<cfset SetVariable("REQUEST.GetProductIDListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#",LOCAL.lCategoryID)>
+		
+		<cfreturn LOCAL.lCategoryID>
+	</cffunction>
+	
 	<cffunction name="GetProductListBasic" returntype="query" output="false">
 		<cfargument name="ProductFamilyID" default="" type="numeric" required="true">
 		<cfargument name="LocaleID" default="#APPLICATION.LocaleID#" type="numeric" required="true">
@@ -69,26 +100,31 @@
 		
 		<cfset VAR LOCAL=StructNew()>
 		
+		<cfinvoke component="/com/product/productFamilyHandler" 
+			method="GetProductListProto" 
+			returnVariable="LOCAL.lCategoryIDProto"
+			ProductFamilyID="#ARGUMENTS.ProductFamilyID#"
+			LocaleID="#ARGUMENTS.LocaleID#"
+			LanguageID="#ARGUMENTS.LanguageID#">
+		
 		<cfif APPLICATION.GetAllLocale.RecordCount GT "1">
 			<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 				<cfprocresult name="LOCAL.GetProductListPrime">
 				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ARGUMENTS.LocaleID)#" null="No">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
-				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#val(ARGUMENTS.ProductFamilyID)#" null="NO">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="" null="yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
-				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
-				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="64" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="#LOCAL.lCategoryIDProto#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="" null="Yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="1" null="No">
 			</cfstoredproc>
 		<cfelse>
 			<cfquery name="LOCAL.GetProductListPrime" datasource="#APPLICATION.DSN#">
 				select *, CategoryName as CategoryNameDerived from t_Category
-				where ParentID=<cfqueryparam value="#val(ARGUMENTS.ProductFamilyID)#" cfsqltype="cf_sql_integer"> AND
-				CategoryTypeID=<cfqueryparam value="64" cfsqltype="cf_sql_integer"> AND
-				CategoryActive=<cfqueryparam value="1" cfsqltype="cf_sql_integer"> AND
-				ShowInNavigation=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
+				where CategoryID IN (<cfqueryparam value="#LOCAL.lCategoryIDProto#" cfsqltype="cf_sql_integer" list="Yes">)
+				order by CategoryNameDerived
 			</cfquery>
 		</cfif>
 		
@@ -106,6 +142,13 @@
 		
 		<cfset VAR LOCAL=StructNew()>
 		
+		<cfinvoke component="/com/product/productFamilyHandler" 
+			method="GetProductListProto" 
+			returnVariable="LOCAL.lCategoryIDProto"
+			ProductFamilyID="#ARGUMENTS.ProductFamilyID#"
+			LocaleID="#ARGUMENTS.LocaleID#"
+			LanguageID="#ARGUMENTS.LanguageID#">
+			
 		<cfif IsDefined("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#")>
 			<cfset SetVariable("LOCAL.GetProductListPrime",Evaluate("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#"))>
 		<cfelse>
@@ -114,18 +157,29 @@
 				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ARGUMENTS.LocaleID)#" null="No">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
-				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#val(ARGUMENTS.ProductFamilyID)#" null="NO">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="" null="Yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
-				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
-				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="64" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="#LOCAL.lCategoryIDProto#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="" null="Yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
 				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
 			</cfstoredproc>
 		</cfif>
 		
 		<cfset LOCAL.lCategoryID="">
+		<cfset LOCAL.sAliasSubstitute=StructNew()>
+		
 		<cfoutput query="LOCAL.GetProductListPrime">
-			<cfset LOCAL.lCategoryID=ListAppend(LOCAL.lCategoryID,LOCAL.GetProductListPrime.CategoryID)>
+			<cfquery name="LOCAL.TestIfRepeated" datasource="#APPLICATION.DSN#">
+				select CategoryAlias, SourceID, CategoryTypeID from t_Category
+				Where CategoryID=<cfqueryparam value="#LOCAL.GetProductListPrime.CategoryID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+			<cfif LOCAL.TestIfRepeated.CategoryTypeID IS "80">
+				<cfset LOCAL.lCategoryID=ListAppend(LOCAL.lCategoryID,LOCAL.TestIfRepeated.SourceID)>
+				<cfset StructInsert(LOCAL.sAliasSubstitute,LOCAL.TestIfRepeated.SourceID,LOCAL.TestIfRepeated.CategoryAlias)>
+			<cfelse>
+				<cfset LOCAL.lCategoryID=ListAppend(LOCAL.lCategoryID,LOCAL.GetProductListPrime.CategoryID)>
+			</cfif>
 		</cfoutput>
 		
 		<cfquery name="LOCAL.GetProductList" dbtype="query">
@@ -141,13 +195,21 @@
 				</cfif>
 			</cfloop>
 			<cfset LOCAL.lCategoryID=LOCAL.ThisLCategoryID>
-			<cfquery name="LOCAL.GetProductList" dbtype="query">
-				select * from [LOCAL].GetProductListPrime
+			<!--- Go back to db with updated list of categories that can either be a product or a repeated product --->
+			<cfquery name="LOCAL.GetProductList" datasource="#APPLICATION.DSN#">
+				select *, CategoryName as CategoryNameDerived from t_Category
 				where CategoryID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#LOCAL.lCategoryID#" List="Yes">)
 				order by CategoryID
 			</cfquery>
-			
 		</cfif>
+		
+		<!--- Fix alias so that alias goes to relevant one, not the source --->
+		<cfoutput query="LOCAL.GetProductList">
+			<cfif StructKeyExists(LOCAL.sAliasSubstitute,LOCAL.GetProductList.CategoryID)>
+				<cfset QuerySetCell(LOCAL.GetProductList,"CategoryAlias",LOCAL.sAliasSubstitute[LOCAL.GetProductList.CategoryID],LOCAL.GetProductList.CurrentRow)>
+			</cfif>
+		</cfoutput>
+		
 		
 		<cfinvoke component="/com/product/productHandler" 
 			method="GetProductAttributeStruct" 

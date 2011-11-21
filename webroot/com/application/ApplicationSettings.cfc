@@ -178,7 +178,7 @@
 		<cfset APPLICATION.ContentEditorUserGroupID = 3 />
 		<cfset APPLICATION.AdminUserGroupID = 4 />
 		<cfset APPLICATION.ContentCategoryTypeID = 60 />
-		<cfset APPLICATION.lVisibleCategoryTypeID = "60,62,64,66,68,69,70,75,76,77,78" />
+		<cfset APPLICATION.lVisibleCategoryTypeID = "60,62,64,66,68,69,70,75,76,77,78,80" />
 
 		<!--- id's referring to t_Label labelGroupId --->
 		<cfset APPLICATION.TemplateTypeLabelGroupID = 20 />

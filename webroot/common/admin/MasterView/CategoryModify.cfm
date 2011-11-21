@@ -102,7 +102,7 @@
 		<!--- if the form is submitted, load the form values into the object --->
 
 		<!--- Handling MyCategory --->
-		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID">
+		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID,SourceID">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategory.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
@@ -1118,6 +1118,7 @@
 				</cfoutput>
 				<cfset MyCategory.SetProperty("CategoryPriority",10+val(MaxCategoryPriority))>
 			</cfif>
+			
 			<cfset MyCategory.Save(APPLICATION.WebrootPath,SESSION.AdminUserID)>
 
 			<cfloop index="ThisImage" list="#lImageName#">
@@ -1145,7 +1146,7 @@
 				<cfdefaultcase>
 				</cfdefaultcase>
 			</cfswitch>
-
+			
 			<cfif Trim(ReturnURL) IS "">
 				<cfset Location=GetToken(ATTRIBUTES.ListPage,1,"?")>
 				<cfset querystring=GetToken(ATTRIBUTES.ListPage,2,"?")>

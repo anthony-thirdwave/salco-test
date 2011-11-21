@@ -508,6 +508,7 @@ webroot/common/process/ContentGenerate.cfm -text
 webroot/common/process/RSSUpdate.cfm -text
 webroot/common/process/RunOnce/MarkAllAsSavedLive.cfm -text
 webroot/common/process/RunOnce/ProductLiteratureFix.cfm -text
+webroot/common/process/RunOnce/ScanDuplicates.cfm -text
 webroot/common/process/RunOnce/savelive.cfm -text
 webroot/common/process/VerityUpdate.cfm -text
 webroot/common/process/_hourly.cfm -text
