@@ -176,7 +176,7 @@
 			</cfquery>
 			<cfif LOCAL.TestIfRepeated.CategoryTypeID IS "80">
 				<cfset LOCAL.lCategoryID=ListAppend(LOCAL.lCategoryID,LOCAL.TestIfRepeated.SourceID)>
-				<cfset StructInsert(LOCAL.sAliasSubstitute,LOCAL.TestIfRepeated.SourceID,LOCAL.TestIfRepeated.CategoryAlias)>
+				<cfset StructInsert(LOCAL.sAliasSubstitute,LOCAL.TestIfRepeated.SourceID,LOCAL.TestIfRepeated.CategoryAlias,1)>
 			<cfelse>
 				<cfset LOCAL.lCategoryID=ListAppend(LOCAL.lCategoryID,LOCAL.GetProductListPrime.CategoryID)>
 			</cfif>
