@@ -18,7 +18,7 @@
 	SELECT		CategoryName,qry_GetCategoryWithCategoryLocale.CategoryID,CategoryAlias, CategoryTypeName,
 				CategoryActive, ParentID, CategoryTypeID, t_permissions.*, CategoryURL,
 				CategoryPropertiesID, CategoryPropertiesPacket, CategoryLocaleName,
-				categoryLocaleActive, CategoryLocaleID, LocaleID, TemplateID
+				categoryLocaleActive, CategoryLocaleID, LocaleID, TemplateID, SourceID
 	FROM		qry_GetCategoryWithCategoryLocale
 		INNER JOIN	t_Permissions
 	ON			qry_GetCategoryWithCategoryLocale.CategoryID = t_Permissions.CategoryID
@@ -180,7 +180,16 @@
 				<td class="datatitle1">Type:</td>
 				<td class="datacontent1">#CategoryTypeName#</td>
 			</tr>
-	
+			<cfif CategoryTypeID IS "80">
+				<cfinvoke component="com.ContentManager.CategoryHandler" method="GetCategoryBasicDetails"
+					CategoryID="#SourceID#" returnvariable="SourcePageDetails">
+				<cfif SourcePageDetails.RecordCount GT "0">
+					<tr valign="top">
+						<td class="datatitle1"></td>
+						<td class="datacontent1">Source Page: <a href="/common/admin/masterview/index.cfm?mvcid=#SourceID#">#SourcePageDetails.CategoryName#</a></td>
+					</tr>
+				</cfif>
+			</cfif>
 			<tr valign="top">
 				<td class="datatitle1">Active:</td>
 				<td class="datacontent1">#YesNoFormat(CategoryActive)#</td>
@@ -189,6 +198,18 @@
 				<tr valign="top">
 					<td class="datatitle1">Override URL:</td>
 					<td class="datacontent1">#CategoryURL#</td>
+				</tr>
+			</cfif>
+			<cfinvoke component="com.ContentManager.CategoryHandler" method="GetRepeatedInstancesOf"
+				CategoryID="#CategoryID#" returnvariable="GetRepeatedInstancesOf">
+			<cfif GetRepeatedInstancesOf.RecordCount GT "0">
+				<tr valign="top">
+					<td class="datatitle1">Duplicate Pages:</td>
+					<td class="datacontent1">
+					<cfloop query="GetRepeatedInstancesOf">
+						<a href="/common/admin/masterview/index.cfm?mvcid=#GetRepeatedInstancesOf.CategoryID#">#GetRepeatedInstancesOf.CategoryName# (#GetRepeatedInstancesOf.CategoryAlias#)</a><br />
+					</cfloop>
+					</td>
 				</tr>
 			</cfif>
 	        </table>
