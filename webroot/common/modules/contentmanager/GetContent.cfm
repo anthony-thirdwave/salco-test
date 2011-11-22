@@ -240,6 +240,10 @@
 				<cfif StructKeyExists(sProperties,"CategoryImageTitle") AND sProperties.CategoryImageTitle is not "" and CALLER.CategoryImageTitle is "">
 					<cfset CALLER.CategoryImageTitle=sProperties.CategoryImageTitle>
 				</cfif>
+				<cfif StructKeyExists(sProperties,"CategoryImageHeader") AND sProperties.CategoryImageHeader is not "" and CALLER.CategoryImageHeader is "">
+					<cfset CALLER.CategoryImageHeader=sProperties.CategoryImageHeader>
+					<cfset REQUEST.CategoryImageHeader=sProperties.CategoryImageHeader>
+				</cfif>
 				<!--- Properties that just come from this category locale --->
 				<cfif CurrentRow IS "1">
 					<cfloop index="ThisProp" list="CSSClass,CSSID">

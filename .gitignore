@@ -18,13 +18,12 @@ webroot/common/modules/product/import/*.txt
 webroot/common/modules/sitemap/sitemap.cfm
 webroot/common/scripts/projekktor/*.db
 webroot/crawfish2011
-webroot/development/convert
-webroot/development/product
-webroot/development/prototype
+webroot/development/*
 webroot/resources/category/*
 webroot/resources/content/*
 webroot/resources/external/dwfparts
 webroot/resources/images/*
+webroot/resources/video/*
 webroot/scratchpad.cfm
 workarea/trash/resources/category/*
 workarea/trash/resources/content/*
