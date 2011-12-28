@@ -70,6 +70,9 @@
 			<cfcase value="63"><!--- Product Series--->
 				<cfset this.sFields[ThisCategoryTypeID]="CSSClass">
 			</cfcase>
+			<cfcase value="80"><!--- Repeated Page --->
+				<cfset this.sFields[ThisCategoryTypeID]="">
+			</cfcase>
 				<!--- Not Used --->
 				<cfcase value="69"><!--- Press Release--->
 					<cfset this.sFields[ThisCategoryTypeID]="Byline1,Byline2">
@@ -82,8 +85,8 @@
 					<cfset this.sFields[ThisCategoryTypeID]="">
 				</cfcase>
 				<cfcase value="77"><!--- Blog --->
-				<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
-			</cfcase>
+					<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
+				</cfcase>
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
 			</cfdefaultcase>

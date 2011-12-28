@@ -269,52 +269,52 @@
 <cfquery name="getParentName" datasource="#APPLICATION.DSN#">
 	SELECT	CategoryName 
 	FROM	t_Category
-	WHERE	CategoryID = <cfqueryparam value="#MyCategory.GetProperty('ParentID')#" cfsqltype="cf_sql_integer">
+	WHERE	CategoryID=<cfqueryparam value="#MyCategory.GetProperty('ParentID')#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfset thisParentName = getParentName.CategoryName>
+<cfset thisParentName=getParentName.CategoryName>
 <cfif FormMode NEQ "ShowForm">
-	<cfset thisParentName = "[ #getParentName.CategoryName# ]">
+	<cfset thisParentName="[ #getParentName.CategoryName# ]">
 </cfif>
 <input type="hidden" name="ParentID" id="ParentID" value="<cfoutput>#MyCategory.GetProperty('ParentID')#</cfoutput>">
 <cfif FormMode EQ "ShowForm">
 	<script language="javascript" type="text/javascript">
 		function chooseCatParent(id,name){
-			thisName = name;
-			document.getElementById('ParentID').value = id;
-			//document.getElementById('qpa_ParentName').value = thisName;
-			document.getElementById('LocationName').innerHTML = thisName;
+			thisName=name;
+			document.getElementById('ParentID').value=id;
+			//document.getElementById('qpa_ParentName').value=thisName;
+			document.getElementById('LocationName').innerHTML=thisName;
 			closeChooser();
 		}
 		
 		function openChooser(){
 			<cfif SESSION.currentbrowserapp EQ "IE">hideSelect();</cfif>
-			document.getElementById('pageChooser').style.display = 'inline';
+			document.getElementById('pageChooser').style.display='inline';
 		}
 		function closeChooser(){
-			document.getElementById('pageChooser').style.display = 'none';
+			document.getElementById('pageChooser').style.display='none';
 			if(catParent_isDivExpanded('857'))
 				catParent_closeThisDiv('857');//"catParent_" is menu idprefix
 			<cfif SESSION.currentbrowserapp EQ "IE">restoreSelect();</cfif>
 		}	
 		<cfif SESSION.currentbrowserapp EQ "IE">
 		function hideSelect(){
-			for (var i = 0; i < document.forms.length; i++) {
-				f = document.forms[i];
-				for (var x = 0; x < f.elements.length; x++) {
-					e = f.elements[x];
+			for (var i=0; i < document.forms.length; i++) {
+				f=document.forms[i];
+				for (var x=0; x < f.elements.length; x++) {
+					e=f.elements[x];
 					if(e.type == 'select-multiple' || e.type == 'select-one'){
-						if(e.style) e.style.display = 'none';
+						if(e.style) e.style.display='none';
 					}
 				}
 			}
 		}
 		function restoreSelect(){
-			for (var i = 0; i < document.forms.length; i++) {
-				f = document.forms[i];
-				for (var x = 0; x < f.elements.length; x++) {
-					e = f.elements[x];
+			for (var i=0; i < document.forms.length; i++) {
+				f=document.forms[i];
+				for (var x=0; x < f.elements.length; x++) {
+					e=f.elements[x];
 					if(e.type == 'select-multiple' || e.type == 'select-one'){
-						if(e.style) e.style.display = '';
+						if(e.style) e.style.display='';
 					}
 				}
 			}
@@ -345,6 +345,93 @@
 	</TD>
 </TR> 
 <!--- END PARENT PAGE CHOOSER --->
+
+<cfif ListFindNoCase(Restrictions,"SourceID") and MyCategory.GetProperty("CategoryTypeID") IS "80">
+
+	<!--- BEGIN SOURCE PAGE CHOOSER --->
+	<cfquery name="getSourceName" datasource="#APPLICATION.DSN#">
+		SELECT	CategoryName, CategoryAlias 
+		FROM	t_Category
+		WHERE	CategoryID=<cfqueryparam value="#Val(MyCategory.GetProperty('SourceID'))#" cfsqltype="cf_sql_integer">
+	</cfquery>
+	<cfset thisSourceName="#getSourceName.CategoryName# (#getSourceName.CategoryAlias#)">
+	<cfif FormMode NEQ "ShowForm">
+		<cfset thisSourceName="[ #getSourceName.CategoryName# (#getSourceName.CategoryAlias#)]">
+	</cfif>
+	<cfset SourceIDToUse=MyCategory.GetProperty("SourceID")>
+	<cfif getSourceName.RecordCount IS "0">
+		<cfset SourceIDToUse="-1">
+	</cfif>
+	<input type="hidden" name="SourceID" id="SourceID" value="<cfoutput>#SourceIDToUse#</cfoutput>">
+	<cfif FormMode EQ "ShowForm">
+		<script language="javascript" type="text/javascript">
+			function chooseCatSource(id,name){
+				thisName=name;
+				document.getElementById('SourceID').value=id;
+				//document.getElementById('qpa_SourceName').value=thisName;
+				document.getElementById('SourceName').innerHTML=thisName;
+				closeSourceChooser();
+			}
+			
+			function openSourceChooser(){
+				<cfif SESSION.currentbrowserapp EQ "IE">hideSourceSelect();</cfif>
+				document.getElementById('pageSourceChooser').style.display='inline';
+			}
+			function closeSourceChooser(){
+				document.getElementById('pageSourceChooser').style.display='none';
+				if(catSource_isDivExpanded('1'))
+					catSource_closeThisDiv('1');//"catSource_" is menu idprefix
+				<cfif SESSION.currentbrowserapp EQ "IE">restoreSourceSelect();</cfif>
+			}	
+			<cfif SESSION.currentbrowserapp EQ "IE">
+				function hideSourceSelect(){
+					for (var i=0; i < document.forms.length; i++) {
+						f=document.forms[i];
+						for (var x=0; x < f.elements.length; x++) {
+							e=f.elements[x];
+							if(e.type == 'select-multiple' || e.type == 'select-one'){
+								if(e.style) e.style.display='none';
+							}
+						}
+					}
+				}
+				function restoreSourceSelect(){
+					for (var i=0; i < document.forms.length; i++) {
+						f=document.forms[i];
+						for (var x=0; x < f.elements.length; x++) {
+							e=f.elements[x];
+							if(e.type == 'select-multiple' || e.type == 'select-one'){
+								if(e.style) e.style.display='';
+							}
+						}
+					}
+				}
+			</cfif>
+		</script>
+	</cfif>
+	<tr valign="top"> 
+		<TD bgcolor="white"></TD><TD nowrap bgcolor="white" class="allcaps">
+			Source Page<cfif FormMode EQ "ShowForm"> <a href="javascript:openSourceChooser();">[choose]</a></cfif>
+			<cfif FormMode EQ "ShowForm">
+				<div id="pageSourceChooser" style="display:none; border:1px solid black; width:400px; background-color:#FFFFCC; position:absolute; margin:16px 0px 0px -120px; z-index:1;/*overflow: inherit;*/ white-space:normal;">
+					<div style="width:100%; text-align:right; font-weight:bold;"><a href="javascript:closeSourceChooser();"><img src="/common/images/admin/icon_delete.gif" style="margin:5px;" border="0"/></a></div>
+					<cfmodule template="/common/modules/admin/menu/menuAjax.cfm" 
+						mvcid="#SourceIDToUse#" 
+						isAutoCollapse="1" 
+						JSFunctionName="chooseCatSource"
+						isNewPage="0"
+						idPrefix="catSource_"/>
+					&nbsp;
+				</div>
+			</cfif>
+			<img src="/common/images/spacer.gif" height="15" width="1">&nbsp;
+		</TD>
+		<Td bgcolor="white"  nowrap>
+			<div id="SourceName"><cfoutput>#thisSourceName#</cfoutput></div>
+		</TD>
+	</TR> 
+	<!--- END SOURCE PAGE CHOOSER --->
+</cfif>
 
 <cfoutput>
 	<cfif ListFindNoCase(Restrictions,"CategoryURL")>

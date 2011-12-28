@@ -23,7 +23,24 @@
 			<cfreturn true>
 		</cfif>
 	</cffunction>
+	
+	<cffunction name="GetRepeatedInstancesOf" output="false" returntype="query">
+		<cfargument name="CategoryID" default="" type="numeric" required="true">
 
+		<!--- init variables --->
+		<cfset var CheckAlias = "">
+
+		<cfquery name="GetRepeatedInstancesOf" datasource="#APPLICATION.DSN#">
+			SELECT *
+			FROM t_Category
+			WHERE SourceID=<cfqueryparam value="#val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer"> AND
+			CategoryTypeID=<cfqueryparam value="80" cfsqltype="cf_sql_integer">
+			order by CategoryName
+		</cfquery>
+		
+		<cfreturn GetRepeatedInstancesOf>
+	</cffunction>
+	
 	<cffunction name="GetCategoryIDFromAlias" output="false" returntype="numeric">
 		<cfargument name="CategoryAlias" default="" type="string" required="true">
 

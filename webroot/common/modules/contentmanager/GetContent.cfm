@@ -14,6 +14,7 @@
 <cfset CALLER.CurrentCategoryAlias="">
 <cfset REQUEST.CurrentCategoryAlias="">
 <cfset REQUEST.CurrentCategoryID="-1">
+<cfset REQUEST.ProductID="-1">
 <cfset CALLER.CategoryTypeID="-1">
 <cfset CALLER.TemplateID="-1">
 <cfset CALLER.CurrentCategoryID="-1">
@@ -58,7 +59,7 @@
 	<cfquery name="GetCategoryID" datasource="#APPLICATION.DSN#" maxrows=1 dbtype="ODBC">
 		SELECT	CategoryID
 		FROM	t_Category
-		WHERE	CategoryAlias = <cfqueryparam value="#Trim(ATTRIBUTES.CategoryAlias)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
+		WHERE	CategoryAlias=<cfqueryparam value="#Trim(ATTRIBUTES.CategoryAlias)#" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
 	</cfquery>
 	<cfif GetCategoryID.RecordCount IS "1">
 		<cfset ATTRIBUTES.CategoryID=GetCategoryID.CategoryID>
@@ -85,6 +86,11 @@
 	<cfset CALLER.CurrentSourceID=GetPage.SourceID>
 	<cfset CALLER.CSSID=GetPage.CategoryAlias>
 
+	<!--- If this is a product page OR a repeated product page, set the product ID --->
+	<cfif CALLER.CategoryTypeID IS "64">
+		<cfset REQUEST.ProductID="#CALLER.CurrentCategoryID#">
+	</cfif>
+	
 	<cfif IsWDDX(GetPage.CategoryLocalePropertiesPacket)>
 		<cfwddx action="WDDX2CFML" input="#GetPage.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
 		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader">
@@ -100,7 +106,7 @@
 		<cfquery name="GetParentPageName" datasource="#APPLICATION.DSN#">
 			SELECT	CategoryName
 			FROM	t_Category
-			WHERE	Categoryid = <cfqueryparam value="#Val(GetPage.ParentID)#" cfsqltype="CF_SQL_INTEGER">
+			WHERE	Categoryid=<cfqueryparam value="#Val(GetPage.ParentID)#" cfsqltype="CF_SQL_INTEGER">
 		</cfquery>
 		<cfset ParentCategoryName="#GetParentPageName.CategoryName#">
 	</cfif>
@@ -151,11 +157,11 @@
 		<cfif structKeyExists(caller, "useSSL") and caller.useSSL and CGI.SERVER_PORT neq APPLICATION.httpsPort and APPLICATION.SSLConfigured>
 
 			<!--- if we're redirecting to https, we want the query string, but not the "page=contentalias" - this removes it --->
-			<cfset thisQueryString = trim(reReplaceNoCase(CGI.query_string, "(&)?page=[^&]*(\?(1)|&|$)", "", "all")) />
+			<cfset thisQueryString=trim(reReplaceNoCase(CGI.query_string, "(&)?page=[^&]*(\?(1)|&|$)", "", "all")) />
 
 			<!--- prepend a "?" --->
 			<cfif len(trim(thisQueryString))>
-				<cfset thisQueryString = "?" & thisQueryString />
+				<cfset thisQueryString="?" & thisQueryString />
 			</cfif>
 
 			<!--- redirect to the ssl version of this page --->
@@ -170,12 +176,61 @@
 
 		<!--- Get Category Locale Properties --->
 		<cfquery name="GetCatProps" datasource="#APPLICATION.DSN#">
-			SELECT		PropertiesPacket
+			SELECT		PropertiesPacket, ROW_NUMBER() OVER (ORDER BY displayorder desc) as RowNumber
 			FROM		qry_GetCategoryLocale
 			WHERE		CategoryID IN (<cfqueryparam value="#CALLER.CategoryThreadList#" cfsqltype="cf_sql_integer" list="yes">) and
 						LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer">
 			ORDER BY	displayorder DESC
 		</cfquery>
+		
+		<cfif CALLER.CategoryTypeID IS "80">
+			<!--- This page is a repeated page page type. --->
+			
+			<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+				<cfprocresult name="GetPagePrime" maxrows="1">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(CALLER.CurrentSourceID)#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
+			</cfstoredproc>
+
+			<cfset CALLER.CurrentCategoryName=GetPagePrime.CategoryNameDerived>
+			<cfset CALLER.CurrentPageTitle=GetPagePrime.CategoryNameDerived>
+			<cfset CALLER.TemplateID=GetPagePrime.TemplateID>
+			<cfset CALLER.CategoryTypeID=GetPagePrime.CategoryTypeID>
+			<cfset CALLER.CSSID=GetPage.CategoryAlias>
+			
+			<!--- If this is a product page OR a repeated product page, set the product ID --->
+			<cfif GetPagePrime.CategoryTypeID IS "64">
+				<cfset REQUEST.ProductID="#GetPagePrime.CategoryID#">
+			</cfif>
+			
+			<cfquery name="GetCatPropsAddtional" datasource="#APPLICATION.DSN#">
+				SELECT		PropertiesPacket
+				FROM		qry_GetCategoryLocale
+				WHERE		CategoryID=<cfqueryparam value="#Val(CALLER.CurrentSourceID)#" cfsqltype="cf_sql_integer"> and
+							LocaleID=<cfqueryparam value="#APPLICATION.DefaultLocaleID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+			<cfset queryAddRow(GetCatProps,1)>
+			<cfset querySetCell(GetCatProps,"PropertiesPacket", GetCatPropsAddtional.PropertiesPacket)>
+			<cfset querySetCell(GetCatProps,"RowNumber", 0)>
+			<cfquery name="GetCatProps" dbtype="Query">
+				select * from GetCatProps order by RowNumber
+			</cfquery>
+			<cfif IsWDDX(GetCatPropsAddtional.PropertiesPacket)>
+				<cfwddx action="WDDX2CFML" input="#GetCatPropsAddtional.PropertiesPacket#" output="sCategoryPropertiesAdditional">
+				<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,HeaderText,CSSClass2,CSSID,SuppressHeaderImage">
+					<cfif StructKeyExists(sCategoryPropertiesAdditional,"#ThisProp#") AND Trim(StructFind(sCategoryPropertiesAdditional, "#ThisProp#")) IS NOT "">
+						<cfset Setvariable("CALLER.#ThisProp#",StructFind(sCategoryPropertiesAdditional, "#ThisProp#"))>
+					</cfif>
+				</cfloop>
+				<cfloop index="ThisProp" list="HeaderTextTypeID">
+					<cfif StructKeyExists(sCategoryPropertiesAdditional,"#ThisProp#") AND Val(StructFind(sCategoryPropertiesAdditional, "#ThisProp#")) GT "0">
+						<cfset Setvariable("CALLER.#ThisProp#",StructFind(sCategoryPropertiesAdditional, "#ThisProp#"))>
+					</cfif>
+				</cfloop>
+			</cfif>
+		</cfif>
+		
 		<cfoutput query="GetCatProps">
 			<cfif IsWDDX(PropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#PropertiesPacket#" output="sProperties">
@@ -184,6 +239,10 @@
 				</cfif>
 				<cfif StructKeyExists(sProperties,"CategoryImageTitle") AND sProperties.CategoryImageTitle is not "" and CALLER.CategoryImageTitle is "">
 					<cfset CALLER.CategoryImageTitle=sProperties.CategoryImageTitle>
+				</cfif>
+				<cfif StructKeyExists(sProperties,"CategoryImageHeader") AND sProperties.CategoryImageHeader is not "" and CALLER.CategoryImageHeader is "">
+					<cfset CALLER.CategoryImageHeader=sProperties.CategoryImageHeader>
+					<cfset REQUEST.CategoryImageHeader=sProperties.CategoryImageHeader>
 				</cfif>
 				<!--- Properties that just come from this category locale --->
 				<cfif CurrentRow IS "1">
@@ -197,18 +256,20 @@
 		</cfoutput>
 	</cfif>
 
+	
+	
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
 	<cfset REQUEST.AllowComments=CALLER.AllowComments>
 
 	<cfloop index="ThisContentPositionID" list="#lPosition#">
-		<cfset recacheThis = false>
+		<cfset recacheThis=false>
 		<cfif DenyAccess>
 			<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#LoginPageAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(LoginPageCacheDateTime,'yyyymmdd')##TimeFormat(LoginPageCacheDateTime,'HHmmss')#.cfm">
 			<cfset CALLER.AllowComments="0">
 			<cfset REQUEST.AllowComments="0">
 		<cfelse>
 			<cfif ListFind("",CALLER.CurrentCategoryID)><!--- Certain page types should always recache --->
-				<cfset recacheThis = true>
+				<cfset recacheThis=true>
 			</cfif>
 			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#GetPage.CategoryAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(CALLER.CacheDateTime,'yyyymmdd')##TimeFormat(CALLER.CacheDateTime,'HHmmss')#.cfm">
 		</cfif>
@@ -216,7 +277,11 @@
 		<cfif DenyAccess>
 			<cfset CategoryIDPrime="#Val(LoginPageCategoryID)#">
 		<cfelse>
-			<cfset CategoryIDPrime="#Val(CALLER.CurrentCategoryID)#">
+			<cfif CALLER.CategoryTypeID IS "80">
+				<cfset CategoryIDPrime="#Val(CALLER.CurrentSourceID)#">
+			<cfelse>
+				<cfset CategoryIDPrime="#Val(CALLER.CurrentCategoryID)#">
+			</cfif>
 		</cfif>
 		<cfif CALLER.CategoryTypeID IS "64">
 			<cfset CategoryThreadListPrime=ListInsertAt(CALLER.CategoryThreadList,2,"5687")>
@@ -298,8 +363,8 @@
 <cfif CALLER.NoContent>
 	<cfif REQUEST.ContentGenerateMode IS Not "FLAT">
 		<cfheader
-			statusCode = "404"
-			statusText = "Not Found">
+			statusCode="404"
+			statusText="Not Found">
 	</cfif>
 	<cfset CALLER.NoContent="0">
 	<cfset CALLER.AllowComments="0">

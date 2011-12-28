@@ -1,4 +1,4 @@
-<cfsetting requesttimeout="3000" showdebugoutput="No">
+<cfsetting requesttimeout="3000">
 
 <cfparam name="SourceTopLevelCategoryID" default="#APPLICATION.defaultSiteCategoryID#">
 <cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
@@ -90,7 +90,7 @@
 	
 	            <cfif GetCats.CategoryTypeID IS "64"><!--- Product --->
 	                <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-	                    select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])#
+	                    select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
 	                    AND AttributeValue <> ''
 	                </cfquery>
 	                <cfoutput query="GetProductProps">
@@ -99,7 +99,7 @@
 	                    </cfif>
 	                </cfoutput>
 	                <cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
-	                    select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])#
+	                    select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
 	                </cfquery>
 	                <cfoutput query="GetProductProps2">
 	                    <cfif Trim(TextBlock) IS NOT "">
@@ -126,7 +126,7 @@
 				
 				<cfif GetCats.CategoryTypeID IS "62"><!--- Product -Family--->
 	                <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-	                    select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])#
+	                    select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
 	                    AND AttributeValue <> ''
 	                </cfquery>
 	                <cfoutput query="GetProductProps">
@@ -135,7 +135,7 @@
 	                    </cfif>
 	                </cfoutput>
 	                <cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
-	                    select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[THisLocaleID])#
+	                    select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
 	                </cfquery>
 	                <cfoutput query="GetProductProps2">
 	                    <cfif Trim(TextBlock) IS NOT "">
@@ -247,10 +247,12 @@
             urlpath="UrlPath"
             category="Category"
             categorytree="CategoryTree">
+		<cfdump var="#ThisCollectionName#">
+		<cfdump var="#qVerity#" expand="false" label="qVerity">
     </cfloop>
 </cfloop>
 
-<!--<cfdump var="#qVerity#" expand="false" label="qVerity">--->
+
 
 <!--- after the update runs, drop the tagCloud, which will be recreated when called again --->
 <cfif structKeyExists(APPLICATION,"tagCloud")>

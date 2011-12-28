@@ -25,7 +25,7 @@
 	<cfquery name="GetCache" datasource="#APPLICATION.DSN#">
 		SELECT     MAX(CacheDateTime) AS CacheDateTime
 		FROM         t_Category
-		WHERE     CategoryID IN (#ATTRIBUTES.ProductID#,#Val(CurrentProductFamilyID)#)
+		WHERE     CategoryID IN (<cfqueryparam value="#ATTRIBUTES.ProductID#,#Val(CurrentProductFamilyID)#" cfsqltype="cf_sql_integer" list="yes">)
 	</cfquery>
 	<CFSET ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductDetail_v1.0_#ATTRIBUTES.ProductID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
 	<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
