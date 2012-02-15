@@ -877,4 +877,35 @@
 		<cfreturn LOCAL.ReturnString>
 	</cffunction>
 	
+	<cfscript>
+	/**
+	* Similar to xmlFormat() but replaces all characters not on the &quot;good&quot; list as opposed to characters specifically on the &quot;bad&quot; list.
+	*
+	* @param inString      String to format. (Required)
+	* @return Returns a string.
+	* @author Samuel Neff (sam@serndesign.com)
+	* @version 1, January 12, 2004
+	*/
+	function XMLSafe(inString) {
+	
+	var goodChars = "!@##$%^*()0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~[]{};:,./?\| -_=+#chr(13)##chr(10)##chr(9)#";
+	var i = 1;
+	var c = "";
+	var s = "";
+	
+	for (i=1; i LTE len(inString); i=i+1) {
+	
+	c = mid(inString, i, 1);
+	
+	if (find(c, goodChars)) {
+	s = s & c;
+	} else {
+	s = s & "&##" & asc(c) & ";";
+	}
+	}
+	
+	return s;
+	}
+	</cfscript>
+	
 </cfcomponent>

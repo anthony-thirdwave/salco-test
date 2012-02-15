@@ -123,7 +123,7 @@
 			<cfif ATTRIBUTES.JSFunctionName EQ "">
 				<cfset thisHREF="index.cfm?#ThisQueryString#&mvcid=#CategoryID#">
 			<cfelse>
-				<cfset thisHREF="javascript:#ATTRIBUTES.JSFunctionName#(#CategoryID#,'#CategoryName#');">
+				<cfset thisHREF="javascript:#ATTRIBUTES.JSFunctionName#(#CategoryID#,'#APPLICATION.utilsObj.XMLSafe(CategoryName)#');">
 			</cfif>
 			<cfif IsActive>
 				<cfset thisTitle = "Active">
@@ -188,7 +188,7 @@
 </cfoutput>
 <cfoutput>
 <cfif ATTRIBUTES.isNewPage AND ATTRIBUTES.JSFunctionName NEQ "" AND ATTRIBUTES.isTopLevel EQ 0>
-<div><a href="javascript:#ATTRIBUTES.JSFunctionName#(#ATTRIBUTES.thisCatID#,'#thisParentName#');" title="insert page here"><img src="/common/images/admin/new_page_here.gif" vspace="2" border="0" alt="insert here"></a></div>
+<div><a href="javascript:#ATTRIBUTES.JSFunctionName#(#ATTRIBUTES.thisCatID#,'#APPLICATION.utilsObj.XMLSafe(thisParentName)#');" title="insert page here"><img src="/common/images/admin/new_page_here.gif" vspace="2" border="0" alt="insert here"></a></div>
 </cfif>
 </cfoutput>
 </cfif>
