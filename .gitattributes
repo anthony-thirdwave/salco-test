@@ -5,6 +5,7 @@ code/db/cms_db_creation_scripts/CreateStoredProcedures.sql -text svneol=unset#ap
 code/db/cms_db_creation_scripts/GrantPermissions.sql -text
 code/db/cms_db_creation_scripts/LoadData.sql -text
 code/db/cms_db_creation_scripts/README.txt -text
+code/externals/flashApps/map/map4_cs4b_0307.fla -text
 code/webroot/.htaccess -text
 code/webroot/Application.cfc -text
 code/webroot/Invitation_Golf_2011.html -text
