@@ -255,8 +255,6 @@
 			</cfif>
 		</cfoutput>
 	</cfif>
-
-	
 	
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
 	<cfset REQUEST.AllowComments=CALLER.AllowComments>
@@ -362,9 +360,7 @@
 
 <cfif CALLER.NoContent>
 	<cfif REQUEST.ContentGenerateMode IS Not "FLAT">
-		<cfheader
-			statusCode="404"
-			statusText="Not Found">
+		<cfheader statusCode="404" statusText="Not Found">
 	</cfif>
 	<cfset CALLER.NoContent="0">
 	<cfset CALLER.AllowComments="0">
