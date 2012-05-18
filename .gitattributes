@@ -5,6 +5,7 @@ db/cms_db_creation_scripts/CreateStoredProcedures.sql -text svneol=unset#applica
 db/cms_db_creation_scripts/GrantPermissions.sql -text
 db/cms_db_creation_scripts/LoadData.sql -text
 db/cms_db_creation_scripts/README.txt -text
+externals/flashApps/map/contactMap.fla -text
 webroot/.htaccess -text
 webroot/Application.cfc -text
 webroot/Invitation_Golf_2011.html -text
@@ -93,6 +94,7 @@ webroot/common/error/cfservertest.cfm -text
 webroot/common/error/errorhandler.cfm -text
 webroot/common/error/errortest.cfm -text
 webroot/common/error/process404.cfm -text
+webroot/common/flash/contactMap.swf -text
 webroot/common/flash/jarisplayer.swf -text
 webroot/common/images/ContentManager/Widget_Addcategory.gif -text
 webroot/common/images/ContentManager/Widget_Addcontent.gif -text
