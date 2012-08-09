@@ -8,7 +8,7 @@
     order by LocaleID
 </cfquery>
 <cfquery name="GetParentDisplayOrder" datasource="#APPLICATION.DSN#">
-    select DisplayOrder from t_category Where CategoryID=#SourceTopLevelCategoryID#
+    select DisplayOrder from t_category Where CategoryID=<cfqueryparam value="#SourceTopLevelCategoryID#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <cfset sLocaleCode=StructNew()>
@@ -34,7 +34,7 @@
 	
 <cfloop index="ThisTopCategoryID" list="#lSiteID#">
     <cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
-        select DisplayOrder from t_Category Where CategoryID=#Val(ThisTopCategoryID)#
+        select DisplayOrder from t_Category Where CategoryID=<cfqueryparam value="#Val(ThisTopCategoryID)#" cfsqltype="cf_sql_integer">
     </cfquery>
     <cfloop index="ThisLocaleID" list="#ValueList(GetLocales.LocaleID)#">
         <cfset ThisCollectionName="#application.collectionname##ThisLocaleID#">
@@ -71,6 +71,8 @@
 				<cfset lCategoryNotActive=ListAppend(lCategoryNotActive,Val(GetCats.CategoryID))>
 			<cfelseif ListFindNoCase(lCategoryNotActive,GetCats.ParentID)>
 				<cfset lCategoryNotActive=ListAppend(lCategoryNotActive,Val(GetCats.CategoryID))>
+			<cfelseif GetCats.ParentID IS "5731"><!--- Orphan Products --->
+				<cfset lCategoryNotActive=ListAppend(lCategoryNotActive,Val(GetCats.CategoryID))>
 			<cfelse>
 	            <cfstoredproc procedure="sp_GetContents" datasource="#APPLICATION.DSN#">
 	                <cfprocresult name="GetContentList">
@@ -90,16 +92,19 @@
 	
 	            <cfif GetCats.CategoryTypeID IS "64"><!--- Product --->
 	                <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-	                    select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
-	                    AND AttributeValue <> ''
-	                </cfquery>
+	                    select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> 
+						And LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer">
+	                    AND AttributeValue <> <cfqueryparam value="" cfsqltype="cf_sql_varchar">
+					</cfquery>
 	                <cfoutput query="GetProductProps">
 	                    <cfif Trim(AttributeValue) IS NOT "">
 	                        <cfset Body="#Body# #Trim(AttributeValue)#">
 	                    </cfif>
 	                </cfoutput>
 	                <cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
-	                    select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
+	                    select * from qry_GetTextBlock WHERE Entity=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar"> and 
+						KeyID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> And 
+						LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer">
 	                </cfquery>
 	                <cfoutput query="GetProductProps2">
 	                    <cfif Trim(TextBlock) IS NOT "">
@@ -109,7 +114,7 @@
 					
 					<cfquery name="GetDescription" dbtype="query">
 	                    select * from GetProductProps
-						where ProductFamilyAttributeID=7
+						where ProductFamilyAttributeID=<cfqueryparam value="7" cfsqltype="cf_sql_integer">
 	                </cfquery>
 					
 					<cfif GetDescription.AttributeValue IS NOT "">
@@ -126,8 +131,9 @@
 				
 				<cfif GetCats.CategoryTypeID IS "62"><!--- Product -Family--->
 	                <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-	                    select * from t_ProductAttribute WHERE CategoryID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
-	                    AND AttributeValue <> ''
+	                    select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> And
+						LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer"> AND 
+						AttributeValue <> <cfqueryparam value="" cfsqltype="cf_sql_varchar">
 	                </cfquery>
 	                <cfoutput query="GetProductProps">
 	                    <cfif Trim(AttributeValue) IS NOT "">
@@ -135,7 +141,9 @@
 	                    </cfif>
 	                </cfoutput>
 	                <cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
-	                    select * from qry_GetTextBlock WHERE Entity='t_Category' and KeyID=#Val(GetCats.CategoryID)# And LanguageID=#Val(slanguageID[ThisLocaleID])#
+	                    select * from qry_GetTextBlock WHERE Entity=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar"> and 
+						KeyID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> And 
+						LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer">
 	                </cfquery>
 	                <cfoutput query="GetProductProps2">
 	                    <cfif Trim(TextBlock) IS NOT "">
@@ -145,7 +153,7 @@
 					
 					<cfquery name="GetDescription" dbtype="query">
 	                    select * from GetProductProps
-						where ProductFamilyAttributeID=18
+						where ProductFamilyAttributeID=<cfqueryparam value="18" cfsqltype="cf_sql_integer">
 	                </cfquery>
 					
 					<cfif GetDescription.AttributeValue IS NOT "">
@@ -161,19 +169,19 @@
 	            </cfif>
 				
 	            <cfquery name="GetpropertiesPacket" datasource="#APPLICATION.DSN#">
-	                select * from t_Properties Where PropertiesID=#Val(GetCats.categoryPropertiesID)#
+	                select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(GetCats.categoryPropertiesID)#" cfsqltype="cf_sql_integer">
 	            </cfquery>
 	            <cfset Body="#Body# #GetpropertiesPacket.PropertiesPacket#">
 	
 	            <cfoutput query="GetContentList">
 	                <cfset Body="#Body# #ContentName# #ContentNameDerived# #ContentBody#">
 	                <cfquery name="GetpropertiesPacket2" datasource="#APPLICATION.DSN#">
-	                    select * from t_Properties Where PropertiesID=#Val(ContentPropertiesID)#
+	                    select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ContentPropertiesID)#" cfsqltype="cf_sql_integer">
 	                </cfquery>
 	                <cfset Body="#Body# #GetpropertiesPacket2.PropertiesPacket#">
 	
 	                <cfquery name="GetpropertiesPacket3" datasource="#APPLICATION.DSN#">
-	                    select * from t_Properties Where PropertiesID=#Val(ContentLocalePropertiesID)#
+	                    select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ContentLocalePropertiesID)#" cfsqltype="cf_sql_integer">
 	                </cfquery>
 	
 	                <cfset Body="#Body# #GetpropertiesPacket3.PropertiesPacket#">
