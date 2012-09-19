@@ -120,7 +120,7 @@
 		</div>
 		<div class="clearFix"></div>
 		<div class="redLine"></div>
-		<div class="hazarsolve"><a href="http://www.hazarsolve.com/" target="_blank">Hazarsolve A Division of Salco Products</a></div>
+		<div class="hazarsolve"><a href="http://www.hazarsolve.com/" target="_blank" onclick="_gaq.push(['_trackPageview', '/custom_outbound_hazarsolvelink']);">Hazarsolve A Division of Salco Products</a></div>
 		<cfmodule template="/common/modules/Display/Navigation/dsp_NavSub.cfm"
 			ParentID="7"
 			CSSID="subNav"
