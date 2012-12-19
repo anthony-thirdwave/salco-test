@@ -477,6 +477,10 @@ code/webroot/common/modules/product/productFamilyDetail.cfm -text
 code/webroot/common/modules/search/SearchForm.cfm -text
 code/webroot/common/modules/search/dspSearchFormFilter.cfm -text
 code/webroot/common/modules/search/dspSearchResults.cfm -text
+code/webroot/common/modules/search/intranet/SearchForm.cfm -text
+code/webroot/common/modules/search/intranet/dspSearchResults.cfm -text
+code/webroot/common/modules/search/intranet/search.cfm -text
+code/webroot/common/modules/search/intranet/tagCloud.cfm -text
 code/webroot/common/modules/search/search.cfm -text
 code/webroot/common/modules/search/tagCloud.cfm -text
 code/webroot/common/modules/sitemap/SitemapHelper.cfm -text
