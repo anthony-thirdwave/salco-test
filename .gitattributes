@@ -410,6 +410,10 @@ code/webroot/common/modules/adhoc/swfobject.cfm -text
 code/webroot/common/modules/blog/dsp_blogListing.cfm -text
 code/webroot/common/modules/blog/dsp_blogNav.cfm -text
 code/webroot/common/modules/browsertest/browserdet.cfm -text
+code/webroot/common/modules/calendar/EventCalendarHelper.cfm -text
+code/webroot/common/modules/calendar/calendarControl.cfm -text
+code/webroot/common/modules/calendar/calendarDetail.cfm -text
+code/webroot/common/modules/calendar/calendarListing.cfm -text
 code/webroot/common/modules/comments/dsp_comments.cfm -text
 code/webroot/common/modules/comments/inc_comment_list.cfm -text
 code/webroot/common/modules/comments/inc_form.cfm -text
