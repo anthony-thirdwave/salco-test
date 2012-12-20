@@ -21,7 +21,7 @@
 <cfif tid contains "all">
 	<cfset tid="">
 </cfif>
-
+<cfset tid="">
 
 <cfif NOT IsDate(dateCurrent)>
 	<cfset dateCurrent=Now()>
