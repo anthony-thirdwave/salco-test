@@ -515,12 +515,14 @@ code/webroot/common/modules/utils/safeSubmit.cfm -text
 code/webroot/common/modules/utils/validateEmail.cfm -text
 code/webroot/common/process/BlogRSSGenerate.cfm -text
 code/webroot/common/process/ContentGenerate.cfm -text
+code/webroot/common/process/ProcessReportData.cfm -text
 code/webroot/common/process/RSSUpdate.cfm -text
 code/webroot/common/process/RunOnce/MarkAllAsSavedLive.cfm -text
 code/webroot/common/process/RunOnce/ProductLiteratureFix.cfm -text
 code/webroot/common/process/RunOnce/ScanDuplicates.cfm -text
 code/webroot/common/process/RunOnce/savelive.cfm -text
 code/webroot/common/process/VerityUpdate.cfm -text
+code/webroot/common/process/VerityUpdateIntranet.cfm -text
 code/webroot/common/process/_hourly.cfm -text
 code/webroot/common/process/_nightly.cfm -text
 code/webroot/common/scripts/admin.js -text
