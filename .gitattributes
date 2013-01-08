@@ -443,9 +443,12 @@ code/webroot/common/modules/display/Navigation/dsp_NavR.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavRHelper.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavSub.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavUtility.cfm -text
-code/webroot/common/modules/display/Templates/dsp_Blank.cfm -text
+code/webroot/common/modules/display/Navigation/intranet/dsp_NavBreadcrumb.cfm -text
+code/webroot/common/modules/display/Navigation/intranet/dsp_NavSub.cfm -text
+code/webroot/common/modules/display/Navigation/intranet/dsp_NavSubPages.cfm -text
+code/webroot/common/modules/display/Navigation/intranet/dsp_NavUtility.cfm -text
 code/webroot/common/modules/display/Templates/dsp_Content.cfm -text
-code/webroot/common/modules/display/Templates/dsp_SimpleContent.cfm -text
+code/webroot/common/modules/display/Templates/intranet/dsp_Content.cfm -text
 code/webroot/common/modules/display/dsp_NavSubPages.cfm -text
 code/webroot/common/modules/emailAFriend/emailAFriend.cfm -text
 code/webroot/common/modules/product/CopyProductImages.cfm -text
