@@ -128,9 +128,9 @@
 	</cfif>
 </cfsavecontent>
 <cfoutput>
-	<h3 class="eventsInlineDate"><cfoutput>#DateFormat(dateStart, "ddd, mmmm dd, yyyy")#</cfoutput></h3>
+	<h3 class="eventsInlineDate">#DateFormat(dateStart, "ddd, mmmm dd, yyyy")#</h3>
 	<ul class="upcomingEvents">
 	#Trim(returnValue)#
 	</ul>
-	<div id="eventsInlineSeeAll"><a href="/page/events?ecdm=#Month(dateStart)#&ecdy=#Year(dateStart)#">See all <cfoutput>#DateFormat(dateStart, "mmmm")#</cfoutput> Events</a></div>
+	<div id="eventsInlineSeeAll"><a href="/page/events?ecdm=#Month(dateStart)#&ecdy=#Year(dateStart)#">See all #DateFormat(dateStart, "mmmm")# Events</a></div>
 </cfoutput>

@@ -29,8 +29,21 @@
 	</cfcase>
 	<cfcase value="201"><!--- HTML --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
-			<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
-			<cfset FileContents="#application.utilsObj.ObscureEMail(FileContents)#">
+			<cfif application.applicationname is "intranet.salco">
+				<cfif ATTRIBUTES.currentCategoryTypeID eq 81>
+					<cfset EmpBio="">
+					<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
+						<cfset EmpBio="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
+					</cfif>			
+					<cfset FileContents="<cfmodule template=""/common/modules/employee/Intranet/employeeDetail.cfm"" EmpBio=""#EmpBio#"" categoryID=""#ATTRIBUTES.currentCategoryID#"" contentID=""#ATTRIBUTES.ContentID#"">">
+				<cfelse>
+					<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#</div></div></article>">
+					<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ObscureEMail(FileContents)#</div></div></article>">
+				</cfif>
+			<cfelse>
+				<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
+				<cfset FileContents="#application.utilsObj.ObscureEMail(FileContents)#">
+			</cfif>
 		</cfif>
 	</cfcase>
 	<cfcase value="202"><!--- HTML & Text --->
@@ -67,7 +80,7 @@
 		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
 			SELECT	SourceID 
 			FROM	t_Content 
-			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			WHERE	ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif GetSource.RecordCount IS "1">
 			<cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
@@ -92,8 +105,8 @@
 			SELECT			t_Category_2.CacheDateTime AS CacheDateTime, t_Category_2.CategoryAlias as CategoryAlias
 			FROM			t_Category t_Category_1 
 			LEFT OUTER JOIN	t_Category t_Category_2
-			ON				t_Category_1.ParentID = t_Category_2.CategoryID
-			WHERE			t_Category_1.CategoryID = <cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
+			ON				t_Category_1.ParentID=t_Category_2.CategoryID
+			WHERE			t_Category_1.CategoryID=<cfqueryparam value="#Val(ATTRIBUTES.CurrentCategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif GetSource.RecordCount IS "1">
 			<CFSET ExecuteTempFile="#GetSource.CategoryAlias#_#Val(ATTRIBUTES.PositionID)#_#APPLICATION.LocaleID#_#DateFormat(GetSource.CacheDateTime,'yyyymmdd')##TimeFormat(GetSource.CacheDateTime,'HHmmss')#.cfm">
@@ -111,8 +124,8 @@
 				SELECT		*, t_Properties.PropertiesPacket
 				FROM		t_ContentLocale
 				INNER JOIN	t_Properties
-				ON			t_ContentLocale.PropertiesID = t_Properties.PropertiesID
-				WHERE		ContentLocaleID = <cfqueryparam value="#Val(APPLICATION.LocaleID)#" cfsqltype="cf_sql_integer">
+				ON			t_ContentLocale.PropertiesID=t_Properties.PropertiesID
+				WHERE		ContentLocaleID=<cfqueryparam value="#Val(APPLICATION.LocaleID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfif IsWddx(GetContentProps.PropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#GetContentProps.PropertiesPacket#" output="sProperties">
@@ -142,22 +155,22 @@
 					<div>
 					<script LANGUAGE=JavaScript1.1 type="text/javascript">
 					<!--
-					var MM_contentVersion = 7;
-					var plugin = (navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"]) ? navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin : 0;
+					var MM_contentVersion=7;
+					var plugin=(navigator.mimeTypes && navigator.mimeTypes["application/x-shockwave-flash"]) ? navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin : 0;
 					if ( plugin ) {
-					 var words = navigator.plugins["Shockwave Flash"].description.split(" ");
-					 for (var i = 0; i < words.length; ++i)
+					 var words=navigator.plugins["Shockwave Flash"].description.split(" ");
+					 for (var i=0; i < words.length; ++i)
 					   {
 					  if (isNaN(parseInt(words[i])))
 					  continue;
-					  var MM_PluginVersion = words[i];
+					  var MM_PluginVersion=words[i];
 					    }
-					 var MM_FlashCanPlay = MM_PluginVersion >= MM_contentVersion;
+					 var MM_FlashCanPlay=MM_PluginVersion >= MM_contentVersion;
 					}
 					else if (navigator.userAgent && navigator.userAgent.indexOf("MSIE")>=0 && (navigator.appVersion.indexOf("Win") != -1)) {
 					document.write('<SCR' + 'IPT LANGUAGE=VBScript\> \n'); //FS hide this from IE4.5 Mac by splitting the tag
 					document.write('on error resume next \n');
-					document.write('MM_FlashCanPlay = ( IsObject(CreateObject("ShockwaveFlash.ShockwaveFlash." & MM_contentVersion)))\n');
+					document.write('MM_FlashCanPlay=( IsObject(CreateObject("ShockwaveFlash.ShockwaveFlash." & MM_contentVersion)))\n');
 					document.write('</SCR' + 'IPT\> \n');
 					}
 					if ( MM_FlashCanPlay ) {
@@ -195,8 +208,8 @@
 			SELECT		*, t_Properties.PropertiesPacket
 			FROM		t_Content
 			INNER JOIN	t_Properties
-			ON			t_Content.PropertiesID = t_Properties.PropertiesID
-			WHERE		ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			ON			t_Content.PropertiesID=t_Properties.PropertiesID
+			WHERE		ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset lArticleID="">
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
@@ -214,14 +227,14 @@
 			WHERE	PropertiesID =	(
 									SELECT	PropertiesID 
 									FROM	t_Content 
-									WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+									WHERE	ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 									)
 		</cfquery>
-		<cfset thisDisplayID = 0>
+		<cfset thisDisplayID=0>
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
 			<cfwddx action="WDDX2CFML" input="#GetContentProps.PropertiesPacket#" output="sProperties">
 			<cfif StructKeyExists(sProperties,"DisplayModeID")>
-				<cfset thisDisplayID = sProperties.DisplayModeID>
+				<cfset thisDisplayID=sProperties.DisplayModeID>
 			</cfif>
 		</cfif>
 		<cfif thisDisplayID EQ 12001>
@@ -229,6 +242,40 @@
 		<cfelse>
 			<cfset FileContents="<cfmodule template=""/common/modules/RelatedContent/relatedContent.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"">">
 		</cfif> 
+	</cfcase>
+	<cfcase value="221"><!--- news Detail --->
+		<cfset newsImagesLarge="">
+		<cfset newsImages="">
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
+			<cfset aFile=ATTRIBUTES.sContentBody.aFile>
+			<cfsavecontent variable="newsImages">
+				<cfoutput>
+					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
+						<cfset sFile=aFile[i]>
+						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"ThumbnailPath") AND sFile.ThumbnailPath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.ThumbnailPath))>
+							<img class='curveMe' src='#sFile.ThumbnailPath#' align='left' style='display:block'>
+						</cfif>
+					</cfloop>
+				</cfoutput>
+			</cfsavecontent>
+			<cfsavecontent variable="newsImagesLarge">
+				<cfoutput>
+					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
+						<cfset sFile=aFile[i]>
+						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.FilePath))>
+							<img src='#sFile.FilePath#'>
+						</cfif>
+					</cfloop>
+				</cfoutput>
+			</cfsavecontent>
+		</cfif>
+		
+		<cfset newsContent="">
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
+			<cfset newsContent="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
+		</cfif>	
+				
+		<cfset FileContents="<cfmodule template=""/common/modules/news/intranet/newsDetail.cfm"" newsContent=""#newsContent#"" newsImage=""#Trim(newsImages)#"" newsImagesLarge=""#Trim(newsImagesLarge)#"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
 	</cfcase>
 	<cfcase value="224"><!--- Press Release List --->
 		<cfset FileContents="<cfmodule template=""/common/modules/pressrelease/PressReleaseListing.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
@@ -260,8 +307,8 @@
 			SELECT		*, t_Properties.PropertiesPacket
 			FROM		t_Content
 			INNER JOIN	t_Properties
-			ON			t_Content.PropertiesID = t_Properties.PropertiesID
-			WHERE		ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			ON			t_Content.PropertiesID=t_Properties.PropertiesID
+			WHERE		ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset ShowQuestionRange="All">
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
@@ -279,65 +326,54 @@
 	</cfcase>
 	<cfcase value="236"><!--- Event Listing --->
 		<cfset Mode="Future">
-		<cfset DisplayMode="Default">
-		<cfset NumItems="">
-		<cfset NumberOfMonths="">
-		<cfset EventDetailURL="#APPLICATION.utilsObj.parseCategoryUrl('event-detail')#" />
-		<cfset EventListingURL="#APPLICATION.utilsObj.parseCategoryUrl('calendar')#" />
-		<cfset ShowEventRangeID="8002">
+		<cfset lTopicID="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL") and ATTRIBUTES.sContentBody.PageActionURL IS NOT "">
 			<cfset EventDetailURL="#ATTRIBUTES.sContentBody.PageActionURL#">
 		</cfif>
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"LinkURL") and ATTRIBUTES.sContentBody.LinkURL IS NOT "">
-			<cfset EventListingURL="#ATTRIBUTES.sContentBody.LinkURL#">
-		</cfif>
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"ShowEventRangeID") and ATTRIBUTES.sContentBody.ShowEventRangeID IS NOT "">
-			<cfset ShowEventRangeID="#ATTRIBUTES.sContentBody.ShowEventRangeID#">
-		</cfif>
 		<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
-			SELECT		*, t_Properties.PropertiesPacket
+			SELECT		t_Properties.PropertiesPacket
 			FROM		t_Content
 			INNER JOIN	t_Properties
-			ON			t_Content.PropertiesID = t_Properties.PropertiesID
-			WHERE		ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			ON			t_Content.PropertiesID=t_Properties.PropertiesID
+			WHERE		ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfif IsWddx(GetContentProps.PropertiesPacket)>
 			<cfwddx action="WDDX2CFML" input="#GetContentProps.PropertiesPacket#" output="sProperties">
 			<cfif StructKeyExists(sProperties,"ShowNavigationRangeID") AND sProperties.ShowNavigationRangeID IS "2001">
 				<cfset Mode="Recent">
 			</cfif>
-			<cfif StructKeyExists(sProperties,"DisplayModeID") AND sProperties.DisplayModeID IS "2101">
-				<cfset DisplayMode="Compact">
-			<cfelseif StructKeyExists(sProperties,"DisplayModeID") AND sProperties.DisplayModeID IS "2102">
-				<cfset DisplayMode="Extended">
-			<cfelseif StructKeyExists(sProperties,"DisplayModeID") AND sProperties.DisplayModeID IS "2103">
-				<cfset DisplayMode="Home">
+			<cfif StructKeyExists(sProperties,"lTopicID") AND sProperties.lTopicID IS NOT "">
+				<cfset lTopicID="#sProperties.lTopicID#">
 			</cfif>
 		</cfif>
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"NumItems") AND Trim(StructFind(ATTRIBUTES.sContentBody,"NumItems")) is not "">
-			<cfset NumItems=ATTRIBUTES.sContentBody.NumItems>
-		</cfif>
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"NumberOfMonths") AND Trim(StructFind(ATTRIBUTES.sContentBody,"NumberOfMonths")) is not "">
-			<cfset NumberOfMonths=ATTRIBUTES.sContentBody.NumberOfMonths>
-		</cfif>
-		<cfswitch expression="#ShowEventRangeID#">
-			<cfcase value="8000">
-				<cfset ShowEventRange="Chapter">
-			</cfcase>
-			<cfcase value="8001">
-				<cfset ShowEventRange="National">
-			</cfcase>
-			<cfdefaultcase>
-				<cfset ShowEventRange="All">
-			</cfdefaultcase>
-		</cfswitch>
-		<cfset FileContents="<cfmodule template=""/common/modules/events/EventListing.cfm"" ChapterID=""0"" ListingMode=""#Mode#"" DisplayMode=""#DisplayMode#"" NumItems=""#NumItems#"" NumberOfMonths=""#NumberOfMonths#"" EventDetailURL=""#EventDetailURL#"" EventListingURL=""#EventListingURL#"" ShowEventRange=""#ShowEventRange#"">">
+		<cfset FileContents="<cfmodule template=""/common/modules/calendar/calendarListing.cfm"" Mode=""#Mode#"" lTopicID=""#lTopicID#"">">
 	</cfcase>
 
 	<cfcase value="238"><!--- Event Calendar --->
-		<cfset FileContents="<cfmodule template=""/common/modules/events/dsp_EventCalendar.cfm"">">
+		<cfset Mode="Future">
+		<cfset lTopicID="">
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL") and ATTRIBUTES.sContentBody.PageActionURL IS NOT "">
+			<cfset EventDetailURL="#ATTRIBUTES.sContentBody.PageActionURL#">
+		</cfif>
+		<cfquery name="GetContentProps" datasource="#APPLICATION.DSN#">
+			SELECT		t_Properties.PropertiesPacket
+			FROM		t_Content
+			INNER JOIN	t_Properties
+			ON			t_Content.PropertiesID=t_Properties.PropertiesID
+			WHERE		ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+		</cfquery>
+		<cfif IsWddx(GetContentProps.PropertiesPacket)>
+			<cfwddx action="WDDX2CFML" input="#GetContentProps.PropertiesPacket#" output="sProperties">
+			<cfif StructKeyExists(sProperties,"ShowNavigationRangeID") AND sProperties.ShowNavigationRangeID IS "2001">
+				<cfset Mode="Recent">
+			</cfif>
+			<cfif StructKeyExists(sProperties,"lTopicID") AND sProperties.lTopicID IS NOT "">
+				<cfset lTopicID="#sProperties.lTopicID#">
+			</cfif>
+		</cfif>
+		<cfset FileContents="<cfmodule template=""/common/modules/calendar/calendarControl.cfm"" Mode=""#Mode#"" lTopicID=""#lTopicID#"">">
 	</cfcase>
-	
+
 	<cfcase value="240"><!--- Event Detail --->
 		<cfset EventID="-1">
 		<cfif IsDefined("URL.eid") and application.utilsObj.SimpleDecrypt(Val(URL.eid)) GT "0">
@@ -395,12 +431,12 @@
 						<cfset ThissHTML=ATTRIBUTES.sContentBody["sHTML"]>
 						<cfloop index="ThisToken" list="#StructKeyList(ThissHTML)#">
 							<!--- get the token name --->
-							<cfset ThisTokenName = getToken(ThisToken, 1, ":") />
+							<cfset ThisTokenName=getToken(ThisToken, 1, ":") />
 							
 							<!--- if the token has a type, will store values in a struct --->
 							<cfif isStruct(ThissHTML[ThisTokenName])>
 								<cfif structKeyExists(ThissHTML[ThisTokenName], "type") and len(trim(ThissHTML[ThisTokenName].type))>
-									<cfset thisToken = thisToken & ":" & ThissHTML[ThisTokenName].type />
+									<cfset thisToken=thisToken & ":" & ThissHTML[ThisTokenName].type />
 								</cfif>
 								<cfset ThisOutput=ReplaceNoCase(ThisOutput,"[[#ThisToken#]]",ThissHTML[ThisTokenName].value,"all")>
 							<cfelse>
@@ -497,7 +533,7 @@
 		<cfquery name="qContentGallery" datasource="#APPLICATION.DSN#">
 			SELECT	sourceID
 			FROM	t_content
-			WHERE	contentID = <cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			WHERE	contentID=<cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset PageActionURL="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"PageActionURL")>
@@ -509,7 +545,7 @@
 		<cfquery name="qContentGallery" datasource="#APPLICATION.DSN#">
 			SELECT	sourceID
 			FROM	t_content
-			WHERE	contentID = <cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			WHERE	contentID=<cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset FileContents="<cfmodule template=""/common/modules/Gallery/dsp_gallery.cfm"" galleryCategoryID=""#qContentGallery.sourceID#"">">
 	</cfcase>
@@ -518,8 +554,8 @@
 			SELECT		t_Content_2.SourceID
 			FROM		dbo.t_Content t_Content_1
 			INNER JOIN	dbo.t_Content t_Content_2 
-			ON			t_Content_1.SourceID = t_Content_2.ContentID
-			WHERE		t_Content_1.contentID = <cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			ON			t_Content_1.SourceID=t_Content_2.ContentID
+			WHERE		t_Content_1.contentID=<cfqueryparam value="#val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset FileContents="<cfmodule template=""/common/modules/Events/Registration/ChapterEventDriver.cfm"" ChapterCode=""#APPLICATION.LocaleCode#"" EventID=""#GetEvent.SourceID#"">">
 	</cfcase>
@@ -535,7 +571,7 @@
 		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
 			SELECT	SourceID 
 			FROM	t_Content 
-			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			WHERE	ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset BlogID=GetSource.SourceID>
 		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogListing.cfm"" BlogID=""#Val(BlogID)#"">">
@@ -545,32 +581,32 @@
 		<cfquery name="GetSource" datasource="#APPLICATION.DSN#">
 			SELECT	SourceID 
 			FROM	t_Content 
-			WHERE	ContentID = <cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
+			WHERE	ContentID=<cfqueryparam value="#Val(ATTRIBUTES.ContentID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset BlogID=GetSource.SourceID>
 		<cfset FileContents="<cfmodule template=""/common/modules/blog/dsp_BlogNav.cfm"" BlogID=""#Val(BlogID)#"">">
 	</cfcase>
 	<cfcase value="222"><!--- List of Files --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
-			<cfset aFile = ATTRIBUTES.sContentBody.aFile>
+			<cfset aFile=ATTRIBUTES.sContentBody.aFile>
 			<cfif ATTRIBUTES.CurrentCategoryTypeID IS "66"><!--- Article --->
 				<cfsavecontent variable="FileContents">
 					<cfoutput>
 					<ol class="related-images">
 					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
-						<cfset sFile = aFile[i]>
+						<cfset sFile=aFile[i]>
 						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.FilePath))>
-							<cfset thisName = "">
+							<cfset thisName="">
 							<cfset ThisLink="/common/modules/utils/ImagePopup.cfm?image=#URLEncodedFormat(sFile.FilePath)#">
 							<cfset ThisLink="PopupPic('#JSStringFormat(ThisLink)#')">
 							<cfif StructKeyExists(sFile,"ThumbnailPath") AND sFile.ThumbnailPath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.ThumbnailPath))>
 								
-								<cfset thisName = "<img src=""#sFile.ThumbnailPath#"" border=""0"" />">
+								<cfset thisName="<img src=""#sFile.ThumbnailPath#"" border=""0"" />">
 							</cfif>
 							<cfif StructKeyExists(sFile,"FileName") AND sFile.FileName NEQ "">
-								<cfset thisName = thisName & sFile.FileName>
+								<cfset thisName=thisName & sFile.FileName>
 							<cfelse>
-								<cfset thisName = thisName & " Fig. #i#">
+								<cfset thisName=thisName & " Fig. #i#">
 							</cfif>
 							<li><a href="javascript:void(#ThisLink#);">#thisName#</a></li>
 						</cfif>
@@ -583,7 +619,7 @@
 					<cfoutput>
 					<ul class="resources">
 					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
-						<cfset sFile = aFile[i]>
+						<cfset sFile=aFile[i]>
 						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.FilePath))>
 							<cfif ListFindNoCase("mov,mp4",ListLast(sFile.FilePath,".")) IS "video">
 								<cfset ThisIcon="/common/images/icons/icon-qt.gif">
@@ -664,28 +700,28 @@
 	<cfcase value="256x"><!--- Article Listing --->
 		<cfquery name="getThisCategory" datasource="#APPLICATION.DSN#">
 			SELECT CategoryTypeID,CategoryName,CategoryAlias FROM t_Category
-			WHERE CategoryID = <cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.CurrentCategoryID#">
+			WHERE CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.CurrentCategoryID#">
 		</cfquery>
-		<cfset thisTitle = "">
-		<cfset thisNumItems = "">
+		<cfset thisTitle="">
+		<cfset thisNumItems="">
 			<cfswitch expression="#getThisCategory.CategoryTypeID#">
 				<cfcase value="76"><!--- Journal --->
-					<cfset KeyType = "Journal">
-					<cfset KeyID = ATTRIBUTES.CurrentCategoryID>
+					<cfset KeyType="Journal">
+					<cfset KeyID=ATTRIBUTES.CurrentCategoryID>
 				</cfcase>
 				<cfdefaultcase>
-					<cfset KeyType = "Parent">
-					<cfset KeyID = ATTRIBUTES.CurrentCategoryID>
+					<cfset KeyType="Parent">
+					<cfset KeyID=ATTRIBUTES.CurrentCategoryID>
 				</cfdefaultcase>
 			</cfswitch>
-			<cfset thisTitle = getThisCategory.CategoryName>
+			<cfset thisTitle=getThisCategory.CategoryName>
 			<cfif StructKeyExists(ATTRIBUTES.sContentBody,"NumItems") AND IsNumeric(ATTRIBUTES.sContentBody.NumItems)>
-				<cfset thisNumItems = ATTRIBUTES.sContentBody.NumItems>
+				<cfset thisNumItems=ATTRIBUTES.sContentBody.NumItems>
 			</cfif>
 		<!--- </cfif> --->
 		<cfif ATTRIBUTES.returnVariable EQ "queryForRSS">
 			<cfmodule template="/common/modules/Article/dsp_landing.cfm" KeyType="#KeyType#" KeyID="#KeyID#" Title="#thisTitle#" ContentID="#ATTRIBUTES.ContentID#" IsRSS="1" ResultsPerPage="#thisNumItems#">
-			<cfset CALLER.qArticles = qArticles>
+			<cfset CALLER.qArticles=qArticles>
 		<cfelse>
 			<cfset FileContents="<cfmodule template=""/common/modules/Article/dsp_landing.cfm"" KeyType=""#KeyType#"" KeyID=""#KeyID#"" Title=""#thisTitle#"" ContentID=""#ATTRIBUTES.ContentID#"" IsRSS=""0"" ResultsPerPage=""#thisNumItems#"">">
 		</cfif>
@@ -705,18 +741,18 @@
 		</cfsavecontent>
 	</cfcase>
 	<cfcase value="262"><!--- section landing --->
-		<cfset thisContent = "">
+		<cfset thisContent="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML") AND ATTRIBUTES.sContentBody.HTML NEQ "">
-			<cfset thisContent = ATTRIBUTES.sContentBody.HTML>
+			<cfset thisContent=ATTRIBUTES.sContentBody.HTML>
 		</cfif>
 		<cfsavecontent variable="FileContents">
 			<cfmodule template="/common/modules/RelatedContent/landing.cfm" Content="#thisContent#" ContentID="#ATTRIBUTES.ContentID#" CategoryID="#ATTRIBUTES.CurrentCategoryID#">
 		</cfsavecontent>
 	</cfcase>
 	<cfcase value="263"><!--- institutional landing --->
-		<cfset thisContent = "">
+		<cfset thisContent="">
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML") AND ATTRIBUTES.sContentBody.HTML NEQ "">
-			<cfset thisContent = ATTRIBUTES.sContentBody.HTML>
+			<cfset thisContent=ATTRIBUTES.sContentBody.HTML>
 		</cfif>
 		<cfsavecontent variable="FileContents">
 			<cfmodule template="/common/modules/display/dsp_institutionalLanding.cfm" Content="#thisContent#" CategoryID="#ATTRIBUTES.CurrentCategoryID#">
@@ -730,7 +766,7 @@
 	<cfcase value="265"><!--- Article Listing (manual) --->
 		<cfif ATTRIBUTES.returnVariable EQ "queryForRSS">
 			<cfmodule template="/common/modules/Article/dsp_landing.cfm" KeyType="List" ContentID="#ATTRIBUTES.ContentID#" IsRSS="1">
-			<cfset CALLER.qArticles = qArticles>
+			<cfset CALLER.qArticles=qArticles>
 		<cfelse>
 			<cfset FileContents="<cfmodule template=""/common/modules/Article/dsp_landing.cfm"" KeyType=""List"" ContentID=""#ATTRIBUTES.ContentID#"" IsRSS=""0"">">
 		</cfif>

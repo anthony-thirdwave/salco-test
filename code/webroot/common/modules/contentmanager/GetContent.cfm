@@ -259,6 +259,27 @@
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
 	<cfset REQUEST.AllowComments=CALLER.AllowComments>
 
+	<cfif APPLICATION.ApplicationName IS "intranet.salco">
+		<cfinvoke component="com.ContentManager.ContentManagerHandler" method="IsRestrictedAccess"
+			returnvariable="bIsRestrictedAccess">
+		<cfif bIsRestrictedAccess>
+			<cfset DenyAccess="1">
+			<cfmodule template="/common/modules/security/_secure.cfm"
+				AcceptGroupIDList="5"
+				RelocateOnError="No">
+			<cfif NOT DenyAccess>
+				<!--- Drive Through --->
+			<cfelse>
+				<cfquery name="GetLoginModule" datasource="#APPLICATION.DSN#" maxrows="1">
+					SELECT CategoryID, CacheDateTime
+					FROM t_Category WHERE CategoryAlias=<cfqueryparam value="intranet-login" cfsqltype="CF_SQL_VARCHAR" maxlength="128">
+				</cfquery>
+				<cfset LoginPageCacheDateTime="#GetLoginModule.CacheDateTime#">
+				<cfset LoginPageCategoryID="#GetLoginModule.CategoryID#">
+			</cfif>
+		</cfif>
+	</cfif>
+	
 	<cfloop index="ThisContentPositionID" list="#lPosition#">
 		<cfset recacheThis=false>
 		<cfif DenyAccess>

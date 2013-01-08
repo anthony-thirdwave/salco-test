@@ -3,7 +3,7 @@
 	<cfset ATTRIBUTES.Action=URL.soa>
 </cfif>
 <cfparam name="ATTRIBUTES.SiteCategoryID" default="-1">
-<cfparam name="ATTRIBUTES.FormAction" default="#CGI.Path_Info#?#CGI.Query_String#">
+<cfparam name="ATTRIBUTES.FormAction" default="#CGI.REQUEST_URI#?#CGI.Query_String#">
 <cfparam name="sc" default="1">
 
 <cfset ThisCollectionName="#Application.CollectionName##APPLICATION.LocaleID#_intranet">
@@ -26,12 +26,14 @@
 <h1>Search Results</h1>
 
 <cfif not blnCanSearch>
-	<cfoutput>#sStatusCode[2]#</cfoutput>
+	<cfoutput>
+	#sStatusCode[2]#
 	<form name="detailedSearch" method="get" action="#APPLICATION.utilsObj.parseCategoryUrl('/page/system/search-intranet')#" id="detailedSearch">
 		<label>Search Term</label>
 		<input type="text" name="searchTxt" id="detailedSearch-text" value="#HTMLEditFormat(searchTxt)#"/>
 		<input type="submit" value="search" alt="Search" id="detailedSearch-btn">
 	</form>
+	</cfoutput>
 <cfelse>
 	<cfif NOT IsDefined("StartRow")>
 		<CFSET StartRow=1>
@@ -41,8 +43,7 @@
 	</cfif>
 	<!---  simple search --->
 	<!--- searching with the categorytree is hundreds of times slower,
-		  so only search with it if necessary --->  
-	<!--- #lcase(htmlEditFormat(searchTxt))# --->
+		  so only search with it if necessary ---> 
 	<CFSEARCH NAME="ContentSearch"
 		COLLECTION="#ThisCollectionName#"
 	 	TYPE="simple"
@@ -89,11 +90,10 @@
 				ContextHighlightBegin="<span class=""searchTxt"">"
 				ContextHighlightEnd="</span>">	
 			
-			  <cfif ContentSearch.recordcount eq 0>
-				 <p class="helpText">No search results</p>
-			  <cfelse>
-				
-				<p class="helpText"> Results for <span class="searchTxt"><cfoutput>#variables.newSearchTerm#</cfoutput></span></p>
+			<cfif ContentSearch.recordcount eq 0>
+				<p class="helpText">No search results</p>
+			<cfelse>	
+				<p class="helpText">Results for <span class="searchTxt"><cfoutput>#variables.newSearchTerm#</cfoutput></span></p>
 				<ul>
 					 <cfinclude template="dspSearchResults.cfm">
 				</ul>

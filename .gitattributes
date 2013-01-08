@@ -403,6 +403,8 @@ code/webroot/common/modules/Contact/actContactForm.cfm -text
 code/webroot/common/modules/Contact/actSupportForm.cfm -text
 code/webroot/common/modules/Contact/supportForm.cfm -text
 code/webroot/common/modules/News/NewsListing.cfm -text
+code/webroot/common/modules/News/intranet/newsDetail.cfm -text
+code/webroot/common/modules/News/intranet/newsListing.cfm -text
 code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserForm.cfm -text
 code/webroot/common/modules/User/UserObject.cfm -text
@@ -451,6 +453,9 @@ code/webroot/common/modules/display/Templates/dsp_Content.cfm -text
 code/webroot/common/modules/display/Templates/intranet/dsp_Content.cfm -text
 code/webroot/common/modules/display/dsp_NavSubPages.cfm -text
 code/webroot/common/modules/emailAFriend/emailAFriend.cfm -text
+code/webroot/common/modules/employee/Intranet/employeeDetail.cfm -text
+code/webroot/common/modules/employee/Intranet/employeeListing.cfm -text
+code/webroot/common/modules/employee/Intranet/employeePhoneList.cfm -text
 code/webroot/common/modules/product/CopyProductImages.cfm -text
 code/webroot/common/modules/product/ProductArraySort.cfm -text
 code/webroot/common/modules/product/ProductDetail.cfm -text
@@ -495,6 +500,9 @@ code/webroot/common/modules/search/intranet/search.cfm -text
 code/webroot/common/modules/search/intranet/tagCloud.cfm -text
 code/webroot/common/modules/search/search.cfm -text
 code/webroot/common/modules/search/tagCloud.cfm -text
+code/webroot/common/modules/security/_secure.cfm -text
+code/webroot/common/modules/security/login.cfm -text
+code/webroot/common/modules/security/logoff.cfm -text
 code/webroot/common/modules/sitemap/SitemapHelper.cfm -text
 code/webroot/common/modules/sitemap/_sitemapGenerate.cfm -text
 code/webroot/common/modules/sitemap/sitemap_xml.cfm -text

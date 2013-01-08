@@ -15,10 +15,12 @@
 
 <cfset DateStart=CreateDate(year(dateCurrent),month(dateCurrent),1)>
 <cfset DateEnd=DateAdd("yyyy",1,DateStart)>
+<cfset HighlightMonth="#DateFormat(DateStart,'yyyymm')#">
+<cfset HighlightDate="">
 
 <cfif Val(URL.ecdm) IS NOT "0" and Val(URL.ecdy) IS NOT "0" and IsDate("#Val(URL.ecdm)#/1/#Val(URL.ecdy)#")>
-	<cfset DateStart=CreateDate(Val(URL.ecdy),Val(URL.ecdm),1)>
-	<cfset DateEnd=DateAdd("m",1,DateStart)>
+	<cfset HighlightDate="#CreateDate(Val(URL.ecdy),Val(URL.ecdm),1)#">
+	<cfset HighlightMonth="#DateFormat(HighlightDate,'yyyymm')#">
 	<cfset ATTRIBUTES.DisplayMode="ByMonth">
 </cfif>
 
@@ -46,6 +48,10 @@
 </cfif>
 
 <cfinvoke component="com.Taxonomy.TopicHandler" method="GetTopicQuery" returnvariable="allTopics">
+
+<script language="JavaScript">
+	<cfoutput>HighlightMonth='#HighlightMonth#';</cfoutput>
+</script>
 
 <article class="news">
 <div class="inArt">
@@ -84,10 +90,10 @@
 	<cfinvokeargument name="limiter" value="true">
 </cfinvoke>
 
-
+<div class="eventTitleContainer">
 <cfoutput>
 	<cfif ATTRIBUTES.DisplayMode IS "ByMonth">
-		<h2>Events for #DateFormat(DateStart,"mmmm, yyyy")#</h2>
+		<h2>Events for #DateFormat(HighlightDate,"mmmm, yyyy")#</h2>
 	<cfelseif ATTRIBUTES.DisplayMode IS "ByTopic">
 		<cfquery name="GetTopicName" dbtype="query">
 			select TopicName from allTopics where TopicID=#Tid#
@@ -97,30 +103,52 @@
 		<h2>Upcoming Programs and Events</h2>
 	</cfif>
 </cfoutput>
-
+<div class="eventTitleRight">
 <p>Type of Event</p>
-<form action="">
-<select type="Select" onChange="this.form.submit()" name="tid">
+<div id="fancyEventTypes" class="fauxSelect">
+	<div class="fauxOption"></div>
+	<img class="fauxArrow" src="/common/images/Intranet/template/fauxSelectArrow.png">
+</div>
+<form action=""><!-- this.form.submit() -->
+<select type="Select" onChange="" name="tid" id="tid" style="visibility:hidden">
 <option value="All" <cfif Val(tid) is "0">selected</cfif>>All</option>
 <cfoutput query="allTopics">
 	<option value="#TopicID#" <cfif tid IS TopicID>selected</cfif>>#TopicName#</option>
 </cfoutput>
 </select>
 </form>
-<hr>
+</div>
+</div>
 <cfif theEvents.RecordCount IS "0">
-	<p>There are no events scheduled at this time. Please check back again soon.</p>
+	<p style="margin-top:24px;">There are no events scheduled at this time. Please check back again soon.</p>
 <cfelse>
+<style title="eventCalStyles">
+
+<cfoutput query="theEvents" group="dateStartYearMonth">
+	<cfset thisIDStyles="#ListFirst(dateStartYearMonth,'/')##ListLast(dateStartYearMonth,'/')#">
+		
+			##title_#thisIDStyles#:target+.calListing{
+				height:auto;/*100%;*/
+			}
+			
+			##title_#thisIDStyles#:target a:before {
+				content:"- ";
+				font-size: 20px;}
+		
+</cfoutput>
+</style>
+
 	<ul class="eventsList">
 
 	<cfoutput query="theEvents" group="dateStartYearMonth">
-		<li><h3>#MonthAsString(ListLast(dateStartYearMonth,"/"))#, #Left(dateStartYearMonth,4)#</h3></li>
-		<dl>
+		<cfset thisID="#ListFirst(dateStartYearMonth,'/')##ListLast(dateStartYearMonth,'/')#">
+		<li><h3 id="title_#thisID#"><a href="##title_#thisID#">#MonthAsString(ListLast(dateStartYearMonth,"/"))#, #Left(dateStartYearMonth,4)#</a></h3>
+		<dl class="calListing" id="listing_#thisID#" data-titleID="title_#thisID#">
 		<cfoutput group="eventID">
 			<cfset thisEventConfig=xmlParse(theEvents.eventConfig) />
 			<cfset thisEventDateConfig=xmlParse(theEvents.eventDateConfig) />
 			<cf_AddToQueryString querystring="#EventDetailQueryString#" name="eid" value="#theEvents.PublicId#">
-			<dt>#dateFormat(theEvents.dateStart, "mmmm dd, yyyy")#
+			<dt><a name="Event#theEvents.publicId#" style="display:block" href="#EventDetailLocation#?#QueryString#">#dateFormat(theEvents.dateStart, "mmmm dd, yyyy")#
 			<cfif isDate(theEvents.dateEnd) and dateFormat(theEvents.dateStart, "mmddyyyy") neq dateFormat(theEvents.dateEnd, "mmddyyyy")>
 			- #dateFormat(theEvents.dateEnd, "mmmm dd, yyyy")#
 			</cfif>
@@ -131,13 +159,33 @@
 				<cfif len(trim(theEvents.dateEnd)) and toString(timeFormat(theEvents.dateEnd, "HH:mm:ss")) neq "00:00:00">
 				&mdash; #timeFormat(theEvents.dateEnd, "h:mm tt")#
 				</cfif>
-			</cfif>
+			</cfif></a>
 			</dt>
 			<dd><a name="Event#theEvents.publicId#" href="#EventDetailLocation#?#QueryString#">#theEvents.eventTitle# #theEvents.dateStartYearMonth#</a></dd>
 		</cfoutput>
-		</dl>
+		</dl></li>
 	</cfoutput>
 	</ul>
 	
 </cfif>
 </div></div></article>
+<script type="text/javascript">
+	optIDs=["tid"];
+	fauxOptIDs=["fancyEventTypes"];
+$(window).load(function () {
+	setTimeout("calendarAccordian.init()",500);
+	fauxSelects.init();
+});
+</script>
+<style title="eventCalStyles">
+article .fauxSelect{
+	width:145px;
+	margin-top:2px;
+}
+article .fauxSelect .fauxArrow {
+    margin-left: 35px;
+}
+article .fauxSelect .fauxOption a{
+	width:145px;
+}
+</style>
