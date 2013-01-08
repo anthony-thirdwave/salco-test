@@ -478,6 +478,11 @@ code/webroot/common/modules/product/dsp_resource.cfm -text
 code/webroot/common/modules/product/import/ProductImportWeekly.cfm -text
 code/webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
 code/webroot/common/modules/product/productFamilyDetail.cfm -text
+code/webroot/common/modules/report/getdateforweeknumber.cfm -text
+code/webroot/common/modules/report/orderShipmentAccuracy.cfm -text
+code/webroot/common/modules/report/orders.cfm -text
+code/webroot/common/modules/report/sales.cfm -text
+code/webroot/common/modules/report/shipment.cfm -text
 code/webroot/common/modules/search/SearchForm.cfm -text
 code/webroot/common/modules/search/dspSearchFormFilter.cfm -text
 code/webroot/common/modules/search/dspSearchResults.cfm -text
