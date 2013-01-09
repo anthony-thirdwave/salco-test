@@ -140,6 +140,9 @@
 			<cfcase value="218"><!--- Flash --->
 				<cfset this.sFields[ThisContentTypeID]="Image,Flash,LinkURL">
 			</cfcase>
+			<cfcase value="221"><!--- list of files --->
+				<cfset this.sFields[ThisContentTypeID]="aFile,HTML">
+			</cfcase>
 			<cfcase value="222"><!--- list of files --->
 				<cfset this.sFields[ThisContentTypeID]="aFile">
 			</cfcase>
@@ -986,7 +989,7 @@
 				<cfquery name="GetContent" datasource="#APPLICATION.DSN#">
 					select ContentDate1 from t_Content Where ContentID=#Val(ThisContentID)#
 				</cfquery>
-				<cfset ReturnString="#DateFormat(GetContent.ContentDate1)# - #application.utilsObj.RemoveHTML(this.GetProperty('Text'))#">
+				<cfset ReturnString="#application.utilsObj.RemoveHTML(this.GetProperty('HTML'))#">
 			</cfcase>
 			<cfcase value="235"><!--- News Item --->
 				<cfif application.utilsObj.RemoveHTML(this.GetProperty("ContentAbstract")) IS NOT "">

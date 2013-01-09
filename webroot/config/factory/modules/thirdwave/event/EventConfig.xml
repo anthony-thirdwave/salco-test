@@ -1,0 +1,48 @@
+<!-- 3W:Event:EventConfig Object -->
+<object>
+	<name>3W:Event:EventConfig</name>
+	<propertyList>
+		<property>
+			<variableName>eventType</variableName>
+			<displayName>event type</displayName>
+			<restrictions>
+				<enumeration>
+					<default>overview</default>
+					<value>overview</value>
+					<value>multiday</value>
+					<value>day</value>
+					<value>block</value>
+				</enumeration>
+			</restrictions>
+		</property>
+		<property>
+			<variableName>description</variableName>
+			<displayName>description</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>subTitle</variableName>
+			<displayName>subtitle</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+	 	<property>
+			<variableName>visibility</variableName>
+			<displayName>visibility</displayName>
+			<restrictions>
+				<enumeration>
+					<default>everyScope</default>
+					<value>noScope</value>
+					<value>everyScope</value>
+					<value>dayScope</value>
+					<value>weekScope</value>
+					<value>monthScope</value>
+					<value>yearScope</value>
+				</enumeration>
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

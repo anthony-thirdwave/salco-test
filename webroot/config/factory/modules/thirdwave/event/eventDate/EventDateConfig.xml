@@ -1,0 +1,63 @@
+<!-- 3W:EventDate:EventDateConfig Object -->
+<object>
+	<name>3W:EventDate:EventDateConfig</name>
+	<propertyList>
+		<property>
+			<variableName>dateType</variableName>
+			<displayName>date type</displayName>
+			<restrictions>
+				<enumeration>
+					<default>event</default>
+					<value>event</value>
+					<value>instance</value>
+				</enumeration>
+			</restrictions>
+		</property>
+	 	<property>
+			<variableName>repeatConfig</variableName>
+			<displayName>repeat configuration</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>3W:EventDate:EventDateConfig:RepeatConfig</objectName>
+				</xml>
+				<subObject />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>registration</variableName>
+			<displayName>registration</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>3W:EventDate:EventDateConfig:Registration</objectName>
+				</xml>
+				<subObject />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>visibility</variableName>
+			<displayName>visibility</displayName>
+			<restrictions>
+				<enumeration>
+					<default>everyScope</default>
+					<value>noScope</value>
+					<value>everyScope</value>
+					<value>dayScope</value>
+					<value>weekScope</value>
+					<value>monthScope</value>
+					<value>yearScope</value>
+				</enumeration>
+			</restrictions>
+		</property>
+		<property>
+			<variableName>dateNote</variableName>
+			<displayName>date note</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

@@ -1,0 +1,192 @@
+<!-- 3W:Address Object -->
+<object>
+	<name>3W:Address</name>
+	<table>
+		<name>t_Address</name>
+		<datasource>APPLICATION.DSN</datasource>
+	</table>
+	<propertyList>
+		<property>
+			<variableName>AddressID</variableName>
+			<displayName>AddressID</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>AddressID</columnName>
+				<dataType>cf_sql_integer</dataType>
+				<primaryKey />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>Address1</variableName>
+			<displayName>address 1</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>Address1</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>128</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>Address2</variableName>
+			<displayName>address 2</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>Address2</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>128</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>Address3</variableName>
+			<displayName>address 3</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>Address3</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>128</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>City</variableName>
+			<displayName>city</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>City</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>64</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>StateProvinceID</variableName>
+			<displayName>state province id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>StateProvinceID</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>4</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>StateProvinceOther</variableName>
+			<displayName>state province other</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>StateProvinceOther</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>64</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>CountryID</variableName>
+			<displayName>country id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>CountryID</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>2</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>CountrySubdivisionID</variableName>
+			<displayName>country subdivision id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>CountrySubdivisionID</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>12</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>PostalCode</variableName>
+			<displayName>postal code</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>PostalCode</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>16</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>PublicId</variableName>
+			<displayName>public id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>PublicId</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>33</maxLength>
+				<uponInsert>publicID</uponInsert>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateAdded</variableName>
+			<displayName>date added</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>DateAdded</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<uponInsert>dateStamp</uponInsert>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateModified</variableName>
+			<displayName>date modified</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>DateModified</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<uponUpdate>dateStamp</uponUpdate>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateDisabled</variableName>
+			<displayName>date disabled</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Address</tableName>
+				<columnName>DateDisabled</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+	</propertyList>
+</object>

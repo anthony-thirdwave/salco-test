@@ -1,7 +1,11 @@
 <cfset sMenu=StructNew()>
-<cfset sMenuList="Dashboard,Content Manager,Product List,User Manager,Redirect Manager,Support">
+<cfset sMenuList="Dashboard,Content Manager,Product List,User Manager,Redirect Manager,Event Manager,Support">
 
-
+<!--- <!--- add the event manager if the events module exists --->
+<cfif structKeyExists(APPLICATION.modules, "event")>
+	<cfset sMenuList = listAppend(sMenuList, "Event Manager")>
+</cfif>
+ --->
 <cfloop index="ThisElt" list="#sMenuList#">
 	<cfset sMenuElt=StructNew()>
 	<cfset StructInsert(sMenuElt,"name","#ThisElt#",1)>
@@ -35,6 +39,11 @@
 			<cfset StructInsert(sMenuElt,"link","/common/admin/redirectManager/index.cfm",1)>
 			<cfset StructInsert(sMenuElt,"lUserGroupID","#APPLICATION.AdminUserGroupID#",1)>
 			<cfset StructInsert(sMenuElt,"Description","Manage url redirects",1)>
+		</cfcase>
+		<cfcase value="Event Manager">
+			<cfset StructInsert(sMenuElt,"link","/common/admin/EventManager/index.cfm",1)>
+			<cfset StructInsert(sMenuElt,"lUserGroupID","#APPLICATION.AdminUserGroupID#",1)>
+			<cfset StructInsert(sMenuElt,"Description","Manage events",1)>
 		</cfcase>
 	</cfswitch>
 	<cfset StructInsert(sMenu,"#ThisElt#",sMenuElt,1)>

@@ -1,0 +1,146 @@
+<!-- EventRegistration Object -->
+<object>
+	<name>EventRegistration</name>
+	<table>
+		<name>t_EventRegistration</name>
+		<datasource>APPLICATION.EVENT_DSN</datasource>
+	</table>
+	<propertyList>
+		<property>
+			<variableName>EventRegistrationID</variableName>
+			<displayName>EventRegistrationID</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>EventRegistrationID</columnName>
+				<dataType>cf_sql_integer</dataType>
+				<primaryKey />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>EventDatePublicId</variableName>
+			<displayName>event date public id</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>EventDatePublicId</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<notNull />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>PaymentPublicId</variableName>
+			<displayName>payment public id</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>PaymentPublicId</columnName>
+				<dataType>cf_sql_varchar</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>Registrants</variableName>
+			<displayName>Total Registrants</displayName>
+			<restrictions>
+				<numeric>
+					<default>1</default>
+				</numeric>
+				<notNull />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>Registrants</columnName>
+				<dataType>cf_sql_integer</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>snapshot</variableName>
+			<displayName>event registration snapshot</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>EventRegistrationSnapshot</objectName>
+				</xml>
+				<notNull />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>Snapshot</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<notNull />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>PublicId</variableName>
+			<displayName>public id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>PublicId</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>33</maxLength>
+				<uponInsert>publicID</uponInsert>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateCancelled</variableName>
+			<displayName>date cancelled</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>DateCancelled</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateAdded</variableName>
+			<displayName>date added</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>DateAdded</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<uponInsert>dateStamp</uponInsert>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateModified</variableName>
+			<displayName>date modified</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>DateModified</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<uponUpdate>dateStamp</uponUpdate>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateDisabled</variableName>
+			<displayName>date disabled</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventRegistration</tableName>
+				<columnName>DateDisabled</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+	</propertyList>
+</object>

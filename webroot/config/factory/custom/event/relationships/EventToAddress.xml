@@ -1,0 +1,37 @@
+<!-- Event to Address Relationship -->
+<object>
+	<name>EventToAddress</name>
+	<table>
+		<name>t_EventAddress</name>
+		<datasource>APPLICATION.DSN</datasource>
+	</table>
+	<propertyList>
+		<property>
+			<variableName>AddressID</variableName>
+			<displayName>address id</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventAddress</tableName>
+				<columnName>AddressID</columnName>
+				<dataType>cf_sql_integer</dataType>
+				<notNull />
+				<foreignKey />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>EventID</variableName>
+			<displayName>event id</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventAddress</tableName>
+				<columnName>EventID</columnName>
+				<dataType>cf_sql_integer</dataType>
+				<notNull />
+			</dbInfo>
+		</property>
+	</propertyList>
+</object>
