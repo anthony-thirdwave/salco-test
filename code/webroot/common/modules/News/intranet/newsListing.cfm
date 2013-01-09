@@ -22,7 +22,17 @@
 		<cfif listlen(qNewsListing.subTitle,"&") gte 2>
 			<cfset EmployeeName=listGetAt(qNewsListing.subTitle,2,"&")>
 		</cfif>
-		<div class="building-blocks<cfif EmergencyAlert> incmWeather</cfif>">
+		<cfset ThisClass="">
+		<cfif EmergencyAlert>
+			<cfif IsDefined("SESSION.EmergencyAlertDisplayed") and ListFindNoCase(SESSION.EmergencyAlertDisplayed,NewsID)>
+				<cfset ThisClass="">
+			<cfelse>
+				<cfset ThisClass="incmWeather">
+				<cfparam name="SESSION.EmergencyAlertDisplayed" default="">
+				<cfset SESSION.EmergencyAlertDisplayed=ListAppend(SESSION.EmergencyAlertDisplayed,NewsID)>
+			</cfif>
+		</cfif>
+		<div class="building-blocks #ThisClass#">
 	 		<dl>
 				<dt>#title#</dt>
 				<dd class="name"><cfif len(EmployeeName)>#EmployeeName#</cfif></dd>

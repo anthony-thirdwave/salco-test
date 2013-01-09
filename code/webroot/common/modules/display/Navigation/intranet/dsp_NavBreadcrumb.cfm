@@ -5,8 +5,8 @@
 		<cfset searchPageName="employee-search">
 		<cfset alphabetList="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z">
 		<cfinvoke component="com.ContentManager.EmployeeHandler"
-				method="GetAllEmployees"
-				returnVariable="REQUEST.GetAllEmployees">
+			method="GetAllEmployees"
+			returnVariable="REQUEST.GetAllEmployees">
 		<nav id="empl-nav">
 			<div id="empl-nav-title">Search Employees:</div>
 				<ul>
@@ -36,8 +36,8 @@
 		<cfset records_per_page=8>
 		
 		<cfinvoke component="com.ContentManager.NewsHandler"
-				 	method="qryNews"
-					returnVariable="News">
+		 	method="qryNews"
+			returnVariable="News">
 		
 		<cfquery name="get_count" dbtype="query">
 		   SELECT COUNT(newsid) AS records 
@@ -50,9 +50,9 @@
 		<cfparam name="show_pages" default="#min(page_links_shown,total_pages)#">
 		
 		<cfif url.pageNum + int(show_pages / 2) - 1 GTE total_pages>
-		   <cfset start_page=total_pages - show_pages + 1>
+			<cfset start_page=total_pages - show_pages + 1>
 		<cfelseif url.pageNum + 1 GT show_pages>
-		   <cfset start_page=url.pageNum - int(show_pages / 2)>
+			<cfset start_page=url.pageNum - int(show_pages / 2)>
 		</cfif>
 		
 		<cfset end_page=start_page + show_pages - 1>
@@ -69,9 +69,9 @@
 				<li>
 				<cfif url.pageNum EQ i>
 			      	#i#
-			   <cfelse>
+				<cfelse>
 			      	<a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#i#">#i#</a>	
-			   	</cfif>
+				</cfif>
 				</li>
 				</cfloop>
 				<li class="newsNextPage">
@@ -117,12 +117,11 @@
 			<nav id="newsStoryNav">
 				<ul>
 					<cfif len(NextStoryLink)>
-					<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">previous story</a></li>
+						<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">previous story</a></li>
 					</cfif>
 					<cfif len(previousStoryLink)>
-					<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">next story</a></li>
+						<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">next story</a></li>
 					</cfif>
-					
 				</ul>
 			</nav>
 		</cfoutput>

@@ -85,12 +85,9 @@ $(document).ready(function(){
 		+ DataEntryErrorTotalsTexas
 		+ DuplicateOrderTotalsIllinois
 		+ DuplicateOrderTotalsTexas
-		+ EngineeringIssueTotalsIllinois
-		+ EngineeringIssueTotalsTexas
-		+ PartExchangeTotalsIllinois
-		+ PartExchangeTotalsTexas
-		+ PartsNoLongerNeededTotalsIllinois
-		+ PartsNoLongerNeededTotalsTexas
+		+ EngineeringIssueTotals
+		+ PartExchangeTotals
+		+ PartsNoLongerNeededTotals
 		+ PickingErrorTotalsIllinois
 		+ PickingErrorTotalsTexas
 		+ ProductionErrorTotalsIllinois
@@ -99,8 +96,7 @@ $(document).ready(function(){
 		+ PurchasingErrorTotalsTexas
 		+ QualifiedWrongPartTotalsIllinois
 		+ QualifiedWrongPartTotalsTexas
-		+ TrialPartTotalsIllinois
-		+ TrialPartTotalsTexas
+		+ TrialPartTotals
 		+ VendorErrorTotalsIllinois
 		+ VendorErrorTotalsTexas
 		+ QualityIssueTotalsIllinois
@@ -284,7 +280,7 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<td>TRIAL PART</td>
-				<td>#qryDate.TrialPartTotalsIllinois#</td>
+				<td>#qryData.TrialPartTotals#</td>
 				<td></td>
 				<td></td>
 			</tr>

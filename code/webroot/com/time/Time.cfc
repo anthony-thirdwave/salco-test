@@ -1,4 +1,4 @@
-<cfcomponent hint="time functions" output="true">
+<cfcomponent hint="time functions" output="false">
 
 
 	<cffunction name="init" returntype="Time" output="false">
@@ -131,7 +131,7 @@
 
 
 	<!--- outputs a pulldown for time elements based upon passed params --->
-	<cffunction name="timeSelect" output="true">
+	<cffunction name="timeSelect" returntype="string" output="false">
 		<cfargument name="selectType" default="minute">
 		<cfargument name="selectName" default="">
 		<cfargument name="selectId" default="">
@@ -149,33 +149,38 @@
 			<cfset arguments.stepBy = 1 />
 		</cfif>
 
+
 		<cfoutput>
-		<!--- create the select dropdown --->
-		<select name="#arguments.selectName#" id="#arguments.selectId#" class="#arguments.selectClass#">
-				<option value="">#arguments.selectType#</option>
+			<cfsavecontent variable="local.returnSelect">
+			<!--- create the select dropdown --->
+			<select name="#arguments.selectName#" id="#arguments.selectId#" class="#arguments.selectClass#">
+					<option value="">#arguments.selectType#</option>
 
-			<!--- loop through the units of time --->
-			<cfloop from="1" to="#arguments.countTo#" index="local.itr" step="#arguments.stepBy#">
+				<!--- loop through the units of time --->
+				<cfloop from="1" to="#arguments.countTo#" index="local.itr" step="#arguments.stepBy#">
 
-				<!--- get the val starting at 0 --->
-				<cfset local.thisVal = local.itr - 1 />
+					<!--- get the val starting at 0 --->
+					<cfset local.thisVal = local.itr - 1 />
 
-				<!--- display each option, determining if it should be selected --->
-				<option value="#local.thisVal#"<cfif (not len(arguments.selected) and local.thisVal eq arguments.default) or (len(arguments.selected) and arguments.selected eq local.thisVal)> selected="selected"</cfif>>
+					<!--- display each option, determining if it should be selected --->
+					<option value="#local.thisVal#"<cfif (not len(arguments.selected) and local.thisVal eq arguments.default) or (len(arguments.selected) and arguments.selected eq local.thisVal)> selected="selected"</cfif>>
 
-					<!--- display the values depending on selectType --->
-					<cfswitch expression="#arguments.selectType#">
-						<cfcase value="hour">
-							#iif(yesNoFormat(local.thisVal mod 12), "local.thisVal mod 12", DE(12))# #iif(local.thisVal gte 12, DE("PM"), DE("AM"))#
-						</cfcase>
-						<cfdefaultcase>
-							#numberFormat(local.thisVal, "00")#
-						</cfdefaultcase>
-					</cfswitch>
-				</option>
-			</cfloop>
-		</select>
+						<!--- display the values depending on selectType --->
+						<cfswitch expression="#arguments.selectType#">
+							<cfcase value="hour">
+								#iif(yesNoFormat(local.thisVal mod 12), "local.thisVal mod 12", DE(12))# #iif(local.thisVal gte 12, DE("PM"), DE("AM"))#
+							</cfcase>
+							<cfdefaultcase>
+								#numberFormat(local.thisVal, "00")#
+							</cfdefaultcase>
+						</cfswitch>
+					</option>
+				</cfloop>
+			</select>
+			</cfsavecontent>
 		</cfoutput>
+
+		<cfreturn local.returnSelect>
 	</cffunction>
 
 </cfcomponent>

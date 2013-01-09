@@ -107,6 +107,9 @@
 			<cfcase value="60,63,70"><!--- Content --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
 			</cfcase>
+			<cfcase value="82"><!--- News --->
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
+			</cfcase>
 			<cfcase value="78"><!--- Blog --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID">
 			</cfcase>
@@ -148,6 +151,9 @@
 					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,CategoryURL,TemplateID,WorkflowStatusID,AuthorName,PressReleaseDate">
 				</cfcase>
 				<cfcase value="61"><!--- System --->
+					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
+				</cfcase>
+				<cfcase value="83"><!--- Topic, Taxonomy --->
 					<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#">
 				</cfcase>
 				<cfcase value="62"><!--- Product Family --->
@@ -407,11 +413,11 @@
 			<cfset thisFoobar=this.GetProperty("foobar")><!--- foxtrot --->
 			<cfset thisLTopicID=this.GetProperty("lTopicID")>
 
-			<cfif ListFindNoCase("60,62,63,64,66,71,67,74,75,76,80",thisCategoryTypeID) IS "0"><!--- Set ShowInNavigation to 1 if not a public category--->
+			<cfif ListFindNoCase("60,62,63,64,66,71,67,74,75,76,80,83,82",thisCategoryTypeID) IS "0"><!--- Set ShowInNavigation to 1 if not a public category--->
 				<cfset thisShowInNavigation=1>
 				<cfset thisCategoryIndexed=0>
 			</cfif>
-
+			
 			<cfif ThisCategoryAlias IS "">
 				<cfinvoke component="com.ContentManager.CategoryHandler"
 					method="CreateAlias"
@@ -1207,10 +1213,10 @@
 						LabelID IN (60,61,75,78,80)<!--- Only content, system --->
 					</cfcase>
 					<cfcase value="60,78,80"><!--- Content --->
-						LabelID  IN (60,61,62,75,66,77,78,80) <!--- Content, System, Blog, Article, Journal, blog Entry --->
+						LabelID  IN (60,61,62,75,66,77,78,80,81,82) <!--- Content, System, Blog, Article, Journal, blog Entry --->
 					</cfcase>
 					<cfcase value="61"><!--- system --->
-						LabelID IN (60,61,67,71,73,74,66,76,78,80) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
+						LabelID IN (60,61,67,71,73,74,66,76,78,80,83) <!--- Content, News List, Event List, Gallery, Banner Repository, Article, Topic --->
 					</cfcase>
 					<cfcase value="76"><!--- topic --->
 						LabelID IN (61,76) <!--- System, Topic --->
@@ -1220,6 +1226,9 @@
 					</cfcase>
 					<cfcase value="63,64"><!--- Product Series, Product--->
 						LabelID IN (63,64,60,80) <!--- System, Topic --->
+					</cfcase>
+					<cfcase value="83"><!--- taxonomy --->
+						LabelID IN (61,76) <!--- System, Topic --->
 					</cfcase>
 					<cfdefaultcase><!--- --->
 						LabelID NOT IN (61,60,80)

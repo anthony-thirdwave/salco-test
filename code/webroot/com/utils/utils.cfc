@@ -908,4 +908,126 @@
 	}
 	</cfscript>
 	
+	<cffunction name="CSVToQuery" access="public" returntype="query" output="false" hint="Converts the given CSV string to a query.">
+		<cfargument name="CSV" type="string" required="true" />
+		<cfargument name="Delimiter" type="string" required="false" default="," />
+		<cfargument name="Qualifier" type="string" required="false" default=""""/>
+	
+		<cfset var LOCAL = StructNew() />
+	 
+		<cfset ARGUMENTS.Delimiter = Left( ARGUMENTS.Delimiter, 1 ) />
+	 
+		<cfif Len( ARGUMENTS.Qualifier )>
+			<cfset ARGUMENTS.Qualifier = Left( ARGUMENTS.Qualifier, 1 ) />
+		</cfif>
+	 
+		<!---
+			Set a variable to handle the new line. This will be the
+			character that acts as the record delimiter.
+		--->
+		<cfset LOCAL.LineDelimiter = Chr( 10 ) />
+	 
+		<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll("\r?\n", LOCAL.LineDelimiter) />
+	 
+		<!---get an array of delimiters.--->
+		<cfset LOCAL.Delimiters = ARGUMENTS.CSV.ReplaceAll("[^\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]+","").ToCharArray()/>
+	 
+		<!---Add a blank space to the beginning of every theoreticalfield. --->
+		<cfset ARGUMENTS.CSV = (" " & ARGUMENTS.CSV) />
+	 
+		<!--- add the space to each field. --->
+		<cfset ARGUMENTS.CSV = ARGUMENTS.CSV.ReplaceAll("([\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1})","$1 ") />
+	 
+		<!---Break the CSV value up into raw tokens. --->
+		<cfset LOCAL.Tokens = ARGUMENTS.CSV.Split("[\#ARGUMENTS.Delimiter#\#LOCAL.LineDelimiter#]{1}") />
+	 
+		<!---Set up the default records array. --->
+		<cfset LOCAL.Rows = ArrayNew( 1 ) />
+	 
+		<!---Create a new active row. --->
+		<cfset ArrayAppend(LOCAL.Rows,ArrayNew( 1 )) />
+	 
+		<!---Set up the row index. THis is the row to which we areactively adding value.--->
+		<cfset LOCAL.RowIndex = 1 />
+	 
+		<!---Set the default flag for wether or not we are in themiddle of building a value across raw tokens.--->
+		<cfset LOCAL.IsInValue = false />
+		<!---Loop over the raw tokens to start building values.--->
+		<cfloop index="LOCAL.TokenIndex" from="1" to="#ArrayLen( LOCAL.Tokens )#" step="1">
+			<!---Get the current field index.--->
+			<cfset LOCAL.FieldIndex = ArrayLen(LOCAL.Rows[ LOCAL.RowIndex ]) />
+			<!---Get the next token. --->
+			<cfset LOCAL.Token = LOCAL.Tokens[ LOCAL.TokenIndex ].ReplaceFirst("^.{1}","") />
+			<!---
+				Check to see if we have a field qualifier. --->
+			<cfif Len( ARGUMENTS.Qualifier )>
+				<!---Check to see if we are currently building a field value that has been split up among different delimiters.--->
+				<cfif LOCAL.IsInValue>
+					<cfset LOCAL.Token = LOCAL.Token.ReplaceAll("\#ARGUMENTS.Qualifier#{2}","{QUALIFIER}") />
+	
+					<cfset LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ] = (LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ] &LOCAL.Delimiters[ LOCAL.TokenIndex - 1 ] &LOCAL.Token) />
+	 
+					<cfif (Right( LOCAL.Token, 1 ) EQ ARGUMENTS.Qualifier)>
+						<cfset LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ] = LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ].ReplaceFirst( ".{1}$", "" ) />
+						<cfset LOCAL.IsInValue = false />
+					</cfif>
+				<cfelse>
+					<cfif (Left( LOCAL.Token, 1 ) EQ ARGUMENTS.Qualifier)>
+						<cfset LOCAL.Token = LOCAL.Token.ReplaceFirst("^.{1}","") />
+						<cfset LOCAL.Token = LOCAL.Token.ReplaceAll("\#ARGUMENTS.Qualifier#{2}","{QUALIFIER}") />
+						<cfif (Right( LOCAL.Token, 1 ) EQ ARGUMENTS.Qualifier)>
+							<cfset ArrayAppend(LOCAL.Rows[ LOCAL.RowIndex ],LOCAL.Token.ReplaceFirst(".{1}$","")) />
+						<cfelse>
+							<cfset LOCAL.IsInValue = true />
+							<!--- Add this token to the row. --->
+							<cfset ArrayAppend(LOCAL.Rows[ LOCAL.RowIndex ],LOCAL.Token) />
+						</cfif>
+					<cfelse>
+						<cfset ArrayAppend(LOCAL.Rows[ LOCAL.RowIndex ],LOCAL.Token) />
+					</cfif>
+				</cfif>
+	 
+				<cfset LOCAL.Rows[ LOCAL.RowIndex ][ ArrayLen( LOCAL.Rows[ LOCAL.RowIndex ] ) ] = Replace( LOCAL.Rows[ LOCAL.RowIndex ][ ArrayLen( LOCAL.Rows[ LOCAL.RowIndex ] ) ],"{QUALIFIER}",ARGUMENTS.Qualifier,"ALL") />
+			<cfelse>
+				<cfset ArrayAppend(LOCAL.Rows[ LOCAL.RowIndex ],LOCAL.Token) />
+			</cfif>
+	 
+			<cfif ((NOT LOCAL.IsInValue) AND (LOCAL.TokenIndex LT ArrayLen( LOCAL.Tokens )) AND (LOCAL.Delimiters[ LOCAL.TokenIndex ] EQ LOCAL.LineDelimiter))>
+				<cfset ArrayAppend(LOCAL.Rows,ArrayNew( 1 )) />
+	 
+				<!--- Increment row index to point to next row. --->
+				<cfset LOCAL.RowIndex = (LOCAL.RowIndex + 1) />
+			</cfif>
+		</cfloop>
+	
+		<!--- Set the initial max field count. --->
+		<cfset LOCAL.MaxFieldCount = 0 />
+		<cfset LOCAL.EmptyArray = ArrayNew( 1 ) />
+	 
+	 
+		<!--- Loop over the records array. --->
+		<cfloop index="LOCAL.RowIndex" from="1" to="#ArrayLen( LOCAL.Rows )#" step="1">
+			<!--- Get the max rows encountered so far. --->
+			<cfset LOCAL.MaxFieldCount = Max(LOCAL.MaxFieldCount,ArrayLen(LOCAL.Rows[ LOCAL.RowIndex ])) />
+			<!--- Add an empty value to the empty array. --->
+			<cfset ArrayAppend(LOCAL.EmptyArray,"") />
+		</cfloop>
+		<cfset LOCAL.Query = QueryNew( "" ) />
+		<!---
+			Loop over the max number of fields and create a column
+			for each records.
+		--->
+		<cfloop index="LOCAL.FieldIndex" from="1" to="#LOCAL.MaxFieldCount#" step="1">
+			<cfset QueryAddColumn(LOCAL.Query,"COLUMN_#LOCAL.FieldIndex#","CF_SQL_VARCHAR",LOCAL.EmptyArray) />
+		</cfloop>
+	 
+		<cfloop index="LOCAL.RowIndex" from="1" to="#ArrayLen( LOCAL.Rows )#" step="1">
+	 
+			<!--- Loop over the fields in this record. --->
+			<cfloop index="LOCAL.FieldIndex" from="1" to="#ArrayLen( LOCAL.Rows[ LOCAL.RowIndex ] )#" step="1">
+				<cfset LOCAL.Query[ "COLUMN_#LOCAL.FieldIndex#" ][ LOCAL.RowIndex ] = JavaCast("string",LOCAL.Rows[ LOCAL.RowIndex ][ LOCAL.FieldIndex ]) />
+			</cfloop>
+		</cfloop>
+		<cfreturn LOCAL.Query />
+	</cffunction>
 </cfcomponent>

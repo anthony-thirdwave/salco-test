@@ -1,4 +1,3 @@
-
 <cfif REQUEST.currentCategoryID eq 6065>
 	<cfparam name="ATTRIBUTES.CategoryID" default="">
 <cfelse>
@@ -8,13 +7,19 @@
 <cfparam name="ATTRIBUTES.PageStatus" default="">
 <cfparam name="url.alphaListing" default="">
 
+<cfif NOT IsDefined("REQUEST.GetAllEmployees")>
+	<cfinvoke component="com.ContentManager.EmployeeHandler"
+		method="GetAllEmployees"
+		returnVariable="REQUEST.GetAllEmployees">
+</cfif>
+
 <cfif len(ATTRIBUTES.PageStatus) and ATTRIBUTES.PageStatus is "search">
 	<cfquery name="employees" dbtype="query">
 		SELECT		*
 		FROM		REQUEST.GetAllEmployees
 		WHERE		departmentID <> <cfqueryparam value="6098" cfsqltype="cf_sql_integer">
 		<cfif Len(Trim(url.alphaListing))>
-		AND			empFirstName like <cfqueryparam value="#UCASE(Trim(url.alphaListing))#%" cfsqltype="cf_sql_varchar">
+			AND empFirstName like <cfqueryparam value="#UCASE(Trim(url.alphaListing))#%" cfsqltype="cf_sql_varchar">
 		</cfif>
 		ORDER BY	empFirstName,empLastName
 	</cfquery>
@@ -24,7 +29,7 @@
 		FROM		REQUEST.GetAllEmployees
 		WHERE		departmentID <> <cfqueryparam value="6098" cfsqltype="cf_sql_integer">
 		<cfif val(ATTRIBUTES.CategoryID) gt 0>
-		AND		departmentID = <cfqueryparam value="#val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer">
+			AND departmentID = <cfqueryparam value="#val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfif>
 		ORDER BY	empFirstName,empLastName
 	</cfquery>
@@ -41,5 +46,5 @@
 	</div>
 	<!--- Loop over keys in the struct. --->
 <cfelse>
-	No Employee Display
+	<p>No Employees Found</p>
 </cfif>

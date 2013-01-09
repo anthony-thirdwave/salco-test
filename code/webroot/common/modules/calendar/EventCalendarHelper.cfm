@@ -31,8 +31,7 @@
 	<cfset EventDetailQueryString="">
 </cfif>
 
-<cfif Inline IS "1">
-	<cfinvoke method="getEvents" component="#APPLICATION.eventHandlerObj#" returnvariable="theEvents">
+<cfinvoke method="getEvents" component="#APPLICATION.eventHandlerObj#" returnvariable="theEvents">
 	<cfinvokeargument name="keywords" value="#trim(lCase(urlDecode(keywords)))#">
 	<cfinvokeargument name="city" value="#trim(urlDecode(city))#">
 	<cfinvokeargument name="Sort" value="#ATTRIBUTES.Mode#">
@@ -56,79 +55,60 @@
 	<cfinvokeargument name="getRecurringDates" value="true">
 	<cfinvokeargument name="limiter" value="true">
 </cfinvoke>
-	<!--- <cfquery name="GetEvents0" datasource="#ThisDSN#" maxrows="1">
-		select EventDateStart FROM qry_GetEvent
-		where
-		EventDateStart>=<cfqueryparam value="#CreateODBCDate(now())#" cfsqltype="cf_sql_date"> AND
-		EventStatusID IN (<cfqueryparam value="#APPLICATION.AllowedEventStatus#" cfsqltype="cf_sql_integer" list="yes">)
-		Order by EventDateStart
+
+<cfset aBlank1=ArrayNew(1)>
+<cfset aBlank2=ArrayNew(1)>
+<cfloop index="i" from="1" to="#theEvents.RecordCount#" step="1">
+	<cfset ArrayAppend(aBlank1,"Event")>
+	<cfset ArrayAppend(aBlank2,"")>
+</cfloop>
+
+<cfset QueryAddColumn(theEvents,"EventType",aBlank1)>
+<cfset QueryAddColumn(theEvents,"Alias",aBlank2)>
+
+<cfif tid IS "" or ListFindNoCase("6277,6276",tid)>
+	<cfinvoke component="com.ContentManager.EmployeeHandler"
+		method="getDates"
+		returnVariable="qEmployeeEvents"
+		mode="displayDay"
+		SelectedDate="#dateStart#"
+		topicIDList="#tid#">
+	<cfoutput query="qEmployeeEvents">
+		<cfset QueryAddRow(theEvents)>
+		<cfset QuerySetCell(theEvents,"EventType",qEmployeeEvents.EventType)>
+		<cfset QuerySetCell(theEvents,"DateStart",qEmployeeEvents.DateStart)>
+		<cfset QuerySetCell(theEvents,"DateEnd",qEmployeeEvents.DateStart)>
+		<cfset QuerySetCell(theEvents,"DateStartYearMonth",qEmployeeEvents.DateStartYearMonth)>
+		<cfset QuerySetCell(theEvents,"EventID",qEmployeeEvents.EmployeeID)>
+		<cfset QuerySetCell(theEvents,"EventTitle",qEmployeeEvents.EventTitle)>
+		<cfset QuerySetCell(theEvents,"Alias",qEmployeeEvents.Alias)>
+	</cfoutput>
+	<cfquery name="theEvents" dbtype="query">
+		select * from theEvents order by DateStart
 	</cfquery>
-	<cfif GetEvents0.RecordCount IS "1">
-		<cfset theDate=GetEvents0.EventDateStart>
-	<cfelse>
-		<cfset theDate=Now()>
-	</cfif>
-	<cfquery name="GetEvents" datasource="#ThisDSN#">
-		select * FROM qry_GetEvent
-		where
-		year(EventDateStart)=<cfqueryparam value="#year(theDate)#" cfsqltype="cf_sql_integer"> AND
-		month(EventDateStart)=<cfqueryparam value="#month(theDate)#" cfsqltype="cf_sql_integer"> AND
-		day(EventDateStart)=<cfqueryparam value="#day(theDate)# " cfsqltype="cf_sql_integer"> and
-		EventDateStart>=<cfqueryparam value="#DateAdd('h',0,Now())#" cfsqltype="cf_sql_timestamp"><!--- Events that are 1 hour in the past (eastern) still  show up. ---> AND
-		EventStatusID IN (<cfqueryparam value="#APPLICATION.AllowedEventStatus#" cfsqltype="cf_sql_integer" list="yes">)
-		Order by EventDateStart
-	</cfquery> --->
-<cfelse>
-	<!--- <cfquery name="theEvents" datasource="#ThisDSN#">
-		select * FROM qry_GetEvent
-		where
-		year(EventDateStart)=<cfqueryparam value="#year(theDate)#" cfsqltype="cf_sql_integer"> AND
-		month(EventDateStart)=<cfqueryparam value="#month(theDate)#" cfsqltype="cf_sql_integer"> AND
-		day(EventDateStart)=<cfqueryparam value="#day(theDate)#" cfsqltype="cf_sql_integer"> AND
-		EventStatusID IN (<cfqueryparam value="#APPLICATION.AllowedEventStatus#" cfsqltype="cf_sql_integer" list="yes">)
-		Order by EventDateStart
-	</cfquery> --->
-	
-	<cfinvoke method="getEvents" component="#APPLICATION.eventHandlerObj#" returnvariable="theEvents">
-		<cfinvokeargument name="keywords" value="#trim(lCase(urlDecode(keywords)))#">
-		<cfinvokeargument name="city" value="#trim(urlDecode(city))#">
-		<cfinvokeargument name="Sort" value="#ATTRIBUTES.Mode#">
-		<!--- use defaults if this isn't a date --->
-		<cfif displayMonth and isDate(dateStart)>
-			<cfset dateStart=CreateDate(Year(dateStart),month(dateStart),1)>
-			<cfinvokeargument name="dateStart" value="#dateStart#">
-			<cfinvokeargument name="dateEnd" value="#DateAdd('m',1,dateStart)#">
-		<cfelseif isDate(dateStart)>
-			<cfinvokeargument name="dateStart" value="#dateStart#">
-			<cfinvokeargument name="dateEnd" value="">
-			<cfinvokeargument name="dateStartOnly" value="true">
-		<cfelseif ATTRIBUTES.Mode IS "Recent">
-			<cfinvokeargument name="dateStart" value="#dateAdd('m',0-APPLICATION.modules.event.EventDateRangeInMonths, now())#">
-			<cfinvokeargument name="dateEnd" value="#Now()#">
-		</cfif>
-		<cfif tid IS NOT "">
-			<cfinvokeargument name="topicIDList" value="#tid#">
-		</cfif>
-		<cfinvokeargument name="xmlFields" value="#xmlFields#">
-		<cfinvokeargument name="getRecurringDates" value="true">
-		<cfinvokeargument name="limiter" value="true">
-	</cfinvoke>
+
 </cfif>
 
 <cfsavecontent variable="returnValue">
 	<cfif theEvents.RecordCount GT "0">
 		<cfoutput query="theEvents">
-			<cf_AddToQueryString querystring="#EventDetailQueryString#" name="eid" value="#theEvents.PublicId#">
-			<li>
-			<a href="#EventDetailLocation#?#QueryString#">#eventTitle#</a>
-		    </li>
+			<cfif EventType IS "employee">
+				<li>
+				<a href="#Alias#">#eventTitle#</a>
+			    </li>
+			<cfelse>
+				<cf_AddToQueryString querystring="#EventDetailQueryString#" name="eid" value="#theEvents.PublicId#">
+				<li>
+				<a href="#EventDetailLocation#?#QueryString#">#eventTitle#</a>
+			    </li>
+			</cfif>
 		</cfoutput>
 	<cfelse>
 		<cfoutput><li><em>No events on this date.</em></li></cfoutput>
 	</cfif>
 </cfsavecontent>
 <cfoutput>
-	<h3 class="eventsInlineDate">#DateFormat(dateStart, "ddd, mmmm dd, yyyy")#</h3>
+	<h3 class="eventsInlineDate">#DateFormat(dateStart, "dddd, mmmm d, yyyy")#</h3>
 	<ul class="upcomingEvents">
 	#Trim(returnValue)#
 	</ul>

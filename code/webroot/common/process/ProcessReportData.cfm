@@ -1,8 +1,8 @@
 <cfset sReports=StructNew()>
-
+<cfset BaseFileLocation="\development\intranet_reports\templates\">
 <cfset sReportElt=StructNew()>
 <cfset StructInsert(sReportElt,"ReportName","ordershipmentAccuracy",1)>
-<cfset StructInsert(sReportElt,"FileLocation","\development\intranet_reports\templates\",1)>
+<cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Order-Shipment Accuracy-RMA Data.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_ordershipmentAccuracy",1)>
 <cfset StructInsert(sReportElt,"FieldLists","Quarter,TotalOrders,RMACount,InquiryCount,CustomerOrderedWrongPartTotalsIllinois,CustomerOrderedWrongPartTotalsTexas,DamagedDefectiveTotalsIllinois,DamagedDefectiveTotalsTexas,DataEntryErrorTotalsIllinois,DataEntryErrorTotalsTexas,DuplicateOrderTotalsIllinois,DuplicateOrderTotalsTexas,EngineeringIssueTotals,PartExchangeTotals,PartsNoLongerNeededTotals,PickingErrorTotalsIllinois,PickingErrorTotalsTexas,ProductionErrorTotalsIllinois,ProductionErrorTotalsTexas,PurchasingErrorTotalsIllinois,PurchasingErrorTotalsTexas,QualifiedWrongPartTotalsIllinois,QualifiedWrongPartTotalsTexas,TrialPartTotals,VendorErrorTotalsIllinois,VendorErrorTotalsTexas,QualityIssueTotalsIllinois,QualityIssueTotalsTexas,InventoryControlTotalsIllinois,InventoryControlTotalsTexas",1)>
@@ -10,15 +10,15 @@
 
 <cfset sReportElt=StructNew()>
 <cfset StructInsert(sReportElt,"ReportName","orders",1)>
-<cfset StructInsert(sReportElt,"FileLocation","\development\intranet_reports\templates\",1)>
+<cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Orders.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Order",1)>
-<cfset StructInsert(sReportElt,"FieldLists","Date,Email, Fax, Phone, Cons, VIP, Promo",1)>
+<cfset StructInsert(sReportElt,"FieldLists","Date,Email,Fax,Phone,Cons,VIP,Promo",1)>
 <cfset StructInsert(sReports,2,sReportElt,1)>
 
 <cfset sReportElt=StructNew()>
 <cfset StructInsert(sReportElt,"ReportName","sales",1)>
-<cfset StructInsert(sReportElt,"FileLocation","\development\intranet_reports\templates\",1)>
+<cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Sales.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Sales",1)>
 <cfset StructInsert(sReportElt,"FieldLists","Year, Month, AnnualSalesGoal,QuarterlySalesGoal,MonthlySalesGoal,ActualSales",1)>
@@ -26,7 +26,7 @@
 
 <cfset sReportElt=StructNew()>
 <cfset StructInsert(sReportElt,"ReportName","Shipment",1)>
-<cfset StructInsert(sReportElt,"FileLocation","\development\intranet_reports\templates\",1)>
+<cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Shipments.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Shipment",1)>
 <cfset StructInsert(sReportElt,"FieldLists","year, month, week, Shipment,Processed",1)>

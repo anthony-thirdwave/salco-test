@@ -90,6 +90,49 @@
 	<cfinvokeargument name="limiter" value="true">
 </cfinvoke>
 
+<cfset aBlank1=ArrayNew(1)>
+<cfset aBlank2=ArrayNew(1)>
+<cfloop index="i" from="1" to="#theEvents.RecordCount#" step="1">
+	<cfset ArrayAppend(aBlank1,"Event")>
+	<cfset ArrayAppend(aBlank2,"")>
+</cfloop>
+
+<cfset QueryAddColumn(theEvents,"EventType",aBlank1)>
+<cfset QueryAddColumn(theEvents,"Alias",aBlank2)>
+
+<!--- add employee dates for anniversary and birthdays --->
+<cfif tid IS "" or ListFindNoCase("6277,6276",tid)>
+	<cfif displayMonth and isDate(dateStart)>
+		<cfinvoke component="com.ContentManager.EmployeeHandler"
+			method="getDates"
+			returnVariable="qEmployeeEvents"
+			mode="displayMonth"
+			SelectedDate="#dateStart#"
+			topicIDList="#tid#">
+	<cfelse>
+		<cfinvoke component="com.ContentManager.EmployeeHandler"
+			method="getDates"
+			returnVariable="qEmployeeEvents"
+			mode="Future"
+			SelectedDate="#dateStart#"
+			topicIDList="#tid#">
+	</cfif>
+	<cfoutput query="qEmployeeEvents">
+		<cfset QueryAddRow(theEvents)>
+		<cfset QuerySetCell(theEvents,"EventType",qEmployeeEvents.EventType)>
+		<cfset QuerySetCell(theEvents,"DateStart",qEmployeeEvents.DateStart)>
+		<cfset QuerySetCell(theEvents,"DateEnd",qEmployeeEvents.DateStart)>
+		<cfset QuerySetCell(theEvents,"DateStartYearMonth",qEmployeeEvents.DateStartYearMonth)>
+		<cfset QuerySetCell(theEvents,"EventID",qEmployeeEvents.EmployeeID)>
+		<cfset QuerySetCell(theEvents,"EventTitle",qEmployeeEvents.EventTitle)>
+		<cfset QuerySetCell(theEvents,"Alias",qEmployeeEvents.Alias)>
+	</cfoutput>
+</cfif>
+
+<cfquery name="theEvents" dbtype="query">
+	select * from theEvents order by DateStart
+</cfquery>
+
 <div class="eventTitleContainer">
 <cfoutput>
 	<cfif ATTRIBUTES.DisplayMode IS "ByMonth">
@@ -104,7 +147,7 @@
 	</cfif>
 </cfoutput>
 <div class="eventTitleRight">
-<p>Type of Event</p>
+<p><strong>Type of Event</strong></p>
 <div id="fancyEventTypes" class="fauxSelect">
 	<div class="fauxOption"></div>
 	<img class="fauxArrow" src="/common/images/Intranet/template/fauxSelectArrow.png">
@@ -145,23 +188,32 @@
 		<li><h3 id="title_#thisID#"><a href="##title_#thisID#">#MonthAsString(ListLast(dateStartYearMonth,"/"))#, #Left(dateStartYearMonth,4)#</a></h3>
 		<dl class="calListing" id="listing_#thisID#" data-titleID="title_#thisID#">
 		<cfoutput group="eventID">
-			<cfset thisEventConfig=xmlParse(theEvents.eventConfig) />
-			<cfset thisEventDateConfig=xmlParse(theEvents.eventDateConfig) />
-			<cf_AddToQueryString querystring="#EventDetailQueryString#" name="eid" value="#theEvents.PublicId#">
-			<dt><a name="Event#theEvents.publicId#" style="display:block" href="#EventDetailLocation#?#QueryString#">#dateFormat(theEvents.dateStart, "mmmm dd, yyyy")#
-			<cfif isDate(theEvents.dateEnd) and dateFormat(theEvents.dateStart, "mmddyyyy") neq dateFormat(theEvents.dateEnd, "mmddyyyy")>
-			- #dateFormat(theEvents.dateEnd, "mmmm dd, yyyy")#
-			</cfif>
-	
-		    <!--- display time block --->
-			<cfif toString(timeFormat(theEvents.dateStart, "HH:mm:ss")) neq "00:00:00">
-				&middot; #timeFormat(theEvents.dateStart, "h:mm tt")#
-				<cfif len(trim(theEvents.dateEnd)) and toString(timeFormat(theEvents.dateEnd, "HH:mm:ss")) neq "00:00:00">
-				&mdash; #timeFormat(theEvents.dateEnd, "h:mm tt")#
+			<cfif EventType IS "employee">
+				<dt><a name="Employee#theEvents.eventID#" style="display:block" href="#Alias#">#dateFormat(theEvents.dateStart, "mmmm d, yyyy")#</a>
+				</dt>
+				<dd><a name="Employee#theEvents.eventID#" href="#Alias#">#theEvents.eventTitle#</a></dd>
+			<cfelse>
+				<cfset thisEventConfig=xmlParse(theEvents.eventConfig) />
+				<cfset thisEventDateConfig=xmlParse(theEvents.eventDateConfig) />
+				<cf_AddToQueryString querystring="#EventDetailQueryString#" name="eid" value="#theEvents.PublicId#">
+				<cfif Val(tid) GT "0">
+					<cf_AddToQueryString querystring="#QueryString#" name="tid" value="#Val(tid)#">
 				</cfif>
-			</cfif></a>
-			</dt>
-			<dd><a name="Event#theEvents.publicId#" href="#EventDetailLocation#?#QueryString#">#theEvents.eventTitle# #theEvents.dateStartYearMonth#</a></dd>
+				<dt><a name="Event#theEvents.publicId#" style="display:block" href="#EventDetailLocation#?#QueryString#">#dateFormat(theEvents.dateStart, "mmmm d, yyyy")#
+				<cfif isDate(theEvents.dateEnd) and dateFormat(theEvents.dateStart, "mmddyyyy") neq dateFormat(theEvents.dateEnd, "mmddyyyy")>
+				- #dateFormat(theEvents.dateEnd, "mmmm d, yyyy")#
+				</cfif>
+		
+			    <!--- display time block --->
+				<cfif toString(timeFormat(theEvents.dateStart, "HH:mm:ss")) neq "00:00:00">
+					&middot; #timeFormat(theEvents.dateStart, "h:mm tt")#
+					<cfif len(trim(theEvents.dateEnd)) and toString(timeFormat(theEvents.dateEnd, "HH:mm:ss")) neq "00:00:00">
+						&mdash; #timeFormat(theEvents.dateEnd, "h:mm tt")#
+					</cfif>
+				</cfif></a>
+				</dt>
+				<dd><a name="Event#theEvents.publicId#" href="#EventDetailLocation#?#QueryString#">#theEvents.eventTitle#</a></dd>
+			</cfif>
 		</cfoutput>
 		</dl></li>
 	</cfoutput>

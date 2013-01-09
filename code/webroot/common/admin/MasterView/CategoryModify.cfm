@@ -61,7 +61,7 @@
 <cfparam name="FORM.DefaultCategoryLocale" default="0">
 <cfparam name="FORM.DeleteLocaleRecord" default="0">
 
-<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
 <cfloop index="ThisImage" list="#lImageName#">
 	<cfparam name="FORM.Delete#ThisImage#" default="0">
 </cfloop>
@@ -95,17 +95,27 @@
 	<cfif structKeyExists(form, "ButLoad2") and val(lclid) gte "1">
 		<cfset SourceCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 		<cfset SourceCategoryLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
-		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#">
-			<cfset MyCategoryLocale.SetProperty("#PropertyToCopy#",SourceCategoryLocale.GetProperty("#PropertyToCopy#"))>
+		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
+			<cfif PropertyToCopy is "SubTitle" and MyCategory.GetProperty("CategoryTypeID") EQ 82>
+				<cfinvoke component="com.ContentManager.EmployeeHandler"
+					method="GetAllEmployees"
+					returnVariable="Employees">
+				<cfset thisSubTitle = empFirstName & empLastName>
+				<cfset MyCategoryLocale.SetProperty("thisSubTitle",SourceCategoryLocale.GetProperty("#thisSubTitle#"))>
+			<cfelse>
+				<cfset MyCategoryLocale.SetProperty("#PropertyToCopy#",SourceCategoryLocale.GetProperty("#PropertyToCopy#"))>
+			</cfif>
+			
 		</cfloop>
 	<cfelse>
 		<!--- if the form is submitted, load the form values into the object --->
 
 		<!--- Handling MyCategory --->
-		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID,SourceID">
+		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID,SourceID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategory.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
+		
 		<cfloop index="ThisImage" list="">
 			<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
 				<cfset MyCategory.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
@@ -114,7 +124,7 @@
 
 		<!--- Handling MyCategoryLocale --->
 		<cfset MyCategoryLocale.SetCategoryTypeID(CategoryTypeID)>
-		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride">
+		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategoryLocale.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
@@ -122,8 +132,45 @@
 		<cfloop index="ThisImage" list="#lImageName#">
 			<cfif IsDefined("FORM.#ThisImage#FileObject") AND Evaluate("FORM.#ThisImage#FileObject") IS NOT "">
 				<cfset MyCategoryLocale.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
+				<!--- employeeImageResize --->
+				<!---  if the big image is uploaded, check on size and resize it 191x213 --->
+				<cfif ThisImage IS "empImage">
+					<cfset thisEmpImagePath = Evaluate("MyCategoryLocale.#ThisImage#")>
+					<cfinvoke component="com.utils.Image" method="ResizeGalleryThumbnail" returnVariable="ThisEmpImage"
+						WebrootPath="#APPLICATION.WebrootPath#"
+						Source="#thisEmpImagePath#"
+						Width="191"
+						Height="212">
+					<cfset MyCategoryLocale.SetProperty(ThisImage, ThisEmpImage)>
+				</cfif>
+				<cfif ThisImage IS "empImageThumb">
+					<cfset thisEmpThumbImagePath = Evaluate("MyCategoryLocale.#ThisImage#")>
+					<cfinvoke component="com.utils.Image" method="ResizeGalleryThumbnail" returnVariable="ThisEmpThumbImage"
+						WebrootPath="#APPLICATION.WebrootPath#"
+						Source="#thisEmpThumbImagePath#"
+						Width="89"
+						Height="99">
+					<cfset MyCategoryLocale.SetProperty(ThisImage, ThisEmpThumbImage)>
+				</cfif>
+				<cfif MyCategoryLocale.CategoryTypeID eq 82 and ThisImage is "CategoryImageRepresentative">
+					<cfset thisImagePath = Evaluate("MyCategoryLocale.#ThisImage#")>
+					<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisNewsImage"
+						WebrootPath="#APPLICATION.WebrootPath#"
+						Source="#thisImagePath#"
+						Width="240">
+					<cfset MyCategoryLocale.SetProperty(ThisImage, ThisNewsImage)>
+				</cfif>
 			<cfelseif IsDefined("FORM.#ThisImage#")>
 				<cfset MyCategoryLocale.SetProperty(ThisImage, FORM[ThisImage])>
+				<cfif ThisImage IS "empImageThumb" and IsDefined("FORM.empImageFileObject") AND Evaluate("FORM.empImageFileObject") IS NOT "">
+					<cfset thisEmpImagePath = Evaluate("MyCategoryLocale.empImage")>
+					<cfinvoke component="com.utils.Image" method="ResizeGalleryThumbnail" returnVariable="ThisEmpThumbImage"
+						WebrootPath="#APPLICATION.WebrootPath#"
+						Source="#thisEmpImagePath#"
+						Width="89"
+						Height="99">
+					<cfset MyCategoryLocale.SetProperty(ThisImage, ThisEmpThumbImage)>
+				</cfif>
 			</cfif>
 		</cfloop>
 

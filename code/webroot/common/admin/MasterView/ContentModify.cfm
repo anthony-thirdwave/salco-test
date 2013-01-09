@@ -268,7 +268,6 @@
 				<cfset MyContentLocale.FormFileUpload("#APPLICATION.WebrootPath#","#ThisImage#","#ThisImage#FileObject")>
 			</cfif>
 		</cfloop>
-
 		<cfif IsDefined("FileName_New") OR IsDefined("NumFiles")>
 			<cfset sView=StructNew()>
 			<cfset lOrder="">
@@ -284,7 +283,7 @@
 				<cfparam name="ThumbnailPath_#r#" default="">
 				<cfparam name="FileDelete_#r#" default="0">
 				<cfparam name="FileSize_#r#" default="0">
-				<cfif len(trim(variables["FileName_#r#"])) AND variables["FileDelete_#r#"] IS "0">
+				<cfif Evaluate("FileName_#r#") IS NOT "" AND Evaluate("FileDelete_#r#") IS "0">
 					<cfloop index="ThisImage" list="MainFilePath,ThumbnailPath">
 						<cfif IsDefined("FORM.#ThisImage#_#r#FileObject") AND len(trim(FORM["#ThisImage#_#r#FileObject"]))>
 							<cffile action="UPLOAD"
@@ -300,32 +299,62 @@
 							</cfif>
 						</cfif>
 					</cfloop>
+					<!--- // if upload image to newssection, resize then upload --->
+					<cfif MyContentLocale.ContentTypeID IS "221">
+						<cfif Evaluate("ThumbnailPath_#r#FileObject") is "">
+							<cfif Evaluate("MainFilePath_#r#FileObject") is not "">
+								<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+									WebrootPath="#APPLICATION.WebrootPath#"
+									Source="#Evaluate('MainFilePath_#r#')#"
+									Width="252">	
+								<cfset SetVariable("ThumbnailPath_#r#",ThisImage)>
+							</cfif>
+						<cfelse>
+							<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+									WebrootPath="#APPLICATION.WebrootPath#"
+									Source="#Evaluate('ThumbnailPath_#r#')#"
+									Width="252">		
+							<cfset SetVariable("ThumbnailPath_#r#",ThisImage)>
+						</cfif>
+							<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+									WebrootPath="#APPLICATION.WebrootPath#"
+									Source="#Evaluate('ThumbnailPath_#r#')#"
+									Width="252">
+									
+						<cfif Evaluate("MainFilePath_#r#FileObject") is not "">	
+							<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+									WebrootPath="#APPLICATION.WebrootPath#"
+									Source="#Evaluate('MainFilePath_#r#')#"
+									Width="560">
+								<cfset SetVariable("'MainFilePath_#r#'",ThisImage)>
+						</cfif>
+					</cfif>
+					
 					<cfset sElement=StructNew()>
-					<cfset StructInsert(sElement,"FileName",variables["FileName_#r#"],1)>
-					<cfset StructInsert(sElement,"FileSubTitle",variables["FileSubtitle_#r#"],1)>
-					<cfset StructInsert(sElement,"Author",variables["Author_#r#"],1)>
-					<cfset StructInsert(sElement,"FileDuration",variables["FileDuration_#r#"],1)>
-					<cfset StructInsert(sElement,"FileKeywords",variables["FileKeywords_#r#"],1)>
-					<cfset StructInsert(sElement,"FileDateTimeStamp",variables["FileDateTimeStamp_#r#"],1)>
-					<cfset StructInsert(sElement,"FileCaption",variables["FileCaption_#r#"],1)>
-					<cfset StructInsert(sElement,"FilePath",variables["MainFilePath_#r#"],1)>
-					<cfset StructInsert(sElement,"ThumbnailPath",variables["ThumbnailPath_#r#"],1)>
-					<cfset StructInsert(sElement,"FileSize",Evariables["FileSize_#r#"],1)>
-					<cfset StructInsert(sElement,"Order",variables["Order_#r#"],1)>
-					<cfif len(trim(variables["MainFilePath_#r#"]))>
-						<cfset ThisDir=application.utilsObj.GetPathFromURL(variables["MainFilePath_#r#"])>
+					<cfset StructInsert(sElement,"FileName",Evaluate("FileName_#r#"),1)>
+					<cfset StructInsert(sElement,"FileSubTitle",Evaluate("FileSubtitle_#r#"),1)>
+					<cfset StructInsert(sElement,"Author",Evaluate("Author_#r#"),1)>
+					<cfset StructInsert(sElement,"FileDuration",Evaluate("FileDuration_#r#"),1)>
+					<cfset StructInsert(sElement,"FileKeywords",Evaluate("FileKeywords_#r#"),1)>
+					<cfset StructInsert(sElement,"FileDateTimeStamp",Evaluate("FileDateTimeStamp_#r#"),1)>
+					<cfset StructInsert(sElement,"FileCaption",Evaluate("FileCaption_#r#"),1)>
+					<cfset StructInsert(sElement,"FilePath",Evaluate("MainFilePath_#r#"),1)>
+					<cfset StructInsert(sElement,"ThumbnailPath",Evaluate("ThumbnailPath_#r#"),1)>
+					<cfset StructInsert(sElement,"FileSize",Evaluate("FileSize_#r#"),1)>
+					<cfset StructInsert(sElement,"Order",Evaluate("Order_#r#"),1)>
+					
+					<cfif Evaluate("MainFilePath_#r#") IS NOT "">
+						<cfset ThisDir="#application.utilsObj.GetPathFromURL(Evaluate('MainFilePath_#r#'))#">
 						<cfset ThisDir=ListDeleteAt(ThisDir,ListLen(ThisDir,"\"),"\")>
 						<cfdirectory action="LIST" directory="#ThisDir#" name="qDir">
 						<cfquery name="qDir2" dbtype="query">
-							SELECT	*
-							FROM	qDir
-							WHERE	Name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ListLast(variables['MainFilePath_#r#'],'/')#">
+							select * from qDir Where Name='#ListLast(Evaluate('MainFilePath_#r#'),'/')#'
 						</cfquery>
 						<cfif Val(qDir2.Size) GT "0">
 							<cfset StructInsert(sElement,"FileSize",Val(qDir2.Size),1)>
 						</cfif>
 					</cfif>
-					<cfset ThisKey=NumberFormat(Val(variables["Order_#r#"]),'000') & "_" & application.utilsObj.Scrub(variables["FileName_#r#"])>
+					<cfset ThisKey="#NumberFormat(Val(Evaluate('Order_#r#')),'000')#_#application.utilsObj.Scrub(Evaluate('FileName_#r#'))#">
 					<cfset StructInsert(sView,ThisKey,sElement,"1")>
 					<cfset lOrder=ListAppend(lOrder,ThisKey)>
 				</cfif>
@@ -338,7 +367,7 @@
 			</cfloop>
 
 			<cfif Isdefined("FORM.FileName_New") AND len(trim(FORM.FileName_New))>
-				<cfloop index="ThisImage" list="MainFilePath">
+				<cfloop index="ThisImage" list="MainFilePath,ThumbnailPath">
 					<cfparam name="#ThisImage#_New" default="">
 					<cfif IsDefined("FORM.#ThisImage#_NewFileObject") AND len(trim(FORM["#ThisImage#_NewFileObject"]))>
 						<cffile action="UPLOAD"
@@ -354,11 +383,36 @@
 						</cfif>
 					</cfif>
 				</cfloop>
+				<cfif MyContentLocale.ContentTypeID IS "221">
+					<cfif ThumbnailPath_New IS "">
+						<cfif MainFilePath_New is not "">
+							<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+									WebrootPath="#APPLICATION.WebrootPath#"
+									Source="#Evaluate('MainFilePath_New')#"
+									Width="252">		
+							<cfset SetVariable("ThumbnailPath_New",ThisImage)>
+						</cfif>
+					<cfelse>
+						<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+									WebrootPath="#APPLICATION.WebrootPath#"
+									Source="#Evaluate('ThumbnailPath_New')#"
+									Width="252">
+						<cfset SetVariable("ThumbnailPath_New",ThisImage)>
+					</cfif>
+					
+					<cfif MainFilePath_New is not "">
+						<cfinvoke component="com.utils.Image" method="Resize" returnVariable="ThisImage"
+								WebrootPath="#APPLICATION.WebrootPath#"
+								Source="#Evaluate('MainFilePath_New')#"
+								Width="560">
+							<cfset SetVariable("'MainFilePath_New'",ThisImage)>
+					</cfif>
+				</cfif>
 				<cfset sElement=StructNew()>
 				<cfset StructInsert(sElement,"FileName",FileName_New,1)>
-				<cfset StructInsert(sElement,"FileCaption",FileCaption_New,1)>
+				<cfset StructInsert(sElement,"FileCaption","",1)>
 				<cfset StructInsert(sElement,"FilePath",MainFilePath_New,1)>
-				<cfset StructInsert(sElement,"ThumbnailPath","",1)>
+				<cfset StructInsert(sElement,"ThumbnailPath",ThumbnailPath_New,1)>
 				<cfset ArrayAppend(aView,sElement)>
 			</cfif>
 

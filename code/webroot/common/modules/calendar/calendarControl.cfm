@@ -36,6 +36,14 @@
 <cfset PreviousMonthURL="#ThisLocationString#?dateCurrent=#DateFormat(dateCurrentPrev,'mm-dd-yyyy')#&tid=#URLEncodedFormat(tid)#&inline=0">
 <cfset NextMonthURL="#ThisLocationString#?dateCurrent=#DateFormat(dateCurrentNext,'mm-dd-yyyy')#&tid=#URLEncodedFormat(tid)#&inline=0">
 
+<cfif val(DateDiff("m",now(),dateCurrentPrev)) GTE 11>
+	<cfset PreviousMonthURL="">
+</cfif>
+
+<cfif val(DateDiff("m",now(),dateCurrentNext)) GTE 11>
+	<cfset NextMonthURL="">
+</cfif>
+
 <cfif IsDefined("URL.eid")>
 	<cfinvoke method="getEventIdByPublicId" component="com.event.eventHandler" returnvariable="eventId">
 		<cfinvokeargument name="publicId" value="#trim(URL.eid)#">
