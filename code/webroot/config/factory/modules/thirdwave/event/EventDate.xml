@@ -1,0 +1,206 @@
+<!-- 3W:EventDate Object -->
+<object>
+	<name>3W:EventDate</name>
+	<table>
+		<name>t_EventDate</name>
+		<datasource>APPLICATION.EVENT_DSN</datasource>
+	</table>
+	<propertyList>
+		<property>
+			<variableName>EventDateID</variableName>
+			<displayName>EventDateID</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>EventDateID</columnName>
+				<dataType>cf_sql_integer</dataType>
+				<primaryKey />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>EventID</variableName>
+			<displayName>EventID</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>EventID</columnName>
+				<dataType>cf_sql_integer</dataType>
+				<notNull />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>cloneOfPublicId</variableName>
+			<displayName>clone of public id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>cloneOfPublicId</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>33</maxLength>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>eventDateConfig</variableName>
+			<displayName>event date config</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>3W:EventDate:EventDateConfig</objectName>
+				</xml>
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>EventDateConfig</columnName>
+				<dataType>cf_sql_varchar</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateStart</variableName>
+			<displayName>Start Date</displayName>
+			<restrictions>
+				<datetime>
+					<dateAndTime />
+					<handler>com.factory.thirdwave.handlers.date.DateValidate</handler>
+					<handlerConfigurationName>3W:DateConfig</handlerConfigurationName>
+				</datetime>
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateStart</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<notNull />
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateEnd</variableName>
+			<displayName>End Date</displayName>
+			<restrictions>
+				<datetime>
+					<dateAndTime />
+					<handler>com.factory.thirdwave.handlers.date.DateValidate</handler>
+					<handlerConfigurationName>3W:DateConfig</handlerConfigurationName>
+				</datetime>
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateEnd</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>RecurrenceStart</variableName>
+			<displayName>Recurrence Start</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>RecurrenceStart</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>RecurrenceEnd</variableName>
+			<displayName>Recurrence End</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>RecurrenceEnd</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateActivated</variableName>
+			<displayName>Activation Date</displayName>
+			<restrictions>
+				<datetime>
+					<dateAndTime />
+					<handler>com.factory.thirdwave.handlers.date.DateValidate</handler>
+					<handlerConfigurationName>3W:DateConfig</handlerConfigurationName>
+				</datetime>
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateActivated</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateDeactivated</variableName>
+			<displayName>Deactivation Date</displayName>
+			<restrictions>
+				<datetime>
+					<dateAndTime />
+					<handler>com.factory.thirdwave.handlers.date.DateValidate</handler>
+					<handlerConfigurationName>3W:DateConfig</handlerConfigurationName>
+				</datetime>
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateDeactivated</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>PublicId</variableName>
+			<displayName>public id</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>PublicId</columnName>
+				<dataType>cf_sql_varchar</dataType>
+				<maxLength>33</maxLength>
+				<uponInsert>publicID</uponInsert>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateAdded</variableName>
+			<displayName>date added</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateAdded</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<uponInsert>dateStamp</uponInsert>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateModified</variableName>
+			<displayName>date modified</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateModified</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+				<uponUpdate>dateStamp</uponUpdate>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>DateDisabled</variableName>
+			<displayName>date disabled</displayName>
+			<restrictions>
+				<datetime />
+			</restrictions>
+			<dbInfo>
+				<tableName>t_EventDate</tableName>
+				<columnName>DateDisabled</columnName>
+				<dataType>cf_sql_timestamp</dataType>
+			</dbInfo>
+		</property>
+	</propertyList>
+</object>

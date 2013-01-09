@@ -1,0 +1,47 @@
+<!-- EventRegistrationAddress Object -->
+<object>
+	<name>EventRegistrationAddress</name>
+	<propertyList>
+		<property>
+			<variableName>address1</variableName>
+			<displayName>Street Address 1</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>city</variableName>
+			<displayName>City</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>stateProvinceID</variableName>
+			<displayName>State</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>countryID</variableName>
+			<displayName>country id</displayName>
+			<restrictions>
+				<string>
+					<default>US</default>
+				</string>
+			</restrictions>
+		</property>
+		<property>
+			<variableName>postalCode</variableName>
+			<displayName>Zip Code</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

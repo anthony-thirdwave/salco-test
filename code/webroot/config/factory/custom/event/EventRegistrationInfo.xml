@@ -1,0 +1,56 @@
+<!-- EventRegistrationInfo Object -->
+<object>
+	<name>EventRegistrationInfo</name>
+	<propertyList>
+		<property>
+			<variableName>firstName</variableName>
+			<displayName>First Name</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>lastName</variableName>
+			<displayName>Last Name</displayName>
+			<restrictions>
+				<string />
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>email</variableName>
+			<displayName>Email</displayName>
+			<restrictions>
+				<email />
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>phone</variableName>
+			<displayName>phone number</displayName>
+			<restrictions>
+				<phoneNumber>
+					<delimiter>-.</delimiter>
+				</phoneNumber>
+			</restrictions>
+		</property>
+		<property>
+			<variableName>registrants</variableName>
+			<displayName>Total Registrants</displayName>
+			<restrictions>
+				<numeric>
+					<default>1</default>
+				</numeric>
+				<notNull />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>notes</variableName>
+			<displayName>Order Notes</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

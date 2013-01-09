@@ -1180,6 +1180,21 @@ code/webroot/common/styles/jquery-ui-1.8.7.custom.css -text
 code/webroot/common/styles/lightbox.css -text
 code/webroot/common/styles/other.css -text
 code/webroot/common/styles/salco_global.css -text
+code/webroot/config/factory/custom/event/Event.xml -text
+code/webroot/config/factory/custom/event/EventConfig.xml -text
+code/webroot/config/factory/custom/event/EventDate.xml -text
+code/webroot/config/factory/custom/event/EventRegistration.xml -text
+code/webroot/config/factory/custom/event/EventRegistrationAddress.xml -text
+code/webroot/config/factory/custom/event/EventRegistrationInfo.xml -text
+code/webroot/config/factory/custom/event/EventRegistrationSnapshot.xml -text
+code/webroot/config/factory/custom/event/relationships/EventToAddress.xml -text
+code/webroot/config/factory/modules/thirdwave/address/Address.xml -text
+code/webroot/config/factory/modules/thirdwave/event/Event.xml -text
+code/webroot/config/factory/modules/thirdwave/event/EventConfig.xml -text
+code/webroot/config/factory/modules/thirdwave/event/EventDate.xml -text
+code/webroot/config/factory/modules/thirdwave/event/eventDate/EventDateConfig.xml -text
+code/webroot/config/factory/modules/thirdwave/event/eventDate/eventDateConfig/Registration.xml -text
+code/webroot/config/factory/modules/thirdwave/event/eventDate/eventDateConfig/RepeatConfig.xml -text
 code/webroot/content.cfm -text
 code/webroot/favicon.ico -text
 code/webroot/golfinvite.pdf -text svneol=unset#unset
