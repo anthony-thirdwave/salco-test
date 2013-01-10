@@ -30,16 +30,7 @@
 	<cfcase value="201"><!--- HTML --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
 			<cfif application.applicationname is "intranet.salco">
-				<cfif ATTRIBUTES.currentCategoryTypeID eq 81>
-					<cfset EmpBio="">
-					<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
-						<cfset EmpBio="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
-					</cfif>			
-					<cfset FileContents="<cfmodule template=""/common/modules/employee/Intranet/employeeDetail.cfm"" EmpBio=""#EmpBio#"" categoryID=""#ATTRIBUTES.currentCategoryID#"" contentID=""#ATTRIBUTES.ContentID#"">">
-				<cfelse>
-					<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#</div></div></article>">
-					<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ObscureEMail(FileContents)#</div></div></article>">
-				</cfif>
+				<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ObscureEMail(FileContents)#</div></div></article>">
 			<cfelse>
 				<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
 				<cfset FileContents="#application.utilsObj.ObscureEMail(FileContents)#">
