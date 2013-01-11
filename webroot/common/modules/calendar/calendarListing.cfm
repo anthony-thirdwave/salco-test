@@ -101,7 +101,7 @@
 <cfset QueryAddColumn(theEvents,"Alias",aBlank2)>
 
 <!--- add employee dates for anniversary and birthdays --->
-<cfif tid IS "" or ListFindNoCase("6277,6276",tid)>
+<cfif tid IS "" or ListFindNoCase("#APPLICATION.BirthdayTopicID#,#APPLICATION.AnniversaryTopicID#",tid)>
 	<cfif displayMonth and isDate(dateStart)>
 		<cfinvoke component="com.ContentManager.EmployeeHandler"
 			method="getDates"
