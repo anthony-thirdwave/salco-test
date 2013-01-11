@@ -65,6 +65,8 @@
 		</cfif>
 		<cfif ListFindNoCase("62,63,64",GetParentName.CategoryTypeID) or ListFind(ValueList(GetCategoryTypes.CategoryTypeID),81)>
 			ORDER BY		c.CategoryName
+		<cfelseif ATTRIBUTES.thisCatID IS "#APPLICATION.NewsCategoryID#">
+			ORDER BY		c.PublishDateTime desc
 		<cfelse>
 			ORDER BY		clm.CategoryLocalePriority
 		</cfif>

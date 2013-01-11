@@ -28,9 +28,11 @@
 		</cfif>
 	</cfcase>
 	<cfcase value="201"><!--- HTML --->
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML") and ATTRIBUTES.sContentBody.HTML IS NOT "">
 			<cfif application.applicationname is "intranet.salco">
-				<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ObscureEMail(FileContents)#</div></div></article>">
+				<cfif ATTRIBUTES.currentCategoryTypeID neq 81>
+					<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ObscureEMail(ATTRIBUTES.sContentBody.HTML)#</div></div></article>">
+				</cfif>
 			<cfelse>
 				<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
 				<cfset FileContents="#application.utilsObj.ObscureEMail(FileContents)#">
