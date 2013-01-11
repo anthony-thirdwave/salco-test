@@ -4,10 +4,10 @@
 <head>
 <meta charset="utf-8">
 <cfif Trim(PageTitleOverride) EQ "">
-	<cfset pageTitleList = ListRest(CategoryThreadName)>
-	<cfset thisPageTitle = APPLICATION.utilsObj.generatePageTitleString(pageTitleList)>
+	<cfset pageTitleList=ListRest(CategoryThreadName)>
+	<cfset thisPageTitle=APPLICATION.utilsObj.generatePageTitleString(pageTitleList)>
 <cfelse>
-	<cfset thisPageTitle = PageTitleOverride>
+	<cfset thisPageTitle=PageTitleOverride>
 </cfif>
 <cfoutput>
 <meta name="keywords" content="#MetaKeywords#" />
@@ -73,7 +73,7 @@
 			<cfelse>
 				<cfset BreadcrumbDisplayType="newsDetail">
 			</cfif>
-		<cfelseif ListGetAt(CategoryThreadList,3) is 6065>
+		<cfelseif ListGetAt(CategoryThreadList,3) is APPLICATION.EmployeeCategoryID>
 			<cfset BreadcrumbDisplayType="employee">
 		<cfelse>
 			<cfset BreadcrumbDisplayType="">

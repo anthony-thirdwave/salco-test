@@ -66,7 +66,7 @@
 <cfset QueryAddColumn(theEvents,"EventType",aBlank1)>
 <cfset QueryAddColumn(theEvents,"Alias",aBlank2)>
 
-<cfif tid IS "" or ListFindNoCase("6277,6276",tid)>
+<cfif tid IS "" or ListFindNoCase("#APPLICATION.BirthdayTopicID#,#APPLICATION.AnniversaryTopicID#",tid)>
 	<cfinvoke component="com.ContentManager.EmployeeHandler"
 		method="getDates"
 		returnVariable="qEmployeeEvents"

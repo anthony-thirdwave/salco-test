@@ -17,8 +17,7 @@
 	
 <cfif qNewsListing.recordCount GT 0>
 	<cfoutput query="qNewsListing" startrow="#start_record#" maxrows="#records_per_page#">
-		<cfparam name="EmployeeName" default="">
-		
+		<cfset EmployeeName="">
 		<cfif listlen(qNewsListing.subTitle,"&") gte 2>
 			<cfset EmployeeName=listGetAt(qNewsListing.subTitle,2,"&")>
 		</cfif>

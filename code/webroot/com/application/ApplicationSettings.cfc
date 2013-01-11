@@ -66,6 +66,12 @@
 		<cfset APPLICATION.StagingURL="http://staging.salco.01.thirdwaveweb.com" />
 		
 		<cfset APPLICATION.NewsCategoryID="6063">
+		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
+		<cfset APPLICATION.AnniversaryTopicID="6074">
+		<cfset APPLICATION.BirthdayTopicID="6075">
+		<cfset APPLICATION.DepartmentCategoryID="6066">
+		<cfset APPLICATION.EmployeeCategoryID="6065">
+		
 		<!---
 			determine how content.cfm is called - default .htaccess is formatted to deal with the following permutations
 			a) "/content.cfm" - non seo links (e.g. "http://www.thirdwavellc.com/content.cfm/about")
@@ -113,6 +119,12 @@
 			<cfset APPLICATION.SSLConfigured = false />
 
 			<cfset APPLICATION.NewsCategoryID="6063">
+			<cfset APPLICATION.IntranetUtilityNavCategoryID="6092">
+			<cfset APPLICATION.AnniversaryTopicID="6277">
+			<cfset APPLICATION.BirthdayTopicID="6276">
+			<cfset APPLICATION.DepartmentCategoryID="6098">
+			<cfset APPLICATION.EmployeeCategoryID="6065">
+		
 		<cfelseif local.siteType eq "staging">
 
 			<cfset APPLICATION.WebRootPath = "#local.stagingPathPrefix#webroot\" />

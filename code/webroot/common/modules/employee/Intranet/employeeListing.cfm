@@ -1,4 +1,4 @@
-<cfif REQUEST.currentCategoryID eq 6065>
+<cfif REQUEST.currentCategoryID eq APPLICATION.EmployeeCategoryID>
 	<cfparam name="ATTRIBUTES.CategoryID" default="">
 <cfelse>
 	<cfparam name="ATTRIBUTES.CategoryID" default="#REQUEST.currentCategoryID#">

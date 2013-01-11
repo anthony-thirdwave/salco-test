@@ -1,5 +1,5 @@
+<cfset ThisCategoryID="#APPLICATION.IntranetUtilityNavCategoryID#">
 
-<cfset ThisCategoryID=6092>
 <cfquery name="GetLastCache" datasource="#APPLICATION.DSN#" maxrows="1">
 	SELECT     MAX(CacheDateTime) AS CacheDateTime
 	FROM         t_Category where ParentID=<cfqueryparam value="#Val(ThisCategoryID)#" cfsqltype="CF_SQL_INTEGER">
@@ -24,20 +24,19 @@
 	<cfsaveContent Variable="FileContents">
 		<cfif GetTopCategories.RecordCount GT "0">
 			<ul>
-                   <cfoutput query="GetTopCategories" group="CategoryID">
-					<cfif ListFind(REQUEST.CategoryThreadList,CategoryID)>
-						<cfset ThisClass="activeMinus">
-					<cfelse>
-						<cfset ThisClass="">
-					</cfif>
-                       <cfif Trim(CategoryURLDerived) IS "">
-                           <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
-                       <cfelse>
-                           <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
-                       </cfif>
-                       <li><a href="#ThisURL#" class="#CategoryAlias#">#CategoryNameDerived#</a>
-				   </li>
-                   </cfoutput>
+			<cfoutput query="GetTopCategories" group="CategoryID">
+				<cfif ListFind(REQUEST.CategoryThreadList,CategoryID)>
+					<cfset ThisClass="activeMinus">
+				<cfelse>
+					<cfset ThisClass="">
+				</cfif>
+                <cfif Trim(CategoryURLDerived) IS "">
+                    <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
+                <cfelse>
+                    <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
+                </cfif>
+                <li><a href="#ThisURL#" class="#CategoryAlias#">#CategoryNameDerived#</a></li>
+			</cfoutput>
 			</ul>
 		</cfif>
 	</cfsaveContent>

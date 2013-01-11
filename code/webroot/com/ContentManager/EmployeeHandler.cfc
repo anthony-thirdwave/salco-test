@@ -179,9 +179,9 @@
 	
 		<cfif ARGUMENTS.topicIDList is "">
 			<cfset LOCAL.lEntity="empBirthDate2,empJoinDate2">
-		<cfelseif ARGUMENTS.topicIDList is "6277">
+		<cfelseif ARGUMENTS.topicIDList is "#APPLICATION.AnniversaryTopicID#"><!--- dev: 6277 --->
 			<cfset LOCAL.lEntity="empJoinDate2">
-		<cfelseif ARGUMENTS.topicIDList is "6276">
+		<cfelseif ARGUMENTS.topicIDList is "#APPLICATION.BirthdayTopicID#"><!--- dev: 6276 --->
 			<cfset LOCAL.lEntity="empBirthDate2">
 		</cfif>
 		

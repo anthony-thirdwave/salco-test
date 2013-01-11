@@ -1,12 +1,12 @@
 <cfinvoke component="com.ContentManager.EmployeeHandler"
 	method="qryEmployees"
-	orderBy = "empFirstName"
+	orderBy="empFirstName"
 	returnVariable="employees">
 
 <cfinvoke component="com.ContentManager.EmployeeHandler"
 	method="qryEmployees"
-	departmentID = "6098"
-	orderBy = "empFirstName"
+	departmentID="#APPLICATION.DepartmentCategoryID#"
+	orderBy="empFirstName"
 	returnVariable="departments">
 
 <cfquery name="qryEmployeePhone" dbtype="query">
@@ -20,7 +20,7 @@
 	FROM	employees
 	WHERE	empCellPhone <> ''
 </cfquery>
-<cfset noPerColumn = qryEmployeePhone.recordCount / 2>
+<cfset noPerColumn=qryEmployeePhone.recordCount / 2>
 
 <article class="phonelist">
    <div id="extensions">
