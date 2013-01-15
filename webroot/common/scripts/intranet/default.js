@@ -375,6 +375,11 @@ $(window).load(function() {
 		    type: 'text/javascript'
 		}).appendTo('head');
 		
+		$('<script />', {
+		    src: '/common/scripts/intranetSlideShow.js',
+		    type: 'text/javascript'
+		}).appendTo('head');
+		
 		$('<div />', {
 		    id: 'idletimeout',
 		}).appendTo('body');
@@ -384,8 +389,8 @@ $(window).load(function() {
 		}).appendTo('#idletimeout');
 		
 		$.idleTimeout('#idletimeout', '#idletimeout a', {
-				idleAfter: 60,
-				pollingInterval: 5,
+				idleAfter: 300,
+				pollingInterval: 60,
 				keepAliveURL: '/common/scripts/intranet/ping.html',
 				serverResponseEquals: 'OK',
 				onIdle: function(){
@@ -493,7 +498,7 @@ $(window).load(function() {
 				
 				$("#newsStyles").append('#image-'+i+':target .news-item .lrgImgs .bigs:hover .closeGal { opacity:1;}');
 				
-				$(".lrgImgs img").eq(i).wrapAll('<div id="lrgImg-'+i+'" class="bigs"></div>');
+				$(".lrgImgs img").eq(i).wrapAll('<div id="lrgImg-'+i+'" class="bigs"  data-title="'+$("#centerColumn article .alignLeft img").eq(i).attr("title")+'"></div>');
 				$(".lrgImgs #lrgImg-"+i).append('<a href="#" class="closeGal" Title="Close"></a>');
 				
 				if($("#centerColumn article .alignLeft img").length > 1){
@@ -775,26 +780,45 @@ $(window).load(function () {
 		httpSimple.send(null); 
 	}
 var kioskPageSaver={
-	pages:["/page/news","/page/sales","/page/events","/page/lets-go-fishing-1","/page/its-a-family-affair","/page/views-from-the-top-20120920","/page/tailgating-in-the-grove"],
+	pages:[""],
 	changePage:function(){
+		kioskPageSaver.pages=SlideShow; 
 		arl=kioskPageSaver.pages.length;
-		var randomnumber=Math.floor(Math.random()*arl);
-		console.log(randomnumber);
-		console.log(kioskPageSaver.pages[randomnumber]);
-		$("body").removeClass("fadein");
-		$("body").addClass("fadeout");
-		
-		$("body").load(kioskPageSaver.pages[randomnumber]+" #wrapper", function(){
-			$("#wrapper").attr("class","");
-			//$("body").removeClass("fadeout");
-			$("body").addClass("fadein");
-			//$('#idletimeout a').click();
-			setTimeout("kioskPageSaver.changePage()",10000);
-			$("body").bind("click", function(){
-				document.location=document.location;
+		if(arl>0){
+			var randomnumber=Math.floor(Math.random()*arl);
+			console.log(randomnumber);
+			console.log(kioskPageSaver.pages[randomnumber]);
+			$("body").removeClass("fadein");
+			$("body").addClass("fadeout");
+			
+			$("body").load(kioskPageSaver.pages[randomnumber]+" #wrapper", function(){
+				$("#wrapper").attr("class","");
+				//$("body").removeClass("fadeout");
+				$("body").addClass("fadein");
+				//$('#idletimeout a').click();
+				setTimeout("kioskPageSaver.changePage()",10000);
+				$("body").bind("click", function(){
+					document.location=document.location;
+					
+				});
+				$("body").attr("id",kioskPageSaver.pages[randomnumber]);
+				if($("#centerColumn div.building-blocks").length>0){
+					if(!document.all){
+						for(i=0;i<$("#centerColumn div.building-blocks").length;i++){
+							$("#centerColumn div.building-blocks .image").eq(i).attr("style", 'background:url('+$("#centerColumn div.building-blocks .image").eq(i).children().attr("src")+') no-repeat center center;');		 
+							//alert($("#centerColumn div[class='building-blocks'] .image").eq(i).height());
+						}
+					}
 				
-			})
-		});
+				}
+				if(kioskPageSaver.pages[randomnumber]=="employees"){
+					$('.employees a span img[src=""]').attr("src","/common/images/Intranet/template/temp-genericPerson.png");
+				}
+				
+			});
+		}else{
+			document.location="/";
+		}
 	}
 }
 

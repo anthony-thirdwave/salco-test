@@ -95,7 +95,7 @@
 	<cfif structKeyExists(form, "ButLoad2") and val(lclid) gte "1">
 		<cfset SourceCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
 		<cfset SourceCategoryLocale.Constructor(Val(application.utilsObj.SimpleDecrypt(lclid)))>
-		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
+		<cfloop index="PropertyToCopy" list="CategoryID,CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,Byline1,Byline2,Title,#lImageName#,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 			<cfif PropertyToCopy is "SubTitle" and MyCategory.GetProperty("CategoryTypeID") EQ 82>
 				<cfinvoke component="com.ContentManager.EmployeeHandler"
 					method="GetAllEmployees"
@@ -111,7 +111,7 @@
 		<!--- if the form is submitted, load the form values into the object --->
 
 		<!--- Handling MyCategory --->
-		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID,SourceID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
+		<cfloop index="ThisProperty" list="CategoryTypeID,ParentID,CategoryName,CategoryAlias,CategoryActive,CategoryURL,MetaKeywords,MetaDescription,WorkflowStatusID,TemplateID,PublishDateTime,ProductionFTPHost,ProductionFTPRootPath,ProductionFTPUserLogin,ProductionFTPPassword,ProductionDBServer,ProductionDBName,ProductionDBDSN,AuthorName,ArticleSourceID,AllowComments,AllowBackToTop,ProductBrandLogoID,ProductConsoleTypeID,ProductProgramTypeID,ColorID,ShowInNavigation,CategoryIndexed,PressReleaseDate,CommentNotificationEmail,lTopicID,foobar,useSSL,lTopicID,SourceID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategory.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
@@ -124,7 +124,7 @@
 
 		<!--- Handling MyCategoryLocale --->
 		<cfset MyCategoryLocale.SetCategoryTypeID(CategoryTypeID)>
-		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
+		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategoryLocale.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
@@ -1197,7 +1197,6 @@
 			<cfif Trim(ReturnURL) IS "">
 				<cfset Location=GetToken(ATTRIBUTES.ListPage,1,"?")>
 				<cfset querystring=GetToken(ATTRIBUTES.ListPage,2,"?")>
-				<!---<cf_AddToQueryString querystring="#QueryString#" name="UpperIDList" value="#UpperIDList#">--->
 				<cflocation url="#Location#?#querystring#" addtoken="No">
 			<cfelse>
 				<cflocation url="#ReturnURL#" addtoken="No">

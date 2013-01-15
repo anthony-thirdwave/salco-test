@@ -2,14 +2,21 @@
 <cfparam name="FormMode" default="ShowForm">
 <!--- Determine Domains --->
 
-
-
 <cfset Restrictions=MyCategoryLocale.GetRestrictionsPropertyList()>
 
+<cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm"
+	thiscategoryid="#MyCategory.GetProperty('ParentID')#"
+	namelist=""
+	idlist="#MyCategory.GetProperty('ParentID')#"
+	aliaslist="">
+	
+<cfif ListLen(IDList) GTE "2">
+	<cfset ThisSiteCategoryID=ListGetAt(IDList,2)>
+<cfelse>
+	<cfset ThisSiteCategoryID="-1">
+</cfif>
+
 <cfif OpenAndCloseFormTables><table width="100%"></cfif>
-<!--- <TR><TD bgcolor="bac0c9" colspan="3"><b>
-<cfdump var="#MyCategoryLocale.getAllErrorMessages()#">
-</b></TD></TR> --->
 
 <cfif APPLICATION.GetAllLocale.RecordCount GT 1>
 	<cfif IsDefined("SESSION.AdminCurrentAdminLocaleID") AND SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>	
@@ -40,16 +47,18 @@
 	</cfif>
 </cfif>
 
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="text"
-	caption="Page Title Override<BR><small>leave blank to use default</small>" 
-	ObjectName="MyCategoryLocale"
-	PropertyName="PageTitleOverride"
-	size="80" maxlength="128"
-	Required="N">
-	
-<cfif ListFindNoCase(Restrictions,"CSSID")>
+<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="Page Title Override<BR><small>leave blank to use default</small>" 
+		ObjectName="MyCategoryLocale"
+		PropertyName="PageTitleOverride"
+		size="80" maxlength="128"
+		Required="N">
+</cfif>
+
+<cfif ListFindNoCase(Restrictions,"CSSID") and ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -91,22 +100,24 @@
 		size="40" maxlength="128"
 		Required="N">
 </cfif>
-		
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="textarea"
-	caption="Keywords" 
-	ObjectName="MyCategoryLocale"
-	PropertyName="MetaKeywords"
-	cols="40" rows="3"
-	EscapeCRLF="No"
-	Required="N">
+
+<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="textarea"
+		caption="Keywords" 
+		ObjectName="MyCategoryLocale"
+		PropertyName="MetaKeywords"
+		cols="40" rows="3"
+		EscapeCRLF="No"
+		Required="N">
+</cfif>
 
 <cfif ListFindNoCase(Restrictions,"SubTitle")>
 	<cfinvoke component="com.ContentManager.EmployeeHandler"
-			method="qryEmployees"
-			orderBy = "empFirstName,empLastName"
-			returnVariable="employees">
+		method="qryEmployees"
+		orderBy = "empFirstName,empLastName"
+		returnVariable="employees">
 	
 	<cfset EmployeeIDList="">
 	<cfoutput query="employees">
@@ -121,8 +132,6 @@
 		ObjectName="MyCategoryLocale"
 		PropertyName="SubTitle"
 		OptionValues="#EmployeeIDList#"
-		<!--- FormEltJavaScript="onchange=""this.form.submit()""" --->
-		<!--- Required="Y" --->
 		FormEltStyle="width:200px;">
 </cfif>
 	
@@ -171,6 +180,15 @@
 		caption="This is an alert?"
 		ObjectName="MyCategoryLocale"
 		PropertyName="EmergencyAlert">
+</cfif>
+
+<cfif ThisSiteCategoryID IS APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="checkbox"
+		caption="Include in screen saver?"
+		ObjectName="MyCategoryLocale"
+		PropertyName="IncludeInScreenSaver">
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"Title")>

@@ -30,6 +30,7 @@
 	<cfproperty name="PageTitleOverride" type="string" default="">
 	<cfproperty name="HomePageDisplay" type="boolean" default="">
 	<cfproperty name="EmergencyAlert" type="boolean" default="">
+	<cfproperty name="IncludeInScreenSaver" type="boolean" default="">
 	
 	<!--- /// added for page type employee/// --->
 	<cfproperty name="EmpFirstName" type="string" default="">
@@ -70,6 +71,7 @@
 	<cfset structInsert(sPropertyDisplayName,"SubTitle","SubTitle 2",1)>
 	<cfset structInsert(sPropertyDisplayName,"HomePageDisplay","Home Page Display",1)>
 	<cfset structInsert(sPropertyDisplayName,"EmergencyAlert","Emergency Alert",1)>
+	<cfset structInsert(sPropertyDisplayName,"IncludeInScreenSaver","Include In Screen Saver",1)>
 	<cfset structInsert(sPropertyDisplayName,"PageTitleOverride","page title override",1)>
 	
 	<!--- /// added for page type employee/// --->
@@ -169,6 +171,7 @@
 		<cfset this.SetProperty("SubTitle","")>
 		<cfset this.SetProperty("HomePageDisplay","")>
 		<cfset this.SetProperty("EmergencyAlert","")>
+		<cfset this.SetProperty("IncludeInScreenSaver","")>
 		<cfset this.SetProperty("PageTitleOverride","")>
 		
 		<!--- /// added for page type employee/// --->
@@ -210,7 +213,7 @@
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert">
+						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
@@ -258,6 +261,7 @@
 		<cfset var thisSubTitle = "">
 		<cfset var thisHomePageDisplay = "">
 		<cfset var thisEmergencyAlert = "">
+		<cfset var thisIncludeInScreenSaver="">
 		<cfset var thisPageTitleOverride = "">
 		<cfset var Destination = "">
 		<cfset var Source = "">
@@ -316,6 +320,7 @@
 			<cfset thisSubTitle=this.GetProperty("SubTitle")>
 			<cfset thisHomePageDisplay=this.GetProperty("HomePageDisplay")>
 			<cfset thisEmergencyAlert=this.GetProperty("EmergencyAlert")>
+			<cfset thisIncludeInScreenSaver=this.GetProperty("IncludeInScreenSaver")>
 			<cfset thisPageTitleOverride=this.GetProperty("PageTitleOverride")>
 			
 			<cfset thisEmpFirstName=this.GetProperty("empFirstName")>
@@ -471,6 +476,7 @@
 			<cfset DevNull=StructInsert(sProperties,"SubTitle","#Trim(ThisSubTitle)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"HomePageDisplay","#Trim(ThisHomePageDisplay)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"EmergencyAlert","#Trim(ThisEmergencyAlert)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"IncludeInScreenSaver","#Trim(ThisIncludeInScreenSaver)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"PageTitleOverride","#Trim(ThisPageTitleOverride)#","1")>
 			
 			<cfset DevNull=StructInsert(sProperties,"empFirstName","#Trim(thisEmpFirstName)#","1")>

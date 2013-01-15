@@ -24,7 +24,7 @@
 		<cfset ThisClass="">
 		<cfif EmergencyAlert>
 			<cfif IsDefined("SESSION.EmergencyAlertDisplayed") and ListFindNoCase(SESSION.EmergencyAlertDisplayed,NewsID)>
-				<cfset ThisClass="">
+				<cfset ThisClass="incmWeatherOff">
 			<cfelse>
 				<cfset ThisClass="incmWeather">
 				<cfparam name="SESSION.EmergencyAlertDisplayed" default="">
@@ -40,7 +40,7 @@
 				<cfif EmergencyAlert>
 					#description#
 				<cfelse>
-					<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#description#" NumChars="300">
+					<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#description#" NumChars="90">
 				</cfif>
 				<a href="#APPLICATION.utilsObj.parseCategoryUrl(link)#">Click to read more</a></dd>
 				<cfif len(headerImage)>

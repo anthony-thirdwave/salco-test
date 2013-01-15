@@ -410,7 +410,7 @@
 				</cfif>
 				<cfset sElement=StructNew()>
 				<cfset StructInsert(sElement,"FileName",FileName_New,1)>
-				<cfset StructInsert(sElement,"FileCaption","",1)>
+				<cfset StructInsert(sElement,"FileCaption",FileCaption_New,1)>
 				<cfset StructInsert(sElement,"FilePath",MainFilePath_New,1)>
 				<cfset StructInsert(sElement,"ThumbnailPath",ThumbnailPath_New,1)>
 				<cfset ArrayAppend(aView,sElement)>

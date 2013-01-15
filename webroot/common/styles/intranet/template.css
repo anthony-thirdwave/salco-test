@@ -763,6 +763,17 @@ article.news .artContent p{
 	overflow:hidden;
 }
 
+.news-item .lrgImgs .bigs:after{
+	content:attr(data-title);
+	display:block;
+	padding-top:3px;
+}
+
+.news-item .lrgImgs .bigs[data-title=""]:after{
+	padding-top:0px;
+}
+
+
 .ie8 .news-item .lrgImgs {
 	display:none;
 }
@@ -1190,15 +1201,15 @@ article.phonelist #right tr td:nth-child(2){
 	white-space:nowrap;
 }
 
-.chrome article.phonelist caption{
+.chrome article.phonelist caption, .ie9 article.phonelist caption, .ie10 article.phonelist caption{
 	display:block;
 	position:absolute;
 }
 
-.chrome article.phonelist #left tr:nth-child(1) td {
+.chrome article.phonelist #left tr:nth-child(1) td, .ie9 article.phonelist #left tr:nth-child(1) td, .ie10 article.phonelist #left tr:nth-child(1) td {
 	padding-top:48px;}
 	
-.chrome article.phonelist #cellphones tr:nth-child(1) td {
+.chrome article.phonelist #cellphones tr:nth-child(1) td, .ie9 article.phonelist #cellphones tr:nth-child(1) td, .ie10 article.phonelist #cellphones tr:nth-child(1) td {
 padding-top: 48px;
 }
 

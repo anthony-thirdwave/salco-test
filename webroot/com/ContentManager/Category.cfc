@@ -105,10 +105,10 @@
 	<cfloop index="ThisCategoryTypeID" list="-1,#ValueList(GetAllCategoryType.LabelID)#">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="60,63,70"><!--- Content --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,PublishDateTime,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
 			</cfcase>
 			<cfcase value="82"><!--- News --->
-				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,PublishDateTime,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
+				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,PublishDateTime,CategoryURL,TemplateID,WorkflowStatusID,AllowComments,CommentNotificationEmail">
 			</cfcase>
 			<cfcase value="78"><!--- Blog --->
 				<cfset this.sFields[ThisCategoryTypeID]="#BaseFieldList#,lTopicID,ShowInNavigation,CategoryURL,TemplateID,WorkflowStatusID">
