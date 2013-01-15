@@ -13,8 +13,6 @@
 <meta name="keywords" content="#MetaKeywords#" />
 <meta name="description" content="#Metadescription#" />
 <meta name="generator" content="#APPLICATION.GeneratorMeta#" />
-<meta name="generator-content" content="#APPLICATION.GeneratorContentMeta#" />
-<meta name="dc.title" content="#HTMLEditFormat(CurrentCategoryName)#" />
 <cfif IsDefined("PageType")>
 	<meta name="dc.type" content="#PageType#" />
 </cfif>

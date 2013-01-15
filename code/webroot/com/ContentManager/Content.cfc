@@ -71,7 +71,7 @@
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,InheritID,ContentIndexed,SourceID">
 			</cfcase>
 			<cfcase value="221"><!--- News Item --->
-				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,ContentDate1">
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
 			</cfcase>
 			<cfcase value="235"><!--- Event --->
 				<!--- Source ID used differently here, fk to t_Event. --->

@@ -18,20 +18,6 @@
 			</restrictions>
 		</property>
 		<property>
-			<variableName>eventUrl</variableName>
-			<displayName>event url</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
-			<variableName>eventUrlLabel</variableName>
-			<displayName>event url label</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
 			<variableName>cost</variableName>
 			<displayName>cost</displayName>
 			<restrictions>
@@ -41,41 +27,6 @@
 		<property>
 			<variableName>additionalInfo</variableName>
 			<displayName>additional info</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
-			<variableName>contactName</variableName>
-			<displayName>contact name</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
-			<variableName>contactEmail</variableName>
-			<displayName>contact email</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
-			<variableName>contactPhone</variableName>
-			<displayName>contact phone</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
-			<variableName>contactExtraInfo</variableName>
-			<displayName>contact extra info</displayName>
-			<restrictions>
-				<string />
-			</restrictions>
-		</property>
-		<property>
-			<variableName>contactEmail</variableName>
-			<displayName>contact email</displayName>
 			<restrictions>
 				<string />
 			</restrictions>

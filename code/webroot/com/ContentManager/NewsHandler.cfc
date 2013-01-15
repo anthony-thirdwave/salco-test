@@ -131,7 +131,7 @@
 						<cfset QuerySetCell(LOCAL.qryGetNews,"homePageDisplayFlag",ThishomePageDisplayFlag)>
 						<cfset QuerySetCell(LOCAL.qryGetNews,"EmergencyAlert",ThisEmergencyAlert)>
 						
-						<cfif ThisEmergencyAlert>
+						<cfif ThisEmergencyAlert or ThisNewsDescription IS "">
 							<cfquery name="LOCAL.GetFirstHTML" datasource="#APPLICATION.DSN#" maxrows="1">
 								select ContentID from qry_GetContentLocaleMeta
 								Where
@@ -151,7 +151,7 @@
 							<cfif IsWDDX(LOCAL.GetContent.ContentBody)>
 								<cfwddx action="WDDX2CFML" input="#LOCAL.GetContent.ContentBody#" output="LOCAL.sContentBody">
 								<cfif StructKeyExists(LOCAL.sContentBody,"HTML") and LOCAL.sContentBody.HTML is NOT "">
-									<cfset ThisNewsDescription=LOCAL.sContentBody.HTML>xxx
+									<cfset ThisNewsDescription=LOCAL.sContentBody.HTML>
 								</cfif>
 							</cfif>
 						</cfif>

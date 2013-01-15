@@ -170,15 +170,6 @@
 		</cfif>
 	</cfloop>
 
-	<!--- loop through the properties of the address --->
-	<cfloop array="#thisEvent.addressObj.propArray#" index="thisProp">
-
-		<!--- if the property is defined in the form --->
-		<cfif structKeyExists(form.address, thisProp.variableName.xmlText)>
-			<cfset thisEvent.addressObj.setProperty(thisProp.variableName.xmlText, form.address[thisProp.variableName.xmlText])>
-		</cfif>
-	</cfloop>
-
 
 	<!--- will hold eventDates in memory for validation --->
 	<cfset eventDateArray = arrayNew(1)>

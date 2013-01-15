@@ -65,6 +65,7 @@
 		<cfset APPLICATION.defaultSiteCategoryID="1">
 		<cfset APPLICATION.StagingURL="http://staging.salco.01.thirdwaveweb.com" />
 		
+		<cfset APPLICATION.IntranetCategoryID="6061">
 		<cfset APPLICATION.NewsCategoryID="6063">
 		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
 		<cfset APPLICATION.AnniversaryTopicID="6074">

@@ -237,38 +237,7 @@
 		</cfif> 
 	</cfcase>
 	<cfcase value="221"><!--- news Detail --->
-		<cfset newsImagesLarge="">
-		<cfset newsImages="">
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
-			<cfset aFile=ATTRIBUTES.sContentBody.aFile>
-			<cfsavecontent variable="newsImages">
-				<cfoutput>
-					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
-						<cfset sFile=aFile[i]>
-						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"ThumbnailPath") AND sFile.ThumbnailPath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.ThumbnailPath))>
-							<img class='curveMe' src='#sFile.ThumbnailPath#' align='left' style='display:block'>
-						</cfif>
-					</cfloop>
-				</cfoutput>
-			</cfsavecontent>
-			<cfsavecontent variable="newsImagesLarge">
-				<cfoutput>
-					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
-						<cfset sFile=aFile[i]>
-						<cfif IsStruct(sFile) AND StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "" AND FileExists(application.utilsObj.GetPathFromURL(sFile.FilePath))>
-							<img src='#sFile.FilePath#'>
-						</cfif>
-					</cfloop>
-				</cfoutput>
-			</cfsavecontent>
-		</cfif>
-		
-		<cfset newsContent="">
-		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML")>
-			<cfset newsContent="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
-		</cfif>	
-				
-		<cfset FileContents="<cfmodule template=""/common/modules/news/intranet/newsDetail.cfm"" newsContent=""#newsContent#"" newsImage=""#Trim(newsImages)#"" newsImagesLarge=""#Trim(newsImagesLarge)#"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
+		<cfset FileContents="<cfmodule template=""/common/modules/news/intranet/newsDetail.cfm"" ContentID=""#ATTRIBUTES.ContentID#"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
 	</cfcase>
 	<cfcase value="224"><!--- Press Release List --->
 		<cfset FileContents="<cfmodule template=""/common/modules/pressrelease/PressReleaseListing.cfm"" CategoryID=""#ATTRIBUTES.CurrentCategoryID#"" LocaleID=""#APPLICATION.LocaleID#"">">
