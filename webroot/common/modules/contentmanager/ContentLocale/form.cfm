@@ -39,8 +39,18 @@
 	<cfset TitleTypeIDList=ListAppend(TitleTypeIDList,"{#LabelID#|#LabelName#}","^^")>
 </cfoutput>
 
+<cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm"
+	thiscategoryid="#MyContent.GetProperty('CategoryID')#"
+	namelist=""
+	idlist="#MyContent.GetProperty('CategoryID')#"
+	aliaslist="">
+	
+<cfif ListLen(IDList) GTE "2">
+	<cfset ThisSiteCategoryID=ListGetAt(IDList,2)>
+<cfelse>
+	<cfset ThisSiteCategoryID="-1">
+</cfif>
 
-<cfset TextPositionIDList="{left|Left of HTML}^^{right|Right of HTML}">
 <cfif OpenAndCloseFormTables><table width="100%" cellspacing="1" cellpadding="2"></cfif>
 <!--- <tr><td bgcolor="bac0c9" colspan="3"><b>
 <cfdump var="#MyContentLocale.getAllErrorMessages()#">
@@ -109,23 +119,25 @@
 	<input type="hidden" name="DefaultContentLocale" value="1">
 </cfif>
 
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="text"
-	caption="CSS ID<BR>Default will be <BR>""ContentElement#MyContentLocale.GetProperty('ContentID')#""" 
-	ObjectName="MyContentLocale"
-	PropertyName="CSSID"
-	size="40" maxlength="40"
-	Required="N">
-
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="text"
-	caption="CSS Class" 
-	ObjectName="MyContentLocale"
-	PropertyName="CSSClass"
-	size="40" maxlength="40"
-	Required="N">
+<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="CSS ID<BR>Default will be <BR>""ContentElement#MyContentLocale.GetProperty('ContentID')#""" 
+		ObjectName="MyContentLocale"
+		PropertyName="CSSID"
+		size="40" maxlength="40"
+		Required="N">
+	
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="CSS Class" 
+		ObjectName="MyContentLocale"
+		PropertyName="CSSClass"
+		size="40" maxlength="40"
+		Required="N">
+</cfif>
 
 <cfif ListFindNoCase(Restrictions,"SubTitle")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
@@ -247,6 +259,7 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"TextPosition")>
+	<cfset TextPositionIDList="{left|Left of HTML}^^{right|Right of HTML}">
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="select"
@@ -1018,6 +1031,99 @@
 		
 		</table>
 		</td></tr>
+	<cfelseif MyContentLocale.GetContentTypeID() IS "221">
+		<cfset aFile=MyContentLocale.GetProperty("aFile")>
+		<TR><TD colspan="3"><b>Files</b></TD></TR>
+		<TR>
+			<td></td>
+			<TD colspan="2">
+				<table width="100%" border="0">
+				<TR>
+					<TD></TD>
+					<TD><strong>Title / Caption</strong></TD>
+					<TD colspan="2"><strong>Files</strong></TD>
+					<TD>&nbsp;</TD>
+					<TD><cfif ArrayLen(aFile) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></TD>
+				</TR>
+				<cfloop index="fi" from="#ArrayLen(aFile)#" to="1" step="-1">
+					<cfif NOT StructKeyExists(aFile[fi],"ThumbnailPath")>
+						<cfset StructInsert(aFile[fi],"ThumbnailPath","",1)>
+					</cfif>
+					<cfif FormMode IS "ShowForm">
+						<cfoutput>
+							<tr valign="top">
+							<TD><strong>#fi#)</strong></TD>
+							<TD nowrap>
+								<input type="text" name="FileName_#fi#" value="#aFile[fi].FileName#" size="40" maxlength="128"><br>
+								<small>Caption</small><br>
+								<textarea cols="40" rows="4"  name="FileCaption_#fi#">#aFile[fi].FileCaption#</textarea>
+							</TD>
+							<TD>
+								Main: <cfif aFile[fi].FilePath is not ""><small><a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a></small></cfif><br>
+								<input type="file" name="MainFilePath_#fi#FileObject" value="#aFile[fi].FilePath#" size="40">
+								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
+							</TD>
+							<TD>
+								Thumbnail: <cfif aFile[fi].ThumbnailPath IS NOT ""><small> <a href="#aFile[fi].ThumbnailPath#" target="_blank">#ListLast(aFile[fi].ThumbnailPath,'/')#</a></cfif><br>
+								<input type="file" name="ThumbnailPath_#fi#FileObject" size="40">
+								<input type="hidden" name="ThumbnailPath_#fi#" value="#aFile[fi].ThumbnailPath#">
+							</TD>
+							<TD nowrap>
+								<cfoutput>
+								<input type="text" name="Order_#fi#" value="#fi*10#" size="2" maxlength="4">
+								</cfoutput>&nbsp;
+							</TD>
+							<TD><input type="checkbox" name="FileDelete_#fi#" value="1"></TD>
+						</TR>
+						</cfoutput>
+					<cfelse>
+						<cfoutput>#formMode#</cfoutput>
+						<cfoutput>
+						<TR>
+							<TD><strong>#fi#)</strong></TD>
+							<TD>#aFile[fi].FileName#</TD>
+							<TD>#aFile[fi].FileCaption#</TD>
+							<TD>
+								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</A>
+								<input type="hidden" name="FileName_#fi#" value="#HTMLEditFormat(aFile[fi].FileName)#">
+								<input type="hidden" name="FileCaption_#fi#" value="#HTMLEditFormat(aFile[fi].FileCaption)#">
+								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
+								<input type="hidden" name="ThumbnailPath_#fi#" value="#aFile[fi].ThumbnailPath#">
+							</TD>
+							<TD colspan="2"></TD>
+						</tr>
+						</cfoutput>
+					</cfif>
+				</cfloop>
+				<cfif ArrayLen(aFile) GT "0">
+					<TR><TD colspan="6" align="right"><input type="submit" value="Update Files"></TD></TR>
+				</cfif>
+				<cfoutput><input type="hidden" name="NumFiles" value="#ArrayLen(aFile)#"></cfoutput>
+				<cfif FormMode IS "ShowForm">
+					<tr valign="top">
+						<TD></TD>
+						<TD>
+							<small>Title ( * required ) /  Caption</small><br>
+							<input type="text" name="FileName_New" value="" size="40" maxlength="128"><br>
+							<textarea cols="40" rows="3" name="FileCaption_New"></textarea>
+						</TD>
+						<TD>
+							Main: <br>
+							<input type="file" name="MainFilePath_NewFileObject" size="40">
+							<br>
+						</TD>
+						
+						<TD>
+						Thumbnail: <br>
+						<input type="file" name="ThumbnailPath_NewFileObject" size="40">
+						</TD>
+						<TD colspan="2">&nbsp;</TD>
+					</TR>
+					<TR><TD colspan="5" align="right"><input type="submit" name="btnUpdateFiles" id="btnUpdateFiles" value="Add New"></TD></TR>
+				</cfif>
+				
+				</table>
+				</TD></TR>
 	<cfelse>
 		<tr><td bgcolor="white" colspan="3"><b>Files</b></td></tr>
 		<tr>

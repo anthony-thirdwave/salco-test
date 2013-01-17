@@ -26,7 +26,24 @@
 	<cfproperty name="Byline1" type="string" default="">
 	<cfproperty name="Byline2" type="string" default="">
 	<cfproperty name="Title" type="string" default="">
+	<cfproperty name="SubTitle" type="string" default="">
 	<cfproperty name="PageTitleOverride" type="string" default="">
+	<cfproperty name="HomePageDisplay" type="boolean" default="">
+	<cfproperty name="EmergencyAlert" type="boolean" default="">
+	<cfproperty name="IncludeInScreenSaver" type="boolean" default="">
+	
+	<!--- /// added for page type employee/// --->
+	<cfproperty name="EmpFirstName" type="string" default="">
+	<cfproperty name="EmpLastName" type="string" default="">
+	<cfproperty name="EmpTitle" type="string" default="">
+	<cfproperty name="empPhone" type="string" default="">
+	<cfproperty name="empPhoneExt" type="string" default="">
+	<cfproperty name="empCellPhone" type="string" default="">
+	<cfproperty name="empImage" type="string" default="">
+	<cfproperty name="empImageThumb" type="string" default="">
+	<cfproperty name="empEmail" type="string" default="">
+	<cfproperty name="empBirthDate" type="string" default="">
+	<cfproperty name="empJoinDate" type="string" default="">
 
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleID","category locale ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryID","category ID",1)>
@@ -51,7 +68,24 @@
 	<cfset structInsert(sPropertyDisplayName,"Byline1","Byline 1",1)>
 	<cfset structInsert(sPropertyDisplayName,"Byline2","Byline 2",1)>
 	<cfset structInsert(sPropertyDisplayName,"Title","Title 2",1)>
+	<cfset structInsert(sPropertyDisplayName,"SubTitle","SubTitle 2",1)>
+	<cfset structInsert(sPropertyDisplayName,"HomePageDisplay","Home Page Display",1)>
+	<cfset structInsert(sPropertyDisplayName,"EmergencyAlert","Emergency Alert",1)>
+	<cfset structInsert(sPropertyDisplayName,"IncludeInScreenSaver","Include In Screen Saver",1)>
 	<cfset structInsert(sPropertyDisplayName,"PageTitleOverride","page title override",1)>
+	
+	<!--- /// added for page type employee/// --->
+	<cfset structInsert(sPropertyDisplayName,"empFirstName","employee first name",1)>
+	<cfset structInsert(sPropertyDisplayName,"empLastName","employee last name",1)>
+	<cfset structInsert(sPropertyDisplayName,"empTitle","employee title",1)>
+	<cfset structInsert(sPropertyDisplayName,"empPhone","employee phone",1)>
+	<cfset structInsert(sPropertyDisplayName,"empPhoneExt","employee phone extension",1)>
+	<cfset structInsert(sPropertyDisplayName,"empCellPhone","employee cell phone",1)>
+	<cfset structInsert(sPropertyDisplayName,"empImage","employee Image",1)>
+	<cfset structInsert(sPropertyDisplayName,"empImageThumb","employee image thumbnail",1)>
+	<cfset structInsert(sPropertyDisplayName,"empEmail","employee email",1)>
+	<cfset structInsert(sPropertyDisplayName,"empBirthDate","employee birth date",1)>
+	<cfset structInsert(sPropertyDisplayName,"empJoinDate","employee join date",1)>
 
 	<cfset this.CategoryTypeID="-1">
 
@@ -73,20 +107,26 @@
 			<cfcase value="80"><!--- Repeated Page --->
 				<cfset this.sFields[ThisCategoryTypeID]="">
 			</cfcase>
-				<!--- Not Used --->
-				<cfcase value="69"><!--- Press Release--->
-					<cfset this.sFields[ThisCategoryTypeID]="Byline1,Byline2">
-				</cfcase>
-				<cfcase value="70"><!--- Press Release--->
-					<cfset this.sFields[ThisCategoryTypeID]="Title">
-				</cfcase>
-				<!--- End Not Used --->
-				<cfcase value="76"><!--- topic --->
-					<cfset this.sFields[ThisCategoryTypeID]="">
-				</cfcase>
-				<cfcase value="77"><!--- Blog --->
-					<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
-				</cfcase>
+			<cfcase value="81"><!--- Employee Page --->
+				<cfset this.sFields[ThisCategoryTypeID]="empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate">
+			</cfcase>
+			<!--- Not Used --->
+			<cfcase value="69"><!--- Press Release--->
+				<cfset this.sFields[ThisCategoryTypeID]="Byline1,Byline2">
+			</cfcase>
+			<cfcase value="70"><!--- Press Release--->
+				<cfset this.sFields[ThisCategoryTypeID]="Title">
+			</cfcase>
+			<!--- End Not Used --->
+			<cfcase value="76"><!--- topic --->
+				<cfset this.sFields[ThisCategoryTypeID]="">
+			</cfcase>
+			<cfcase value="77"><!--- Blog --->
+				<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
+			</cfcase>
+			<cfcase value="82"><!--- news --->
+				<cfset this.sFields[ThisCategoryTypeID]="SubTitle,CategoryImageRepresentative,HomePageDisplay,EmergencyAlert">
+			</cfcase>
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisCategoryTypeID]="CategoryImageRepresentative">
 			</cfdefaultcase>
@@ -128,8 +168,25 @@
 		<cfset this.SetProperty("Byline1","")>
 		<cfset this.SetProperty("Byline2","")>
 		<cfset this.SetProperty("Title","")>
+		<cfset this.SetProperty("SubTitle","")>
+		<cfset this.SetProperty("HomePageDisplay","")>
+		<cfset this.SetProperty("EmergencyAlert","")>
+		<cfset this.SetProperty("IncludeInScreenSaver","")>
 		<cfset this.SetProperty("PageTitleOverride","")>
-
+		
+		<!--- /// added for page type employee/// --->
+		<cfset this.SetProperty("empFirstName","")>
+		<cfset this.SetProperty("empLastName","")>
+		<cfset this.SetProperty("empTitle","")>
+		<cfset this.SetProperty("empPhone","")>
+		<cfset this.SetProperty("empPhoneExt","")>
+		<cfset this.SetProperty("empCellPhone","")>
+		<cfset this.SetProperty("empImage","")>
+		<cfset this.SetProperty("empImageThumb","")>
+		<cfset this.SetProperty("empEmail","")>
+		<cfset this.SetProperty("empBirthDate","")>
+		<cfset this.SetProperty("empJoinDate","")>
+		
 		<cfif Val(ARGUMENTS.ID) GT 0>
 			<!--- If id is greater than 0, load from DB. --->
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
@@ -156,7 +213,7 @@
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride">
+						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
@@ -201,6 +258,10 @@
 		<cfset var thisByline1 = "">
 		<cfset var thisByline2 = "">
 		<cfset var thisTitle = "">
+		<cfset var thisSubTitle = "">
+		<cfset var thisHomePageDisplay = "">
+		<cfset var thisEmergencyAlert = "">
+		<cfset var thisIncludeInScreenSaver="">
 		<cfset var thisPageTitleOverride = "">
 		<cfset var Destination = "">
 		<cfset var Source = "">
@@ -218,6 +279,18 @@
 		<cfset var ThisCategoryName = "">
 		<cfset var success = "">
 		<cfset var wProperties = "">
+		
+		<cfset var thisEmpFirstName = "">
+		<cfset var thisEmpLastName = "">
+		<cfset var thisEmpTitle = "">
+		<cfset var thisEmpPhone = "">
+		<cfset var thisEmpPhoneExt = "">
+		<cfset var thisEmpCellPhone = "">
+		<cfset var thisEmpImage = "">
+		<cfset var thisEmpImageThumb = "">
+		<cfset var thisempEmail = "">
+		<cfset var thisempBirthDate = "">
+		<cfset var thisempJoinDate = "">
 
 		<cfif IsCorrect()>
 			<cfset thisCategoryLocaleID=this.GetProperty("CategoryLocaleID")>
@@ -244,7 +317,24 @@
 			<cfset thisByline1=this.GetProperty("Byline1")>
 			<cfset thisByline2=this.GetProperty("Byline2")>
 			<cfset thisTitle=this.GetProperty("Title")>
+			<cfset thisSubTitle=this.GetProperty("SubTitle")>
+			<cfset thisHomePageDisplay=this.GetProperty("HomePageDisplay")>
+			<cfset thisEmergencyAlert=this.GetProperty("EmergencyAlert")>
+			<cfset thisIncludeInScreenSaver=this.GetProperty("IncludeInScreenSaver")>
 			<cfset thisPageTitleOverride=this.GetProperty("PageTitleOverride")>
+			
+			<cfset thisEmpFirstName=this.GetProperty("empFirstName")>
+			<cfset thisEmpLastName=this.GetProperty("empLastName")>
+			<cfset thisEmpTitle=this.GetProperty("empTitle")>
+			<cfset thisEmpPhone=this.GetProperty("empPhone")>
+			<cfset thisEmpPhoneExt=this.GetProperty("empPhoneExt")>
+			<cfset thisEmpCellPhone=this.GetProperty("empCellPhone")>
+			<cfset thisEmpImage=this.GetProperty("empImage")>
+			<cfset thisEmpImageThumb=this.GetProperty("empImageThumb")>
+			<cfset thisEmpEmail=this.GetProperty("empEmail")>
+			<cfset thisEmpBirthDate=this.GetProperty("empBirthDate")>
+			<cfset thisEmpJoinDate=this.GetProperty("empJoinDate")>
+			
 
 			<cfinvoke component="com.ContentManager.CategoryHandler"
 				method="GetCategoryName"
@@ -331,7 +421,7 @@
 				<cfset ThisDestinationDirectory=this.GetResourcePath("images")>
 				<cfset ThisDestinationDirectory=ReplaceNoCase("#ARGUMENTS.WebrootPath##ThisDestinationDirectory#","/","\","all")>
 				<cfset ThisDestinationDirectory=ReplaceNoCase("#ThisDestinationDirectory#","\\","\","all")>
-				<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+				<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
 					<cfset OriginalPath=this.GetProperty("#ThisImage#")>
 					<cfset Source=ExpandPath(OriginalPath)>
 					<cfif FileExists(Source) and left(Source,Len(ThisDestinationDirectory)) is not ThisDestinationDirectory>
@@ -383,8 +473,24 @@
 			<cfset DevNull=StructInsert(sProperties,"Byline1","#Trim(ThisByline1)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"Byline2","#Trim(ThisByline2)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"Title","#Trim(ThisTitle)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"SubTitle","#Trim(ThisSubTitle)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"HomePageDisplay","#Trim(ThisHomePageDisplay)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"EmergencyAlert","#Trim(ThisEmergencyAlert)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"IncludeInScreenSaver","#Trim(ThisIncludeInScreenSaver)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"PageTitleOverride","#Trim(ThisPageTitleOverride)#","1")>
-
+			
+			<cfset DevNull=StructInsert(sProperties,"empFirstName","#Trim(thisEmpFirstName)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empLastName","#Trim(thisEmpLastName)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empTitle","#Trim(thisEmpTitle)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empPhone","#Trim(thisEmpPhone)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empPhoneExt","#Trim(thisEmpPhoneExt)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empCellPhone","#Trim(thisempCellPhone)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empImage","#Trim(thisEmpImage)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empImageThumb","#Trim(thisEmpImageThumb)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empEmail","#Trim(thisempEmail)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empBirthDate","#Trim(thisempBirthDate)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"empJoinDate","#Trim(thisempJoinDate)#","1")>
+			
 			<cfwddx action="CFML2WDDX" input="#sProperties#" output="wProperties">
 			<cfquery name="UpdateContent" datasource="#APPLICATION.DSN#">
 				UPDATE t_Properties
@@ -413,7 +519,6 @@
 
 		<cfif IsSimpleValue(ARGUMENTS.Value)>
 			<cfset ARGUMENTS.Value=Trim(ARGUMENTS.Value)>
-
 			<cfif ListFindNoCase("CategoryLocaleID,CategoryID,LocaleID,PropertiesID",ARGUMENTS.Property) and ARGUMENTS.Value is NOT "">
 				<cfif NOT IsNumeric(ARGUMENTS.Value)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a valid number.")>
@@ -421,17 +526,17 @@
 				</cfif>
 			</cfif>
 
-			<cfif ListFindNoCase("",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
+			<!--- <cfif this.categoryTypeid eq 81 and ListFindNoCase("empBirthDate,empJoinDate",ARGUMENTS.Property) AND ARGUMENTS.VALUE IS NOT "">
 				<cfif NOT IsDate(ARGUMENTS.Value)>
 					<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a valid date.")>
 					<cfreturn false>
 				</cfif>
 			</cfif>
-
-			<cfif ListFindNoCase("",ARGUMENTS.Property) AND Trim(ARGUMENTS.Value) IS "">
+			
+			<cfif this.categoryTypeid eq 81 and ListFindNoCase("empFirstName,empLastName,empTitle,empPhone,empEmail,empPhoneExt",ARGUMENTS.Property) AND Trim(ARGUMENTS.Value) IS "">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
 				<cfreturn false>
-			</cfif>
+			</cfif> --->
 
 			<cfif ListFindNoCase("LocaleID",ARGUMENTS.Property) AND val(ARGUMENTS.Value) LTE "0">
 				<cfset AddError(ARGUMENTS.Property,"#Trim(ARGUMENTS.Value)#","Please enter a #sPropertyDisplayName[ARGUMENTS.Property]#.")>
@@ -686,7 +791,7 @@
 				<cfset DestImages="#DirectoryToCreate#\images\">
 				<cfset DestDocs="#DirectoryToCreate#\documents\">
 
-				<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+				<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
 				<cfloop index="ThisImageName" list="#lImage#">
 					<cfset OriginalName=this.GetProperty(thisImageName)>
 					<cfset OriginalName=ReplaceNoCase(OriginalName,"http://#CGI.Server_Name#","","All")>
@@ -735,7 +840,7 @@
 				</cftransaction>
 
 				<cfif SelectCategory.RecordCount GT "0">
-					<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+					<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
 
 					<!--- open the ftp connection to the production site --->
 					<cfftp	action="open"
@@ -877,7 +982,7 @@
 					FTPPassword="#sProductionSiteInformation.ProductionFTPPassword#">
 			</cfif>
 
-			<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+			<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
 
 			<cfloop index="ThisImage" list="#lImageName#">
 				<cfif this.GetProperty(ThisImage) is not "">

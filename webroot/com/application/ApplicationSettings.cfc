@@ -11,7 +11,7 @@
 		<cfargument name="pathPrefix" required="true" type="string" />
 
 		<cfset var local = structNew() />
-
+		
 		<!--- get the site type - functions defined in Application.cfc, which this extends --->
 		<cfinvoke method="getSiteType" returnvariable="local.siteType" />
 		<cfinvoke method="getUniqueName" returnvariable="local.uniqueName" />
@@ -19,6 +19,8 @@
 		<!--- set the datasources  --->
 		<cfinvoke method="getDatasource" returnvariable="APPLICATION.DSN" />
 		<cfset APPLICATION.USER_DSN = APPLICATION.DSN />
+		<cfset APPLICATION.EVENT_DSN = APPLICATION.DSN>
+		<cfset APPLICATION.Data_DSN = APPLICATION.DSN>
 
 		<!--- this path should work for most implementations --->
 		<cfset arguments.pathPrefix = replaceNoCase(arguments.pathPrefix, "\webroot", "", "all") />
@@ -63,12 +65,24 @@
 		<cfset APPLICATION.CategoryID404Page="5701">
 		<cfset APPLICATION.defaultSiteCategoryID="1">
 		<cfset APPLICATION.StagingURL="http://staging.salco.01.thirdwaveweb.com" />
+		
+		<cfset APPLICATION.IntranetCategoryID="6061">
+		<cfset APPLICATION.NewsCategoryID="6063">
+		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
+		<cfset APPLICATION.AnniversaryTopicID="6074">
+		<cfset APPLICATION.BirthdayTopicID="6075">
+		<cfset APPLICATION.DepartmentCategoryID="6066">
+		<cfset APPLICATION.EmployeeCategoryID="6065">
+		
 		<!---
 			determine how content.cfm is called - default .htaccess is formatted to deal with the following permutations
 			a) "/content.cfm" - non seo links (e.g. "http://www.thirdwavellc.com/content.cfm/about")
 			b) "" - seo links defined purely by contentAlias (e.g. "http://www.thirdwavellc.com/about")
 			c) "/yourstringhere" - any string that you want to go before the contentAlias (e.g. "http://www.thirdwavellc.com/page/about")
 		--->
+		<!--- create an empty struct to hold any MasterView modules --->
+		<cfset APPLICATION.modules = structNew()>
+		
 		<cfset APPLICATION.contentPageInUrl = "/page" />
 
 		<!--- clean up contentPageInUrl --->
@@ -94,7 +108,8 @@
 			<cfset APPLICATION.SourceDBServer = "#local.uniqueName#.thirdwavellc.com" />
 			<cfset APPLICATION.SourceLogin = "cfmx" />
 			<cfset APPLICATION.SourcePassword = "st34l1n" />
-			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = APPLICATION.applicationName />
+			<cfset APPLICATION.sLocation["www.salco"] = "www.salco.dev09.thirdwavellc.com" />
+			<cfset APPLICATION.sLocation["intranet.salco"] = "intranet.salco.dev09.thirdwavellc.com" />
 
 			<!---	set custom httpServer and httpsServer - *both* must be set to work properly
 					e.g.: http://www.mySite.com and https://secure.mySite.com --->
@@ -105,6 +120,13 @@
 			<!--- is ssl set up for the dev site? --->
 			<cfset APPLICATION.SSLConfigured = false />
 
+			<cfset APPLICATION.NewsCategoryID="6063">
+			<cfset APPLICATION.IntranetUtilityNavCategoryID="6092">
+			<cfset APPLICATION.AnniversaryTopicID="6277">
+			<cfset APPLICATION.BirthdayTopicID="6276">
+			<cfset APPLICATION.DepartmentCategoryID="6098">
+			<cfset APPLICATION.EmployeeCategoryID="6065">
+		
 		<cfelseif local.siteType eq "staging">
 
 			<cfset APPLICATION.WebRootPath = "#local.stagingPathPrefix#webroot\" />
@@ -116,7 +138,8 @@
 			<cfset APPLICATION.SourceLogin = "cfmx" />
 			<cfset APPLICATION.SourcePassword = "st34l1n" />
 			<cfset APPLICATION.Staging = "yes" />
-			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = "staging.#local.uniqueName#.com" />
+			<cfset APPLICATION.sLocation["www.salco"] = "www.staging.salco.01.thirdwaveweb.com" />
+			<cfset APPLICATION.sLocation["intranet.salco"] = "intranet.staging.salco.01.thirdwaveweb.com" />
 
 			<!---	set custom httpServer and httpsServer - *both* must be set to work properly
 					e.g.: http://www.mySite.com and https://secure.mySite.com --->
@@ -126,6 +149,9 @@
 
 			<!--- is ssl set up for the staging site? --->
 			<cfset APPLICATION.SSLConfigured = false />
+			<cfset APPLICATION.EVENT_DSN = "#local.uniqueName#_cms_production" />
+			<cfset APPLICATION.User_DSN = "#local.uniqueName#_cms_production" />
+			<cfset APPLICATION.Data_DSN = "#local.uniqueName#_cms_production" />
 
 		<cfelse>
 
@@ -138,7 +164,8 @@
 			<cfset APPLICATION.SourceLogin = "" />
 			<cfset APPLICATION.SourcePassword = "" />
 			<cfset APPLICATION.Production = true />
-			<cfset APPLICATION.sLocation["#APPLICATION.applicationName#"] = APPLICATION.applicationName />
+			<cfset APPLICATION.sLocation["www.salco"] = "www.salcoproducts.com" />
+			<cfset APPLICATION.sLocation["intranet.salco"] = "intranet.salcoproducts.com" />
 
 			<!---	set custom httpServer and httpsServer - *both* must be set to work properly
 					e.g.: http://www.mySite.com and https://secure.mySite.com --->
@@ -178,7 +205,7 @@
 		<cfset APPLICATION.ContentEditorUserGroupID = 3 />
 		<cfset APPLICATION.AdminUserGroupID = 4 />
 		<cfset APPLICATION.ContentCategoryTypeID = 60 />
-		<cfset APPLICATION.lVisibleCategoryTypeID = "60,62,64,66,68,69,70,75,76,77,78,80" />
+		<cfset APPLICATION.lVisibleCategoryTypeID = "60,62,64,66,68,69,70,75,76,77,78,80,81,82" />
 
 		<!--- id's referring to t_Label labelGroupId --->
 		<cfset APPLICATION.TemplateTypeLabelGroupID = 20 />
@@ -203,7 +230,7 @@
 		<cfset APPLICATION.utilsObj.init() />
 
 		<cfobject component="com.time.Time" name="APPLICATION.timeObj" />
-		<cfset APPLICATION.timeObj.init() />
+		<cfset APPLICATION.timeObj.init()>
 
 		<cfobject component="com.utils.Message" name="APPLICATION.messageObj" />
 		<cfset APPLICATION.messageObj.init() />
@@ -220,16 +247,41 @@
 			<cfinvoke method="getSSLStruct" returnvariable="APPLICATION.sslCategories" />
 		</cfif>
 
-		<!--- read the factory config xml into memory --->
+			<!--- read the factory config xml into memory --->
 		<cfif directoryExists("#APPLICATION.WebRootPath#com/factory/thirdwave")>
 
 			<!--- create a factoryUtils object in memory --->
 			<cfobject component="com.factory.thirdwave.FactoryObjectUtils" name="APPLICATION.factoryUtilsObj" />
-			<cfset APPLICATION.factoryUtilsObj.init() />
+			<cfset APPLICATION.factoryUtilsObj.init()>
 
 			<cfinvoke method="initFactory" returnvariable="local.factorySuccess" />
 		</cfif>
 
+		<!--- if the 3W:Address module has been added, create an addressHandlerObj --->
+		<cfif fileExists("#APPLICATION.WebRootPath#com\address\AddressHandler.cfc") and arrayLen(xmlSearch(APPLICATION.FACTORYCONFIG, "//object[name[text() = '3W:Address']]"))>
+
+			<!--- indicate that the address module is installed --->
+			<cfset APPLICATION.modules.address = structNew()>
+
+			<cfobject component="com.address.AddressHandler" name="APPLICATION.addressHandlerObj" />
+			<cfset APPLICATION.addressHandlerObj.init()>
+		</cfif>
+
+		<!--- if the 3W:Event module and the prequisite 3W:Address module have been added, create eventHandlerObj and eventRegistrationObj --->
+		<cfif fileExists("#APPLICATION.WebRootPath#com\event\EventHandler.cfc")
+				and arrayLen(xmlSearch(APPLICATION.FACTORYCONFIG, "//object[name[text() = '3W:Event']]"))
+				and structKeyExists(APPLICATION.modules, "address")>
+
+			<!--- indicate that the event module is installed --->
+			<cfset APPLICATION.modules.event = structNew()>
+			<cfset APPLICATION.modules.event.EventDateRangeInMonths = 36>
+
+			<cfobject component="com.event.EventHandler" name="APPLICATION.eventHandlerObj" />
+			<cfset APPLICATION.eventHandlerObj.init()>
+
+			<cfobject component="com.event.EventRegistration" name="APPLICATION.eventRegistrationObj">
+			<cfset APPLICATION.eventRegistrationObj.init() />
+		</cfif>
 		<!--- get all locales --->
 		<cfquery name="APPLICATION.GetAllLocale" datasource="#APPLICATION.DSN#">
 			SELECT		localeId, localeActive, localeName, localeAlias, localeCode, languageId,
@@ -266,7 +318,7 @@
 			WHERE		countrycode = <cfqueryparam cfsqltype="cf_sql_varchar" value="us">
 			ORDER BY 	priority
 		</cfquery>
-
+		
 		<cfquery name="APPLICATION.GetCountries" datasource="#APPLICATION.DSN#">
 			SELECT		countryId, countryCode, countryName, priority
 			FROM		t_Country

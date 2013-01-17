@@ -11,9 +11,9 @@ webroot/common/images/admin/*.db
 webroot/common/images/captcha/*.db
 webroot/common/images/template/*.db
 webroot/common/images/template/home_images_back/*.db
+webroot/common/incoming/*
 webroot/common/incoming/documents/*
 webroot/common/incoming/images/*
-webroot/common/incoming/import
 webroot/common/modules/Contact/Thumbs.db
 webroot/common/modules/product/import/*.txt
 webroot/common/modules/sitemap/sitemap.cfm

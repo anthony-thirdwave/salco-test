@@ -1,0 +1,19 @@
+<!-- 3W:EventDate:EventDateConfig:RepeatConfig Object -->
+<object>
+	<name>3W:EventDate:EventDateConfig:RepeatConfig</name>
+	<propertyList>
+		<property>
+			<variableName>repeatType</variableName>
+			<displayName>repeat type</displayName>
+			<restrictions>
+				<enumeration>
+					<value>everyday</value>
+					<value>weekday</value>
+					<value>week</value>
+					<value>month</value>
+					<value>year</value>
+				</enumeration>
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

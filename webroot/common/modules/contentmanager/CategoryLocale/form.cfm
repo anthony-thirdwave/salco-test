@@ -2,14 +2,21 @@
 <cfparam name="FormMode" default="ShowForm">
 <!--- Determine Domains --->
 
-
-
 <cfset Restrictions=MyCategoryLocale.GetRestrictionsPropertyList()>
 
+<cfmodule template="/common/modules/utils/GetBranchFromRoot.cfm"
+	thiscategoryid="#MyCategory.GetProperty('ParentID')#"
+	namelist=""
+	idlist="#MyCategory.GetProperty('ParentID')#"
+	aliaslist="">
+	
+<cfif ListLen(IDList) GTE "2">
+	<cfset ThisSiteCategoryID=ListGetAt(IDList,2)>
+<cfelse>
+	<cfset ThisSiteCategoryID="-1">
+</cfif>
+
 <cfif OpenAndCloseFormTables><table width="100%"></cfif>
-<!--- <TR><TD bgcolor="bac0c9" colspan="3"><b>
-<cfdump var="#MyCategoryLocale.getAllErrorMessages()#">
-</b></TD></TR> --->
 
 <cfif APPLICATION.GetAllLocale.RecordCount GT 1>
 	<cfif IsDefined("SESSION.AdminCurrentAdminLocaleID") AND SESSION.AdminCurrentAdminLocaleID IS APPLICATION.DefaultLocaleID>	
@@ -40,16 +47,18 @@
 	</cfif>
 </cfif>
 
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="text"
-	caption="Page Title Override<BR><small>leave blank to use default</small>" 
-	ObjectName="MyCategoryLocale"
-	PropertyName="PageTitleOverride"
-	size="80" maxlength="128"
-	Required="N">
-	
-<cfif ListFindNoCase(Restrictions,"CSSID")>
+<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="Page Title Override<BR><small>leave blank to use default</small>" 
+		ObjectName="MyCategoryLocale"
+		PropertyName="PageTitleOverride"
+		size="80" maxlength="128"
+		Required="N">
+</cfif>
+
+<cfif ListFindNoCase(Restrictions,"CSSID") and ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -91,16 +100,40 @@
 		size="40" maxlength="128"
 		Required="N">
 </cfif>
-		
-<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-	ObjectAction="#FormMode#"
-	type="textarea"
-	caption="Keywords" 
-	ObjectName="MyCategoryLocale"
-	PropertyName="MetaKeywords"
-	cols="40" rows="3"
-	EscapeCRLF="No"
-	Required="N">
+
+<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="textarea"
+		caption="Keywords" 
+		ObjectName="MyCategoryLocale"
+		PropertyName="MetaKeywords"
+		cols="40" rows="3"
+		EscapeCRLF="No"
+		Required="N">
+</cfif>
+
+<cfif ListFindNoCase(Restrictions,"SubTitle")>
+	<cfinvoke component="com.ContentManager.EmployeeHandler"
+		method="qryEmployees"
+		orderBy = "empFirstName,empLastName"
+		returnVariable="employees">
+	
+	<cfset EmployeeIDList="">
+	<cfoutput query="employees">
+		<cfset EmployeeName = employees.empFirstName &" "& employees.empLastName>
+		<cfset EmployeeIDList=ListAppend(EmployeeIDList,"{#employees.empAlias#&#EmployeeName#|#EmployeeName#}","^^")>
+	</cfoutput>
+
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="select"
+		caption="Sub Title / Posted by"
+		ObjectName="MyCategoryLocale"
+		PropertyName="SubTitle"
+		OptionValues="#EmployeeIDList#"
+		FormEltStyle="width:200px;">
+</cfif>
 	
 <cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 	ObjectAction="#FormMode#"
@@ -130,6 +163,33 @@
 	cols="40" rows="3"
 	EscapeCRLF="No"
 	Required="N">
+
+<cfif ListFindNoCase(Restrictions,"HomePageDisplay")>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="checkbox"
+		caption="Display on Home Page?"
+		ObjectName="MyCategoryLocale"
+		PropertyName="HomePageDisplay">
+</cfif>
+
+<cfif ListFindNoCase(Restrictions,"EmergencyAlert")>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="checkbox"
+		caption="This is an alert?"
+		ObjectName="MyCategoryLocale"
+		PropertyName="EmergencyAlert">
+</cfif>
+
+<cfif ThisSiteCategoryID IS APPLICATION.IntranetCategoryID>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
+		ObjectAction="#FormMode#"
+		type="checkbox"
+		caption="Include in screen saver?"
+		ObjectName="MyCategoryLocale"
+		PropertyName="IncludeInScreenSaver">
+</cfif>
 
 <cfif ListFindNoCase(Restrictions,"Title")>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
@@ -172,6 +232,52 @@
 		PropertyName="Byline2"
 		size="40" maxlength="128"
 		Required="N">
+</cfif>
+
+<cfif MyCategoryLocale.GetCategoryTypeID() IS "81"><!--- This is a employee  --->
+</table>
+	<div class="RuleDotted1"></div>
+	<strong>Employee Information</strong>
+	<div class="RuleSolid1"></div>
+	<table width="90%" cellspacing="1" cellpadding="1">
+	<cfoutput>
+		<tr>
+			<td width="1%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
+			<td>First Name</td>
+			<td>Last Name</td>
+			<td>Birth Date (mm/dd)</td>
+		</tr>
+		<tr>
+			<td width="1%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
+			<td><input type="text" name="empFirstName" value="#MyCategoryLocale.GetProperty('empFirstName')#" size="40" maxlength="128"></td>
+			<td><input type="text" name="empLastName" value="#MyCategoryLocale.GetProperty('empLastName')#" size="40" maxlength="128"></td>
+			<td><input type="text" name="empBirthDate" value="#MyCategoryLocale.GetProperty('empBirthDate')#" size="40" maxlength="128"></td>
+		</tr>
+		<tr>
+			<td width="1%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
+			<td>Title</td>
+			<td>Hire Date (mm/dd/yyyy)</td>
+			<td>Email</td>
+		</tr>
+		<tr>
+			<td width="1%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
+			<td><input type="text" name="empTitle" value="#MyCategoryLocale.GetProperty('empTitle')#" size="40" maxlength="128"></td>
+			<td><input type="text" name="empJoinDate" value="#MyCategoryLocale.GetProperty('empJoinDate')#" size="40" maxlength="128"></td>
+			<td><input type="text" name="empEmail" value="#MyCategoryLocale.GetProperty('empEmail')#" size="40" maxlength="128"></td>
+		</tr>
+		<tr>
+			<td width="1%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
+			<td>Phone (xxx-xxx-xxxx)</td>
+			<td>Extension</td>
+			<td>Cell Phone (xxx-xxx-xxxx)</td>
+		</tr>
+		<tr>
+			<td width="1%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
+			<td><input type="text" name="empPhone" value="#MyCategoryLocale.GetProperty('empPhone')#" size="40" maxlength="128"></td>
+			<td><input type="text" name="empPhoneExt" value="#MyCategoryLocale.GetProperty('empPhoneExt')#" size="10" maxlength="10"></td>
+			<td><input type="text" name="empCellPhone" value="#MyCategoryLocale.GetProperty('empCellPhone')#" size="40" maxlength="128"></td>
+		</tr>
+	</cfoutput>
 </cfif>
 
 <cfif MyCategoryLocale.GetCategoryTypeID() IS "73"><!--- This is a gallery  --->
@@ -224,13 +330,16 @@
 	<cfset StructInsert(sImageName,"CategoryImageRollover","Rollover Outline Image",1)>
 	<cfif MyCategory.GetProperty("CategoryTypeID") EQ 66>
 		<cfset StructInsert(sImageName,"CategoryImageHeader","Featured Thumbnail <small>(285 x 128)</small>",1)>
+	<cfelseif  MyCategory.GetProperty("CategoryTypeID") EQ 81>
+		<cfset StructInsert(sImageName,"empImage","Employee Picture <small>(191 x 213)</small>",1)>
+		<cfset StructInsert(sImageName,"empImageThumb","Thumbnail Image <small>(89 x 99)</small>",1)>
 	<cfelse>
 		<cfset StructInsert(sImageName,"CategoryImageHeader","Hero Image",1)>
 	</cfif>
 	<cfset StructInsert(sImageName,"CategoryImageTitle","Title Image",1)>
 	<cfset StructInsert(sImageName,"CategoryImageRepresentative","Listing Image",1)>
 	<cfset firstImg = 0>
-	<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative">
+	<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
 		<cfif ListFindNoCase(Restrictions,ThisImage)>
 			<cfset firstImg = firstImg+1>
 			<cfif firstImg EQ 1>
@@ -245,23 +354,23 @@
 					<td width="74%"><img src="/common/images/spacer.gif" height="1" width="1"/></td>
 				</tr>
 			</cfif>
-			<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-				ObjectAction="#FormMode#"
-				type="File"
-				caption="#sImageName[ThisImage]#" 
-				ObjectName="MyCategoryLocale"
-				PropertyName="#ThisImage#"
-				Required="N"
-				size="80">
-			<cfif MyCategoryLocale.GetProperty("#ThisImage#") is not "">
 				<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 					ObjectAction="#FormMode#"
-					type="checkbox" 
-					caption="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete?"
-					DefaultValue="#Val(evaluate('Delete#ThisImage#'))#"
-					VarName="Delete#ThisImage#"
-					Required="N">
-			</cfif>
+					type="File"
+					caption="#sImageName[ThisImage]#" 
+					ObjectName="MyCategoryLocale"
+					PropertyName="#ThisImage#"
+					Required="N"
+					size="80">
+				<cfif MyCategoryLocale.GetProperty("#ThisImage#") is not "">
+					<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+						ObjectAction="#FormMode#"
+						type="checkbox" 
+						caption="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Delete?"
+						DefaultValue="#Val(evaluate('Delete#ThisImage#'))#"
+						VarName="Delete#ThisImage#"
+						Required="N">
+				</cfif>
 		</cfif>
 	</cfloop>
 </cfif>

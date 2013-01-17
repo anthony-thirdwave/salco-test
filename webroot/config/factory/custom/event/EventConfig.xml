@@ -1,0 +1,35 @@
+<!-- Event.EventConfig Object -->
+<object>
+	<name>Event:EventConfig</name>
+	<implements>3W:Event:EventConfig</implements>
+	<propertyList>
+		<property>
+			<variableName>eventCategory</variableName>
+			<displayName>event category</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>locationName</variableName>
+			<displayName>location name</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>cost</variableName>
+			<displayName>cost</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>additionalInfo</variableName>
+			<displayName>additional info</displayName>
+			<restrictions>
+				<string />
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

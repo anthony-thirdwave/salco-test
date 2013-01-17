@@ -1,0 +1,30 @@
+<!-- EventRegistrationSnapshot Object -->
+<object>
+	<name>EventRegistrationSnapshot</name>
+	<propertyList>
+		<property>
+			<variableName>address</variableName>
+			<displayName>registration address</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>EventRegistrationAddress</objectName>
+				</xml>
+				<subObject />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>info</variableName>
+			<displayName>registration info</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>EventRegistrationInfo</objectName>
+				</xml>
+				<subObject />
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

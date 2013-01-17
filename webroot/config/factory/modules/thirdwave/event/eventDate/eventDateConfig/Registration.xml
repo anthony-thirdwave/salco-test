@@ -1,0 +1,29 @@
+<!-- 3W:EventDate:EventDateConfig:Registration Object -->
+<object>
+	<name>3W:EventDate:EventDateConfig:Registration</name>
+	<propertyList>
+		<property>
+			<variableName>useRegistration</variableName>
+			<displayName>Use Registration</displayName>
+			<restrictions>
+				<boolean>
+					<default>false</default>
+				</boolean>
+			</restrictions>
+		</property>
+		<property>
+			<variableName>maxRegistrants</variableName>
+			<displayName>max registrants</displayName>
+			<restrictions>
+				<numeric />
+			</restrictions>
+		</property>
+		<property>
+			<variableName>notificationEmail</variableName>
+			<displayName>registration notification email list</displayName>
+			<restrictions>
+				<emailList />
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

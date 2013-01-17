@@ -71,7 +71,7 @@
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,InheritID,ContentIndexed,SourceID">
 			</cfcase>
 			<cfcase value="221"><!--- News Item --->
-				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,ContentDate1">
+				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
 			</cfcase>
 			<cfcase value="235"><!--- Event --->
 				<!--- Source ID used differently here, fk to t_Event. --->
@@ -1086,12 +1086,16 @@
 				<cfcase value="66"><!--- Article --->
 					LabelID IN (222,255)<!--- Only article body, list of files, list of links --->
 				</cfcase>
+				<cfcase value="82"><!--- Article --->
+					LabelID IN (221)<!--- Only article body, list of files, list of links --->
+				</cfcase>
 				<cfdefaultcase><!---  --->
 					LabelID NOT IN (235,221)
 				</cfdefaultcase>
 			</cfswitch>
 			ORDER BY labelPriority
 		</cfquery>
+		<cfdump var="#GetCategoryTypes#">
 		<cfreturn GetCategoryTypes>
 	</cffunction>
 </cfcomponent>

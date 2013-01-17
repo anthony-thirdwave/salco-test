@@ -351,4 +351,29 @@
 		<cfreturn arguments.URL_array>
 	</cffunction>
 
+	<cffunction name="IsRestrictedAccess" returntype="boolean" access="remote" output="false">
+		<cfset var LOCAL=StructNew()>
+		
+		<cfset LOCAL.ReturnValue="1">
+		<cfset LOCAL.lAllowableIP="">
+		<!--- Lemont --->
+		<cfset LOCAL.lAllowableIP=ListAppend(LOCAL.lAllowableIP,"66.252.66.48,66.252.77.176,66.252.77.180,66.252.77.178,66.252.77.179,66.252.77.180,66.252.77.181,66.252.77.182,66.252.77.183")>
+		
+		<!--- TomBall --->
+		<cfset LOCAL.lAllowableIP=ListAppend(LOCAL.lAllowableIP,"63.149.159.26,63.149.159.27,63.149.159.28,63.149.159.29,63.149.159.30")>
+		
+		<!--- Thirdwave --->
+		<cfset LOCAL.lAllowableIP=ListAppend(LOCAL.lAllowableIP,"75.149.219.169")>
+		
+		<cfif ListFind(LOCAL.lAllowableIP,CGI.Remote_Host)>
+			<cfset LOCAL.ReturnValue="0">
+		</cfif>
+		
+		<!--- Thirdwave Local --->
+		<cfif Left(CGI.Remote_Host,9) IS "10.120.50">
+			<cfset LOCAL.ReturnValue="0">
+		</cfif>
+		
+		<cfreturn LOCAL.ReturnValue>
+	</cffunction>
 </cfcomponent>

@@ -11,62 +11,69 @@
 	<cfparam name="ATTRIBUTES.ParentChooserInitID" default="none">
 	<!--- if variables in querystring(from ajax call), set ATTRIBUTES scope --->
 	<cfif IsDefined("URL.thisCatID")>
-		<cfset ATTRIBUTES.thisCatID = URL.thisCatID>
+		<cfset ATTRIBUTES.thisCatID=URL.thisCatID>
 	</cfif>
 	<cfif IsDefined("URL.isAutoCollapse")>
-		<cfset ATTRIBUTES.isAutoCollapse = URL.isAutoCollapse>
+		<cfset ATTRIBUTES.isAutoCollapse=URL.isAutoCollapse>
 	</cfif>
 	<cfif IsDefined("URL.MVEid")>
-		<cfset ATTRIBUTES.MVEid = URL.MVEid>
+		<cfset ATTRIBUTES.MVEid=URL.MVEid>
 	</cfif>
 	<cfif IsDefined("URL.JSFunctionName") AND URL.JSFunctionName NEQ "">
-		<cfset ATTRIBUTES.JSFunctionName = URL.JSFunctionName>
+		<cfset ATTRIBUTES.JSFunctionName=URL.JSFunctionName>
 	</cfif>
 	<cfif IsDefined("URL.idPrefix")>
-		<cfset ATTRIBUTES.idPrefix = URL.idPrefix>
+		<cfset ATTRIBUTES.idPrefix=URL.idPrefix>
 	</cfif>
-	<cfset thisIdPrefix = ATTRIBUTES.idPrefix>
+	<cfset thisIdPrefix=ATTRIBUTES.idPrefix>
 	<cfif IsDefined("URL.isNewPage")>
-		<cfset ATTRIBUTES.isNewPage = URL.isNewPage>
+		<cfset ATTRIBUTES.isNewPage=URL.isNewPage>
 	</cfif>
 	<!--- END param ATTRIBUTES variables --->
 	
 	<!--- include struct file, defines struct that holds image icon paths --->
 	<cfinclude template="menuAjaxIconStructInc.cfm">
 	
+	<cfquery name="GetCategoryTypes" datasource="#APPLICATION.DSN#">
+		select Distinct CategoryTypeID from t_Category 
+		where ParentID=<cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
+	</cfquery>
+	
 	<cfquery name="GetParentName" datasource="#APPLICATION.DSN#">
 		SELECT	CategoryName, CategoryTypeID
 		FROM	t_Category
-		WHERE	CategoryID = <cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
+		WHERE	CategoryID=<cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
 	</cfquery>
-	<cfset thisParentName = GetParentName.CategoryName>
+	<cfset thisParentName=GetParentName.CategoryName>
 	
 	<cfquery name="GetCategories" datasource="#APPLICATION.DSN#">
 		SELECT			c.CategoryID, c.CategoryActive, c.CategoryName, c.CategoryAlias, c.CategoryTypeID, clm.CategoryLocalePriority, cl.CategoryLocaleActive
 		FROM			t_Category c
 		INNER JOIN		t_CategoryLocaleMeta clm 
 		ON 				(
-						c.CategoryID = clm.CategoryID 
-						AND clm.LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+						c.CategoryID=clm.CategoryID 
+						AND clm.LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 						)
 		LEFT OUTER JOIN	t_CategoryLocale cl 
 		ON				(
-						c.CategoryID = cl.CategoryID
-						AND cl.LocaleID = <cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
+						c.CategoryID=cl.CategoryID
+						AND cl.LocaleID=<cfqueryparam value="#Val(SESSION.AdminCurrentAdminLocaleID)#" cfsqltype="cf_sql_integer">
 						)
-		WHERE			c.ParentID = <cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
+		WHERE			c.ParentID=<cfqueryparam value="#ATTRIBUTES.thisCatID#" cfsqltype="cf_sql_integer">
 		<cfif IsNumeric(ATTRIBUTES.ParentChooserInitID)>
 		AND				c.CategoryID <> <cfqueryparam value="#ATTRIBUTES.ParentChooserInitID#" cfsqltype="cf_sql_integer">
 		</cfif>
-		<cfif ListFindNoCase("62,63,64",GetParentName.CategoryTypeID)>
+		<cfif ListFindNoCase("62,63,64",GetParentName.CategoryTypeID) or ListFind(ValueList(GetCategoryTypes.CategoryTypeID),81)>
 			ORDER BY		c.CategoryName
+		<cfelseif ATTRIBUTES.thisCatID IS "#APPLICATION.NewsCategoryID#">
+			ORDER BY		c.PublishDateTime desc
 		<cfelse>
 			ORDER BY		clm.CategoryLocalePriority
 		</cfif>
 	</cfquery>
-	<cfset lCatIDs = ValueList(GetCategories.CategoryID)>
+	<cfset lCatIDs=ValueList(GetCategories.CategoryID)>
 	<cfif ListLen(lCatIDs) EQ 0>
-		<cfset lCatIDs = 0>
+		<cfset lCatIDs=0>
 	</cfif>
 	
 	<!--- BEGIN set permission struct --->
@@ -94,28 +101,28 @@
 	
 	<!--- set variable if this is the initial page load (not ajax call) --->
 	<cfif ATTRIBUTES.thisCatIDInitList NEQ "">
-		<cfset isInitial = 1>
+		<cfset isInitial=1>
 	<cfelse>
-		<cfset isInitial = 0>
+		<cfset isInitial=0>
 	</cfif>
 </cfsilent>
 <cfoutput query="GetCategories">
 	<cfsilent>
 		<!--- BEGIN set active flag --->
 		<cfif CategoryActive EQ 0>
-			<cfset IsActive = 0>
+			<cfset IsActive=0>
 		<cfelseif CategoryLocaleActive NEQ "">
-			<cfset IsActive = CategoryLocaleActive>
+			<cfset IsActive=CategoryLocaleActive>
 		<cfelse>
-			<cfset IsActive = CategoryActive>
+			<cfset IsActive=CategoryActive>
 		</cfif>
 		<!--- END set active flag --->
 		
 		<!--- IF is initial page load, set flag if this category is in the path of the initial category --->
 		<cfif isInitial AND ListFind(ATTRIBUTES.thisCatIDInitList,CategoryID)>
-			<cfset isInitPath = 1>
+			<cfset isInitPath=1>
 		<cfelse>
-			<cfset isInitPath = 0>
+			<cfset isInitPath=0>
 		</cfif>
 		
 		<!--- BEGIN set vars based on security and active status --->
@@ -126,10 +133,10 @@
 				<cfset thisHREF="javascript:#ATTRIBUTES.JSFunctionName#(#CategoryID#,'#APPLICATION.utilsObj.XMLSafe(CategoryName)#');">
 			</cfif>
 			<cfif IsActive>
-				<cfset thisTitle = "Active">
+				<cfset thisTitle="Active">
 				<cfset thisClass="">
 			<cfelse>
-				<cfset thisTitle = "Inactive">
+				<cfset thisTitle="Inactive">
 				<cfset thisClass="inactive">
 			</cfif>
 		<cfelse>
@@ -143,7 +150,7 @@
 		<cfquery name="checkChildren" datasource="#APPLICATION.DSN#">
 			SELECT	categoryID
 			FROM	t_Category
-			WHERE	ParentID = <cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
+			WHERE	ParentID=<cfqueryparam value="#CategoryID#" cfsqltype="cf_sql_integer">
 		</cfquery>
 	</cfsilent>
 	<div id="#thisIdPrefix#categoryLink_#CategoryID#">
@@ -156,9 +163,9 @@
 			<!--- if initial page load and in initial path, initialize JS array values --->
 			<cfif isInitPath>
 				<script language="javascript" type="text/javascript">
-					#thisIdPrefix#hrefCloseArray[#CategoryID#] = "javascript:#thisIdPrefix#closeThisDiv('#CategoryID#');";
-					#thisIdPrefix#hrefOpenArray[#CategoryID#] = "javascript:#thisIdPrefix#openThisDiv('#CategoryID#');<cfif ATTRIBUTES.isAutoCollapse EQ 1>#thisIdPrefix#collapse('#lCatIDs#','#CategoryID#');</cfif>";
-					#thisIdPrefix#typeIDArray[#CategoryID#] = #CategoryTypeID#;
+					#thisIdPrefix#hrefCloseArray[#CategoryID#]="javascript:#thisIdPrefix#closeThisDiv('#CategoryID#');";
+					#thisIdPrefix#hrefOpenArray[#CategoryID#]="javascript:#thisIdPrefix#openThisDiv('#CategoryID#');<cfif ATTRIBUTES.isAutoCollapse EQ 1>#thisIdPrefix#collapse('#lCatIDs#','#CategoryID#');</cfif>";
+					#thisIdPrefix#typeIDArray[#CategoryID#]=#CategoryTypeID#;
 				</script>
 			</cfif>
 			<!--- expand/collapse icon link --->

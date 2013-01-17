@@ -3,6 +3,8 @@
 	<!--- the unique name used in database and directory defaults --->
 	<cfset variables.uniqueName = "salco" />
 
+	<!--- figure out the siteType --->
+	<cfinvoke method="determineSiteName" returnvariable="variables.siteName" />
 	<!--- this variable will override any server defined siteType
 				* for cf8 sites, this is where the site type is set, leaving blank creates "dev" site type
 				* for cf9 sites, if server.siteType is set, if this should be "" unless
@@ -15,7 +17,8 @@
 	</cfinvoke>
 
 	<!--- default application settings --->
-	<cfset this.name = "www.#variables.uniqueName#.com" />
+	<cfset this.name = "#variables.siteName#" />
+	<cfset REQUEST.SiteName = "#variables.siteName#" />
 	<cfset this.applicationTimeout = createTimeSpan(1,0,0,0) />
 	<cfset this.sessionManagement = true />
 	<cfset this.sessiontimeout = createTimeSpan(0,1,0,0) />
@@ -289,4 +292,19 @@
 		<cfreturn variables.uniqueName />
 	</cffunction>
 
+	<!--- this function gets the site name --->
+	<cffunction name="determineSiteName" returntype="string">
+
+		<cfset var local = structNew() />
+		<cfset local.SiteName="www.salco">
+		
+		<cfloop index="LOCAL.ThisPart" list="#CGI.HTTP_HOST#" delimiters=".">
+			<cfif ListFind("intranet",LOCAL.ThisPart)>
+				<cfset local.SiteName="intranet.salco">
+				<cfreturn local.SiteName />
+			</cfif>
+		</cfloop>
+
+		<cfreturn local.SiteName />
+	</cffunction>
 </cfcomponent>
