@@ -36,7 +36,7 @@ $(document).ready(function(){
     });
 });
 </script>
-<cfquery name="qryQuarter" datasource="#application.DSN#">
+<cfquery name="qryQuarter" datasource="#APPLICATION.Data_DSN#">
 	SELECT	quarter,
 	convert (varchar(4),2000+convert(int,right([quarter],2))) +
 	case left([quarter],3) 
@@ -57,7 +57,7 @@ $(document).ready(function(){
 </cfquery>
 <cfparam name="form.quarterSelect" default="#qryQuarter.Quarter#">
 
-<cfquery name="qryData" datasource="#application.DSN#">
+<cfquery name="qryData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	*
 	FROM	rp_ordershipmentAccuracy
 	WHERE	Quarter = <cfqueryparam value="#form.quarterSelect#" cfsqltype="cf_sql_varchar">

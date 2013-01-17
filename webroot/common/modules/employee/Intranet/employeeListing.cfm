@@ -17,7 +17,7 @@
 	<cfquery name="employees" dbtype="query">
 		SELECT		*
 		FROM		REQUEST.GetAllEmployees
-		WHERE		departmentID <> <cfqueryparam value="6098" cfsqltype="cf_sql_integer">
+		WHERE		departmentID <> <cfqueryparam value="#APPLICATION.DepartmentCategoryID#" cfsqltype="cf_sql_integer">
 		<cfif Len(Trim(url.alphaListing))>
 			AND empFirstName like <cfqueryparam value="#UCASE(Trim(url.alphaListing))#%" cfsqltype="cf_sql_varchar">
 		</cfif>
@@ -27,7 +27,7 @@
 	<cfquery name="employees" dbtype="query">
 		SELECT		*
 		FROM		REQUEST.GetAllEmployees
-		WHERE		departmentID <> <cfqueryparam value="6098" cfsqltype="cf_sql_integer">
+		WHERE		departmentID <> <cfqueryparam value="#APPLICATION.DepartmentCategoryID#" cfsqltype="cf_sql_integer">
 		<cfif val(ATTRIBUTES.CategoryID) gt 0>
 			AND departmentID = <cfqueryparam value="#val(ATTRIBUTES.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfif>

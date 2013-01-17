@@ -42,12 +42,12 @@
 			CSV="#Trim(orderCSVFile)#">
 
 		<cftransaction>
-			<cfquery name="rp_OrderDelete" datasource="#application.DSN#">
+			<cfquery name="rp_OrderDelete" datasource="#APPLICATION.Data_DSN#">
 				DELETE FROM #sReports[ThisReport].TableName#
 			</cfquery>
 			
 			<cfloop query="qResult" startRow="2">
-				<cfquery name="#sReports[ThisReport].TableName#_Insert" datasource="#application.DSN#">
+				<cfquery name="#sReports[ThisReport].TableName#_Insert" datasource="#APPLICATION.Data_DSN#">
 					INSERT INTO #sReports[ThisReport].TableName# (#sReports[ThisReport].FieldLists#)
 					VALUES	(
 					<cfloop index="i" from="1" to="#listlen(sReports[ThisReport].FieldLists)#">

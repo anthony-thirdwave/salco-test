@@ -20,6 +20,7 @@
 		<cfinvoke method="getDatasource" returnvariable="APPLICATION.DSN" />
 		<cfset APPLICATION.USER_DSN = APPLICATION.DSN />
 		<cfset APPLICATION.EVENT_DSN = APPLICATION.DSN>
+		<cfset APPLICATION.Data_DSN = APPLICATION.DSN>
 
 		<!--- this path should work for most implementations --->
 		<cfset arguments.pathPrefix = replaceNoCase(arguments.pathPrefix, "\webroot", "", "all") />
@@ -149,6 +150,8 @@
 			<!--- is ssl set up for the staging site? --->
 			<cfset APPLICATION.SSLConfigured = false />
 			<cfset APPLICATION.EVENT_DSN = "#local.uniqueName#_cms_production" />
+			<cfset APPLICATION.User_DSN = "#local.uniqueName#_cms_production" />
+			<cfset APPLICATION.Data_DSN = "#local.uniqueName#_cms_production" />
 
 		<cfelse>
 

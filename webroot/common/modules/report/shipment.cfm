@@ -1,4 +1,4 @@
-<cfquery name="qryGetMonthMax" datasource="#application.DSN#" maxrows="1">
+<cfquery name="qryGetMonthMax" datasource="#APPLICATION.Data_DSN#" maxrows="1">
 	SELECT	month, year, convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
 	FROM	rp_sales order by GroupDate desc
 </cfquery>
@@ -7,11 +7,11 @@
 <cfset selectedYear=ListGetAt (form.selectedMonthYear, 2, " ")>
 <cfset selectedMonth=ListGetAt (form.selectedMonthYear, 1, " ")>
 
-<cfquery name="qryGetMonth" datasource="#application.DSN#">
+<cfquery name="qryGetMonth" datasource="#APPLICATION.Data_DSN#">
 	SELECT	distinct month, year
 	FROM	rp_shipment
 </cfquery>
-<cfquery name="qryData" datasource="#application.DSN#">
+<cfquery name="qryData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	*
 	FROM	rp_shipment
 	WHERE	year=<cfqueryparam value="#selectedYear#" cfsqltype="cf_sql_integer">
@@ -24,14 +24,14 @@
 	FROM	qryData
 </cfquery>
 
-<cfquery name="qryAnnualshipment" datasource="#application.DSN#">
+<cfquery name="qryAnnualshipment" datasource="#APPLICATION.Data_DSN#">
 	SELECT	SUM(shipment) as shipmentByMonth, SUBSTRING('JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC ', (month * 4) - 3, 3) as dmonth
 	FROM	rp_shipment
 	WHERE	year=<cfqueryparam value="#selectedYear#" cfsqltype="cf_sql_integer">
 	Group  By month
 	Order by month
 </cfquery>
-<cfquery name="qryAnnualProcessed" datasource="#application.DSN#">
+<cfquery name="qryAnnualProcessed" datasource="#APPLICATION.Data_DSN#">
 	SELECT	SUM(Processed) as ProcessedByMonth, SUBSTRING('JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC ', (month * 4) - 3, 3) as dmonth
 	FROM	rp_shipment
 	WHERE	year=<cfqueryparam value="#selectedYear#" cfsqltype="cf_sql_integer">

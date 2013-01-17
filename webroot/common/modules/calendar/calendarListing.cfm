@@ -202,14 +202,6 @@
 				<dt><a name="Event#theEvents.publicId#" style="display:block" href="#EventDetailLocation#?#QueryString#">#dateFormat(theEvents.dateStart, "mmmm d, yyyy")#
 				<cfif isDate(theEvents.dateEnd) and dateFormat(theEvents.dateStart, "mmddyyyy") neq dateFormat(theEvents.dateEnd, "mmddyyyy")>
 				- #dateFormat(theEvents.dateEnd, "mmmm d, yyyy")#
-				</cfif>
-		
-			    <!--- display time block --->
-				<cfif toString(timeFormat(theEvents.dateStart, "HH:mm:ss")) neq "00:00:00">
-					&middot; #timeFormat(theEvents.dateStart, "h:mm tt")#
-					<cfif len(trim(theEvents.dateEnd)) and toString(timeFormat(theEvents.dateEnd, "HH:mm:ss")) neq "00:00:00">
-						&mdash; #timeFormat(theEvents.dateEnd, "h:mm tt")#
-					</cfif>
 				</cfif></a>
 				</dt>
 				<dd><a name="Event#theEvents.publicId#" href="#EventDetailLocation#?#QueryString#">#theEvents.eventTitle#</a></dd>

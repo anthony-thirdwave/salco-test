@@ -169,7 +169,7 @@
 				
 				<cfif MyProduct.GetProperty("ProductThumbnailPath") IS NOT "">
 					<cfif APPLICATION.Production>
-						<cfset QuerySetCell(qReturn,"ProductThumbnailURL","http://www.salco.com#MyProduct.GetProperty('ProductThumbnailPath')#")>
+						<cfset QuerySetCell(qReturn,"ProductThumbnailURL","http://www.salcoproducts.com#MyProduct.GetProperty('ProductThumbnailPath')#")>
 					<cfelse>
 						<cfset QuerySetCell(qReturn,"ProductThumbnailURL","http://www.staging.salco.01.thirdwaveweb.com#MyProduct.GetProperty('ProductThumbnailPath')#")>
 					</cfif>
@@ -177,7 +177,7 @@
 				
 				<cfif MyProduct.GetProperty("ProductThumbnailHoverPath") IS NOT "">
 					<cfif APPLICATION.Production>
-						<cfset QuerySetCell(qReturn,"ProductRolloverURL","http://www.salco.com#MyProduct.GetProperty('ProductThumbnailHoverPath')#")>
+						<cfset QuerySetCell(qReturn,"ProductRolloverURL","http://www.salcoproducts.com#MyProduct.GetProperty('ProductThumbnailHoverPath')#")>
 					<cfelse>
 						<cfset QuerySetCell(qReturn,"ProductRolloverURL","http://www.staging.salco.01.thirdwaveweb.com#MyProduct.GetProperty('ProductThumbnailHoverPath')#")>
 					</cfif>
@@ -373,7 +373,7 @@
 			
 			<cfif MyProduct.GetProperty("ProductThumbnailPath") IS NOT "">
 				<cfif APPLICATION.Production>
-					<cfset QuerySetCell(qReturn,"ProductThumbnailURL","http://www.salco.com#MyProduct.GetProperty('ProductThumbnailPath')#")>
+					<cfset QuerySetCell(qReturn,"ProductThumbnailURL","http://www.salcoproducts.com#MyProduct.GetProperty('ProductThumbnailPath')#")>
 				<cfelse>
 					<cfset QuerySetCell(qReturn,"ProductThumbnailURL","http://www.staging.salco.01.thirdwaveweb.com#MyProduct.GetProperty('ProductThumbnailPath')#")>
 				</cfif>
@@ -381,7 +381,7 @@
 			
 			<cfif MyProduct.GetProperty("ProductThumbnailHoverPath") IS NOT "">
 				<cfif APPLICATION.Production>
-					<cfset QuerySetCell(qReturn,"ProductRolloverURL","http://www.salco.com#MyProduct.GetProperty('ProductThumbnailHoverPath')#")>
+					<cfset QuerySetCell(qReturn,"ProductRolloverURL","http://www.salcoproducts.com#MyProduct.GetProperty('ProductThumbnailHoverPath')#")>
 				<cfelse>
 					<cfset QuerySetCell(qReturn,"ProductRolloverURL","http://www.staging.salco.01.thirdwaveweb.com#MyProduct.GetProperty('ProductThumbnailHoverPath')#")>
 				</cfif>
