@@ -1,9 +1,9 @@
-<cfquery name="qryGetMonth" datasource="#application.DSN#">
+<cfquery name="qryGetMonth" datasource="#APPLICATION.Data_DSN#">
 	SELECT  month(Date) as Month, year(Date) year, date
 	FROM rp_order order by date desc
 </cfquery>
 
-<cfquery name="qryGetMaxDate" datasource="#application.DSN#" maxrows="1">
+<cfquery name="qryGetMaxDate" datasource="#APPLICATION.Data_DSN#" maxrows="1">
 	SELECT date as MaxDate
 	FROM rp_order order by date desc
 </cfquery>
@@ -86,7 +86,7 @@
 		</div>
 	</div>
 	<h3 class="subTitle">Orders</h3>
-	<cfquery name="qryReport" datasource="#application.DSN#">
+	<cfquery name="qryReport" datasource="#APPLICATION.Data_DSN#">
 		SELECT	Date, Email, Fax, Phone, Cons, VIP, Promo
 		FROM	rp_order
 		<cfif FORM.SelectedWeek IS NOT "">
@@ -144,7 +144,7 @@
 			</tr>
 			</cfoutput>
 		</tbody>
-		<cfquery name="qryTotal" datasource="#application.DSN#">
+		<cfquery name="qryTotal" datasource="#APPLICATION.Data_DSN#">
 			SELECT	SUM (Email+Fax+Phone+Cons+VIP+Promo) as total, SUM(Email) as emailTotalToYear
 			,SUM(Fax) as FaxTotalToYear ,SUM(Phone) as PhoneTotalToYear, SUM(Cons) as ConsTotalToYear
 			,SUM(VIP) as VIPTotalToYear ,SUM(Promo) as PromoTotalToYear

@@ -27,7 +27,7 @@
     <div class="inArt"> 
 		<div id="left">
 			<table cellpadding="0" cellspacing="0" border="0">
-				<caption>Phone List <span>Ext. <a href="#cellphones" class="telSwitch">Cell</a><span class="clearit"></span></span></caption>
+				<caption>Phone List <span>  Ext. <a href="#cellphones" class="telSwitch">Cell</a><span class="clearit"></span></span></caption>
 					<tbody>
 						<cfoutput query="qryEmployeePhone" startrow="1" maxrows="#noPerColumn#">
 							<tr>

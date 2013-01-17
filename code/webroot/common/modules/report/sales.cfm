@@ -1,9 +1,9 @@
-<cfquery name="qryGetMonthMax" datasource="#application.DSN#" maxrows="1">
+<cfquery name="qryGetMonthMax" datasource="#APPLICATION.Data_DSN#" maxrows="1">
 	SELECT	month, year, convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
 	FROM	rp_sales order by GroupDate desc
 </cfquery>
 
-<cfquery name="qryGetMonth" datasource="#application.DSN#">
+<cfquery name="qryGetMonth" datasource="#APPLICATION.Data_DSN#">
 	SELECT	month, year, convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
 	FROM	rp_sales order by GroupDate desc
 </cfquery>
@@ -45,30 +45,30 @@ $(document).ready(function(){
 });
 </script>
 
-<cfquery name="AnnualSalesTotal" datasource="#application.DSN#">
+<cfquery name="AnnualSalesTotal" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Distinct AnnualSalesGoal
 	FROM	rp_sales
 	WHERE	year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfquery name="qryYearData" datasource="#application.DSN#">
+<cfquery name="qryYearData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Sum(ActualSales) as actualSalesTotal
 	FROM	rp_sales
 	WHERE	year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfquery name="qryQuterTotal" datasource="#application.DSN#">
+<cfquery name="qryQuterTotal" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Distinct QuarterlySalesGoal
 	FROM	rp_sales
 	WHERE	month in (<cfqueryparam value="#quarterMonthList#" cfsqltype="cf_sql_varchar" list="Yes">)
 	AND		year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
-<cfquery name="qryQuterData" datasource="#application.DSN#">
+<cfquery name="qryQuterData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Sum(ActualSales) as actualSalesTotal
 	FROM	rp_sales
 	WHERE	month in (<cfqueryparam value="#quarterMonthList#" cfsqltype="cf_sql_varchar" list="Yes">)
 	AND		year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
 
-<cfquery name="qryMonthData" datasource="#application.DSN#">
+<cfquery name="qryMonthData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Sum(MonthlySalesGoal) as MonthlySalesGoal,Sum(ActualSales) as actualSalesTotal
 	FROM	rp_sales
 	WHERE	month = <cfqueryparam value="#monthSelect#" cfsqltype="cf_sql_varchar">
