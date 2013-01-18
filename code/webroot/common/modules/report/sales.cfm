@@ -134,7 +134,7 @@ $(document).ready(function(){
 						<div id="progressbarannualPercentage"></div>
 					</td>
 				</tr>
-			</table>
+			</tbody>
 		</table>
 	</div>
 	<div class="goalProgressTableHolder">
@@ -166,7 +166,7 @@ $(document).ready(function(){
 						<div id="progressbarquarterPercentage"></div>
 					</td>
 				</tr>
-			</table>
+			</tbody>
 		</table>
 	</div>
 	<div class="goalProgressTableHolder">
@@ -198,7 +198,7 @@ $(document).ready(function(){
 						<div id="progressbarmonthPercentage"></div>
 					</td>
 				</tr>
-			</table>
+			</tbody>
 		</table>
-	</div>
+	</div></div>
 </article>
