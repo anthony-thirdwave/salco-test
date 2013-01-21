@@ -21,7 +21,7 @@
 <cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Sales.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Sales",1)>
-<cfset StructInsert(sReportElt,"FieldLists","Year, Month, AnnualSalesGoal,QuarterlySalesGoal,MonthlySalesGoal,ActualSales",1)>
+<cfset StructInsert(sReportElt,"FieldLists","Year, Month,AnnualSalesGoal,QuarterlySalesGoal,MonthlySalesGoal,ActualSales",1)>
 <cfset StructInsert(sReports,3,sReportElt,1)>
 
 <cfset sReportElt=StructNew()>
@@ -29,7 +29,7 @@
 <cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Shipments.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Shipment",1)>
-<cfset StructInsert(sReportElt,"FieldLists","year, month, week, Shipment,Processed",1)>
+<cfset StructInsert(sReportElt,"FieldLists","year,month,week,Shipment,Processed",1)>
 <cfset StructInsert(sReports,4,sReportElt,1)>
 
 <cfloop index="ThisReport" list="#StructKeyList(sReports)#">
@@ -57,7 +57,7 @@
 						<cfelseif ThisReport eq 1 and i eq 1>
 							<cfqueryparam value="#evaluate('column_#i#')#"  cfsqltype="cf_sql_varchar">
 						<cfelse>
-							<cfqueryparam value="#evaluate('column_#i#')#" cfsqltype="cf_sql_integer">
+							<cfqueryparam value="#Val(evaluate('column_#i#'))#" cfsqltype="cf_sql_integer">
 						</cfif>
 					</cfloop>
 					)
@@ -67,3 +67,4 @@
 	</cfif>
 </cfloop>
 	
+Done
