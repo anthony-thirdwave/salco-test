@@ -57,12 +57,14 @@
 				
 				<select id="selectedMonth"  name="selectedMonth" style="visibility:hidden">
 					<cfoutput query="qryGetMonth" group="year">
-						<cfoutput group="month">
-							<cfset thisYear=qryGetMonth.Year>
-							<cfset thisValue="#qryGetMonth.month# #qryGetMonth.year#">
-							<cfset thisdisplayValue="#MonthAsString(qryGetMonth.month)# #qryGetMonth.year#">
-							<option value="#thisValue#"<cfif form.selectedMonth eq thisValue >selected</cfif>>#thisdisplayValue#</option>
-						</cfoutput>
+						<cfif Val(year) IS NOT "0">
+							<cfoutput group="month">
+								<cfset thisYear=qryGetMonth.Year>
+								<cfset thisValue="#qryGetMonth.month# #qryGetMonth.year#">
+								<cfset thisdisplayValue="#MonthAsString(qryGetMonth.month)# #qryGetMonth.year#">
+								<option value="#thisValue#"<cfif form.selectedMonth eq thisValue >selected</cfif>>#thisdisplayValue#</option>
+							</cfoutput>
+						</cfif>
 					</cfoutput>
 				</select>
 				</div>
