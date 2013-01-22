@@ -144,6 +144,10 @@ img.curveMe, .employees a img, .image img, .empl-left img{
 }
 
 #header #utilityNavigation .utilityNavigation ul li:nth-child(2){
+	width:137px;	
+}
+
+#header #utilityNavigation .utilityNavigation ul li:nth-child(3){
 	width:167px;	
 }
 
@@ -152,14 +156,18 @@ img.curveMe, .employees a img, .image img, .empl-left img{
 }
 
 #header #utilityNavigation .utilityNavigation ul li:nth-child(3){
-	width:147px;
+	width:137px;
 }
 
 .ie8 #header #utilityNavigation .utilityNavigation ul li.ult-phonelist{
-	width:147px;
+	width:137px;
 }
 
 #header #utilityNavigation .utilityNavigation ul li:nth-child(4){
+	width:137px;
+}
+
+#header #utilityNavigation .utilityNavigation ul li:nth-child(5){
 	width:157px;
 	margin-right:10px;
 	border-radius:0px 8px 8px 0px;
