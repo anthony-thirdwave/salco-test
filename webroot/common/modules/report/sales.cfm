@@ -1,30 +1,34 @@
 <cfquery name="qryGetMonthMax" datasource="#APPLICATION.Data_DSN#" maxrows="1">
 	SELECT	month, year, convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
-	FROM	rp_sales order by GroupDate desc
+	FROM	rp_sales 
+	where ActualSales > 0
+	order by GroupDate desc
 </cfquery>
 
 <cfquery name="qryGetMonth" datasource="#APPLICATION.Data_DSN#">
 	SELECT	month, year, convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
-	FROM	rp_sales order by GroupDate desc
+	FROM	rp_sales 
+	where ActualSales > 0
+	order by GroupDate desc
 </cfquery>
 
 <cfparam name="form.selectedMonthYear" default="#qryGetMonthMax.month# #qryGetMonthMax.year#">
-<cfset monthSelect = ListGetAt(form.selectedMonthYear, 1, " ")>
-<cfset yearSelect = ListGetAt(form.selectedMonthYear, 2, " ")>
-<cfset quarterSelect = Quarter(form.selectedMonthYear)>
+<cfset monthSelect=ListGetAt(form.selectedMonthYear, 1, " ")>
+<cfset yearSelect=ListGetAt(form.selectedMonthYear, 2, " ")>
+<cfset quarterSelect=Quarter(form.selectedMonthYear)>
 
 <cfswitch expression="#quarterSelect#">
 	<cfcase value="1">
-		<cfset quarterMonthList = "1,2,3">
+		<cfset quarterMonthList="1,2,3">
 	</cfcase>
 	<cfcase value="2">
-		<cfset quarterMonthList = "4,5,6">
+		<cfset quarterMonthList="4,5,6">
 	</cfcase>
 	<cfcase value="3">
-		<cfset quarterMonthList = "7,8,9">
+		<cfset quarterMonthList="7,8,9">
 	</cfcase>
 	<cfcase value="4">
-		<cfset quarterMonthList = "10,11,12">
+		<cfset quarterMonthList="10,11,12">
 	</cfcase>
 </cfswitch>
 
@@ -48,31 +52,31 @@ $(document).ready(function(){
 <cfquery name="AnnualSalesTotal" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Distinct AnnualSalesGoal
 	FROM	rp_sales
-	WHERE	year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
+	WHERE	year=<cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfquery name="qryYearData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Sum(ActualSales) as actualSalesTotal
 	FROM	rp_sales
-	WHERE	year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
+	WHERE	year=<cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfquery name="qryQuterTotal" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Distinct QuarterlySalesGoal
 	FROM	rp_sales
 	WHERE	month in (<cfqueryparam value="#quarterMonthList#" cfsqltype="cf_sql_varchar" list="Yes">)
-	AND		year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
+	AND		year=<cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
 <cfquery name="qryQuterData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Sum(ActualSales) as actualSalesTotal
 	FROM	rp_sales
 	WHERE	month in (<cfqueryparam value="#quarterMonthList#" cfsqltype="cf_sql_varchar" list="Yes">)
-	AND		year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
+	AND		year=<cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <cfquery name="qryMonthData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	Sum(MonthlySalesGoal) as MonthlySalesGoal,Sum(ActualSales) as actualSalesTotal
 	FROM	rp_sales
-	WHERE	month = <cfqueryparam value="#monthSelect#" cfsqltype="cf_sql_varchar">
-	AND		year = <cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
+	WHERE	month=<cfqueryparam value="#monthSelect#" cfsqltype="cf_sql_varchar">
+	AND		year=<cfqueryparam value="#yearSelect#" cfsqltype="cf_sql_integer">
 </cfquery>
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
@@ -95,9 +99,9 @@ $(document).ready(function(){
 			<form name="reportPeriodSelect" enctype="multipart/form-data" method="post" action="">
 				<select id="selectedMonthYear" style="/*margin-top:30px;*/ width:25px; margin-left:10px;" name="selectedMonthYear">
 					<cfoutput query="qryGetMonth">
-						<cfset thisMonth = MonthAsString(qryGetMonth.month)>
-						<cfset thisYear = qryGetMonth.Year>
-						<cfset thisValue = "#qryGetMonth.month# #qryGetMonth.year#">
+						<cfset thisMonth=MonthAsString(qryGetMonth.month)>
+						<cfset thisYear=qryGetMonth.Year>
+						<cfset thisValue="#qryGetMonth.month# #qryGetMonth.year#">
 					<option value="#thisValue#" <cfif form.selectedMonthYear eq thisValue>selected</cfif>>#thisMonth# #thisYear#</option>
 					</cfoutput>
 				</select>
@@ -113,7 +117,7 @@ $(document).ready(function(){
 			<tbody>
 				<tr>
 					<td>
-						<cfset annualPercentage = Val(qryYearData.actualSalesTotal) / Val(AnnualSalesTotal.AnnualSalesGoal) * 100 >
+						<cfset annualPercentage=Val(qryYearData.actualSalesTotal) / Val(AnnualSalesTotal.AnnualSalesGoal) * 100 >
 						<div class="tileHolderSmall">
 							<div class="miniTile">
 								<div class="percentageLrg"><cfoutput>#NumberFormat(annualPercentage,'_____.__')#</cfoutput></div>
@@ -145,7 +149,7 @@ $(document).ready(function(){
 			<tbody>
 				<tr>
 					<td>
-						<cfset quarterPercentage = (qryQuterData.actualSalesTotal / qryQuterTotal.QuarterlySalesGoal) * 100 >
+						<cfset quarterPercentage=(qryQuterData.actualSalesTotal / qryQuterTotal.QuarterlySalesGoal) * 100 >
 						<div class="tileHolderSmall">
 							<div class="miniTile">
 								<div class="percentageLrg"><cfoutput>#NumberFormat(quarterPercentage,'_____.__')#</cfoutput></div>
@@ -177,7 +181,7 @@ $(document).ready(function(){
 			<tbody>
 				<tr>
 					<td>
-						<cfset monthPercentage = (qryMonthData.actualSalesTotal / qryMonthData.MonthlySalesGoal) * 100 >
+						<cfset monthPercentage=(qryMonthData.actualSalesTotal / qryMonthData.MonthlySalesGoal) * 100 >
 						<div class="tileHolderSmall">
 							<div class="miniTile">
 								<div class="percentageLrg"><cfoutput>#NumberFormat(monthPercentage,'_____.__')#</cfoutput></div>
