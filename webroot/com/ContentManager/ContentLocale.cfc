@@ -1152,7 +1152,9 @@
 				<cfset local.thisAFile=this.GetProperty("aFile")>
 				<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
 					<cfloop index="local.Afilei" from="1" to="#ArrayLen(local.thisAFile)#" step="1">
-						<cfset local.stringToTest="#local.stringToTest# <a href=""#local.thisAFile[local.Afilei].FilePath#"">">
+						<cfloop index="LOCAL.AfileiVar" list="#StructKeyList(local.thisAFile[local.Afilei])#">
+							<cfset local.stringToTest="#local.stringToTest# <a href=""#local.thisAFile[local.Afilei][LOCAL.AfileiVar]#"">">
+						</cfloop>
 					</cfloop>
 				</cfif>
 			</cfif>
