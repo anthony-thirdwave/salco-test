@@ -584,7 +584,9 @@
 						<cfset thisAFile=this.GetProperty("aFile")>
 						<cfif IsArray(thisAFile) and ArrayLen(thisAFile) GT "0">
 							<cfloop index="Afilei" from="1" to="#ArrayLen(thisAFile)#" step="1">
-								<cfset thisAFile[Afilei].FilePath=ReplaceNoCase(thisAFile[Afilei].FilePath,"#OriginalName#","#FileHREF#","All")>
+								<cfloop index="ThisKey" list="#StructKeyList(thisAFile[Afilei])#">
+									<cfset thisAFile[Afilei][ThisKey]=ReplaceNoCase(thisAFile[Afilei][ThisKey],"#OriginalName#","#FileHREF#","All")>
+								</cfloop>
 							</cfloop>
 						</cfif>
 					</cfif>
