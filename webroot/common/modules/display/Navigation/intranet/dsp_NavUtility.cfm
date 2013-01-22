@@ -35,7 +35,12 @@
                 <cfelse>
                     <cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryURLDerived)#">
                 </cfif>
-                <li><a href="#ThisURL#" class="#CategoryAlias#">#CategoryNameDerived#</a></li>
+				<cfif Left(ThisURL,4) IS "http">
+					<cfset target="_blank">
+				<cfelse>
+					<cfset target="_self">
+				</cfif>
+                <li><a href="#ThisURL#" class="#CategoryAlias#" target="#target#">#CategoryNameDerived#</a></li>
 			</cfoutput>
 			</ul>
 		</cfif>
