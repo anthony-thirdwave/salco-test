@@ -481,6 +481,12 @@ $(window).load(function() {
 			}
 		
 		if($("#centerColumn article .alignLeft").length > 0){
+			
+			if($("html").hasClass("ie8")==true){
+				$("body").prepend('<div class="ieOverlay"></div><div class="ieCenterer"><div class="ieImgHolder"></div></div>');
+				setTimeout("fixGalleryIE8.init()",1500);
+			}else{
+			
 			for(i=0;i<$("#centerColumn article .alignLeft img").length;i++){
 				$("#centerColumn article .alignLeft img").eq(i).wrapAll('<a href="#image-'+i+'"></a>');
 				$("#wrapper").wrapAll('<div id="image-'+i+'"></div>');
@@ -530,7 +536,7 @@ $(window).load(function() {
 			$("#modalBG").bind("click",function(){window.location="#"});
 			tempHei2=($(window).height()-(imgArray[0].height+20))/2;
 			$(".lrgImgs").css({top:tempHei2+"px"})
-		}
+		}}
 		
 		
 	}
@@ -556,6 +562,33 @@ $(window).load(function() {
 		}
    /**/
 });
+
+var fixGalleryIE8={
+		init:function(){
+			
+			for(i=0;i<$("#centerColumn article .alignLeft img").length;i++){
+				$("#centerColumn article .alignLeft img").eq(i).wrapAll('<a href="javascript:fixGalleryIE8.gI('+i+')"></a>');		
+					$(".ieImgHolder").append('<img src="'+$(".lrgImgs img").eq(i).attr("src")+'" id="bi-'+i+'" class="IE8mainImg" />');	
+				}
+				
+				$(".ieImgHolder").prepend("<div id='ie8prevLinkHolder'><a href='javascript:void(0)' id='ie8prev'><span>&laquo;</span></a></div>");
+				$(".ieImgHolder").append("<div id='ie8nextLinkHolder'><a href='javascript:void(0)' id='ie8next'><span>&raquo;</span></a></div><a class='ieCloseBut' href='javascript:fixGalleryIE8.close()'><img src='/common/images/intranet/template/closeBut2.png' /></a>");
+			
+		},
+		gI:function(imgTG){
+			//alert($(".lrgImgs img").eq(imgTG).attr("src"))
+			$(".ie8 .ieOverlay").css({display:"block"});
+			$(".ie8 .ieCenterer").css({display:"block"});
+			$(".ie8 .ieImgHolder img").eq(imgTG).css({display:"inline-block", width:$(".ie8 .ieImgHolder img").eq(imgTG).width()+"px",margin:"auto"});
+			window.scroll(0,320);
+			setTimeout("window.scroll(0,0)",500);
+		},
+		close:function(){
+			$(".ie8 .ieOverlay").css({display:"none"});
+			$(".ie8 .ieCenterer").css({display:"none"});
+			$(".ie8 .ieImgHolder img.IE8mainImg").css({display:"none"});
+		}
+	}
 
 var ieFixListNewImg={
 	init:function(){
@@ -823,17 +856,44 @@ var kioskPageSaver={
 }
 
 var calendarAccordian={
+		ie8Setter:"",
 		init:function(){
 			//alert($(".calListing").length)
-			
+			if($("html").hasClass("ie8")==true){
+					for(ieea=0;ieea<$(".calListing").length;ieea++){
+						tempH=($(".calListing").eq(ieea).height())+5;///2
+						$(".calListing").eq(ieea).attr("data-ie8",tempH);
+						$(".calListing").eq(ieea).css({height:"0px",display:"block"});
+					}
+					
+					$(".eventsList li h3 a").bind("click",function(event){
+						
+						//event.preventDefault();
+						dd=$(this).attr("href");
+						
+						
+						dd=dd.split("_");
+						
+						
+						
+						calendarAccordian.ie8(dd[1]);
+					});
+					calendarAccordian.ie8Setter=HighlightMonth;
+					calendarAccordian.ie8(HighlightMonth);
+				}
 			for(ieea=0;ieea<$(".calListing").length;ieea++){
 				//alert($(".calListing").eq(ieea).height()+" "+$(".calListing").eq(ieea).attr("data-titleID"));
 				tempH=($(".calListing").eq(ieea).height())+5;///2
+				
+				
+				
 				//alert(tempH)
 				//if(tempH>50){
 				//	tempH=tempH-50;
 				//	}
 				$('style[title="eventCalStyles"]').append("#"+$(".calListing").eq(ieea).attr("data-titleID")+":target+.calListing{height:"+tempH+"px; display:block; -webkit-transition: all 1s ease-out .75s;-moz-transition: all 1s ease-out .75s;	-o-transition: all 1s ease-out .75s;	transition: all 1s ease-out .75s;}");
+				
+				
 			}
 			
 			$('style[title="eventCalStyles"]').append( ".event-listing .artContent .calListing{height:0px; display:block} ");
@@ -847,6 +907,16 @@ var calendarAccordian={
 				//$(this).siblings().children().click();attr("href")
 			
 			});
+		},
+		ie8:function(links){//alert($("#listing_"+links).attr("data-ie8"))
+		
+		//$("#listing_"+links).animate({height:$("#listing_"+links).attr("data-ie8")+"px"},750);
+		 
+			$("#listing_"+calendarAccordian.ie8Setter).animate({height:"0px"},750,function(){
+				$("#listing_"+links).animate({height:$("#listing_"+links).attr("data-ie8")+"px"},750);
+				calendarAccordian.ie8Setter=links;
+			});
+		 
 		}
 		
 		
