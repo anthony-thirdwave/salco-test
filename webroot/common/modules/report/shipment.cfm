@@ -52,8 +52,8 @@
 	select * from qryAnnualProcessedPrime order by [year], [month]
 </cfquery>
 
-<cfquery name="qryMaxAnnualShipment" dbtype="query">
-	select max(shipmentByMonth) as MaxAnnualShipment from qryAnnualshipment
+<cfquery name="qryMaxAnnualProcessed" dbtype="query">
+	select max(ProcessedByMonth) as MaxAnnualProcessed from qryAnnualProcessed
 </cfquery>
 
 <script type="text/javascript">
@@ -117,7 +117,7 @@ $(document).ready(function(){
 			<tr>
 				<td>
 				<cfchart showborder="no" chartHeight="300" chartWidth="400" backgroundColor="##ffffff"
-					showLegend="Yes" scaleTo="#Val(qryMaxAnnualShipment.MaxAnnualShipment)+500#">
+					showLegend="Yes" scaleTo="#Val(qryMaxAnnualProcessed.MaxAnnualProcessed)+500#">
 					<cfchartseries 
 						type="line"
 						markerStyle="circle" 
