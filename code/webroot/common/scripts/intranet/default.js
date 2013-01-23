@@ -109,9 +109,10 @@ $(window).load(function() {
 var ieFixes={
 	init:function(){
 		$("#utilityNavigation ul li").eq(0).addClass("ult-adp");
-		$("#utilityNavigation ul li").eq(1).addClass("ult-halfHoliday");
-		$("#utilityNavigation ul li").eq(2).addClass("ult-phonelist");
-		$("#utilityNavigation ul li").eq(3).addClass("ult-salcoHome");
+		$("#utilityNavigation ul li").eq(1).addClass("ult-adp-labor");
+		$("#utilityNavigation ul li").eq(2).addClass("ult-halfHoliday");
+		$("#utilityNavigation ul li").eq(3).addClass("ult-phonelist");
+		$("#utilityNavigation ul li").eq(4).addClass("ult-salcoHome");
 	}
 }
 	
