@@ -147,12 +147,17 @@ img.curveMe, .employees a img, .image img, .empl-left img{
 	width:137px;	
 }
 
+.ie8 #header #utilityNavigation .utilityNavigation ul li.ult-adp-labor{
+	width:137px;
+	
+}
+
 #header #utilityNavigation .utilityNavigation ul li:nth-child(3){
-	width:167px;	
+	width:137px;	
 }
 
 .ie8 #header #utilityNavigation .utilityNavigation ul li.ult-halfHoliday{
-	width:167px;
+	width:137px;
 }
 
 #header #utilityNavigation .utilityNavigation ul li:nth-child(3){
