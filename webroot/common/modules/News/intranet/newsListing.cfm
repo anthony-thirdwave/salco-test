@@ -23,13 +23,7 @@
 		</cfif>
 		<cfset ThisClass="">
 		<cfif EmergencyAlert>
-			<cfif IsDefined("SESSION.EmergencyAlertDisplayed") and ListFindNoCase(SESSION.EmergencyAlertDisplayed,NewsID)>
-				<cfset ThisClass="incmWeatherOff">
-			<cfelse>
-				<cfset ThisClass="incmWeather">
-				<cfparam name="SESSION.EmergencyAlertDisplayed" default="">
-				<cfset SESSION.EmergencyAlertDisplayed=ListAppend(SESSION.EmergencyAlertDisplayed,NewsID)>
-			</cfif>
+			<cfset ThisClass="incmWeather">
 		</cfif>
 		<div class="building-blocks #ThisClass#">
 	 		<dl>
