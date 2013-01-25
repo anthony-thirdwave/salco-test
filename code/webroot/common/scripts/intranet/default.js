@@ -609,7 +609,7 @@ var inclimateWeather={
 	date:"",
 	html:"",
 	init:function(){
-		if($(".building-blocks").eq(0).children().children().html()=="Inclement Weather Closings"){
+		/*if($(".building-blocks").eq(0).children().children().html()=="Inclement Weather Closings"){
 			$('.blurb ul').nextAll().remove();
 			$(".building-blocks").eq(0).children().append('<dd class="image" style="background-image:url(/common/images/Intranet/template/weatherClosing/ClosingPage-weatherRain.png),url(/common/images/Intranet/template/weatherClosing/ClosingPage-weatherSnow.png),url(/common/images/Intranet/template/weatherClosing/ClosingPage-weatherLight.png),url(/common/images/Intranet/template/weatherClosing/ClosingPageBG.png); margin-top:5px; height: 175px;"></dd>');
 			
@@ -618,7 +618,7 @@ var inclimateWeather={
 				inclimateWeather.html='<div id="inclWHolder"><div id="inclmWAlertClosing"><a href="javascript:void(0)" id="inclmWClose"></a><dl id="inclmWDetail"><dt>Inclement Weather Closings</dt><dd><h4>Salco Products</h4><time>'+inclimateWeather.date+'</time>'+inclimateWeather.message+'</dd></dl></div></div><div id="inclmWOverlay"></div>';
 			
 			$(".building-blocks").eq(0).unbind("click").bind("click",function(){inclimateWeather.relauch()});
-			}
+			}*/
 			
 			// check for weather alert
 			if($(".building-blocks").eq(0).hasClass("incmWeather")==true){
