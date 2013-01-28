@@ -1,5 +1,10 @@
 <cfset sReports=StructNew()>
-<cfset BaseFileLocation="\development\intranet_reports\templates\">
+
+<cfif APPLICATION.Staging>
+	<cfset BaseFileLocation="D:\websites.staging\salco\Resources\Intranet Files\">
+<cfelse>
+	<cfset BaseFileLocation="#ExpandPath('/development/intranet_reports/templates/')#">
+</cfif>
 <cfset sReportElt=StructNew()>
 <cfset StructInsert(sReportElt,"ReportName","ordershipmentAccuracy",1)>
 <cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
@@ -33,7 +38,7 @@
 <cfset StructInsert(sReports,4,sReportElt,1)>
 
 <cfloop index="ThisReport" list="#StructKeyList(sReports)#">
-	<cfset thisFilePath = ExpandPath("#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#")>
+	<cfset thisFilePath="#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#">
 	<cfif FileExists(thisFilePath)>
 		<cffile action="read" file="#thisFilePath#" variable="orderCSVFile">
 		<cfinvoke component="/com/utils/utils"
