@@ -35,6 +35,10 @@
 	@import url(/common/styles/intranet/calendar.css);
 	@import url(/common/styles/intranet/jquery-ui.css);
 </style>
+
+<link href="/common/scripts/projekktor/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/common/scripts/projekktor/projekktor.min.js"></script>
+
 <cfif APPLICATION.Production>
 	<script type="text/javascript">
 		var _gaq = _gaq || [];
