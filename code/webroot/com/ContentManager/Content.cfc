@@ -1086,8 +1086,8 @@
 				<cfcase value="66"><!--- Article --->
 					LabelID IN (222,255)<!--- Only article body, list of files, list of links --->
 				</cfcase>
-				<cfcase value="82"><!--- Article --->
-					LabelID IN (221)<!--- Only article body, list of files, list of links --->
+				<cfcase value="82"><!--- News --->
+					LabelID IN (221)<!--- news item--->
 				</cfcase>
 				<cfdefaultcase><!---  --->
 					LabelID NOT IN (235,221)
