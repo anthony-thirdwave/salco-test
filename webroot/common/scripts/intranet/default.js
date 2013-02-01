@@ -279,7 +279,13 @@ $(window).load(function() {
    if($(".event-listing .artContent").length==1){
 	   document.location="#title_"+HighlightMonth;
    }
-   
+   if($("html").hasClass("firefox")==true){
+	   projekktor('#salcoPlayer', {
+			playerFlashMP4: '/common/flash/jarisplayer.swf'
+		});
+   }else{
+	 //  projekktor('#salcoPlayer');
+   }
   // Handler for .load() called.
   $(".opcl").bind("click",function(event){
 	  
