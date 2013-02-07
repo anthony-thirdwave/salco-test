@@ -112,16 +112,16 @@ $(document).ready(function(){
 	<div class="goalProgressTableHolder">
 		<table cellpadding="0" cellspacing="0" class="accuracy">
 			<thead>
-				<th>ANNUAL SALES GOAL: $<cfoutput>#NumberFormat(AnnualSalesTotal.AnnualSalesGoal,",")#</cfoutput></th>
+				<th>MONTHLY SALES GOAL: $<cfoutput>#NumberFormat(qryMonthData.MonthlySalesGoal,",")#</cfoutput></th>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						<cfset annualPercentage=Val(qryYearData.actualSalesTotal) / Val(AnnualSalesTotal.AnnualSalesGoal) * 100 >
+						<cfset monthPercentage=(qryMonthData.actualSalesTotal / qryMonthData.MonthlySalesGoal) * 100 >
 						<div class="tileHolderSmall">
 							<div class="miniTile">
-								<div class="percentageLrg"><cfoutput>#NumberFormat(annualPercentage,'_____.__')#</cfoutput></div>
-								$<cfoutput>#NumberFormat(qryYearData.actualSalesTotal,",")#</cfoutput>
+								<div class="percentageLrg"><cfoutput>#NumberFormat(monthPercentage,'_____.__')#</cfoutput></div>
+								$<cfoutput>#NumberFormat(qryMonthData.actualSalesTotal,",")#</cfoutput>
 							</div>
 						</div>
 					</td>
@@ -129,13 +129,13 @@ $(document).ready(function(){
 				<script>
 					$(document).ready(function() {
 						<cfoutput>
-						$("##progressbarannualPercentage").progressbar({value:#annualPercentage#})
+						$("##progressbarmonthPercentage").progressbar({value:#monthPercentage#})
 						</cfoutput>
 					});
 				</script>
 				<tr>
 					<td>
-						<div id="progressbarannualPercentage"></div>
+						<div id="progressbarmonthPercentage"></div>
 					</td>
 				</tr>
 			</tbody>
@@ -176,16 +176,16 @@ $(document).ready(function(){
 	<div class="goalProgressTableHolder">
 		<table cellpadding="0" cellspacing="0" class="accuracy">
 			<thead>
-				<th>MONTHLY SALES GOAL: $<cfoutput>#NumberFormat(qryMonthData.MonthlySalesGoal,",")#</cfoutput></th>
+				<th>ANNUAL SALES GOAL: $<cfoutput>#NumberFormat(AnnualSalesTotal.AnnualSalesGoal,",")#</cfoutput></th>
 			</thead>
 			<tbody>
 				<tr>
 					<td>
-						<cfset monthPercentage=(qryMonthData.actualSalesTotal / qryMonthData.MonthlySalesGoal) * 100 >
+						<cfset annualPercentage=Val(qryYearData.actualSalesTotal) / Val(AnnualSalesTotal.AnnualSalesGoal) * 100 >
 						<div class="tileHolderSmall">
 							<div class="miniTile">
-								<div class="percentageLrg"><cfoutput>#NumberFormat(monthPercentage,'_____.__')#</cfoutput></div>
-								$<cfoutput>#NumberFormat(qryMonthData.actualSalesTotal,",")#</cfoutput>
+								<div class="percentageLrg"><cfoutput>#NumberFormat(annualPercentage,'_____.__')#</cfoutput></div>
+								$<cfoutput>#NumberFormat(qryYearData.actualSalesTotal,",")#</cfoutput>
 							</div>
 						</div>
 					</td>
@@ -193,16 +193,17 @@ $(document).ready(function(){
 				<script>
 					$(document).ready(function() {
 						<cfoutput>
-						$("##progressbarmonthPercentage").progressbar({value:#monthPercentage#})
+						$("##progressbarannualPercentage").progressbar({value:#annualPercentage#})
 						</cfoutput>
 					});
 				</script>
 				<tr>
 					<td>
-						<div id="progressbarmonthPercentage"></div>
+						<div id="progressbarannualPercentage"></div>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-	</div></div>
+	</div>
+	</div>
 </article>
