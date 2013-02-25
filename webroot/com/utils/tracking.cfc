@@ -29,7 +29,8 @@
 			</cfif>
 		</cfif>
 		
-		<cfif ARGUMENTS.Operation IS NOT "delete">
+		<cfif ARGUMENTS.Operation IS "delete" or ARGUMENTS.Entity IS "reports">
+		<cfelse>
 			<cfinvoke component="com.utils.Database" method="GenericLookup" returnVariable="Test">
 				<cfinvokeargument name="datasource" value="#APPLICATION.DSN#">
 				<cfinvokeargument name="TableName" value="t_#ARGUMENTS.Entity#">
