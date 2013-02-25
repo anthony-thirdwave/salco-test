@@ -206,4 +206,11 @@ $(document).ready(function(){
 		</table>
 	</div>
 	</div>
+	<cfinvoke component="com.utils.tracking" method="GetTrackingDate" returnVariable="ReturnString"
+		Entity="Reports"
+		KeyID="3"
+		Operation="modify">
+	<cfif IsDate(ReturnString)>
+		<p align="center"><small style="font-size:x-small;"><cfoutput>Last Updated: #DateFormat(ReturnString,"long")# #TimeFormat(ReturnString)#</cfoutput></small></p>
+	</cfif>
 </article>
