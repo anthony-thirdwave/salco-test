@@ -70,6 +70,12 @@
 			</cfloop>
 		</cftransaction>
 	</cfif>
+	<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
+		UserID="1"
+		Entity="Reports"
+		KeyID="#ThisReport#"
+		Operation="modify"
+		EntityName="#sReports[ThisReport].ReportName#">
 </cfloop>
-	
+
 Done
