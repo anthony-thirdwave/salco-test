@@ -49,7 +49,7 @@
 		Purging <cfoutput>#ThisCollectionName#</cfoutput>....<br/>
 		<cfindex action="PURGE" collection="#ThisCollectionName#">
 
-		<cfstoredproc procedure="usp_GetPages" datasource="#APPLICATION.DSN#">
+		<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 			<cfprocresult name="GetCats">
 			<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#ThisLocaleID#" null="No">
 			<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="#GetDisplayOrder.DisplayOrder#" null="no">

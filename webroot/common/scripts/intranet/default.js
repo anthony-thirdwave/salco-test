@@ -284,7 +284,7 @@ $(window).load(function() {
 			playerFlashMP4: '/common/flash/jarisplayer.swf'
 		});
    }else{
-	 //  projekktor('#salcoPlayer');
+	   projekktor('#salcoPlayer');
    }
   // Handler for .load() called.
   $(".opcl").bind("click",function(event){
@@ -394,7 +394,7 @@ $(window).load(function() {
 		$('<a />', {
 		    href: '#tty',
 		}).appendTo('#idletimeout');
-		
+		/* 300 */
 		$.idleTimeout('#idletimeout', '#idletimeout a', {
 				idleAfter: 300,
 				pollingInterval: 60,
@@ -826,19 +826,20 @@ var kioskPageSaver={
 		arl=kioskPageSaver.pages.length;
 		if(arl>0){
 			var randomnumber=Math.floor(Math.random()*arl);
+			var randomForceNumber=Math.floor(Math.random()*999999);
 			console.log(randomnumber);
 			console.log(kioskPageSaver.pages[randomnumber]);
 			$("body").removeClass("fadein");
 			$("body").addClass("fadeout");
 			
-			$("body").load(kioskPageSaver.pages[randomnumber]+" #wrapper", function(){
+			$("body").load(kioskPageSaver.pages[randomnumber]+"?ran=hope"+randomForceNumber+" #wrapper", function(){
 				$("#wrapper").attr("class","");
 				//$("body").removeClass("fadeout");
 				$("body").addClass("fadein");
 				//$('#idletimeout a').click();
 				setTimeout("kioskPageSaver.changePage()",10000);
 				$("body").bind("click", function(){
-					document.location=document.location;
+					document.location=document.location+"?force=update"+randomForceNumber;
 					
 				});
 				$("body").attr("id",kioskPageSaver.pages[randomnumber]);
