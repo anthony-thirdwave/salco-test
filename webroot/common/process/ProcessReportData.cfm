@@ -37,9 +37,12 @@
 <cfset StructInsert(sReportElt,"FieldLists","year,month,week,Shipment,Processed",1)>
 <cfset StructInsert(sReports,4,sReportElt,1)>
 
+<!--- <cfloop index="ThisReport" list="#StructKeyList(sReports)#"> --->
 <cfloop index="ThisReport" list="#StructKeyList(sReports)#">
+	<cfoutput>Working on #sReports[ThisReport].ReportName#...<br></cfoutput>
 	<cfset thisFilePath="#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#">
 	<cfif FileExists(thisFilePath)>
+		<cfoutput>Import file exists (#sReports[ThisReport].FileName#)...<br></cfoutput>
 		<cffile action="read" file="#thisFilePath#" variable="orderCSVFile">
 		<cfinvoke component="/com/utils/utils"
 			method="CSVToQuery"
@@ -47,10 +50,48 @@
 			CSV="#Trim(orderCSVFile)#">
 
 		<cftransaction>
+			<cfquery name="SelectOriginal" datasource="#APPLICATION.Data_DSN#">
+				select * from #sReports[ThisReport].TableName#
+			</cfquery>
+			
+			<cfset TotalData="">
+			Calculating hash of data...<br>
+			<cfoutput query="SelectOriginal">
+				<cfloop index="ThisColumn" list="#SelectOriginal.ColumnList#">
+					<cfset TotalData="#TotalData##Trim(SelectOriginal[Thiscolumn][CurrentRow])#">
+				</cfloop>
+			</cfoutput>
+			<cfset ThisHash=Hash(TotalData)>
+			
+			<cfquery name="SelectStatus" datasource="#APPLICATION.Data_DSN#">
+				select * from rp_status where ReportID=<cfqueryparam value="#ThisReport#" cfsqltype="cf_sql_integer">
+			</cfquery>
+			
+			<cfif SelectStatus.RecordCount IS "0">
+				<cfquery name="InsertStatus" datasource="#APPLICATION.Data_DSN#">
+					INSERT INTO rp_status 
+					(ReportID, Hash, DateTimeLastUpdated)
+					VALUES
+					(<cfqueryparam value="#ThisReport#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#ThisHash#" cfsqltype="cf_sql_varchar">, GetDate())
+				</cfquery>
+			<cfelseif SelectStatus.Hash is not ThisHash>
+				Hash does not match last import's hash, marking this report as updated...<br>
+				<cfquery name="SelectStatus" datasource="#APPLICATION.Data_DSN#">
+					update rp_status 
+					SET
+					Hash=<cfqueryparam value="#ThisHash#" cfsqltype="cf_sql_varchar">,
+					DateTimeLastUpdated=GetDate()
+					where ReportID=<cfqueryparam value="#ThisReport#" cfsqltype="cf_sql_integer">
+				</cfquery>
+			<cfelse>
+				Hash matches last import's hash...<br>
+			</cfif>
+			
+			
 			<cfquery name="rp_OrderDelete" datasource="#APPLICATION.Data_DSN#">
 				DELETE FROM #sReports[ThisReport].TableName#
 			</cfquery>
-			
+			Importing data...<br>
 			<cfloop query="qResult" startRow="2">
 				<cfquery name="#sReports[ThisReport].TableName#_Insert" datasource="#APPLICATION.Data_DSN#">
 					INSERT INTO #sReports[ThisReport].TableName# (#sReports[ThisReport].FieldLists#)
@@ -58,9 +99,9 @@
 					<cfloop index="i" from="1" to="#listlen(sReports[ThisReport].FieldLists)#">
 						<cfif i neq 1>,</cfif>
 						<cfif ThisReport eq 2 and i eq 1>
-							<cfqueryparam value="#dateformat(column_1,'mm-dd-yyyy')#"  cfsqltype="cf_sql_date">
+							<cfqueryparam value="#dateformat(column_1,'mm-dd-yyyy')#" cfsqltype="cf_sql_date">
 						<cfelseif ThisReport eq 1 and i eq 1>
-							<cfqueryparam value="#evaluate('column_#i#')#"  cfsqltype="cf_sql_varchar">
+							<cfqueryparam value="#evaluate('column_#i#')#" cfsqltype="cf_sql_varchar">
 						<cfelse>
 							<cfqueryparam value="#Val(evaluate('column_#i#'))#" cfsqltype="cf_sql_integer">
 						</cfif>
@@ -68,6 +109,7 @@
 					)
 				</cfquery>
 			</cfloop>
+			Done...<br>
 		</cftransaction>
 	</cfif>
 	<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
@@ -76,6 +118,7 @@
 		KeyID="#ThisReport#"
 		Operation="modify"
 		EntityName="#sReports[ThisReport].ReportName#">
+	<hr>
 </cfloop>
 
-Done
+Done with all.
