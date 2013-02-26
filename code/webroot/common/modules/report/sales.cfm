@@ -206,12 +206,10 @@ $(document).ready(function(){
 		</table>
 	</div>
 	</div>
-	<cfinvoke component="com.utils.tracking" method="GetTrackingDate" returnVariable="ReturnString"
-		Entity="Reports"
-		KeyID="3"
-		Operation="modify"
-		datasource="#APPLICATION.Staging_DSN#">
-	<cfif IsDate(ReturnString)>
-		<p align="center"><small style="font-size:x-small;"><cfoutput>Last Updated: #DateFormat(ReturnString,"long")# #TimeFormat(ReturnString)#</cfoutput></small></p>
+	<cfquery name="GetLastUpdated" datasource="#APPLICATION.Data_DSN#">
+		Select DateTimeLastUpdated from rp_status where reportid=3
+	</cfquery>
+	<cfif IsDate(GetLastUpdated.DateTimeLastUpdated)>
+		<p align="center"><small style="font-size:x-small;"><cfoutput>Last Updated: #DateFormat(GetLastUpdated.DateTimeLastUpdated,"long")# #TimeFormat(GetLastUpdated.DateTimeLastUpdated)#</cfoutput></small></p>
 	</cfif>
 </article>
