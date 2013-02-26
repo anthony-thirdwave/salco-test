@@ -116,7 +116,7 @@
 		<cfset var ReturnString="">
 		<cfset var qry_GetTracking="">
 		
-		<cfquery name="qry_GetTracking" datasource="#ARGUMENTS.DSN#" maxrows="1">
+		<cfquery name="qry_GetTracking" datasource="#ARGUMENTS.DataSource#" maxrows="1">
 			SELECT		*
 			FROM		qry_GetTracking
 			WHERE		Entity=<cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar" maxlength="64">
