@@ -141,4 +141,10 @@ $(document).ready(function(){
 	</table>
 	</div>
 </div>
+<cfquery name="GetLastUpdated" datasource="#APPLICATION.Data_DSN#">
+	Select DateTimeLastUpdated from rp_status where reportid=4
+</cfquery>
+<cfif IsDate(GetLastUpdated.DateTimeLastUpdated)>
+	<p align="center"><small style="font-size:x-small;"><cfoutput>Last Updated: #DateFormat(GetLastUpdated.DateTimeLastUpdated,"long")# #TimeFormat(GetLastUpdated.DateTimeLastUpdated)#</cfoutput></small></p>
+</cfif>
 </article>
