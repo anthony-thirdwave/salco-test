@@ -123,6 +123,7 @@
 			<cfset VIPTotal=0>
 			<cfset promoTotal=0>
 			<cfset weeklyTotal=0>
+			<cfset lineTotal=0>
 			
 			<cfoutput query="qryReport">
 			<cfset order=qryReport.Email + qryReport.Fax + qryReport.Phone + qryReport.Cons + qryReport.VIP + qryReport.Promo>
@@ -133,7 +134,7 @@
 			<cfset VIPTotal=VIPTotal + qryReport.VIP>
 			<cfset promoTotal=promoTotal + qryReport.Promo>
 			<cfset weeklyTotal=weeklyTotal + order>
-			
+			<cfset lineTotal=lineTotal+order>
 			<tr>
 				<td>#dateformat(Date, "mm/dd/yyyy")#</td>
 				<td>#NumberFormat(order,",")#</td>
@@ -179,7 +180,7 @@
 			
 			<tr>
 				<td>line items<br>total</td>
-				<td>#NumberFormat(qryTotal.total,",")#</td>
+				<td>#NumberFormat(lineTotal,",")#</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
@@ -192,6 +193,12 @@
 		</table>
 	</div>
 </div>
+<cfquery name="GetLastUpdated" datasource="#APPLICATION.Data_DSN#">
+	Select DateTimeLastUpdated from rp_status where reportid=1
+</cfquery>
+<cfif IsDate(GetLastUpdated.DateTimeLastUpdated)>
+	<p align="center"><small style="font-size:x-small;"><cfoutput>Last Updated: #DateFormat(GetLastUpdated.DateTimeLastUpdated,"long")# #TimeFormat(GetLastUpdated.DateTimeLastUpdated)#</cfoutput></small></p>
+</cfif>
 </article>
 <script type="text/javascript">
 	optIDs=["selectedMonth","selectedWeek"];
