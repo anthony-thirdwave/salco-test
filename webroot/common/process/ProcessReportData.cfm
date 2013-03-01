@@ -18,7 +18,7 @@
 <cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Orders.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Order",1)>
-<cfset StructInsert(sReportElt,"FieldLists","Date,Email,Fax,Phone,Cons,VIP,Promo",1)>
+<cfset StructInsert(sReportElt,"FieldLists","Date,Email,Fax,Phone,Cons,VIP,Promo,LI",1)>
 <cfset StructInsert(sReports,2,sReportElt,1)>
 
 <cfset sReportElt=StructNew()>
@@ -55,14 +55,14 @@
 			</cfquery>
 			
 			<cfset TotalData="">
-			Calculating hash of data...<br>
+			
 			<cfoutput query="SelectOriginal">
 				<cfloop index="ThisColumn" list="#SelectOriginal.ColumnList#">
 					<cfset TotalData="#TotalData##Trim(SelectOriginal[Thiscolumn][CurrentRow])#">
 				</cfloop>
 			</cfoutput>
 			<cfset ThisHash=Hash(TotalData)>
-			
+			<cfoutput>Calculating hash of data...(#ThisHash#)<br></cfoutput>
 			<cfquery name="SelectStatus" datasource="#APPLICATION.Data_DSN#">
 				select * from rp_status where ReportID=<cfqueryparam value="#ThisReport#" cfsqltype="cf_sql_integer">
 			</cfquery>
@@ -84,7 +84,7 @@
 					where ReportID=<cfqueryparam value="#ThisReport#" cfsqltype="cf_sql_integer">
 				</cfquery>
 			<cfelse>
-				Hash matches last import's hash...<br>
+				<cfoutput>Hash matches last import's hash (#SelectStatus.Hash#)...<br></cfoutput>
 			</cfif>
 			
 			

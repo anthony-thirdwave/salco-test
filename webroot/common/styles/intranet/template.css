@@ -1322,7 +1322,7 @@ article.goalsProgess .goalProgressTableHolder table.orders td:nth-child(2){
 }
 
 article.goalsProgess .goalProgressTableHolder table.orders tfoot tr:nth-child(3) td:nth-child(2){
-	border-right:none;
+	/* border-right:none;*/
 }
 
 article.goalsProgess .goalProgressTableHolder table.orders tbody td, article.goalsProgess .goalProgressTableHolder table.orders tfoot td{
