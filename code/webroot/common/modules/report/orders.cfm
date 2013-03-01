@@ -38,7 +38,6 @@
 	</cfif>
 </cfloop>
 
-
 <article class="goalsProgess">
     <div class="inArt"> 
 	<h1>Goals &amp; Progress</h1>
@@ -89,7 +88,7 @@
 	</div>
 	<h3 class="subTitle">Orders</h3>
 	<cfquery name="qryReport" datasource="#APPLICATION.Data_DSN#">
-		SELECT	Date, Email, Fax, Phone, Cons, VIP, Promo
+		SELECT	Date, Email, Fax, Phone, Cons, VIP, Promo, LI
 		FROM	rp_order
 		<cfif FORM.SelectedWeek IS NOT "">
 			where date between
@@ -134,7 +133,7 @@
 			<cfset VIPTotal=VIPTotal + qryReport.VIP>
 			<cfset promoTotal=promoTotal + qryReport.Promo>
 			<cfset weeklyTotal=weeklyTotal + order>
-			<cfset lineTotal=lineTotal+order>
+			<cfset lineTotal=lineTotal+qryReport.LI>
 			<tr>
 				<td>#dateformat(Date, "mm/dd/yyyy")#</td>
 				<td>#NumberFormat(order,",")#</td>
@@ -150,7 +149,7 @@
 		<cfquery name="qryTotal" datasource="#APPLICATION.Data_DSN#">
 			SELECT	SUM (Email+Fax+Phone+Cons+VIP+Promo) as total, SUM(Email) as emailTotalToYear
 			,SUM(Fax) as FaxTotalToYear ,SUM(Phone) as PhoneTotalToYear, SUM(Cons) as ConsTotalToYear
-			,SUM(VIP) as VIPTotalToYear ,SUM(Promo) as PromoTotalToYear
+			,SUM(VIP) as VIPTotalToYear ,SUM(Promo) as PromoTotalToYear, SUM(LI) as LITotalToYear
 			FROM	rp_order
 			WHERE	year(date)= <cfqueryparam value="#thisYear#" cfsqltype="cf_sql_varchar">
 		</cfquery>
@@ -179,8 +178,19 @@
 			</tr>
 			
 			<tr>
-				<td>line items<br>total</td>
+				<td>Line Items<br><cfif FORM.SelectedWeek IS "">Month<cfelse>Week</cfif><br>total</td>
 				<td>#NumberFormat(lineTotal,",")#</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			
+			<tr>
+				<td>Line Items<br>Year to Date<br>total</td>
+				<td>#NumberFormat(qryTotal.LITotalToYear,",")#</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
