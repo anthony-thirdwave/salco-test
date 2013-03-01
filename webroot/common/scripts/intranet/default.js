@@ -837,7 +837,7 @@ var kioskPageSaver={
 				//$("body").removeClass("fadeout");
 				$("body").addClass("fadein");
 				//$('#idletimeout a').click();
-				setTimeout("kioskPageSaver.changePage()",10000);
+				setTimeout("kioskPageSaver.changePage()",300000);// changed setting to be 5 min from 10 sec
 				$("body").bind("click", function(){
 					document.location=document.location+"?force=update"+randomForceNumber;
 					
