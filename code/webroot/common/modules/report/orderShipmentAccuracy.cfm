@@ -66,7 +66,7 @@ $(document).ready(function(){
 <cfquery name="qryDataYTD" datasource="#APPLICATION.Data_DSN#">
 	SELECT	*
 	FROM	rp_ordershipmentAccuracy
-	WHERE	Quarter like <cfqueryparam value="%#right(form.quarterSelect,2)#" cfsqltype="cf_sql_varchar">
+	WHERE	Quarter=<cfqueryparam value="#form.quarterSelect#" cfsqltype="cf_sql_varchar">
 </cfquery>
 <cfquery name="qryOrderYTD" dbtype="query">
 	SELECT SUM(TotalOrders) AS totalOrder
