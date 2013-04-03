@@ -53,7 +53,7 @@ $(document).ready(function(){
 		when 'Oct' then 'Q4'
 		end as quarterNum
 	FROM	rp_ordershipmentAccuracy
-	order by quarterYear desc, quarterNum
+	order by quarterYear desc, quarterNum desc
 </cfquery>
 <cfparam name="form.quarterSelect" default="#qryQuarter.Quarter#">
 

@@ -6,6 +6,8 @@ temp/1/*
 temp/2/*
 webroot/aspnet_client
 webroot/common/images/ContentManager/*.db
+webroot/common/images/Intranet/template/*.db
+webroot/common/images/Intranet/template/weatherClosing/*.db
 webroot/common/images/Thumbs.db
 webroot/common/images/admin/*.db
 webroot/common/images/captcha/*.db
