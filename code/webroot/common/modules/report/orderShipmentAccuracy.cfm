@@ -1,22 +1,22 @@
 
 <!--- <cfparam name="form.quarterSelect" default="#Quarter(now())#,#Year(now())#">
-<cfset form.quarterSelect = Replace(form.quarterSelect,",","_","all")>
+<cfset form.quarterSelect=Replace(form.quarterSelect,",","_","all")>
 
-<cfset selectedquarter = ListGetAt (form.quarterSelect, 1, "_")>
-<cfset selectedYear = ListGetAt (form.quarterSelect, 2, "_")>
+<cfset selectedquarter=ListGetAt (form.quarterSelect, 1, "_")>
+<cfset selectedYear=ListGetAt (form.quarterSelect, 2, "_")>
 
 <cfswitch expression="#selectedquarter#">
 	<cfcase value="1">
-		<cfset monthList = "1,2,3">
+		<cfset monthList="1,2,3">
 	</cfcase>
 	<cfcase value="2">
-		<cfset monthList = "4,5,6">
+		<cfset monthList="4,5,6">
 	</cfcase>
 	<cfcase value="3">
-		<cfset monthList = "7,8,9">
+		<cfset monthList="7,8,9">
 	</cfcase>
 	<cfcase value="4">
-		<cfset monthList = "10,11,12">
+		<cfset monthList="10,11,12">
 	</cfcase>
 </cfswitch> --->
 
@@ -60,7 +60,17 @@ $(document).ready(function(){
 <cfquery name="qryData" datasource="#APPLICATION.Data_DSN#">
 	SELECT	*
 	FROM	rp_ordershipmentAccuracy
-	WHERE	Quarter = <cfqueryparam value="#form.quarterSelect#" cfsqltype="cf_sql_varchar">
+	WHERE	Quarter=<cfqueryparam value="#form.quarterSelect#" cfsqltype="cf_sql_varchar">
+</cfquery>
+
+<cfquery name="qryDataYTD" datasource="#APPLICATION.Data_DSN#">
+	SELECT	*
+	FROM	rp_ordershipmentAccuracy
+	WHERE	Quarter like <cfqueryparam value="%#right(form.quarterSelect,2)#" cfsqltype="cf_sql_varchar">
+</cfquery>
+<cfquery name="qryOrderYTD" dbtype="query">
+	SELECT SUM(TotalOrders) AS totalOrder
+	FROM	qryDataYTD
 </cfquery>
 
 <cfquery name="qryOrder" dbtype="query">
@@ -76,7 +86,7 @@ $(document).ready(function(){
 	FROM	qryData
 </cfquery>
 
-<cfquery name="qryInAccuraData"  dbtype="query">
+<cfquery name="qryInAccurateDataYTD" dbtype="query">
 	SELECT SUM(CustomerOrderedWrongPartTotalsIllinois
 		+ CustomerOrderedWrongPartTotalsTexas
 		+ DamagedDefectiveTotalsIllinois
@@ -103,13 +113,13 @@ $(document).ready(function(){
 		+ QualityIssueTotalsTexas
 		+ InventoryControlTotalsIllinois
 		+ InventoryControlTotalsTexas) AS total
-	FROM	qryData
+	FROM	qryDataYTD
 </cfquery>
 
-<cfif qryInAccuraData.total gt 0 and qryOrder.totalOrder gt 0>
-	<cfset Accuracy = 100 * (1 - ( qryInAccuraData.total/ qryOrder.totalOrder))>
+<cfif qryInAccurateDataYTD.total gt 0 and qryOrderYTD.totalOrder gt 0>
+	<cfset Accuracy=100 * (1 - ( qryInAccurateDataYTD.total/qryOrderYTD.totalOrder))>
 <cfelse>
-	<cfset Accuracy = 0>
+	<cfset Accuracy=0>
 </cfif>
 
 
@@ -141,7 +151,7 @@ $(document).ready(function(){
 	<cfoutput>
 	<div class="tileHolderSmall">
 		<div class="miniTile">
-			<h4>Accuracy</h4>
+			<h4>Accuracy (YTD)</h4>
 			<div class="percentageLrg">#NumberFormat(Accuracy,'_____.__')#</div>
 		</div>
 		
