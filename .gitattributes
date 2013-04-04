@@ -487,6 +487,7 @@ code/webroot/common/modules/contentmanager/category/form.cfm -text
 code/webroot/common/modules/contentmanager/content.cfm -text
 code/webroot/common/modules/contentmanager/content/form.cfm -text
 code/webroot/common/modules/contentmanager/locale/form.cfm -text
+code/webroot/common/modules/directory/browser.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavBreadcrumb.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavFooter.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavGeneric.cfm -text
