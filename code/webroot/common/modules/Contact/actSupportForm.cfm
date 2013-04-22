@@ -29,7 +29,8 @@
 
 <cfif len(trim(ErrorMessage)) EQ 0>
 	<cfmail	to="#Mailer_ToAddress#" from="#Mailer_FromAddress#"
-			type="html" subject="Support Form Submission: #form.Firstname# #form.LastName#">
+		type="html" subject="Support Form Submission: #form.Firstname# #form.LastName#"
+		cc="lisa_lakatos@salcoproducts.com">
 	<table>
 		<tr>
 		<td colspan="2"><b>Support Form Submission</b><br>
