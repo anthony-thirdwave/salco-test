@@ -2187,3 +2187,31 @@ article.searchResults ul.pagination li:last-child span {
 	position:absolute;
 	margin:5px 0px 0px -30px;
 }
+
+#m2m .centerInner h3.subTitle{
+		color:#ec2127;
+		font-size:18px;
+		margin:0px;
+		padding:0px 0px 35px 0px;
+}
+
+#m2m .centerInner ul{
+	margin:0px;
+	padding:0px;
+	list-style:none;
+}
+
+#m2m .centerInner ul li a{
+	font-size:21px;
+	line-height:30px;
+	text-decoration:none;
+	color:#000;
+	-webkit-transition: all .75s ease-out;
+	-moz-transition: all .75s ease-out;
+	-o-transition: all .75s ease-out;
+	transition: all .75s ease-out;
+}
+
+#m2m .centerInner ul li a:hover{
+	color:#ED1C25;
+}
