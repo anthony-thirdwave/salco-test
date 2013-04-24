@@ -178,11 +178,13 @@
 
 	<cffunction name="GetPathFromURL" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
+		<cfargument name="WebrootPath" default="#APPLICATION.WebrootPath#" type="String" required="false">
+		
 		<cfset var ReturnString = "">
 		<cfif Left(ARGUMENTS.String,1) IS NOT "/">
 			<cfreturn "">
 		<cfelse>
-			<cfset ReturnString="#APPLICATION.WebrootPath##ReplaceNoCase(ARGUMENTS.String,'/','\','all')#">
+			<cfset ReturnString="#ARGUMENTS.WebrootPath##ReplaceNoCase(ARGUMENTS.String,'/','\','all')#">
 			<cfset ReturnString=ReplaceNoCase(ReturnString,"\\","\","all")>
 			<cfreturn ReturnString>
 		</cfif>
@@ -191,13 +193,15 @@
 
 	<cffunction name="GetURLFromPath" returntype="string" output="false">
 		<cfargument name="String" default="" type="String" required="true">
+		<cfargument name="WebrootPath" default="#APPLICATION.WebrootPath#" type="String" required="false">
+		
 		<cfset var ReturnString = "">
-		<cfif Len(ARGUMENTS.String) LT Len(APPLICATION.WebrootPath)>
+		<cfif Len(ARGUMENTS.String) LT Len(ARGUMENTS.WebrootPath)>
 			<cfreturn "">
-		<cfelseif Left(ARGUMENTS.String,Len(APPLICATION.WebrootPath)) IS NOT APPLICATION.WebrootPath>
+		<cfelseif Left(ARGUMENTS.String,Len(ARGUMENTS.WebrootPath)) IS NOT ARGUMENTS.WebrootPath>
 			<cfreturn "">
 		<cfelse>
-			<cfset ReturnString=ReplaceNoCase(ARGUMENTS.String,APPLICATION.WebrootPath,"/","All")>
+			<cfset ReturnString=ReplaceNoCase(ARGUMENTS.String,ARGUMENTS.WebrootPath,"/","All")>
 			<cfset ReturnString=ReplaceNoCase(ReturnString,"\","/","All")>
 			<cfset ReturnString=ReplaceNoCase(ReturnString,"//","/","All")>
 			<cfreturn ReturnString>
