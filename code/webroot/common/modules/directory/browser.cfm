@@ -1,19 +1,16 @@
 <cfparam name="ATTRIBUTES.PageAction" default="#CGI.Path_Info#?#CGI.Query_String#">
 
 <cfif APPLICATION.Production>
-	<cfparam name="ATTRIBUTES.DirectoryHome" default="\\s52963\websites\center.staging.lifefitness.com\webroot\resources\ServiceDocuments\">
-	<cfparam name="ATTRIBUTES.DirectoryStart" default="\\s52963\websites\center.staging.lifefitness.com\webroot\resources\ServiceDocuments\">
-	<cfset ThisWebroot="\\s52963\websites\center.staging.lifefitness.com\webroot">
+	<cfparam name="ATTRIBUTES.DirectoryHome" default="D:\websites.staging\salco\TrainingVideos\">
+	<cfparam name="ATTRIBUTES.DirectoryStart" default="#ATTRIBUTES.DirectoryHome#">
 	<cfset VideoHost="128.1.1.103">
 <cfelseif APPLICATION.Staging>
 	<cfparam name="ATTRIBUTES.DirectoryHome" default="D:\websites.staging\salco\TrainingVideos\">
-	<cfparam name="ATTRIBUTES.DirectoryStart" default="D:\websites.staging\salco\TrainingVideos\">
-	<cfset ThisWebroot="\\s52963\websites\center.staging.lifefitness.com\webroot">
+	<cfparam name="ATTRIBUTES.DirectoryStart" default="#ATTRIBUTES.DirectoryHome#">
 	<cfset VideoHost="128.1.1.103">
 <cfelse>
 	<cfparam name="ATTRIBUTES.DirectoryHome" default="d:\websites\salco\TrainingVideos">
-	<cfparam name="ATTRIBUTES.DirectoryStart" default="d:\websites\salco\TrainingVideos">
-	<cfset ThisWebroot="d:\websites\salco\TrainingVideos">
+	<cfparam name="ATTRIBUTES.DirectoryStart" default="#ATTRIBUTES.DirectoryHome#">
 	<cfset VideoHost="Z:\websites.dev09\Salco\TrainingVideos">
 </cfif>
 
@@ -28,7 +25,7 @@
 </cfif>
 
 <cfif Isdefined("url.d") and Trim(URL.d) is not "" and hash(URL.d) IS h>
-	<cfset Dir=APPLICATION.utilsObj.GetPathFromURL(URL.d,ThisWebroot)>
+	<cfset Dir=APPLICATION.utilsObj.GetPathFromURL(URL.d,ATTRIBUTES.DirectoryHome)>
 </cfif>
 
 <cfif IsDebugMode()>
@@ -51,10 +48,10 @@
 						</cfquery>
 						<cfif TestIfVideo.RecordCount GT "0">
 							<!--- This is a video page --->
-							<li><a href="http://#VideoHost##APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ThisWebroot)#/OpenMe.html" target="_blank">#qDir1.Name#</a></li>
+							<li><a href="http://#VideoHost##APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome)#/OpenMe.html" target="_blank">#qDir1.Name#</a></li>
 						<cfelse>
-							<cf_AddToQueryString queryString="#PageQueryString#" name="d" value="#APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ThisWebroot)#">
-							<cf_AddToQueryString queryString="#QueryString#" name="h" value="#hash(APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ThisWebroot))#">
+							<cf_AddToQueryString queryString="#PageQueryString#" name="d" value="#APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome)#">
+							<cf_AddToQueryString queryString="#QueryString#" name="h" value="#hash(APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome))#">
 							<li><a href="#PagePath#?#Querystring#">#qDir1.Name#</a></li>
 						</cfif>
 					</cfif>
