@@ -176,7 +176,7 @@ $(document).ready(function(){
 			<tr>
 				<th>Category</th>
 				<th>Total</th>
-				<th>Illinois</th>
+				<th>Lemont</th>
 				<th>Tomball</th>
 			</tr>
 		</thead>
