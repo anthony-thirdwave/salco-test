@@ -1,25 +1,4 @@
 
-<!--- <cfparam name="form.quarterSelect" default="#Quarter(now())#,#Year(now())#">
-<cfset form.quarterSelect=Replace(form.quarterSelect,",","_","all")>
-
-<cfset selectedquarter=ListGetAt (form.quarterSelect, 1, "_")>
-<cfset selectedYear=ListGetAt (form.quarterSelect, 2, "_")>
-
-<cfswitch expression="#selectedquarter#">
-	<cfcase value="1">
-		<cfset monthList="1,2,3">
-	</cfcase>
-	<cfcase value="2">
-		<cfset monthList="4,5,6">
-	</cfcase>
-	<cfcase value="3">
-		<cfset monthList="7,8,9">
-	</cfcase>
-	<cfcase value="4">
-		<cfset monthList="10,11,12">
-	</cfcase>
-</cfswitch> --->
-
 <script type="text/javascript">
 	optIDs=["ordersMonth"];
 	fauxOptIDs=["orderMonths-fancy"];
@@ -87,8 +66,7 @@ $(document).ready(function(){
 </cfquery>
 
 <cfquery name="qryInAccurateDataYTD" dbtype="query">
-	SELECT SUM(CustomerOrderedWrongPartTotalsIllinois
-		+ CustomerOrderedWrongPartTotalsTexas
+	SELECT SUM(
 		+ DamagedDefectiveTotalsIllinois
 		+ DamagedDefectiveTotalsTexas
 		+ DataEntryErrorTotalsIllinois
@@ -96,8 +74,6 @@ $(document).ready(function(){
 		+ DuplicateOrderTotalsIllinois
 		+ DuplicateOrderTotalsTexas
 		+ EngineeringIssueTotals
-		+ PartExchangeTotals
-		+ PartsNoLongerNeededTotals
 		+ PickingErrorTotalsIllinois
 		+ PickingErrorTotalsTexas
 		+ ProductionErrorTotalsIllinois
@@ -106,7 +82,6 @@ $(document).ready(function(){
 		+ PurchasingErrorTotalsTexas
 		+ QualifiedWrongPartTotalsIllinois
 		+ QualifiedWrongPartTotalsTexas
-		+ TrialPartTotals
 		+ VendorErrorTotalsIllinois
 		+ VendorErrorTotalsTexas
 		+ QualityIssueTotalsIllinois
@@ -182,17 +157,6 @@ $(document).ready(function(){
 		</thead>
 		<cfoutput>
 		<tbody>
-			<cfquery name="qryCustomerOrderWrongPart" dbtype="query">
-				SELECT SUM(CustomerOrderedWrongPartTotalsIllinois + CustomerOrderedWrongPartTotalsTexas) AS total
-						, SUM(CustomerOrderedWrongPartTotalsIllinois) as Illinois, SUM(CustomerOrderedWrongPartTotalsTexas) as Tomball
-				FROM	qryData
-			</cfquery>
-			<tr>
-				<td>CUSTOMER ORDERED WRONG PART TOTALS</td>
-				<td>#NumberFormat(qryCustomerOrderWrongPart.total,",")#</td>
-				<td>#NumberFormat(qryCustomerOrderWrongPart.Illinois,",")#</td>
-				<td>#NumberFormat(qryCustomerOrderWrongPart.Tomball,",")#</td>
-			</tr>
 			<cfquery name="qryDamaged" dbtype="query">
 				SELECT SUM(DamagedDefectiveTotalsIllinois + DamagedDefectiveTotalsTexas) AS total
 					, SUM(DamagedDefectiveTotalsIllinois) as Illinois, SUM(DamagedDefectiveTotalsTexas) as Tomball
@@ -229,18 +193,6 @@ $(document).ready(function(){
 			<tr>
 				<td>ENGINEERING ISSUE</td>
 				<td>#qryData.EngineeringIssueTotals#</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>PART EXCHANGE</td>
-				<td>#qryData.PartExchangeTotals#</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>PARTS NO LONGER NEEDED</td>
-				<td>#qryData.PartsNoLongerNeededTotals#</td>
 				<td></td>
 				<td></td>
 			</tr>
@@ -287,12 +239,6 @@ $(document).ready(function(){
 				<td>#qryQualifiedWrongParts.total#</td>
 				<td>#qryQualifiedWrongParts.Illinois#</td>
 				<td>#qryQualifiedWrongParts.Tomball#</td>
-			</tr>
-			<tr>
-				<td>TRIAL PART</td>
-				<td>#qryData.TrialPartTotals#</td>
-				<td></td>
-				<td></td>
 			</tr>
 			<cfquery name="qryVendorError" dbtype="query">
 				SELECT SUM(VendorErrorTotalsIllinois + VendorErrorTotalsTexas) AS total
