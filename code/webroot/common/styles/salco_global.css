@@ -552,9 +552,11 @@ ul#tabsDownloads {
 	width:498px;
 }
 
+
+
 ul#tabsDownloads li a {
-	background: url(/common/images/template/sprite_tabs_download.png)	left -23px no-repeat;
-	width: 114px;
+	background: url(/common/images/template/sprite_tabs_download-98.png)	left -23px no-repeat;
+	width: 88px;
 	height: 18px;
 	display: block;
 	float:left;
@@ -563,11 +565,21 @@ ul#tabsDownloads li a {
 	text-decoration:none;
 	padding: 5px 0 0 10px;
 }
+
+ul#tabsDownloads li:first-child a {
+	width: 95px;
+	background: url(/common/images/template/sprite_tabs_download-105.png)	left -23px no-repeat;
+}
+
 ul#tabsDownloads li a:hover, .tabActive {
-	background: url(/common/images/template/sprite_tabs_download.png)	left top no-repeat!important; 
+	background: url(/common/images/template/sprite_tabs_download-98.png)	left top no-repeat!important; 
 	color:white!important;
 }
 
+
+ul#tabsDownloads li:first-child a:hover, ul#tabsDownloads li:first-child a.tabActive {
+	background: url(/common/images/template/sprite_tabs_download-105.png)	left top no-repeat !important;
+}
 
 
 
