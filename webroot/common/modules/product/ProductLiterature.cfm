@@ -74,7 +74,7 @@
 </cffunction>
 
 <cfswitch expression="#ActiveTab#">
-	<cfcase value="ProductLiterature,Charts,Presentations,Instructions,E-Catalog">
+	<cfcase value="ProductLiterature,Charts,Presentations,Instructions">
 		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#")>
 		<cfdirectory action="LIST" directory="#DirectoryToRead#" name="qDirPrime">
 		<cfset qDir=QueryNew("#qDirPrime.ColumnList#,Language,Folder,URL,Title,Description,BaseName")>
@@ -139,7 +139,50 @@
 				</table>
 			</div>
 		</cfif>
+	</cfcase>
+	<cfcase value="E-Catalog">
+		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#")>
+		<cfdirectory action="LIST" directory="#DirectoryToRead#" name="qDirPrime">
+		<cfset lLinks="">
+		<cfloop query="qDirPrime">
+			<cfif qDirPrime.type IS "dir" and FileExists("#DirectoryToRead#\#qDirPrime.Name#\index.html")>
+				<cfset lLinks=ListAppend(lLinks,"#qDirPrime.Name#:/resources/external/downloads/#ActiveTab#/#qDirPrime.Name#/index.html")>
+			</cfif>
+		</cfloop>
 		
+		
+		<cfif lLinks IS NOT "">
+			<div class="downloadContent" id="downloadContent1">
+				<table class="featuredDownloads" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                    <tr>
+						<th align="left">Catalog</th>
+						<th></th>
+						<th></th>
+					</tr>
+                    </thead>
+					<tbody>
+					<cfset CurrentRow="1">
+					<cfloop index="ThisLink" list="#lLinks#">
+						<cfset class="">
+						<cfset classTR="">
+						<cfif CurrentRow MOD 2 IS "0">
+							<cfset class="grayCol">
+							<cfset classTR="odd">
+						</cfif>
+						<cfoutput>
+						<tr class="#classTR#">
+							<td valign="top" class="#class#"><a href="#ListLast(ThisLink,":")#" target="_blank">#ListFirst(ThisLink,":")#</a></td>
+							<td valign="top" class="#class#"></td>
+							<td valign="top" class="#class#" nowrap><a href="#ListLast(ThisLink,":")#" target="_blank">View</a></td>
+						</tr>
+						</cfoutput>
+						<cfset CurrentRow=CurrentRow+1>
+					</cfloop>
+                    </tbody>
+				</table>
+			</div>
+		</cfif>
 	</cfcase>
 	<cfdefaultcase>
 		<cfinvoke component="/com/product/producthandler" 
