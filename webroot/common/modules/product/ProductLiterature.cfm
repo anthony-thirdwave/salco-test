@@ -13,12 +13,13 @@
 </cfif>
 <cfset SearchNUM="20">
 
-<cfset lTab="ProductLiterature,Charts,Presentations,Instructions">
+<cfset lTab="ProductLiterature,Charts,Presentations,Instructions,E-Catalog">
 <cfset sTabName=StructNew()>
 <cfset StructInsert(sTabName,"ProductLiterature","Product Literature")>
 <cfset StructInsert(sTabName,"Charts","Charts")>
 <cfset StructInsert(sTabName,"Presentations","Presentations")>
 <cfset StructInsert(sTabName,"Instructions","Instructions")>
+<cfset StructInsert(sTabName,"E-Catalog","E-Catalog")>
 
 <ul id="tabsDownloads" class="nav">
 	<cfloop index="ThisTab" list="#lTab#">
@@ -73,13 +74,10 @@
 </cffunction>
 
 <cfswitch expression="#ActiveTab#">
-	<cfcase value="ProductLiterature,Charts,Presentations,Instructions">
+	<cfcase value="ProductLiterature,Charts,Presentations,Instructions,E-Catalog">
 		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#")>
-		
 		<cfdirectory action="LIST" directory="#DirectoryToRead#" name="qDirPrime">
-		
 		<cfset qDir=QueryNew("#qDirPrime.ColumnList#,Language,Folder,URL,Title,Description,BaseName")>
-		
 		<cfloop query="qDirPrime">
 			<cfif qDirPrime.type IS "dir">
 				<cfdirectory action="LIST" directory="#DirectoryToRead#\#Name#" name="qDirPrime2">
