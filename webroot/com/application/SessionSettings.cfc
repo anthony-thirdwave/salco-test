@@ -76,7 +76,7 @@
 		<cfquery name="local.GetLang" datasource="#APPLICATION.DSN#" maxrows="1">
 			SELECT LanguageID,LocaleCode,LocaleName
 			FROM t_Locale
-			WHERE LocaleID = <cfqueryparam value="#Val(session.CurrentAdminLocaleID)#" cfsqltype="cf_sql_integer" maxlength="4">
+			WHERE LocaleID = <cfqueryparam value="#Val(APPLICATION.LocaleID)#" cfsqltype="cf_sql_integer" maxlength="4">
 		</cfquery>
 
 		<!--- defaults for admin users --->
