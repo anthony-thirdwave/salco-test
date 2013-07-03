@@ -60,13 +60,17 @@
 		<cfset QuerySetCell(ARGUMENTS.qDir,"URL","/resources/external/downloads/#LOCAL.ThisDirectory#/#ARGUMENTS.qSourceRow.Name#")>
 		
 		<cfif FileExists("#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#") and ListLast(ARGUMENTS.qSourceRow.Name,".") IS "pdf">
-			<cfpdf action="getInfo" name="LOCAL.sInfo" source="#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#">
-			<cfif LOCAL.sInfo.Title IS NOT "">
-				<cfset QuerySetCell(ARGUMENTS.qDir,"Title",LOCAL.sInfo.Title)>
-			</cfif>
-			<cfif LOCAL.sInfo.Subject IS NOT "">
-				<cfset QuerySetCell(ARGUMENTS.qDir,"Description",LOCAL.sInfo.Subject)>
-			</cfif>
+			<cftry>	
+				<cfpdf action="getInfo" name="LOCAL.sInfo" source="#ARGUMENTS.qSourceRow.Directory#/#ARGUMENTS.qSourceRow.Name#">
+				<cfif LOCAL.sInfo.Title IS NOT "">
+					<cfset QuerySetCell(ARGUMENTS.qDir,"Title",LOCAL.sInfo.Title)>
+				</cfif>
+				<cfif LOCAL.sInfo.Subject IS NOT "">
+					<cfset QuerySetCell(ARGUMENTS.qDir,"Description",LOCAL.sInfo.Subject)>
+				</cfif>
+				<cfcatch>
+				</cfcatch>
+			</cftry>
 		</cfif>
 	</cfif>
 		
