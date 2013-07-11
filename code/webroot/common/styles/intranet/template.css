@@ -2188,22 +2188,21 @@ article.searchResults ul.pagination li:last-child span {
 	margin:5px 0px 0px -30px;
 }
 
-#m2m .centerInner h3.subTitle{
+.directoryListing .centerInner h3.subTitle{
 		color:#ec2127;
 		font-size:18px;
 		margin:0px;
 		padding:0px 0px 35px 0px;
 }
 
-#m2m .centerInner ul{
+.directoryListing .centerInner ul{
 	margin:0px;
 	padding:0px;
 	list-style:none;
 }
 
-#m2m .centerInner ul li a{
-	font-size:21px;
-	line-height:30px;
+.directoryListing .centerInner ul li a{
+
 	text-decoration:none;
 	color:#000;
 	-webkit-transition: all .75s ease-out;
@@ -2212,6 +2211,101 @@ article.searchResults ul.pagination li:last-child span {
 	transition: all .75s ease-out;
 }
 
-#m2m .centerInner ul li a:hover{
+.directoryListing .centerInner ul li a:hover{
 	color:#ED1C25;
+}
+
+.directoryListing .news {
+	background:none;
+	-pie-background: none;
+	behavior:url(/common/scripts/intranet/PIE.htc);
+}
+
+.directoryListing article.news .inArt{
+	padding:0px;
+}
+
+.directoryListing .news h1{
+	color:#fff;
+}
+
+.trainingLinks{
+	text-align:left;
+}
+
+.trainingLinks li{
+	display:inline-block;
+	width:105px;
+	font-size:17px;
+	line-height:20px;
+	min-height:136px;
+	vertical-align:top;
+	background: linear-gradient(140deg, #B3B3B3 10%, #FFFFFF 60%) repeat scroll 0 0 transparent;
+	-pie-background: linear-gradient(#B3B3B3, #FFFFFF);
+	behavior:url(/common/scripts/intranet/PIE.htc);
+	border-radius:10px;
+	text-align:center;
+	margin:0px 5px 10px 0px;
+	font-family:sans-serif, "Arial Black", Gadget;
+	padding-top:15px;
+	padding-bottom:15px;
+}
+
+.trainingLinks li img{
+	max-height:70px;
+	margin-bottom:20px;
+}
+
+.trainingLinks li:nth-child(5n+5){
+	margin-right:0px;
+}
+
+.trainingLinks li span{
+	display:inline-block;
+	/*width:105px;
+	height:136px;*/
+	word-break: break-all;
+	padding:0px 13px;
+	
+}
+
+.directoryListing .listing{
+	background: linear-gradient(140deg, #B3B3B3 10%, #FFFFFF 60%) repeat scroll 0 0 transparent;
+	-pie-background: linear-gradient(#B3B3B3, #FFFFFF);
+	behavior:url(/common/scripts/intranet/PIE.htc);
+	padding: 14px 40px 14px 14px;
+	border-radius:12px;
+}
+
+.directoryListing .listing .trainingLinks li{
+	display:block;
+	background:none;
+	-pie-background: none;
+	behavior:url(/common/scripts/intranet/PIE.htc);
+	height:auto;
+	width:auto;
+	text-align:left;
+	min-height:17px;
+	margin:0px;
+	padding:0px;
+}
+
+.directoryListing .listing .trainingLinks li.listingDir a{
+	min-height:35px;
+	background:url(/common/images/Intranet/template/folder.png) no-repeat left center;
+	display:inline-block;
+	padding-left:35px;
+	padding-top:18px;
+}
+
+.directoryListing .listing .trainingLinks li.listingFile a{
+	min-height:35px;
+	background:url(/common/images/Intranet/template/document.png) no-repeat 10px center;
+	display:inline-block;
+	padding-left:35px;
+	padding-top:18px;
+}
+
+.directoryListing .listing .trainingLinks li.listingFile a[href*=".pdf"]{
+	background:url(/common/images/Intranet/template/pdf.png) no-repeat 10px center;/**/
 }
