@@ -2217,8 +2217,14 @@ article.searchResults ul.pagination li:last-child span {
 
 .directoryListing .news {
 	background:none;
+	
 	-pie-background: none;
 	behavior:url(/common/scripts/intranet/PIE.htc);
+}
+
+.chrome .directoryListing article.news {
+	background:none;
+	background-image:none !important;
 }
 
 .directoryListing article.news .inArt{
