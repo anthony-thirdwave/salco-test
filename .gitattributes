@@ -143,7 +143,9 @@ code/webroot/common/images/ContentManager/widget_plus.gif -text
 code/webroot/common/images/Intranet/template/articleWithImages.png -text
 code/webroot/common/images/Intranet/template/closeBut.png -text
 code/webroot/common/images/Intranet/template/closeBut2.png -text
+code/webroot/common/images/Intranet/template/document.png -text
 code/webroot/common/images/Intranet/template/fauxSelectArrow.png -text
+code/webroot/common/images/Intranet/template/folder.png -text
 code/webroot/common/images/Intranet/template/ie8Next.png -text
 code/webroot/common/images/Intranet/template/ie8Prev.png -text
 code/webroot/common/images/Intranet/template/inclement-weather-hi.png -text
@@ -156,6 +158,7 @@ code/webroot/common/images/Intranet/template/nav-SecondLvlCarrotBG.png -text
 code/webroot/common/images/Intranet/template/newsStoryNextArrow.png -text
 code/webroot/common/images/Intranet/template/newsStoryPrevArrow.png -text
 code/webroot/common/images/Intranet/template/pbar-ani.gif -text
+code/webroot/common/images/Intranet/template/pdf.png -text
 code/webroot/common/images/Intranet/template/percentOutlineBG.png -text
 code/webroot/common/images/Intranet/template/salcoScene.png -text
 code/webroot/common/images/Intranet/template/search-arrowButtonBG.png -text
