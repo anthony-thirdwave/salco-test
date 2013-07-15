@@ -2313,5 +2313,14 @@ article.searchResults ul.pagination li:last-child span {
 }
 
 .directoryListing .listing .trainingLinks li.listingFile a[href*=".pdf"]{
-	background:url(/common/images/Intranet/template/pdf.png) no-repeat 10px center;/**/
+	background:url(/common/images/Intranet/template/pdf.png) no-repeat 8px center;/**/
+}
+
+.directoryListing .listing .trainingLinks li.listingVideo a{
+	
+	min-height:35px;
+	background:url(/common/images/Intranet/template/videos.png) no-repeat left center;/**/
+	display:inline-block;
+	padding-left:35px;
+	padding-top:18px;
 }
