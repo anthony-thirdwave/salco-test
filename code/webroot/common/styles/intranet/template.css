@@ -2325,3 +2325,197 @@ article.searchResults ul.pagination li:last-child span {
 	padding-top:18px;
 }
 
+/* gallery styles */
+
+.image-gallery #centerColumn{
+	border-radius:12px;
+	 
+	 margin:0px;
+	 padding:0px;
+	 background: rgb(179, 179, 179);
+	background: -moz-linear-gradient(129deg, rgb(255, 255, 255) 10%, rgb(179, 179, 179) 60%);
+	
+	background: -o-linear-gradient(287deg, rgb(179, 179, 179) 10%, rgb(255, 255, 255) 60%);
+	background: -ms-linear-gradient(287deg, rgb(179, 179, 179) 10%, rgb(255, 255, 255) 60%);
+	background: linear-gradient(140deg, rgb(179, 179, 179) 10%, rgb(255, 255, 255) 60%);
+	-pie-background: linear-gradient(#B3B3B3, #FFFFFF);
+	behavior:url(/common/scripts/intranet/PIE.htc);
+	-webkit-background-clip: padding;
+}
+
+.image-gallery #centerColumn ul{
+	margin:10px 0px;
+	padding:0px;
+	list-style:none;
+	text-align:center;
+}
+
+.image-gallery #centerColumn ul li{
+	display:inline-block;
+	/*transform: scale(.68);
+	-ms-transform: scale(.68); /* IE 9 */
+	/*-webkit-transform: scale(.68); /* Safari and Chrome */
+	overflow:hidden;
+	max-width:300px;
+	letter-spacing:0px;
+	word-spacing:0px;
+	white-space:0px;
+	margin:0px 5px 5px 5px;
+	
+}
+
+.image-gallery #centerColumn ul li a {
+	display:block;
+	border-radius:12px;
+	width:265px;
+	height:177px;
+	background-size:265px auto !important;
+	background-position:center center;
+}
+
+.image-gallery #centerColumn ul li a .image-info{
+	display:none;
+}
+
+#ig-overlay{
+	display:none;/**/
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.85);
+	z-index:20;
+}
+
+#image-display{
+	display:none;
+	position:absolute;
+	width:100%;
+	z-index:25;
+	/*transition:all .5s ease-in-out;
+	-webkit-transition:scale .5s ease-in-out;*/
+}
+
+#image-inner{
+	border-radius:12px;
+	/* background: rgb(179, 179, 179);
+	background: -moz-linear-gradient(129deg, rgb(255, 255, 255) 10%, rgb(179, 179, 179) 60%);
+	background: -o-linear-gradient(287deg, rgb(179, 179, 179) 10%, rgb(255, 255, 255) 60%);
+	background: -ms-linear-gradient(287deg, rgb(179, 179, 179) 10%, rgb(255, 255, 255) 60%);
+	background: linear-gradient(140deg, rgb(179, 179, 179) 10%, rgb(255, 255, 255) 60%);
+	-pie-background: linear-gradient(#B3B3B3, #FFFFFF);*/
+	backface-visibility:hidden;
+	background:#fff;
+	behavior:url(/common/scripts/intranet/PIE.htc);
+	display:inline-block;
+	margin:0px auto;
+	min-height:200px;
+	overflow:hidden;
+	text-align:center;
+	/*transition:all .5s ease-in-out;
+	-webkit-transition:all .5s ease-in-out;*/
+}
+
+#image-display.transing{
+	/*transform:scale(.25) rotateX(90deg) /*rotateY(90deg)*/;
+	/*-webkit-transform:scale(.25) rotateX(90deg) /*rotateY(90deg)*/;
+	
+}
+
+#image-inner img{
+	max-width:auto;
+	border-radius:12px;
+	margin:5px 0px 3px;
+}
+#image-inner .closeGal{
+	background:url("/common/images/intranet/template/closeBut2.png") no-repeat scroll 0 0 transparent;
+	width:22px;
+	height:21px;
+	position:absolute;
+	right:10px;
+	top:10px;
+}
+
+.nextPrevLinks {
+	display:block;
+	position:absolute;
+	color:transparent;
+	text-decoration:none;
+	height:99%;
+	background:rgba(255,255,255,.75);
+	width:120px;
+	opacity:0;
+	transition:all .5s ease-in-out;
+	-webkit-transition:all .5s ease-in-out;
+}
+
+#image-inner:hover .nextPrevLinks{
+	opacity:1;
+}
+
+.firefox .nextImg{
+	border-radius:0px;	
+}
+
+.nextImg{
+	top:5px;
+	right:5px;
+	border-radius:0px 20px 20px 0px;
+}
+
+.chrome .nextImg, .explorer .nextImg{
+	top:5px;
+	right:auto;
+	left:100%;
+	
+}
+
+.firefox .nextImg{
+	border-radius:0px;	
+}
+
+.nextImg:after{
+	color:#fff;
+	content:"»";
+	background:#B5203C;
+	top:50%;
+	font-size:50px;
+	line-height:40px;
+	height:50px;
+	width:50px;
+	border-radius:100%;
+	position:absolute;
+	padding:0px;
+	vertical-align:middle;
+	right:30px;
+	
+}
+
+.previousImg{
+	border-radius:20px 0px 0px 20px;
+}
+
+.firefox .previousImg{
+	border-radius:0px
+}
+
+.previousImg:after{
+	color:#fff;
+	content:"«";
+	background:#B5203C;
+	top:50%;
+	font-size:50px;
+	line-height:40px;
+	height:50px;
+	width:50px;
+	border-radius:100%;
+	position:absolute;
+	padding:0px;
+	vertical-align:middle;
+	left:30px;
+}
+
+.imageCaptions{
+	text-align:left;
+	margin-left:15px;}
