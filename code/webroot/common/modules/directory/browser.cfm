@@ -28,9 +28,9 @@
 	<cfset Dir=APPLICATION.utilsObj.GetPathFromURL(URL.d,ATTRIBUTES.DirectoryHome)>
 </cfif>
 
-<cfif IsDebugMode()>
+<!--- <cfif IsDebugMode()>
 	<cfoutput><p><strong>dir: #Dir#</strong></p></cfoutput>
-</cfif>
+</cfif> --->
 
 <cfif Left(dir,Len(ATTRIBUTES.DirectoryHome)) is not ATTRIBUTES.DirectoryHome>
 	<!--- Current directory is not in home --->
@@ -107,7 +107,14 @@
 			<div class="listing">
 			<ul class="trainingLinks">
 			<cfoutput query="qDir3">
-				<li class="<cfif qDir3.type is "dir">listingDir<cfelse>listingFile</cfif>">
+				<cfif Right(qDir3.linkURL,Len("OpenMe.html")) IS "OpenMe.html">
+					<cfset ThisLIClass="listingVideo">
+				<cfelseif qDir3.type is "dir">
+					<cfset ThisLIClass="listingDir">
+				<cfelse>
+					<cfset ThisLIClass="listingFile">
+				</cfif>
+				<li class="#ThisLIClass#">
 				<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
 				<cfif qDir3.Thumbnail IS NOT "">
 					<img src="#qDir3.Thumbnail#">
