@@ -54,7 +54,7 @@
 </cfif>
 </head>
 
-<cfoutput><body class="default content" id="#CurrentCategoryAlias#"></cfoutput>
+<cfoutput><body class="default content #CSSClass#" id="#CurrentCategoryAlias#"></cfoutput>
 <a name="top"></a>
 <!-- Main Element Container (wrapper) -->
 <div id="wrapper">
