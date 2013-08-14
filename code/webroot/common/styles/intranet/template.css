@@ -2327,7 +2327,7 @@ article.searchResults ul.pagination li:last-child span {
 
 /* gallery styles */
 
-.image-gallery #centerColumn{
+.image-gallery-full #centerColumn{
 	border-radius:12px;
 	 
 	 margin:0px;
@@ -2343,14 +2343,14 @@ article.searchResults ul.pagination li:last-child span {
 	-webkit-background-clip: padding;
 }
 
-.image-gallery #centerColumn ul{
+.image-gallery-full #centerColumn ul{
 	margin:10px 0px;
 	padding:0px;
 	list-style:none;
 	text-align:center;
 }
 
-.image-gallery #centerColumn ul li{
+.image-gallery-full #centerColumn ul li{
 	display:inline-block;
 	/*transform: scale(.68);
 	-ms-transform: scale(.68); /* IE 9 */
@@ -2364,7 +2364,7 @@ article.searchResults ul.pagination li:last-child span {
 	
 }
 
-.image-gallery #centerColumn ul li a {
+.image-gallery-full #centerColumn ul li a {
 	display:block;
 	border-radius:12px;
 	width:265px;
@@ -2373,7 +2373,7 @@ article.searchResults ul.pagination li:last-child span {
 	background-position:center center;
 }
 
-.image-gallery #centerColumn ul li a .image-info{
+.image-gallery-full #centerColumn ul li a .image-info{
 	display:none;
 }
 
@@ -2475,7 +2475,7 @@ article.searchResults ul.pagination li:last-child span {
 	border-radius:0px;	
 }
 
-.nextImg:after{
+.image-gallery-full .nextImg:after{
 	color:#fff;
 	content:"»";
 	background:#B5203C;

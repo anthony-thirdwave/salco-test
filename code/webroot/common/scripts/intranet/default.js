@@ -103,7 +103,7 @@ $(window).load(function() {
 	//initiate maximus scripts
 	maximusPortable.init();
 	
-	if($("body").hasClass("image-gallery")==true){
+	if($("body").hasClass("image-gallery-full")==true){
 		imageGallery.init();
 	}
 });
@@ -937,7 +937,7 @@ var imageGallery={
 	tempIndexNumber:"",
 	init:function(){
 		//alert("image gallery")
-		$(".image-gallery #centerColumn ul li a").bind("click",function(event){
+		$(".image-gallery-full #centerColumn ul li a").bind("click",function(event){
 				event.preventDefault();
 				//alert($(this).attr("href"));
 				location.hash=$(this).attr("href");
@@ -974,12 +974,12 @@ var imageGallery={
 				},750);
 				if(imageGallery.tempIndexNumber > 0){
 					s1=imageGallery.tempIndexNumber-1;
-					$("#image-inner").prepend('<a href="'+$('.image-gallery .centerInner ul li').eq(s1).children().attr("href")+'" class="nextPrevLinks previousImg">previous</a>');	
+					$("#image-inner").prepend('<a href="'+$('.image-gallery-full .centerInner ul li').eq(s1).children().attr("href")+'" class="nextPrevLinks previousImg">previous</a>');	
 				}
 				
-				if(imageGallery.tempIndexNumber < ($(".image-gallery .centerInner ul li").length-1)){
+				if(imageGallery.tempIndexNumber < ($(".image-gallery-full .centerInner ul li").length-1)){
 					s2=imageGallery.tempIndexNumber+1;
-					$("#image-inner").append('<a href="'+$('.image-gallery .centerInner ul li').eq(s2).children().attr("href")+'" class="nextPrevLinks nextImg">next</a>');
+					$("#image-inner").append('<a href="'+$('.image-gallery-full .centerInner ul li').eq(s2).children().attr("href")+'" class="nextPrevLinks nextImg">next</a>');
 				}
 				
 				$(".nextPrevLinks").bind("click",function(event){
