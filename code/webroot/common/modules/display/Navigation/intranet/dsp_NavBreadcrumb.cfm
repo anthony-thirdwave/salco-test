@@ -36,7 +36,7 @@
 		<cfset records_per_page=8>
 		
 		<cfinvoke component="com.ContentManager.NewsHandler"
-		 	method="qryNews"
+		 	method="GetNews"
 			returnVariable="News">
 		
 		<cfquery name="get_count" dbtype="query">
@@ -85,7 +85,7 @@
 	</cfcase>
 	<cfcase value="newsDetail">
 		<cfinvoke component="com.ContentManager.NewsHandler"
-		 	method="qryNews"
+		 	method="GetNews"
 			newsID="#ATTRIBUTES.CategoryID#"
 			returnVariable="qryNews">
 		
@@ -97,7 +97,7 @@
 		
 		<cfif previousStoryRowCount gt 0>
 			<cfinvoke component="com.ContentManager.NewsHandler"
-			 	method="qryNews"
+			 	method="GetNews"
 				rowNumber="#previousStoryRowCount#"
 				returnVariable="previousStory">
 			<cfif previousStory.recordCount EQ 1>
@@ -106,7 +106,7 @@
 		</cfif>
 		
 		<cfinvoke component="com.ContentManager.NewsHandler"
-		 	method="qryNews"
+		 	method="GetNews"
 			rowNumber="#nextStoryRowCount#"
 			returnVariable="nextStory">
 		
