@@ -2,22 +2,28 @@ var browserWars=$.client.browser;
 
 $(document).ready(function() {
 
-	browserWars=browserWars.toLowerCase();			   	   
+	browserWars=browserWars.toLowerCase();	
+	
+	$(".pagList .pagination p a").bind("click", function(event){
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));
+	});
+	
+			   	   
 	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));});
 	$("body").addClass(browserWars);
 
 	initNav();	
 	getHash=location.hash;
-
+	
 	if(getHash.length>0){
 		splithash=getHash.split("#")
 		$("#linkEx"+splithash[1]).click();
 	}
 	$(".sideBarContent a.email").bind("click",function(e){e.preventDefault(); 
 		
-		getNameinfo=$(this).text();
-		getNameinfo=getNameinfo.split(" ");
-		document.location="/page/contact-us-form?contact="+getNameinfo[1]+"_"+getNameinfo[2];
+		getNameinfo=$(this).attr("data-name");
+		//getNameinfo=getNameinfo.split(" ");
+		document.location="/page/contact-us-form?contact="+getNameinfo;//[1]+"_"+getNameinfo[2];
 																		   
 	});
 	
@@ -388,4 +394,497 @@ function closeIE6Modal(){
 	$("#ie6ModalContainer").remove();
 	$(".sideBar").css({marginLeft:"680px"});
 	$("html").css({overflow:"auto"});
+}
+
+
+//updated contact us map
+
+
+
+$(window).load(function(){
+	
+		contactUsMap.init();
+	
+});
+
+
+var contactUsMap={
+	ieOverItRegion:function(ieClasser){
+				holdingC=ieClasser;
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","#300000");
+					$("."+rO).eq(0).attr("stroke","#300000");
+					$("."+rO).eq(1).attr("stroke","#300000");
+				}
+				
+				
+				
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#e8858c");
+					
+					if($(this).attr("class")=="regions region-11"){
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#959595");
+						}
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+					if($(this).attr("class")=="regions region-7"){
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#e8858c");
+							
+						}
+						
+						
+					}
+					
+					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
+						$("#tx-northern-us-line").attr("stroke","#fff");
+					}
+					
+					
+					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
+						$("#pa-western-us").attr("stroke","#fff");
+					}
+					
+				}
+	},
+	ieOffItRegion:function(ieClasser){
+				holdingC=ieClasser;
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","transparent");
+					$("."+rO).eq(0).attr("stroke","transparent");
+					$("."+rO).eq(1).attr("stroke","transparent");
+				}
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#959595");
+					
+				}
+				
+				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				
+				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
+					$("#tx-northern-us-line").attr("stroke","none");
+				}
+				
+				if($("#pa-western-us").attr("fill")!="#c1272d" && $("#pa-us").attr("fill")!="#c1272d"){
+					$("#pa-western-us").attr("stroke","none");
+				}
+	},
+	init:function(){
+		highlightRegion('region0');
+		$("svg rect").bind("click",function(){contactUsMap.resetit();});
+		if(document.all){
+			
+			
+			//$( ".office-dot" ).hover(function(){alert("m00m00")});
+			
+			
+			$( ".office-dot" ).each(function(index, element) {
+				$(this).attr("onmouseover","contactUsMap.ieOverItOffices('"+$(this).attr('id')+"')");
+			});
+			
+			$( ".office-dot" ).each(function(index, element) {
+				$(this).attr("onmouseout","contactUsMap.ieLeaveItOffices('"+$(this).attr('id')+"')");
+			});
+			
+			$( ".regions" ).each(function(index, element) {
+				$(this).attr("onmouseover","contactUsMap.ieOverItRegion('"+$(this).attr('class')+"')");
+			});
+			
+			$( ".regions" ).each(function(index, element) {
+				$(this).attr("onmouseout","contactUsMap.ieOffItRegion('"+$(this).attr('class')+"')");
+			});
+			
+		}
+		$(".office-dot").click(function(){
+			contactUsMap.resetit();
+			getOffice="#"+$(this).attr("id")+"-selected";
+			$(".office-circle").attr("class","office-circle");
+			$(".office-circle").attr("stroke","transparent");
+			
+			$(getOffice).attr("class","office-circle office-active");
+			$(".ncOffices").attr("fill","none");
+			$(".ncOffices").attr("stroke","none");
+			$("#il-in-upper-us").attr("fill","none");
+			$("#il-in-upper-us").attr("stroke","none");
+			//$("#region-id").html($(getOffice).attr("id"));
+			
+			if($(getOffice).attr("id")=="chicago-office-selected"){
+				highlightRegion('region13');
+			}else if($(getOffice).attr("id")=="houston-office-selected"){
+				highlightRegion('region12');
+			}
+			
+			$(getOffice).attr("stroke","#000000");
+		}).mouseenter(function(){
+			$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+			
+			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}
+
+			
+			getOffice="#"+$(this).attr("id")+"-selected";
+			$(getOffice).attr("stroke","#000000");
+		}
+		
+		).mouseleave(function(){
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}
+			
+		});
+		
+		$(".regions").click(function(){
+			
+			$(".regions").attr("fill","#959595");
+			$(".ncOffices").attr("stroke","transparent");
+			$(".ncOffices").each(function(index, element) {
+				if($(this).attr("fill")!="none"){
+					$(this).attr("fill","transparent");
+				}
+			});
+			//$(this).attr("fill","#c1272d");
+			holdingC=$("#"+$(this).attr("id")).attr("class");
+			
+			
+			holdingC=holdingC.split(" ");
+			holdingC=holdingC[1];
+			
+			$("."+holdingC).attr("fill","#c1272d");
+			
+			$("#il-in-upper-us").attr("fill","none");
+			$("#il-in-upper-us").attr("stroke","none");
+			$("#il-upper-us").attr("stroke","none");
+			
+			if($(this).attr("class")=="regions region-11"){
+				$("#il-in-upper-us").attr("fill","#959595");
+				$("#il-in-upper-us").attr("stroke","white");
+				$("#il-upper-border-us").attr("stroke","none");
+			}
+			
+			if($(this).attr("class")=="regions region-7"){
+				$("#il-in-upper-us").attr("stroke","white");
+				$("#il-in-upper-us").attr("fill","#c1272d");
+				$("#il-upper-border-us").attr("stroke","#959595");
+			}
+			
+			if($(this).attr("class")=="regions region-8"){
+				$("#il-upper-us").attr("stroke","white");
+				$("#il-upper-border-us").attr("stroke","none");
+			}
+			
+			if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
+						$("#tx-northern-us-line").attr("stroke","#fff");
+			}else{
+				$("#tx-northern-us-line").attr("stroke","none");
+			}
+			
+			if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
+						$("#pa-western-us").attr("stroke","#fff");
+			}else{
+				$("#pa-western-us").attr("stroke","none");
+			}
+			
+			
+			//$("#region-id").html(holdingC);
+			
+			switch(holdingC){
+				case "region-1":
+				highlightRegion('region4')
+				break;
+				case "region-2":
+				highlightRegion('region8')
+				break;
+				case "region-3":
+				highlightRegion('region2')
+				break;
+				case "region-4":
+				highlightRegion('region3')
+				break;
+				case "region-5":
+				highlightRegion('region10')
+				break;
+				case "region-6":
+				highlightRegion('region16')
+				break;
+				case "region-7":
+				highlightRegion('region6')
+				break;
+				case "region-8":
+				highlightRegion('region15')
+				break;
+				case "region-9":
+				highlightRegion('region1')
+				break;
+				case "region-11":
+				highlightRegion('region9')
+				break;
+				case "region-12":
+				highlightRegion('region5')
+				break;
+				case "region-13":
+				highlightRegion('region11')
+				break;
+				case "region-14":
+				highlightRegion('region17')
+				break;
+				
+			}
+			
+			$(".office-circle").attr("stroke","transparent");
+			$(".office-circle").attr("class","office-circle");
+			rO=holdingC;
+			rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				
+					$("."+rO).eq(0).attr("fill","#000000");
+					$("."+rO).eq(0).attr("stroke","#000000");
+					$("."+rO).eq(1).attr("stroke","#000000");
+				
+			
+		}).mouseenter(function(){
+				
+				holdingC=$(this).attr("class");
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","#300000");
+					$("."+rO).eq(0).attr("stroke","#300000");
+					$("."+rO).eq(1).attr("stroke","#300000");
+				}
+				
+				
+				
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#e8858c");
+					
+					if($(this).attr("class")=="regions region-11"){
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#959595");
+						}
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+					if($(this).attr("class")=="regions region-7"){
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#e8858c");
+							
+						}
+						
+						
+					}
+					
+					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
+						$("#tx-northern-us-line").attr("stroke","#fff");
+					}
+					
+					
+					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
+						$("#pa-western-us").attr("stroke","#fff");
+					}
+					
+				}
+			}).mouseleave(function(){
+				holdingC=$(this).attr("class");
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","transparent");
+					$("."+rO).eq(0).attr("stroke","transparent");
+					$("."+rO).eq(1).attr("stroke","transparent");
+				}
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#959595");
+					
+				}
+				
+				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				
+				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
+					$("#tx-northern-us-line").attr("stroke","none");
+				}
+				
+				if($("#pa-western-us").attr("fill")!="#c1272d" && $("#pa-us").attr("fill")!="#c1272d"){
+					$("#pa-western-us").attr("stroke","none");
+				}
+				
+			});
+			
+			
+			
+			
+			
+			$("polygon:not(.regions)").bind("click", function(){
+				contactUsMap.resetit();
+			});
+			
+			
+			
+	},
+	
+	initIE:function(){
+		//future
+		
+	},
+	
+	resetit:function(){
+		highlightRegion('region0');
+		$(".regions").attr("fill","#959595");
+		$("#il-upper-border-us").attr("stroke","none");
+		$("#il-upper-us").attr("stroke","none");
+		$(".ncOffices").attr("fill","none");
+		$(".ncOffices").attr("stroke","none");
+		$("#il-in-upper-us").attr("fill","none");
+		$("#il-in-upper-us").attr("stroke","none");
+		$(".office-circle").attr("stroke","transparent");
+
+		$("#pa-western-us").attr("stroke","none");
+		$("#tx-northern-us-line").attr("stroke","none");
+	},
+	
+	resetit2:function(){
+		$(".regions").attr("fill","#959595");
+		$("#il-upper-border-us").attr("stroke","none");
+		$("#il-upper-us").attr("stroke","none");
+		$(".ncOffices").attr("fill","none");
+		$(".ncOffices").attr("stroke","none");
+		$("#il-in-upper-us").attr("fill","none");
+		$("#il-in-upper-us").attr("stroke","none");
+		$(".office-circle").attr("stroke","transparent");
+
+		$("#pa-western-us").attr("stroke","none");
+		$("#tx-northern-us-line").attr("stroke","none");
+	}, 
+	ieOverItOffices:function(ieOO){
+		
+		$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+			
+			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}
+
+			
+			getOffice="#"+ieOO+"-selected";
+			$(getOffice).attr("stroke","#000000");/* */
+	},
+	
+	ieLeaveItOffices:function(ieLO){
+		$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}
+	}
+	
 }
