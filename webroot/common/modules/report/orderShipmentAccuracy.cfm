@@ -21,14 +21,14 @@ $(document).ready(function(){
 	case left([quarter],3) 
 	when 'Jan' then 'Q1'
 	when 'Apr' then 'Q2'
-	when 'Aul' then 'Q3'
+	when 'Jul' then 'Q3'
 	when 'Oct' then 'Q4'
 	end as QuarterLabel,
 	2000+convert(int,right([quarter],2)) as quarterYear,
 	case left([quarter],3) 
 		when 'Jan' then 'Q1'
 		when 'Apr' then 'Q2'
-		when 'Aul' then 'Q3'
+		when 'Jul' then 'Q3'
 		when 'Oct' then 'Q4'
 		end as quarterNum
 	FROM	rp_ordershipmentAccuracy
