@@ -92,7 +92,7 @@ $(document).ready(function(){
 </cfquery>
 
 <cfif qryInAccurateDataYTD.total gt 0 and qryOrderYTD.totalOrder gt 0>
-	<cfset Accuracy=100 * (1 - ( qryInAccurateDataYTD.total/qryOrderYTD.totalOrder))>
+	<cfset Accuracy=100 * (1 - ( (qryInAccurateDataYTD.total+qryInquires.totalInquires)/qryOrderYTD.totalOrder))>
 <cfelse>
 	<cfset Accuracy=0>
 </cfif>
