@@ -372,39 +372,55 @@ ul#acc3 #productNav ul li ul{
 	color:#fff;
 
 	font-weight:bold;
-	font-style:italic;
-	font-size:14px;
-	line-height:17px;
-	padding:0px 0px 5px 0px;
+	
+	font-size:20px;
+	line-height:20px;
+	padding:0px 0px 20px 0px;
 	margin:0px;
 }
 .cont {
-	padding:0px 0px 34px 0px;
+	padding:0px 0px 24px 0px;
 }
 .contTop {
 	display:block;
 }
 .contTopLeft {
 	display:inline-block;
-	width:77px;
-	height:68px;
+	width:95px;
+	height:95px;
 }
+
+.contTopLeft img {
+	border:1px solid #000;
+	min-height:93px;
+	min-width:93px;
+}
+
 .male {
 	background:url(/common/images/template/contactm.png) no-repeat left top;
+	background-size:cover;
 }
 .female {
 	background:url(/common/images/template/contactf.png) no-repeat left top;
 }
 .contTopRight {
 	display:inline-block;
-	width:100px;
+	
 	height:auto;
 	color:#fff;
 
 	font-size:12px;
 	line-height:12px;
-	vertical-align:bottom;
+	vertical-align:top;
+	padding-top:15px;
+	margin-left:10px;
 }
+
+.contTopRight .fname, .contTopRight .lname{
+	display:inline-block;
+	font-weight:bold;
+}
+
 .contBottom{
 	padding-top:5px;
 }
@@ -412,7 +428,7 @@ ul#acc3 #productNav ul li ul{
 .contBottom a {
 	display:block;
 	color:#fff;
-
+	text-decoration: underline;
 	font-size:12px;
 	line-height:16px;
 }
@@ -493,17 +509,19 @@ ul#acc3 #productNav ul li ul{
 	}
 
 .contactUsAlpha{
-	border:1px solid #ED1C24;
+	/*border:1px solid #ED1C24;
 	padding:5px;
-	color:#ED1C24;
 	font-style:italic;
-	width:60%;
-	font-size:11px;
-	margin:15px 0px 0px 150px;
+	width:60%;*/
+	display:list-item;
+	color:#ED1C24;
+	font-size:15px;
+	margin:15px 0px 25px 25px;
+	list-style:square;
 }
 
 .contactUsAlpha a{
-	color:#ED1C24;
+	color:#000;
 	text-decoration:underline;
 }
 
@@ -939,3 +957,103 @@ ul.accordion li {
 .ie7 .ieTableTHFix{
 	width:90px;
 }
+
+/* updated contact us map */
+
+.regions, .office-dot, svg rect{
+	cursor:pointer;
+}
+
+polygon, .office-circle, .ncOffices{
+	transition:all .5s;	
+}
+
+svg{
+	/*border:1px solid red;*/
+	position:relative;
+	z-index:10;
+}
+
+svg polygon, svg .office-circle, svg .ncOffices{
+	/*border:1px solid red;*/
+	position:relative;
+	z-index:25;
+}
+
+
+#svgmapHolder {width:476px; height:448px; overflow:hidden; margin-bottom:95px;}
+
+/* lesser ie version of contact map */
+
+#salcomap{opacity:0; -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);}
+
+.ie7 area{outline: hidden;}
+
+.ie7 #svgmapHolder, .ie8 #svgmapHolder{
+	display:none;
+}
+
+	#mapbg{
+		background:url(/common/images/template/imagemapbg.png) no-repeat left 2px; height:447px;
+		width:475px;
+	}
+	#mapbg.regionBG-1{
+		background-position:left -447px;
+	}
+	
+	#mapbg.regionBG-2{
+		background-position:left -894px;
+	}
+	
+	#mapbg.regionBG-3{
+		background-position:left -1341px;
+	}
+	
+	#mapbg.regionBG-4{
+		background-position:left -1786px;
+	}
+	
+	#mapbg.regionBG-5{
+		background-position:left -2234px;
+	}
+	
+	#mapbg.regionBG-6{
+		background-position:left -2681px;
+	}
+	
+	#mapbg.regionBG-7{
+		background-position:left -3124px;
+	}
+	
+	#mapbg.regionBG-8{
+		background-position:left -3571px;
+	}
+	
+	#mapbg.regionBG-9{
+		background-position:left -4021px;
+	}
+	
+	#mapbg.regionBG-11{
+		background-position:left -4466px;
+	}
+	
+	#mapbg.regionBG-12{
+		background-position:left -4913px;
+	}
+	
+	#mapbg.regionBG-13{
+		background-position:left -5362px;
+	}
+	
+	#mapbg.regionBG-14{
+		background-position:left -5830px;
+	}
+	
+	#mapbg.regionBG-15{
+		background-position:-1px -6289px;
+	}
+	
+	#mapbg.regionBG-16{
+		background-position:-1px -6763px;
+	}
