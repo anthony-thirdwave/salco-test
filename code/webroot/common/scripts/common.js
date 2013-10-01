@@ -5,7 +5,7 @@ $(document).ready(function() {
 	browserWars=browserWars.toLowerCase();	
 	
 	$(".pagList .pagination p a").bind("click", function(event){
-		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
 	});
 	
 			   	   
@@ -129,7 +129,7 @@ $(document).ready(function() {
 	
 	function addAj(pid){
 		$(".pagList .pagination p a").bind("click", function(event){
-		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
 	});
 		
 		$("#"+pid+" .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"))});
@@ -495,6 +495,9 @@ var contactUsMap={
 						$("#il-in-upper-us").attr("stroke","none");
 				}
 				
+				if($("#il-in-upper-us").attr("fill")=="#c1272d" && $("#il-in-upper-us").attr("fill")=="#c1272d"){	
+					$("#il-upper-border-us").attr("stroke","#959595");
+				}
 				
 				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
 					$("#tx-northern-us-line").attr("stroke","none");
@@ -738,7 +741,7 @@ var contactUsMap={
 					
 					if($(this).attr("class")=="regions region-7"){
 						$("#il-in-upper-us").attr("stroke","white");
-						$("#il-upper-border-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","#959595");
 						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
 							$("#il-in-upper-us").attr("fill","#e8858c");
 							
@@ -781,6 +784,13 @@ var contactUsMap={
 				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
 						$("#il-in-upper-us").attr("fill","none");
 						$("#il-in-upper-us").attr("stroke","none");
+						
+						
+				}
+				
+				
+				if($("#il-in-upper-us").attr("fill")=="#c1272d" && $("#il-in-upper-us").attr("fill")=="#c1272d"){	
+					$("#il-upper-border-us").attr("stroke","#959595");
 				}
 				
 				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
