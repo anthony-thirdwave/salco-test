@@ -1,5 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml">
+<!--- <!DOCTYPE HTML>
+<html>--->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="/common/styles/salco_global.css" rel="stylesheet" type="text/css" />
@@ -7,7 +9,8 @@
 <link href="/common/scripts/projekktor/style.css" rel="stylesheet" type="text/css" />
 
 
-<script type="text/javascript" src="/common/scripts/jquery-1.5.1.min.js"></script>
+<!---<script type="text/javascript" src="/common/scripts/jquery-1.5.1.min.js"></script>--->
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <cfswitch expression="#TemplateID#">
 	<cfcase value="22"><!--- home --->
 		<script type="text/javascript" src="/common/scripts/jquery.cycle.js"></script>
@@ -129,6 +132,7 @@
 				<input class="backSearch" name="searchTxt" type="text" <cfif IsDefined("URL.searchTxt")> value="#HTMLEditFormat(URL.searchTxt)#"</cfif>/><input class="btnSearch" type="submit"/>
 			</form>
 			</cfoutput>
+
 			<cfmodule template="/common/modules/Display/Navigation/dsp_NavSub.cfm"
 				ParentID="14"
 				CSSID=""
@@ -142,7 +146,7 @@
 			CSSID="subNav"
 			CSSClass="nav">
 	</div>
-	
+				
 	<cfswitch expression="#TemplateID#">
 		<cfcase value="22">
 			<div class="subBackHome">
@@ -213,7 +217,8 @@
 							</cfif>
 						<cfelseif ListLen(CategoryThreadList) GTE "3">
 							<cfsavecontent variable="LeftNav">
-								<cfmodule template="/common/modules/display/navigation/dsp_NavR.cfm" CategoryID="#ListGetAt(CategoryThreadList,3)#">
+								<cfset thisCategoryID = ListGetAt(CategoryThreadList,3)>
+								<cfmodule template="/common/modules/display/navigation/dsp_NavR.cfm" CategoryID="#thisCategoryID#">
 							</cfsavecontent>
 							<cfif Trim(LeftNav) IS NOT "">
 								<cfoutput>#LeftNav#</cfoutput>
