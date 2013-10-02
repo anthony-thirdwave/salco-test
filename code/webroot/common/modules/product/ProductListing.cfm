@@ -1,10 +1,11 @@
-<cfsetting showdebugoutput="No">
+<cfsetting showdebugoutput="0">
 
 <cfparam name="ATTRIBUTES.ProductID" default="-1">
 <cfparam name="ATTRIBUTES.ProductFamilyID" default="-1">
 <cfparam name="ATTRIBUTES.Mode" default="Default">
 <cfparam name="ATTRIBUTES.Title" default="">
 <cfparam name="ATTRIBUTES.OmitCurrentProduct" default="no">
+<cfparam name="ShowAll" default="0">
 
 <cfparam name="ATTRIBUTES.SpecificationSetID" default="8000">
 <cfif IsDefined("APPLICATION.LanguageID")>
@@ -51,13 +52,17 @@
 		<cfdefaultcase>
 			<cfset SearchNum="5">
 			<cfif NOT IsDefined("StartRow")>
-				<CFSET StartRow=1>
+				<cfset StartRow=1>
 			</cfif>
 			<cfif Val(StartRow) LTE "0">
-				<CFSET StartRow=1>
+				<cfset StartRow=1>
 			</cfif>
 			<cfif Val(StartRow) GT Val(qGetProductListBasic.RecordCount)>
-				<CFSET StartRow=1>
+				<cfset StartRow=1>
+			</cfif>
+			<cfif ShowAll IS "1">
+				<cfset StartRow=1>
+				<cfset SearchNum=999>
 			</cfif>
 			
 			<cfinvoke component="/com/product/productFamilyHandler" 
@@ -77,11 +82,14 @@
 				</cfquery>
 			</cfif>
 			
-			<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
 			<cfif qGetProductList.RecordCount GT "0">
 				<cfif ATTRIBUTES.Title IS NOT "">
 					<cfoutput><h4>#ATTRIBUTES.Title#</h4></cfoutput>
 				</cfif>
+			</cfif>
+			
+			<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
+			<cfif qGetProductList.RecordCount GT "0">
 				<cfoutput><div id="ProductListing_#ATTRIBUTES.ProductFamilyID#"></cfoutput>
 				<table class="featuredDownloads" border="0" cellspacing="0" cellpadding="0">
                 <thead>
@@ -111,12 +119,22 @@
 				</cfoutput></tbody>
 				</table>
 				</div>
+				<cfoutput>
+					<cfif Val(ShowAll) IS "0">
+						<cfset AdditionalText="<a href=""/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=1"">Show All</a>">
+					<cfelse>
+						<cfset AdditionalText="">
+						<div class="pagination"><p><a href="/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=0">Show As Paginated Results</a></p></div>
+					</cfif>
+				</cfoutput>
+				
 				<cfmodule template="/common/modules/utils/pagination.cfm"
 					StartRow="#StartRow#" SearchNum="#SearchNum#"
 					RecordCount="#qGetProductListBasic.RecordCount#"
 					Path="/common/modules/product/ProductListing.cfm"
 					FieldList="ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#"
-					Label="Products">
+					Label="Products"
+					AdditionalText="#AdditionalText#">
 			<cfelse>
 				<cfif ATTRIBUTES.OmitCurrentProduct>
 				
