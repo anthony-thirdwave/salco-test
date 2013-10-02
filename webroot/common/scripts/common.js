@@ -3,6 +3,12 @@ var browserWars=$.client.browser;
 $(document).ready(function() {
 
 	browserWars=browserWars.toLowerCase();			   	   
+	
+	$(".pagList .pagination p a").bind("click", function(event){
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
+	});
+	
+			   	   
 	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));});
 	$("body").addClass(browserWars);
 
@@ -122,6 +128,10 @@ $(document).ready(function() {
 		
 	
 	function addAj(pid){
+		$(".pagList .pagination p a").bind("click", function(event){
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
+	});
+		
 		$("#"+pid+" .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"))});
 		}
 
