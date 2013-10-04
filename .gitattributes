@@ -467,6 +467,7 @@ code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserForm.cfm -text
 code/webroot/common/modules/User/UserObject.cfm -text
 code/webroot/common/modules/adhoc/pdfiframe.cfm -text
+code/webroot/common/modules/adhoc/svgcontactmap.cfm -text
 code/webroot/common/modules/adhoc/swfobject.cfm -text
 code/webroot/common/modules/blog/dsp_blogListing.cfm -text
 code/webroot/common/modules/blog/dsp_blogNav.cfm -text
