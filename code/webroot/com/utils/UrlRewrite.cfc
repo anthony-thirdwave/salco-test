@@ -166,9 +166,9 @@
 		   connection="FTP_#scrub(local.sProductionSiteInformation.ProductionFTPHost)#">
 
 		<!--- set source and destination --->
-		<cfset local.returnStruct.source= application.webrootPath & ".htaccess">
-		<cfset local.returnStruct.destination=ReplaceNoCase("#local.sProductionSiteInformation.ProductionFTPRootPath#","//","/","All")>
-<!--- #local.returnStruct.destination#.htaccess --->
+		<cfset local.returnStruct.source=application.webrootPath & ".htaccess">
+		<cfset local.returnStruct.destination=ReplaceNoCase("#local.sProductionSiteInformation.ProductionFTPRootPath#/","//","/","All")>
+
 		<!--- put the file --->
 		<cfftp action="PUTFILE"
 			stoponerror="No"
