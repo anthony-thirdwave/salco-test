@@ -27,7 +27,10 @@
 		<cfset CALLER.UserGroupIDList="">
 	</cfif>
 	
-	
+	<cfheader name="Expires" value="#GetHttpTimeString(Now())#">
+	<cfheader name="Pragma" value="no-cache">
+	<cfheader name="Cache-Control" value="no-cache, no-store, must-revalidate">
+
 	<html>
 	<head>
 	<title>ADMIN : <cfoutput>#ATTRIBUTES.Page#</cfoutput></title>
