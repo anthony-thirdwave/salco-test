@@ -1,7 +1,12 @@
 <cfmodule template="/common/modules/admin/dsp_Admin.cfm" 
 	Page="Redirect Manager"
 	PageHeader="<a href=""/common/admin/"">Main Menu</A> | Redirect Manager">
-	
+<div class="dashModuleWide">
+	<div class="box2">
+		<div class="boxtop2"><div></div></div>
+		<div class="ModuleTitle2" style="border-bottom:1px solid #97AEB8;">Redirect Manager</div>
+		<div class="ModuleBody2">
+		
 <!--- create a urlRewrite object --->
 <cfobject component="com.utils.UrlRewrite" name="urlRewriteObj">
 
@@ -254,7 +259,7 @@
 									
 									<tr bgcolor="##666666">
 										<td class="padded">
-											<input type="text" name="sourceUrl" id="sourceUrl" value="#getRewrite.sourceUrl#" size="50" />
+											<input type="text" name="sourceUrl" id="sourceUrl" value="#getRewrite.sourceUrl#" size="30" />
 										</td>
 										<td class="padded">
 											<input type="text" name="destinationUrl" id="destinationUrl" value="#getRewrite.destinationUrl#" size="50" />
@@ -275,7 +280,7 @@
 										</td>
 										<td class="padded">
 											<input type="hidden" name="urlId" value="#urlId#">
-											<input name="edit" type="submit" value="edit" />
+											<input name="edit" type="submit" value="Edit" />
 										</td>
 									</tr>
 								<cfelseif trim(action) eq "delete" and trim(urlId) neq "">
@@ -305,7 +310,7 @@
 
 										<td class="paddedLikeSearch">
 											<input type="hidden" name="urlId" value="#urlId#">
-											<input name="delete" type="submit" value="delete" />
+											<input name="delete" type="submit" value="Delete" />
 										</td>
 									</tr>
 									
@@ -340,7 +345,7 @@
 									<tr>
 										<td>
 											<input type="hidden" name="finalize" value="true">
-											<input name="finalize" type="submit" value="finalize" />
+											<input name="finalize" type="submit" value="Finalize" />
 										</td>
 									</tr>
 								<cfelseif trim(action) eq "pushLive">
@@ -360,4 +365,11 @@
 		</td>
 	</tr>
 </table>
+
+</div>
+		<div class="boxbottom2"><div></div></div>
+	</div>
+</div>
 </cfoutput>
+
+</cfmodule>

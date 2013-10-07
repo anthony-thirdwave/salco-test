@@ -126,6 +126,7 @@
 		<cfset local.theString = replace(local.theString, "?", "\?", "all") />
 		<cfset local.theString = replace(local.theString, ".", "\.", "all") />
 		<cfset local.theString = replace(local.theString, "^", "\^", "all") />
+		<cfset local.theString = replace(local.theString, "%", "\%", "all") />
 	</cfif>
 
 	<cfreturn trim(local.theString) />
