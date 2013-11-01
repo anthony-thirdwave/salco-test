@@ -27,6 +27,7 @@
 			<cfset ThisTarget="">
 			<cfoutput><ul <cfif ATTRIBUTES.CSSID IS NOT "">id="#ATTRIBUTES.CSSID#"</cfif> class="#ATTRIBUTES.CSSClass#"></cfoutput>
 				<cfoutput query="GetTopCategories" group="CategoryID">
+					<cfset ThisTarget="">
                     <cfif Trim(CategoryURLDerived) IS "">
                     	<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(CategoryAlias)#">
 					<cfelse>
