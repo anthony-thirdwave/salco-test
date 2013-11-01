@@ -102,7 +102,7 @@
 						<cfset ThisRowClass="#ThisRowClass# tableBot">
 					</cfif>
 					<tr>
-						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#">#qGetProductList.CategoryNameDerived#</a></td>
+						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#qGetProductList.CategoryNameDerived#</a></td>
 						<td class="#ThisRowClass#" valign="middle"  align="left">#Ucase(qGetProductList.PartNumber)#</td>
 						<td class="tableRight #ThisRowClass#" valign="middle" align="left">
 						<cfif qGetProductList.PublicDrawing IS NOT "" and FileExists(ExpandPath(qGetProductList.PublicDrawing))><a href="#APPLICATION.utilsObj.GetFreewheelLink(qGetProductList.PublicDrawing)#" target="_blank">CAD Drawing</a><cfelse>&nbsp;</cfif>
