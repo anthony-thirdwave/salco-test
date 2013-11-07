@@ -128,7 +128,7 @@
 		</div>
 		<div id="holderNavSearch" style="padding-right:25px;">
 			<cfoutput>
-			<form action="#APPLICATION.utilsObj.parseCategoryUrl('advanced-search-1')#" method="get">
+			<form action="#APPLICATION.utilsObj.parseCategoryUrl('search')#" method="get">
 				<input class="backSearch" name="searchTxt" type="text" <cfif IsDefined("URL.searchTxt")> value="#HTMLEditFormat(URL.searchTxt)#"</cfif>/><input class="btnSearch" type="submit"/>
 			</form>
 			</cfoutput>
