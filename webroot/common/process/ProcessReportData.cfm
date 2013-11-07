@@ -121,4 +121,6 @@
 	<hr>
 </cfloop>
 
-Done with all.
+<p>Done with all.</p>
+
+<p>Completed: <cfoutput>#DateFormat(now())# #TimeFormat(now())#</cfoutput></p>
