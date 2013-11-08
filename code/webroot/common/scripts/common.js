@@ -15,6 +15,10 @@ $(document).ready(function() {
 				tweakhash=tweakhash.split("#");
 				tweakhash=tweakhash[1].split("^");
 				getPage(tweakhash[0],tweakhash[1]);
+				console.log($("#"+tweakhash[1]).parent().parent().parent().siblings("h4").attr("class"));
+				if($("#"+tweakhash[1]).parent().parent().parent().attr("style")!="display: block;"){
+					$("#"+tweakhash[1]).parent().parent().parent().siblings("h4").children().click();
+					}
 		    }
 		  })
 		
