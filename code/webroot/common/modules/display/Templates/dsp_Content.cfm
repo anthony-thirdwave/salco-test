@@ -11,6 +11,7 @@
 
 <!---<script type="text/javascript" src="/common/scripts/jquery-1.5.1.min.js"></script>--->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="/common/scripts/jquery.hashchange.js"></script>
 <cfswitch expression="#TemplateID#">
 	<cfcase value="22"><!--- home --->
 		<script type="text/javascript" src="/common/scripts/jquery.cycle.js"></script>

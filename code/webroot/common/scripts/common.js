@@ -4,12 +4,32 @@ $(document).ready(function() {
 
 	browserWars=browserWars.toLowerCase();	
 	
+	
+	$(function(){
+
+		  // Bind the event.
+		  $(window).hashchange( function(){
+		    // Alerts every time the hash changes!
+		    if(location.hash.indexOf("^")>-1){
+				tweakhash=location.hash;
+				tweakhash=tweakhash.split("#");
+				tweakhash=tweakhash[1].split("^");
+				getPage(tweakhash[0],tweakhash[1]);
+		    }
+		  })
+		
+		  // Trigger the event (useful on page load).
+		  $(window).hashchange();
+	
+	});
+	
+	
 	$(".pagList .pagination p a").bind("click", function(event){
-		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id")); location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().attr("id");
 	});
 	
 			   	   
-	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));});
+	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));  location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().parent().attr("id");});
 	$("body").addClass(browserWars);
 
 	initNav();	
@@ -129,10 +149,10 @@ $(document).ready(function() {
 	
 	function addAj(pid){
 		$(".pagList .pagination p a").bind("click", function(event){
-		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id")); location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().attr("id");
 	});
 		
-		$("#"+pid+" .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"))});
+		$("#"+pid+" .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id")); location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().parent().attr("id"); });
 		}
 
 
