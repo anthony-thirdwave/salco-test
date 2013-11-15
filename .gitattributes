@@ -620,6 +620,7 @@ webroot/common/scripts/jquery-1.5.1.min.js -text
 webroot/common/scripts/jquery-ui-1.8.7.custom.min.js -text
 webroot/common/scripts/jquery.client.js -text
 webroot/common/scripts/jquery.cycle.js -text
+webroot/common/scripts/jquery.hashchange.js -text
 webroot/common/scripts/jquery.nestedAccordion.js -text
 webroot/common/scripts/jquery.smart_autocomplete.js -text
 webroot/common/scripts/jquery.ui.tabs.js -text
