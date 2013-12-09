@@ -1,7 +1,25 @@
 var browserWars=$.client.browser;
 
 $(document).ready(function() {
+	//temp until new templates are in place begins here..
+	//binding for news listing page
+		$(".building-blocks").bind("click",function(){
+			document.location=$(this).find("a").attr("href")
+		});
+		
+		$(".news .alignLeft img.curveMe").bind("click",function(){
+			indexofNI=$(this);
+			getImg=$(".alignLeft img").index(indexofNI);
+			//alert($(".lrgImgs img").eq(getImg).attr("src"));
+			
+			
+			
+			modalooo.newsImage(getImg, $(this).attr("data-id"));
+		});
+		
+		
 
+	//temp until new templates are in place ends here...
 	browserWars=browserWars.toLowerCase();	
 	
 	
@@ -29,7 +47,8 @@ $(document).ready(function() {
 		
 		  // Trigger the event (useful on page load).
 		  $(window).hashchange();
-	
+		
+		
 	});
 	
 	
@@ -369,7 +388,7 @@ function rebinder(nn){
 	
 function highlightRegion(region){
 	$(".sideBarContent .office").parent().addClass("hidden");
-	$("#"+region).removeClass("hidden")
+	$("#"+region).removeClass("hidden");
 }
 var stAT=1;
 function rotateBigSplashImgIE6(){
@@ -471,7 +490,7 @@ var contactUsMap={
 						$("#il-upper-border-us").attr("stroke","none");
 					}
 					
-					if($(this).attr("class")=="regions region-7"){
+					/*if($(this).attr("class")=="regions region-7"){
 						$("#il-in-upper-us").attr("stroke","white");
 						$("#il-upper-border-us").attr("stroke","none");
 						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
@@ -480,7 +499,7 @@ var contactUsMap={
 						}
 						
 						
-					}
+					}*/
 					
 					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
 						$("#tx-northern-us-line").attr("stroke","#fff");
@@ -537,6 +556,7 @@ var contactUsMap={
 				}
 	},
 	init:function(){
+		tech.init();
 		highlightRegion('region0');
 		$("svg rect").bind("click",function(){contactUsMap.resetit();});
 		if(document.all){
@@ -579,6 +599,10 @@ var contactUsMap={
 				highlightRegion('region13');
 			}else if($(getOffice).attr("id")=="houston-office-selected"){
 				highlightRegion('region12');
+			}else if($(getOffice).attr("id")=="sioux-city-office-selected"){
+				highlightRegion('region16');
+			}else if($(getOffice).attr("id")=="sarnia-on-ca-office-selected"){
+				highlightRegion('region1');
 			}
 			
 			$(getOffice).attr("stroke","#000000");
@@ -599,11 +623,11 @@ var contactUsMap={
 						$("#il-in-upper-us").attr("fill","none");
 						$("#il-in-upper-us").attr("stroke","none");
 						$("#il-upper-border-us").attr("stroke","none");
-					}
+					}/**/
 			
-			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
 						$("#il-upper-us").attr("stroke","none");
-					}
+					}*/
 
 			
 			getOffice="#"+$(this).attr("id")+"-selected";
@@ -623,9 +647,9 @@ var contactUsMap={
 						$("#il-upper-border-us").attr("stroke","none");
 					}
 					
-			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
+			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
 						$("#il-upper-us").attr("stroke","none");
-					}
+					}*/
 			
 		});
 		
@@ -647,17 +671,24 @@ var contactUsMap={
 			
 			$("."+holdingC).attr("fill","#c1272d");
 			
-			$("#il-in-upper-us").attr("fill","none");
-			$("#il-in-upper-us").attr("stroke","none");
-			$("#il-upper-us").attr("stroke","none");
+			if($(this).attr("class")!="regions region-19"){
+				$("#il-in-upper-us").attr("fill","none");
+				$("#il-in-upper-us").attr("stroke","none");
+				/*$("#il-upper-us").attr("stroke","none");*/
+			}
+			if($(this).attr("class")=="regions region-19"){
+				$("#il-in-upper-us").attr("fill","#c1272d");
+				$("#il-in-upper-us").attr("stroke","white");
+				/*$("#il-upper-border-us").attr("stroke","none");*/
+			}
 			
 			if($(this).attr("class")=="regions region-11"){
 				$("#il-in-upper-us").attr("fill","#959595");
 				$("#il-in-upper-us").attr("stroke","white");
-				$("#il-upper-border-us").attr("stroke","none");
+				/*$("#il-upper-border-us").attr("stroke","none");*/
 			}
 			
-			if($(this).attr("class")=="regions region-7"){
+			/*if($(this).attr("class")=="regions region-7"){
 				$("#il-in-upper-us").attr("stroke","white");
 				$("#il-in-upper-us").attr("fill","#c1272d");
 				$("#il-upper-border-us").attr("stroke","#959595");
@@ -666,7 +697,7 @@ var contactUsMap={
 			if($(this).attr("class")=="regions region-8"){
 				$("#il-upper-us").attr("stroke","white");
 				$("#il-upper-border-us").attr("stroke","none");
-			}
+			}*/
 			
 			if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
 						$("#tx-northern-us-line").attr("stroke","#fff");
@@ -686,42 +717,56 @@ var contactUsMap={
 			switch(holdingC){
 				case "region-1":
 				highlightRegion('region4')
+				tech.sale('region-1ts');
 				break;
 				case "region-2":
 				highlightRegion('region8')
+				tech.sale('region-1ts');
 				break;
 				case "region-3":
 				highlightRegion('region2')
+				tech.sale('region18');
 				break;
 				case "region-4":
 				highlightRegion('region3')
+				tech.sale('region18');
 				break;
 				case "region-5":
 				highlightRegion('region10')
+				tech.sale('region18');
 				break;
 				case "region-6":
 				highlightRegion('region16')
+				tech.sale('region18');
 				break;
 				case "region-7":
 				highlightRegion('region6')
 				break;
 				case "region-8":
 				highlightRegion('region15')
+				tech.sale('region18');
 				break;
 				case "region-9":
 				highlightRegion('region1')
 				break;
 				case "region-11":
 				highlightRegion('region9')
+				tech.sale('region-1ts');
 				break;
 				case "region-12":
 				highlightRegion('region5')
+				tech.sale('region18');
 				break;
 				case "region-13":
 				highlightRegion('region11')
+				tech.sale('region18');
 				break;
 				case "region-14":
 				highlightRegion('region17')
+				break;
+				case "region-19":
+				highlightRegion('region19')
+				tech.sale('region18');
 				break;
 				
 			}
@@ -768,7 +813,7 @@ var contactUsMap={
 						$("#il-upper-border-us").attr("stroke","none");
 					}
 					
-					if($(this).attr("class")=="regions region-7"){
+					/*if($(this).attr("class")=="regions region-7"){
 						$("#il-in-upper-us").attr("stroke","white");
 						$("#il-upper-border-us").attr("stroke","#959595");
 						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
@@ -777,7 +822,7 @@ var contactUsMap={
 						}
 						
 						
-					}
+					}*/
 					
 					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
 						$("#tx-northern-us-line").attr("stroke","#fff");
@@ -811,8 +856,8 @@ var contactUsMap={
 				}
 				
 				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
+						/*$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");*/
 						
 						
 				}
@@ -931,3 +976,179 @@ var contactUsMap={
 	}
 	
 }
+
+var allContacts={
+	init:function(){
+		$( "#contAlpha .alphaemail" ).mouseover(function() {
+  			//console.log("in "+$(this).html());
+			allContacts.rollover($(this).html());
+			
+		}).mouseout(function() {
+		  	//console.log("out "+$(this).html());
+			allContacts.clearit();
+		});
+	},
+	rollover:function(nn){
+		
+		switch(nn){
+			case "Randy Bowman":
+				//alert("hi Randy");
+				regionSet="region-11";
+			break;
+			case "Joshua Chesser":
+				regionSet="region-7";
+			break;
+			case "Al Isenegger":
+				regionSet="region-9";
+			break;
+			case "Jim McLaughlin":
+				regionSet="region-8";
+			break;
+			case "Pete Petersen":
+				regionSet="region-1";
+			break;
+			case "Scottie Primeaux":
+				regionSet="region-3";
+			break;
+			case "Dennis Rivardo":
+				regionSet="region-4";
+			break;
+			case "Tony Segovia":
+				regionSet="region-13";
+			break;
+			case "Scott Swanson":
+				regionSet="region-5";
+			break;
+			case "Stoy Taylor":
+				regionSet="region-2";
+			break;
+			case "Edwin Luper":
+				regionSet="region-12";
+			break;
+			case "Jan Marino":
+				regionSet="region-19";
+			break;
+			case "Steve Vannocken":
+				regionSet="region-14";
+			break;
+			case "Tyler Jepsen":
+				regionSet="none";
+			break;
+		}
+		
+		
+		
+		$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+			if(regionSet!="none"){
+				$("."+regionSet).attr("fill","#e8858c");
+			}
+	},
+	clearit:function(){
+		$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					
+	}
+}
+
+tech={
+	init:function(){
+		tempHoldTS=$("#region1").html();
+		$(".sideBar .sideBarContent ").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
+		$("#region-1ts .regionTitle").html("Techincal Sales Contact");
+		allContacts.init();
+	},
+	sale:function(r){
+		$("#"+r).removeClass("hidden");
+	}
+}
+
+/* temp script for modal until new template mess is resolved */
+
+$(window).load(function(){
+	modalooo.init()
+});
+
+var modalooo={
+		init:function(){
+			tempsCSS="";
+			$(".modal-link").each(function(index, element) {
+				//alert($(this).attr("href"));
+				temps=$(this).attr("href");
+				temps=temps.split(".html");
+				temps=temps[0]+"_html";
+				//alert(temps)
+				
+				$("#modal-holder").wrapAll('<div id="'+temps+'"></div>');
+				
+				tempsCSS+="#"+temps+":target #modal-background{height:100%; width:100%; z-index:100; opacity:1;}#"+temps+":target #modal-outer{height:490px; width:430px; z-index:110; opacity:1;}"
+				
+			});
+			
+			$("head").eq(0).append('<style type="text/css">/* additional styles for modal */</style>');
+			
+			if($(".news .alignLeft .curveMe").length>0){
+				$(".news .alignLeft .curveMe").each(function(index, element) {
+					//alert($("body").attr("id")+"-"+index)
+					$(this).attr("data-id", $("body").attr("id")+"-"+index);
+					temps=$("body").attr("id")+"-"+index;
+					
+					$("#modal-holder").wrapAll('<div id="'+$("body").attr("id")+"-"+index+'"></div>');
+					
+					//tempW=$(".lrgImgs img").eq(index).width();
+					//alert(tempW);
+				
+				tempsCSS+="#"+temps+":target #modal-background{height:100%; width:100%; z-index:800; opacity:1;}#"+temps+":target #modal-outer{height:490px; width:430px; z-index:810; opacity:1;}"
+					
+				});
+			}
+			
+			$("style").eq(0).append(tempsCSS);
+		},
+		newsImage:function(x,xhash){
+			$('<img src="'+$(".lrgImgs img").eq(x).attr("src")+'" />').load(function(){
+				 img=this
+				 tempW=img.width+60;
+				 tempH=img.height+80;
+				$("#modal-outer").animate({width:tempW+"px",height:tempH+"px"});
+				//alert(img.width);
+				$("#modal-content").html('<img class="curveMe" src="'+$(".lrgImgs img").eq(x).attr("src")+'" style="margin-top:20px;" />')
+			
+				location.hash="#"+xhash;
+			});
+			
+		},
+		closing:function(){
+			location.hash="";
+			$("#modal-holder").removeClass("closing");
+		}
+	}
