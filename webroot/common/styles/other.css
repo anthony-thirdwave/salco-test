@@ -1152,7 +1152,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#010000', end
 
 /* lit download updates */
 
-ul#tabsDownloads li a{
+/*ul#tabsDownloads li a{
 	background-image:url(/common/images/template/lit-download-tabs-bg.png)!important;
 	background-repeat:repeat-x !important;
 	background-position:left bottom !important;
@@ -1178,7 +1178,7 @@ ul#tabsDownloads li a:hover, ul#tabsDownloads li:first-child a.tabActive, ul#tab
 	background-position:left top !important;
 	width:auto;
 	padding:4px 12px !important;
-}
+}*/
 
 /* news pages styles */
 
