@@ -6,7 +6,7 @@ $(document).ready(function() {
 		$(".building-blocks").bind("click",function(){
 			document.location=$(this).find("a").attr("href")
 		});
-
+		
 		$(".news .alignLeft img.curveMe").bind("click",function(){
 			indexofNI=$(this);
 			getImg=$(".alignLeft img").index(indexofNI);
@@ -47,15 +47,14 @@ $(document).ready(function() {
 		
 		  // Trigger the event (useful on page load).
 		  $(window).hashchange();
-	
+		
 		
 	});
 	
 	
 	$(".pagList .pagination p a").bind("click", function(event){
-<<<<<<< .mine		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id")); location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().attr("id");
-=======		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id"));
->>>>>>> .theirs	});
+		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id")); location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().attr("id");
+	});
 	
 			   	   
 	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));  location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().parent().attr("id");});
@@ -63,7 +62,7 @@ $(document).ready(function() {
 
 	initNav();	
 	getHash=location.hash;
-
+	
 	if(getHash.length>0){
 		splithash=getHash.split("#")
 		$("#linkEx"+splithash[1]).click();
@@ -673,8 +672,8 @@ var contactUsMap={
 			$("."+holdingC).attr("fill","#c1272d");
 			
 			if($(this).attr("class")!="regions region-19"){
-			$("#il-in-upper-us").attr("fill","none");
-			$("#il-in-upper-us").attr("stroke","none");
+				$("#il-in-upper-us").attr("fill","none");
+				$("#il-in-upper-us").attr("stroke","none");
 				/*$("#il-upper-us").attr("stroke","none");*/
 			}
 			if($(this).attr("class")=="regions region-19"){
