@@ -11,8 +11,8 @@
 
 <cfinvoke component="com.ContentManager.NewsHandler"
 	homePageDisplay="#ATTRIBUTES.HomePageDisplay#"
-	TopID="#ATTRIBUTES.topicID#"
-	method="qryNews"
+	TopicID="#ATTRIBUTES.topicID#"
+	method="GetNews"
 	returnVariable="qNewsListing">
 	
 <cfif qNewsListing.recordCount GT 0>

@@ -81,13 +81,13 @@
 		</div>
 		<!-- to clear out floats -->
 		<div class="clearit"></div>
-		<cfif ListGetAt(CategoryThreadList,3) is APPLICATION.NewsCategoryID>
+		<cfif ListLen(CategoryThreadList) GTE "3" and ListGetAt(CategoryThreadList,3) is APPLICATION.NewsCategoryID>
 			<cfif currentCategoryID is APPLICATION.NewsCategoryID>
 				<cfset BreadcrumbDisplayType="news">
 			<cfelse>
 				<cfset BreadcrumbDisplayType="newsDetail">
 			</cfif>
-		<cfelseif ListGetAt(CategoryThreadList,3) is APPLICATION.EmployeeCategoryID>
+		<cfelseif ListLen(CategoryThreadList) GTE "3" and ListGetAt(CategoryThreadList,3) is APPLICATION.EmployeeCategoryID>
 			<cfset BreadcrumbDisplayType="employee">
 		<cfelse>
 			<cfset BreadcrumbDisplayType="">

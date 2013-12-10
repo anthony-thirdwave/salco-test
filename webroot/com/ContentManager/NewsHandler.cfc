@@ -4,9 +4,9 @@
 		<cfreturn this>
 	</cffunction>
 	
-	<cffunction name="qryNews" output="false" returntype="query">
+	<cffunction name="GetNews" output="false" returntype="query">
 		<cfargument name="homePageDisplay" default="0" type="numeric" required="false">
-		<cfargument name="TopID" default="0" type="numeric" required="false">
+		<cfargument name="TopicID" default="0" type="numeric" required="false">
 		<cfargument name="newsID" default="0" type="numeric" required="false">
 		<cfargument name="rowNumber" default="0" type="numeric" required="false">
 		
@@ -15,23 +15,23 @@
 		<cfinvoke component="com.ContentManager.NewsHandler"
 			method="GetAllNews"
 			NewsTopCategoryID="#APPLICATION.NewsCategoryID#"
-			returnVariable="qGetallNews">
+			returnVariable="qGetAllNews">
 
 		<cfquery name="LOCAL.qGetNews" dbtype="query">
 			SELECT	*
-			FROM	qGetallNews
+			FROM	qGetAllNews
 			WHERE	1=1
 			<cfif val(ARGUMENTS.NewsID) gt 0>
-			AND		newsID=<cfqueryparam value="#ARGUMENTS.newsID#" cfsqltype="cf_sql_integer">
+				AND newsID=<cfqueryparam value="#ARGUMENTS.newsID#" cfsqltype="cf_sql_integer">
 			</cfif>
 			<cfif val(ARGUMENTS.rowNumber) gt 0>
-			AND		rowNumber=<cfqueryparam value="#ARGUMENTS.rowNumber#" cfsqltype="cf_sql_integer">
+				AND rowNumber=<cfqueryparam value="#ARGUMENTS.rowNumber#" cfsqltype="cf_sql_integer">
 			</cfif>
 			<cfif val(ARGUMENTS.homePageDisplay) eq 1>
-			AND		homePageDisplayFlag=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
+				AND	homePageDisplayFlag=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
 			</cfif>
-			<cfif val(ARGUMENTS.TopID) gt 0>
-			AND		CONTAINS (TopicIDList, '#ARGUMENTS.TopID#') > 0
+			<cfif val(ARGUMENTS.TopicID) gt 0>
+				AND CONTAINS (TopicIDList, '#ARGUMENTS.TopicID#') > 0
 			</cfif>
 		</cfquery>
 		
@@ -41,12 +41,11 @@
 	<cffunction name="GetAllNews" output="false" returntype="query">
 		<cfset VAR LOCAL=StructNew()>
 		
-		
 		<cfif NOT IsDefined("REQUEST.GetAllNews")>
 			<cfquery name="LOCAL.GetNewsPages" datasource="#APPLICATION.DSN#">
-					SELECT     CategoryID
-					FROM       t_Category
-					WHERE      CategoryTypeID=<cfqueryparam value="82" cfsqltype="cf_sql_integer">
+				SELECT     CategoryID
+				FROM       t_Category
+				WHERE      CategoryTypeID=<cfqueryparam value="82" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfset lNewsPageID=valueList(LOCAL.GetNewsPages.CategoryID)>
 			
@@ -64,7 +63,7 @@
 					FROM	t_category c JOIN t_categoryLocale cl on c.categoryID=cl.categoryID
 					JOIN t_Properties p ON  cl.PropertiesID=p.PropertiesID
 					WHERE	c.categoryID in (<cfqueryparam value="#lNewsPageID#" cfsqltype="cf_sql_integer" list="yes">)
-					AND		c.CategoryActive=1
+					AND		c.CategoryActive=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
 					ORDER BY	c.PublishDateTime DESC
 				</cfquery>
 				<!--- Create a new query. --->
@@ -159,7 +158,7 @@
 					</cfif> 
 				</cfloop>
 			</cfif>
-				<cfset REQUEST.GetAllNews=LOCAL.qryGetNews>
+			<cfset REQUEST.GetAllNews=LOCAL.qryGetNews>
 		<cfelse>
 			<cfset LOCAL.qryGetNews=REQUEST.GetAllNews>
 		</cfif>

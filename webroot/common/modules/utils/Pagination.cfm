@@ -4,6 +4,8 @@
 <cfparam name="ATTRIBUTES.FieldList" default=""><!--- Valid URLEncodedFormat String --->
 <cfparam name="ATTRIBUTES.Path" default="">
 <cfparam name="ATTRIBUTES.Label" default="">
+<cfparam name="ATTRIBUTES.AdditionalText" default="">
+
 <cfset StartRow=Val(ATTRIBUTES.StartRow)>
 <cfset SearchNum=Val(ATTRIBUTES.SearchNum)>
 <cfset FieldList=ATTRIBUTES.FieldList>
@@ -32,6 +34,9 @@
 		<p>
 		<cfoutput>
 		#ATTRIBUTES.Label# #ATTRIBUTES.StartRow#&ndash;<cfif ATTRIBUTES.StartRow+DecrementValue(ATTRIBUTES.SearchNum) GT ATTRIBUTES.RecordCount>#ATTRIBUTES.RecordCount#<cfelse>#ATTRIBUTES.StartRow+DecrementValue(ATTRIBUTES.SearchNum)#</cfif> of #ATTRIBUTES.RecordCount#
+		<cfif ATTRIBUTES.AdditionalText IS NOT "">
+			&nbsp; #ATTRIBUTES.AdditionalText#
+		</cfif>
 		</cfoutput>
 		</p>
 		<ul class="pagination">

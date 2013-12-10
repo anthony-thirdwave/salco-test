@@ -57,7 +57,7 @@
 						</cfif>
 					</cfloop>
 					
-					<li><a href="#ATTRIBUTES.SourceDirectory#/#qDirectory.Name#" style="background:url('#ATTRIBUTES.SourceDirectory#/#qDirectory.Name#')" target="_blank"><!--- <img src="#ATTRIBUTES.SourceDirectory#/#qDirectory.Name#" width="300px"> ---><div class="image-info"><cfif thisTitle IS NOT ""><span>#thisTitle#</span></cfif><cfif thisDescription IS NOT ""><p>#thisDescription#</p></cfif></div></a>
+					<li><a href="#ATTRIBUTES.SourceDirectory#/#URLEncodedFormat(qDirectory.Name)#" style="background:url('#ATTRIBUTES.SourceDirectory#/#URLEncodedFormat(qDirectory.Name)#')" target="_blank"><!--- <img src="#ATTRIBUTES.SourceDirectory#/#qDirectory.Name#" width="300px"> ---><div class="image-info"><cfif thisTitle IS NOT ""><span>#thisTitle#</span></cfif><cfif thisDescription IS NOT ""><p>#thisDescription#</p></cfif></div></a>
 					</li>
 				</cfif>
 			</cfoutput>

@@ -790,6 +790,12 @@ h4.subAcHd a.trigger.open { background: none!important; color: black!important; 
 	position:relative;
 	z-index:500;
 }
+
+#contact-us .sideBar {
+	width:180px;
+	overflow:visible;
+}
+
 .sideBarTop {
 	width: 215px;
 	height: 12px;
@@ -799,6 +805,11 @@ h4.subAcHd a.trigger.open { background: none!important; color: black!important; 
 	width: 180px;
 	background: url(/common/images/template/side_bar_bak.png) left top repeat-y;
 	padding: 10px 15px 0 20px;
+}
+
+#contact-us .sideBarContent {
+	width: 200px;
+	font-family: "Myriad Pro", Arial,Helvetica,sans-serif;	
 }
 .sideBarBot {
 	width: 215px;

@@ -62,7 +62,7 @@
 </cfif>	
 
 <cfinvoke component="com.ContentManager.NewsHandler"
- 	method="qryNews"
+ 	method="GetNews"
 	newsID="#ATTRIBUTES.CategoryID#"
 	returnVariable="qryNews">
 
