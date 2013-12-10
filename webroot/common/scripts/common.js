@@ -1,7 +1,25 @@
 var browserWars=$.client.browser;
 
 $(document).ready(function() {
+	//temp until new templates are in place begins here..
+	//binding for news listing page
+		$(".building-blocks").bind("click",function(){
+			document.location=$(this).find("a").attr("href")
+		});
+		
+		$(".news .alignLeft img.curveMe").bind("click",function(){
+			indexofNI=$(this);
+			getImg=$(".alignLeft img").index(indexofNI);
+			//alert($(".lrgImgs img").eq(getImg).attr("src"));
+			
+			
+			
+			modalooo.newsImage(getImg, $(this).attr("data-id"));
+		});
+		
+		
 
+	//temp until new templates are in place ends here...
 	browserWars=browserWars.toLowerCase();	
 	
 	
@@ -29,7 +47,8 @@ $(document).ready(function() {
 		
 		  // Trigger the event (useful on page load).
 		  $(window).hashchange();
-	
+		
+		
 	});
 	
 	
@@ -43,16 +62,16 @@ $(document).ready(function() {
 
 	initNav();	
 	getHash=location.hash;
-
+	
 	if(getHash.length>0){
 		splithash=getHash.split("#")
 		$("#linkEx"+splithash[1]).click();
 	}
 	$(".sideBarContent a.email").bind("click",function(e){e.preventDefault(); 
 		
-		getNameinfo=$(this).text();
-		getNameinfo=getNameinfo.split(" ");
-		document.location="/page/contact-us-form?contact="+getNameinfo[1]+"_"+getNameinfo[2];
+		getNameinfo=$(this).attr("data-name");
+		//getNameinfo=getNameinfo.split(" ");
+		document.location="/page/contact-us-form?contact="+getNameinfo;//[1]+"_"+getNameinfo[2];
 																		   
 	});
 	
@@ -369,7 +388,7 @@ function rebinder(nn){
 	
 function highlightRegion(region){
 	$(".sideBarContent .office").parent().addClass("hidden");
-	$("#"+region).removeClass("hidden")
+	$("#"+region).removeClass("hidden");
 }
 var stAT=1;
 function rotateBigSplashImgIE6(){
@@ -428,3 +447,708 @@ function closeIE6Modal(){
 	$(".sideBar").css({marginLeft:"680px"});
 	$("html").css({overflow:"auto"});
 }
+
+
+//updated contact us map
+
+
+
+$(window).load(function(){
+	
+		contactUsMap.init();
+	
+});
+
+
+var contactUsMap={
+	ieOverItRegion:function(ieClasser){
+				holdingC=ieClasser;
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","#300000");
+					$("."+rO).eq(0).attr("stroke","#300000");
+					$("."+rO).eq(1).attr("stroke","#300000");
+				}
+				
+				
+				
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#e8858c");
+					
+					if($(this).attr("class")=="regions region-11"){
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#959595");
+						}
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+					/*if($(this).attr("class")=="regions region-7"){
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#e8858c");
+							
+						}
+						
+						
+					}*/
+					
+					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
+						$("#tx-northern-us-line").attr("stroke","#fff");
+					}
+					
+					
+					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
+						$("#pa-western-us").attr("stroke","#fff");
+					}
+					
+				}
+	},
+	ieOffItRegion:function(ieClasser){
+				holdingC=ieClasser;
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","transparent");
+					$("."+rO).eq(0).attr("stroke","transparent");
+					$("."+rO).eq(1).attr("stroke","transparent");
+				}
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#959595");
+					
+				}
+				
+				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				if($("#il-in-upper-us").attr("fill")=="#c1272d" && $("#il-in-upper-us").attr("fill")=="#c1272d"){	
+					$("#il-upper-border-us").attr("stroke","#959595");
+				}
+				
+				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
+					$("#tx-northern-us-line").attr("stroke","none");
+				}
+				
+				if($("#pa-western-us").attr("fill")!="#c1272d" && $("#pa-us").attr("fill")!="#c1272d"){
+					$("#pa-western-us").attr("stroke","none");
+				}
+	},
+	init:function(){
+		tech.init();
+		highlightRegion('region0');
+		$("svg rect").bind("click",function(){contactUsMap.resetit();});
+		if(document.all){
+			
+			
+			//$( ".office-dot" ).hover(function(){alert("m00m00")});
+			
+			
+			$( ".office-dot" ).each(function(index, element) {
+				$(this).attr("onmouseover","contactUsMap.ieOverItOffices('"+$(this).attr('id')+"')");
+			});
+			
+			$( ".office-dot" ).each(function(index, element) {
+				$(this).attr("onmouseout","contactUsMap.ieLeaveItOffices('"+$(this).attr('id')+"')");
+			});
+			
+			$( ".regions" ).each(function(index, element) {
+				$(this).attr("onmouseover","contactUsMap.ieOverItRegion('"+$(this).attr('class')+"')");
+			});
+			
+			$( ".regions" ).each(function(index, element) {
+				$(this).attr("onmouseout","contactUsMap.ieOffItRegion('"+$(this).attr('class')+"')");
+			});
+			
+		}
+		$(".office-dot").click(function(){
+			contactUsMap.resetit();
+			getOffice="#"+$(this).attr("id")+"-selected";
+			$(".office-circle").attr("class","office-circle");
+			$(".office-circle").attr("stroke","transparent");
+			
+			$(getOffice).attr("class","office-circle office-active");
+			$(".ncOffices").attr("fill","none");
+			$(".ncOffices").attr("stroke","none");
+			$("#il-in-upper-us").attr("fill","none");
+			$("#il-in-upper-us").attr("stroke","none");
+			//$("#region-id").html($(getOffice).attr("id"));
+			
+			if($(getOffice).attr("id")=="chicago-office-selected"){
+				highlightRegion('region13');
+			}else if($(getOffice).attr("id")=="houston-office-selected"){
+				highlightRegion('region12');
+			}else if($(getOffice).attr("id")=="sioux-city-office-selected"){
+				highlightRegion('region16');
+			}else if($(getOffice).attr("id")=="sarnia-on-ca-office-selected"){
+				highlightRegion('region1');
+			}
+			
+			$(getOffice).attr("stroke","#000000");
+		}).mouseenter(function(){
+			$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}/**/
+			
+			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}*/
+
+			
+			getOffice="#"+$(this).attr("id")+"-selected";
+			$(getOffice).attr("stroke","#000000");
+		}
+		
+		).mouseleave(function(){
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}*/
+			
+		});
+		
+		$(".regions").click(function(){
+			
+			$(".regions").attr("fill","#959595");
+			$(".ncOffices").attr("stroke","transparent");
+			$(".ncOffices").each(function(index, element) {
+				if($(this).attr("fill")!="none"){
+					$(this).attr("fill","transparent");
+				}
+			});
+			//$(this).attr("fill","#c1272d");
+			holdingC=$("#"+$(this).attr("id")).attr("class");
+			
+			
+			holdingC=holdingC.split(" ");
+			holdingC=holdingC[1];
+			
+			$("."+holdingC).attr("fill","#c1272d");
+			
+			if($(this).attr("class")!="regions region-19"){
+				$("#il-in-upper-us").attr("fill","none");
+				$("#il-in-upper-us").attr("stroke","none");
+				/*$("#il-upper-us").attr("stroke","none");*/
+			}
+			if($(this).attr("class")=="regions region-19"){
+				$("#il-in-upper-us").attr("fill","#c1272d");
+				$("#il-in-upper-us").attr("stroke","white");
+				/*$("#il-upper-border-us").attr("stroke","none");*/
+			}
+			
+			if($(this).attr("class")=="regions region-11"){
+				$("#il-in-upper-us").attr("fill","#959595");
+				$("#il-in-upper-us").attr("stroke","white");
+				/*$("#il-upper-border-us").attr("stroke","none");*/
+			}
+			
+			/*if($(this).attr("class")=="regions region-7"){
+				$("#il-in-upper-us").attr("stroke","white");
+				$("#il-in-upper-us").attr("fill","#c1272d");
+				$("#il-upper-border-us").attr("stroke","#959595");
+			}
+			
+			if($(this).attr("class")=="regions region-8"){
+				$("#il-upper-us").attr("stroke","white");
+				$("#il-upper-border-us").attr("stroke","none");
+			}*/
+			
+			if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
+						$("#tx-northern-us-line").attr("stroke","#fff");
+			}else{
+				$("#tx-northern-us-line").attr("stroke","none");
+			}
+			
+			if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
+						$("#pa-western-us").attr("stroke","#fff");
+			}else{
+				$("#pa-western-us").attr("stroke","none");
+			}
+			
+			
+			//$("#region-id").html(holdingC);
+			
+			switch(holdingC){
+				case "region-1":
+				highlightRegion('region4')
+				tech.sale('region-1ts');
+				break;
+				case "region-2":
+				highlightRegion('region8')
+				tech.sale('region-1ts');
+				break;
+				case "region-3":
+				highlightRegion('region2')
+				tech.sale('region18');
+				break;
+				case "region-4":
+				highlightRegion('region3')
+				tech.sale('region18');
+				break;
+				case "region-5":
+				highlightRegion('region10')
+				tech.sale('region18');
+				break;
+				case "region-6":
+				highlightRegion('region16')
+				tech.sale('region18');
+				break;
+				case "region-7":
+				highlightRegion('region6')
+				break;
+				case "region-8":
+				highlightRegion('region15')
+				tech.sale('region18');
+				break;
+				case "region-9":
+				highlightRegion('region1')
+				break;
+				case "region-11":
+				highlightRegion('region9')
+				tech.sale('region-1ts');
+				break;
+				case "region-12":
+				highlightRegion('region5')
+				tech.sale('region18');
+				break;
+				case "region-13":
+				highlightRegion('region11')
+				tech.sale('region18');
+				break;
+				case "region-14":
+				highlightRegion('region17')
+				break;
+				case "region-19":
+				highlightRegion('region19')
+				tech.sale('region18');
+				break;
+				
+			}
+			
+			$(".office-circle").attr("stroke","transparent");
+			$(".office-circle").attr("class","office-circle");
+			rO=holdingC;
+			rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				
+					$("."+rO).eq(0).attr("fill","#000000");
+					$("."+rO).eq(0).attr("stroke","#000000");
+					$("."+rO).eq(1).attr("stroke","#000000");
+				
+			
+		}).mouseenter(function(){
+				
+				holdingC=$(this).attr("class");
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","#300000");
+					$("."+rO).eq(0).attr("stroke","#300000");
+					$("."+rO).eq(1).attr("stroke","#300000");
+				}
+				
+				
+				
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#e8858c");
+					
+					if($(this).attr("class")=="regions region-11"){
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#959595");
+						}
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+					/*if($(this).attr("class")=="regions region-7"){
+						$("#il-in-upper-us").attr("stroke","white");
+						$("#il-upper-border-us").attr("stroke","#959595");
+						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+							$("#il-in-upper-us").attr("fill","#e8858c");
+							
+						}
+						
+						
+					}*/
+					
+					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
+						$("#tx-northern-us-line").attr("stroke","#fff");
+					}
+					
+					
+					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
+						$("#pa-western-us").attr("stroke","#fff");
+					}
+					
+				}
+			}).mouseleave(function(){
+				holdingC=$(this).attr("class");
+				holdingC=holdingC.split(" ");
+				holdingC=holdingC[1];
+				
+				rO=holdingC;
+				
+				rO=rO.split("-");
+				rO=rO[1];
+				rO="rOffice-"+rO;
+				if($("."+rO).eq(0).attr("fill")!="#000000"){
+					$("."+rO).eq(0).attr("fill","transparent");
+					$("."+rO).eq(0).attr("stroke","transparent");
+					$("."+rO).eq(1).attr("stroke","transparent");
+				}
+				
+				if($("."+holdingC).attr("fill")!="#c1272d"){
+					$("."+holdingC).attr("fill","#959595");
+					
+				}
+				
+				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						/*$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");*/
+						
+						
+				}
+				
+				
+				if($("#il-in-upper-us").attr("fill")=="#c1272d" && $("#il-in-upper-us").attr("fill")=="#c1272d"){	
+					$("#il-upper-border-us").attr("stroke","#959595");
+				}
+				
+				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+				}
+				
+				
+				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
+					$("#tx-northern-us-line").attr("stroke","none");
+				}
+				
+				if($("#pa-western-us").attr("fill")!="#c1272d" && $("#pa-us").attr("fill")!="#c1272d"){
+					$("#pa-western-us").attr("stroke","none");
+				}
+				
+			});
+			
+			
+			
+			
+			
+			$("polygon:not(.regions)").bind("click", function(){
+				contactUsMap.resetit();
+			});
+			
+			
+			
+	},
+	
+	initIE:function(){
+		//future
+		
+	},
+	
+	resetit:function(){
+		highlightRegion('region0');
+		$(".regions").attr("fill","#959595");
+		$("#il-upper-border-us").attr("stroke","none");
+		$("#il-upper-us").attr("stroke","none");
+		$(".ncOffices").attr("fill","none");
+		$(".ncOffices").attr("stroke","none");
+		$("#il-in-upper-us").attr("fill","none");
+		$("#il-in-upper-us").attr("stroke","none");
+		$(".office-circle").attr("stroke","transparent");
+
+		$("#pa-western-us").attr("stroke","none");
+		$("#tx-northern-us-line").attr("stroke","none");
+	},
+	
+	resetit2:function(){
+		$(".regions").attr("fill","#959595");
+		$("#il-upper-border-us").attr("stroke","none");
+		$("#il-upper-us").attr("stroke","none");
+		$(".ncOffices").attr("fill","none");
+		$(".ncOffices").attr("stroke","none");
+		$("#il-in-upper-us").attr("fill","none");
+		$("#il-in-upper-us").attr("stroke","none");
+		$(".office-circle").attr("stroke","transparent");
+
+		$("#pa-western-us").attr("stroke","none");
+		$("#tx-northern-us-line").attr("stroke","none");
+	}, 
+	ieOverItOffices:function(ieOO){
+		
+		$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+			
+			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}
+
+			
+			getOffice="#"+ieOO+"-selected";
+			$(getOffice).attr("stroke","#000000");/* */
+	},
+	
+	ieLeaveItOffices:function(ieLO){
+		$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+					
+			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
+						$("#il-upper-us").attr("stroke","none");
+					}
+	}
+	
+}
+
+var allContacts={
+	init:function(){
+		$( "#contAlpha .alphaemail" ).mouseover(function() {
+  			//console.log("in "+$(this).html());
+			allContacts.rollover($(this).html());
+			
+		}).mouseout(function() {
+		  	//console.log("out "+$(this).html());
+			allContacts.clearit();
+		});
+	},
+	rollover:function(nn){
+		
+		switch(nn){
+			case "Randy Bowman":
+				//alert("hi Randy");
+				regionSet="region-11";
+			break;
+			case "Joshua Chesser":
+				regionSet="region-7";
+			break;
+			case "Al Isenegger":
+				regionSet="region-9";
+			break;
+			case "Jim McLaughlin":
+				regionSet="region-8";
+			break;
+			case "Pete Petersen":
+				regionSet="region-1";
+			break;
+			case "Scottie Primeaux":
+				regionSet="region-3";
+			break;
+			case "Dennis Rivardo":
+				regionSet="region-4";
+			break;
+			case "Tony Segovia":
+				regionSet="region-13";
+			break;
+			case "Scott Swanson":
+				regionSet="region-5";
+			break;
+			case "Stoy Taylor":
+				regionSet="region-2";
+			break;
+			case "Edwin Luper":
+				regionSet="region-12";
+			break;
+			case "Jan Marino":
+				regionSet="region-19";
+			break;
+			case "Steve Vannocken":
+				regionSet="region-14";
+			break;
+			case "Tyler Jepsen":
+				regionSet="none";
+			break;
+		}
+		
+		
+		
+		$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					}
+			if(regionSet!="none"){
+				$("."+regionSet).attr("fill","#e8858c");
+			}
+	},
+	clearit:function(){
+		$(".regions").each(function(index, element) {
+				if($(this).attr("fill")!="#c1272d"){
+					$(this).attr("fill","#959595");
+				}
+			});
+			
+			$(".office-circle").each(function(index, element) {
+				if($(this).attr("class")=="office-circle"){
+					$(this).attr("stroke","transparent");
+				}
+			});
+			
+			
+						$("#il-in-upper-us").attr("fill","none");
+						$("#il-in-upper-us").attr("stroke","none");
+						$("#il-upper-border-us").attr("stroke","none");
+					
+	}
+}
+
+tech={
+	init:function(){
+		tempHoldTS=$("#region1").html();
+		$(".sideBar .sideBarContent ").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
+		$("#region-1ts .regionTitle").html("Techincal Sales Contact");
+		allContacts.init();
+	},
+	sale:function(r){
+		$("#"+r).removeClass("hidden");
+	}
+}
+
+/* temp script for modal until new template mess is resolved */
+
+$(window).load(function(){
+	modalooo.init()
+});
+
+var modalooo={
+		init:function(){
+			tempsCSS="";
+			$(".modal-link").each(function(index, element) {
+				//alert($(this).attr("href"));
+				temps=$(this).attr("href");
+				temps=temps.split(".html");
+				temps=temps[0]+"_html";
+				//alert(temps)
+				
+				$("#modal-holder").wrapAll('<div id="'+temps+'"></div>');
+				
+				tempsCSS+="#"+temps+":target #modal-background{height:100%; width:100%; z-index:100; opacity:1;}#"+temps+":target #modal-outer{height:490px; width:430px; z-index:110; opacity:1;}"
+				
+			});
+			
+			$("head").eq(0).append('<style type="text/css">/* additional styles for modal */</style>');
+			
+			if($(".news .alignLeft .curveMe").length>0){
+				$(".news .alignLeft .curveMe").each(function(index, element) {
+					//alert($("body").attr("id")+"-"+index)
+					$(this).attr("data-id", $("body").attr("id")+"-"+index);
+					temps=$("body").attr("id")+"-"+index;
+					
+					$("#modal-holder").wrapAll('<div id="'+$("body").attr("id")+"-"+index+'"></div>');
+					
+					//tempW=$(".lrgImgs img").eq(index).width();
+					//alert(tempW);
+				
+				tempsCSS+="#"+temps+":target #modal-background{height:100%; width:100%; z-index:800; opacity:1;}#"+temps+":target #modal-outer{height:490px; width:430px; z-index:810; opacity:1;}"
+					
+				});
+			}
+			
+			$("style").eq(0).append(tempsCSS);
+		},
+		newsImage:function(x,xhash){
+			$('<img src="'+$(".lrgImgs img").eq(x).attr("src")+'" />').load(function(){
+				 img=this
+				 tempW=img.width+60;
+				 tempH=img.height+80;
+				$("#modal-outer").animate({width:tempW+"px",height:tempH+"px"});
+				//alert(img.width);
+				$("#modal-content").html('<img class="curveMe" src="'+$(".lrgImgs img").eq(x).attr("src")+'" style="margin-top:20px;" />')
+			
+				location.hash="#"+xhash;
+			});
+			
+		},
+		closing:function(){
+			location.hash="";
+			$("#modal-holder").removeClass("closing");
+		}
+	}

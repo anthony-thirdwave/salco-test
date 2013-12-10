@@ -133,7 +133,7 @@
 								<td valign="top" class="#class#">#Description#</td>
 								<td valign="top" class="#class#" nowrap>
 									<cfoutput group="Language">
-										<a href="#URL#" target="_blank">#Language# #Round(Size/1024)#kb</a>
+										#Language# #Round(Size/1024)#kb: <a href="#URL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(URL)#">Download</a>
 									</cfoutput>
 								</td>
 							</tr>

@@ -379,6 +379,7 @@ webroot/common/images/template/ico_red_dot.png -text
 webroot/common/images/template/ico_red_square.png -text
 webroot/common/images/template/ie6_home_nav_right_off.gif -text
 webroot/common/images/template/ie6_home_nav_right_on_over.gif -text
+webroot/common/images/template/ie8-map-20131209.png -text
 webroot/common/images/template/lightboxNext.png -text
 webroot/common/images/template/lightboxPrev.png -text
 webroot/common/images/template/loading.gif -text
@@ -467,6 +468,7 @@ webroot/common/modules/User/GetUserPermissions.cfm -text
 webroot/common/modules/User/UserForm.cfm -text
 webroot/common/modules/User/UserObject.cfm -text
 webroot/common/modules/adhoc/pdfiframe.cfm -text
+webroot/common/modules/adhoc/svgcontactmap.cfm -text
 webroot/common/modules/adhoc/swfobject.cfm -text
 webroot/common/modules/blog/dsp_blogListing.cfm -text
 webroot/common/modules/blog/dsp_blogNav.cfm -text
@@ -542,6 +544,7 @@ webroot/common/modules/product/ProductOutlineHelper.cfm -text
 webroot/common/modules/product/ProductSheet.cfm -text
 webroot/common/modules/product/ProductSheetDriver.cfm -text
 webroot/common/modules/product/_ProductFamilyDetail.cfm -text
+webroot/common/modules/product/download.cfm -text
 webroot/common/modules/product/dsp_PromoText.cfm -text
 webroot/common/modules/product/dsp_resource.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly.cfm -text
