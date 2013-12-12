@@ -42,7 +42,7 @@
 				<cfinclude template="/common/modules/display/templates/intranet/dsp_content.cfm">
 			</cfcase>
 			<cfdefaultcase>
-				<cfinclude template="/common/modules/display/templates/dsp_content.cfm">
+				<cfinclude template="/common/modules/display/templates/dsp_content_proto.cfm">
 			</cfdefaultcase>
 		</cfswitch>
 	</cfdefaultcase>

@@ -34,11 +34,7 @@
 </cfif>
 
 <cfif GetCategoryList.recordcount GT "0">
-	<cfif ATTRIBUTES.Level IS "0">
-		<ul id="acc3" class="accordion">
-	<cfelse>
-		<ul>
-	</cfif>
+	<ul>
 	<cfoutput query="GetCategoryList">
 		<cfmodule template="/common/modules/display/navigation/dsp_NavRHelper.cfm" 
 			CategoryID="#val(GetCategoryList.CategoryID)#" 
