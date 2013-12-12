@@ -7,7 +7,7 @@
 <link href="/common/styles/salco_global.css" rel="stylesheet" type="text/css" />
 <link href="/common/styles/other.css" rel="stylesheet" type="text/css" />
 <link href="/common/scripts/projekktor/style.css" rel="stylesheet" type="text/css" />
-
+<link type="text/css" rel="stylesheet" href="http://fast.fonts.net/cssapi/2be01d4e-a0db-490d-a9b9-78f5099f10bc.css"/>
 
 <!---<script type="text/javascript" src="/common/scripts/jquery-1.5.1.min.js"></script>--->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -120,7 +120,19 @@
 <cfoutput>
 	<body id="#CSSID#" class="#CSSClass#"><a name="top"></a>
 </cfoutput>
-
+<!-- modal html start -->
+<div id="modal-holder">
+	<div id="modal-background"></div>
+	<div id="modal-outer">
+		<div id="modal-inner">
+			<div id="modal-close"><a href="#close"></a></div>
+			<div id="modal-content">
+				
+			</div>
+		</div>
+	</div>
+</div>
+<!-- modal html end -->
 <div class="holderCenter">
 	<div id="holderMastHead">
 		<div id="holderNavMain">
@@ -229,11 +241,22 @@
 						<cfelse>
 							<div id="emptyleftcolumn"></div>
 						</cfif>
+			
 						<div class="holderWide">
 							<div class="holderWideHeader png">&nbsp;</div>
 							<div class="holderWideBack">
 								<div class="fade">
-									<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">
+									<cfif ListLen(CategoryThreadList) GTE "4" and ListGetAt(CategoryThreadList,4) is APPLICATION.NewsCategoryID>
+										<cfset displaynewsBreadbrumb = 0>
+										<cfif currentCategoryID eq APPLICATION.NewsCategoryID>
+											<cfinclude template="/common/modules/news/newsListingPagination.cfm">
+										<cfelse>
+											<cfinclude template="/common/modules/news/newsDetailPagination.cfm">
+										</cfif>
+									<cfelse>
+										<cfinclude template="/common/modules/display/navigation/dsp_NavBreadCrumb.cfm">
+									</cfif>
+									
 									<cfif ListFind("62,64",CategoryTypeID) IS "0"><cfoutput><h1>#CurrentCategoryName#</h1></cfoutput></cfif>
 									<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
 									<cfswitch expression="#AllowComments#">
