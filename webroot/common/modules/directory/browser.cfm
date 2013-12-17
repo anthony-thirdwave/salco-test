@@ -85,8 +85,16 @@
 			<div>
 			<ul class="trainingLinks">
 			<cfoutput query="qDir2">
+				<cfset UseIFrame="0">
+				<cfif Right(qDir2.linkURL,Len("OpenMe.html")) IS "OpenMe.html">
+					<cfset UseIFrame="1">
+				</cfif>
 				<li>
-				<a href="#qDir2.linkURL#"<cfif Left(qDir2.linkURL,4) IS "http"> target="_blank"</cfif>>
+				<cfif UseIFrame>
+					<a href="/common/modules/directory/iframe.cfm?URL=#URLEncodedFormat(qDir2.linkURL)#&title=#URLEncodedFormat(qDir2.Name)#" target="_blank">
+				<cfelse>
+					<a href="#qDir2.linkURL#"<cfif Left(qDir2.linkURL,4) IS "http"> target="_blank"</cfif>>
+				</cfif>
 				<cfif qDir2.Thumbnail IS NOT "">
 					<img src="#qDir2.Thumbnail#">
 				</cfif>
@@ -107,15 +115,21 @@
 			<div class="listing">
 			<ul class="trainingLinks">
 			<cfoutput query="qDir3">
+				<cfset UseIFrame="0">
 				<cfif Right(qDir3.linkURL,Len("OpenMe.html")) IS "OpenMe.html">
 					<cfset ThisLIClass="listingVideo">
+					<cfset UseIFrame="1">
 				<cfelseif qDir3.type is "dir">
 					<cfset ThisLIClass="listingDir">
 				<cfelse>
 					<cfset ThisLIClass="listingFile">
 				</cfif>
 				<li class="#ThisLIClass#">
-				<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
+				<cfif UseIFrame>
+					<a href="/common/modules/directory/iframe.cfm?URL=#URLEncodedFormat(qDir3.linkURL)#&title=#URLEncodedFormat(qDir3.Name)#" target="_blank">
+				<cfelse>
+					<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
+				</cfif>
 				<cfif qDir3.Thumbnail IS NOT "">
 					<img src="#qDir3.Thumbnail#">
 				</cfif>
