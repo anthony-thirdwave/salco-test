@@ -11,6 +11,7 @@ code/webroot/common/images/Intranet/template/weatherClosing/*.db
 code/webroot/common/images/Thumbs.db
 code/webroot/common/images/admin/*.db
 code/webroot/common/images/captcha/*.db
+code/webroot/common/images/template-updated/homepage/*.db
 code/webroot/common/images/template/*.db
 code/webroot/common/images/template/home_images_back/*.db
 code/webroot/common/incoming/*

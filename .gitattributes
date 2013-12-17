@@ -343,7 +343,6 @@ code/webroot/common/images/spacer.gif -text
 code/webroot/common/images/template-updated/committed-to-innovations-resized.png -text
 code/webroot/common/images/template-updated/committed-to-innovations.png -text
 code/webroot/common/images/template-updated/content-area-bgtop.jpg -text
-code/webroot/common/images/template-updated/homepage/Thumbs.db -text
 code/webroot/common/images/template-updated/homepage/featured-prod-lift-assist.png -text
 code/webroot/common/images/template-updated/homepage/hazarsolve-hp-slide.png -text
 code/webroot/common/images/template-updated/homepage/homepage-left-border-fa-transparent-2.png -text
@@ -545,6 +544,7 @@ code/webroot/common/modules/contentmanager/content.cfm -text
 code/webroot/common/modules/contentmanager/content/form.cfm -text
 code/webroot/common/modules/contentmanager/locale/form.cfm -text
 code/webroot/common/modules/directory/browser.cfm -text
+code/webroot/common/modules/directory/iframe.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_Nav.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavBreadcrumb.cfm -text
 code/webroot/common/modules/display/Navigation/dsp_NavFooter.cfm -text
