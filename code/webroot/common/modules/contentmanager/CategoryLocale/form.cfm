@@ -47,7 +47,7 @@
 	</cfif>
 </cfif>
 
-<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+<cfif ThisSiteCategoryID IS NOT APPLICATION.intranetSiteCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -58,7 +58,7 @@
 		Required="N">
 </cfif>
 
-<cfif ListFindNoCase(Restrictions,"CSSID") and ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+<cfif ListFindNoCase(Restrictions,"CSSID") and ThisSiteCategoryID IS NOT APPLICATION.intranetSiteCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -101,7 +101,7 @@
 		Required="N">
 </cfif>
 
-<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+<cfif ThisSiteCategoryID IS NOT APPLICATION.intranetSiteCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="textarea"
@@ -182,7 +182,7 @@
 		PropertyName="EmergencyAlert">
 </cfif>
 
-<cfif ThisSiteCategoryID IS APPLICATION.IntranetCategoryID>
+<cfif ThisSiteCategoryID IS APPLICATION.intranetSiteCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm"
 		ObjectAction="#FormMode#"
 		type="checkbox"

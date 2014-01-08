@@ -104,13 +104,13 @@
 			<cfcase value="255"><!--- Blog Navigation --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#,SourceID,InheritID">
 			</cfcase>
-			<cfcase value="256"><!--- Article Listing --->
+			<cfcase value="256"><!--- Text Slide Show --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
 			</cfcase>
 			<cfcase value="257"><!--- Design Archives --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
 			</cfcase>
-			<cfcase value="258"><!--- Header Banner --->
+			<cfcase value="258"><!--- Teaser Slide Show --->
 				<cfset this.sFields[ThisContentTypeID]="#BaseFieldList#">
 			</cfcase>
 			<cfcase value="259"><!--- Search Results --->

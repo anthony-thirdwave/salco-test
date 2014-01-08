@@ -119,7 +119,7 @@
 	<input type="hidden" name="DefaultContentLocale" value="1">
 </cfif>
 
-<cfif ThisSiteCategoryID IS NOT APPLICATION.IntranetCategoryID>
+<cfif ThisSiteCategoryID IS NOT APPLICATION.intranetSiteCategoryID>
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
 		ObjectAction="#FormMode#"
 		type="text"
@@ -794,99 +794,6 @@
 
 <cfif ListFindNoCase(Restrictions,"aFile")>
 	<cfif MyContentLocale.GetContentTypeID() IS "266">
-		<cfif 0>
-			<script type="text/javascript">
-				var swf_upload_control;
-		
-		        window.onload = function () {
-		            swf_upload_control = new SWFUpload({
-						// Backend settings
-						upload_url: "/common/modules/ContentManager/ContentLocale/upload.cfm",	// Relative to the SWF file, you can use an absolute URL as well.
-						file_post_name: "new_file",
-		
-						// Flash file settings
-						file_size_limit : "1000000000000",	
-						file_types : "<cfoutput>#Replace(APPLICATION.MasterFileExtensionList,".","*.","all")#</cfoutput>",	// or you could use something like: "*.doc;*.wpd;*.pdf",
-						file_types_description : "All Files",
-						file_upload_limit : "0", // Even though I only want one file I want the user to be able to try again if an upload fails
-						file_queue_limit : "1", // this isn't needed because the upload_limit will automatically place a queue limit
-		
-						// Event handler settings
-						swfupload_loaded_handler : myShowUI,
-						
-						//file_dialog_start_handler : fileDialogStart,		// I don't need to override this handler
-						file_queued_handler : fileQueued,
-						file_queue_error_handler : fileQueueError,
-						file_dialog_complete_handler : fileDialogComplete,
-						
-						//upload_start_handler : uploadStart,	// I could do some client/JavaScript validation here, but I don't need to.
-						upload_progress_handler : uploadProgress,
-						upload_error_handler : uploadError,
-						upload_complete_handler : uploadComplete,
-						file_complete_handler : fileComplete,
-		
-						// Flash Settings
-						flash_url : "/common/scripts/swfupload.swf",	// Relative to this file
-		
-						// UI settings
-		                ui_function: myShowUI,	// I'm using a custom UI function rather than SWFUpload's default
-						ui_container_id : "flashUI",
-						degraded_container_id : "degradedUI",
-		
-						// Debug settings
-						debug: false
-					});
-		            // This is a setting that my Handlers will use. It's not part of SWFUpload
-		            // But I can add it to the SWFUpload object and then use it where I need to
-					swf_upload_control.customSettings.progress_target = "fsUploadProgress";
-					swf_upload_control.customSettings.upload_successful = false;
-		
-		        }
-		
-		        function myShowUI() {
-					var ButSubmit = document.getElementById("btnUpdateFiles");
-					ButSubmit.onclick = doSubmit;
-		            SWFUpload.swfUploadLoaded.apply(this);  // Let SWFUpload finish loading the UI.
-					validateForm();
-		        }
-				
-				function validateForm() {
-				
-				}
-				
-				function fileBrowse() {
-					var txtFileName = document.getElementById("txtFileName");
-					txtFileName.value = "";
-		
-					this.cancelUpload();
-					this.selectFile();
-				}
-				
-				
-		        // Called by the submit button to start the upload
-				function doSubmit(e) {
-					e = e || window.event;
-					if (e.stopPropagation) e.stopPropagation();
-					e.cancelBubble = true;
-					
-					try {
-						swf_upload_control.startUpload();
-					} catch (ex) {
-		
-		            }
-		            return false;
-			    }
-		
-				 // Called by the queue complete handler to submit the form
-			    function uploadDone() {
-					try {
-						document.forms["contentForm"].submit();
-					} catch (ex) {
-						alert("Error submitting form");
-					}
-			    }
-			</script>
-		</cfif>
 		<cfset aFile=MyContentLocale.GetProperty("aFile")>
 		<tr><td colspan="3"><b>Files</b></td></tr>
 		<tr>
@@ -1134,6 +1041,7 @@
 				<tr>
 					<td><strong>Name</strong></td>
 					<td><strong>Caption</strong></td>
+					<td><strong>Link</strong></td>
 					<td><strong>File</strong></td>
 					<td>&nbsp;</td>
 					<td><cfif ArrayLen(aFile) GT "0" and FormMode IS "ShowForm"><strong>Remove?</strong><cfelse>&nbsp;</cfif></td>
@@ -1142,24 +1050,22 @@
 					<cfif NOT StructKeyExists(aFile[fi],"ThumbnailPath")>
 						<cfset StructInsert(aFile[fi],"ThumbnailPath","",1)>
 					</cfif>
+					<cfif NOT StructKeyExists(aFile[fi],"LinkURL")>
+						<cfset StructInsert(aFile[fi],"LinkURL","",1)>
+					</cfif>
 					<cfif FormMode IS "ShowForm">
 						<cfoutput>
 						<tr valign="top">
 							<td><input type="text" name="FileName_#fi#" value="#aFile[fi].FileName#" size="20" maxlength="128"></td>
+							<td><textarea cols="50" rows="4" name="FileCaption_#fi#">#aFile[fi].FileCaption#</textarea></td>
+							<td><input type="text" name="LinkURL_#fi#" value="#aFile[fi].LinkURL#" size="40" maxlength="255"></td>
 							<td>
-								<input type="text" name="FileCaption_#fi#" value="#aFile[fi].FileCaption#" size="40" maxlength="255">
+								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a><BR>
+								<input type="file" name="MainFilePath_#fi#FileObject">
+								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
 								<input type="hidden" name="ThumbnailPath_#fi#" value="#aFile[fi].ThumbnailPath#">
 							</td>
-							<td>
-								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a>
-								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#"><BR>
-								<input type="file" name="MainFilePath_#fi#FileObject">
-							</td>
-							<td nowrap>
-								<cfoutput><cfif ArrayLen(aFile) GT "1">
-								<cfif fi IS NOT "1"><input type="image" name="ButtonSubmit_up_#fi#" value="up_#fi#" src="/common/images/widget_arrow_up.gif"><cfelse><img src="/common/images/widget_arrow_up_grey.gif"></cfif><cfif fi IS NOT ArrayLen(aFile)><input type="image" name="ButtonSubmit_down_#fi#" value="down_#fi#" src="/common/images/widget_arrow_down.gif"><cfelse><img src="/common/images/widget_arrow_down_grey.gif"></cfif>
-								</cfif></cfoutput>&nbsp;
-							</td>
+							<td nowrap><input type="text" name="Order_#fi#" value="#fi*10#" size="2" maxlength="4">&nbsp;</td>
 							<td><input type="checkbox" name="FileDelete_#fi#" value="1"></td>
 						</tr>
 						</cfoutput>
@@ -1168,10 +1074,12 @@
 						<tr>
 							<td>#aFile[fi].FileName#</td>
 							<td>#aFile[fi].FileCaption#</td>
+							<td>#aFile[fi].LinkURL#</td>
 							<td>
 								<a href="#aFile[fi].FilePath#" target="_blank">#ListLast(aFile[fi].FilePath,'/')#</a>
 								<input type="hidden" name="MainFilePath_#fi#" value="#aFile[fi].FilePath#">
 								<input type="hidden" name="FileCaption_#fi#" value="#aFile[fi].FileCaption#">
+								<input type="hidden" name="LinkURL_#fi#" value="#aFile[fi].LinkURL#">
 							</td>
 							<td colspan="2"><input type="hidden" name="FileName_#fi#" value="#HTMLEditFormat(aFile[fi].FileName)#"></td>
 						</tr>
@@ -1182,7 +1090,8 @@
 		<cfif FormMode IS "ShowForm">
 			<tr valign="top">
 				<td><input type="text" name="FileName_New" value="" size="20" maxlength="128"></td>
-				<td><input type="text" name="FileCaption_New" value="" size="40" maxlength="128"></td>
+				<td><textarea cols="50" rows="4" name="FileCaption_New"></textarea></td>
+				<td><input type="text" name="LinkURL_New" value="" size="40" maxlength="128"></td>
 				<td><input type="file" name="MainFilePath_NewFileObject"><BR>Leave blank to insert label</td>
 				<td colspan="2">&nbsp;</td>
 			</tr>

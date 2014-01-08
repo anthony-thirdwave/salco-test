@@ -32,10 +32,13 @@
 		<cfmodule template="/common/modules/product/productFamilyListing.cfm" ParentProductFamilyID="#ATTRIBUTES.CategoryID#" Mode="TopLevel">
 	</cfcase>
 	<cfcase value="SecondLevel">
+		<div class="product-landing">
 		<cfmodule template="/common/modules/product/_ProductFamilyDetail.cfm" ProductFamilyID="#ATTRIBUTES.CategoryID#">
-		<cfmodule template="/common/modules/product/productFamilyListing.cfm" ParentProductFamilyID="#ATTRIBUTES.CategoryID#" Mode="RolloverOutline">
+		</div>
 	</cfcase>
 	<cfdefaultcase>
+		<div class="product-landing">
 		<cfmodule template="/common/modules/product/productFamilyListing.cfm" ParentProductFamilyID="#ATTRIBUTES.CategoryID#" Mode="MultiLevel">
+		</div>
 	</cfdefaultcase>
 </cfswitch>

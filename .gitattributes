@@ -511,6 +511,8 @@ code/webroot/common/modules/Contact/supportForm.cfm -text
 code/webroot/common/modules/News/NewsListing.cfm -text
 code/webroot/common/modules/News/intranet/newsDetail.cfm -text
 code/webroot/common/modules/News/intranet/newsListing.cfm -text
+code/webroot/common/modules/News/newsDetailPagination.cfm -text
+code/webroot/common/modules/News/newsListingPagination.cfm -text
 code/webroot/common/modules/User/GetUserPermissions.cfm -text
 code/webroot/common/modules/User/UserForm.cfm -text
 code/webroot/common/modules/User/UserObject.cfm -text

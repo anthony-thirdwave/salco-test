@@ -13,19 +13,20 @@
 </cfif>
 
 <cfif Val(ATTRIBUTES.ProductFamilyID) GT "0" AND Val(ATTRIBUTES.LanguageID) GT "0">
-	<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
-		<cfprocresult name="GetProductFamily">
-		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ATTRIBUTES.ProductFamilyID)#" null="No">
-		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#ATTRIBUTES.LocaleID#" null="No">
-	</cfstoredproc>
 	<cfquery name="GetCache" datasource="#APPLICATION.DSN#">
 		SELECT     MAX(CacheDateTime) AS CacheDateTime
 		FROM         t_Category
-		WHERE     CategoryID IN (#ATTRIBUTES.ProductFamilyID#)
+		WHERE     CategoryID IN (<cfqueryparam value="#Val(ATTRIBUTES.ProductFamilyID)#" cfsqltype="CF_SQL_INTEGER">)
 	</cfquery>
-	<CFSET ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductFamilyDetail_v1.1_#ATTRIBUTES.ProductFamilyID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
-	<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
+	<cfset ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductFamilyDetail_v1.1_#ATTRIBUTES.ProductFamilyID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
+	<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
 		<cfsaveContent Variable="FileContents">
+			<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+				<cfprocresult name="GetProductFamily">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(ATTRIBUTES.ProductFamilyID)#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#ATTRIBUTES.LocaleID#" null="No">
+			</cfstoredproc>
+			
 			<cfset MyProductFamily=CreateObject("component","com.Product.ProductFamily")>
 			<cfset MyProductFamily.Constructor(Val(ATTRIBUTES.ProductFamilyID),ATTRIBUTES.LanguageID)>
 			<cfset aView=MyProductFamily.GetProperty("aProductFamilyView")>
@@ -61,13 +62,47 @@
 			</cfloop>
 			<cfset aDownload=tempArray>
 			
+			<cfset thisImageHeader="">
+			<cfif IsWDDX(GetProductFamily.CategoryLocalePropertiesPacket)>
+				<cfwddx action="WDDX2CFML" input="#GetProductFamily.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
+				<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader">
+					<cfif StructKeyExists(sCategoryProperties,"CategoryImageHeader") AND Trim(StructFind(sCategoryProperties,"CategoryImageHeader")) IS NOT "">
+						<cfset thisImageHeader=StructFind(sCategoryProperties,"CategoryImageHeader")>
+					</cfif>
+				</cfloop>
+			</cfif>
+			
+			<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+				<cfprocresult name="GetSubProductFamilies">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ATTRIBUTES.LocaleID)#" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#val(ATTRIBUTES.ProductFamilyID)#" null="NO">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="62" null="No">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+				<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
+			</cfstoredproc>
+
 			<cfoutput>
-				<h1>#GetProductFamily.CategoryNameDerived#</h1>
-				<cfif IsDefined("REQUEST.CategoryImageHeader") and REQUEST.CategoryImageHeader IS NOT "">
-					<img class="hero" src="#REQUEST.CategoryImageHeader#" alt="#REQUEST.CategoryImageHeader#">
+				<h2>#GetProductFamily.CategoryNameDerived#</h2>
+			</cfoutput>
+			
+			<cfif GetSubProductFamilies.RecordCount GT "0">
+				<nav class="product-nav">
+				<ul>
+				<cfoutput query="GetSubProductFamilies">
+					<li><a href="#APPLICATION.utilsObj.parseCategoryUrl(GetSubProductFamilies.CategoryAlias)#">#GetSubProductFamilies.CategoryNameDerived#</a></li>
+				</cfoutput>
+				</ul>
+				</nav>
+			</cfif>
+			
+			<cfoutput>
+				<cfif Trim(thisProductFamilyDescription) IS NOT "">
+					<p class="indent-bullet">#APPLICATION.utilsObj.AddBreaks(thisProductFamilyDescription)#</p>
 				</cfif>
-				<p>#APPLICATION.utilsObj.AddBreaks(thisProductFamilyDescription)#</p>
-				
 				<cfif ArrayLen(aProductFamilyFeature) GT "0">
 					<h4>Features</h4>
 					<ul>
@@ -85,6 +120,29 @@
 						#aDownload[i].ResourceText#
 						</p>
 					</cfloop>
+				</cfif>
+				
+				<cfif thisImageHeader IS NOT "">
+					<div id="product-hero-image" <cfif thisImageHeader IS NOT "">style="background-image:url(#thisImageHeader#);"</cfif>>
+					<cfif 0>
+						<div class="product-hero-grad">
+							<div class="popular-products">
+								<h3>Popular Air Slide Parts:</h3>
+								<ul>
+									<li><a href="">
+										<div style="background-image:url(AirslideHatchCover20.png)"></div>
+										<span>Airslide Hatch Cover 20 <span>AHC20TAS</span></span> </a></li>
+									<li><a href="">
+										<div style="background-image:url(pipe-cap-number-3.png)"></div>
+										<span>Pipe Cap 3 <span>GA3AIC</span></span> </a></li>
+									<li><a href="">
+										<div style="background-image:url(airslide-cover-handwheel.png)"></div>
+										<span>Airslide Cover Handwheel Assembly <span>GA20HWA</span></span> </a></li>
+								</ul>
+							</div>
+						</div>
+					</cfif>
+					</div>
 				</cfif>
 				
 			</cfoutput>

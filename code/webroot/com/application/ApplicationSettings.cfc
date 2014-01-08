@@ -67,13 +67,11 @@
 		<cfset APPLICATION.defaultSiteCategoryID="1">
 		<cfset APPLICATION.intranetSiteCategoryID="6061">
 		<cfset APPLICATION.StagingURL="http://staging.salco.01.thirdwaveweb.com" />
-		
-		<cfset APPLICATION.IntranetCategoryID="6061">
 
 		<cfif APPLICATION.ApplicationName is "intranet.salco">
 			<cfset APPLICATION.NewsCategoryID="6063">
 		<cfelse>
-			<cfset APPLICATION.NewsCategoryID="6293">
+			<cfset APPLICATION.NewsCategoryID="6719">
 		</cfif>
 		
 		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
@@ -131,7 +129,7 @@
 			<cfif APPLICATION.ApplicationName is "intranet.salco">
 				<cfset APPLICATION.NewsCategoryID="6063">
 			<cfelse>
-				<cfset APPLICATION.NewsCategoryID="6293">
+				<cfset APPLICATION.NewsCategoryID="6719">
 			</cfif>
 			<cfset APPLICATION.IntranetUtilityNavCategoryID="6092">
 			<cfset APPLICATION.AnniversaryTopicID="6277">

@@ -116,7 +116,7 @@
                     <tr>
 						<th align="left">Name</th>
 						<th>Description</th>
-						<th>Available Languages</th>
+						<th>Downloads</th>
 					</tr>
                     </thead>
 					<tbody>
@@ -133,7 +133,7 @@
 								<td valign="top" class="#class#">#Description#</td>
 								<td valign="top" class="#class#" nowrap>
 									<cfoutput group="Language">
-										#Language# #Round(Size/1024)#kb: <a href="#URL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(URL)#">Download</a>
+										<a href="#URL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(URL)#">Download</a> (#Round(Size/1024)#kb)
 									</cfoutput>
 								</td>
 							</tr>

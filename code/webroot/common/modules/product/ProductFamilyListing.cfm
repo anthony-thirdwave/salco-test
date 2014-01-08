@@ -85,6 +85,30 @@
 				<cfset MyProductFamily=CreateObject("component","com.Product.ProductFamily")>
 				<cfset MyProductFamily.Constructor(Val(ATTRIBUTES.ParentProductFamilyID),ATTRIBUTES.LanguageID)>
 				
+				<cfinvoke component="#APPLICATION.MyCategoryHandler#"
+					method="GetCategoryBasicDetails"
+					returnVariable="qGetCategoryBasicDetails"
+					CategoryID="#ATTRIBUTES.ParentProductFamilyID#">
+				<cfquery name="GetParentPageName" datasource="#APPLICATION.DSN#">
+					SELECT	CategoryName
+					FROM	t_Category
+					WHERE	Categoryid=<cfqueryparam value="#Val(qGetCategoryBasicDetails.ParentID)#" cfsqltype="CF_SQL_INTEGER">
+				</cfquery>
+				<cfset ParentCategoryName="#GetParentPageName.CategoryName#">
+				
+				<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+					<cfprocresult name="GetSiblingProductFamilies">
+					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ATTRIBUTES.LocaleID)#" null="No">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
+					<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="#val(qGetCategoryBasicDetails.ParentID)#" null="NO">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="" null="Yes">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="62" null="No">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
+				</cfstoredproc>
+				
 				<script type="text/javascript">
 					$(document).ready(function() {
 						/*$("html").addClass("js");
@@ -109,10 +133,27 @@
 				</script>
 				<div id="sub">
 				<cfoutput>
-					<h1>#REQUEST.CurrentCategoryName#</h1>
-					#APPLICATION.utilsObj.AddBreaks(MyProductFamily.GetProperty('ProductFamilyDescription'))#
+					<h2>#ParentCategoryName#</h2>
 				</cfoutput>
-				Select categories below to expand for more information.
+				
+				<cfif GetSiblingProductFamilies.RecordCount GT "0">
+					<nav class="product-nav">
+					<ul>
+					<cfoutput query="GetSiblingProductFamilies">
+						<li><a href="#APPLICATION.utilsObj.parseCategoryUrl(GetSiblingProductFamilies.CategoryAlias)#" <cfif GetSiblingProductFamilies.CategoryID IS ATTRIBUTES.ParentProductFamilyID>class="active"</cfif>>#GetSiblingProductFamilies.CategoryNameDerived#</a></li>
+					</cfoutput>
+					</ul>
+					</nav>
+				</cfif>
+				
+				<cfif Trim(MyProductFamily.GetProperty("ProductFamilyDescription")) IS NOT "">
+					<cfoutput>
+						<p class="indent-bullet">#APPLICATION.utilsObj.AddBreaks(MyProductFamily.GetProperty('ProductFamilyDescription'))#</p>
+					</cfoutput>
+				</cfif>
+				
+				<p>Select categories below to expand for more information.</p>
+				
 				<div class="subordion">
 					<cfoutput query="qGetProductFamilyList">
 						<h4>#qGetProductFamilyList.CategoryNameDerived#</h4>
