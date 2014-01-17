@@ -986,6 +986,13 @@ body{
 		margin:24px 0px 18px 50px;
 	}
 	
+	#service-center #center-content > h1 {
+		width:114px;
+		line-height:30px;
+		text-indent:-66px;
+		padding-left:66px;
+	}
+	
 	#center-content > h3 {
 		margin:24px 0px 18px 50px;
 		padding:0px;
