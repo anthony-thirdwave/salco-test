@@ -1,14 +1,15 @@
 <cfparam name="ATTRIBUTES.CategoryID" default="-1">
 <cfparam name="ATTRIBUTES.Level" default="1">
+<cfparam name="ATTRIBUTES.MaxLevel" default="-1">
 
-<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+<cfstoredproc procedure="usp_GetPage" datasource="#APPLICATION.DSN#">
 	<cfprocresult name="GetCategoryDetail" maxrows="1">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#val(ATTRIBUTES.CategoryID)#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(APPLICATION.LocaleID)#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="1" null="No">
 </cfstoredproc>
 
-<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+<cfstoredproc procedure="usp_GetPages" datasource="#APPLICATION.DSN#">
 	<cfprocresult name="GetCategoryList">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(APPLICATION.LocaleID)#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
@@ -29,17 +30,25 @@
 		<cfelse>
 			<cfset ThisURL = "#APPLICATION.utilsObj.parseCategoryUrl(GetCategoryDetail.CategoryAlias)#" />
 		</cfif>
-		<li><a href="#ThisURL#" <cfif ATTRIBUTES.Level IS "1">class="sideNavLink"</cfif>>#GetCategoryDetail.CategoryNameDerived#</a>
+		<li><a href="#ThisURL#" <cfif ATTRIBUTES.Level IS "1">class="sideNavLink"</cfif>><span>#GetCategoryDetail.CategoryNameDerived#</span></a>
 	</cfoutput>
 </cfif>
 
-<cfif GetCategoryList.recordcount GT "0">
+<cfset Continue="1">
+<cfif Val(ATTRIBUTES.MaxLevel) GT "0" and ATTRIBUTES.Level+1 GT Val(ATTRIBUTES.MaxLevel)>
+	<cfset Continue="0">
+</cfif>
+<cfif GetCategoryList.recordcount is "0">
+	<cfset Continue="0">
+</cfif>
+<cfif Continue>
 	<ul>
 	<cfoutput query="GetCategoryList">
 		<cfmodule template="/common/modules/display/navigation/dsp_NavRHelper.cfm" 
 			CategoryID="#val(GetCategoryList.CategoryID)#" 
 			counter="#GetCategoryList.CurrentRow#"
-			Level="#ATTRIBUTES.Level+1#">
+			Level="#ATTRIBUTES.Level+1#"
+			MaxLevel="#ATTRIBUTES.MaxLevel#">
 	</cfoutput>
 	</ul>
 </cfif>

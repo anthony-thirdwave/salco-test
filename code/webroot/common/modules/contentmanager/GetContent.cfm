@@ -39,6 +39,7 @@
 <cfset CALLER.CSSClass="">
 <cfset CALLER.CategoryImageHeader="">
 <cfset REQUEST.CategoryImageHeader="">
+<cfset CALLER.CategoryImageBackground="">
 
 <cfset DenyAccess="0">
 <cfset LoginPageCacheDateTime="">
@@ -93,7 +94,7 @@
 	
 	<cfif IsWDDX(GetPage.CategoryLocalePropertiesPacket)>
 		<cfwddx action="WDDX2CFML" input="#GetPage.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
-		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader">
+		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader,CategoryImageBackground">
 			<cfif StructKeyExists(sCategoryProperties,"#ThisProp#") AND Trim(StructFind(sCategoryProperties, "#ThisProp#")) IS NOT "">
 				<cfset Setvariable("CALLER.#ThisProp#",StructFind(sCategoryProperties, "#ThisProp#"))>
 				<cfif ThisProp IS "CategoryImageHeader">
@@ -257,6 +258,17 @@
 	</cfif>
 	
 	<cfset CALLER.CSSClass=Trim(ListAppend(lcase(application.utilsObj.scrub(GetPage.CategoryTypeName)),"#CALLER.CSSClass#"," "))>
+	<cfif ListFind("62,64",CALLER.CategoryTypeID)>
+		<cfif CALLER.CategoryTypeID IS "64" and ListFindNoCase(CALLER.CSSClass,"product"," ") IS "0">
+			<cfset CALLER.CSSClass=ListAppend(CALLER.CSSClass,"product"," ")>
+		</cfif>
+		<cfif ListLen(CALLER.CategoryThreadList) GTE "3" and Len(ListGetAt(CALLER.CategoryThreadName,3)) GT "15">
+			<cfset CALLER.CSSClass=ListAppend(CALLER.CSSClass,"longTitle"," ")>
+		</cfif>
+	<cfelseif Len(CALLER.CurrentCategoryName) GT "15">
+		<cfset CALLER.CSSClass=ListAppend(CALLER.CSSClass,"longTitle"," ")>
+	</cfif>
+	
 	<cfset REQUEST.AllowComments=CALLER.AllowComments>
 
 	<cfif APPLICATION.ApplicationName IS "intranet.salco">
@@ -283,7 +295,7 @@
 	<cfloop index="ThisContentPositionID" list="#lPosition#">
 		<cfset recacheThis=false>
 		<cfif DenyAccess>
-			<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#LoginPageAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(LoginPageCacheDateTime,'yyyymmdd')##TimeFormat(LoginPageCacheDateTime,'HHmmss')#.cfm">
+			<cfset ExecuteTempFile="#APPLICATION.LocaleID#\#APPLICATION.ApplicationName#_#LoginPageAlias#+#ThisContentPositionID#_#APPLICATION.LocaleID#_#DateFormat(LoginPageCacheDateTime,'yyyymmdd')##TimeFormat(LoginPageCacheDateTime,'HHmmss')#.cfm">
 			<cfset CALLER.AllowComments="0">
 			<cfset REQUEST.AllowComments="0">
 		<cfelse>

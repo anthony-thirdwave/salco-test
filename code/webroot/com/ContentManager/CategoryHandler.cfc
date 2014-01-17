@@ -676,18 +676,22 @@
 	<!--- get the number of categories --->
 	<cffunction name="getCategoryCount" output="false" returntype="numeric">
 		<cfargument name="parentId" type="numeric" required="false" default=0>
+		<cfargument name="CategoryTypeID" type="numeric" required="false" default=0>
 
 		<!--- init variables --->
-		<cfset var Check = "">
+		<cfset var Check="">
 
 		<!--- return the total number of categories --->
 		<cfquery name="Check" datasource="#APPLICATION.DSN#">
 			SELECT COUNT(*) numCats
 			FROM t_category
-
+			WHERE 1=1
 			<!--- limit by parentId if passed --->
 			<cfif arguments.parentId neq 0>
-				WHERE parentId = <cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+				and parentId=<cfqueryparam value="#arguments.parentId#" cfsqltype="cf_sql_integer">
+			</cfif>
+			<cfif arguments.CategoryTypeID neq 0>
+				and CategoryTypeID=<cfqueryparam value="#arguments.CategoryTypeID#" cfsqltype="cf_sql_integer">
 			</cfif>
 		</cfquery>
 		<cfreturn Check.numCats>

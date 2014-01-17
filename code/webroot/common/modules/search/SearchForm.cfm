@@ -1,9 +1,15 @@
 <cfparam name="ATTRIBUTES.FormAction" default="#APPLICATION.utilsObj.parseCategoryUrl('Search')#">
-<cfparam name="sc" default="1">
-<cfset FormPath=GetToken(ATTRIBUTES.FormAction,1,"?")>
-<cfset FormQueryString=GetToken(ATTRIBUTES.FormAction,2,"?")>
-<cfparam name="ParamKeywords" default="">
-<cf_AddToQueryString QueryString="#FormQueryString#" name="scaoa" value="2">
-<cfoutput><form style="display:inline;"  action="#FormPath#?#QueryString#" method="POST" name="searchform">
-<input type="text" name="ParamKeywords" value="#ParamKeywords#" size="15" maxlength="35" align="absmiddle">
-<input type="submit" value="Search"></form></cfoutput>
+<cfparam name="searchTxt" default="Search Salco Products...">
+<cfparam name="searchType" default="">
+<cfset sSearch=APPLICATION.utilsObj.GetSearchStruct()>
+<cfoutput>
+	<form method="get" action="#ATTRIBUTES.FormAction#">
+	<select name="searchType" id="search-type">
+		<cfloop index="ThisSearchType" list="#StructKeyList(sSearch)#">
+			<option value="#ThisSearchType#" <cfif searchType IS ThisSearchType>selected</cfif>>#sSearch[ThisSearchType]#</option>
+		</cfloop>
+	</select>
+	<input type="text" name="searchTxt" class="backSearch" value="#HTMLEditFormat(searchTxt)#" id="search-text"/>
+	<input type="submit" class="btnSearch" />
+	</form>
+</cfoutput>

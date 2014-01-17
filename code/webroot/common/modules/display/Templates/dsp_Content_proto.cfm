@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+<meta content="width=925, maximum-scale=1" name="viewport">
 <cfoutput>
 	<title>#thisPageTitle#</title>
 	<meta name="keywords" content="#MetaKeywords#" />
@@ -36,7 +36,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript" src="/common/js/jquery.client.js"></script>
 <script type="text/javascript" src="/common/js/html5shiv.js"></script>
+
 <script type="text/javascript" src="/common/js/default-updated.js"></script>
+
+<script type="text/javascript" src="/common/js/jquery.patternizer.js"></script>
+<script type="text/javascript" src="/common/js/jquery.hashchange.js"></script>
 <!--[if lt IE 9]>
 	<script src="/common/js/html5shiv.js"></script>
 <![endif]-->
@@ -50,17 +54,26 @@
 	 font-family: font-family:'Myriad W01 Regular';
 	}	
 	
-	#contact-us-aside{display:none;}
 	
-	#contact-us-aside:target {
-		display:block;
-	}
-	
-	#contact-us-aside:target + div {
-		display:none;
-	}
 	/* above css is just for demo, will need to update css for fonts when we have the fonts.com code */
 </style>
+
+<cfif ListFindNoCase("62,64",CategoryTypeID)>
+	<cfif ListLen(CategoryThreadList) GTE "5">
+		<cfoutput>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					<cfset ThisList="">
+					<cfloop index="i" from="5" to="#ListLen(CategoryThreadList)#" step="1">
+						<cfset ThisList=ListAppend(ThisList,ListGetAt(CategoryThreadList,i))>
+					</cfloop>
+					getNavItemsAuto('#ThisList#','#ThisList#');
+				});
+			</script>
+		</cfoutput>
+	</cfif>
+</cfif>
+
 </head>
 
 <cfoutput>
@@ -89,12 +102,7 @@
 					<li><a href="/page/espanol">Espa&ntilde;ol</a></li>
 				</ul>
 			</nav>
-			<cfoutput>
-			<form method="get" action="#APPLICATION.utilsObj.parseCategoryUrl('search')#">
-				<input type="text" name="searchTxt" class="backSearch" value="Search Salco Products..." />
-				<input type="submit" class="btnSearch" />
-			</form>
-			</cfoutput>
+			<cfmodule template="/common/modules/search/searchForm.cfm">
 		</div>
 		<div id="nav-toggle-container">
 			<div id="nav-toggle-background"></div>
@@ -109,33 +117,86 @@
 			</nav>
 		</div>
 	</header>
-	<div id="content-wrapper">
-		<div id="left-content">
-			<cfif ListLen(CategoryThreadList) GTE "3">
-				<cfsavecontent variable="LeftNavContent">
-					<cfmodule template="/common/modules/display/navigation/dsp_NavR.cfm" CategoryID="#ListGetAt(CategoryThreadList,3)#">
-				</cfsavecontent>
-				<cfif Trim(LeftNavContent) IS NOT "">
-					<nav class="vers-1">
-						<cfoutput>#LeftNavContent#</cfoutput>
-					</nav>
-				</cfif>
-			</cfif>
-		</div>
-		<div id="center-content">
-			<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
-		</div>
-		<div id="right-content">
-			<cfsavecontent variable="RightColumnContent">
-				<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
-			</cfsavecontent>
-			<cfif Trim(RightColumnContent) IS NOT "">
-				<div id="right-aside" style="">
-					<cfoutput>#RightColumnContent#</cfoutput>
+	<cfswitch expression="#TemplateID#">
+		<cfcase value="22">
+			<div id="content-wrapper-home">
+				<div id="left-content">
+					<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
 				</div>
-			</cfif>
-		</div>
-	</div>
+				<div id="right-content">
+					<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+				</div>
+			</div>
+		</cfcase>
+		<cfdefaultcase>
+			<div id="content-wrapper">
+				<div id="left-content">
+					<cfif ListFind("62,64",CategoryTypeID)>
+						<cfif ListLen(CategoryThreadList) GTE "4">
+							<ul id="acc3">
+							<li class="treeHeader"><cfoutput>#ListGetAt(CategoryThreadName,3)#</cfoutput></li>
+							<cfmodule template="/common/modules/display/navigation/dsp_NavProduct.cfm" CategoryID="#ListGetAt(CategoryThreadList,4)#" CategoryThreadList="#CategoryThreadList#">
+							</ul>
+						</cfif>
+					<cfelseif ListLen(CategoryThreadList) GTE "3">
+						<cfsavecontent variable="LeftNavContent">
+							<cfmodule template="/common/modules/display/navigation/dsp_NavR.cfm" CategoryID="#ListGetAt(CategoryThreadList,3)#">
+						</cfsavecontent>
+						<cfif Trim(LeftNavContent) IS NOT "">
+							<nav class="vers-1">
+								<cfoutput>#LeftNavContent#</cfoutput>
+							</nav>
+						</cfif>
+					</cfif>
+				</div>
+				<div id="center-content">
+					<cfif ListFind(CategoryThreadList,APPLICATION.NewsCategoryID)>
+						<cfif currentCategoryID eq APPLICATION.NewsCategoryID>
+							<cfinclude template="/common/modules/news/newsListingPagination.cfm">
+						<cfelse>
+							<cfinclude template="/common/modules/news/newsDetailPagination.cfm">
+						</cfif>
+					</cfif>
+					<cfif ListFindNoCase("62",CategoryTypeID)>
+						<cfif ListLen(CategoryThreadList) GTE "3">
+							<cfoutput><h1>#ListGetAt(CategoryThreadName,3)#</h1></cfoutput>
+						</cfif>
+					<cfelseif ListFindNoCase("64",CategoryTypeID)>
+						<cfoutput>
+							<cfif ListLen(CategoryThreadList) GTE "3">
+								<h3>#ListGetAt(CategoryThreadName,3)#</h3>
+							</cfif>
+							<cfif ListLen(CategoryThreadList) GTE "4">
+								<h2>#ListGetAt(CategoryThreadName,4)#</h2>
+							</cfif>
+							<h1>#CurrentCategoryName#</h1>
+						</cfoutput>
+					<cfelse>
+						<cfoutput><h1>#CurrentCategoryName#</h1></cfoutput>
+					</cfif>
+					<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="401">
+				</div>
+				<div id="right-content">
+					<cfsavecontent variable="RightColumnContent">
+						<cfmodule template="/common/modules/contentManager/ContentPositionOutput.cfm" PositionID="402">
+					</cfsavecontent>
+					<cfif Trim(RightColumnContent) IS NOT "">
+						<cfif CurrentCategoryAlias is "contact-us">
+							<aside id="contact-us-aside">
+							<div class="inner-content">
+							<cfoutput>#RightColumnContent#</cfoutput>
+							</div>
+							</aside>
+						<cfelse>
+							<div id="right-aside" style="">
+								<cfoutput>#RightColumnContent#</cfoutput>
+							</div>
+						</cfif>
+					</cfif>
+				</div>
+			</div>
+		</cfdefaultcase>
+	</cfswitch>
 	<footer>
 		<ul>
 			<li>&copy; <cfoutput>#Year(Now())#</cfoutput> Salco Products, Inc.</li>

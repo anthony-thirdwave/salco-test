@@ -63,13 +63,15 @@
 			<cfset aDownload=tempArray>
 			
 			<cfset thisImageHeader="">
+			<cfset thisLRelatedPageID="">
 			<cfif IsWDDX(GetProductFamily.CategoryLocalePropertiesPacket)>
 				<cfwddx action="WDDX2CFML" input="#GetProductFamily.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
-				<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader">
-					<cfif StructKeyExists(sCategoryProperties,"CategoryImageHeader") AND Trim(StructFind(sCategoryProperties,"CategoryImageHeader")) IS NOT "">
-						<cfset thisImageHeader=StructFind(sCategoryProperties,"CategoryImageHeader")>
-					</cfif>
-				</cfloop>
+				<cfif StructKeyExists(sCategoryProperties,"CategoryImageAccent") AND Trim(StructFind(sCategoryProperties,"CategoryImageAccent")) IS NOT "">
+					<cfset thisImageHeader=StructFind(sCategoryProperties,"CategoryImageAccent")>
+				</cfif>
+				<cfif StructKeyExists(sCategoryProperties,"lRelatedPageID") AND Trim(StructFind(sCategoryProperties,"lRelatedPageID")) IS NOT "">
+					<cfset thisLRelatedPageID=StructFind(sCategoryProperties,"lRelatedPageID")>
+				</cfif>
 			</cfif>
 			
 			<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
@@ -121,31 +123,55 @@
 						</p>
 					</cfloop>
 				</cfif>
-				
-				<cfif thisImageHeader IS NOT "">
-					<div id="product-hero-image" <cfif thisImageHeader IS NOT "">style="background-image:url(#thisImageHeader#);"</cfif>>
-					<cfif 0>
-						<div class="product-hero-grad">
-							<div class="popular-products">
-								<h3>Popular Air Slide Parts:</h3>
-								<ul>
-									<li><a href="">
-										<div style="background-image:url(AirslideHatchCover20.png)"></div>
-										<span>Airslide Hatch Cover 20 <span>AHC20TAS</span></span> </a></li>
-									<li><a href="">
-										<div style="background-image:url(pipe-cap-number-3.png)"></div>
-										<span>Pipe Cap 3 <span>GA3AIC</span></span> </a></li>
-									<li><a href="">
-										<div style="background-image:url(airslide-cover-handwheel.png)"></div>
-										<span>Airslide Cover Handwheel Assembly <span>GA20HWA</span></span> </a></li>
-								</ul>
-							</div>
-						</div>
-					</cfif>
+			</cfoutput>
+			
+			<cfif thisImageHeader IS NOT "" or Trim(thisLRelatedPageID) IS NOT "">
+				<div id="product-hero-image" <cfif thisImageHeader IS NOT "">style="background-image:url(<cfoutput>#thisImageHeader#</cfoutput>);"</cfif>>
+				<cfif Trim(thisLRelatedPageID) IS NOT "">
+					<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
+						<cfprocresult name="GetFeaturedProducts">
+						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ATTRIBUTES.LocaleID)#" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayOrder" Value="" null="yes">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="categoryActiveDerived" value="1" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ParentID" value="" null="Yes">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="DisplayLevelList" value="" null="Yes">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryIDList" value="#thisLRelatedPageID#" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="CategoryTypeIDList" value="64" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="NotCategoryTypeIDList" value="" null="Yes">
+						<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
+					</cfstoredproc>
+					<div class="product-hero-grad">
+					<div class="popular-products">
+					<h3>Popular <cfoutput>#GetProductFamily.CategoryNameDerived#</cfoutput> Parts:</h3>
+					<ul>
+					<cfloop index="ThisProductID" list="#thisLRelatedPageID#">
+						<cfquery name="GetThis" dbtype="query">
+							select * from GetFeaturedProducts where CategoryID=<cfqueryparam value="#ThisProductID#" cfsqltype="CF_SQL_INTEGER">
+						</cfquery>
+						<cfset thisImage="">
+						<cfif IsWDDX(GetThis.CategoryLocalePropertiesPacket)>
+							<cfwddx action="WDDX2CFML" input="#GetThis.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
+							<cfif StructKeyExists(sCategoryProperties,"CategoryImageHeader") AND Trim(StructFind(sCategoryProperties,"CategoryImageHeader")) IS NOT "">
+								<cfset thisImage=StructFind(sCategoryProperties,"CategoryImageHeader")>
+							</cfif>
+						</cfif>
+						<cfset thisProductNumber="">
+						<cfinvoke component="/com/Product/ProductHandler"
+							method="GetProductPartNumber"
+							returnVariable="thisProductNumber"
+							ProductID="#Val(GetThis.CategoryID)#">
+						<cfoutput>
+							<li><a href="#APPLICATION.utilsObj.parseCategoryUrl(GetThis.CategoryAlias)#"><cfif thisImage IS NOT ""><div style="background-image:url(#thisImage#)"></div></cfif>
+							<span>#GetThis.CategoryNameDerived#<cfif thisProductNumber IS NOT ""> <span>#thisProductNumber#</span></cfif></span></a></li>						
+						</cfoutput>
+					</cfloop>
+					</ul>
+					</div>
 					</div>
 				</cfif>
-				
-			</cfoutput>
+				</div>
+			</cfif>
+			
 		</cfsavecontent>
 		<cffile action="WRITE" file="#APPLICATION.ExecuteTempDir##ExecuteTempFile#" output="#FileContents#" addnewline="Yes">
 	</cfif>

@@ -31,26 +31,26 @@
 
 <cfset end_page=start_page + show_pages - 1>
 <cfoutput>
-	<div>
+	<div class="news-listing-pagy">
 		<cfif url.pageNum gt 1>
 		<dd>
-		   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newsListingPage)#&pageNum=#Val(url.pageNum-1)#">Previous Page</a>
+		   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newsListingPage)#&pageNum=#Val(url.pageNum-1)#">&lt;</a>
 		</dd>
 		</cfif>
 		<ul>
 		<cfloop from="#start_page#" to="#end_page#" index="i">
-			<li>
+			
 			<cfif Val(url.pageNum) EQ i>
-		      	#i#
+		      <li class="current">#i#</li>
 			<cfelse>
-		      	<a href="#APPLICATION.utilsObj.parseCategoryUrl(newsListingPage)#&pageNum=#Val(i)#">#i#</a>	
+		      	<li><a href="#APPLICATION.utilsObj.parseCategoryUrl(newsListingPage)#&pageNum=#Val(i)#">#i#</a></li>	
 			</cfif>
-			</li>
+			
 		</cfloop>
 		</ul>
 			<cfif url.pageNum * records_per_page LT get_count.records>
 			<dd>
-			   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newsListingPage)#&pageNum=#Val(url.pageNum+1)#">Next Page</a>
+			   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newsListingPage)#&pageNum=#Val(url.pageNum+1)#">&gt;</a>
 			 </dd>
 			</cfif>
 	</div>

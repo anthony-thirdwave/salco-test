@@ -1,7 +1,7 @@
 <cfparam name="APPLICATION.LocaleID" default="-1">
 <cfparam name="nlmode" default="Active">
 <cfparam name="ATTRIBUTES.NumItems" default=" ">
-
+<cfabort>
 <cfquery name="GetLastCache" datasource="#APPLICATION.DSN#">
 	SELECT     Max(CacheDateTime) as CACHEDATETIME 
 	FROM         t_Category

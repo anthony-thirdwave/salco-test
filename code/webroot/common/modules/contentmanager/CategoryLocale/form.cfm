@@ -116,12 +116,12 @@
 <cfif ListFindNoCase(Restrictions,"SubTitle")>
 	<cfinvoke component="com.ContentManager.EmployeeHandler"
 		method="qryEmployees"
-		orderBy = "empFirstName,empLastName"
+		orderBy="empFirstName,empLastName"
 		returnVariable="employees">
 	
 	<cfset EmployeeIDList="">
 	<cfoutput query="employees">
-		<cfset EmployeeName = employees.empFirstName &" "& employees.empLastName>
+		<cfset EmployeeName=employees.empFirstName &" "& employees.empLastName>
 		<cfset EmployeeIDList=ListAppend(EmployeeIDList,"{#employees.empAlias#&#EmployeeName#|#EmployeeName#}","^^")>
 	</cfoutput>
 
@@ -234,6 +234,65 @@
 		Required="N">
 </cfif>
 
+<cfif ListFindNoCase(Restrictions,"lRelatedPageID")>
+	<style>
+		#articleList {
+			list-style-type:none;
+			margin:0;
+			padding:0;
+		}
+		#articleList li {
+			width:400px;
+			border:1px solid #000000;
+			margin:3px;
+			padding:3px;
+		}
+		.handle {
+			cursor:move;
+		}
+		a.suggest {
+			text-decoration:none;
+		}
+		a.suggest:hover {
+			text-decoration:underline;
+		}
+	</style>
+
+	<cfset articleList="">
+	<cfif MyCategoryLocale.GetProperty("lRelatedPageID") NEQ "">
+		<cfloop list="#MyCategoryLocale.GetProperty('lRelatedPageID')#" index="thisID">
+			<cfquery name="getArticle" datasource="#APPLICATION.DSN#">
+				SELECT CategoryName, CategoryID FROM t_Category
+				WHERE CategoryID=<cfqueryparam value="#thisID#" cfsqltype="cf_sql_integer">
+			</cfquery>
+			<cfoutput query="getArticle">
+				<cfset articleList=articleList & "<li id=""#CategoryID#""><span class=""handle"">#CategoryName#</span> <a href=""javascript:removeArticle('#CategoryID#');"">remove</a></li>">
+			</cfoutput>
+		</cfloop>
+	</cfif>
+	<TR valign="top">
+		<TD bgcolor="white"></TD>
+		<TD bgcolor="white">
+			Find Product<br>
+			(by Product No. or Alias):<br/>
+			<input id="txtResource" name="txtResource" style="WIDTH: 200px" type="text" onKeyDown="return supressEnterKey(event);" onKeyUp="return getSuggestions(this, event);" /><br />
+			<div id="suggest" style="z-index:1000;position:absolute; border-style:solid; border-color:#7F9DB9; /*overflow: inherit;*/ white-space:normal; visibility:hidden; width:600px; border-width:1px; font-size:11px; font-family:Arial, Helvetica, sans-serif; padding-left: 0px; color:#000000; background-color:#FFFFCC"></div>
+		</TD>
+		<TD><strong>Product List:</strong><br/><ul id="articleList"><cfoutput>#Trim(articleList)#</cfoutput></ul></TD>
+	</TR>
+	<script src="/common/scripts/pageSelector.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		document.getElementById('categoryForm').onsubmit=function (e) {setResults();return true;};
+		function setResults(){
+			document.getElementById('lRelatedPageID').value=getResults();
+		} 
+		<cfif articleList NEQ "">
+			Sortable.create('articleList',{ghosting:true,handle:'handle',constraint:false});
+		</cfif>
+	</script>
+	<input type="hidden" name="lRelatedPageID" id="lRelatedPageID" />
+</cfif>
+
 <cfif MyCategoryLocale.GetCategoryTypeID() IS "81"><!--- This is a employee  --->
 </table>
 	<div class="RuleDotted1"></div>
@@ -325,7 +384,7 @@
  --->
 <cfif 1>
 	<cfset sImageName=StructNew()>
-	<cfset StructInsert(sImageName,"CategoryImageOff","Navigation Image: Off",1)>
+	<cfset StructInsert(sImageName,"CategoryImageBackground","Background Image",1)>
 	<cfset StructInsert(sImageName,"CategoryImageOn","Navigation Image: On",1)>
 	<cfset StructInsert(sImageName,"CategoryImageRollover","Rollover Outline Image",1)>
 	<cfif MyCategory.GetProperty("CategoryTypeID") EQ 66>
@@ -336,12 +395,12 @@
 	<cfelse>
 		<cfset StructInsert(sImageName,"CategoryImageHeader","Hero Image",1)>
 	</cfif>
-	<cfset StructInsert(sImageName,"CategoryImageTitle","Title Image",1)>
+	<cfset StructInsert(sImageName,"CategoryImageAccent","Accent Image",1)>
 	<cfset StructInsert(sImageName,"CategoryImageRepresentative","Listing Image",1)>
-	<cfset firstImg = 0>
-	<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
+	<cfset firstImg=0>
+	<cfloop index="ThisImage" list="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,empImage,empImageThumb">
 		<cfif ListFindNoCase(Restrictions,ThisImage)>
-			<cfset firstImg = firstImg+1>
+			<cfset firstImg=firstImg+1>
 			<cfif firstImg EQ 1>
 				</table>
 				<div class="RuleDotted1"></div>

@@ -458,6 +458,19 @@
 		<cfreturn qReturn>
 	</cffunction>
 	
+	<cffunction name="GetProductPartNumber" returntype="string" output="false">
+		<cfargument name="ProductID" default="" type="string" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfquery name="LOCAL.GetProductPartNumber" datasource="#APPLICATION.DSN#">
+			select AttributeValue from qry_GetProductPartNumber 
+			where CategoryID=<cfqueryparam value="#Trim(ARGUMENTS.ProductID)#" cfsqltype="CF_SQL_INTEGER">
+		</cfquery>
+		
+		<cfreturn LOCAL.GetProductPartNumber.AttributeValue>
+	</cffunction>
+	
 	<cffunction name="GetProductSpecs" returntype="query" output="false" access="remote">
 		<cfargument name="ProductAlias" default="" type="string" required="true">
 		<cfargument name="LanguageID" default="" type="numeric" required="true">
