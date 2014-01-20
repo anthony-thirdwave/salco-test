@@ -629,6 +629,7 @@ body{
 		clear:both;
 		margin-bottom:16px;
 		font-size:0px;
+		
 	}
 	
 	#main-navigation ul, #products-navigation ul{
@@ -636,6 +637,7 @@ body{
 		margin:-4px 0px 0px 55px; /*0px 0px 0px 310px */
 		padding:0px;
 		position:absolute;
+		min-width:800px;
 	}
 	
 	#products-navigation ul{
@@ -916,7 +918,7 @@ body{
 	
 	.ie8 .carHolder h2:after, .ie9 .carHolder h2:after{
 		
-		background:rgba(166, 21, 26, 1);
+		background: url(/common/images/template-updated/.ie8-product-landing-title-bg.png) no-repeat left top;
 	}
 	
 	#center-content{
@@ -1017,7 +1019,7 @@ body{
 	
 	.explorer #center-content > h3 + h2, .chrome #center-content > h3 + h2{
 		width:100%;
-		margin-left:-20px;
+		margin-left:-11px;
 		text-align:right;
 		position:absolute;
 	}
@@ -1042,6 +1044,18 @@ body{
 		margin-left:100px;
 		position:relative;
 		z-index:101;
+	}
+	
+	.chrome .product #center-content > h1{
+		margin-top:-43px;
+	}
+	
+	.longTitle.product #center-content > h1{
+		margin-top:-20px;
+	}
+	
+	.chrome .longTitle.product #center-content > h1{
+		margin-top:-30px;
 	}
 	
 	.product #center-content .text > h1 {
@@ -1070,6 +1084,13 @@ body{
 		font-size:25px;
 		margin-top:-45px;
 	}
+	
+	
+	.firefox .longTitle #center-content h3 + h2{
+		margin-right:6px;
+	}
+	
+	
 	
 	.chrome .longTitle #center-content h3 + h2, .safari .longTitle #center-content h3 + h2{
 		margin-top:-65px;
@@ -1153,9 +1174,9 @@ body{
 	
 	#center-content  .product-landing h2 {
 		color:#ea1d25;
-		font-size:50px;
-		margin:-28px 15px 10px 85px;
-		display:inline-block;
+		font-size:32px; /* 50 */
+		margin:-30px 15px 10px 38px; /* -28px 15px 10px 85px */
+		/*display:inline-block;*/
 		font-family:"Century Gothic W01";
 		position: relative;
 		z-index:15;
@@ -1163,7 +1184,13 @@ body{
 	
 	.longTitle #center-content  .product-landing h2 {
 		font-size:30px;
-		margin:-45px 15px 0px 70px;
+		margin:-22px 0px 0px 38px;
+		padding-bottom:10px;
+	}
+	
+	.chrome .longTitle #center-content  .product-landing h2, .safari .longTitle #center-content  .product-landing h2 {
+		margin:-32px 0px 0px 38px;
+		padding-bottom:5px;
 	}
 	
 	.chrome #center-content  .product-landing h2 {
@@ -1171,7 +1198,7 @@ body{
 	}
 	
 	.product-nav{
-		font-family:"Century Gothic W01";
+		/*font-family:"Century Gothic W01";*/
 		display:inline-block;
 	}
 	
@@ -1194,16 +1221,29 @@ body{
 	
 	.product-nav ul{
 		list-style:none;
-		margin:-8px 0px 0px 0px;
+		margin:-8px 0px 0px 38px;
 		padding:0px;
 	}
 	
 	.product-nav ul li{
 		display:inline-block;
-		font-size:14px;
+		font-size:13px;
 		text-transform:uppercase;
 		font-weight: bold;
-		margin-right:12px;
+		margin-right:5px;
+	}
+	
+	.product-nav ul li:after{
+		content:" -";
+		margin-left:5px;
+	}
+	
+	.product-nav ul li:last-child:after{
+		content:" ";
+	}
+	
+	.ie8 .product-nav ul li.ie8-last-prod-nav:after{
+		content:" ";	
 	}
 	
 	.product-nav ul li a{
@@ -1219,7 +1259,7 @@ body{
 	#product-hero-image{
 		 background:#fff no-repeat left top; 
 		 background-size: 617px, auto; 
-		
+		 margin-top:-30px;
 		 margin-left:-50px;
 		 margin-right:-20px; 
 		 padding-top:235px;
@@ -1395,6 +1435,7 @@ body{
 		margin:0px;
 		padding:0px;
 		color:#ea1d25;
+		font-size:13px;
 		}
 	
 	.popular-products ul{
@@ -1411,29 +1452,32 @@ body{
 		line-height:20px;
 		text-align:center;
 		vertical-align:top;
-		width:31%;
+		width:33%;
 	}
 	
 	#center-content .popular-products ul li a{
 		color:#000000;
+		display:block;
 	}
 	
 	#center-content .popular-products ul li a div{
-		width:95%;
-		height:125px;
+		width:105px;
+		height:85px;
 		background-repeat:no-repeat;
 		background-size:contain;
-		background-position:center center;
-		margin-bottom:10px;
+		background-position:center bottom;
+		margin:0px auto 5px auto;
 	}
 	
 	.popular-products ul li span, .popular-products ul li span span{
 		display:block;
-		
+		font-size:13px;
+		line-height:13px;
 	}
 	
 	.popular-products ul li span span{
-		margin-top:15px;
+		margin-top:5px;
+		text-transform:uppercase;
 	}
 	
 	#center-content .html{
@@ -1462,9 +1506,9 @@ body{
 	}
 	
 	#center-content .indent-bullet{
-		margin-left:120px;
-		margin-right:60px;
-	
+		margin-left:58px;
+		font-size:12px;
+		line-height:20px;
 	}
 	
 	#center-content .indent-bullet:before{
@@ -1764,6 +1808,10 @@ body{
 			width:600px;
 	}
 	
+	.ie8 .subordion h4, .ie8 .subordion h4.subAcHd.h{
+		width:540px;
+	}
+	
 	.subordion h4:before, .subordion h4.subAcHd.h:before{
 			content:"";
 			background:url(/common/images/template-updated/faq-arrow.png) no-repeat left top;
@@ -1777,16 +1825,28 @@ body{
 			transform:rotate(-90deg);/**/
 			transition:all .60s;
 		}
-		
+	
+	.ie8 .subordion h4:before, .ie8 .subordion h4.subAcHd.h:before{
+		background:url(/common/images/template-updated/ie8-productnav-arrow-bg.png) no-repeat left top;
+	}
+	
 	.subordion h4.open:before, .subordion h4.open.subAcHd.h:before{
 			-webkit-transform:rotate(0deg);/**/
 			-ms-transform:rotate(0deg);/**/
 			transform:rotate(0deg);/**/
 		}
 		
+	.ie8 .subordion h4.open:before, .ie8 .subordion h4.open.subAcHd.h:before{
+		background-position:left bottom;
+	}
+		
 	.subordion .inner h4 {
 		margin-left:20px;
 		width:580px;
+	}
+	
+	.ie8 .subordion .inner h4 {
+		width:515px;
 	}
 		
 	/*.subordion h4.subAcHd{
@@ -1808,6 +1868,15 @@ body{
 		overflow:hidden;
 		transition:all .5s;
 	}
+	
+	.ie8 .subordion .inner css3-container{
+		display:none;
+	}
+	
+	.ie8 .subordion .inner.open css3-container{
+		display:block;
+	}
+	
 	
 	.red {
 		color:#EA1D25;
@@ -1878,12 +1947,31 @@ body{
 		padding-bottom:5px;
 	}
 	
+	.ie8 #applicationForm .formRow.memo labal, .ie8 #applicationForm .formRow.memo label {
+		display:block;
+		padding-bottom:5px;
+	}
+	
 	#applicationForm .formRow:nth-child(9) label[for="emai"] {
 		display:inline-block;
 		padding-bottom:0px;
 	}
 	
 	#applicationForm .formRow:nth-child(9) textarea, #applicationForm .formRow.memo textarea {
+		width:465px;
+		border:1px solid #000000;
+		border-radius:4px;
+		padding:5px;
+		margin-bottom:15px;
+		-webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+		-moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+		box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+		behavior:url(/common/scripts/intranet/PIE.htc);
+		height:200px;
+		font-family: 'Myriad W01 Regular';
+	}
+	
+	.ie8 #applicationForm .formRow.memo textarea {
 		width:465px;
 		border:1px solid #000000;
 		border-radius:4px;
@@ -1915,6 +2003,18 @@ body{
 	    margin: 0 auto 0 250px;
 	    width: 78px;
 	}
+	
+	.ie8 .formRow.submit input{
+		 background: url("/common/images/template/btn_contact_sumbit.png") no-repeat scroll 0 0;
+	    border: medium none;
+	    color: rgba(0, 0, 0, 0);
+	    cursor: pointer;
+	    display: block;
+	    height: 26px;
+	    margin: 0 auto 0 250px;
+	    width: 78px;
+	}
+	
 	.rightSubmit input {
 	    margin-left: 390px !important;
 	}
@@ -1951,6 +2051,9 @@ body{
 			transform:rotate(-90deg);/**/
 			transition:all .60s;
 		}
+		.ie8 #faq h4.h:before{
+			background:url(/common/images/template-updated/ie8-productnav-arrow-bg.png) no-repeat left top;
+		}
 		
 		#faq h4.h a{
 			text-decoration:none;
@@ -1961,6 +2064,10 @@ body{
 			-webkit-transform:rotate(0deg);/**/
 			-ms-transform:rotate(0deg);/**/
 			transform:rotate(0deg);/**/
+		}
+		
+		.ie8 #faq .expanded h4.h:before{
+			background-position:left bottom;
 		}
 		
 		#faq .outer .inner {
@@ -2137,13 +2244,19 @@ polygon, .office-circle, .ncOffices{
 /* style updates for torque calculator */
 
 #torque-calculator #center-content .html{
-	background:url(../images/template-updated/Torque.png) no-repeat left bottom;
+	background:url(/common/images/template-updated/Torque.png) no-repeat left bottom;
 	background-size:contain;
 	min-height:500px;
 	margin-left:-0px;
 	padding-left:50px;
 	margin-right:0px;
 	padding-right:20px;
+}
+
+.ie8 #torque-calculator #center-content .html{
+	background:none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='/common/images/template-updated/Torque.png', sizingMethod='scale');
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader( src='/common/images/template-updated/Torque.png', sizingMethod='scale')";
 }
 
 /* about us updated styles */
@@ -2204,7 +2317,7 @@ polygon, .office-circle, .ncOffices{
 /* service center page */
 
 #service-center  #center-content{
-	 background:#fff url(../images/template-updated/service-center-bg.png) no-repeat left 20px;
+	 background:#fff url(/common/images/template-updated/service-center-bg.png) no-repeat left 20px;
 		background-size:contain;
 		max-height:547px;
 	}
@@ -2214,6 +2327,11 @@ polygon, .office-circle, .ncOffices{
 	margin:185px 0px 0px 280px
 }
 
+.ie8 #service-center  #center-content{
+	background:none;
+	filter: progid:DXImageTransform.Microsoft.AlphaImageLoader( src='/common/images/template-updated/service-center-bg.png', sizingMethod='scale');
+    -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader( src='/common/images/template-updated/service-center-bg.png', sizingMethod='scale')";
+}
 
 /* service engineering page */
 

@@ -1317,6 +1317,11 @@ $(function(){
 		}
 			
 		}
+		
+		
+	if($("html").hasClass("ie8")==true){
+		$(".product-nav ul li:last-child").addClass("ie8-last-prod-nav")
+	}
 	});
 	
 	news={
