@@ -56,8 +56,10 @@
 			<!--- If id is greater than 0, load from DB. --->
 			<cfset this.SetProperty("CategoryID",ARGUMENTS.ID)>
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
-				SELECT * FROM t_ProductAttribute
-				WHERE ProductFamilyAttributeID IN (#this.lAttributeID#) AND CategoryID=#Val(ARGUMENTS.ID)# and languageID=#Val(ARGUMENTS.LanguageID)#
+				SELECT ProductFamilyAttributeID,AttributeValue FROM t_ProductAttribute
+				WHERE ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#this.lAttributeID#" List="yes">) AND 
+				CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
+				languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#" List="yes">
 			</cfquery>
 
 			<cfoutput query="GetItems">
@@ -69,8 +71,11 @@
 			</cfoutput>
 			
 			<cfquery name="GetFeatures" datasource="#APPLICATION.DSN#">
-				select * from qry_GetTextBlock
-				WHERE KeyID=#Val(ARGUMENTS.ID)# and Entity='t_Category' and languageID=#Val(ARGUMENTS.LanguageID)# AND TextBlockTypeID=900
+				select TextBlockID,TextBlock,SpecificationSetID from qry_GetTextBlock
+				WHERE KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
+				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
+				languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#"> AND 
+				TextBlockTypeID=<cfqueryparam cfsqltype="cf_sql_integer" value="900">
 				Order by TextBlockPriority
 			</cfquery>
 			
@@ -87,11 +92,11 @@
 			</cfif>
 			
 			<cfquery name="GetView" datasource="#APPLICATION.DSN#">
-				select * from qry_GetResource
-				WHERE KeyID=#Val(ARGUMENTS.ID)# and 
-				Entity='t_Category' and 
-				languageID=#Val(ARGUMENTS.LanguageID)# and
-				ResourceTypeID=9000
+				select ResourceID,ResourceName,ResourceText,ResourceSize,MainFilePath,ThumbnailFilePath,SpecificationSetID from qry_GetResource
+				WHERE KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
+				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
+				languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#"> and
+				ResourceTypeID=<cfqueryparam cfsqltype="cf_sql_integer" value="9000">
 				Order by ResourcePriority
 			</cfquery>
 			<cfif GetView.RecordCount GT "0">
@@ -111,11 +116,11 @@
 			</cfif>
 			
 			<cfquery name="GetDownload" datasource="#APPLICATION.DSN#">
-				select * from qry_GetResource
-				WHERE KeyID=#Val(ARGUMENTS.ID)# and 
-				Entity='t_Category' and 
-				languageID=#Val(ARGUMENTS.LanguageID)# and
-				ResourceTypeID=9001
+				select ResourceID,ResourceName,ResourceText,ResourceSize,MainFilePath,ThumbnailFilePath,SpecificationSetID from qry_GetResource
+				WHERE KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
+				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
+				languageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#"> and
+				ResourceTypeID=<cfqueryparam cfsqltype="cf_sql_integer" value="9001">
 				Order by ResourcePriority
 			</cfquery>
 			<cfif GetDownload.RecordCount GT "0">
@@ -135,8 +140,9 @@
 			</cfif>
 			
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
-				SELECT * FROM qry_GetProductFamilyAttribute
-				WHERE CategoryID=#Val(ARGUMENTS.ID)# and languageID IN (#Val(ARGUMENTS.LanguageID)#,#APPLICATION.DefaultLanguageID#)
+				SELECT ProductFamilyAttributeID, ProductFamilyAttributeTypeID,ProductFamilyAttributePriority FROM qry_GetProductFamilyAttribute
+				WHERE CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
+				languageID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LanguageID)#,#APPLICATION.DefaultLanguageID#" list="yes">)
 				order by ProductFamilyAttributePriority, LanguageID desc
 			</cfquery>
 			<cfif GetItems.recordcount GT 0>
@@ -196,20 +202,26 @@
 					<cfset ThisValue=this.GetProperty(this.sAttribute[ThisID])>
 					<cfquery name="test" datasource="#APPLICATION.DSN#">
 						select * from t_ProductAttribute 
-						WHERE CategoryID=#Val(ThisCategoryID)# AND LanguageID=#Val(ThisLanguageID)# AND ProductFamilyAttributeID=#Val(ThisID)#
+						WHERE CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisCategoryID)#"> AND 
+						LanguageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisLanguageID)#"> AND 
+						ProductFamilyAttributeID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisID)#">
 					</cfquery>
 					<cfif test.RecordCount GT "0">
 						<cfquery name="update" datasource="#APPLICATION.DSN#">
 							update t_ProductAttribute Set
 							AttributeValue=N'#Trim(ThisValue)#'
-							WHERE CategoryID=#Val(ThisCategoryID)# AND LanguageID=#Val(ThisLanguageID)# AND ProductFamilyAttributeID=#Val(ThisID)#
+							WHERE CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisCategoryID)#"> AND 
+							LanguageID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisLanguageID)#"> AND 
+							ProductFamilyAttributeID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisID)#">
 						</cfquery>
 					<cfelse>
 						<cfquery name="isnert" datasource="#APPLICATION.DSN#">
 							INSERT INTO t_ProductAttribute 
 							(CategoryID, LanguageID, ProductFamilyAttributeID, AttributeValue)
 							VALUES
-							(#Val(ThisCategoryID)#, #Val(ThisLanguageID)#, #Val(ThisID)#, N'#Trim(ThisValue)#')
+							(<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisCategoryID)#">,
+							<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisLanguageID)#">,
+							<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisID)#">,N'#Trim(ThisValue)#')
 						</cfquery>
 					</cfiF>
 				</cfloop>
@@ -225,7 +237,7 @@
 				
 				<cfquery name="GetPrevAttrs" datasource="#APPLICATION.DSN#">
 					select ProductFamilyAttributeID from t_ProductFamilyAttribute
-					WHERE CategoryID=#Val(ThisCategoryID)#
+					WHERE CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisCategoryID)#">
 				</cfquery>
 				<cfset OriginalList=ValueList(GetPrevAttrs.ProductFamilyAttributeID)>
 				<cfset NewList="">

@@ -15,7 +15,7 @@
 </cfstoredproc>
 
 <cfquery name="GetCategoryList" dbtype="query">
-	select * from GetCategoryListPrime
+	select CategoryID,CategoryURLDerived,CategoryAlias,CategoryNameDerived from GetCategoryListPrime
 	order by CategoryName
 </cfquery>
 <cfif GetCategoryList.RecordCount GT "0">
@@ -29,7 +29,7 @@
 	<ul>
 	<cfoutput query="GetCategoryList">
 		<cfquery name="LOCAL.GetChildren" dbtype="query">
-			select * from GetChildrenPrime
+			select [Count],ParentID from GetChildrenPrime
 			where ParentID=<cfqueryparam value="#GetCategoryList.CategoryID#" cfsqltype="cf_sql_integer">
 		</cfquery>
 		<cfset ThisUrl="">

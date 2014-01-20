@@ -472,5 +472,6 @@
 <cfheader name="Last-Modified" value="#gmtFullstring#">
 
 <cfset REQUEST.CategoryThreadList=CALLER.CategoryThreadList>
+<cfset REQUEST.CategoryThreadName=CALLER.CategoryThreadName>
 <cfset REQUEST.SecurityDenyAccess=DenyAccess>
 <cfset REQUEST.CurrentCategoryName=CALLER.CurrentCategoryName>

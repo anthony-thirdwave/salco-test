@@ -4,8 +4,14 @@
 <cfparam name="URL.pff" default="no">
 <cfparam name="URL.prcid" default="">
 <cfparam name="URL.pcid" default="">
-<cfset PreviewTargetContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.prcid))>
-<cfset PreviewSourceContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.pcid))>
+<cfset PreviewTargetContentID="-1">
+<cfset PreviewSourceContentID="-1">
+<cfif URL.prcid IS NOT "">
+	<cfset PreviewTargetContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.prcid))>
+</cfif>
+<cfif URL.pcid IS NOT "">
+	<cfset PreviewSourceContentID=APPLICATION.utilsObj.SimpleDecrypt(Val(URL.pcid))>
+</cfif>
 
 <cfset REQUEST.ReCache="1">
 

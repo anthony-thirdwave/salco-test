@@ -616,6 +616,7 @@ code/webroot/common/modules/product/ProductImport.cfm -text
 code/webroot/common/modules/product/ProductImportHelper.cfm -text
 code/webroot/common/modules/product/ProductImportHelper2.cfm -text
 code/webroot/common/modules/product/ProductListing.cfm -text
+code/webroot/common/modules/product/ProductListingAccordion.cfm -text
 code/webroot/common/modules/product/ProductLiterature.cfm -text
 code/webroot/common/modules/product/ProductLookup.cfm -text
 code/webroot/common/modules/product/ProductOutline.cfm -text

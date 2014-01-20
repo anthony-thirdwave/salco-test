@@ -109,31 +109,13 @@
 					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
 				</cfstoredproc>
 				
-				<script type="text/javascript">
-					$(document).ready(function() {
-						/*$("html").addClass("js");
-							$.fn.accordion.defaults.container = false; 
-							$(function() {
-								$("#acc3").accordion({initShow : "#current"});
-								$("html").removeClass("js");
-								return false;
-						});*/
-						$("#sub").accordion({
-						  obj: "div", 
-						  wrapper: "div", 
-						  el: ".h", 
-						  head: "h4", 
-						  next: "div", 
-						  initShow : "div.outer:first",
-						  event : "click",
-						  collapsible : true, // {true} - makes the accordion fully collapsible, {false} - forces one section to be open at any time
-						  standardExpansible : true //if {true}, the functonality will be standard Expand/Collapse without 'accordion' effect
-						});
-					});
-				</script>
 				<div id="sub">
 				<cfoutput>
-					<h2>#ParentCategoryName#</h2>
+					<cfif IsDefined("REQUEST.CategoryThreadList") AND ListLen(REQUEST.CategoryThreadList) GTE "4">
+						<h2>#ListGetAt(REQUEST.CategoryThreadName,4)#</h2>
+					<cfelse>
+						<h2>#ParentCategoryName#</h2>
+					</cfif>
 				</cfoutput>
 				
 				<cfif GetSiblingProductFamilies.RecordCount GT "0">
@@ -152,50 +134,8 @@
 					</cfoutput>
 				</cfif>
 				
-				<p>Select categories below to expand for more information.</p>
+				<cfmodule template="/common/modules/product/productListingAccordion.cfm" ParentProductFamilyID="#ATTRIBUTES.ParentProductFamilyID#">
 				
-				<div class="subordion">
-					<cfoutput query="qGetProductFamilyList">
-						<h4>#qGetProductFamilyList.CategoryNameDerived#</h4>
-						<div class="inner">
-							<div class="copyHolder">
-							<cfif qGetProductFamilyList.ProductFamilyDescription IS NOT "">
-								<p>#APPLICATION.utilsObj.AddBreaks(qGetProductFamilyList.ProductFamilyDescription)#</p>
-							</cfif>
-							<cfinvoke component="/com/product/productFamilyHandler" 
-								method="GetProductFamilyList" 
-								returnVariable="qGetProductFamilyListSub"
-								ParentProductFamilyID="#qGetProductFamilyList.CategoryID#"
-								LocaleID="#ATTRIBUTES.LocaleID#"
-								LanguageID="#ATTRIBUTES.LanguageID#">
-							<cfif qGetProductFamilyListSub.RecordCount GT "0">
-								<cfloop query="qGetProductFamilyListSub">
-									<cfif qGetProductFamilyListSub.HasSubProductFamilies>
-										<cfif qGetProductFamilyListSub.HasProducts>
-											<h4 class="subAcHd">#qGetProductFamilyListSub.CategoryNameDerived#</h4>
-											<div class="inner subAcCont">
-												<cfif qGetProductFamilyListSub.ProductFamilyDescription IS NOT "">
-													<p>#APPLICATION.utilsObj.AddBreaks(qGetProductFamilyListSub.ProductFamilyDescription)#</p>
-												</cfif>
-												<cfmodule template="/common/modules/product/productListing.cfm" ProductID="#qGetProductFamilyListSub.CategoryID#">
-											</div>
-										<cfelse>
-											<h4 class="subAcHd"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyListSub.CategoryAlias)#">#qGetProductFamilyListSub.CategoryNameDerived#</a></h4>
-											<cfif qGetProductFamilyListSub.ProductFamilyDescription IS NOT "">
-												<p>#APPLICATION.utilsObj.AddBreaks(qGetProductFamilyListSub.ProductFamilyDescription)#</p>
-											</cfif>
-										</cfif>
-									<cfelse>
-										<h4 class="subAcHd"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyListSub.CategoryAlias)#">#qGetProductFamilyListSub.CategoryNameDerived#</a></h4>
-									</cfif>
-								</cfloop>
-							<cfelse>
-								<cfmodule template="/common/modules/product/productListing.cfm" ProductID="#qGetProductFamilyList.CategoryID#">
-							</cfif>
-							</div>
-						</div>
-					</cfoutput>
-				</div>
 				</div>
 			</cfcase>
 			<cfcase value="Simple">
@@ -213,7 +153,7 @@
 					<div class="carHolder">
 						<h2><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyList.CategoryAlias)#">#qGetProductFamilyList.CategoryNameDerived#</a></h2>
 						<cfif qGetProductFamilyList.CategoryImageRepresentative IS NOT "">
-							<a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyList.CategoryAlias)#"><img src="#qGetProductFamilyList.CategoryImageRepresentative#" width="88" height="61" alt="#qGetProductFamilyList.CategoryNameDerived#" /></a>
+							<a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductFamilyList.CategoryAlias)#"><img src="#qGetProductFamilyList.CategoryImageRepresentative#" alt="#qGetProductFamilyList.CategoryNameDerived#" /></a>
 						</cfif>
 						<div class="carDesc">
 							<cfif qGetProductFamilyList.ProductFamilyDescription IS NOT "">
