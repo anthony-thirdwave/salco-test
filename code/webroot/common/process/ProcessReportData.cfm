@@ -37,8 +37,16 @@
 <cfset StructInsert(sReportElt,"FieldLists","year,month,week,Shipment,Processed",1)>
 <cfset StructInsert(sReports,4,sReportElt,1)>
 
+<cfset sReportElt=StructNew()>
+<cfset StructInsert(sReportElt,"ReportName","Backlog",1)>
+<cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
+<cfset StructInsert(sReportElt,"FileName","Template-Backlog.csv",1)>
+<cfset StructInsert(sReportElt,"TableName","rp_backlog",1)>
+<cfset StructInsert(sReportElt,"FieldLists","year,month,value",1)>
+<cfset StructInsert(sReports,5,sReportElt,1)>
+
 <!--- <cfloop index="ThisReport" list="#StructKeyList(sReports)#"> --->
-<cfloop index="ThisReport" list="#StructKeyList(sReports)#">
+<cfloop index="ThisReport" list="5">
 	<cfoutput>Working on #sReports[ThisReport].ReportName#...<br></cfoutput>
 	<cfset thisFilePath="#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#">
 	<cfif FileExists(thisFilePath)>
@@ -102,6 +110,10 @@
 							<cfqueryparam value="#dateformat(column_1,'mm-dd-yyyy')#" cfsqltype="cf_sql_date">
 						<cfelseif ThisReport eq 1 and i eq 1>
 							<cfqueryparam value="#evaluate('column_#i#')#" cfsqltype="cf_sql_varchar">
+						<cfelseif ThisReport eq 5 and i eq 3>
+							<cfset ThisValue="#evaluate('column_#i#')#">
+							<cfset ThisValue=Replace(ThisValue,"$","","all")>
+							<cfqueryparam value="#ThisValue#" cfsqltype="cf_sql_varchar">
 						<cfelse>
 							<cfqueryparam value="#Val(evaluate('column_#i#'))#" cfsqltype="cf_sql_integer">
 						</cfif>

@@ -32,6 +32,7 @@ $(document).ready(function(){
 		when 'Oct' then 'Q4'
 		end as quarterNum
 	FROM	rp_ordershipmentAccuracy
+	where TotalOrders > <cfqueryparam value="0" cfsqltype="cf_sql_numeric">
 	order by quarterYear desc, quarterNum desc
 </cfquery>
 <cfparam name="form.quarterSelect" default="#qryQuarter.Quarter#">
