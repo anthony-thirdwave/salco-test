@@ -243,19 +243,20 @@
 			</cfif>
 
 			<cfloop index="r" from="1" to="#ArrayLen(aLink)#" step="1">
-				<cfif isdefined("LinkButtonSubmit_up_#r#.x") OR isdefined("LinkButtonSubmit_down_#r#.x")>
-					<cfif isdefined("LinkButtonSubmit_up_#r#.x")>
+				<cfif isdefined("LinkButtonSubmit_up_#r#") OR isdefined("LinkButtonSubmit_down_#r#")>
+					sdfsdf
+					<cfif isdefined("LinkButtonSubmit_up_#r#")>
 						<cfset TempStruct=aLink[r]>
 						<cfset aLink[r]=aLink[r-1]>
 						<cfset aLink[r-1]=TempStruct>
-					<cfelseif isdefined("LinkButtonSubmit_down_#r#.x")>
+					<cfelseif isdefined("LinkButtonSubmit_down_#r#")>
 						<cfset TempStruct=aLink[r]>
 						<cfset aLink[r]=aLink[r+1]>
 						<cfset aLink[r+1]=TempStruct>
 					</cfif>
 				</cfif>
+				
 			</cfloop>
-
 			<cfset MyContentLocale.SetProperty("aLink",aLink)>
 
 		</cfif>

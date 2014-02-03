@@ -1,3 +1,5 @@
+<cfparam name="ATTRIBUTES.NewsListingPage" default="/page/news-1">
+
 <cfinvoke component="com.ContentManager.NewsHandler"
  	method="GetNews"
 	newsID="#currentCategoryID#"
@@ -30,12 +32,14 @@
 <cfoutput>
 	<nav id="newsStoryNav">
 		<ul>
-			<cfif len(NextStoryLink)>
-				<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">Previous Story</a></li>
-			</cfif>
 			<cfif len(previousStoryLink)>
-				<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">Next Story</a></li>
+				<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">Previous Story</a></li>
 			</cfif>
+			<li><a href="#APPLICATION.utilsObj.parseCategoryUrl(ATTRIBUTES.NewsListingPage)#">News Listing</a></li>
+			<cfif len(NextStoryLink)>
+				<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">Next Story</a></li>
+			</cfif>
+			
 		</ul>
 	</nav>
 </cfoutput>

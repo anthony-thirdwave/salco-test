@@ -1,6 +1,7 @@
 <cfparam name="ATTRIBUTES.CategoryID" default="-1">
 <cfparam name="ATTRIBUTES.Level" default="1">
 <cfparam name="ATTRIBUTES.MaxLevel" default="-1">
+<cfparam name="REQUEST.CategoryThreadList" default="-1">
 
 <cfstoredproc procedure="usp_GetPage" datasource="#APPLICATION.DSN#">
 	<cfprocresult name="GetCategoryDetail" maxrows="1">
@@ -24,13 +25,20 @@
 
 <cfif ATTRIBUTES.Level IS NOT "0" and GetCategoryDetail.ShowInNavigation IS "1">
 	<cfoutput query="GetCategoryDetail">
-		<cfset ThisUrl = "" />
+		<cfset ThisUrl="">
+		<cfset ThisClass="">
 		<cfif len(trim(GetCategoryDetail.CategoryURLDerived))>
-			<cfset ThisURL = "#APPLICATION.utilsObj.parseCategoryUrl(GetCategoryDetail.CategoryURLDerived)#" />
+			<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(GetCategoryDetail.CategoryURLDerived)#" />
 		<cfelse>
-			<cfset ThisURL = "#APPLICATION.utilsObj.parseCategoryUrl(GetCategoryDetail.CategoryAlias)#" />
+			<cfset ThisURL="#APPLICATION.utilsObj.parseCategoryUrl(GetCategoryDetail.CategoryAlias)#" />
 		</cfif>
-		<li><a href="#ThisURL#" <cfif ATTRIBUTES.Level IS "1">class="sideNavLink"</cfif>><span>#GetCategoryDetail.CategoryNameDerived#</span></a>
+		<cfif ATTRIBUTES.Level IS "1">
+			<cfset ThisClass="sideNavLink">
+		</cfif>
+		<cfif ListFind(REQUEST.CategoryThreadList,GetCategoryDetail.CategoryID)>
+			<cfset ThisClass="#ThisClass# navActive">
+		</cfif>
+		<li><a href="#ThisURL#" <cfif Trim(ThisClass) IS NOT "">class="#Trim(ThisClass)#"</cfif>><span>#GetCategoryDetail.CategoryNameDerived#</span></a>
 	</cfoutput>
 </cfif>
 
@@ -42,7 +50,7 @@
 	<cfset Continue="0">
 </cfif>
 <cfif Continue>
-	<ul>
+	<cfoutput><ul class="level-#ATTRIBUTES.Level+1#"></cfoutput>
 	<cfoutput query="GetCategoryList">
 		<cfmodule template="/common/modules/display/navigation/dsp_NavRHelper.cfm" 
 			CategoryID="#val(GetCategoryList.CategoryID)#" 

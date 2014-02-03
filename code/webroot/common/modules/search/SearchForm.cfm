@@ -9,7 +9,8 @@
 			<option value="#ThisSearchType#" <cfif searchType IS ThisSearchType>selected</cfif>>#sSearch[ThisSearchType]#</option>
 		</cfloop>
 	</select>
-	<input type="text" name="searchTxt" class="backSearch" value="#HTMLEditFormat(searchTxt)#" id="search-text"/>
+	<input type="text" name="searchTxt" class="backSearch" autocomplete="off" value="#HTMLEditFormat(searchTxt)#" id="search-text"/>
 	<input type="submit" class="btnSearch" />
+	<div id="json-return"></div>
 	</form>
 </cfoutput>

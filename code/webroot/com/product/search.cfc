@@ -138,22 +138,58 @@
 		<cfif NOT IsNumeric(ARGUMENTS.MaxRows)>
 			<cfset ARGUMENTS.MaxRows="999999">
 		</cfif>
-		<cfinvoke component="/com/product/search" method="searchProduct" returnVariable="LOCAL.ContentSearch"
-			searchTxt="#ARGUMENTS.searchTxt#"
-			searchType="#ARGUMENTS.searchType#">
 		
-		<cfquery name="LOCAL.ContentSearch" dbtype="query" maxrows="#ARGUMENTS.MaxRows#">
-		 	select * from [LOCAL].ContentSearch 
-			order by rank
-		 </cfquery>
+		<cfswitch expression="#ARGUMENTS.searchType#">
+			<cfcase value="ProductNumber">
+				<cfinvoke component="/com/Product/ProductHandler"
+					method="GetProductsByMatchingProductNo"
+					returnVariable="LOCAL.ContentSearch"
+					MaxRows="#ARGUMENTS.MaxRows#"
+					PartNo="#lcase(htmlEditFormat(ARGUMENTS.searchTxt))#">
+			</cfcase>
+			<cfdefaultcase>
+				<cfset LOCAL.SourceDisplayOrder="">
+				<cfif ListFindNoCase("hopper-car,tank-cars,railyard-accessories,hazarsolve",ARGUMENTS.searchType)>
+					<cfquery name="LOCAL.GetDisplayOrder" datasource="#APPLICATION.DSN#">
+						select displayOrder from t_Category
+						where CategoryAlias=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.searchType#">
+					</cfquery>
+					<cfset LOCAL.SourceDisplayOrder=LOCAL.GetDisplayOrder.DisplayOrder>
+				</cfif>
+				
+				<cfquery name="LOCAL.ContentSearch" datasource="#APPLICATION.DSN#">
+					select 
+					<cfif ARGUMENTS.MaxRows IS NOT "All">TOP #Val(ARGUMENTS.MaxRows)#</cfif> 
+					CategoryName, CategoryAlias, AttributeValue as ProductNo
+					FROM	qry_GetCategoryWithCategoryLocale INNER JOIN
+						t_ProductAttribute ON 
+						qry_GetCategoryWithCategoryLocale.CategoryId = t_ProductAttribute.CategoryID AND
+						t_ProductAttribute.ProductFamilyAttributeID = <cfqueryparam cfsqltype="cf_sql_numeric" value="10">
+					WHERE
+					(qry_GetCategoryWithCategoryLocale.CategoryName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#ARGUMENTS.SearchTxt#%"> OR
+					 t_ProductAttribute.AttributeValue LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#ARGUMENTS.SearchTxt#%">
+					)
+					And	qry_GetCategoryWithCategoryLocale.ParentID <> <cfqueryparam cfsqltype="cf_sql_numeric" value="5731">
+					<cfif LOCAL.SourceDisplayOrder IS NOT "">
+						and qry_GetCategoryWithCategoryLocale.DisplayOrder like <cfqueryparam cfsqltype="cf_sql_varchar" value="#LOCAL.SourceDisplayOrder#%">
+					</cfif>
+					order by CategoryName, ProductNo
+				</cfquery>
+			</cfdefaultcase>
+		</cfswitch>
 		
 		<cfset LOCAL.aReturn=ArrayNew(1)>
-		
-		<cfoutput query="LOCAL.ContentSearch">
-			<cfset LOCAL.sReturn=StructNew()>
-			<cfset LOCAL.sReturn["Name"]="#LOCAL.ContentSearch.Title# (#LOCAL.ContentSearch.Custom3#)">
-			<cfset LOCAL.sReturn["Value"]="/page/#LOCAL.ContentSearch.URL#">
-			<cfset ArrayAppend(LOCAL.aReturn,LOCAL.sReturn)>
+		<cfoutput query="LOCAL.ContentSearch" group="CategoryName">
+			<cfoutput group="ProductNo">
+				<cfset LOCAL.sReturn=StructNew()>
+				<cfif LOCAL.ContentSearch.ProductNo IS NOT "">
+					<cfset LOCAL.sReturn["Name"]="#LOCAL.ContentSearch.CategoryName# (#LOCAL.ContentSearch.ProductNo#)">
+				<cfelse>
+					<cfset LOCAL.sReturn["Name"]="#LOCAL.ContentSearch.CategoryName#">
+				</cfif>
+				<cfset LOCAL.sReturn["Value"]="/page/#LOCAL.ContentSearch.CategoryAlias#">
+				<cfset ArrayAppend(LOCAL.aReturn,LOCAL.sReturn)>
+			</cfoutput>
 		</cfoutput>
 		
 		<cfreturn LOCAL.aReturn>

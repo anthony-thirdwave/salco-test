@@ -48,7 +48,7 @@
 				<cfinclude template="/common/modules/display/templates/intranet/dsp_content.cfm">
 			</cfcase>
 			<cfdefaultcase>
-				<cfinclude template="/common/modules/display/templates/dsp_content_proto.cfm">
+				<cfinclude template="/common/modules/display/templates/dsp_content.cfm">
 			</cfdefaultcase>
 		</cfswitch>
 	</cfdefaultcase>

@@ -1,4 +1,4 @@
-<cfsetting RequestTimeout="60000">
+<cfabort><cfsetting RequestTimeout="60000">
 
 <cfparam name="url.totalRecord" default="">
 <cfparam name="url.page" default="">

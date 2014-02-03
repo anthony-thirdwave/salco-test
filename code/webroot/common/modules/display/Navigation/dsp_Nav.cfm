@@ -7,9 +7,9 @@
 	FROM	t_Category where ParentID=<cfqueryparam value="#Val(ATTRIBUTES.ParentID)#" cfsqltype="CF_SQL_INTEGER">
 </cfquery>
 
-<CFSET ExecuteTempFile="#APPLICATION.LocaleID#\+nav_#ATTRIBUTES.ParentID#_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
+<cfset ExecuteTempFile="#APPLICATION.LocaleID#\+nav_#ATTRIBUTES.ParentID#_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
 
-<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
+<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
 	<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 		<cfprocresult name="GetTopCategories">
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">

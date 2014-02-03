@@ -473,5 +473,6 @@
 
 <cfset REQUEST.CategoryThreadList=CALLER.CategoryThreadList>
 <cfset REQUEST.CategoryThreadName=CALLER.CategoryThreadName>
+<cfset REQUEST.CategoryThreadAlias=CALLER.CategoryThreadAlias>
 <cfset REQUEST.SecurityDenyAccess=DenyAccess>
 <cfset REQUEST.CurrentCategoryName=CALLER.CurrentCategoryName>

@@ -31,7 +31,6 @@
 			<cfset MyProductFamily.Constructor(Val(ATTRIBUTES.ProductFamilyID),ATTRIBUTES.LanguageID)>
 			<cfset aView=MyProductFamily.GetProperty("aProductFamilyView")>
 			<cfset aProductFamilyFeature=MyProductFamily.GetProperty("aProductFamilyFeature")>
-			<cfset aDownload=MyProductFamily.GetProperty("aProductFamilyDownload")>
 			
 			<cfset lProps="ProductFamilyDescription">
 			<cfloop index="ThisProp" list="#lProps#">
@@ -53,14 +52,6 @@
 				</cfif>
 			</cfloop>
 			<cfset aView=tempArray>
-			
-			<cfset tempArray=ArrayNew(1)>
-			<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
-				<cfif aDownload[i].SpecificationSetID EQ ATTRIBUTES.SpecificationSetID or aDownload[i].SpecificationSetID IS "">
-					<cfset ArrayAppend(tempArray,aDownload[i])>
-				</cfif>
-			</cfloop>
-			<cfset aDownload=tempArray>
 			
 			<cfset thisImageHeader="">
 			<cfset thisLRelatedPageID="">
@@ -114,19 +105,15 @@
 					</ul>
 				</cfif>
 				
-				<cfif ArrayLen(aDownload) GT "0">
-					<h4>Downloads</h4>
-					<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
-						<p><a href="#aDownload[i].MainFilePath#" target="_blank">#aDownload[i].ResourceName#</a>
-						(#UCase(ListLast(aDownload[i].MainFilePath,"."))#<cfif StructKeyExists(aDownload[i],"MainFileSize") AND Val(aDownload[i].MainFileSize) GT "0">, #Ceiling(aDownload[i].MainFileSize/1024)#KB</cfif>)<br/>
-						#aDownload[i].ResourceText#
-						</p>
-					</cfloop>
-				</cfif>
 			</cfoutput>
 			
 			<cfif thisImageHeader IS NOT "" or Trim(thisLRelatedPageID) IS NOT "">
-				<div id="product-hero-image" <cfif thisImageHeader IS NOT "">style="background-image:url(<cfoutput>#thisImageHeader#</cfoutput>);"</cfif>>
+				<cfset thisImageHeight="0">
+				<cfif FileExists(ExpandPath(thisImageHeader))>
+					<cfimage action="info" source="#ExpandPath(thisImageHeader)#" structname="sImage">
+					<cfset thisImageHeight=sImage.Height>
+				</cfif>
+				<cfoutput><div id="product-hero-image" <cfif thisImageHeader IS NOT "">style="background-image:url(#thisImageHeader#);<cfif val(thisImageHeight) GT "0">padding-top:#thisImageHeight#px</cfif>"</cfif>></cfoutput>
 				<cfif Trim(thisLRelatedPageID) IS NOT "">
 					<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 						<cfprocresult name="GetFeaturedProducts">

@@ -1,5 +1,5 @@
 <cfsilent>
-<cfsetting showdebugoutput="no">
+<cfsetting showdebugoutput="false">
 <cfparam name="URL.s" default=""> <!--- searchTxt--->
 <cfparam name="URL.st" default=""> <!--- searchType --->
 <!--- Set MaxResults to the maximun number of results you want to suggest --->

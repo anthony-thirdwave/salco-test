@@ -685,6 +685,7 @@
 	<cfcase value="258"><!--- Teaser Slide Show --->
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
 			<cfset aFile=ATTRIBUTES.sContentBody.aFile>
+			<cfset RandomStart=RandRange(1,ArrayLen(aFile))>
 			<cfsavecontent variable="FileContents">
 				<cfoutput>
 					<div id="bottom-prods">
@@ -704,7 +705,7 @@
 						<cfif StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "">
 							<cfset thisImage=sFile.FilePath>
 						</cfif>
-						<div id="feat-prod-#i#" class="feat-prods<cfif i IS "1"> on</cfif>">
+						<div id="feat-prod-#i#" class="feat-prods<cfif i IS RandomStart> on</cfif>">
 							<h4>#UCase(thisName)#</h4>
 							<p>#thisCaption#</p>
 							<img src="#thisImage#" alt="#thisName#"/>
@@ -724,7 +725,7 @@
 						<cfelse>
 							<cfset thisURL="">
 						</cfif>
-						<li<cfif i IS "1"> class="on"</cfif>><a href="##feat-prod-#i#" data-id="#thisURL#">#thisName#</a></li>
+						<li<cfif i IS RandomStart> class="on"</cfif>><a href="##feat-prod-#i#" data-id="#thisURL#">#thisName#</a></li>
 					</cfloop>
 					</ul>
 					</div>

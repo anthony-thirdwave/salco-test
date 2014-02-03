@@ -5,6 +5,8 @@
 <cfparam name="ATTRIBUTES.Mode" default="Default">
 <cfparam name="ATTRIBUTES.Title" default="">
 <cfparam name="ATTRIBUTES.OmitCurrentProduct" default="no">
+<cfparam name="ATTRIBUTES.HighlightCurrentProduct" default="No">
+
 <cfparam name="ShowAll" default="0">
 
 <cfparam name="ATTRIBUTES.SpecificationSetID" default="8000">
@@ -114,9 +116,12 @@
 					<cfif CurrentRow MOD SearchNum IS "0" or CurrentRow IS qGetProductList.RecordCount>
 						<cfset ThisRowClass="#ThisRowClass# tableBot">
 					</cfif>
+					<cfif ATTRIBUTES.HighlightCurrentProduct and ATTRIBUTES.ProductID IS qGetProductList.CategoryID>
+						<cfset ThisRowClass="#ThisRowClass# activeRow">
+					</cfif>
 					<tr>
 						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#qGetProductList.CategoryNameDerived#</a></td>
-						<td class="#ThisRowClass#" valign="middle"  align="left">#Ucase(qGetProductList.PartNumber)#</td>
+						<td class="#ThisRowClass#" valign="middle"  align="left"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#Ucase(qGetProductList.PartNumber)#</a></td>
 						<cfif qTestIfDocument.RecordCount GT "0">
 							<td class="tableRight #ThisRowClass#" valign="middle" align="left">
 							<cfif qGetProductList.PublicDrawing IS NOT "" and FileExists(ExpandPath(qGetProductList.PublicDrawing))><a href="#APPLICATION.utilsObj.GetFreewheelLink(qGetProductList.PublicDrawing)#" target="_blank">CAD Drawing</a><cfelse>&nbsp;</cfif>
