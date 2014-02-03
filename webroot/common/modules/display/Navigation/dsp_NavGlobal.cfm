@@ -6,7 +6,7 @@
 
 <CFSET ExecuteTempFile="#APPLICATION.LocaleID#\+GlobalNav_#APPLICATION.LocaleID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
 
-<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
+<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
 	<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 		<cfprocresult name="GetTopCategories">
 		<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
