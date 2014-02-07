@@ -995,6 +995,9 @@ var allContacts={
 				//alert("hi Randy");
 				regionSet="region-11";
 			break;
+			case "Todd Waggoner":
+				regionSet="region-6";
+			break;
 			case "Joshua Chesser":
 				regionSet="region-7";
 			break;
