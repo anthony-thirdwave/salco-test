@@ -1084,7 +1084,7 @@ tech={
 	init:function(){
 		tempHoldTS=$("#region1").html();
 		$(".sideBar .sideBarContent ").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
-		$("#region-1ts .regionTitle").html("Techincal Sales Contact");
+		$("#region-1ts .regionTitle").html("Technical Sales Contact");
 		allContacts.init();
 	},
 	sale:function(r){
