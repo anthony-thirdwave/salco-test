@@ -717,11 +717,11 @@ var contactUsMap={
 			switch(holdingC){
 				case "region-1":
 				highlightRegion('region4')
-				tech.sale('region-1ts');
+				tech.sale('region18');
 				break;
 				case "region-2":
 				highlightRegion('region8')
-				tech.sale('region-1ts');
+				tech.sale('region18');
 				break;
 				case "region-3":
 				highlightRegion('region2')
@@ -751,7 +751,7 @@ var contactUsMap={
 				break;
 				case "region-11":
 				highlightRegion('region9')
-				tech.sale('region-1ts');
+				tech.sale('region18');
 				break;
 				case "region-12":
 				highlightRegion('region5')
@@ -1032,7 +1032,7 @@ var allContacts={
 				regionSet="region-14";
 			break;
 			case "Tyler Jepsen":
-				regionSet="none";
+				regionSet="region-9";
 			break;
 		}
 		
@@ -1082,9 +1082,10 @@ var allContacts={
 
 tech={
 	init:function(){
-		tempHoldTS=$("#region1").html();
-		$(".sideBar .sideBarContent ").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
-		$("#region-1ts .regionTitle").html("Techincal Sales Contact");
+		tempHoldTS=$("#region18").html();
+		//$(".sideBar .sideBarContent ").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
+		$("#region1").html(tempHoldTS);
+		$("#region1 .regionTitle").html("Contact");
 		allContacts.init();
 	},
 	sale:function(r){
