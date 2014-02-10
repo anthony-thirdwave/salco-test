@@ -35,7 +35,7 @@
 			<cfif len(previousStoryLink)>
 				<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">Previous Story</a></li>
 			</cfif>
-			<li><a href="#APPLICATION.utilsObj.parseCategoryUrl(ATTRIBUTES.NewsListingPage)#">News Listing</a></li>
+			<li class="newsListing"><a href="#APPLICATION.utilsObj.parseCategoryUrl(ATTRIBUTES.NewsListingPage)#">News Listing</a></li>
 			<cfif len(NextStoryLink)>
 				<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">Next Story</a></li>
 			</cfif>
