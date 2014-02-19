@@ -551,6 +551,7 @@ webroot/common/modules/product/dsp_resource.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
 webroot/common/modules/product/productFamilyDetail.cfm -text
+webroot/common/modules/report/backlog.cfm -text
 webroot/common/modules/report/getdateforweeknumber.cfm -text
 webroot/common/modules/report/orderShipmentAccuracy.cfm -text
 webroot/common/modules/report/orders.cfm -text
