@@ -50,6 +50,10 @@ $(document).ready(function(){
 <article class="goalsProgess">
     <div class="inArt"> 
 	<h1>Goals &amp; Progress</h1>
+	<div class="selects">
+		<div class="selectsLeft" style="height:41px">&nbsp;
+		</div>
+	</div>
 	<h3 class="subTitle">Booked Sales</h3>
 	<div class="goalProgressTableHolder">
 	<table cellpadding="0" cellspacing="0" class="accuracy">
