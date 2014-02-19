@@ -7,7 +7,7 @@
 </cfquery>
 
 <cfquery name="qryValuePrime" datasource="#APPLICATION.Data_DSN#" maxrows="12">
-	SELECT	SUM(value) as valueByMonth, month, year,
+	SELECT	SUM(value) as valueByMonth, SUM([Order QTY]) as orderQtyByMonth, month, year,
 	SUBSTRING('JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC ', (month * 4) - 3, 3) + ' ' + convert(varchar,year) as dmonth,
 	convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
 	FROM	rp_backlog
@@ -25,6 +25,10 @@
 
 <cfquery name="qryMaxValue" dbtype="query">
 	select max(valueByMonth) as MaxValueByMonth from qryValue
+</cfquery>
+
+<cfquery name="qryMaxOrder" dbtype="query">
+	select max(orderQtyByMonth) as MaxOrderQtyByMonth from qryValue
 </cfquery>
 
 <script type="text/javascript">
@@ -50,7 +54,7 @@ $(document).ready(function(){
 	<div class="goalProgressTableHolder">
 	<table cellpadding="0" cellspacing="0" class="accuracy">
 		<thead>
-			<tr><th>Booked Sales</th></tr>
+			<tr><th>Booked Sales ($)</th></tr>
 		</thead>
 		<tbody>
 			<tr>
@@ -69,6 +73,30 @@ $(document).ready(function(){
 			</tr>
 		</tbody>
 	</table>
+	<p>&nbsp;</p>
+	
+	<table cellpadding="0" cellspacing="0" class="accuracy">
+		<thead>
+			<tr><th>Booked Sales (Line Items)</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+				<cfchart showborder="no" chartHeight="300" chartWidth="400" backgroundColor="##ffffff"
+					scaleTo="#Val(qryMaxOrder.MaxOrderQtyByMonth)+50#" labelFormat="number">
+					<cfchartseries 
+						type="line"
+						paintStyle="plain" 
+						query="qryValue" 
+						itemcolumn="dMonth" 
+						valuecolumn="orderQtyByMonth"
+						seriesLabel="OrderQty">
+				</cfchart>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
 	</div>
 </div>
 <cfquery name="GetLastUpdated" datasource="#APPLICATION.Data_DSN#">
