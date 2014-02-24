@@ -37,7 +37,14 @@
 <cfset StructInsert(sReportElt,"FieldLists","year,month,week,Shipment,Processed",1)>
 <cfset StructInsert(sReports,4,sReportElt,1)>
 
-<!--- <cfloop index="ThisReport" list="#StructKeyList(sReports)#"> --->
+<cfset sReportElt=StructNew()>
+<cfset StructInsert(sReportElt,"ReportName","Backlog",1)>
+<cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
+<cfset StructInsert(sReportElt,"FileName","Template-Backlog.csv",1)>
+<cfset StructInsert(sReportElt,"TableName","rp_backlog",1)>
+<cfset StructInsert(sReportElt,"FieldLists","[SO Count],value,month,year",1)>
+<cfset StructInsert(sReports,5,sReportElt,1)>
+
 <cfloop index="ThisReport" list="#StructKeyList(sReports)#">
 	<cfoutput>Working on #sReports[ThisReport].ReportName#...<br></cfoutput>
 	<cfset thisFilePath="#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#">
