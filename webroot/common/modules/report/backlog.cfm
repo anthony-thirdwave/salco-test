@@ -7,7 +7,7 @@
 </cfquery>
 
 <cfquery name="qryValuePrime" datasource="#APPLICATION.Data_DSN#" maxrows="12">
-	SELECT	SUM(value) as valueByMonth, SUM([Order QTY]) as orderQtyByMonth, month, year,
+	SELECT	SUM(value) as valueByMonth, SUM([SO Count]) as orderQtyByMonth, month, year,
 	SUBSTRING('JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC ', (month * 4) - 3, 3) + ' ' + convert(varchar,year) as dmonth,
 	convert(varchar,year) + right('00'+convert(varchar,month),2) AS GroupDate
 	FROM	rp_backlog
@@ -81,7 +81,7 @@ $(document).ready(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="accuracy">
 		<thead>
-			<tr><th>Booked Sales (Line Items)</th></tr>
+			<tr><th>Booked Sales (Number of Orders)</th></tr>
 		</thead>
 		<tbody>
 			<tr>
