@@ -11,10 +11,10 @@
 </cfif>
 
 <cfif NOT IsDefined("StartRow")>
-	<CFSET StartRow=1>
+	<cfset StartRow=1>
 </cfif>
 <cfif Val(StartRow) LTE "0">
-	<CFSET StartRow=1>
+	<cfset StartRow=1>
 </cfif>
 <cfset SearchNUM="20">
 
@@ -95,7 +95,7 @@
 			<ul id="tabsDownloadsLevel2" class="nav">
 			<cfoutput><li><a href="?ActiveTab=#ActiveTab#" <cfif ActiveFolder IS "/">class="tabActive"</cfif>>All</a></li></cfoutput>
 			<cfoutput query="qGetDirs">
-				<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#qGetDirs.Name#</a></li>
+				<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#ReplaceNoCase(qGetDirs.Name,"RailYard","Rail/Yard","all")#</a></li>
 			</cfoutput>
 			</ul>
 		</cfif>
