@@ -151,7 +151,7 @@
 			,SUM(Fax) as FaxTotalToYear ,SUM(Phone) as PhoneTotalToYear, SUM(Cons) as ConsTotalToYear
 			,SUM(VIP) as VIPTotalToYear ,SUM(Promo) as PromoTotalToYear, SUM(LI) as LITotalToYear
 			FROM	rp_order
-			WHERE	year(date)= <cfqueryparam value="#thisYear#" cfsqltype="cf_sql_varchar">
+			WHERE	year(date)= <cfqueryparam value="#year(SelectedDate)#" cfsqltype="cf_sql_varchar">
 		</cfquery>
 		<cfoutput>
 		<tfoot>
