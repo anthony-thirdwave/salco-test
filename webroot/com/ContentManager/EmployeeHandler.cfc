@@ -48,7 +48,9 @@
 			CategoryTypeID=<cfqueryparam value="81" cfsqltype="cf_sql_integer">
 		</cfquery>
 
-		<cfif IsDefined("APPLICATION.EmployeeControl_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#")>
+		<cfset LOCAL.CacheDateTimeToUse=CreateDate(Year(now()),month(GetLastCache.CacheDateTime),day(GetLastCache.CacheDateTime))>
+
+		<cfif IsDefined("APPLICATION.EmployeeControl_#DateFormat(LOCAL.CacheDateTimeToUse,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#")>
 			<cfreturn APPLICATION.EmployeeQuery>
 		<cfelse>
 			<cfset LOCAL.qryGetEmployee=QueryNew("employeeID,empFirstName,empLastName,departmentID,empEmail,empTitle,empBirthDate,empBirthDate2,empJoinDate,empJoinDate2,empPhone,empPhoneExt,empCellPhone,empImage,empImagethumb,empAlias",
@@ -164,7 +166,7 @@
 				</cfif>
 			</cfloop>
 			
-			<cfset SetVariable("APPLICATION.EmployeeControl_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#",Now())>
+			<cfset SetVariable("APPLICATION.EmployeeControl_#DateFormat(LOCAL.CacheDateTimeToUse,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#",Now())>
 			<cfset APPLICATION.EmployeeQuery=LOCAL.qryGetEmployee>
 			<cfreturn LOCAL.qryGetEmployee>
 		</cfif>
