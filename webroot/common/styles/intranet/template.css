@@ -1349,6 +1349,18 @@ article.goalsProgess .goalProgressTableHolder table.orders tfoot td{
 	color:#231f20;
 }
 
+.tileHolder .miniTile{
+	width:auto;
+	border:1px solid #808183;
+	display:inline-block;
+	vertical-align:top;
+	border-radius:15px;
+	behavior:url(/common/scripts/intranet/PIE.htc);
+	padding:16px 16px 16px 16px;
+	color:#231f20;
+}
+
+
 .tileHolderSmall .miniTile.shortenTile{
 	padding-bottom:7px;
 }
@@ -1358,7 +1370,7 @@ article.goalsProgess .goalProgressTableHolder table.orders tfoot td{
 	margin-right:11px;
 }
 
-.tileHolderSmall .miniTile h4{
+.tileHolderSmall .miniTile h4, .tileHolder .miniTile h4 {
 	margin:0px;
 	padding:0px;
 	font-size:10px;
@@ -1380,6 +1392,10 @@ article.goalsProgess .goalProgressTableHolder table.orders tfoot td{
 
 .tileHolderSmall{
 	padding-top:20px;
+}
+
+th .tileHolderSmall{
+	padding-top:0px;
 }
 
 .tileHolderSmall .miniTile div.botLeft:first-line{
