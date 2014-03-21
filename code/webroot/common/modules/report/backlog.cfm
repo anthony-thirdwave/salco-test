@@ -31,6 +31,14 @@
 	select max(orderQtyByMonth) as MaxOrderQtyByMonth from qryValue
 </cfquery>
 
+<cfquery name="qrySumValue" dbtype="query">
+	select sum(valueByMonth) as SumValue from qryValue
+</cfquery>
+
+<cfquery name="qrySumOrder" dbtype="query">
+	select sum(orderQtyByMonth) as SumOrder from qryValue
+</cfquery>
+
 <script type="text/javascript">
 	optIDs=["selectedMonthYear"];
 	fauxOptIDs=["orderMonths-fancy"];
@@ -55,10 +63,18 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<h3 class="subTitle">Booked Sales</h3>
+
 	<div class="goalProgressTableHolder">
 	<table cellpadding="0" cellspacing="0" class="accuracy">
 		<thead>
-			<tr><th>Booked Sales ($)</th></tr>
+			<tr><th>
+			<div class="tileHolder">
+				<div class="miniTile">
+					<h4>Booked Sales ($)</h4>
+					<div><cfoutput>#dollarFormat(qrySumValue.SumValue)#</cfoutput></div>
+				</div>
+			</div>
+			</th></tr>
 		</thead>
 		<tbody>
 			<tr>
@@ -81,7 +97,14 @@ $(document).ready(function(){
 	
 	<table cellpadding="0" cellspacing="0" class="accuracy">
 		<thead>
-			<tr><th>Booked Sales (Number of Orders)</th></tr>
+			<tr><th>
+			<div class="tileHolderSmall">
+				<div class="miniTile">
+					<h4>Booked Sales (Number of Orders)</h4>
+					<div><cfoutput>#val(qrySumOrder.SumOrder)#</cfoutput></div>
+				</div>
+			</div>
+		</th></tr>
 		</thead>
 		<tbody>
 			<tr>
