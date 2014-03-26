@@ -1,4 +1,4 @@
-<cfsetting ShowDebugOutput="1">
+<cfsetting ShowDebugOutput="0">
 
 <cfparam name="ATTRIBUTES.ProductID" default="-1">
 <cfparam name="ATTRIBUTES.ProductFamilyID" default="-1">
