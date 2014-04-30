@@ -6,7 +6,7 @@
 <cfif APPLICATION.Production>
 	<cfset Mailer_ToAddress="sales@salcoproducts.com">
 <cfelse>
-	<cfset Mailer_ToAddress="thomas@newermedia.com">
+	<cfset Mailer_ToAddress="notifications@dev01.thirdwavellc.com">
 </cfif>
 <cfset Mailer_FromAddress="noreply@salcoproducts.net">
 
