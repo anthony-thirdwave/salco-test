@@ -100,140 +100,142 @@
 						<cfset LogTextElement="#LogTextElement##CRLF#+#expandPath(ThisPublicDrawing)# does not exist">
 					</cfif>
 
-					<cfif thisImport IS "delete">
-						<cfset ThisWasUpdated="0">
-						<cfif GetTargetProduct.RecordCount GTE "1">
-							<cfloop query="GetTargetProduct">
-								<cfquery name="UpdateCategory" datasource="#APPLICATION.DSN#">
-									update t_Category set CategoryActive=0
-									where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
-								</cfquery>
-								<cfset ThisWasUpdated="1">
-								<cfset LogTextElement="#LogTextElement##CRLF#+++DELETE: Made inactive (#GetTargetProduct.CategoryID#)">
-							</cfloop>
-						<cfelse>
-							<cfset LogTextElement="#LogTextElement##CRLF#+++DELETE: Not present in DB">
-						</cfif>
-					<cfelse>
-						<cfif GetTargetProduct.RecordCount GTE "1">
-							<!--- update product --->
-							
-							<cfloop query="GetTargetProduct">
-								<cfif Commit>
-									<cfset LogTextElement="#LogTextElement##CRLF#+Working on #GetTargetProduct.CategoryID# in CMS">
-									<cfset ThisWasUpdated="0">
-									
-									<cfif hash(GetTargetProduct.CategoryName) IS NOT Hash(Trim(sRow.fdescript))>
-										<cfquery name="UpdateCategory" datasource="#APPLICATION.DSN#">
-											update t_Category set CategoryName=<cfqueryparam value="#Trim(sRow.fdescript)#" cfsqltype="cf_sql_varchar">
-											where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
-										</cfquery>
-										<cfset ThisWasUpdated="1">
-										<cfset LogTextElement="#LogTextElement##CRLF#+++Updated Name: ""#GetTargetProduct.CategoryName#"" -> ""#sRow.fdescript#"" (#GetTargetProduct.CategoryID#)">
-									</cfif>
-									
-									<cfloop index="ThisID" list="#lAttributeID#">
-										<cfset ThisValue=Evaluate("This#sAttribute[ThisID]#")>
-										<cfquery name="test" datasource="#APPLICATION.DSN#">
-											select * from t_ProductAttribute 
-											WHERE 
-											CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer"> AND 
-											LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
-											ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
-										</cfquery>
-										
-										<cfif Hash(Trim(ThisValue)) IS NOT hash(Trim(test.AttributeValue))>
-											
-											<cfif test.RecordCount GT "0">
-												<cfquery name="update" datasource="#APPLICATION.DSN#">
-													update t_ProductAttribute Set
-													AttributeValue=N'#Trim(ThisValue)#'
-													WHERE 
-													CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer"> AND 
-													LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
-													ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
-												</cfquery>
-												<cfset LogTextElement="#LogTextElement##CRLF#+++Updated #sAttribute[ThisID]#: ""#Trim(test.AttributeValue)#"" -> ""#Trim(ThisValue)#"" (#GetTargetProduct.CategoryID#)">
-											<cfelse>
-												<cfquery name="insert" datasource="#APPLICATION.DSN#">
-													INSERT INTO t_ProductAttribute 
-													(CategoryID, LanguageID, ProductFamilyAttributeID, AttributeValue)
-													VALUES
-													(<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">, N'#Trim(ThisValue)#')
-												</cfquery>
-												<cfset LogTextElement="#LogTextElement##CRLF#+++Inserted #sAttribute[ThisID]#: ""#Trim(ThisValue)#"" (#GetTargetProduct.CategoryID#)">
-											</cfif>
-											<cfset ThisWasUpdated="1">
-										</cfif>
-									</cfloop>
-									
-									<cfif ThisWasUpdated>
-										<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
-											UserID="1"
-											Entity="Category"
-											KeyID="#Val(GetTargetProduct.CategoryID)#"
-											Operation="modify"
-											EntityName="#Trim(sRow.fdescript)#"
-											Note="#FormatLog(LogTextElement)#">
-									</cfif>
-									
-								</cfif>
-								<cfset LogTextElement="#LogTextElement##CRLF#+UPDATE DONE TO #Trim(sRow.fdescript)# (#GetTargetProduct.CategoryID#)#CRLF#Any updates made?: #YesNoFormat(ThisWasUpdated)#">
-							</cfloop>
-							
-						<cfelse>
-							<!--- new product --->
-							<cfif Commit>
-								<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
-								<cfset MyCategory.Constructor(-1)>
-								<cfset MyCategory.SetProperty("CategoryName",sRow.fdescript)>
-								<cfset MyCategory.SetProperty("CategoryActive",1)>
-								<cfset MyCategory.SetProperty("ShowInNavigation",1)>
-								<cfset MyCategory.SetProperty("CategoryTypeID",64)>
-								<cfset MyCategory.SetProperty("ParentID",5731)>
-								<cfinvoke component="com.ContentManager.CategoryHandler"
-									method="CreateAlias"
-									Name="#sRow.FPartNo#"
-									CategoryID="-1"
-									returnVariable="thisCategoryAlias">
-								<cfset MyCategory.SetProperty("CategoryAlias",thisCategoryAlias)>
-								<cfif MyCategory.IsCorrect() IS "0">
-									New product creation failed.
-								</cfif>
-								<cfset MyCategory.Save(APPLICATION.WebrootPath,1)>
-								<cfset ThisCategoryID=MyCategory.GetProperty("CategoryID")>
-						
-								<cfset MyProduct=CreateObject("component","com.Product.Product")>
-								<cfset MyProduct.Constructor(Val(ThisCategoryID),APPLICATION.DefaultLanguageID)>
-								<cfset MyProduct.SetProperty("ProductDescription",Trim(sRow.FDSTMemo))>
-								<cfset MyProduct.SetProperty("PublicDrawing",Trim(ThisFile))>
-								<cfset MyProduct.SetProperty("PublicDrawingSize",Trim(ThisFileSize))>
-								<cfset MyProduct.SetProperty("PartNumber",sRow.FPartNo)>
-								<cfset MyProduct.Save(APPLICATION.WebrootPath,1)>
-								
-								<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
-								<cfset MyCategoryLocale.Constructor(-1)>
-								<cfset MyCategoryLocale.SetProperty("CategoryID",ThisCategoryID)>
-								<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
-								<cfset MyCategoryLocale.SetCategoryTypeID(64)>
-								
-								<cfset MyCategoryLocale.SetProperty("DefaultCategoryLocale",1)>
-								<cfset MyCategoryLocale.SetProperty("CategoryLocaleActive",1)>
-								<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
-								<cfset MyCategoryLocale.Save(APPLICATION.WebrootPath,1)>
+					<cfif sRow.FPartNo IS NOT "">
+						<cfif thisImport IS "delete">
+							<cfset ThisWasUpdated="0">
+							<cfif GetTargetProduct.RecordCount GTE "1">
+								<cfloop query="GetTargetProduct">
+									<cfquery name="UpdateCategory" datasource="#APPLICATION.DSN#">
+										update t_Category set CategoryActive=0
+										where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
+									</cfquery>
+									<cfset ThisWasUpdated="1">
+									<cfset LogTextElement="#LogTextElement##CRLF#+++DELETE: Made inactive (#GetTargetProduct.CategoryID#)">
+								</cfloop>
+							<cfelse>
+								<cfset LogTextElement="#LogTextElement##CRLF#+++DELETE: Not present in DB">
 							</cfif>
+						<cfelse>
+							<cfif GetTargetProduct.RecordCount GTE "1">
+								<!--- update product --->
+								
+								<cfloop query="GetTargetProduct">
+									<cfif Commit>
+										<cfset LogTextElement="#LogTextElement##CRLF#+Working on #GetTargetProduct.CategoryID# in CMS">
+										<cfset ThisWasUpdated="0">
+										
+										<cfif hash(GetTargetProduct.CategoryName) IS NOT Hash(Trim(sRow.fdescript))>
+											<cfquery name="UpdateCategory" datasource="#APPLICATION.DSN#">
+												update t_Category set CategoryName=<cfqueryparam value="#Trim(sRow.fdescript)#" cfsqltype="cf_sql_varchar">
+												where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
+											</cfquery>
+											<cfset ThisWasUpdated="1">
+											<cfset LogTextElement="#LogTextElement##CRLF#+++Updated Name: ""#GetTargetProduct.CategoryName#"" -> ""#sRow.fdescript#"" (#GetTargetProduct.CategoryID#)">
+										</cfif>
+										
+										<cfloop index="ThisID" list="#lAttributeID#">
+											<cfset ThisValue=Evaluate("This#sAttribute[ThisID]#")>
+											<cfquery name="test" datasource="#APPLICATION.DSN#">
+												select * from t_ProductAttribute 
+												WHERE 
+												CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer"> AND 
+												LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
+												ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
+											</cfquery>
+											
+											<cfif Hash(Trim(ThisValue)) IS NOT hash(Trim(test.AttributeValue))>
+												
+												<cfif test.RecordCount GT "0">
+													<cfquery name="update" datasource="#APPLICATION.DSN#">
+														update t_ProductAttribute Set
+														AttributeValue=N'#Trim(ThisValue)#'
+														WHERE 
+														CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer"> AND 
+														LanguageID=<cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer"> AND 
+														ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
+													</cfquery>
+													<cfset LogTextElement="#LogTextElement##CRLF#+++Updated #sAttribute[ThisID]#: ""#Trim(test.AttributeValue)#"" -> ""#Trim(ThisValue)#"" (#GetTargetProduct.CategoryID#)">
+												<cfelse>
+													<cfquery name="insert" datasource="#APPLICATION.DSN#">
+														INSERT INTO t_ProductAttribute 
+														(CategoryID, LanguageID, ProductFamilyAttributeID, AttributeValue)
+														VALUES
+														(<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(APPLICATION.DefaultLanguageID)#" cfsqltype="cf_sql_integer">, <cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">, N'#Trim(ThisValue)#')
+													</cfquery>
+													<cfset LogTextElement="#LogTextElement##CRLF#+++Inserted #sAttribute[ThisID]#: ""#Trim(ThisValue)#"" (#GetTargetProduct.CategoryID#)">
+												</cfif>
+												<cfset ThisWasUpdated="1">
+											</cfif>
+										</cfloop>
+										
+										<cfif ThisWasUpdated>
+											<cfinvoke component="com.utils.tracking" method="track" returnVariable="success"
+												UserID="1"
+												Entity="Category"
+												KeyID="#Val(GetTargetProduct.CategoryID)#"
+												Operation="modify"
+												EntityName="#Trim(sRow.fdescript)#"
+												Note="#FormatLog(LogTextElement)#">
+										</cfif>
+										
+									</cfif>
+									<cfset LogTextElement="#LogTextElement##CRLF#+UPDATE DONE TO #Trim(sRow.fdescript)# (#GetTargetProduct.CategoryID#)#CRLF#Any updates made?: #YesNoFormat(ThisWasUpdated)#">
+								</cfloop>
+								
+							<cfelse>
+								<!--- new product --->
+								<cfif Commit>
+									<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
+									<cfset MyCategory.Constructor(-1)>
+									<cfset MyCategory.SetProperty("CategoryName",sRow.fdescript)>
+									<cfset MyCategory.SetProperty("CategoryActive",1)>
+									<cfset MyCategory.SetProperty("ShowInNavigation",1)>
+									<cfset MyCategory.SetProperty("CategoryTypeID",64)>
+									<cfset MyCategory.SetProperty("ParentID",5731)>
+									<cfinvoke component="com.ContentManager.CategoryHandler"
+										method="CreateAlias"
+										Name="#sRow.FPartNo#"
+										CategoryID="-1"
+										returnVariable="thisCategoryAlias">
+									<cfset MyCategory.SetProperty("CategoryAlias",thisCategoryAlias)>
+									<cfif MyCategory.IsCorrect() IS "0">
+										New product creation failed.
+									</cfif>
+									<cfset MyCategory.Save(APPLICATION.WebrootPath,1)>
+									<cfset ThisCategoryID=MyCategory.GetProperty("CategoryID")>
 							
-							<cfset LogTextElement="#LogTextElement##CRLF#CREATE #sRow.fdescript# (CategoryID: #Val(ThisCategoryID)#)">
+									<cfset MyProduct=CreateObject("component","com.Product.Product")>
+									<cfset MyProduct.Constructor(Val(ThisCategoryID),APPLICATION.DefaultLanguageID)>
+									<cfset MyProduct.SetProperty("ProductDescription",Trim(sRow.FDSTMemo))>
+									<cfset MyProduct.SetProperty("PublicDrawing",Trim(ThisFile))>
+									<cfset MyProduct.SetProperty("PublicDrawingSize",Trim(ThisFileSize))>
+									<cfset MyProduct.SetProperty("PartNumber",sRow.FPartNo)>
+									<cfset MyProduct.Save(APPLICATION.WebrootPath,1)>
+									
+									<cfset MyCategoryLocale=CreateObject("component","com.ContentManager.CategoryLocale")>
+									<cfset MyCategoryLocale.Constructor(-1)>
+									<cfset MyCategoryLocale.SetProperty("CategoryID",ThisCategoryID)>
+									<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
+									<cfset MyCategoryLocale.SetCategoryTypeID(64)>
+									
+									<cfset MyCategoryLocale.SetProperty("DefaultCategoryLocale",1)>
+									<cfset MyCategoryLocale.SetProperty("CategoryLocaleActive",1)>
+									<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
+									<cfset MyCategoryLocale.Save(APPLICATION.WebrootPath,1)>
+								</cfif>
+								
+								<cfset LogTextElement="#LogTextElement##CRLF#CREATE #sRow.fdescript# (CategoryID: #Val(ThisCategoryID)#)">
+							</cfif>
 						</cfif>
-					</cfif>
-					#APPLICATION.utilsObj.AddBreaks(LogTextElement)#
-					<hr>
-					<cffile action="APPEND" file="#LogFilePath#\#LogFile#" output="#FormatLog(LogTextElement)##CRLF#" addnewline="Yes">
-					<cfset TotalLogText="#TotalLogText##CRLF##LogTextElement#">
-					<cfif structKeyExists(sCounter,thisImport)>
-						<cfset sCounter[thisImport]++>
-					<cfelse>
-						<cfset sCounter[thisImport]="1">
+						#APPLICATION.utilsObj.AddBreaks(LogTextElement)#
+						<hr>
+						<cffile action="APPEND" file="#LogFilePath#\#LogFile#" output="#FormatLog(LogTextElement)##CRLF#" addnewline="Yes">
+						<cfset TotalLogText="#TotalLogText##CRLF##LogTextElement#">
+						<cfif structKeyExists(sCounter,thisImport)>
+							<cfset sCounter[thisImport]++>
+						<cfelse>
+							<cfset sCounter[thisImport]="1">
+						</cfif>
 					</cfif>
 				</cfif>
 			</cfoutput>
