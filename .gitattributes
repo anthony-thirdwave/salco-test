@@ -548,6 +548,7 @@ webroot/common/modules/product/_ProductFamilyDetail.cfm -text
 webroot/common/modules/product/download.cfm -text
 webroot/common/modules/product/dsp_PromoText.cfm -text
 webroot/common/modules/product/dsp_resource.cfm -text
+webroot/common/modules/product/import/ProductDeltaImport.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
 webroot/common/modules/product/productFamilyDetail.cfm -text
