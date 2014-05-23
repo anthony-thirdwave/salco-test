@@ -1,11 +1,12 @@
 <cfsetting RequestTimeOut="60000">
 
-<cfquery name="GetDetail" datasource="#APPLICATION.DSN#" maxrows="20">
+<!--- Import chunks of 10 at a time. --->
+<cfquery name="GetDetail" datasource="#APPLICATION.DSN#" maxrows="10">
 	SELECT  t_ProductsHierarchyDataLink.CategoryID, t_ProductsHierarchyDataLink.ProductNum, t_ProductsHierarchyData.*
 	FROM    t_ProductsHierarchyDataLink INNER JOIN
 		    t_ProductsHierarchyData ON t_ProductsHierarchyDataLink.ProductNum = t_ProductsHierarchyData.fpartno
-	--where import_datetime is null
-	where CategoryID=6431
+	where import_datetime is null
+	--where ID=17120
 	ORDER BY import_datetime desc
 </cfquery>
 
@@ -61,7 +62,19 @@
 	<cfset MyProduct.Constructor(Val(ThisCategoryID),APPLICATION.DefaultLanguageID)>
 	<cfset MyProduct.SetProperty("CategoryID",Val(ThisCategoryID))>
 	<cfset MyProduct.SetProperty("ProductDescription",Trim(GetDetail.FSTDMemo))>
-	<cfset MyProduct.SetProperty("PublicDrawing",Trim(GetDetail.FCCadFile2))>
+
+	<cfset ThisFile=GetDetail.FCCadFile2>
+	<cfset ThisFile=ReplaceNoCase(ThisFile,"W:\DWF Parts","/resources/external/dwfparts")>
+	<cfset ThisFile=Replace(ThisFile,"\","/","All")>
+	<cfset Source=ReplaceNoCase(GetDetail.FCCadFile2,"W:\","#ListDeleteAt(APPLICATION.RootPath,ListLen(APPLICATION.RootPath,'\'),'\')#\resources\w\")>
+	<cfif FileExists(Source)>
+		<cfset ThisFileSize="#GetFileInfo(Source).Size#">
+	<cfelse>
+		<cfset ThisFileSize="">
+	</cfif>
+
+	<cfset MyProduct.SetProperty("PublicDrawing",Trim(ThisFile))>
+	<cfset MyProduct.SetProperty("PublicDrawingSize",ThisFileSize)>
 	<cfset MyProduct.SetProperty("PartNumber",Trim(GetDetail.FPartNo))>
 	<cfset MyProduct.Save(APPLICATION.WebrootPath,1)>
 	
