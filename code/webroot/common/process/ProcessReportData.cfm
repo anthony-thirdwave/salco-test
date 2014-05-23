@@ -45,7 +45,7 @@
 <cfset StructInsert(sReportElt,"FieldLists","[SO Count],value,month,year",1)>
 <cfset StructInsert(sReports,5,sReportElt,1)>
 
-<cfloop index="ThisReport" list="#StructKeyList(sReports)#">
+<cfloop index="ThisReport" list="#structKeyList(sReports)#">
 	<cfoutput>Working on #sReports[ThisReport].ReportName#...<br></cfoutput>
 	<cfset thisFilePath="#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#">
 	<cfif FileExists(thisFilePath)>
