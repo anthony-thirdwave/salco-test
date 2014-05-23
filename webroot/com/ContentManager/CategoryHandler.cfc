@@ -409,7 +409,7 @@
 
 		<cfquery name="GetCategoryBasicDetails" datasource="#APPLICATION.DSN#" maxrows="1">
 			SELECT		CategoryName, CategoryTypeName, CategoryAlias, CategoryActive, DisplayLevel,
-						PropertiesPacket, CategoryTypeID, ParentID
+						PropertiesPacket, CategoryTypeID, ParentID, SourceID
 			FROM		qry_GetCategory
 			WHERE		CategoryID=<cfqueryparam value="#Val(ARGUMENTS.CategoryID)#" cfsqltype="cf_sql_integer">
 		</cfquery>

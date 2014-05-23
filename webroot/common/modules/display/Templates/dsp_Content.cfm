@@ -109,8 +109,8 @@
 					CategoryID="1">
 			</nav>
 			<nav id="products-navigation">
-				<cfmodule template="/common/modules/Display/Navigation/dsp_Nav.cfm"
-					ParentID="7">
+				<cfmodule template="/common/modules/Display/Navigation/dsp_NavR.cfm"
+					CategoryID="7" MaxLevel="3">
 			</nav>
 		</div>
 	</header>

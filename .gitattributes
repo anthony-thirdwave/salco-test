@@ -342,7 +342,6 @@ webroot/common/images/logo.gif -text
 webroot/common/images/news_events.gif -text
 webroot/common/images/spacer.gif -text
 webroot/common/images/template-updated/.ie8-product-landing-title-bg.png -text
-webroot/common/images/template-updated/Thumbs.db -text
 webroot/common/images/template-updated/Torque.png -text
 webroot/common/images/template-updated/about-us-bg.png -text
 webroot/common/images/template-updated/committed-to-innovations-resized.png -text
@@ -397,6 +396,7 @@ webroot/common/images/template-updated/services-inventory-bg-2.png -text
 webroot/common/images/template-updated/services-inventory-bg.png -text
 webroot/common/images/template-updated/services-landing.png -text
 webroot/common/images/template-updated/services-warranties-bg.png -text
+webroot/common/images/template-updated/util-search-btn-resized-hourglass.png -text
 webroot/common/images/template-updated/util-search-btn-resized.png -text
 webroot/common/images/template-updated/util-search-btn-transparent.png -text
 webroot/common/images/template-updated/util-search-btn.png -text

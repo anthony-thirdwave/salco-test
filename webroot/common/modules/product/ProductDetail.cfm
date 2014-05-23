@@ -33,7 +33,6 @@
 			<cfset MyProduct=CreateObject("component","com.Product.Product")>
 			<cfset MyProduct.Constructor(Val(ATTRIBUTES.ProductID),ATTRIBUTES.LanguageID)>
 			<cfset aProductFeature=MyProduct.GetProperty("aProductFeature")>
-			<cfset aDownload=MyProduct.GetProperty("aProductDownload")>
 			
 			<cfset lProps="PublicDrawing,PublicDrawingSize,ProductDescription,PartNumber">
 			<cfloop index="ThisProp" list="#lProps#">
@@ -47,14 +46,6 @@
 				</cfif>
 			</cfloop>
 			<cfset aProductFeature=tempArray>
-			
-			<cfset tempArray=ArrayNew(1)>
-			<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
-				<cfif aDownload[i].SpecificationSetID EQ ATTRIBUTES.SpecificationSetID or aDownload[i].SpecificationSetID IS "">
-					<cfset ArrayAppend(tempArray,aDownload[i])>
-				</cfif>
-			</cfloop>
-			<cfset aDownload=tempArray>
 			
 			<cfif ThisPublicDrawing IS "">
 				<cfinvoke component="/com/product/producthandler" method="GetPublicDrawingDupe" returnVariable="ThisPublicDrawing"
@@ -79,21 +70,6 @@
 						<li>#aProductFeature[i].TextBlock#</li>
 					</cfloop>
 					</ul>
-				</cfif>
-				
-				<cfif ArrayLen(aDownload) GT "0" or (ThisPublicDrawing IS NOT "" and FileExists(ExpandPath(ThisPublicDrawing)))>
-					<h4>Downloads</h4>
-					<cfif ThisPublicDrawing IS NOT "" and FileExists(ExpandPath(ThisPublicDrawing))>
-						<p><a href="#APPLICATION.utilsObj.GetFreewheelLink(ThisPublicDrawing)#" target="_blank">CAD Drawing</a>
-						(#UCase(ListLast(ThisPublicDrawing,"."))#<cfif Val(ThisPublicDrawingSize) GT "0">, #Ceiling(ThisPublicDrawingSize/1024)#KB</cfif>)<br/>
-						</p>
-					</cfif>
-					<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
-						<p><a href="#APPLICATION.utilsObj.GetFreewheelLink(aDownload[i].MainFilePath)#" target="_blank">#aDownload[i].ResourceName#</a>
-						(#UCase(ListLast(aDownload[i].MainFilePath,"."))#<cfif StructKeyExists(aDownload[i],"MainFileSize") AND Val(aDownload[i].MainFileSize) GT "0">, #Ceiling(aDownload[i].MainFileSize/1024)#KB</cfif>)<br/>
-						#aDownload[i].ResourceText#
-						</p>
-					</cfloop>
 				</cfif>
 				
 			</cfoutput>

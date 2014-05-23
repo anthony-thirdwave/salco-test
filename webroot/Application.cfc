@@ -255,9 +255,9 @@
 							</p>
 
 							<p>
-							<cfdump var=#arguments# />
+							<cfdump var="#arguments#" />
 							<p>
-
+							<cfdump var="#CGI#" />
 						</cfmail>
 					</cfloop>
 				</cfoutput>

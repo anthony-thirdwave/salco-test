@@ -109,6 +109,10 @@
 					<cfprocparam type="In" cfsqltype="CF_SQL_VARCHAR" dbvarname="ShowInNavigation" value="" null="Yes">
 				</cfstoredproc>
 				
+				<cfquery name="GetSiblingProductFamilies" dbtype="query">
+					select * from GetSiblingProductFamilies order by CategoryNameDerived
+				</cfquery>
+				
 				<div id="sub">
 				<cfoutput>
 					<cfif IsDefined("REQUEST.CategoryThreadList") AND ListLen(REQUEST.CategoryThreadList) GTE "4">

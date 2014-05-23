@@ -465,9 +465,21 @@
 		
 		<cfquery name="LOCAL.GetProductPartNumber" datasource="#APPLICATION.DSN#">
 			select AttributeValue from qry_GetProductPartNumber 
-			where CategoryID=<cfqueryparam value="#Trim(ARGUMENTS.ProductID)#" cfsqltype="CF_SQL_INTEGER">
+			where CategoryID=<cfqueryparam value="#val(ARGUMENTS.ProductID)#" cfsqltype="CF_SQL_INTEGER">
 		</cfquery>
 		
+		<cfif LOCAL.GetProductPartNumber.RecordCount IS "0">
+			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+				method="GetCategoryBasicDetails" 
+				returnVariable="LOCAL.qGetCategoryBasicDetails"
+				CategoryID="#Val(ARGUMENTS.ProductID)#">
+			<cfif LOCAL.qGetCategoryBasicDetails.CategoryTypeID IS "80">
+				<cfquery name="LOCAL.GetProductPartNumber" datasource="#APPLICATION.DSN#">
+					select AttributeValue from qry_GetProductPartNumber 
+					where CategoryID=<cfqueryparam value="#val(LOCAL.qGetCategoryBasicDetails.SourceID)#" cfsqltype="CF_SQL_INTEGER">
+				</cfquery>
+			</cfif>
+		</cfif>
 		<cfreturn LOCAL.GetProductPartNumber.AttributeValue>
 	</cffunction>
 	
