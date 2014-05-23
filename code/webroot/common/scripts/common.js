@@ -388,7 +388,9 @@ function rebinder(nn){
 	
 function highlightRegion(region){
 	$(".sideBarContent .office").parent().addClass("hidden");
+	$(".sideBarContent .office").parent().removeClass("shown");
 	$("#"+region).removeClass("hidden");
+	$("#"+region).addClass("shown");
 }
 var stAT=1;
 function rotateBigSplashImgIE6(){
@@ -1084,7 +1086,7 @@ tech={
 	init:function(){
 		tempHoldTS=$("#region1").html();
 		$(".sideBar .sideBarContent ").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
-		$("#region-1ts .regionTitle").html("Techincal Sales Contact");
+		$("#region-1ts .regionTitle").html("Technical Sales Contact");
 		allContacts.init();
 	},
 	sale:function(r){
@@ -1095,7 +1097,8 @@ tech={
 /* temp script for modal until new template mess is resolved */
 
 $(window).load(function(){
-	modalooo.init()
+	modalooo.init();
+	
 });
 
 var modalooo={
