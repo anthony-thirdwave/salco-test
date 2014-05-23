@@ -9,24 +9,24 @@
 			returnVariable="REQUEST.GetAllEmployees">
 		<nav id="empl-nav">
 			<div id="empl-nav-title">Search Employees:</div>
-				<ul>
-					<cfparam name="url.alphaListing" default="">
-					<cfloop index="i" list="#alphabetList#">
-						<cfquery name="qryEmployeePhoneByAlphabet" dbtype="query">
-							SELECT		employeeID
-							FROM		REQUEST.GetAllEmployees
-							WHERE		departmentID <> <cfqueryparam value="6098" cfsqltype="cf_sql_integer">
-							AND			empFirstName like <cfqueryparam value="#UCASE(Trim(i))#%" cfsqltype="cf_sql_varchar">
-						</cfquery>
-						<cfoutput>
-							<cfif qryEmployeePhoneByAlphabet.recordCount eq 0>
-								<li>#i#</li>
-							<cfelse>
-								<li <cfif url.alphaListing eq i>active</cfif>><a href="#APPLICATION.utilsObj.parseCategoryUrl(searchPageName)#?alphaListing=#i#">#i#</a></li>
-							</cfif>
-						</cfoutput>
-					</cfloop>
-				</ul>
+		<ul>
+			<cfparam name="url.alphaListing" default="">
+			<cfloop index="i" list="#alphabetList#">
+				<cfquery name="qryEmployeePhoneByAlphabet" dbtype="query">
+					SELECT		employeeID
+					FROM		REQUEST.GetAllEmployees
+					WHERE		departmentID <> <cfqueryparam value="6098" cfsqltype="cf_sql_integer">
+					AND			empFirstName like <cfqueryparam value="#UCASE(Trim(i))#%" cfsqltype="cf_sql_varchar">
+				</cfquery>
+				<cfoutput>
+					<cfif qryEmployeePhoneByAlphabet.recordCount eq 0>
+						<li>#i#</li>
+					<cfelse>
+						<li <cfif url.alphaListing eq i>active</cfif>><a href="#APPLICATION.utilsObj.parseCategoryUrl(searchPageName)#?alphaListing=#i#">#i#</a></li>
+					</cfif>
+				</cfoutput>
+			</cfloop>
+		</ul>
 		</nav>
 	</cfcase>
 	<cfcase value="news">
@@ -48,6 +48,11 @@
 
 		<cfparam name="start_page" default="1">
 		<cfparam name="show_pages" default="#min(page_links_shown,total_pages)#">
+
+		<cfset url.pageNum=Val(url.pageNum)>
+		<cfif Val(url.pageNum) LTE "0">
+			<cfset url.pageNum="1">
+		</cfif>
 		
 		<cfif url.pageNum + int(show_pages / 2) - 1 GTE total_pages>
 			<cfset start_page=total_pages - show_pages + 1>
@@ -57,12 +62,12 @@
 		
 		<cfset end_page=start_page + show_pages - 1>
 		<cfoutput>
-		<nav id="empl-nav">
+			<nav id="empl-nav">
 			<div id="empl-nav-title">Search Stories:</div>
 			<ul>
 				<li class="newsPrevPage">
 					<cfif url.pageNum gt 1>
-					   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#url.pageNum-1#">Previous Page</a>
+					   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#Val(url.pageNum-1)#">Previous Page</a>
 					</cfif>
 				</li>
 				<cfloop from="#start_page#" to="#end_page#" index="i">
@@ -70,17 +75,17 @@
 				<cfif url.pageNum EQ i>
 			      	#i#
 				<cfelse>
-			      	<a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#i#">#i#</a>	
+			      	<a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#Val(i)#">#i#</a>	
 				</cfif>
 				</li>
 				</cfloop>
 				<li class="newsNextPage">
 					<cfif url.pageNum * records_per_page LT get_count.records>
-					   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#url.pageNum+1#">Next Page</a>
+					   <a href="#APPLICATION.utilsObj.parseCategoryUrl(newListingPage)#&pageNum=#Val(url.pageNum+1)#">Next Page</a>
 					</cfif>
 				</li>
 			</ul>
-		</nav>
+			</nav>
 		</cfoutput>
 	</cfcase>
 	<cfcase value="newsDetail">

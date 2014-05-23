@@ -65,10 +65,15 @@
 		<cfset APPLICATION.CategoryAlias404Page="404-page">
 		<cfset APPLICATION.CategoryID404Page="5701">
 		<cfset APPLICATION.defaultSiteCategoryID="1">
+		<cfset APPLICATION.intranetSiteCategoryID="6061">
 		<cfset APPLICATION.StagingURL="http://staging.salco.01.thirdwaveweb.com" />
+
+		<cfif APPLICATION.ApplicationName is "intranet.salco">
+			<cfset APPLICATION.NewsCategoryID="6063">
+		<cfelse>
+			<cfset APPLICATION.NewsCategoryID="6719">
+		</cfif>
 		
-		<cfset APPLICATION.IntranetCategoryID="6061">
-		<cfset APPLICATION.NewsCategoryID="6063">
 		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
 		<cfset APPLICATION.AnniversaryTopicID="6074">
 		<cfset APPLICATION.BirthdayTopicID="6075">
@@ -121,7 +126,11 @@
 			<!--- is ssl set up for the dev site? --->
 			<cfset APPLICATION.SSLConfigured=false />
 
-			<cfset APPLICATION.NewsCategoryID="6063">
+			<cfif APPLICATION.ApplicationName is "intranet.salco">
+				<cfset APPLICATION.NewsCategoryID="6063">
+			<cfelse>
+				<cfset APPLICATION.NewsCategoryID="6719">
+			</cfif>
 			<cfset APPLICATION.IntranetUtilityNavCategoryID="6092">
 			<cfset APPLICATION.AnniversaryTopicID="6277">
 			<cfset APPLICATION.BirthdayTopicID="6276">

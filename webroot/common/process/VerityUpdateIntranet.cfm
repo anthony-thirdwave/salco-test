@@ -1,14 +1,13 @@
 <cfsetting requesttimeout="300">
-
 <cfparam name="SourceTopLevelCategoryID" default="#APPLICATION.intranetSiteCategoryID#">
+
+<cfparam name="lIntranetSlideShowCategoryAlias" default="">
+
 <cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
 	select LocaleID,LocaleCode,LanguageID,LabelName As LanguageName from
 	t_Locale LEFT OUTER JOIN
 	t_Label ON t_Locale.LanguageID=t_Label.LabelID
 	order by LocaleID
-</cfquery>
-<cfquery name="GetParentDisplayOrder" datasource="#APPLICATION.DSN#">
-	select DisplayOrder from t_category Where CategoryID=#SourceTopLevelCategoryID#
 </cfquery>
 
 <cfset sLocaleCode=StructNew()>
@@ -24,13 +23,9 @@
 	<cfset StructInsert(slanguageName,LocaleID,LanguageName)>
 </cfoutput>
 
-<cfset lSiteID="6061">
-
-<cfset lIntranetSlideShowCategoryAlias="">
-
-<cfloop index="ThisTopCategoryID" list="#lSiteID#">
+<cfloop index="ThisTopCategoryID" list="#SourceTopLevelCategoryID#">
 	<cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
-		select DisplayOrder from t_Category Where CategoryID=#Val(ThisTopCategoryID)#
+		select DisplayOrder from t_Category Where CategoryID=<cfqueryparam value="#Val(ThisTopCategoryID)#" cfsqltype="cf_sql_integer">
 	</cfquery>
 	<cfloop index="ThisLocaleID" list="#ValueList(GetLocales.LocaleID)#">
 			<cfset ThisCollectionName="#application.collectionname##THisLocaleID#_intranet">
@@ -39,6 +34,7 @@
 		<!--- <cfcollection action="CREATE" collection="#ThisCollectionName#" path="#APPLICATION.CollectionPath#" language="#slanguageName[ThisLocaleID]#"> --->
 			<cfcollection
 				action="CREATE"
+				engine="solr"
 				collection="#ThisCollectionName#"
 				path="#APPLICATION.CollectionPath#"
 				categories="true"
@@ -108,7 +104,7 @@
 			</cfif>
 
 			<cfquery name="GetpropertiesPacket" datasource="#APPLICATION.DSN#">
-				select * from t_Properties Where PropertiesID=#Val(GetCats.categoryPropertiesID)#
+				select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(GetCats.categoryPropertiesID)#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfset Body="#Body# #application.utilsObj.RemoveHTML(GetpropertiesPacket.PropertiesPacket)#">
 
@@ -117,12 +113,12 @@
 			<cfoutput query="GetContentList">
 				<cfset Body="#Body# #ContentName# #ContentNameDerived# #application.utilsObj.RemoveHTML(ContentBody)#">
 				<cfquery name="GetpropertiesPacket2" datasource="#APPLICATION.DSN#">
-					select * from t_Properties Where PropertiesID=#Val(ContentPropertiesID)#
+					select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ContentPropertiesID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 				<cfset Body="#Body# #application.utilsObj.RemoveHTML(GetpropertiesPacket2.PropertiesPacket)#">
 
 				<cfquery name="GetpropertiesPacket3" datasource="#APPLICATION.DSN#">
-					select * from t_Properties Where PropertiesID=#Val(ContentLocalePropertiesID)#
+					select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(ContentLocalePropertiesID)#" cfsqltype="cf_sql_integer">
 				</cfquery>
 
 				<cfset Body="#Body# #application.utilsObj.RemoveHTML(GetpropertiesPacket3.PropertiesPacket)#">
@@ -142,27 +138,23 @@
 				</cfif>
 			</cfoutput>
 
-
-			<!--- find the taxonomy for this category, if any --->
-
-			<cftry>
-
-				<cfquery name="getTaxonomy" datasource="#APPLICATION.dsn#">
-					SELECT lower(dbo.fn_getTopicEntityNameHierarchyList(c.categoryId)) as topicPath
-					  FROM t_category c
-					  JOIN t_topicEntity te ON c.categoryId=te.topicId
-					 WHERE te.entityId=<cfqueryparam value="#key#" cfsqltype="cf_sql_integer">
-						AND te.entityName=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar">
-				</cfquery>
-
-				<cfset Category=valuelist(getTaxonomy.topicPath,",")>
-
-			<cfcatch>
-				 <cfset Category="">
-			</cfcatch>
-
-			</cftry>
-
+			<cfset Category="">
+			<cfif 0><!--- find the taxonomy for this category, if any --->
+				<cftry>
+					<cfquery name="getTaxonomy" datasource="#APPLICATION.dsn#">
+						SELECT lower(dbo.fn_getTopicEntityNameHierarchyList(c.categoryId)) as topicPath
+						  FROM t_category c
+						  JOIN t_topicEntity te ON c.categoryId=te.topicId
+						 WHERE te.entityId=<cfqueryparam value="#key#" cfsqltype="cf_sql_integer">
+							AND te.entityName=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar">
+					</cfquery>
+					<cfset Category=valuelist(getTaxonomy.topicPath,",")>
+					<cfcatch>
+						<cfset Category="">
+					</cfcatch>
+				</cftry>
+			</cfif>
+			
 			<cfset CategoryNameList="">
 			<cfset CategoryTree="">
 

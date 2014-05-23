@@ -14,13 +14,12 @@
 		
 		<cfinvoke component="com.ContentManager.NewsHandler"
 			method="GetAllNews"
-			NewsTopCategoryID="#APPLICATION.NewsCategoryID#"
 			returnVariable="qGetAllNews">
 
 		<cfquery name="LOCAL.qGetNews" dbtype="query">
 			SELECT	*
 			FROM	qGetAllNews
-			WHERE	1=1
+			WHERE	1=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
 			<cfif val(ARGUMENTS.NewsID) gt 0>
 				AND newsID=<cfqueryparam value="#ARGUMENTS.newsID#" cfsqltype="cf_sql_integer">
 			</cfif>
@@ -31,7 +30,7 @@
 				AND	homePageDisplayFlag=<cfqueryparam value="1" cfsqltype="cf_sql_integer">
 			</cfif>
 			<cfif val(ARGUMENTS.TopicID) gt 0>
-				AND CONTAINS (TopicIDList, '#ARGUMENTS.TopicID#') > 0
+				AND CONTAINS (TopicIDList,<cfqueryparam value="#ARGUMENTS.TopicID#" cfsqltype="cf_sql_integer">) > 0
 			</cfif>
 		</cfquery>
 		
@@ -39,16 +38,32 @@
 	</cffunction>
 	
 	<cffunction name="GetAllNews" output="false" returntype="query">
+	
 		<cfset VAR LOCAL=StructNew()>
 		
 		<cfif NOT IsDefined("REQUEST.GetAllNews")>
+            <cfquery name="LOCAL.GetTopLevelDisplayOrder" datasource="#APPLICATION.DSN#">
+				SELECT     DisplayOrder
+				FROM       t_Category
+				WHERE
+				<cfif APPLICATION.ApplicationName is "intranet.salco">
+					CategoryID=<cfqueryparam value="#APPLICATION.intranetSiteCategoryID#" cfsqltype="cf_sql_integer">
+				<cfelse>
+					CategoryID=<cfqueryparam value="#APPLICATION.defaultSiteCategoryID#" cfsqltype="cf_sql_integer">
+				</cfif>
+			</cfquery>
+			
+			<cfset thisNewsDisplayOrder=LOCAL.GetTopLevelDisplayOrder.DisplayOrder>
+			
 			<cfquery name="LOCAL.GetNewsPages" datasource="#APPLICATION.DSN#">
 				SELECT     CategoryID
 				FROM       t_Category
 				WHERE      CategoryTypeID=<cfqueryparam value="82" cfsqltype="cf_sql_integer">
+				AND		   DisplayOrder like <cfqueryparam value="#thisNewsDisplayOrder#%" cfsqltype="cf_sql_varchar">
 			</cfquery>
-			<cfset lNewsPageID=valueList(LOCAL.GetNewsPages.CategoryID)>
 			
+			<cfset lNewsPageID=valueList(LOCAL.GetNewsPages.CategoryID)>
+
 			<cfset LOCAL.qryGetNews=QueryNew("rowNumber,newsID,title,subTitle,Topics,topicIDList,Description,headerImage,publishDate,link,homePageDisplayFlag,EmergencyAlert") />
 			
 			<cfif ListLen(lNewsPageID)>
@@ -75,7 +90,7 @@
 						<cfset thisNewsID=LOCAL.GetNews.categoryID>
 						<cfset thisNewstitle=LOCAL.GetNews.categoryNameDerived>
 						<cfset thisNewslink=LOCAL.GetNews.categoryAlias>
-						<cfset thisPublishDate= LOCAL.GetNews.PublishDateTime>
+						<cfset thisPublishDate=LOCAL.GetNews.PublishDateTime>
 						
 						<cfinvoke component="com.Taxonomy.TopicHandler"
 							method="GetRelatedTopics"
@@ -83,8 +98,8 @@
 							EntityName="t_Category"
 							returnvariable="LOCAL.getTopics">
 						
-						<cfset thisTopicIDs= ValueList(LOCAL.getTopics.TopicID)>
-						<cfset thisTopicList= ValueList(LOCAL.getTopics.TopicName)>
+						<cfset thisTopicIDs=ValueList(LOCAL.getTopics.TopicID)>
+						<cfset thisTopicList=ValueList(LOCAL.getTopics.TopicName)>
 	
 						<cfset QuerySetCell(LOCAL.qryGetNews,"rowNumber",rowCount)>
 						<cfset QuerySetCell(LOCAL.qryGetNews,"newsID",thisNewsID)>

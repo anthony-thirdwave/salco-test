@@ -1,9 +1,14 @@
 <cfparam name="ATTRIBUTES.FormAction" default="#CGI.REQUEST_URI#?#CGI.Query_String#">
 <cfparam name="ActiveTab" default="ProductLiterature">
+<cfparam name="ActiveFolder" default="/">
 <cfparam name="ParamTopProductFamilyAlias" default="">
 
 <cfset FormPath=GetToken(ATTRIBUTES.FormAction,1,"?")>
 <cfset FormQueryString=GetToken(ATTRIBUTES.FormAction,2,"?")>
+
+<cfif Left(ActiveFolder,1) IS NOT "/">
+	<cfset ActiveFolder="/#ActiveFolder#">
+</cfif>
 
 <cfif NOT IsDefined("StartRow")>
 	<CFSET StartRow=1>
@@ -79,23 +84,27 @@
 
 <cfswitch expression="#ActiveTab#">
 	<cfcase value="ProductLiterature,Charts,Presentations,Instructions">
-		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#")>
+		<cfset BaseDirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#/")>
+		<cfdirectory action="LIST" directory="#BaseDirectoryToRead#" name="qBaseDir">
+		<cfquery name="qGetDirs" dbtype="query">
+			select * from qBaseDir where type='Dir'
+			order by Name
+		</cfquery>
+		
+		<cfif qGetDirs.RecordCount GT "0">
+			<ul id="tabsDownloadsLevel2" class="nav">
+			<cfoutput><li><a href="?ActiveTab=#ActiveTab#" <cfif ActiveFolder IS "/">class="tabActive"</cfif>>All</a></li></cfoutput>
+			<cfoutput query="qGetDirs">
+				<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#qGetDirs.Name#</a></li>
+			</cfoutput>
+			</ul>
+		</cfif>
+	
+		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab##ActiveFolder#")>
 		<cfdirectory action="LIST" directory="#DirectoryToRead#" name="qDirPrime">
 		<cfset qDir=QueryNew("#qDirPrime.ColumnList#,Language,Folder,URL,Title,Description,BaseName")>
 		<cfloop query="qDirPrime">
-			<cfif qDirPrime.type IS "dir">
-				<cfdirectory action="LIST" directory="#DirectoryToRead#\#Name#" name="qDirPrime2">
-				<cfoutput query="qDirPrime2">
-					<cfif qDirPrime2.type IS "file">
-						<cfset qRow=QueryNew(qDirPrime2.ColumnList)>
-						<cfset QueryAddRow(qRow)>
-						<cfloop index="ThisCol" list="#qDirPrime2.ColumnList#">
-							<cfset QuerySetCell(qRow,ThisCol,qDirPrime2[ThisCol][qDirPrime2.currentrow])>
-						</cfloop>
-						<cfset qDir=AddFile(qRow,qDir,DirectoryToRead)>
-					</cfif>
-				</cfoutput>
-			<cfelseif qDirPrime.type IS "file">
+			<cfif qDirPrime.type IS "file">
 				<cfset qRow=QueryNew(qDirPrime.ColumnList)>
 				<cfset QueryAddRow(qRow)>
 				<cfloop index="ThisCol" list="#qDirPrime.ColumnList#">
@@ -116,7 +125,7 @@
                     <tr>
 						<th align="left">Name</th>
 						<th>Description</th>
-						<th>Available Languages</th>
+						<th>Downloads</th>
 					</tr>
                     </thead>
 					<tbody>
@@ -133,7 +142,7 @@
 								<td valign="top" class="#class#">#Description#</td>
 								<td valign="top" class="#class#" nowrap>
 									<cfoutput group="Language">
-										#Language# #Round(Size/1024)#kb: <a href="#URL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(URL)#">Download</a>
+										<a href="#URL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(URL)#">Download</a> (#Round(Size/1024)#kb)
 									</cfoutput>
 								</td>
 							</tr>

@@ -9,6 +9,11 @@
 		<cfreturn ReplaceNoCase(ARGUMENTS.String,"#Chr(10)#", "<br />","ALL")>
 	</cffunction>
 	
+	<cffunction name="RemoveBreaks" returntype="string" output="false">
+		<cfargument name="String" default="" type="String" required="true">
+		<cfreturn replace(replace(ARGUMENTS.String,chr(10),""),chr(13),"")>
+	</cffunction>
+	
 	<cffunction name="extractByToken" output="true" returntype="string">
 		<cfargument name="content" required="yes" type="string">
 		<cfargument name="startToken" required="no" type="string" default="[[">
@@ -867,6 +872,22 @@
 		<cfreturn ReturnString>
 	</cffunction>
 
+	<cffunction name="GetSearchStruct" returntype="struct" output="No">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfset LOCAL.sSearch=StructNew()>
+		
+		<cfset StructInsert(LOCAL.sSearch,"ProductName","Product Name")>
+		<cfset StructInsert(LOCAL.sSearch,"ProductNum","Product Number")>
+		<cfset StructInsert(LOCAL.sSearch,"hopper-car","Hopper Car Parts")>
+		<cfset StructInsert(LOCAL.sSearch,"tank-cars","Tank Car Parts")>
+		<cfset StructInsert(LOCAL.sSearch,"railyard-accessories","Rail/Yard Accessories")>
+		<cfset StructInsert(LOCAL.sSearch,"hazarsolve","Hazarsolve")>
+	
+		<cfreturn LOCAL.sSearch>
+	</cffunction>
+	
 	<cffunction name="GetFreewheelLink" returntype="string" output="No">
 		<cfargument name="DWFFile" default="" type="String" required="true">
 		

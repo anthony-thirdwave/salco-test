@@ -25,6 +25,14 @@
 
 <cfif ATTRIBUTES.Mode IS "Default" and GetRootCategory.DisplayLevel IS "3">
 	<cfset ATTRIBUTES.Mode="SecondLevel">
+	<cfinvoke component="#APPLICATION.MyCategoryHandler#"
+		method="getCategoryCount"
+		returnVariable="GetCategoryCount"
+		ParentID="#ATTRIBUTES.CategoryID#"
+		CategoryTypeID="62">
+	<cfif GetCategoryCount GT "5">
+		<cfset ATTRIBUTES.Mode="Default">
+	</cfif>
 </cfif>
 
 <cfswitch expression="#ATTRIBUTES.Mode#">
@@ -32,10 +40,13 @@
 		<cfmodule template="/common/modules/product/productFamilyListing.cfm" ParentProductFamilyID="#ATTRIBUTES.CategoryID#" Mode="TopLevel">
 	</cfcase>
 	<cfcase value="SecondLevel">
+		<div class="product-landing">
 		<cfmodule template="/common/modules/product/_ProductFamilyDetail.cfm" ProductFamilyID="#ATTRIBUTES.CategoryID#">
-		<cfmodule template="/common/modules/product/productFamilyListing.cfm" ParentProductFamilyID="#ATTRIBUTES.CategoryID#" Mode="RolloverOutline">
+		</div>
 	</cfcase>
 	<cfdefaultcase>
+		<div class="product-landing">
 		<cfmodule template="/common/modules/product/productFamilyListing.cfm" ParentProductFamilyID="#ATTRIBUTES.CategoryID#" Mode="MultiLevel">
+		</div>
 	</cfdefaultcase>
 </cfswitch>

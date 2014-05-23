@@ -1,7 +1,7 @@
 <cfcomponent displayname="Application">
 
 	<!--- the unique name used in database and directory defaults --->
-	<cfset variables.uniqueName = "salco" />
+	<cfset variables.uniqueName="salco" />
 
 	<!--- figure out the siteType --->
 	<cfinvoke method="determineSiteName" returnvariable="variables.siteName" />
@@ -17,41 +17,41 @@
 	</cfinvoke>
 
 	<!--- default application settings --->
-	<cfset this.name = "#variables.siteName#" />
-	<cfset REQUEST.SiteName = "#variables.siteName#" />
-	<cfset this.applicationTimeout = createTimeSpan(1,0,0,0) />
-	<cfset this.sessionManagement = true />
-	<cfset this.sessiontimeout = createTimeSpan(0,1,0,0) />
+	<cfset this.name="#variables.siteName#" />
+	<cfset REQUEST.SiteName="#variables.siteName#" />
+	<cfset this.applicationTimeout=createTimeSpan(1,0,0,0) />
+	<cfset this.sessionManagement=true />
+	<cfset this.sessiontimeout=createTimeSpan(0,1,0,0) />
 	<cfset this.datasource="#variables.uniqueName#_cms_#variables.siteType#" />
-	<cfset variables.botSessionInSeconds = 2 />
+	<cfset variables.botSessionInSeconds=2 />
 
 	<!--- most bots don't keep cookies and we don't want to do this more than once for valid users --->
 	<cfif not structKeyExists(cookie, "COOKIESON") or structKeyExists(url, "testShortSession")>
 
 		<!--- if cookies are disabled, no user agent or test case, set the short session timeout --->
 		<cfif not isBoolean(URLSessionFormat("true")) or not len(CGI.HTTP_USER_AGENT) or structKeyExists(url, "testShortSession")>
-			<cfset this.sessionTimeout = createTimespan(0,0,0,variables.botSessionInSeconds) />
+			<cfset this.sessionTimeout=createTimespan(0,0,0,variables.botSessionInSeconds) />
 		<cfelse>
 
 			<!--- get the userAgent as lowercase --->
-			<cfset variables.botUserAgent = lCase(CGI.HTTP_USER_AGENT) />
+			<cfset variables.botUserAgent=lCase(CGI.HTTP_USER_AGENT) />
 
 			<!--- the lists of potential bots --->
-			<cfset variables.findList = "crawl,feed,news,blog,reader,syndication,coldfusion,slurp,google,zyborg,emonitor,jeeves,yandex" />
-			<cfset variables.reFindList = "bot\b,\brss" />
-			<cfset variables.botFound = false />
+			<cfset variables.findList="crawl,feed,news,blog,reader,syndication,coldfusion,slurp,google,zyborg,emonitor,jeeves,yandex" />
+			<cfset variables.reFindList="bot\b,\brss" />
+			<cfset variables.botFound=false />
 
 			<!--- if this is a bot, set a short session timeout --->
 			<cfloop list="#variables.findList#" index="variables.bot">
 				<cfif find(variables.bot, variables.botUserAgent)>
-					<cfset variables.botFound = true />
+					<cfset variables.botFound=true />
 					<cfbreak />
 				</cfif>
 			</cfloop>
 			<cfif not variables.botFound>
 				<cfloop list="#variables.reFindList#" index="variables.bot">
 					<cfif reFind(variables.bot, variables.botUserAgent)>
-						<cfset variables.botFound = true />
+						<cfset variables.botFound=true />
 						<cfbreak />
 					</cfif>
 				</cfloop>
@@ -59,7 +59,7 @@
 
 			<!--- if we found a bot--->
 			<cfif variables.botFound>
-				<cfset this.sessionTimeout = createTimespan(0,0,0,variables.botSessionInSeconds) />
+				<cfset this.sessionTimeout=createTimespan(0,0,0,variables.botSessionInSeconds) />
 			<cfelse>
 				<cfcookie name="COOKIESON" value="true" expires="never" />
 			</cfif>
@@ -70,24 +70,24 @@
 	<cffunction name="determineSiteType" returntype="string" output="false">
 		<cfargument name="overrideSiteType" default="" />
 
-		<cfset var local = structNew() />
+		<cfset var local=structNew() />
 
 		<cfif arguments.overrideSiteType eq "production"
 				or (trim(arguments.overrideSiteType) eq ""
 					and structKeyExists(server, "siteType")
 					and server.siteType eq "production")>
-			<cfset local.siteType = "production" />
+			<cfset local.siteType="production" />
 
 		<!--- else if staging --->
 		<cfelseif arguments.overrideSiteType eq "staging"
 				or (trim(arguments.overrideSiteType) eq ""
 					and structKeyExists(server, "siteType")
 					and server.siteType eq "staging")>
-			<cfset local.siteType = "staging" />
+			<cfset local.siteType="staging" />
 
 		<!--- default to dev --->
 		<cfelse>
-			<cfset local.siteType = "dev" />
+			<cfset local.siteType="dev" />
 		</cfif>
 
 		<cfreturn local.siteType />
@@ -99,7 +99,7 @@
 	<!--- called when the application is created --->
 	<cffunction name="onApplicationStart" returntype="boolean" output="false">
 
-		<cfset var local = structNew() />
+		<cfset var local=structNew() />
 
 		<!--- initialize the application - we pass the directory path of this file, because it's always webroot --->
 		<cfinvoke method="initializeApplication" component="com.application.ApplicationSettings">
@@ -223,13 +223,13 @@
 		<cfargument name="exception" type="any" required="true" />
 		<cfargument name="eventName" type="string" default="" />
 
-		<cfset var local = structNew() />
+		<cfset var local=structNew() />
 
 		<!--- only email and go to error handling page from production --->
 		<cfif not isDebugMode() and APPLICATION.production>
 
 			<!--- Get the current time.  --->
-			<cfset local.ts = Now()>
+			<cfset local.ts=Now()>
 			<cfif findNoCase("slurp",CGI.HTTP_USER_AGENT,1) IS "0">
 
 				<cfoutput>
@@ -295,7 +295,7 @@
 	<!--- this function gets the site name --->
 	<cffunction name="determineSiteName" returntype="string">
 
-		<cfset var local = structNew() />
+		<cfset var local=structNew() />
 		<cfset local.SiteName="www.salco">
 		
 		<cfloop index="LOCAL.ThisPart" list="#CGI.HTTP_HOST#" delimiters=".">

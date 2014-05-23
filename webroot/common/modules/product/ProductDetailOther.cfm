@@ -28,19 +28,19 @@
 		WHERE     CategoryID IN (#ATTRIBUTES.ProductID#,#Val(CurrentProductFamilyID)#)
 	</cfquery>
 	<CFSET ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductDetailOther_v1.0_#ATTRIBUTES.ProductID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
-	<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or REQUEST.ReCache>
+	<CFIF NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
 		<cfsaveContent Variable="FileContents">
 			<cfset MyProduct=CreateObject("component","com.Product.Product")>
 			<cfset MyProduct.Constructor(Val(ATTRIBUTES.ProductID),ATTRIBUTES.LanguageID)>
 			<cfset aView=MyProduct.GetProperty("aProductView")>
 			
-			<cfset tempArray = ArrayNew(1)>
+			<cfset tempArray=ArrayNew(1)>
 			<cfloop index="i" from="1" to="#ArrayLen(aView)#" step="1">
 				<cfif aView[i].SpecificationSetID EQ ATTRIBUTES.SpecificationSetID or aView[i].SpecificationSetID IS "">
 					<cfset ArrayAppend(tempArray,aView[i])>
 				</cfif>
 			</cfloop>
-			<cfset aView = tempArray>
+			<cfset aView=tempArray>
 			
 			<cfoutput>
 				<cfif ArrayLen(aView) GT "0">

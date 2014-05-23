@@ -11,11 +11,11 @@
 	<cfproperty name="DefaultCategoryLocale" type="boolean" default="">
 
 	<!--- Custom Properties --->
-	<cfproperty name="CategoryImageOff" type="string" default="">
+	<cfproperty name="CategoryImageBackground" type="string" default="">
 	<cfproperty name="CategoryImageOn" type="string" default="">
 	<cfproperty name="CategoryImageRollover" type="string" default="">
 	<cfproperty name="CategoryImageHeader" type="string" default="">
-	<cfproperty name="CategoryImageTitle" type="string" default="">
+	<cfproperty name="CategoryImageAccent" type="string" default="">
 	<cfproperty name="CategoryImageRepresentative" type="string" default="">
 	<cfproperty name="MetaKeywords" type="string" default="">
 	<cfproperty name="MetaDescription" type="string" default="">
@@ -31,6 +31,7 @@
 	<cfproperty name="HomePageDisplay" type="boolean" default="">
 	<cfproperty name="EmergencyAlert" type="boolean" default="">
 	<cfproperty name="IncludeInScreenSaver" type="boolean" default="">
+	<cfproperty name="lRelatedPageID" type="boolean" default="">
 	
 	<!--- /// added for page type employee/// --->
 	<cfproperty name="EmpFirstName" type="string" default="">
@@ -52,11 +53,11 @@
 	<cfset structInsert(sPropertyDisplayName,"CategoryLocaleURL","category locale URL",1)>
 	<cfset structInsert(sPropertyDisplayName,"LocaleID","locale ID",1)>
 	<cfset structInsert(sPropertyDisplayName,"PropertiesID","properties ID",1)>
-	<cfset structInsert(sPropertyDisplayName,"CategoryImageOff","off image",1)>
+	<cfset structInsert(sPropertyDisplayName,"CategoryImageBackground","background image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageOn","on image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageRollover","highlight image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageHeader","hero image",1)>
-	<cfset structInsert(sPropertyDisplayName,"CategoryImageTitle","title image",1)>
+	<cfset structInsert(sPropertyDisplayName,"CategoryImageAccent","title image",1)>
 	<cfset structInsert(sPropertyDisplayName,"CategoryImageRepresentative","representative image",1)>
 	<cfset structInsert(sPropertyDisplayName,"MetaKeywords","meta keywords",1)>
 	<cfset structInsert(sPropertyDisplayName,"MetaDescription","meta description",1)>
@@ -73,6 +74,7 @@
 	<cfset structInsert(sPropertyDisplayName,"EmergencyAlert","Emergency Alert",1)>
 	<cfset structInsert(sPropertyDisplayName,"IncludeInScreenSaver","Include In Screen Saver",1)>
 	<cfset structInsert(sPropertyDisplayName,"PageTitleOverride","page title override",1)>
+	<cfset structInsert(sPropertyDisplayName,"lRelatedPageID","related pages",1)>
 	
 	<!--- /// added for page type employee/// --->
 	<cfset structInsert(sPropertyDisplayName,"empFirstName","employee first name",1)>
@@ -96,7 +98,7 @@
 	<cfloop index="ThisCategoryTypeID" list="#ValueList(GetAllCategoryType.LabelID)#">
 		<cfswitch expression="#ThisCategoryTypeID#">
 			<cfcase value="62"><!--- Product Family--->
-				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRepresentative,CategoryImageRollover">
+				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRepresentative,CategoryImageRollover,CategoryImageAccent,lRelatedPageID">
 			</cfcase>
 			<cfcase value="64"><!--- Product --->
 				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader">
@@ -137,11 +139,11 @@
 		<cfargument name="ID" default="0" type="numeric" required="false">
 
 		<!--- init variables --->
-		<cfset var ThisProperty = "">
-		<cfset var GetItems = "">
-		<cfset var GetCategoryTypeID = "">
-		<cfset var GetCategoryProperties = "">
-		<cfset var sProperties = "">
+		<cfset var ThisProperty="">
+		<cfset var GetItems="">
+		<cfset var GetCategoryTypeID="">
+		<cfset var GetCategoryProperties="">
+		<cfset var sProperties="">
 
 		<!--- Typically, use set methods in contructor. --->
 		<cfset this.SetProperty("CategoryLocaleID","-1")>
@@ -153,11 +155,11 @@
 		<cfset this.SetProperty("PropertiesID","-1")>
 		<cfset this.SetProperty("DefaultCategoryLocale","0")>
 
-		<cfset this.SetProperty("CategoryImageOff","")>
+		<cfset this.SetProperty("CategoryImageBackground","")>
 		<cfset this.SetProperty("CategoryImageOn","")>
 		<cfset this.SetProperty("CategoryImageRollover","")>
 		<cfset this.SetProperty("CategoryImageHeader","")>
-		<cfset this.SetProperty("CategoryImageTitle","")>
+		<cfset this.SetProperty("CategoryImageAccent","")>
 		<cfset this.SetProperty("CategoryImageRepresentative","")>
 		<cfset this.SetProperty("MetaKeywords","")>
 		<cfset this.SetProperty("MetaDescription","")>
@@ -173,6 +175,8 @@
 		<cfset this.SetProperty("EmergencyAlert","")>
 		<cfset this.SetProperty("IncludeInScreenSaver","")>
 		<cfset this.SetProperty("PageTitleOverride","")>
+		<cfset this.SetProperty("lRelatedPageID","")>
+		<cfset this.SetProperty("lRelatedPageID","")>
 		
 		<!--- /// added for page type employee/// --->
 		<cfset this.SetProperty("empFirstName","")>
@@ -209,11 +213,11 @@
 					<cfset this.SetProperty("DefaultCategoryLocale",DefaultCategoryLocale)>
 					<!--- Custom Properties --->
 					<cfquery name="GetCategoryProperties" datasource="#APPLICATION.DSN#">
-						SELECT * FROM t_Properties WHERE PropertiesID = <cfqueryparam value="#Val(PropertiesID)#" cfsqltype="cf_sql_integer">
+						SELECT * FROM t_Properties WHERE PropertiesID=<cfqueryparam value="#Val(PropertiesID)#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
+						<cfloop index="ThisProperty" list="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,lRelatedPageID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
@@ -235,62 +239,63 @@
 		<cfargument name="UserID" required="false">
 
 		<!--- init variables --->
-		<cfset var thisCategoryLocaleID = "">
-		<cfset var thisCategoryID = "">
-		<cfset var thisCategoryLocaleName = "">
-		<cfset var thisCategoryLocaleActive = "">
-		<cfset var thisLocaleID = "">
-		<cfset var thisPropertiesID = "">
-		<cfset var thisCategoryLocaleURL = "">
-		<cfset var thisDefaultCategoryLocale = "">
-		<cfset var thisCategoryImageOff = "">
-		<cfset var thisCategoryImageOn = "">
-		<cfset var thisCategoryImageRollover = "">
-		<cfset var thisCategoryImageHeader = "">
-		<cfset var thisCategoryImageTitle = "">
-		<cfset var thisCategoryImageRepresentative = "">
-		<cfset var thisMetaKeywords = "">
-		<cfset var thisMetaDescription = "">
-		<cfset var thisCSSID = "">
-		<cfset var thisCSSClass = "">
-		<cfset var thisCallToActionURL = "">
-		<cfset var thisCategoryLocaleNameAlternative = "">
-		<cfset var thisByline1 = "">
-		<cfset var thisByline2 = "">
-		<cfset var thisTitle = "">
-		<cfset var thisSubTitle = "">
-		<cfset var thisHomePageDisplay = "">
-		<cfset var thisEmergencyAlert = "">
+		<cfset var thisCategoryLocaleID="">
+		<cfset var thisCategoryID="">
+		<cfset var thisCategoryLocaleName="">
+		<cfset var thisCategoryLocaleActive="">
+		<cfset var thisLocaleID="">
+		<cfset var thisPropertiesID="">
+		<cfset var thisCategoryLocaleURL="">
+		<cfset var thisDefaultCategoryLocale="">
+		<cfset var thisCategoryImageBackground="">
+		<cfset var thisCategoryImageOn="">
+		<cfset var thisCategoryImageRollover="">
+		<cfset var thisCategoryImageHeader="">
+		<cfset var thisCategoryImageAccent="">
+		<cfset var thisCategoryImageRepresentative="">
+		<cfset var thisMetaKeywords="">
+		<cfset var thisMetaDescription="">
+		<cfset var thisCSSID="">
+		<cfset var thisCSSClass="">
+		<cfset var thisCallToActionURL="">
+		<cfset var thisCategoryLocaleNameAlternative="">
+		<cfset var thisByline1="">
+		<cfset var thisByline2="">
+		<cfset var thisTitle="">
+		<cfset var thisSubTitle="">
+		<cfset var thisHomePageDisplay="">
+		<cfset var thisEmergencyAlert="">
 		<cfset var thisIncludeInScreenSaver="">
-		<cfset var thisPageTitleOverride = "">
-		<cfset var Destination = "">
-		<cfset var Source = "">
-		<cfset var DestinationToSave = "">
-		<cfset var sProperties = "">
-		<cfset var ImageWidth = "">
-		<cfset var DevNull = "">
-		<cfset var ThisImage = "">
-		<cfset var GetParentID = "">
-		<cfset var InsertProperties = "">
-		<cfset var InsertCategory = "">
-		<cfset var UpdateCategory = "">
-		<cfset var GetProperties = "">
-		<cfset var UpdateContent = "">
-		<cfset var ThisCategoryName = "">
-		<cfset var success = "">
-		<cfset var wProperties = "">
+		<cfset var thisPageTitleOverride="">
+		<cfset var thisLRelatedPageID="">
+		<cfset var Destination="">
+		<cfset var Source="">
+		<cfset var DestinationToSave="">
+		<cfset var sProperties="">
+		<cfset var ImageWidth="">
+		<cfset var DevNull="">
+		<cfset var ThisImage="">
+		<cfset var GetParentID="">
+		<cfset var InsertProperties="">
+		<cfset var InsertCategory="">
+		<cfset var UpdateCategory="">
+		<cfset var GetProperties="">
+		<cfset var UpdateContent="">
+		<cfset var ThisCategoryName="">
+		<cfset var success="">
+		<cfset var wProperties="">
 		
-		<cfset var thisEmpFirstName = "">
-		<cfset var thisEmpLastName = "">
-		<cfset var thisEmpTitle = "">
-		<cfset var thisEmpPhone = "">
-		<cfset var thisEmpPhoneExt = "">
-		<cfset var thisEmpCellPhone = "">
-		<cfset var thisEmpImage = "">
-		<cfset var thisEmpImageThumb = "">
-		<cfset var thisempEmail = "">
-		<cfset var thisempBirthDate = "">
-		<cfset var thisempJoinDate = "">
+		<cfset var thisEmpFirstName="">
+		<cfset var thisEmpLastName="">
+		<cfset var thisEmpTitle="">
+		<cfset var thisEmpPhone="">
+		<cfset var thisEmpPhoneExt="">
+		<cfset var thisEmpCellPhone="">
+		<cfset var thisEmpImage="">
+		<cfset var thisEmpImageThumb="">
+		<cfset var thisempEmail="">
+		<cfset var thisempBirthDate="">
+		<cfset var thisempJoinDate="">
 
 		<cfif IsCorrect()>
 			<cfset thisCategoryLocaleID=this.GetProperty("CategoryLocaleID")>
@@ -302,11 +307,11 @@
 			<cfset thisCategoryLocaleURL=this.GetProperty("CategoryLocaleURL")>
 			<cfset thisDefaultCategoryLocale=this.GetProperty("DefaultCategoryLocale")>
 
-			<cfset thisCategoryImageOff=this.GetProperty("CategoryImageOff")>
+			<cfset thisCategoryImageBackground=this.GetProperty("CategoryImageBackground")>
 			<cfset thisCategoryImageOn=this.GetProperty("CategoryImageOn")>
 			<cfset thisCategoryImageRollover=this.GetProperty("CategoryImageRollover")>
 			<cfset thisCategoryImageHeader=this.GetProperty("CategoryImageHeader")>
-			<cfset thisCategoryImageTitle=this.GetProperty("CategoryImageTitle")>
+			<cfset thisCategoryImageAccent=this.GetProperty("CategoryImageAccent")>
 			<cfset thisCategoryImageRepresentative=this.GetProperty("CategoryImageRepresentative")>
 			<cfset thisMetaKeywords=this.GetProperty("MetaKeywords")>
 			<cfset thisMetaDescription=this.GetProperty("MetaDescription")>
@@ -322,6 +327,7 @@
 			<cfset thisEmergencyAlert=this.GetProperty("EmergencyAlert")>
 			<cfset thisIncludeInScreenSaver=this.GetProperty("IncludeInScreenSaver")>
 			<cfset thisPageTitleOverride=this.GetProperty("PageTitleOverride")>
+			<cfset thisLRelatedPageID=this.GetProperty("lRelatedPageID")>
 			
 			<cfset thisEmpFirstName=this.GetProperty("empFirstName")>
 			<cfset thisEmpLastName=this.GetProperty("empLastName")>
@@ -421,7 +427,7 @@
 				<cfset ThisDestinationDirectory=this.GetResourcePath("images")>
 				<cfset ThisDestinationDirectory=ReplaceNoCase("#ARGUMENTS.WebrootPath##ThisDestinationDirectory#","/","\","all")>
 				<cfset ThisDestinationDirectory=ReplaceNoCase("#ThisDestinationDirectory#","\\","\","all")>
-				<cfloop index="ThisImage" list="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
+				<cfloop index="ThisImage" list="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,empImage,empImageThumb">
 					<cfset OriginalPath=this.GetProperty("#ThisImage#")>
 					<cfset Source=ExpandPath(OriginalPath)>
 					<cfif FileExists(Source) and left(Source,Len(ThisDestinationDirectory)) is not ThisDestinationDirectory>
@@ -450,19 +456,19 @@
 				<cfset sProperties=StructNew()>
 			</cfif>
 
-			<cfif FileExists("#application.utilsObj.GetPathFromURL(ThisCategoryImageOff)#")>
-				<cf_ImageSize file="#application.utilsObj.GetPathFromURL(ThisCategoryImageOff)#">
+			<cfif FileExists("#application.utilsObj.GetPathFromURL(ThisCategoryImageBackground)#")>
+				<cf_ImageSize file="#application.utilsObj.GetPathFromURL(ThisCategoryImageBackground)#">
 				<cfset ImageWidth=Width>
 				<cfset DevNull=StructInsert(sProperties,"ImageWidth","#val(ImageWidth)#","1")>
 			<cfelse>
 				<cfset DevNull=StructInsert(sProperties,"ImageWidth","0","1")>
 			</cfif>
 
-			<cfset DevNull=StructInsert(sProperties,"CategoryImageOff","#Trim(ThisCategoryImageOff)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"CategoryImageBackground","#Trim(ThisCategoryImageBackground)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageOn","#Trim(ThisCategoryImageOn)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageRollover","#Trim(ThisCategoryImageRollover)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageHeader","#Trim(ThisCategoryImageHeader)#","1")>
-			<cfset DevNull=StructInsert(sProperties,"CategoryImageTitle","#Trim(ThisCategoryImageTitle)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"CategoryImageAccent","#Trim(ThisCategoryImageAccent)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"CategoryImageRepresentative","#Trim(ThisCategoryImageRepresentative)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"MetaKeywords","#Trim(ThisMetaKeywords)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"MetaDescription","#Trim(ThisMetaDescription)#","1")>
@@ -478,6 +484,7 @@
 			<cfset DevNull=StructInsert(sProperties,"EmergencyAlert","#Trim(ThisEmergencyAlert)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"IncludeInScreenSaver","#Trim(ThisIncludeInScreenSaver)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"PageTitleOverride","#Trim(ThisPageTitleOverride)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"lRelatedPageID","#Trim(ThisLRelatedPageID)#","1")>
 			
 			<cfset DevNull=StructInsert(sProperties,"empFirstName","#Trim(thisEmpFirstName)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"empLastName","#Trim(thisEmpLastName)#","1")>
@@ -513,7 +520,7 @@
 		<cfargument name="Value" required="true" type="any">
 
 		<!--- init variables --->
-		<cfset var Test = "">
+		<cfset var Test="">
 
 		<cfset ARGUMENTS.Property=Trim(ARGUMENTS.Property)>
 
@@ -597,7 +604,7 @@
 		<cfargument name="Property" required="true">
 
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 
 		<cfif IsInError(ARGUMENTS.Property)>
 			<cfreturn GetErrorValue(ARGUMENTS.Property)>
@@ -626,7 +633,7 @@
 		<cfargument name="WebrootPath" required="true">
 
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="CreateResourcePath"
@@ -640,7 +647,7 @@
 		<cfargument name="ResourceType" required="true">
 
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetResourcePath"
@@ -655,7 +662,7 @@
 		<cfargument name="WebrootPath" required="true">
 
 		<!--- init variables --->
-		<cfset var ReturnValue = "">
+		<cfset var ReturnValue="">
 
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetResourceFilePath"
@@ -672,9 +679,9 @@
 		<cfargument name="FormFileFieldName" required="true">
 
 		<!--- init variables --->
-		<cfset var UploadDirectory = "">
-		<cfset var UploadedFile = "">
-		<cfset var FilePath = "">
+		<cfset var UploadDirectory="">
+		<cfset var UploadedFile="">
+		<cfset var FilePath="">
 
 		<cfif ARGUMENTS.FormFileFieldName IS "" OR ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
@@ -710,7 +717,7 @@
 		<cfargument name="Property" required="true">
 
 		<!--- init variables --->
-		<cfset var FileToDelete = "">
+		<cfset var FileToDelete="">
 
 		<cfif ARGUMENTS.WebrootPath IS "" OR ARGUMENTS.Property IS "">
 			<cfreturn false>
@@ -741,28 +748,28 @@
 		<cfargument name="UserID" required="true">
 
 		<!--- init variables --->
-		<cfset var thisCategoryLocaleID = "">
-		<cfset var thisCategoryID = "">
-		<cfset var DirDone = "">
-		<cfset var DirectoryToCreate = "">
-		<cfset var DestImages = "">
-		<cfset var DestDocs = "">
-		<cfset var lImage = "">
-		<cfset var OriginalName = "">
-		<cfset var SourceFile = "">
-		<cfset var ThisFile = "">
-		<cfset var RemoteFile = "">
-		<cfset var i = "">
-		<cfset var ThisImageName = "">
-		<cfset var SelectProps = "">
-		<cfset var deleteContent1 = "">
-		<cfset var deleteContent3 = "">
-		<cfset var SelectCategory = "">
-		<cfset var DELETEMEssages = "">
-		<cfset var success = "">
-		<cfset var sProductionSiteInformation = "">
-		<cfset var connectionName = APPLICATION.utilsObj.createUniqueId()>
-		<cfset var ftpResult = structNew()>
+		<cfset var thisCategoryLocaleID="">
+		<cfset var thisCategoryID="">
+		<cfset var DirDone="">
+		<cfset var DirectoryToCreate="">
+		<cfset var DestImages="">
+		<cfset var DestDocs="">
+		<cfset var lImage="">
+		<cfset var OriginalName="">
+		<cfset var SourceFile="">
+		<cfset var ThisFile="">
+		<cfset var RemoteFile="">
+		<cfset var i="">
+		<cfset var ThisImageName="">
+		<cfset var SelectProps="">
+		<cfset var deleteContent1="">
+		<cfset var deleteContent3="">
+		<cfset var SelectCategory="">
+		<cfset var DELETEMEssages="">
+		<cfset var success="">
+		<cfset var sProductionSiteInformation="">
+		<cfset var connectionName=APPLICATION.utilsObj.createUniqueId()>
+		<cfset var ftpResult=structNew()>
 
 		<cfif this.ValidateDelete() and ARGUMENTS.TrashPath IS NOT "">
 			<cftransaction>
@@ -791,7 +798,7 @@
 				<cfset DestImages="#DirectoryToCreate#\images\">
 				<cfset DestDocs="#DirectoryToCreate#\documents\">
 
-				<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
+				<cfset lImage="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,empImage,empImageThumb">
 				<cfloop index="ThisImageName" list="#lImage#">
 					<cfset OriginalName=this.GetProperty(thisImageName)>
 					<cfset OriginalName=ReplaceNoCase(OriginalName,"http://#CGI.Server_Name#","","All")>
@@ -827,7 +834,7 @@
 			<cfif IsStruct(sProductionSiteInformation) and sProductionSiteInformation.ProductionDBDSN is not "">
 				<cftransaction>
 					<cfquery name="SelectCategory" datasource="#sProductionSiteInformation.ProductionDBDSN#">
-						SELECT * FROM t_CategoryLocale WHERE CategoryLocaleID = <cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
+						SELECT * FROM t_CategoryLocale WHERE CategoryLocaleID=<cfqueryparam value="#ThisCategoryLocaleID#" cfsqltype="cf_sql_integer">
 					</cfquery>
 					<cfoutput query="SelectCategory">
 						<cfquery name="deleteContent3" datasource="#sProductionSiteInformation.ProductionDBDSN#">
@@ -840,7 +847,7 @@
 				</cftransaction>
 
 				<cfif SelectCategory.RecordCount GT "0">
-					<cfset lImage="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
+					<cfset lImage="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,empImage,empImageThumb">
 
 					<!--- open the ftp connection to the production site --->
 					<cfftp	action="open"
@@ -887,7 +894,7 @@
 
 	<cffunction name="GetContent" returnType="Query" output="true">
 		<cfset var ThisCategoryLocaleID=this.GetProperty("CategoryLocaleID")>
-		<cfset var GetContent = "">
+		<cfset var GetContent="">
 		<cfquery name="GetContent" datasource="#APPLICATION.DSN#">
 			SELECT * FROM qry_GetContent WHERE CategoryLocaleID=<cfqueryparam value="#Val(ThisCategoryLocaleID)#" cfsqltype="cf_sql_integer">
 		</cfquery>
@@ -899,24 +906,24 @@
 		<cfargument name="UserID" required="true">
 
 		<!--- init variables --->
-		<cfset var ThisCategoryLocaleID = "">
-		<cfset var ThisCategoryID = "">
-		<cfset var ThisPropertiesID = "">
-		<cfset var thisCategoryLocaleActive = "">
-		<cfset var ThisLocaleID = "">
-		<cfset var lImageName = "">
-		<cfset var Source = "">
-		<cfset var Destination = "">
-		<cfset var ThisImage = "">
-		<cfset var GetSummary = "">
-		<cfset var DeleteSummaryOnProduction = "">
-		<cfset var UpdateSummaryOnProduction = "">
-		<cfset var GetProps = "">
-		<cfset var DeleteContentOnProduction2 = "">
-		<cfset var UpdateContentOnProduction4 = "">
-		<cfset var sProductionSiteInformation = "">
-		<cfset var success = "">
-		<cfset var SaveResults = "">
+		<cfset var ThisCategoryLocaleID="">
+		<cfset var ThisCategoryID="">
+		<cfset var ThisPropertiesID="">
+		<cfset var thisCategoryLocaleActive="">
+		<cfset var ThisLocaleID="">
+		<cfset var lImageName="">
+		<cfset var Source="">
+		<cfset var Destination="">
+		<cfset var ThisImage="">
+		<cfset var GetSummary="">
+		<cfset var DeleteSummaryOnProduction="">
+		<cfset var UpdateSummaryOnProduction="">
+		<cfset var GetProps="">
+		<cfset var DeleteContentOnProduction2="">
+		<cfset var UpdateContentOnProduction4="">
+		<cfset var sProductionSiteInformation="">
+		<cfset var success="">
+		<cfset var SaveResults="">
 
 		<cfinvoke component="com.ContentManager.CategoryHandler"
 			method="GetProductionSiteInformation"
@@ -982,7 +989,7 @@
 					FTPPassword="#sProductionSiteInformation.ProductionFTPPassword#">
 			</cfif>
 
-			<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
+			<cfset lImageName="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,empImage,empImageThumb">
 
 			<cfloop index="ThisImage" list="#lImageName#">
 				<cfif this.GetProperty(ThisImage) is not "">

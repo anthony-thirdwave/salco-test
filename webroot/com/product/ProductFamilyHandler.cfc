@@ -237,7 +237,7 @@
 		
 		<cfoutput query="LOCAL.GetProductList">
 			<cfquery name="LOCAL.GetItemsPrime" dbtype="query">
-				select * from [LOCAL].GetItems where CategoryID=<cfqueryparam value="#LOCAL.GetProductList.CategoryID#" cfsqltype="cf_sql_integer">
+				select CategoryID,ProductFamilyAttributeID,AttributeValue from [LOCAL].GetItems where CategoryID=<cfqueryparam value="#LOCAL.GetProductList.CategoryID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfloop query="LOCAL.GetItemsPrime">
 				<cfset QuerySetCell(LOCAL.GetProductList,LOCAL.sAttribute[LOCAL.GetItemsPrime.ProductFamilyAttributeID],LOCAL.GetItemsPrime.AttributeValue,LOCAL.GetProductList.CurrentRow)>
@@ -258,7 +258,7 @@
 		
 		<cfoutput query="LOCAL.GetProductList">
 			<cfquery name="LOCAL.GetViewPrime" dbtype="query">
-				select * from [LOCAL].GetView where KeyID=<cfqueryparam value="#LOCAL.GetProductList.CategoryID#" cfsqltype="cf_sql_integer">
+				select ResourceID,ResourceName,ResourceText,MainFilePath,ResourceSize,ThumbnailFilePath,SpecificationSetID,KeyID,ResourcePriority from [LOCAL].GetView where KeyID=<cfqueryparam value="#LOCAL.GetProductList.CategoryID#" cfsqltype="cf_sql_integer">
 				order by ResourcePriority
 			</cfquery>
 			<cfset LOCAL.aBlank=ArrayNew(1)>
@@ -290,7 +290,7 @@
 		
 		<cfoutput query="LOCAL.GetProductList">
 			<cfquery name="LOCAL.GetDownloadPrime" dbtype="query">
-				select * from [LOCAL].GetDownload where KeyID=<cfqueryparam value="#LOCAL.GetProductList.CategoryID#" cfsqltype="cf_sql_integer">
+				select ResourceID,ResourceName,ResourceText,MainFilePath,ResourceSize,ThumbnailFilePath,SpecificationSetID,KeyID,ResourcePriority from [LOCAL].GetDownload where KeyID=<cfqueryparam value="#LOCAL.GetProductList.CategoryID#" cfsqltype="cf_sql_integer">
 				order by ResourcePriority
 			</cfquery>
 			<cfset LOCAL.aBlank=ArrayNew(1)>
