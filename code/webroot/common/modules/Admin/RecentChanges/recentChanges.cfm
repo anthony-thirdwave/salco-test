@@ -22,7 +22,7 @@
 				<td align="left">
 					<strong>#CategoryName#</strong><br/>
 					By 
-					<cfif Trim() IS "">
+					<cfif Trim("#FirstName##LastName#") IS "">
 						System<br/>
 					<cfelse>
 						#FirstName# #LastName#<br/>
