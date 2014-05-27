@@ -21,7 +21,12 @@
 			<tr valign="top">
 				<td align="left">
 					<strong>#CategoryName#</strong><br/>
-					By #FirstName# #LastName#<br>
+					By 
+					<cfif Trim() IS "">
+						System<br/>
+					<cfelse>
+						#FirstName# #LastName#<br/>
+					</cfif>
 					#APPLICATION.utilsObj.OutputDateTime(TrackingDateTime)#
 				</td>
 				<td align="left">
