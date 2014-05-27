@@ -8,7 +8,7 @@
 		<cfset var GetUser = "">
 		
 		<!--- query the SecurityDB for the passed username and password --->
-		<cfquery name="GetUser" datasource="#APPLICATION.DSN#">
+		<cfquery name="GetUser" datasource="#APPLICATION.User_DSN#">
 			SELECT	UserID, UserLogin, UserPassword, LocaleID
 			FROM	t_User
 			WHERE	UserLogin = <cfqueryparam value="#trim(arguments.Username)#" cfsqltype="cf_sql_varchar">
@@ -24,7 +24,7 @@
 		<!--- init variables --->
 		<cfset var GetUser = "">
 		
-		<cfquery name="GetUser" datasource="#APPLICATION.DSN#">
+		<cfquery name="GetUser" datasource="#APPLICATION.User_DSN#">
 			SELECT	UserID, UserLogin, UserPassword, LocaleID 
 			FROM	t_User
 			WHERE	1=0
@@ -39,7 +39,7 @@
 		<cfset var getUserGroups = "">
 		
 		<!--- query the SecurityDB for the passed username get all groups --->
-		<cfquery name="getUserGroups" datasource="#APPLICATION.DSN#">
+		<cfquery name="getUserGroups" datasource="#APPLICATION.User_DSN#">
 			SELECT		UserGroupID
 			FROM		t_UserGroup
 			WHERE		UserID = <cfqueryparam value="#Val(arguments.UserID)#" cfsqltype="cf_sql_integer">
