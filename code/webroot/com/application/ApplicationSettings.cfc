@@ -71,7 +71,7 @@
 		<cfif APPLICATION.ApplicationName is "intranet.salco">
 			<cfset APPLICATION.NewsCategoryID="6063">
 		<cfelse>
-			<cfset APPLICATION.NewsCategoryID="6719">
+			<cfset APPLICATION.NewsCategoryID="6530">
 		</cfif>
 		
 		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
