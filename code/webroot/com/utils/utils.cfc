@@ -757,7 +757,7 @@
 			<!--- if this isn't a link to "/" --->
 			<cfif arguments.categoryUrl neq "/">
 				<!--- the last token in a string of "/" should be the alias  --->
-				<cfset local.categoryAlias = getToken(arguments.categoryUrl, listLen(arguments.categoryUrl, "/"), "/") />
+				<cfset local.categoryAlias = ListLast(arguments.categoryUrl, "/") />
 			<cfelse>
 				<cfset local.categoryAlias = "/" />
 			</cfif>
