@@ -620,6 +620,12 @@ a img {
 	margin-left: 40px; /* 25 */
 	height: 19px;
 }
+
+.chrome.mac #site-header #util-nav #search-type, .safari.mac #site-header #util-nav #search-type {
+	-webkit-appearance:none;
+	padding-left:5px;
+}
+
 #site-header #util-nav form {
 	padding-top: 8px;
 }
@@ -651,6 +657,15 @@ a img {
 .chrome #site-header #util-nav .backSearch, .safari #site-header #util-nav .backSearch {
 	margin-left: -4px;
 }
+
+.chrome.mac #site-header #util-nav .backSearch, .safari.mac #site-header #util-nav .backSearch, .firefox.mac #site-header #util-nav .backSearch {
+	margin-top:2px;
+}
+
+.chrome.linux #site-header #util-nav .backSearch{
+	margin-top:2px;
+}
+
 #site-header #util-nav .btnSearch {
 	background: transparent url(/common/images/template-updated/util-search-btn-resized-hourglass.png) no-repeat left 0px;
 	background-size:contain;
@@ -664,6 +679,15 @@ a img {
 	text-indent: -9000px;
 	vertical-align: top;
 }
+
+.chrome.mac #site-header #util-nav .btnSearch, .safari.mac #site-header #util-nav .btnSearch, .firefox.mac #site-header #util-nav .btnSearch {
+	margin-top:2px;
+}
+
+.chrome.linux #site-header #util-nav .btnSearch {
+	margin-top:2px;
+}
+
 .toggle-nav {
 	dislay: none;
 }
@@ -864,7 +888,9 @@ a img {
 
 	height:30px;
 }
-
+.safari.mac #products-navigation {
+	margin-top:43px;	
+}
 #products-navigation:hover {
 	z-index:110;/**/
 
@@ -2522,6 +2548,7 @@ polygon, .office-circle, .ncOffices {
 	position: absolute;
 	width: 215px;
 	background: linear-gradient(to right, rgba(128, 128, 128, .75) 45%, rgba(128, 128, 128, .45) 65%, rgba(128, 128, 128, 0) 100%);
+	background: -webkit-linear-gradient(to right, rgba(128, 128, 128, .75) 45%, rgba(128, 128, 128, .45) 65%, rgba(128, 128, 128, 0) 100%);
 	margin-left: -65px;
 	z-index: 100;
 	margin-top: 125px;
@@ -2535,6 +2562,7 @@ polygon, .office-circle, .ncOffices {
 	margin: 5px;
 	padding: 8px 12px;
 	background: linear-gradient(to right, rgba(0, 0, 0, .65) 45%, rgba(0, 0, 0, .45) 65%, rgba(64, 64, 64, 0) 100%);
+	background: -webkit-linear-gradient(to right, rgba(0, 0, 0, .65) 45%, rgba(0, 0, 0, .45) 65%, rgba(64, 64, 64, 0) 100%);
 	color: #fff;
 	/* IE 5.5 - 7 
         filter: progid:DXImageTransform.Microsoft.gradient(
