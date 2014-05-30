@@ -6,7 +6,7 @@
 </cfif>
 
 <cfset page_links_shown=20>
-<cfset records_per_page=2>
+<cfset records_per_page=8>
 <cfset start_record=Val(url.pageNum)*Val(records_per_page)-Val(records_per_page)+1>
 
 <cfinvoke component="com.ContentManager.NewsHandler"
