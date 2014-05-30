@@ -157,13 +157,17 @@
 		<cfset DirectoryToRead=ExpandPath("/resources/external/downloads/#ActiveTab#")>
 		<cfdirectory action="LIST" directory="#DirectoryToRead#" name="qDirPrime">
 		<cfset lLinks="">
+		<cfset sDownloads=structNew()>
 		<cfloop query="qDirPrime">
 			<cfif qDirPrime.type IS "dir" and FileExists("#DirectoryToRead#\#qDirPrime.Name#\index.html")>
 				<cfset lLinks=ListAppend(lLinks,"#qDirPrime.Name#:/resources/external/downloads/#ActiveTab#/#qDirPrime.Name#/index.html")>
+				<cfdirectory action="LIST" directory="#DirectoryToRead#\#qDirPrime.Name#\" name="qDirPrimePDF" filter="*.pdf">
+
+				<cfif qDirPrimePDF.recordCount IS "1">
+					<cfset sDownloads[qDirPrime.Name]="/resources/external/downloads/#ActiveTab#/#qDirPrime.Name#/#qDirPrimePDF.name#:#qDirPrimePDF.size#">
+				</cfif>
 			</cfif>
 		</cfloop>
-		
-		
 		<cfif lLinks IS NOT "">
 			<div class="downloadContent" id="downloadContent1">
 				<table class="featuredDownloads" width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -187,7 +191,11 @@
 						<tr class="#classTR#">
 							<td valign="top" class="#class#"><a href="#ListLast(ThisLink,":")#" target="_blank">#ListFirst(ThisLink,":")#</a></td>
 							<td valign="top" class="#class#"></td>
-							<td valign="top" class="#class#" nowrap><a href="#ListLast(ThisLink,":")#" target="_blank">View</a></td>
+							<td valign="top" class="#class#" nowrap><a href="#ListLast(ThisLink,":")#" target="_blank">View</a>
+							<cfif structKeyExists(sDownloads,listFirst(ThisLink,":"))>
+								/ <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(listFirst(sDownloads[listFirst(ThisLink,":")],":"))#">Download</a> (#Round(listLast(sDownloads[listFirst(ThisLink,":")],":")/1024)#kb)
+							</cfif>
+							</td>
 						</tr>
 						</cfoutput>
 						<cfset CurrentRow=CurrentRow+1>
