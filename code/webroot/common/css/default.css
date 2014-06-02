@@ -2805,7 +2805,7 @@ footer ul li {
 .news-listing-pagy ul li a, .news-listing-pagy dd a {
 	text-decoration: none;
 }
-.news {
+.newsListing {
 	font-size: 15px;
 	line-height: 24px;
 }
