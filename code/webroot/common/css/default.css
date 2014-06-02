@@ -484,6 +484,7 @@ opacity:0;
 }
 #bottom-prods .feat-prods.on {
 	opacity: 1;
+	z-index:20;
 }
 #bottom-prods h3, #bottom-prods h4, #bottom-prods p {
 	margin: 0px 20px 0px 30px;

@@ -39,9 +39,17 @@ $(document).ready(function(e) {
 		});
 		//
 		
+		$("#feature-prod-nav li").each(function(index, element) {
+		
+			if($(this).children('a').attr('data-id')==""){
+				
+				$($(this).children('a').attr('href')).css({cursor:"default"});
+			}
+		});
+		
 		$(".feat-prods").bind("click",function(){
-			
-				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");
+			if($("#feat-prods #feature-prod-nav .on a").attr("data-id")!=""){
+				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");}
 			
 		});
 		
