@@ -32,7 +32,7 @@
 		<cfset Mailer_ToAddress=ListAppend(Mailer_ToAddress,"sales@salcoproducts.com")>
 	</cfif>
 	<cfmail	to="#Mailer_ToAddress#" from="#Mailer_FromAddress#"
-		type="html" subject="#Mailer_Subject#" cc="lisa_lakatos@salcoproducts.com">
+		type="html" subject="#Mailer_Subject#" cc="lisa_moffat@salcoproducts.com">
 	<table>
 		<tr>
 		<td colspan="2"><b>Contact Form Submission</b><br>

@@ -37,7 +37,7 @@
 <cfelse>
 	<cfset Mailer_Subject="#Mailer_Subject# TESTING ONLY!">
 	<cfif 1>
-		<cfset Mailer_ToAddress="thomas@newermedia.com">
+		<cfset Mailer_ToAddress="notifications@dev01.thirdwavellc.com">
 	</cfif>
 </cfif>
 

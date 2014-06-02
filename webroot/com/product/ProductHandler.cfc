@@ -458,6 +458,31 @@
 		<cfreturn qReturn>
 	</cffunction>
 	
+	<cffunction name="GetProductPartNumber" returntype="string" output="false">
+		<cfargument name="ProductID" default="" type="string" required="true">
+		
+		<cfset VAR LOCAL=StructNew()>
+		
+		<cfquery name="LOCAL.GetProductPartNumber" datasource="#APPLICATION.DSN#">
+			select AttributeValue from qry_GetProductPartNumber 
+			where CategoryID=<cfqueryparam value="#val(ARGUMENTS.ProductID)#" cfsqltype="CF_SQL_INTEGER">
+		</cfquery>
+		
+		<cfif LOCAL.GetProductPartNumber.RecordCount IS "0">
+			<cfinvoke component="/com/ContentManager/CategoryHandler" 
+				method="GetCategoryBasicDetails" 
+				returnVariable="LOCAL.qGetCategoryBasicDetails"
+				CategoryID="#Val(ARGUMENTS.ProductID)#">
+			<cfif LOCAL.qGetCategoryBasicDetails.CategoryTypeID IS "80">
+				<cfquery name="LOCAL.GetProductPartNumber" datasource="#APPLICATION.DSN#">
+					select AttributeValue from qry_GetProductPartNumber 
+					where CategoryID=<cfqueryparam value="#val(LOCAL.qGetCategoryBasicDetails.SourceID)#" cfsqltype="CF_SQL_INTEGER">
+				</cfquery>
+			</cfif>
+		</cfif>
+		<cfreturn LOCAL.GetProductPartNumber.AttributeValue>
+	</cffunction>
+	
 	<cffunction name="GetProductSpecs" returntype="query" output="false" access="remote">
 		<cfargument name="ProductAlias" default="" type="string" required="true">
 		<cfargument name="LanguageID" default="" type="numeric" required="true">
@@ -649,16 +674,20 @@
 	
 	<cffunction name="GetProductsByMatchingProductNo" returntype="query" output="false">
 		<cfargument name="PartNo" default="" type="string" required="true">
+		<cfargument name="maxrows" default="all" type="string">
 		
 		<cfset VAR LOCAL=StructNew()>
 		
 		<cfquery name="LOCAL.GetProductsByMatchingProductNo" datasource="#APPLICATION.DSN#">
-			select *
+			select 
+			<cfif ARGUMENTS.MaxRows IS NOT "All">TOP #Val(ARGUMENTS.MaxRows)#</cfif> *,
+			AttributeValue as ProductNo
 			FROM	qry_GetCategoryWithCategoryLocale INNER JOIN
-				t_ProductAttribute ON qry_GetCategoryWithCategoryLocale.CategoryId = t_ProductAttribute.CategoryID AND t_ProductAttribute.ProductFamilyAttributeID = 10
+				t_ProductAttribute ON qry_GetCategoryWithCategoryLocale.CategoryId = t_ProductAttribute.CategoryID AND t_ProductAttribute.ProductFamilyAttributeID=<cfqueryparam cfsqltype="cf_sql_numeric" value="10">
 			WHERE	t_ProductAttribute.AttributeValue 
 			LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.PartNo#%"> And
 			qry_GetCategoryWithCategoryLocale.ParentID <> <cfqueryparam cfsqltype="cf_sql_numeric" value="5731">
+			ORDER BY CategoryName
 		</cfquery>
 		
 		<cfreturn LOCAL.GetProductsByMatchingProductNo>

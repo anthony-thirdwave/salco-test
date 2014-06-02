@@ -21,10 +21,10 @@
 				  Leave blank to ignore"/>
 				  
 		<!--- init variables --->
-		<cfset var OrderBy = "">
-		<cfset var ThisFieldName = "">
-		<cfset var i = "">
-		<cfset var GenericQuery = "">
+		<cfset var OrderBy="">
+		<cfset var ThisFieldName="">
+		<cfset var i="">
+		<cfset var GenericQuery="">
 		
 		<!--- Check for potentially hostile special characters before building
 			  the SQL by hand.  --->
@@ -53,15 +53,15 @@
 		<!--- Is there a ORDER BY clause?  --->
 		<cfif Arguments.SortFieldName IS "">
 			<!--- If there's no sort field, SortOrder is ignored.  --->
-			<cfset OrderBy = ""/>
+			<cfset OrderBy=""/>
 		<cfelse>
-			<cfset OrderBy = "ORDER BY " & Arguments.SortFieldName/>
+			<cfset OrderBy="ORDER BY " & Arguments.SortFieldName/>
 
 			<!--- If there was a sort order and it's DESC, add it on.
 				  ASC is the default if it wasn't given or is bogus.  --->
 			<cfif IsDefined("Arguments.SortOrder")>
 				<cfif UCase(Arguments.SortOrder) IS "desc">
-					<cfset OrderBy = OrderBy & " DESC"/>
+					<cfset OrderBy=OrderBy & " DESC"/>
 				</cfif>  <!--- matches DESC --->
 			</cfif>  <!--- sort order given --->
 		</cfif>  <!--- sort field given --->
@@ -74,7 +74,11 @@
 					SELECT * FROM #Arguments.TableName#
 					WHERE 
 					<cfloop index="i" from="1" to="#ListLen(Arguments.FieldName)#" step="1">
-						#ListGetAt(Arguments.FieldName,i)# = '#ListGetAt(Arguments.FieldValue,i)#' AND
+						<cfif Right(ListGetAt(Arguments.FieldName,i),2) IS "ID">
+							#ListGetAt(Arguments.FieldName,i)#=<cfqueryparam cfsqltype="cf_sql_integer" value="#ListGetAt(Arguments.FieldValue,i)#"> AND
+						<cfelse>
+							#ListGetAt(Arguments.FieldName,i)#='#ListGetAt(Arguments.FieldValue,i)#' AND
+						</cfif>
 					</cfloop>
 					1=1 
 					#OrderBy#
@@ -84,7 +88,11 @@
 					SELECT * FROM #Arguments.TableName#
 					WHERE
 					<cfloop index="i" from="1" to="#ListLen(Arguments.FieldName)#" step="1">
-						#ListGetAt(Arguments.FieldName,i)# = '#ListGetAt(Arguments.FieldValue,i)#' AND
+						<cfif Right(ListGetAt(Arguments.FieldName,i),2) IS "ID">
+							#ListGetAt(Arguments.FieldName,i)#=<cfqueryparam cfsqltype="cf_sql_integer" value="#ListGetAt(Arguments.FieldValue,i)#"> AND
+						<cfelse>
+							#ListGetAt(Arguments.FieldName,i)#='#ListGetAt(Arguments.FieldValue,i)#' AND
+						</cfif>
 					</cfloop>
 					1=1
 					#OrderBy#

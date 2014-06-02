@@ -136,9 +136,10 @@
 	
 	<cfset LOCAL.ReturnValue="">
 	
-	<cfloop index="LOCAL.ThisTarget" list="thumbnail.gif,thumbnail.png,thumbnail.jpg">
+	<cfloop index="LOCAL.ThisTarget" list="thumbnail.png,thumbnail.gif,thumbnail.jpg">
 		<cfif FileExists("#ARGUMENTS.directory#\#LOCAL.ThisTarget#")>
 			<cfset LOCAL.ReturnValue="#ARGUMENTS.directory#\#LOCAL.ThisTarget#">
+			<cfreturn LOCAL.ReturnValue>
 		</cfif>
 	</cfloop>
 	

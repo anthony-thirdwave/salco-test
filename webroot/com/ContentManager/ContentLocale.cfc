@@ -164,6 +164,9 @@
 			<cfcase value="256"><!--- Text Slide Show --->
 				<cfset this.sFields[ThisContentTypeID]="aLink">
 			</cfcase>
+			<cfcase value="258"><!--- Teaser Slide Show --->
+				<cfset this.sFields[ThisContentTypeID]="aFile">
+			</cfcase>
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisContentTypeID]="">
 			</cfdefaultcase>

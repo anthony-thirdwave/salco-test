@@ -61,7 +61,7 @@
 <cfparam name="FORM.DefaultCategoryLocale" default="0">
 <cfparam name="FORM.DeleteLocaleRecord" default="0">
 
-<cfset lImageName="CategoryImageOff,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageTitle,CategoryImageRepresentative,empImage,empImageThumb">
+<cfset lImageName="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,empImage,empImageThumb">
 <cfloop index="ThisImage" list="#lImageName#">
 	<cfparam name="FORM.Delete#ThisImage#" default="0">
 </cfloop>
@@ -124,7 +124,7 @@
 
 		<!--- Handling MyCategoryLocale --->
 		<cfset MyCategoryLocale.SetCategoryTypeID(CategoryTypeID)>
-		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
+		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,lRelatedPageID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategoryLocale.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
@@ -936,7 +936,7 @@
 				<cf_AddToQueryString querystring="#QueryString#" name="cid" value="#cid#">
 			</cfif>
 			<cf_AddToQueryString querystring="#QueryString#" name="ReturnURL" value="#ReturnURL#" Omitlist="PageAction">
-			<form action="#Location#?#querystring#" method="post" enctype="multipart/form-data">
+			<form action="#Location#?#querystring#" method="post" enctype="multipart/form-data" id="categoryForm">
 			<input type="hidden" name="PageAction" value="Validate#PageAction#">
 		</cfoutput>
 

@@ -620,40 +620,34 @@
 			<cfset aLink=ATTRIBUTES.sContentBody.aLink>
 			<cfsavecontent variable="FileContents">
 				<cfoutput>
-					<div id="tabsRotate">
+					<div id="salco-statements">
 					<cfloop from="1" to="#ArrayLen(aLink)#" index="i">
 						<cfset sLink=aLink[i]>
-						<cfif IsStruct(sLink) AND StructKeyExists(sLink,"URL") AND sLink.URL NEQ "">
-							<cfset thisCaption="">
-							<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
-								<cfset thisName=sLink.Title>
-							<cfelse>
-								<cfset thisName=sLink.URL>
-							</cfif>
-							<cfif StructKeyExists(sLink,"Caption") AND sLink.Caption NEQ "">
-								<cfset thisCaption=sLink.Caption>
-							</cfif>
-							<div id="homeContChange#i#" class="content">
-								<strong><em>#thisName#</em></strong>
-								<cfif thisCaption is not ""><a href="#sLink.URL#"><p>#thisCaption#</p></a></cfif>
-							</div>
+						<cfset thisCaption="">
+						<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
+							<cfset thisName=sLink.Title>
+						<cfelse>
+							<cfset thisName=sLink.URL>
 						</cfif>
+						<cfif StructKeyExists(sLink,"Caption") AND sLink.Caption NEQ "">
+							<cfset thisCaption=sLink.Caption>
+						</cfif>
+						<div id="ss-#i#" class="ss-statements<cfif i IS "1"> on</cfif>">
+							<h3>#thisName#</h3>
+							<p>#thisCaption#</p>
+						</div>
 					</cfloop>
-					<ul class="homeNavRight" id="homeNavRight">
+					<ul id="statements-navigation">
 					<cfloop from="1" to="#ArrayLen(aLink)#" index="i">
 						<cfset sLink=aLink[i]>
-						<cfif IsStruct(sLink) AND StructKeyExists(sLink,"URL") AND sLink.URL NEQ "">
-							<cfset thisCaption="">
-							<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
-								<cfset thisName=sLink.Title>
-							<cfelse>
-								<cfset thisName=sLink.URL>
-							</cfif>
-							<li><a href="##homeContChange#i#"><em>#thisName#</em></a></li>
+						<cfif StructKeyExists(sLink,"Title") AND sLink.Title NEQ "">
+							<cfset thisName=sLink.Title>
+						<cfelse>
+							<cfset thisName=sLink.URL>
 						</cfif>
+						<li><a href="##ss-#i#"<cfif i IS "1"> class="on"</cfif>>#thisName#</a></li>
 					</cfloop>
 					</ul>
-					<div class="clearFix"></div>
 					</div>
 				</cfoutput>
 			</cfsavecontent>
@@ -686,6 +680,58 @@
 			<cfset CALLER.qArticles=qArticles>
 		<cfelse>
 			<cfset FileContents="<cfmodule template=""/common/modules/Article/dsp_landing.cfm"" KeyType=""#KeyType#"" KeyID=""#KeyID#"" Title=""#thisTitle#"" ContentID=""#ATTRIBUTES.ContentID#"" IsRSS=""0"" ResultsPerPage=""#thisNumItems#"">">
+		</cfif>
+	</cfcase>
+	<cfcase value="258"><!--- Teaser Slide Show --->
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"aFile") AND IsArray(ATTRIBUTES.sContentBody.aFile) AND ArrayLen(ATTRIBUTES.sContentBody.aFile) GT 0>
+			<cfset aFile=ATTRIBUTES.sContentBody.aFile>
+			<cfset RandomStart=RandRange(1,ArrayLen(aFile))>
+			<cfsavecontent variable="FileContents">
+				<cfoutput>
+					<div id="bottom-prods">
+					<div id="feat-prods">
+					<h3>Featured Products</h3>
+					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
+						<cfset sFile=aFile[i]>
+						<cfset thisCaption="">
+						<cfset thisName="">
+						<cfset thisImage="">
+						<cfif StructKeyExists(sFile,"FileName") AND sFile.FileName NEQ "">
+							<cfset thisName=sFile.FileName>
+						</cfif>
+						<cfif StructKeyExists(sFile,"FileCaption") AND sFile.FileCaption NEQ "">
+							<cfset thisCaption=sFile.FileCaption>
+						</cfif>
+						<cfif StructKeyExists(sFile,"FilePath") AND sFile.FilePath NEQ "">
+							<cfset thisImage=sFile.FilePath>
+						</cfif>
+						<div id="feat-prod-#i#" class="feat-prods<cfif i IS RandomStart> on</cfif>">
+							<h4>#UCase(thisName)#</h4>
+							<p>#thisCaption#</p>
+							<img src="#thisImage#" alt="#thisName#"/>
+						</div>
+					</cfloop>
+					
+					<ul id="feature-prod-nav">
+					<cfloop from="1" to="#ArrayLen(aFile)#" index="i">
+						<cfset sFile=aFile[i]>
+						<cfif StructKeyExists(sFile,"FileName") AND sFile.FileName NEQ "">
+							<cfset thisName=sFile.FileName>
+						<cfelse>
+							<cfset thisName="">
+						</cfif>
+						<cfif StructKeyExists(sFile,"LinkURL") AND sFile.LinkURL NEQ "">
+							<cfset thisURL=sFile.LinkURL>
+						<cfelse>
+							<cfset thisURL="">
+						</cfif>
+						<li<cfif i IS RandomStart> class="on"</cfif>><a href="##feat-prod-#i#" data-id="#thisURL#">#thisName#</a></li>
+					</cfloop>
+					</ul>
+					</div>
+					</div>
+				</cfoutput>
+			</cfsavecontent>
 		</cfif>
 	</cfcase>
 	<cfcase value="259"><!--- Search Result --->

@@ -5,6 +5,7 @@
 		<cfargument name="KeyID" type="numeric" required="true">
 		<cfargument name="Operation" type="string" required="true">
 		<cfargument name="EntityName" type="string" required="false">
+		<cfargument name="Note" type="string" required="false">
 			  
 		<!--- init variables --->
 		<cfset var InsertTracking="">
@@ -63,7 +64,8 @@
 			KeyID, 
 			TrackingDateTime, 
 			OperationID,
-			EntityName
+			EntityName,
+			note
 			) VALUES (
 			<cfqueryparam value="#ARGUMENTS.UserID#" cfsqltype="cf_sql_varchar" maxlength="10">,
 			<cfqueryparam value="t_#Trim(ARGUMENTS.Entity)#" cfsqltype="cf_sql_varchar" maxlength="64">,
@@ -71,7 +73,12 @@
 			getdate(),
 			<cfqueryparam value="#Val(qOperation.LabelID)#" cfsqltype="cf_sql_integer" maxlength="4">,
 			<cfif IsDefined("ARGUMENTS.EntityName")>
-				<cfqueryparam value="#Trim(ARGUMENTS.EntityName)#" cfsqltype="cf_sql_varchar" maxlength="1000">
+				<cfqueryparam value="#Trim(ARGUMENTS.EntityName)#" cfsqltype="cf_sql_varchar" maxlength="1000">,
+			<cfelse>
+				NULL,
+			</cfif>
+			<cfif IsDefined("ARGUMENTS.Note")>
+				<cfqueryparam value="#Trim(ARGUMENTS.Note)#" cfsqltype="cf_sql_varchar" maxlength="4000">
 			<cfelse>
 				NULL
 			</cfif>

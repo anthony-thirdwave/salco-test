@@ -103,7 +103,7 @@
 		<cfif Val(ARGUMENTS.ID) GT 0 AND Val(ARGUMENTS.LanguageID) GT "0">
 			<!--- If id is greater than 0, load from DB. --->
 			<cfquery name="GetItems" datasource="#APPLICATION.DSN#">
-				SELECT * FROM t_ProductAttribute
+				SELECT ProductFamilyAttributeID,AttributeValue FROM t_ProductAttribute
 				WHERE 
 				ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="#this.lAttributeID#" List="yes">) AND 
 				CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
@@ -115,7 +115,7 @@
 			</cfoutput>
 				
 			<cfquery name="GetItemsEnglish" datasource="#APPLICATION.DSN#">
-				SELECT * FROM t_ProductAttribute
+				SELECT ProductFamilyAttributeID,AttributeValue FROM t_ProductAttribute
 				WHERE 
 				ProductFamilyAttributeID IN (<cfqueryparam cfsqltype="cf_sql_integer" value="14,15" list="yes">) AND 
 				CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
@@ -127,7 +127,7 @@
 			
 			
 			<cfquery name="GetFeatures" datasource="#APPLICATION.DSN#">
-				select * from qry_GetTextBlock
+				select TextBlockID,TextBlock,SpecificationSetID from qry_GetTextBlock
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -147,7 +147,7 @@
 			</cfif>
 			
 			<cfquery name="GetBullets" datasource="#APPLICATION.DSN#">
-				select * from qry_GetTextBlock
+				select TextBlockID,TextBlock,SpecificationSetID from qry_GetTextBlock
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -168,7 +168,7 @@
 			</cfif>
 			
 			<cfquery name="GetReviews" datasource="#APPLICATION.DSN#">
-				select * from qry_GetTextBlock
+				select TextBlockID,TextBlock,SpecificationSetID from qry_GetTextBlock
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -189,7 +189,7 @@
 			</cfif>
 			
 			<cfquery name="GetView" datasource="#APPLICATION.DSN#">
-				select * from qry_GetResource
+				select ResourceID,ResourceName,ResourceText,ResourceSize,SpecificationSetID from qry_GetResource
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -199,7 +199,7 @@
 			</cfquery>
 			
 			<cfquery name="GetViewEnglish" datasource="#APPLICATION.DSN#">
-				select * from qry_GetResource
+				select ResourceID,MainFilePath,ThumbnailFilePath from qry_GetResource
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -238,7 +238,7 @@
 			</cfif>
 			
 			<cfquery name="GetDownload" datasource="#APPLICATION.DSN#">
-				select * from qry_GetResource
+				select ResourceID,ResourceName,ResourceText,ResourceSize,SpecificationSetID from qry_GetResource
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -248,7 +248,7 @@
 			</cfquery>
 			
 			<cfquery name="GetDownloadEnglish" datasource="#APPLICATION.DSN#">
-				select * from qry_GetResource
+				select ResourceID,MainFilePath,ThumbnailFilePath from qry_GetResource
 				WHERE 
 				KeyID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> and 
 				Entity=<cfqueryparam cfsqltype="cf_sql_varchar" value="t_Category"> and 
@@ -288,7 +288,7 @@
 			
 			<cfset ThisProductFamilyID=this.GetProductFamilyID()>
 			<cfquery name="GetAttributes" datasource="#APPLICATION.DSN#">
-				select * from qry_GetProductAttribute 
+				select AttributeValueID,AttributeValue,ProductFamilyAttributeID from qry_GetProductAttribute 
 				WHERE 
 				CategoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ThisProductFamilyID)#"> And 
 				ProductID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ID)#"> And 

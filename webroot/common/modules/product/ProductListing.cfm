@@ -1,10 +1,12 @@
-<cfsetting showdebugoutput="0">
+<cfsetting ShowDebugOutput="0">
 
 <cfparam name="ATTRIBUTES.ProductID" default="-1">
 <cfparam name="ATTRIBUTES.ProductFamilyID" default="-1">
 <cfparam name="ATTRIBUTES.Mode" default="Default">
 <cfparam name="ATTRIBUTES.Title" default="">
 <cfparam name="ATTRIBUTES.OmitCurrentProduct" default="no">
+<cfparam name="ATTRIBUTES.HighlightCurrentProduct" default="No">
+
 <cfparam name="ShowAll" default="0">
 
 <cfparam name="ATTRIBUTES.SpecificationSetID" default="8000">
@@ -48,6 +50,11 @@
 		LocaleID="#ATTRIBUTES.LocaleID#"
 		LanguageID="#ATTRIBUTES.LanguageID#">
 	
+	<cfinvoke component="/com/product/productHandler" 
+		method="GetProductPartNumber"
+		productID="#ATTRIBUTES.ProductID#"
+		returnVariable="sourceProductPartNumber">
+
 	<cfswitch expression="#ATTRIBUTES.Mode#">
 		<cfdefaultcase>
 			<cfset SearchNum="5">
@@ -63,6 +70,9 @@
 			<cfif ShowAll IS "1">
 				<cfset StartRow=1>
 				<cfset SearchNum=999>
+			</cfif>
+			<cfif NOT IsNumeric(StartRow)>
+				<cfset StartRow="1">
 			</cfif>
 			
 			<cfinvoke component="/com/product/productFamilyHandler" 
@@ -87,7 +97,7 @@
 					<cfoutput><h4>#ATTRIBUTES.Title#</h4></cfoutput>
 				</cfif>
 			</cfif>
-			
+
 			<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
 			<cfif qGetProductList.RecordCount GT "0">
 				<cfoutput><div id="ProductListing_#ATTRIBUTES.ProductFamilyID#"></cfoutput>
@@ -96,7 +106,7 @@
 				<tr>
 					<th align="left" valign="middle">Product</th>
 					<th align="center" valign="middle" width="110">Part No.</th>
-					<th align="center" valign="middle" width="110">Document(s)</th>
+					<th align="center" valign="middle" width="110">Description</th>
 				</tr>
                 </thead>
                 <tbody>
@@ -109,11 +119,12 @@
 					<cfif CurrentRow MOD SearchNum IS "0" or CurrentRow IS qGetProductList.RecordCount>
 						<cfset ThisRowClass="#ThisRowClass# tableBot">
 					</cfif>
-					<tr>
+					<tr<cfif ATTRIBUTES.HighlightCurrentProduct and (ATTRIBUTES.ProductID IS qGetProductList.CategoryID or sourceProductPartNumber IS qGetProductList.PartNumber)> class="activeRow"</cfif>>
 						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#qGetProductList.CategoryNameDerived#</a></td>
-						<td class="#ThisRowClass#" valign="middle"  align="left">#Ucase(qGetProductList.PartNumber)#</td>
+						<td class="#ThisRowClass#" valign="middle" align="left"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#Ucase(qGetProductList.PartNumber)#</a></td>
 						<td class="tableRight #ThisRowClass#" valign="middle" align="left">
-						<cfif qGetProductList.PublicDrawing IS NOT "" and FileExists(ExpandPath(qGetProductList.PublicDrawing))><a href="#APPLICATION.utilsObj.GetFreewheelLink(qGetProductList.PublicDrawing)#" target="_blank">CAD Drawing</a><cfelse>&nbsp;</cfif>
+							<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#qGetProductList.ProductDescription#" NumChars="100">
+
 						</td>
 					</tr>
 				</cfoutput></tbody>
