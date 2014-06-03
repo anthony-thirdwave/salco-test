@@ -35,10 +35,7 @@
 		<cfif ATTRIBUTES.Level IS "1">
 			<cfset ThisClass="sideNavLink">
 		</cfif>
-		<cfif ListFind(REQUEST.CategoryThreadList,GetCategoryDetail.CategoryID)>
-			<cfset ThisClass="#ThisClass# navActive">
-		</cfif>
-		<li><a href="#ThisURL#" <cfif Trim(ThisClass) IS NOT "">class="#Trim(ThisClass)#"</cfif>><span>#GetCategoryDetail.CategoryNameDerived#</span></a>
+		<li><a href="#ThisURL#" data-CategoryID="#GetCategoryDetail.CategoryID#" <cfif Trim(ThisClass) IS NOT "">class="#Trim(ThisClass)#"</cfif> ><span>#GetCategoryDetail.CategoryNameDerived#</span></a>
 	</cfoutput>
 </cfif>
 

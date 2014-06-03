@@ -71,6 +71,17 @@
 		</cfoutput>
 	</cfif>
 </cfif>
+<cfoutput>
+	<script type="text/javascript">
+		
+			<cfset ThisList="">
+			<cfloop index="i" from="1" to="#ListLen(CategoryThreadList)#" step="1">
+				<cfset ThisList=ListAppend(ThisList,ListGetAt(CategoryThreadList,i))>
+			</cfloop>
+			var globalNavItems='#ThisList#';
+		
+	</script>
+</cfoutput>
 </head>
 
 <cfoutput>
