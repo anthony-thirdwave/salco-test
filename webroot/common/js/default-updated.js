@@ -1,6 +1,18 @@
 // Default Scripts
 
 $(document).ready(function(e) {
+	//set active main nav links
+	
+	globalNavItems=globalNavItems.split(",");
+	
+	for(i=2;i<globalNavItems.length;i++){
+		
+		$("#nav-toggle-container a").each(function(index, element) {
+			if(globalNavItems[i]==$(this).attr("data-categoryid")){
+				$(this).addClass("navActive");
+			}
+		});		
+	}
 	
 	$('input#search-text').focus(function() {
 		if(this.value == "Search Salco Products..." || this.value == "search") {
@@ -39,9 +51,17 @@ $(document).ready(function(e) {
 		});
 		//
 		
+		$("#feature-prod-nav li").each(function(index, element) {
+		
+			if($(this).children('a').attr('data-id')==""){
+				
+				$($(this).children('a').attr('href')).css({cursor:"default"});
+			}
+		});
+		
 		$(".feat-prods").bind("click",function(){
-			
-				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");
+			if($("#feat-prods #feature-prod-nav .on a").attr("data-id")!=""){
+				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");}
 			
 		});
 		
