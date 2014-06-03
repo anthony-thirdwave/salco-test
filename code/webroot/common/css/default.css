@@ -939,7 +939,7 @@ a img {
 	transition:color .5s;
 }
 
-#main-navigation ul li a:hover, #products-navigation ul li a:hover, #main-navigation ul li:hover a, #products-navigation ul li:hover a, #main-navigation ul li a.navActive, #products-navigation ul li a.navActive {
+#main-navigation ul li a:hover, #products-navigation ul li a:hover, #main-navigation ul li:hover a, #products-navigation ul li:hover a, #main-navigation ul li a.navActive, #products-navigation ul li a.navActive, #products-navigation ul li li.level-2 a.navActive, #products-navigation ul li li li a.navActive, #main-navigation ul li ul.level-2 li a.navActive, #products-navigation ul li ul.level-2 li a.navActive {
 	color: #ea1d25;
 }
 

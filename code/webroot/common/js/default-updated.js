@@ -1,6 +1,18 @@
 // Default Scripts
 
 $(document).ready(function(e) {
+	//set active main nav links
+	
+	globalNavItems=globalNavItems.split(",");
+	
+	for(i=2;i<globalNavItems.length;i++){
+		
+		$("#nav-toggle-container a").each(function(index, element) {
+			if(globalNavItems[i]==$(this).attr("data-categoryid")){
+				$(this).addClass("navActive");
+			}
+		});		
+	}
 	
 	$('input#search-text').focus(function() {
 		if(this.value == "Search Salco Products..." || this.value == "search") {
