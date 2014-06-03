@@ -95,7 +95,10 @@
 			<ul id="tabsDownloadsLevel2" class="nav">
 			<cfoutput><li><a href="?ActiveTab=#ActiveTab#" <cfif ActiveFolder IS "/">class="tabActive"</cfif>>All</a></li></cfoutput>
 			<cfoutput query="qGetDirs">
-				<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#ReplaceNoCase(qGetDirs.Name,"RailYard","Rail/Yard","all")#</a></li>
+				<cfdirectory action="LIST" directory="#ExpandPath("/resources/external/downloads/#ActiveTab#/#qGetDirs.Name#")#" name="qDirPrime" type="file">
+				<cfif qDirPrime.recordCount GT "0">
+					<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#ReplaceNoCase(qGetDirs.Name,"RailYard","Rail/Yard","all")#</a></li>
+				</cfif>
 			</cfoutput>
 			</ul>
 		</cfif>
@@ -189,7 +192,7 @@
 						</cfif>
 						<cfoutput>
 						<tr class="#classTR#">
-							<td valign="top" class="#class#"><a href="#ListLast(ThisLink,":")#" target="_blank">#ListFirst(ThisLink,":")#</a></td>
+							<td valign="top" class="#class#">#ListFirst(ThisLink,":")#</td>
 							<td valign="top" class="#class#"></td>
 							<td valign="top" class="#class#" nowrap><a href="#ListLast(ThisLink,":")#" target="_blank">View</a>
 							<cfif structKeyExists(sDownloads,listFirst(ThisLink,":"))>
