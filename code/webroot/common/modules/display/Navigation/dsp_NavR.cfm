@@ -21,7 +21,7 @@
 	WHERE	DisplayOrder like <cfqueryparam value="#GetDisplayOrder.DisplayOrder#%" cfsqltype="CF_SQL_VARCHAR">
 </cfquery>
 
-<cfset ExecuteTempFile="#APPLICATION.LocaleID#\+Nav_#APPLICATION.LocaleID#_#ATTRIBUTES.MaxLevel#_#REQUEST.CurrentCategoryID#_#ATTRIBUTES.CategoryID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
+<cfset ExecuteTempFile="#APPLICATION.LocaleID#\+Nav_#APPLICATION.LocaleID#_#ATTRIBUTES.MaxLevel#_#ATTRIBUTES.CategoryID#_#DateFormat(GetLastCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetLastCache.CacheDateTime,'HHmmss')#.cfm">
 
 <cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
 	<cfsavecontent variable="SiteNavigation">
