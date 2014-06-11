@@ -191,7 +191,7 @@ $(document).ready(function(e) {
 					tempHH=140;
 					break;
 					case 1:
-					tempHH=150;
+					tempHH=186;
 					tempWidt='width:120px;';
 					break;
 					case 2:
