@@ -3,7 +3,7 @@
 
 <cfstoredproc procedure="sp_GetContent" datasource="#APPLICATION.DSN#">
 	<cfprocresult name="GetContent">
-	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(ThisContentIDPrime)#" null="No">
+	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentID" value="#Val(ATTRIBUTES.contentID)#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
 	<cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
 </cfstoredproc>
