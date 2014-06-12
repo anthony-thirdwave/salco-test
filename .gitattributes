@@ -597,6 +597,7 @@ code/webroot/common/modules/display/Templates/dsp_Content.cfm -text
 code/webroot/common/modules/display/Templates/dsp_Content_proto.cfm -text
 code/webroot/common/modules/display/Templates/intranet/dsp_Content.cfm -text
 code/webroot/common/modules/display/dsp_NavSubPages.cfm -text
+code/webroot/common/modules/display/dsp_TeaserSlideShow.cfm -text
 code/webroot/common/modules/emailAFriend/emailAFriend.cfm -text
 code/webroot/common/modules/employee/Intranet/employeeDetail.cfm -text
 code/webroot/common/modules/employee/Intranet/employeeListing.cfm -text
