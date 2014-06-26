@@ -145,7 +145,9 @@
 								<td valign="top" class="#class#">#Description#</td>
 								<td valign="top" class="#class#" nowrap>
 									<cfoutput group="Language">
-										<a href="#URL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(URL)#">Download</a> (#Round(Size/1024)#kb)
+										<cfset thisURL="/resources/external/downloads/#ActiveTab##ActiveFolder#/#Name#">
+										<cfset thisURL=replaceNoCase(thisURL,"//","/","All")>
+										<a href="#thisURL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(thisURL)#">Download</a> (#Round(Size/1024)#kb)
 									</cfoutput>
 								</td>
 							</tr>
