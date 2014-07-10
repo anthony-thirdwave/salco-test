@@ -26,6 +26,8 @@
 <cfset StructInsert(sTabName,"Instructions","Instructions")>
 <cfset StructInsert(sTabName,"E-Catalog","E-Catalog")>
 
+<cfset sFolderName=structNew()>
+
 <ul id="tabsDownloads" class="nav">
 	<cfloop index="ThisTab" list="#lTab#">
 		<cfoutput><li><a href="?ActiveTab=#ThisTab#" <cfif ThisTab IS ActiveTab>class="tabActive"</cfif>>#sTabName[ThisTab]#</a></li></cfoutput>
@@ -97,7 +99,9 @@
 			<cfoutput query="qGetDirs">
 				<cfdirectory action="LIST" directory="#ExpandPath("/resources/external/downloads/#ActiveTab#/#qGetDirs.Name#")#" name="qDirPrime" type="file">
 				<cfif qDirPrime.recordCount GT "0">
-					<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#ReplaceNoCase(qGetDirs.Name,"RailYard","Rail/Yard","all")#</a></li>
+					<cfset thisFolderName=ReplaceNoCase(qGetDirs.Name,"RailYard","Rail/Yard","all")>
+					<cfset sFolderName["/#qGetDirs.Name#"]=thisFolderName>
+					<li><a href="?ActiveTab=#ActiveTab#&ActiveFolder=#URLEncodedFormat(qGetDirs.Name)#" <cfif ActiveFolder IS "/#qGetDirs.Name#">class="tabActive"</cfif>>#thisFolderName#</a></li>
 				</cfif>
 			</cfoutput>
 			</ul>
@@ -144,10 +148,16 @@
 								<td valign="top" class="#class#">#Title#</td>
 								<td valign="top" class="#class#">#Description#</td>
 								<td valign="top" class="#class#" nowrap>
+									<cfif ActiveFolder IS "/">
+										<cfset thisActiveFolder="All">
+									<cfelse>
+										<cfset thisActiveFolder=sFolderName[ActiveFolder]>
+									</cfif>
 									<cfoutput group="Language">
 										<cfset thisURL="/resources/external/downloads/#ActiveTab##ActiveFolder#/#Name#">
 										<cfset thisURL=replaceNoCase(thisURL,"//","/","All")>
-										<a href="#thisURL#" target="_blank">View</a> / <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(thisURL)#">Download</a> (#Round(Size/1024)#kb)
+										<a href="#thisURL#" target="_blank" onclick="_gaq.push(['_trackEvent', '#sTabName[ActiveTab]# #thisActiveFolder#', 'View', '#JSStringFormat(Title)#']);">View</a> / 
+										<a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(thisURL)#" onclick="_gaq.push(['_trackEvent', '#sTabName[ActiveTab]# #thisActiveFolder#', 'Download', '#JSStringFormat(Title)#']);">Download</a> (#Round(Size/1024)#kb)
 									</cfoutput>
 								</td>
 							</tr>
@@ -194,11 +204,12 @@
 						</cfif>
 						<cfoutput>
 						<tr class="#classTR#">
-							<td valign="top" class="#class#">#ListFirst(ThisLink,":")#</td>
+							<cfset thisLinkName=ListFirst(ThisLink,":")>
+							<td valign="top" class="#class#">#thisLinkName#</td>
 							<td valign="top" class="#class#"></td>
-							<td valign="top" class="#class#" nowrap><a href="#ListLast(ThisLink,":")#" target="_blank">View</a>
+							<td valign="top" class="#class#" nowrap><a href="#ListLast(ThisLink,":")#" target="_blank" onclick="_gaq.push(['_trackEvent', 'E-Category', 'View', '#JSStringFormat(thisLinkName)#']);">View</a>
 							<cfif structKeyExists(sDownloads,listFirst(ThisLink,":"))>
-								/ <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(listFirst(sDownloads[listFirst(ThisLink,":")],":"))#">Download</a> (#Round(listLast(sDownloads[listFirst(ThisLink,":")],":")/1024)#kb)
+								/ <a href="/common/modules/product/download.cfm?f=#URLEncodedFormat(listFirst(sDownloads[listFirst(ThisLink,":")],":"))#" onclick="_gaq.push(['_trackEvent', 'E-Category', 'Download', '#JSStringFormat(thisLinkName)#']);">Download</a> (#Round(listLast(sDownloads[listFirst(ThisLink,":")],":")/1024)#kb)
 							</cfif>
 							</td>
 						</tr>
