@@ -82,7 +82,7 @@
 			<!--- ==================================================== --->
 			
 			<div class="formRow submit rightSubmit">
-				<input type="submit" name="submit" value="" title=" Send Inquiry " />
+				<input type="submit" name="submit" value="" title=" Send Inquiry "  onclick="_gaq.push(['_trackEvent', 'Contact Us', 'Clicks', 'Submit Support Form']);"/>
 			</div>
 			<p>Note that * indicates a required field.</p>
 		</cfform>
