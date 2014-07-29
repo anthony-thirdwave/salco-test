@@ -60,8 +60,13 @@ $(document).ready(function(e) {
 		});
 		
 		$(".feat-prods").bind("click",function(){
+			featprodstitle=$(this).find("h4").html(); 
 			if($("#feat-prods #feature-prod-nav .on a").attr("data-id")!=""){
-				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");}
+				_gaq.push(['_trackEvent', 'Featured', 'Clicks', featprodstitle]);
+				//alert(featprodstitle)
+				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");
+				
+			}
 			
 		});
 		
@@ -170,10 +175,32 @@ $(document).ready(function(e) {
 	
 	});
 	
+	/*var trackingStuff={
+		urlTracks:["/resources/content/5/8/documents/Salco-Calculator-2-3-2.xls","/resources/content/1/1/3/documents/Gasket-material-matrix_2.pdf", "/resources/content/1/2/documents/2014-Calendar.pdf", "/content.cfm/terms-and-conditions", "/resources/content/1/5/documents/Technical-Consulting-Services2_1.pdf"],
+		typeTracks:["Technical Information","Technical Information", "About Us", "Services", "Services"],
+		labelTracks:["Salco Torque Calculator ver2.3.2","Gasket Material Matrix", "Salco Holiday Calendar", "Terms and Conditions", "Technical Consulting"],
+		init:function(){
+			$("#site-wrapper a").each(function(index, element) {
+				for(i=0;i<trackingStuff.urlTracks.length;i++){
+					if($(this).attr("href")==trackingStuff.urlTracks[i]){
+						
+						tempStuffhold1=trackingStuff.typeTracks[i];
+						tempStuffhold2=trackingStuff.labelTracks[i];
+						$(this).bind("click",function(){ 
+							alert(tempStuffhold1+" - "+tempStuffhold2)
+							_gaq.push(['_trackEvent', tempStuffhold1, 'Clicks', tempStuffhold2]);
+						})
+					}
+				}
+			});
+		}
+	}*/
 	
 	$(window).load(function(){
 	
 		contactUsMap.init();
+		/*trackingStuff.init();*/
+		
 		
 		//airslide fix for chrome
 		if($("body").attr("id")=="air-slide" && $("html").hasClass("chrome")==true){ 
