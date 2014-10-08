@@ -85,6 +85,30 @@
 		</cfif>
 		<cfreturn -1>
 	</cffunction>
+
+	<cffunction name="GetRelatedProductIDList" returntype="string" output="false">
+		<cfargument name="ProductID" default="" type="numeric" required="true">
+		<cfargument name="LocaleID" default="#APPLICATION.defaultLocaleID#" type="numeric" required="true">
+
+		<cfset VAR LOCAL=structNew()>
+
+		<cfquery name="LOCAL.GetRelatedProductIDList" datasource="#APPLICATION.DSN#" maxrows="1">
+			SELECT        t_Properties.PropertiesPacket
+			FROM            t_Category INNER JOIN
+				t_CategoryLocale ON t_Category.CategoryID = t_CategoryLocale.CategoryID INNER JOIN
+				t_Properties ON t_CategoryLocale.PropertiesID = t_Properties.PropertiesID
+			where 
+			t_Category.categoryID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.ProductID)#"> and
+			localeID=<cfqueryparam cfsqltype="cf_sql_integer" value="#Val(ARGUMENTS.LocaleID)#">
+		</cfquery>
+		<cfif IsWDDX(LOCAL.GetRelatedProductIDList.PropertiesPacket)>
+			<cfwddx action="WDDX2CFML" input="#LOCAL.GetRelatedProductIDList.PropertiesPacket#" output="LOCAL.sProperties">
+			<cfif StructKeyExists(LOCAL.sProperties,"lRelatedPageID")>
+				<cfreturn LOCAL.sProperties.lRelatedPageID>
+			</cfif>
+		</cfif>
+		<cfreturn -1>
+	</cffunction>
 	
 	<cffunction name="GetProductInProductFamily" returntype="string" output="false">
 		<cfargument name="ProductFamilyID" default="" type="numeric" required="true">

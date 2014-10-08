@@ -270,6 +270,13 @@
 			</cfoutput>
 		</cfloop>
 	</cfif>
+	<TR valign="top"><td></td><td colspan="2">
+	<cfif MyCategoryLocale.GetCategoryTypeID() IS "62"><!--- Product Family --->
+		Highlighted Products
+	<cfelse>
+		Sub-Assemblies/Components
+	</cfif>
+	</td></tr>
 	<TR valign="top">
 		<TD bgcolor="white"></TD>
 		<TD bgcolor="white">
