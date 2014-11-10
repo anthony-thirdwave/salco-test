@@ -42,6 +42,7 @@
         <cftry>
             <cfcollection
                 action="CREATE"
+                engine="solr"
                 collection="#ThisCollectionName#"
                 path="#APPLICATION.CollectionPath#"
                 categories="true"
