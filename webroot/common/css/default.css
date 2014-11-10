@@ -1582,7 +1582,7 @@ a img {
 	margin: 0px;
 	padding: 0px;
 	color: #ea1d25;
-	font-size: 13px;
+	font-size: 13px !important;
 }
 .popular-products ul {
 	list-style: none;
