@@ -12,7 +12,7 @@
 			<cfcase value="ProductNum">
 				<cfset LOCAL.criteria="Custom3:#lcase(htmlEditFormat(ARGUMENTS.searchTxt))#">
 			</cfcase>
-			<cfcase value="hopper-car,tank-cars,railyard-accessories,hazarsolve">
+			<cfcase value="hopper-car,tank-car,railyard-accessories,hazarsolve">
 				<cfset LOCAL.criteria="#lcase(htmlEditFormat(ARGUMENTS.searchTxt))#">
 			</cfcase>
 			<cfdefaultcase>
@@ -116,7 +116,7 @@
 					Where Custom4=<cfqueryparam value="64" cfsqltype="cf_sql_varchar">
 					order by rank
 				 </cfquery>
-			<cfelseif ListFindNoCase("hopper-car,tank-cars,railyard-accessories,hazarsolve",ARGUMENTS.searchType)>
+			<cfelseif ListFindNoCase("hopper-car,tank-car,railyard-accessories,hazarsolve",ARGUMENTS.searchType)>
 				<cfquery name="ContentSearch" dbtype="query">
 				 	select * from ContentSearch 
 					Where Category=<cfqueryparam value="Product-#ARGUMENTS.searchType#" cfsqltype="cf_sql_varchar">
@@ -149,7 +149,7 @@
 			</cfcase>
 			<cfdefaultcase>
 				<cfset LOCAL.SourceDisplayOrder="">
-				<cfif ListFindNoCase("hopper-car,tank-cars,railyard-accessories,hazarsolve",ARGUMENTS.searchType)>
+				<cfif ListFindNoCase("hopper-car,tank-car,railyard-accessories,hazarsolve",ARGUMENTS.searchType)>
 					<cfquery name="LOCAL.GetDisplayOrder" datasource="#APPLICATION.DSN#">
 						select displayOrder from t_Category
 						where CategoryAlias=<cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.searchType#">
