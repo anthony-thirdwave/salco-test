@@ -1,9 +1,9 @@
 <cfset sSearchCategory=StructNew()>
 
-<cfset sSearchCategory["Product-hopper-car"]="Hopper Cars">
+<cfset sSearchCategory["Product-hopper-car"]="Hopper Car">
 <cfset sSearchCategory["Product-intermodal-containers"]="Intermodal Container">
 <cfset sSearchCategory["Product-railyard-accessories"]="Rail/Yard Accessories">
-<cfset sSearchCategory["Product-tank-cars"]="Tank Cars">
+<cfset sSearchCategory["Product-tank-car"]="Tank Car">
 <cfset sSearchCategory["SiteContent"]="Site">
 
 

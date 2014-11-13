@@ -881,7 +881,7 @@
 		<cfset StructInsert(LOCAL.sSearch,"ProductName","Product Name")>
 		<cfset StructInsert(LOCAL.sSearch,"ProductNum","Product Number")>
 		<cfset StructInsert(LOCAL.sSearch,"hopper-car","Hopper Car Parts")>
-		<cfset StructInsert(LOCAL.sSearch,"tank-cars","Tank Car Parts")>
+		<cfset StructInsert(LOCAL.sSearch,"tank-car","Tank Car Parts")>
 		<cfset StructInsert(LOCAL.sSearch,"railyard-accessories","Rail/Yard Accessories")>
 		<cfset StructInsert(LOCAL.sSearch,"hazarsolve","Hazarsolve")>
 	
