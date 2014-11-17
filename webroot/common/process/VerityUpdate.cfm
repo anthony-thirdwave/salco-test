@@ -1,14 +1,14 @@
 <cfsetting requesttimeout="3000" ShowDebugOutput="0">
 
 <cfparam name="SourceTopLevelCategoryID" default="#APPLICATION.defaultSiteCategoryID#">
+
+<!--- <cfset SourceTopLevelCategoryID=2758> --->
+
 <cfquery name="GetLocales" datasource="#APPLICATION.DSN#">
     select LocaleID,LocaleCode,LanguageID,LabelName As LanguageName from
 	t_Locale LEFT OUTER JOIN
 	t_Label ON t_Locale.LanguageID=t_Label.LabelID
     order by LocaleID
-</cfquery>
-<cfquery name="GetParentDisplayOrder" datasource="#APPLICATION.DSN#">
-    select DisplayOrder from t_category Where CategoryID=<cfqueryparam value="#SourceTopLevelCategoryID#" cfsqltype="cf_sql_integer">
 </cfquery>
 
 <cfset sLocaleCode=StructNew()>
@@ -33,10 +33,10 @@
 	returnVariable="qGetTopProductFamily">
 	
 <cfloop index="ThisTopCategoryID" list="#lSiteID#">
-    <cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
-        select DisplayOrder from t_Category Where CategoryID=<cfqueryparam value="#Val(ThisTopCategoryID)#" cfsqltype="cf_sql_integer">
-    </cfquery>
     <cfloop index="ThisLocaleID" list="#ValueList(GetLocales.LocaleID)#">
+	    <cfquery name="GetDisplayOrder" datasource="#APPLICATION.DSN#">
+	        select CategoryLocaleDisplayOrder as displayOrder from t_CategoryLocaleMeta Where CategoryID=<cfqueryparam value="#Val(ThisTopCategoryID)#" cfsqltype="cf_sql_integer"> and localeID=#ThisLocaleID#
+	    </cfquery>
         <cfset ThisCollectionName="#application.collectionname##ThisLocaleID#">
         <cfoutput><p>Creating collection #APPLICATION.CollectionPath##ThisCollectionName#...</p></cfoutput>
         <cftry>
@@ -68,7 +68,7 @@
         <cfset qVerity=QueryNew("Key,Title,Body,Custom1,Custom2,Custom3,Custom4,Category,CategoryTree,UrlPath")>
 
         <cfloop query="GetCats">
-			<cfoutput>processing #GetCats.CategoryNameDerived#<br></cfoutput>
+			<cfoutput>processing #GetCats.CategoryNameDerived# #GetCats.categoryID#<br></cfoutput>
 			<cfif GetCats.CategoryActive IS "0">
 				<cfset lCategoryNotActive=ListAppend(lCategoryNotActive,Val(GetCats.CategoryID))>
 			<cfelseif ListFindNoCase(lCategoryNotActive,GetCats.ParentID)>
@@ -76,27 +76,53 @@
 			<cfelseif GetCats.ParentID IS "5731"><!--- Orphan Products --->
 				<cfset lCategoryNotActive=ListAppend(lCategoryNotActive,Val(GetCats.CategoryID))>
 			<cfelse>
-	            <cfstoredproc procedure="sp_GetContents" datasource="#APPLICATION.DSN#">
+				<cfset thisCategoryID=GetCats.CategoryID>
+				<cfset thisCategoryPropertiesID=GetCats.categoryPropertiesID>
+				<cfset thisCategoryTypeID=GetCats.CategoryTypeID>
+				<cfset thisCategoryLocalePropertiesPacket=GetCats.CategoryLocalePropertiesPacket>
+
+				<cfif thisCategoryTypeID IS "80"><!--- Repeated page--->
+					<cfset thisCategoryID=GetCats.sourceID>
+					<cfstoredproc procedure="sp_GetPage" datasource="#APPLICATION.DSN#">
+						<cfprocresult name="GetPagePrime" maxrows="1">
+						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(GetCats.sourceID)#" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#APPLICATION.LocaleID#" null="No">
+						<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="categoryActiveDerived" value="" null="Yes">
+					</cfstoredproc>
+					<cfset thisCategoryTypeID=GetPagePrime.CategoryTypeID>
+					<cfset thisCategoryLocalePropertiesPacket=GetPagePrime.CategoryLocalePropertiesPacket>
+					<cfset Key="#GetCats.CategoryID#">
+		            <cfset Title="#GetCats.CategoryNameDerived#">
+		            <cfset UrlPath=getCats.CategoryAlias>
+		            <cfset Body="#GetCats.CategoryNameDerived# #GetCats.CategoryName# #GetPagePrime.CategoryLocalePropertiesPacket#">
+					<cfset ThisCategory="SiteContent">
+					<cfset Custom1=""><!--- Description --->
+					<cfset Custom2=""><!--- CategoryImageHeader --->
+					<cfset Custom3=""><!--- Part No --->
+					<cfset Custom4="#GetPagePrime.CategoryTypeID#">
+				<cfelse>	
+		            <cfset Key="#GetCats.CategoryID#">
+		            <cfset Title="#GetCats.CategoryNameDerived#">
+		            <cfset UrlPath=getCats.CategoryAlias>
+		            <cfset Body="#GetCats.CategoryNameDerived# #GetCats.CategoryName# #GetCats.CategoryLocalePropertiesPacket#">
+					<cfset ThisCategory="SiteContent">
+					<cfset Custom1=""><!--- Description --->
+					<cfset Custom2=""><!--- CategoryImageHeader --->
+					<cfset Custom3=""><!--- Part No --->
+					<cfset Custom4="#GetCats.CategoryTypeID#">
+				</cfif>
+
+				<cfstoredproc procedure="sp_GetContents" datasource="#APPLICATION.DSN#">
 	                <cfprocresult name="GetContentList">
 	                <cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#ThisLocaleID#" null="No">
-	                <cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(GetCats.CategoryID)#" null="No">
+	                <cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="CategoryID" value="#Val(thisCategoryID)#" null="No">
 	                <cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="ContentPositionID" value="401" null="No">
 	                <cfprocparam type="In" cfsqltype="CF_SQL_BIT" dbvarname="ContentActiveDerived" value="1" null="No">
 	            </cfstoredproc>
-	
-	            <cfset Key="#GetCats.CategoryID#">
-	            <cfset Title="#GetCats.CategoryNameDerived#">
-	            <cfset UrlPath=getCats.CategoryAlias>
-	            <cfset Body="#GetCats.CategoryNameDerived# #GetCats.CategoryName# #GetCats.CategoryLocalePropertiesPacket#">
-				<cfset ThisCategory="SiteContent">
-				<cfset Custom1=""><!--- Description --->
-				<cfset Custom2=""><!--- CategoryImageHeader --->
-				<cfset Custom3=""><!--- Part No --->
-				<cfset Custom4="#GetCats.CategoryTypeID#">
-	
-	            <cfif GetCats.CategoryTypeID IS "64"><!--- Product --->
+
+	            <cfif thisCategoryTypeID IS "64"><!--- Product --->
 	                <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-	                    select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> 
+	                    select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#Val(thisCategoryID)#" cfsqltype="cf_sql_integer"> 
 						And LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer">
 	                    AND AttributeValue <> <cfqueryparam value="" cfsqltype="cf_sql_varchar">
 					</cfquery>
@@ -107,7 +133,7 @@
 	                </cfoutput>
 	                <cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
 	                    select * from qry_GetTextBlock WHERE Entity=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar"> and 
-						KeyID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> And 
+						KeyID=<cfqueryparam value="#Val(thisCategoryID)#" cfsqltype="cf_sql_integer"> And 
 						LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer">
 	                </cfquery>
 	                <cfoutput query="GetProductProps2">
@@ -138,13 +164,14 @@
 					<cfloop query="qGetTopProductFamily">
 						<cfif Left(GetCats.DisplayOrder,Len(qGetTopProductFamily.DisplayOrder)) IS qGetTopProductFamily.DisplayOrder>
 							<cfset ThisCategory="Product-#qGetTopProductFamily.CategoryAlias#">
+							<cfoutput>#ThisCategory#<br></cfoutput>
 						</cfif>
 					</cfloop>
 	            </cfif>
 				
-				<cfif GetCats.CategoryTypeID IS "62"><!--- Product -Family--->
+				<cfif thisCategoryTypeID IS "62"><!--- Product -Family--->
 	                <cfquery name="GetProductProps" datasource="#APPLICATION.DSN#">
-	                    select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> And
+	                    select * from t_ProductAttribute WHERE CategoryID=<cfqueryparam value="#Val(thisCategoryID)#" cfsqltype="cf_sql_integer"> And
 						LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer"> AND 
 						AttributeValue <> <cfqueryparam value="" cfsqltype="cf_sql_varchar">
 	                </cfquery>
@@ -155,7 +182,7 @@
 	                </cfoutput>
 	                <cfquery name="GetProductProps2" datasource="#APPLICATION.DSN#">
 	                    select * from qry_GetTextBlock WHERE Entity=<cfqueryparam value="t_Category" cfsqltype="cf_sql_varchar"> and 
-						KeyID=<cfqueryparam value="#Val(GetCats.CategoryID)#" cfsqltype="cf_sql_integer"> And 
+						KeyID=<cfqueryparam value="#Val(thisCategoryID)#" cfsqltype="cf_sql_integer"> And 
 						LanguageID=<cfqueryparam value="#Val(slanguageID[ThisLocaleID])#" cfsqltype="cf_sql_integer">
 	                </cfquery>
 	                <cfoutput query="GetProductProps2">
@@ -182,15 +209,15 @@
 	            </cfif>
 				
 	            <cfquery name="GetPropertiesPacket" datasource="#APPLICATION.DSN#">
-	                select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(GetCats.categoryPropertiesID)#" cfsqltype="cf_sql_integer">
+	                select * from t_Properties Where PropertiesID=<cfqueryparam value="#Val(thisCategoryPropertiesID)#" cfsqltype="cf_sql_integer">
 	            </cfquery>
 	            <cfset Body="#Body# #GetpropertiesPacket.PropertiesPacket#">
 	
-				 <cfif IsWddx(GetCats.CategoryLocalePropertiesPacket)>
-                    <cfwddx action="WDDX2CFML" input="#GetCats.CategoryLocalePropertiesPacket#" output="sContentLocalePropertiesPacket">
+				 <cfif IsWddx(thisCategoryLocalePropertiesPacket)>
+                    <cfwddx action="WDDX2CFML" input="#thisCategoryLocalePropertiesPacket#" output="sCategoryLocalePropertiesPacket">
 
-                    <cfif StructKeyExists(sContentLocalePropertiesPacket,"CategoryImageHeader") and sContentLocalePropertiesPacket.CategoryImageHeader IS NOT "">
-                        <cfset Custom2="#sContentLocalePropertiesPacket.CategoryImageHeader#">
+                    <cfif StructKeyExists(sCategoryLocalePropertiesPacket,"CategoryImageHeader") and sCategoryLocalePropertiesPacket.CategoryImageHeader IS NOT "">
+                        <cfset Custom2="#sCategoryLocalePropertiesPacket.CategoryImageHeader#">
                     </cfif>
                 </cfif>
 				
@@ -218,12 +245,12 @@
 	            </cfoutput>
 	
 	            <cfquery name="getCategoryNameTree" datasource="#APPLICATION.dsn#">
-	                select dbo.fn_getCategoryNameHierarchyList(<cfqueryparam value="#GetCats.CategoryID#" cfsqltype="cf_sql_integer">) as categoryNameTree
+	                select dbo.fn_getCategoryNameHierarchyList(<cfqueryparam value="#thisCategoryID#" cfsqltype="cf_sql_integer">) as categoryNameTree
 	            </cfquery>
 	            <cfset CategoryNameList=getCategoryNameTree.categoryNameTree>
 	
 	            <cfquery name="getCategoryAliasTree" datasource="#APPLICATION.dsn#">
-	                select dbo.fn_getCategoryAliasHierarchyList(<cfqueryparam value="#GetCats.CategoryID#" cfsqltype="cf_sql_integer">) as categoryAliasTree
+	                select dbo.fn_getCategoryAliasHierarchyList(<cfqueryparam value="#thisCategoryID#" cfsqltype="cf_sql_integer">) as categoryAliasTree
 	            </cfquery>
 	            <cfset CategoryTree=getCategoryAliasTree.categoryAliasTree>
 	
@@ -260,20 +287,7 @@
     </cfloop>
 </cfloop>
 
-
-
 <!--- after the update runs, drop the tagCloud, which will be recreated when called again --->
 <cfif structKeyExists(APPLICATION,"tagCloud")>
     <cfset temp=structdelete(APPLICATION,"tagCloud")>
 </cfif>
-
-<!---
-<cfquery name="getThis" dbtype="query">
-    SELECT *
-      FROM qVerity
-     WHERE [key]=19
-</cfquery>
-
-<cfdump var="#getThis#"> --->
-
-
