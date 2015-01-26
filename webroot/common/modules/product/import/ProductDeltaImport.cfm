@@ -20,6 +20,13 @@
 	<cfset sImportFiles["delete"]="#ExpandPath('/common/incoming/import/productDelta/delete.csv')#">
 </cfif>
 
+<!--- 
+	5731: ID of Orphan Products
+ --->
+<cfset defaultProductFamilyID="6734">
+
+
+
 <cfset sColumnName=structNew()>
 <cfset sColumnName["Column_1"]="fpartno">
 <cfset sColumnName["Column_2"]="frev">
@@ -30,6 +37,7 @@
 <cfset sColumnName["Column_7"]="fccadfile1">
 <cfset sColumnName["Column_8"]="fccadfile2">
 <cfset sColumnName["Column_9"]="fccadfile3">
+<cfset sColumnName["Column_10"]="lsubpartno">
 
 <cfset sAttributeID=StructNew()>
 <cfset StructInsert(sAttributeID,"ProductDescription","7",1)><!--- ProductDescription --->
@@ -95,6 +103,7 @@
 					<cfset ThisPublicDrawing="#Trim(ThisFile)#">
 					<cfset ThisPublicDrawingSize="#Trim(ThisFileSize)#">
 					<cfset ThisPartNumber="#Trim(sRow.FPartNo)#">
+					<cfset thisLSubPartNo="#Trim(sRow.lsubpartno)#">
 					
 					<cfif ThisPublicDrawing IS NOT "" and fileExists(expandPath(ThisPublicDrawing)) IS "0">
 						<cfset LogTextElement="#LogTextElement##CRLF#+#expandPath(ThisPublicDrawing)# does not exist">
@@ -119,12 +128,40 @@
 							<cfif GetTargetProduct.RecordCount GTE "1">
 								<!--- update product --->
 								
+								<cfset thisNewLRelatedPageID="">
+								<cfset lPartNoMissing="">
+								<cfloop index="thisPartNo" list="#sRow.lsubpartno#">
+									<cfinvoke component="/com/product/producthandler" method="GetProductByProductNo" returnVariable="thisPartCategoryID" PartNo="#thisPartNo#">
+									<cfif val(thisPartCategoryID) GT "0">
+										<cfset thisNewLRelatedPageID=listAppend(thisNewLRelatedPageID,thisPartCategoryID)>
+									<cfelse>
+										<cfset lPartNoMissing=ListAppend(lPartNoMissing,thisPartNo)>
+									</cfif>
+								</cfloop>
+
 								<cfloop query="GetTargetProduct">
+									<cfquery name="getProperties" datasource="#APPLICATION.DSN#">
+										select * from qry_GetCategoryLocale
+										where categoryID=<cfqueryparam value="#GetTargetProduct.CategoryID#" cfsqltype="cf_sql_integer">
+										and localeID=<cfqueryparam value="#APPLICATION.defaultLocaleID#" cfsqltype="cf_sql_integer">
+									</cfquery>
+
+									<cfset sProperties=structNew()>
+									<cfset thisOriginalLRelatedPageID="">
+									<cfset thisPropertiesID="-1">
+									<cfif isWDDX(getProperties.propertiesPacket)>
+										<cfset thisPropertiesID=getProperties.propertiesID>
+										<cfwddx action="WDDX2CFML" input="#getProperties.propertiesPacket#" output="sProperties">
+										<cfif structKeyExists(sProperties, "lRelatedPageID") and sProperties.lRelatedPageID is NOT "">
+											<cfset thisOriginalLRelatedPageID=sProperties.lRelatedPageID>
+										</cfif>
+									</cfif>
+
 									<cfif Commit>
 										<cfset LogTextElement="#LogTextElement##CRLF#+Working on #GetTargetProduct.CategoryID# in CMS">
 										<cfset ThisWasUpdated="0">
 										
-										<cfif hash(GetTargetProduct.CategoryName) IS NOT Hash(Trim(sRow.fdescript))>
+										<cfif trim(sRow.fdescript) IS NOT "" and hash(GetTargetProduct.CategoryName) IS NOT Hash(Trim(sRow.fdescript))>
 											<cfquery name="UpdateCategory" datasource="#APPLICATION.DSN#">
 												update t_Category set CategoryName=<cfqueryparam value="#Trim(sRow.fdescript)#" cfsqltype="cf_sql_varchar">
 												where CategoryID=<cfqueryparam value="#Val(GetTargetProduct.CategoryID)#" cfsqltype="cf_sql_integer">
@@ -133,8 +170,22 @@
 											<cfset LogTextElement="#LogTextElement##CRLF#+++Updated Name: ""#GetTargetProduct.CategoryName#"" -> ""#sRow.fdescript#"" (#GetTargetProduct.CategoryID#)">
 										</cfif>
 										
+										<cfif thisNewLRelatedPageID IS NOT "" and hash(thisOriginalLRelatedPageID) IS NOT hash(thisNewLRelatedPageID) and val(thisPropertiesID) GT "0">
+											<cfset sProperties["LRelatedPageID"]=thisNewLRelatedPageID>
+											<cfwddx action="CFML2WDDX" input="#sProperties#" output="wProperties">
+											<cfquery name="UpdateContent" datasource="#APPLICATION.DSN#">
+												UPDATE t_Properties
+												SET PropertiesPacket=<cfqueryparam value="#Trim(wProperties)#" cfsqltype="cf_sql_varchar">
+												WHERE PropertiesID=<cfqueryparam value="#val(thisPropertiesID)#" cfsqltype="cf_sql_integer">
+											</cfquery>
+											<cfset ThisWasUpdated="1">
+											<cfset LogTextElement="#LogTextElement##CRLF#+++Updated Sub-Assemblies: ""#thisOriginalLRelatedPageID#"" -> ""#thisNewLRelatedPageID#"" (#GetTargetProduct.CategoryID#)">
+										</cfif>
+										<cfif lPartNoMissing IS NOT "">
+											<cfset LogTextElement="#LogTextElement##CRLF#+++Missing related parts from CMS: #lPartNoMissing#">
+										</cfif>
 										<cfloop index="ThisID" list="#lAttributeID#">
-											<cfset ThisValue=Evaluate("This#sAttribute[ThisID]#")>
+											<cfset ThisValue=trim(Evaluate("This#sAttribute[ThisID]#"))>
 											<cfquery name="test" datasource="#APPLICATION.DSN#">
 												select * from t_ProductAttribute 
 												WHERE 
@@ -143,7 +194,7 @@
 												ProductFamilyAttributeID=<cfqueryparam value="#Val(ThisID)#" cfsqltype="cf_sql_integer">
 											</cfquery>
 											
-											<cfif Hash(Trim(ThisValue)) IS NOT hash(Trim(test.AttributeValue))>
+											<cfif ThisValue IS NOT "" AND Hash(Trim(ThisValue)) IS NOT hash(Trim(test.AttributeValue))>
 												
 												<cfif test.RecordCount GT "0">
 													<cfquery name="update" datasource="#APPLICATION.DSN#">
@@ -185,13 +236,14 @@
 							<cfelse>
 								<!--- new product --->
 								<cfif Commit>
+
 									<cfset MyCategory=CreateObject("component","com.ContentManager.Category")>
 									<cfset MyCategory.Constructor(-1)>
 									<cfset MyCategory.SetProperty("CategoryName",sRow.fdescript)>
 									<cfset MyCategory.SetProperty("CategoryActive",1)>
 									<cfset MyCategory.SetProperty("ShowInNavigation",1)>
 									<cfset MyCategory.SetProperty("CategoryTypeID",64)>
-									<cfset MyCategory.SetProperty("ParentID",5731)>
+									<cfset MyCategory.SetProperty("ParentID",defaultProductFamilyID)>
 									<cfinvoke component="com.ContentManager.CategoryHandler"
 										method="CreateAlias"
 										Name="#sRow.FPartNo#"
@@ -221,6 +273,7 @@
 									<cfset MyCategoryLocale.SetProperty("DefaultCategoryLocale",1)>
 									<cfset MyCategoryLocale.SetProperty("CategoryLocaleActive",1)>
 									<cfset MyCategoryLocale.SetProperty("LocaleID",APPLICATION.DefaultLocaleID)>
+									<cfset MyCategoryLocale.SetProperty("lRelatedPageID","")>
 									<cfset MyCategoryLocale.Save(APPLICATION.WebrootPath,1)>
 								</cfif>
 								
@@ -244,7 +297,7 @@
 </cfloop>
 
 <cfif APPLICATION.Staging>
-	<cfset NotificationEmail="notifications@dev01.thirdwavellc.com">
+<cfset NotificationEmail="lisa_moffat@salcoproducts.com,terry_weaver@salcoproducts.com,notifications@dev01.thirdwavellc.com">
 <cfelse>
 	<cfset NotificationEmail="notifications@dev01.thirdwavellc.com">
 </cfif>
@@ -264,3 +317,4 @@
 	<cfset ARGUMENTS.String=ReplaceNoCase(Trim(ARGUMENTS.String),"#Chr(9)#", "","ALL")>
 	<cfreturn ARGUMENTS.String>
 </cffunction>
+DONE

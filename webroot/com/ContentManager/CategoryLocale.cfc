@@ -101,7 +101,7 @@
 				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRepresentative,CategoryImageRollover,CategoryImageAccent,lRelatedPageID">
 			</cfcase>
 			<cfcase value="64"><!--- Product --->
-				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader">
+				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,lRelatedPageID">
 			</cfcase>
 			<cfcase value="63"><!--- Product Series--->
 				<cfset this.sFields[ThisCategoryTypeID]="CSSClass">
