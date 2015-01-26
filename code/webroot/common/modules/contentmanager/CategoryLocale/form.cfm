@@ -262,11 +262,17 @@
 	<cfif MyCategoryLocale.GetProperty("lRelatedPageID") NEQ "">
 		<cfloop list="#MyCategoryLocale.GetProperty('lRelatedPageID')#" index="thisID">
 			<cfquery name="getArticle" datasource="#APPLICATION.DSN#">
-				SELECT CategoryName, CategoryID FROM t_Category
-				WHERE CategoryID=<cfqueryparam value="#thisID#" cfsqltype="cf_sql_integer">
+				SELECT CategoryName, t_Category.CategoryID, attributeValue
+				FROM t_Category LEFT OUTER JOIN
+				t_ProductAttribute ON t_Category.CategoryID = t_ProductAttribute.CategoryID AND t_ProductAttribute.ProductFamilyAttributeID = 10
+				WHERE t_Category.CategoryID=<cfqueryparam value="#thisID#" cfsqltype="cf_sql_integer">
 			</cfquery>
 			<cfoutput query="getArticle">
-				<cfset articleList=articleList & "<li id=""#CategoryID#""><span class=""handle"">#CategoryName#</span> <a href=""javascript:removeArticle('#CategoryID#');"">remove</a></li>">
+				<cfif attributeValue IS NOT "">
+					<cfset articleList=articleList & "<li id=""#CategoryID#""><span class=""handle"">#CategoryName# (#attributeValue#)</span> <a href=""javascript:removeArticle('#CategoryID#');"">remove</a></li>">
+				<cfelse>
+					<cfset articleList=articleList & "<li id=""#CategoryID#""><span class=""handle"">#CategoryName#</span> <a href=""javascript:removeArticle('#CategoryID#');"">remove</a></li>">
+				</cfif>
 			</cfoutput>
 		</cfloop>
 	</cfif>
