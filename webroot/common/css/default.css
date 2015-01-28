@@ -2023,7 +2023,7 @@ body[class*="product"] .featuredDownloads tbody tr td:nth-child(3)  {
 	display: block;
 	padding-bottom: 5px;
 }
-#applicationForm .formRow:nth-child(9) label[for="emai"] {
+#applicationForm .formRow:nth-child(9) label[for="missive"] {
 	display: inline-block;
 	padding-bottom: 0px;
 }
