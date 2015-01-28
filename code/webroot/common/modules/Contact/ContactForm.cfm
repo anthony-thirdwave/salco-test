@@ -15,7 +15,7 @@
 <cfset lSubject="Hopper Cars,Intermodal Containers,Rail/Yard Accessories,Tank Cars,Other">
 
 <!---  set params ----> 
-<cfset RequiredFormFieldList="firstName,lastName,emai,message,company,subject,phone">
+<cfset RequiredFormFieldList="firstName,lastName,missive,message,company,subject,phone">
 <cfset NonRequiredFormFieldList="address2">
 <cfloop index="i" list="#RequiredFormFieldList#">
 	<cfparam name="form.#i#" default="">
@@ -83,23 +83,23 @@
 			</div>
 			<div class="formRow<cfif formsubmit EQ 1 and len(trim(firstName)) eq 0> errorTxt</cfif>">
 				<label for="firstName">First Name *</label>
-				<cfinput name="firstName" id="firstName" maxlength="50" type="text" value="#form.firstName#" />
+				<cfinput name="firstName" id="firstName" maxlength="50" type="text" value="#HTMLEditFormat(form.firstName)#" />
 			</div>
 			<div class="formRow<cfif formsubmit EQ 1 and len(trim(lastName)) eq 0> errorTxt</cfif>">
 				<label for="lastName">Last Name *</label>
-				<cfinput name="lastName" id="lastName" maxlength="50" type="text" value="#form.lastName#" />
+				<cfinput name="lastName" id="lastName" maxlength="50" type="text" value="#HTMLEditFormat(form.lastName)#" />
 			</div>
 			<div class="formRow">
 				<label for="company">Company</label>
-				<cfinput name="company" id="company" maxlength="50" type="text" value="#form.company#" />
+				<cfinput name="company" id="company" maxlength="50" type="text" value="#HTMLEditFormat(form.company)#" />
 			</div>
 			<div class="formRow">
 				<label for="Phone">Phone Number *</label>
-				<cfinput name="Phone" id="Phone" maxlength="20" type="text" value="#form.Phone#" />
+				<cfinput name="Phone" id="Phone" maxlength="20" type="text" value="#HTMLEditFormat(form.Phone)#" />
 			</div>
-			<div class="formRow<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
-				<label for="emai">Email *</label>
-				<cfinput name="emai" id="emai" maxlength="50" type="text" value="#form.emai#" />
+			<div class="formRow<cfif formsubmit EQ 1 and len(trim(missive)) eq 0> errorTxt</cfif>">
+				<label for="missive">Email *</label>
+				<cfinput name="missive" id="emai" maxlength="50" type="text" value="#HTMLEditFormat(form.missive)#" />
 			</div>
 			<div class="formRow">
 				<label for="state">Preferred method of contact</label>
@@ -109,7 +109,7 @@
 			</div>
 			<div class="formRow memo<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
 				<label for="message">Message *</label>
-				<cftextarea name="message">#FORM.message#</cftextarea>
+				<cftextarea name="message">#HTMLEditFormat(FORM.message)#</cftextarea>
 			</div>
 			
 			<!--- ==================================================== --->
