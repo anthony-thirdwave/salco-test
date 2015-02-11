@@ -226,6 +226,20 @@ $(document).ready(function(e) {
 					break;
 					
 				}
+                
+                tempSecL=0
+                 $(this).children().each(function(index, element) {
+                    // alert($(this).children().height()); 
+                    tempSecL=tempSecL+$(this).children().height(); 
+                });
+				
+				//alert(tempSecL)
+                
+               
+               
+                  tempHH=tempSecL*2;
+               
+                //alert(tempSecL);
 				
 				$("<style>#hasSubNav-"+index+" ul{width:"+$(this).parent().width()+"px;} #hasSubNav-"+index+":hover ul {height:"+tempHH+"px; "+tempWidt+"}</style>").insertBefore(this);
 				$(this).attr("style","");
@@ -236,7 +250,17 @@ $(document).ready(function(e) {
 			
 			$("#products-navigation ul ul.level-2").each(function(index, element) {
 				$(this).css({height:"auto"});
-				 
+				 //alert($(this).children().height());
+                 tempSecL=0
+                 $(this).children().each(function(index, element) {
+                    tempSecL=tempSecL+$(this).height();
+                    
+                });
+                // 
+                $(this).attr("data-height",tempSecL);
+                $(this).css({minHeight:tempSecL+"px"});
+                
+                
 				temperHi=0;
 				$(this).children().children().each(function(index, element) {
 					moomoo=$(this).children().children().offset();
@@ -267,9 +291,21 @@ $(document).ready(function(e) {
 					
 				}
 				
+				tempSecL=0
+                 $(this).children().each(function(index, element) {
+                    // alert($(this).children().height()); 
+                    tempSecL=tempSecL+$(this).children().height(); 
+                });
 				
-				
-				//alert(tempHH)
+				//alert(tempSecL)
+                
+                //tempHH=tempSecL*1.85;
+                 if(index==2){
+                  tempHH=tempSecL*2; 
+                  //alert(tempHH) 
+                }else{
+                  tempHH=tempSecL*1.85;
+                }
 				
 				$("<style>#hasSubNavP-"+index+" ul{width:"+($(this).parent().width()+24)+"px !important;} #hasSubNavP-"+index+" ul li{width:"+($(this).parent().width()+14)+"px !important;} #hasSubNavP-"+index+" ul li a{width:"+($(this).parent().width()+5)+"px !important;} #hasSubNavP-"+index+" ul .level-3{width:"+($(this).parent().width()+16)+"px !important;margin-left:"+($(this).parent().width()+20)+"px !important;} #hasSubNavP-"+index+":hover ul {height:"+tempHH+"px;}</style>").insertBefore(this);
 				$(this).attr("style","");
