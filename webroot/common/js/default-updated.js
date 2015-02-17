@@ -238,6 +238,9 @@ $(document).ready(function(e) {
                
                
                   tempHH=tempSecL*2;
+                  if(index==1){
+                      tempHH=tempSecL*2.25;
+                  }
                
                 //alert(tempSecL);
 				
