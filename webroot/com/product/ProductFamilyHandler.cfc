@@ -139,7 +139,8 @@
 		<cfargument name="LanguageID" default="#APPLICATION.LanguageID#" type="numeric" required="true">
 		<cfargument name="StartRow" type="numeric">
 		<cfargument name="MaxRows" type="numeric">
-		
+		<cfargument name="lProductID" default="" type="string">
+
 		<cfset VAR LOCAL=StructNew()>
 		
 		<cfinvoke component="/com/product/productFamilyHandler" 
@@ -149,7 +150,11 @@
 			LocaleID="#ARGUMENTS.LocaleID#"
 			LanguageID="#ARGUMENTS.LanguageID#">
 			
-		<cfif IsDefined("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#")>
+		<cfif ARGUMENTS.lProductID IS not "">
+			<cfset LOCAL.lCategoryIDProto="#ARGUMENTS.lProductID#">
+		</cfif>
+
+		<cfif IsDefined("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#_")>
 			<cfset SetVariable("LOCAL.GetProductListPrime",Evaluate("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#"))>
 		<cfelse>
 			<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">

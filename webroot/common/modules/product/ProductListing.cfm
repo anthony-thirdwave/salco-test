@@ -43,118 +43,137 @@
 			<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(qGetCategoryBasicDetails.CategoryAlias)#" addtoken="No">
 		</cfif>
 	</cfif>
-	<cfinvoke component="/com/product/productFamilyHandler" 
-		method="GetProductListBasic" 
-		returnVariable="qGetProductListBasic"
-		ProductFamilyID="#ATTRIBUTES.ProductFamilyID#"
-		LocaleID="#ATTRIBUTES.LocaleID#"
-		LanguageID="#ATTRIBUTES.LanguageID#">
+
+	<cfif ATTRIBUTES.mode IS "displayRelated">
+		<cfinvoke component="/com/product/productHandler" 
+			method="GetRelatedProductIDList"
+			productID="#ATTRIBUTES.ProductID#"
+			returnVariable="lRelatedProductID">
+		<cfset productListCount=listLen(lRelatedProductID)>
+	<cfelse>
+		<cfinvoke component="/com/product/productFamilyHandler" 
+			method="GetProductListBasic" 
+			returnVariable="qGetProductListBasic"
+			ProductFamilyID="#ATTRIBUTES.ProductFamilyID#"
+			LocaleID="#ATTRIBUTES.LocaleID#"
+			LanguageID="#ATTRIBUTES.LanguageID#">
+		
+		<cfinvoke component="/com/product/productHandler" 
+			method="GetProductPartNumber"
+			productID="#ATTRIBUTES.ProductID#"
+			returnVariable="sourceProductPartNumber">
+
+		<cfset productListCount=qGetProductListBasic.RecordCount>
+	</cfif>
 	
-	<cfinvoke component="/com/product/productHandler" 
-		method="GetProductPartNumber"
-		productID="#ATTRIBUTES.ProductID#"
-		returnVariable="sourceProductPartNumber">
+	<cfset SearchNum="5">
+	<cfif NOT IsDefined("StartRow")>
+		<cfset StartRow=1>
+	</cfif>
+	<cfif Val(StartRow) LTE "0">
+		<cfset StartRow=1>
+	</cfif>
+	<cfif Val(StartRow) GT Val(productListCount)>
+		<cfset StartRow=1>
+	</cfif>
+	<cfif ShowAll IS "1">
+		<cfset StartRow=1>
+		<cfset SearchNum=999>
+	</cfif>
+	<cfif NOT IsNumeric(StartRow)>
+		<cfset StartRow="1">
+	</cfif>
+	
+	<cfif ATTRIBUTES.mode IS "displayRelated">
+		<cfinvoke component="/com/product/productFamilyHandler" 
+			method="GetProductList" 
+			returnVariable="qGetProductList"
+			ProductFamilyID="#ATTRIBUTES.ProductFamilyID#"
+			LocaleID="#ATTRIBUTES.LocaleID#"
+			LanguageID="#ATTRIBUTES.LanguageID#"
+			StartRow="#StartRow#"
+			MaxRows="#SearchNum#"
+			lProductID="#lRelatedProductID#">
+	<cfelse>
+		<cfinvoke component="/com/product/productFamilyHandler" 
+			method="GetProductList" 
+			returnVariable="qGetProductList"
+			ProductFamilyID="#ATTRIBUTES.ProductFamilyID#"
+			LocaleID="#ATTRIBUTES.LocaleID#"
+			LanguageID="#ATTRIBUTES.LanguageID#"
+			StartRow="#StartRow#"
+			MaxRows="#SearchNum#">
+	</cfif>
+	
+	<cfif ATTRIBUTES.OmitCurrentProduct and Val(ATTRIBUTES.ProductID) GT "0">
+		<cfquery name="qGetProductList" dbtype="query">
+			select * from qGetProductList
+			where CategoryID <> <cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.ProductID#">
+			order by CategoryNameDerived
+		</cfquery>
+	</cfif>
+	
+	<cfif qGetProductList.RecordCount GT "0">
+		<cfif ATTRIBUTES.Title IS NOT "">
+			<cfoutput><h4>#ATTRIBUTES.Title#</h4></cfoutput>
+		</cfif>
+	</cfif>
 
-	<cfswitch expression="#ATTRIBUTES.Mode#">
-		<cfdefaultcase>
-			<cfset SearchNum="5">
-			<cfif NOT IsDefined("StartRow")>
-				<cfset StartRow=1>
-			</cfif>
-			<cfif Val(StartRow) LTE "0">
-				<cfset StartRow=1>
-			</cfif>
-			<cfif Val(StartRow) GT Val(qGetProductListBasic.RecordCount)>
-				<cfset StartRow=1>
-			</cfif>
-			<cfif ShowAll IS "1">
-				<cfset StartRow=1>
-				<cfset SearchNum=999>
-			</cfif>
-			<cfif NOT IsNumeric(StartRow)>
-				<cfset StartRow="1">
-			</cfif>
-			
-			<cfinvoke component="/com/product/productFamilyHandler" 
-				method="GetProductList" 
-				returnVariable="qGetProductList"
-				ProductFamilyID="#ATTRIBUTES.ProductFamilyID#"
-				LocaleID="#ATTRIBUTES.LocaleID#"
-				LanguageID="#ATTRIBUTES.LanguageID#"
-				StartRow="#StartRow#"
-				MaxRows="#SearchNum#">
-			
-			<cfif ATTRIBUTES.OmitCurrentProduct and Val(ATTRIBUTES.ProductID) GT "0">
-				<cfquery name="qGetProductList" dbtype="query">
-					select * from qGetProductList
-					where CategoryID <> <cfqueryparam cfsqltype="cf_sql_integer" value="#ATTRIBUTES.ProductID#">
-					order by CategoryNameDerived
-				</cfquery>
-			</cfif>
-			
-			<cfif qGetProductList.RecordCount GT "0">
-				<cfif ATTRIBUTES.Title IS NOT "">
-					<cfoutput><h4>#ATTRIBUTES.Title#</h4></cfoutput>
-				</cfif>
-			</cfif>
-
-			<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
-			<cfif qGetProductList.RecordCount GT "0">
-				<cfoutput><div id="ProductListing_#ATTRIBUTES.ProductFamilyID#"></cfoutput>
-				<table class="featuredDownloads" border="0" cellspacing="0" cellpadding="0">
-                <thead>
-				<tr>
-					<th align="left" valign="middle">Product</th>
-					<th align="center" valign="middle" width="110">Part No.</th>
-					<th align="center" valign="middle" width="110">Description</th>
-				</tr>
-                </thead>
-                <tbody>
-				<cfoutput query="qGetProductList">
-					<cfif CurrentRow MOD 2 IS "1">
-						<cfset ThisRowClass="evenRow">
-					<cfelse>
-						<cfset ThisRowClass="oddRow">
-					</cfif>
-					<cfif CurrentRow MOD SearchNum IS "0" or CurrentRow IS qGetProductList.RecordCount>
-						<cfset ThisRowClass="#ThisRowClass# tableBot">
-					</cfif>
-					<tr<cfif ATTRIBUTES.HighlightCurrentProduct and (ATTRIBUTES.ProductID IS qGetProductList.CategoryID or sourceProductPartNumber IS qGetProductList.PartNumber)> class="activeRow"</cfif>>
-						<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#qGetProductList.CategoryNameDerived#</a></td>
-						<td class="#ThisRowClass#" valign="middle" align="left"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#Ucase(qGetProductList.PartNumber)#</a></td>
-						<td class="tableRight #ThisRowClass#" valign="middle" align="left">
-							<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#qGetProductList.ProductDescription#" NumChars="100">
-
-						</td>
-					</tr>
-				</cfoutput></tbody>
-				</table>
-				</div>
-				<cfoutput>
-					<cfif Val(ShowAll) IS "0">
-						<cfset AdditionalText="<a href=""/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=1"">Show All</a>">
-					<cfelse>
-						<cfset AdditionalText="">
-						<div class="pagination"><p><a href="/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=0">Show As Paginated Results</a></p></div>
-					</cfif>
-				</cfoutput>
-				
-				<cfmodule template="/common/modules/utils/pagination.cfm"
-					StartRow="#StartRow#" SearchNum="#SearchNum#"
-					RecordCount="#qGetProductListBasic.RecordCount#"
-					Path="/common/modules/product/ProductListing.cfm"
-					FieldList="ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#"
-					Label="Products"
-					AdditionalText="#AdditionalText#">
+	<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
+	<cfif qGetProductList.RecordCount GT "0">
+		<cfoutput><div id="ProductListing_#ATTRIBUTES.ProductFamilyID#"></cfoutput>
+		<table class="featuredDownloads" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+		<tr>
+			<th align="left" valign="middle">Product</th>
+			<th align="center" valign="middle" width="110">Part No.</th>
+			<th align="center" valign="middle" width="110">Description</th>
+		</tr>
+        </thead>
+        <tbody>
+		<cfoutput query="qGetProductList">
+			<cfif CurrentRow MOD 2 IS "1">
+				<cfset ThisRowClass="evenRow">
 			<cfelse>
-				<cfif ATTRIBUTES.OmitCurrentProduct>
-				
-				<cfelse>
-					<h3>Product List Coming Soon</h3>
-				</cfif>
+				<cfset ThisRowClass="oddRow">
 			</cfif>
-			</div>
-		</cfdefaultcase>
-	</cfswitch>
+			<cfif CurrentRow MOD SearchNum IS "0" or CurrentRow IS qGetProductList.RecordCount>
+				<cfset ThisRowClass="#ThisRowClass# tableBot">
+			</cfif>
+			<tr<cfif ATTRIBUTES.HighlightCurrentProduct and (ATTRIBUTES.ProductID IS qGetProductList.CategoryID or sourceProductPartNumber IS qGetProductList.PartNumber)> class="activeRow"</cfif>>
+				<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#qGetProductList.CategoryNameDerived#</a></td>
+				<td class="#ThisRowClass#" valign="middle" align="left"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#Ucase(qGetProductList.PartNumber)#</a></td>
+				<td class="tableRight #ThisRowClass#" valign="middle" align="left">
+					<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#qGetProductList.ProductDescription#" NumChars="100">
+
+				</td>
+			</tr>
+		</cfoutput></tbody>
+		</table>
+		</div>
+		<cfoutput>
+			<cfif Val(ShowAll) IS "0">
+				<cfset AdditionalText="<a href=""/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=1"">Show All</a>">
+			<cfelse>
+				<cfset AdditionalText="">
+				<div class="pagination"><p><a href="/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=0">Show As Paginated Results</a></p></div>
+			</cfif>
+		</cfoutput>
+		
+		<cfmodule template="/common/modules/utils/pagination.cfm"
+			StartRow="#StartRow#" SearchNum="#SearchNum#"
+			RecordCount="#productListCount#"
+			Path="/common/modules/product/ProductListing.cfm"
+			FieldList="ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#"
+			Label="Products"
+			AdditionalText="#AdditionalText#">
+	<cfelse>
+		<cfif ATTRIBUTES.OmitCurrentProduct>
+		
+		<cfelse>
+			<h3>Product List Coming Soon</h3>
+		</cfif>
+	</cfif>
+	</div>
 </cfif>
 <div style="clear:both"></div>
