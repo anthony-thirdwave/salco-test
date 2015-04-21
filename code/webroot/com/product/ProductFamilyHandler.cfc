@@ -154,9 +154,16 @@
 			<cfset LOCAL.lCategoryIDProto="#ARGUMENTS.lProductID#">
 		</cfif>
 
+		<cfif LOCAL.lCategoryIDProto IS "">
+			<cfset LOCAL.lCategoryIDProto="-1">
+		</cfif>
+		
 		<cfif IsDefined("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#_")>
 			<cfset SetVariable("LOCAL.GetProductListPrime",Evaluate("REQUEST.GetProductListPrime_#Val(ARGUMENTS.ProductFamilyID)#_#val(ARGUMENTS.LocaleID)#"))>
 		<cfelse>
+			<cfif LOCAL.lCategoryIDProto IS "">
+				<cfset LOCAL.lCategoryIDProto="-1">
+			</cfif>
 			<cfstoredproc procedure="sp_GetPages" datasource="#APPLICATION.DSN#">
 				<cfprocresult name="LOCAL.GetProductListPrime">
 				<cfprocparam type="In" cfsqltype="CF_SQL_INTEGER" dbvarname="LocaleID" value="#val(ARGUMENTS.LocaleID)#" null="No">
