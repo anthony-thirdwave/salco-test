@@ -142,8 +142,18 @@
 					<cfif ListFind("62,64",CategoryTypeID)>
 						<cfif ListLen(CategoryThreadList) GTE "4">
 							<ul id="acc3">
-							<li class="treeHeader"><cfoutput>#ListGetAt(CategoryThreadName,3)#</cfoutput></li>
-							<cfmodule template="/common/modules/display/navigation/dsp_NavProduct.cfm" CategoryID="#ListGetAt(CategoryThreadList,4)#" CategoryThreadList="#CategoryThreadList#">
+							<cfif listFind(CategoryThreadList,APPLICATION.orphanProductFamilyCategoryID) IS "0">
+								<li class="treeHeader"><cfoutput>#ListGetAt(CategoryThreadName,3)#</cfoutput></li>
+								<cfmodule template="/common/modules/display/navigation/dsp_NavProduct.cfm" CategoryID="#ListGetAt(CategoryThreadList,4)#" CategoryThreadList="#CategoryThreadList#">
+							<cfelse>
+								<li class="treeHeader">Sub-Assemblies</li>
+								<cfif isDefined("URL.return") and URL.return is not "">
+									<div id="productNav">
+										<ul>
+										<cfoutput><li><a href="#APPLICATION.utilsObj.parseCategoryUrl(URL.return)#" data-CategoryID="" data-CategoryThreadList="" data-HasChildren="false">Return to Main Assembly</a></li></cfoutput>
+									</ul>
+								</cfif>
+							</cfif>
 							</ul>
 						</cfif>
 					<cfelseif ListLen(CategoryThreadList) GTE "3">
@@ -172,10 +182,22 @@
 					<cfelseif ListFindNoCase("64",CategoryTypeID)>
 						<cfoutput>
 							<cfif ListLen(CategoryThreadList) GTE "3">
-								<h3>#ListGetAt(CategoryThreadName,3)#</h3>
+								<cfif listFind(CategoryThreadList,APPLICATION.orphanProductFamilyCategoryID) IS "0">
+									<h3>#ListGetAt(CategoryThreadName,3)#</h3>
+								<cfelse>
+									<cfif ListLen(CategoryThreadList) GTE "4">
+										<h3>Sub-Assembly</h3>
+									<cfelse>
+										<h3>Product</h3>
+									</cfif>
+								</cfif>
 							</cfif>
 							<cfif ListLen(CategoryThreadList) GTE "4">
-								<h2>#ListGetAt(CategoryThreadName,4)#</h2>
+								<cfif listFind(CategoryThreadList,APPLICATION.orphanProductFamilyCategoryID) IS "0">
+									<h2>#ListGetAt(CategoryThreadName,4)#</h2>
+								<cfelse>
+									<h2>#ListLast(CategoryThreadName)#</h2>
+								</cfif>
 							</cfif>
 							<h1>#CurrentCategoryName#</h1>
 						</cfoutput>
