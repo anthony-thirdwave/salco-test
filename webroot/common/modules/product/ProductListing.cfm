@@ -6,6 +6,7 @@
 <cfparam name="ATTRIBUTES.Title" default="">
 <cfparam name="ATTRIBUTES.OmitCurrentProduct" default="no">
 <cfparam name="ATTRIBUTES.HighlightCurrentProduct" default="No">
+<cfparam name="ATTRIBUTES.currentPageAlias" default="">
 
 <cfparam name="ShowAll" default="0">
 
@@ -141,8 +142,13 @@
 				<cfset ThisRowClass="#ThisRowClass# tableBot">
 			</cfif>
 			<tr<cfif ATTRIBUTES.HighlightCurrentProduct and (ATTRIBUTES.ProductID IS qGetProductList.CategoryID or sourceProductPartNumber IS qGetProductList.PartNumber)> class="activeRow"</cfif>>
-				<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#qGetProductList.CategoryNameDerived#</a></td>
-				<td class="#ThisRowClass#" valign="middle" align="left"><a href="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">#Ucase(qGetProductList.PartNumber)#</a></td>
+				<cfif ATTRIBUTES.mode IS "displayRelated" and ATTRIBUTES.currentPageAlias IS NOT "">
+					<cfset thisURL="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#&return=#ATTRIBUTES.currentPageAlias#">
+				<cfelse>
+					<cfset thisURL="#APPLICATION.utilsObj.parseCategoryUrl(qGetProductList.CategoryAlias)#?StartRow=#StartRow#">
+				</cfif>
+				<td class="tableLeft #ThisRowClass#" valign="middle"><a href="#thisURL#">#qGetProductList.CategoryNameDerived#</a></td>
+				<td class="#ThisRowClass#" valign="middle" align="left"><a href="#thisURL#">#Ucase(qGetProductList.PartNumber)#</a></td>
 				<td class="tableRight #ThisRowClass#" valign="middle" align="left">
 					<cfmodule template="/common/modules/Utils/TruncateText.cfm" Input="#qGetProductList.ProductDescription#" NumChars="100">
 
@@ -171,7 +177,11 @@
 		<cfif ATTRIBUTES.OmitCurrentProduct>
 		
 		<cfelse>
-			<h3>Product List Coming Soon</h3>
+			<cfif ATTRIBUTES.mode IS "displayRelated">
+
+			<cfelse>
+				<h3>Product List Coming Soon</h3>
+			</cfif>
 		</cfif>
 	</cfif>
 	</div>

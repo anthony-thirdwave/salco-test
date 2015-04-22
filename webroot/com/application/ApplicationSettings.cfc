@@ -79,6 +79,8 @@
 		<cfset APPLICATION.BirthdayTopicID="6075">
 		<cfset APPLICATION.DepartmentCategoryID="6066">
 		<cfset APPLICATION.EmployeeCategoryID="6065">
+
+		<cfset APPLICATION.orphanProductFamilyCategoryID="5731">
 		
 		<!---
 			determine how content.cfm is called - default .htaccess is formatted to deal with the following permutations
