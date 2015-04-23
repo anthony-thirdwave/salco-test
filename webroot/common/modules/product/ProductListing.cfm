@@ -1,4 +1,4 @@
-<cfsetting ShowDebugOutput="0">
+<cfsetting ShowDebugOutput="false">
 
 <cfparam name="ATTRIBUTES.ProductID" default="-1">
 <cfparam name="ATTRIBUTES.ProductFamilyID" default="-1">
@@ -23,8 +23,16 @@
 	<cfparam name="ATTRIBUTES.LocaleID" default="#APPLICATION.DefaultLocaleID#">
 </cfif>
 
+<cfif IsDefined("URL.ProductID")>
+	<cfset ATTRIBUTES.ProductID=Val(URL.ProductID)>
+</cfif>
+
 <cfif IsDefined("URL.ProductFamilyID")>
 	<cfset ATTRIBUTES.ProductFamilyID=Val(URL.ProductFamilyID)>
+</cfif>
+
+<cfif IsDefined("URL.Mode")>
+	<cfset ATTRIBUTES.Mode=Trim(URL.Mode)>
 </cfif>
 
 <cfif Val(ATTRIBUTES.ProductFamilyID) LTE "0" AND Val(ATTRIBUTES.ProductID) GT "0">
@@ -37,11 +45,13 @@
 <cfif Val(ATTRIBUTES.ProductFamilyID) GT "0" AND Val(ATTRIBUTES.LanguageID) GT "0">
 	<cfif ListLast(GetBaseTemplatePath(),"\") IS "ProductListing.cfm">
 		<cfif (ListLen(CGI.HTTP_Referer,"/") GTE "2" and FindNoCase("salco",ListGetAt(CGI.HTTP_Referer,2,"/")) IS "0") or CGI.HTTP_Referer IS "">
-			<cfinvoke component="/com/ContentManager/CategoryHandler" 
-				method="GetCategoryBasicDetails" 
-				returnVariable="qGetCategoryBasicDetails"
-				CategoryID="#ATTRIBUTES.ProductFamilyID#">
-			<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(qGetCategoryBasicDetails.CategoryAlias)#" addtoken="No">
+			<cfif 0>
+				<cfinvoke component="/com/ContentManager/CategoryHandler" 
+					method="GetCategoryBasicDetails" 
+					returnVariable="qGetCategoryBasicDetails"
+					CategoryID="#ATTRIBUTES.ProductFamilyID#">
+				<cflocation url="#APPLICATION.utilsObj.parseCategoryUrl(qGetCategoryBasicDetails.CategoryAlias)#" addtoken="No">
+			</cfif>
 		</cfif>
 	</cfif>
 
@@ -120,9 +130,9 @@
 		</cfif>
 	</cfif>
 
-	<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#" class="pagList"></cfoutput>
+	<cfoutput><div id="pagList_#ATTRIBUTES.ProductFamilyID#_#ATTRIBUTES.Mode#" class="pagList"></cfoutput>
 	<cfif qGetProductList.RecordCount GT "0">
-		<cfoutput><div id="ProductListing_#ATTRIBUTES.ProductFamilyID#"></cfoutput>
+		<cfoutput><div id="ProductListing_#ATTRIBUTES.ProductFamilyID#_#ATTRIBUTES.Mode#"></cfoutput>
 		<table class="featuredDownloads" border="0" cellspacing="0" cellpadding="0">
         <thead>
 		<tr>
@@ -159,10 +169,10 @@
 		</div>
 		<cfoutput>
 			<cfif Val(ShowAll) IS "0">
-				<cfset AdditionalText="<a href=""/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=1"">Show All</a>">
+				<cfset AdditionalText="<a href=""/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&mode=#ATTRIBUTES.Mode#&ShowAll=1&productID=#ATTRIBUTES.ProductID#"">Show All</a>">
 			<cfelse>
 				<cfset AdditionalText="">
-				<div class="pagination"><p><a href="/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&ShowAll=0">Show As Paginated Results</a></p></div>
+				<div class="pagination"><p><a href="/common/modules/product/ProductListing.cfm?ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&mode=#ATTRIBUTES.Mode#&ShowAll=0&productID=#ATTRIBUTES.ProductID#">Show As Paginated Results</a></p></div>
 			</cfif>
 		</cfoutput>
 		
@@ -170,7 +180,7 @@
 			StartRow="#StartRow#" SearchNum="#SearchNum#"
 			RecordCount="#productListCount#"
 			Path="/common/modules/product/ProductListing.cfm"
-			FieldList="ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#"
+			FieldList="ProductFamilyID=#URLEncodedFormat(ATTRIBUTES.ProductFamilyID)#&mode=#ATTRIBUTES.Mode#&productID=#ATTRIBUTES.ProductID#"
 			Label="Products"
 			AdditionalText="#AdditionalText#">
 	<cfelse>
