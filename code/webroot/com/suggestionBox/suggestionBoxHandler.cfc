@@ -140,7 +140,11 @@
 		<!--- keep scope local to function --->
 		<cfset var local = structNew() />
 
-		<cfdump var="#ARGUMENTS#"><cfabort>
+		<cfif ARGUMENTS.cfgridsortcolumn IS "">
+			<cfset ARGUMENTS.cfgridsortcolumn="dateSubmitted">
+			<cfset ARGUMENTS.cfgridsortdirection="desc">
+		</cfif>
+
 		<!--- get the results --->
 		<cfquery name="LOCAL.getResults" datasource="#APPLICATION.Data_DSN#">
 			SELECT t_suggestions.suggestionID, 
