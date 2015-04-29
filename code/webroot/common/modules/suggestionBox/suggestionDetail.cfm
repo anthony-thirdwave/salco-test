@@ -21,9 +21,9 @@
 				<td><strong>Department</strong></td>
 				<td>#departmentName#</td>
 			</tr>
-			<tr>
+			<tr valign="top">
 				<td><strong>Suggestion</strong></td>
-				<td>#suggestion#</td>
+				<td>#APPLICATION.utilsObj.addBreaks(suggestion)#</td>
 			</tr>
 			<tr>
 				<td><strong>Date Submitted</strong></td>

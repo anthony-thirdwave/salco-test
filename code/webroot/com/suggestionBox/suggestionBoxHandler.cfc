@@ -140,19 +140,20 @@
 		<!--- keep scope local to function --->
 		<cfset var local = structNew() />
 
+		<cfdump var="#ARGUMENTS#"><cfabort>
 		<!--- get the results --->
 		<cfquery name="LOCAL.getResults" datasource="#APPLICATION.Data_DSN#">
 			SELECT t_suggestions.suggestionID, 
-						 t_suggestions.employeeName, 
-						 t_suggestions.employeeEmail, 
-						 CAST ( t_suggestions.suggestion AS nvarchar ) AS suggestionText, 
-						 t_suggestions.departmentID, 
-						 t_suggestions.areaID, 
-						 t_suggestions.anonymous, 
-						 t_Label_1.LabelName AS departmentName, 
-						 t_Label_2.LabelName AS areaName, 
-						 t_suggestions.dateSubmitted,
-						 '<img src="/common/images/admin/icon_magnify.gif" width="12" height="12" />' as edit
+			 t_suggestions.employeeName, 
+			 t_suggestions.employeeEmail, 
+			 CAST ( t_suggestions.suggestion AS nvarchar ) AS suggestionText, 
+			 t_suggestions.departmentID, 
+			 t_suggestions.areaID, 
+			 t_suggestions.anonymous, 
+			 t_Label_1.LabelName AS departmentName, 
+			 t_Label_2.LabelName AS areaName, 
+			 t_suggestions.dateSubmitted,
+			 '<img src="/common/images/admin/icon_magnify.gif" width="12" height="12" />' as edit
 
 			FROM t_Label AS t_Label_1 
 				INNER JOIN t_suggestions ON t_Label_1.LabelID = t_suggestions.departmentID 

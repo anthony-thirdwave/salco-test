@@ -128,6 +128,7 @@ textarea {
   border-radius: 12px;
   padding: 5px;
   background: rgba(179,41,68,1);
+  cursor: pointer;
   /*gradient*/
   background: -moz-linear-gradient(top, rgba(179,41,68,1) 0%, rgba(178,42,69,1) 40%, rgba(110,24,43,1) 100%);
   background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(179,41,68,1)), color-stop(40%, rgba(178,42,69,1)), color-stop(100%, rgba(110,24,43,1)));
