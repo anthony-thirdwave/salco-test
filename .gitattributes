@@ -48,6 +48,7 @@ webroot/com/product/ProductSpecsHandler.cfc -text
 webroot/com/product/ResourceHandler.cfc -text
 webroot/com/product/TextBlockHandler.cfc -text
 webroot/com/product/search.cfc -text
+webroot/com/suggestionBox/suggestionBoxHandler.cfc -text
 webroot/com/taxonomy/TopicHandler.cfc -text
 webroot/com/time/Time.cfc -text
 webroot/com/utils/Captcha.cfc -text
@@ -91,6 +92,7 @@ webroot/common/admin/PulldownOptionsManager/index.cfm -text
 webroot/common/admin/RedirectManager/edit.cfm -text
 webroot/common/admin/RedirectManager/index.cfm -text
 webroot/common/admin/Search/index.cfm -text
+webroot/common/admin/SuggestionManager/index.cfm -text
 webroot/common/admin/System/ContentGenerate.cfm -text
 webroot/common/admin/UserManager/UserModify.cfm -text
 webroot/common/admin/UserManager/index.cfm -text
@@ -507,6 +509,7 @@ webroot/common/js/jquery.patternizer.js -text
 webroot/common/modules/Admin/Bulletin/action.cfm -text
 webroot/common/modules/Admin/Bulletin/bulletin.cfm -text
 webroot/common/modules/Admin/Dashboard/comments.cfm -text
+webroot/common/modules/Admin/Dashboard/suggestions.cfm -text
 webroot/common/modules/Admin/MasterView/dsp_Nav.cfm -text
 webroot/common/modules/Admin/MasterView/mv_Content.cfm -text
 webroot/common/modules/Admin/MasterView/mv_FEPermissions.cfm -text
@@ -657,6 +660,15 @@ webroot/common/modules/security/logoff.cfm -text
 webroot/common/modules/sitemap/SitemapHelper.cfm -text
 webroot/common/modules/sitemap/_sitemapGenerate.cfm -text
 webroot/common/modules/sitemap/sitemap_xml.cfm -text
+webroot/common/modules/suggestionBox/suggestionBox.css -text
+webroot/common/modules/suggestionBox/suggestionBox.js -text
+webroot/common/modules/suggestionBox/suggestionBoxForm.cfm -text
+webroot/common/modules/suggestionBox/suggestionBoxView.cfm -text
+webroot/common/modules/suggestionBox/suggestionCSV.cfm -text
+webroot/common/modules/suggestionBox/suggestionDetail.cfm -text
+webroot/common/modules/suggestionBox/suggestionGrid.cfm -text
+webroot/common/modules/suggestionBox/suggestionGrid.css -text
+webroot/common/modules/suggestionBox/thankYou.css -text
 webroot/common/modules/utils/AddToQueryString.cfm -text
 webroot/common/modules/utils/Copy[!!-~]of[!!-~]DisplayFormElt.cfm -text
 webroot/common/modules/utils/DetermineImageSize.cfm -text
