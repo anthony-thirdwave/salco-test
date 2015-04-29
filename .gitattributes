@@ -48,6 +48,7 @@ code/webroot/com/product/ProductSpecsHandler.cfc -text
 code/webroot/com/product/ResourceHandler.cfc -text
 code/webroot/com/product/TextBlockHandler.cfc -text
 code/webroot/com/product/search.cfc -text
+code/webroot/com/suggestionBox/suggestionBoxHandler.cfc -text
 code/webroot/com/taxonomy/TopicHandler.cfc -text
 code/webroot/com/time/Time.cfc -text
 code/webroot/com/utils/Captcha.cfc -text
@@ -91,6 +92,7 @@ code/webroot/common/admin/PulldownOptionsManager/index.cfm -text
 code/webroot/common/admin/RedirectManager/edit.cfm -text
 code/webroot/common/admin/RedirectManager/index.cfm -text
 code/webroot/common/admin/Search/index.cfm -text
+code/webroot/common/admin/SuggestionManager/index.cfm -text
 code/webroot/common/admin/System/ContentGenerate.cfm -text
 code/webroot/common/admin/UserManager/UserModify.cfm -text
 code/webroot/common/admin/UserManager/index.cfm -text
@@ -506,6 +508,7 @@ code/webroot/common/js/jquery.patternizer.js -text
 code/webroot/common/modules/Admin/Bulletin/action.cfm -text
 code/webroot/common/modules/Admin/Bulletin/bulletin.cfm -text
 code/webroot/common/modules/Admin/Dashboard/comments.cfm -text
+code/webroot/common/modules/Admin/Dashboard/suggestions.cfm -text
 code/webroot/common/modules/Admin/MasterView/dsp_Nav.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_Content.cfm -text
 code/webroot/common/modules/Admin/MasterView/mv_FEPermissions.cfm -text
@@ -657,6 +660,15 @@ code/webroot/common/modules/security/logoff.cfm -text
 code/webroot/common/modules/sitemap/SitemapHelper.cfm -text
 code/webroot/common/modules/sitemap/_sitemapGenerate.cfm -text
 code/webroot/common/modules/sitemap/sitemap_xml.cfm -text
+code/webroot/common/modules/suggestionBox/suggestionBox.css -text
+code/webroot/common/modules/suggestionBox/suggestionBox.js -text
+code/webroot/common/modules/suggestionBox/suggestionBoxForm.cfm -text
+code/webroot/common/modules/suggestionBox/suggestionBoxView.cfm -text
+code/webroot/common/modules/suggestionBox/suggestionCSV.cfm -text
+code/webroot/common/modules/suggestionBox/suggestionDetail.cfm -text
+code/webroot/common/modules/suggestionBox/suggestionGrid.cfm -text
+code/webroot/common/modules/suggestionBox/suggestionGrid.css -text
+code/webroot/common/modules/suggestionBox/thankYou.css -text
 code/webroot/common/modules/utils/AddToQueryString.cfm -text
 code/webroot/common/modules/utils/Copy[!!-~]of[!!-~]DisplayFormElt.cfm -text
 code/webroot/common/modules/utils/DetermineImageSize.cfm -text

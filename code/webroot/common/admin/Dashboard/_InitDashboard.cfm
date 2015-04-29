@@ -46,6 +46,17 @@
 		sDashboardModule.Path="/common/modules/admin/RecentChanges/recentChanges.cfm";
 		sDashboard[thisKey]=Duplicate(sDashboardModule);
 		thisKey = thisKey + 1;
+
+		sDashboardModule.ID = 4;
+		sDashboardModule.Name = "Recent Suggestions";
+		sDashboardModule.Description = "Recent suggestions.";
+		sDashboardModule.Required = 1;
+		sDashboardModule.Position=402;
+		sDashboardModule.Priority=20;
+		sDashboardModule.UsergroupIdList="#APPLICATION.AdminUserGroupID#,#APPLICATION.ContentEditorUserGroupID#";
+		sDashboardModule.Path="/common/modules/admin/dashboard/suggestions.cfm";
+		sDashboard[thisKey]=Duplicate(sDashboardModule);
+		thisKey = thisKey + 1;
 		
 	</cfscript>
 	<!--- <cfdump var="#sDashboard#"> --->
