@@ -131,11 +131,12 @@
 		<cfargument name="pageSize" default="">
 		<cfargument name="cfgridsortcolumn" default="dateSubmitted">
 		<cfargument name="cfgridsortdirection" default="desc">
-		<cfargument name="employeeName" type="string" default="">
+		<!--- <cfargument name="employeeName" type="string" default="">  --->
 		<cfargument name="suggestion" type="string" default="">
 		<cfargument name="departmentName" type="string" default="">
 		<cfargument name="areaName" type="string" default="">
 		<cfargument name="anonymous" default="">
+		<cfargument name="showall" default="">
 
 		<!--- keep scope local to function --->
 		<cfset var local = structNew() />
@@ -148,8 +149,10 @@
 		<!--- get the results --->
 		<cfquery name="LOCAL.getResults" datasource="#APPLICATION.Data_DSN#">
 			SELECT t_suggestions.suggestionID, 
+			<cfif val(ARGUMENTS.showall) eq 1>
 			 t_suggestions.employeeName, 
 			 t_suggestions.employeeEmail, 
+			</cfif>
 			 CAST ( t_suggestions.suggestion AS nvarchar ) AS suggestionText, 
 			 t_suggestions.departmentID, 
 			 t_suggestions.areaID, 
@@ -164,9 +167,9 @@
 				INNER JOIN t_Label AS t_Label_2 ON t_suggestions.areaID = t_Label_2.LabelID
 			where 1=1
 
-			<cfif trim(arguments.employeeName) neq "">
-				AND employeeName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.employeeName#%">
-			</cfif>
+			<!--- <cfif trim(arguments.employeeName) neq "">
+			-- 	AND employeeName LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.employeeName#%">
+			-- </cfif>--->
 			<cfif trim(arguments.suggestion) neq "">
 				AND suggestion LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.suggestion#%">
 			</cfif>
@@ -184,7 +187,7 @@
 			<cfif trim(arguments.cfgridsortcolumn) neq "">
 				ORDER BY #arguments.cfgridsortcolumn# #arguments.cfgridsortdirection#
 			<cfelse>
-				ORDER BY employeeName
+				ORDER BY suggestionID
 			</cfif>
 		</cfquery>
 

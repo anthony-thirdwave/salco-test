@@ -9,10 +9,10 @@
 <cfif getSuggestionResult.recordCount>
 	<cfoutput query="getSuggestionResult">
 		<Table>
-			<tr>
+			<!--- <tr>
 				<td><strong>Employee Name</strong></td>
 				<td><cfif val(anonymous)>anonymous<cfelse>#employeeName# (<a href="mailto:#employeeEmail#">#employeeEmail#</a>)</cfif></td>
-			</tr>
+			</tr> --->
 			<tr>
 				<td><strong>Area</strong></td>
 				<td>#areaName#</td>
