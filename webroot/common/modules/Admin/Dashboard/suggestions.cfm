@@ -3,7 +3,7 @@
 	returnVariable="getSuggestions">
 
 <cfoutput query="getSuggestions" maxrows="5">
-	<p><b><cfif val(anonymous)>Anonymous<cfelse>#employeeName#</cfif></b> #DateFormat(dateSubmitted)# #timeFormat(dateSubmitted)#<br/>
+	<p><b>Suggestion ###getSuggestions.suggestionID#</b><br/>
 	#getSuggestions.suggestionText#
 	</p>
 </cfoutput>

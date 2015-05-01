@@ -2,7 +2,7 @@
 <cfparam name="ATTRIBUTES.Mode" default="Default">
 
 <cfparam name="suggestionID" default="">
-<cfparam name="employeeName" default="">
+<!--- <cfparam name="employeeName" default=""> --->
 <cfparam name="suggestion" default="">
 <cfparam name="departmentName" default="">
 <cfparam name="areaName" default="">
@@ -17,22 +17,21 @@
 	returnVariable="getSuggestionAreasResult">
 
 <cfoutput>
-	<cfform action="#CGI.SCRIPT_NAME#" method="post" name="productSearchForm">
+	<cfform action="#CGI.SCRIPT_NAME#" method="post" name="suggestionSearchForm">
+		<cfinput type="hidden" name="showall" value="0" style="width:96px;">
 		<!--- <h4>Search By</h4> --->
 		<table style="padding:8px;" width="90%" align="center">
 			<thead>
 			<tr>
-				<th align="center" valign="middle"><b>Employee Name</b></th>
+				<!--- <th align="center" valign="middle"><b>Employee Name</b></th> --->
 				<th align="center" valign="middle"><b>Suggestion</b></th>
 				<th align="center" valign="middle"><b>Department Name</b></th>
 				<th align="center" valign="middle"><b>Area Name</b></th>
 				<th align="center" valign="middle"><b>Group</b></th>
 			</tr>
 			<tr>
-				<th align="left" valign="middle"><cfinput type="text" name="employeeName" value="#employeeName#" style="width:179px;"></th>
+				<!--- <th align="left" valign="middle"><cfinput type="text" name="employeeName" value="#employeeName#" style="width:179px;"></th> --->
 				<th align="center" valign="middle"><cfinput type="text" name="suggestion" value="#suggestion#" style="width:96px;"> </th>
-
-				<!--- <th align="center" valign="middle"><cfinput type="text" name="departmentName" value="#departmentName#" style="width:196px;"></th> --->
 
 				<th align="center" valign="middle">
 					<cfselect type="text" name="departmentName">
@@ -42,8 +41,6 @@
 						</cfloop>
 					</cfselect>
 				</th>
-
-				<!--- <th align="center" valign="middle"><cfinput type="text" name="areaName" value="#areaName#" style="width:200px;"></th> --->
 
 				<th align="center" valign="middle">
 					<cfselect type="text" name="areaName">
@@ -77,6 +74,7 @@
 			</td></tr>
 			<tr><td colspan="4" height="10">&nbsp;&nbsp;</td></tr>
 			<tr><td>
+
 			<!--- display the users in a cfgrid tag - this is bound both to the cfgrid
 			controls and the form controls above --->
 			<cfif ATTRIBUTES.Mode IS "admin">
@@ -84,10 +82,10 @@
 						selectmode="row" pagesize="20" stripeRowColor="##e0e0e0" stripeRows="yes"
 						appendKey="true"
 						bind="cfc:com.suggestionBox.suggestionBoxHandler.getSuggestions({cfgridpage}, {cfgridpagesize}, {cfgridsortcolumn}, 
-							{cfgridsortdirection}, {employeeName@keyup}, {suggestion@keyup}, {departmentName@change}, {areaName@change}, {anonymous@change})">
+							{cfgridsortdirection}, {suggestion@keyup}, {departmentName@change}, {areaName@change}, {anonymous@change}, {showall})">
 					<cfgridcolumn name="suggestionID" header="Id" />
-					<cfgridcolumn name="employeeName" header="Employee" />
-					<cfgridcolumn name="employeeEmail" header="Email" />
+					<!--- <cfgridcolumn name="employeeName" header="Employee" /> --->
+					<!--- <cfgridcolumn name="employeeEmail" header="Email" /> --->
 					<cfgridcolumn name="suggestionText" header="Suggestion" />
 					<cfgridcolumn name="departmentName" header="Department Name" />
 					<cfgridcolumn name="areaName" header="Area Name"/>

@@ -106,14 +106,14 @@
 											<td colspan="2"><b>Contact Form Submission</b><br>
 											Submitted #DateFormat(Now())# #TimeFormat(Now())#</td>
 										</tr>
-										<tr>
+									<!--- 	<tr>
 											<td style="width: 20%;"><b>Full Name:</b></td>
 											<td>#form.employeeName#</td>
-										</tr>
-										<tr>
+										</tr> --->
+										<!--- <tr>
 											<td><b>Email:</b></td>
 											<td>#form.missive#</td>
-										</tr>
+										</tr> --->
 										<tr>
 											<td><b>Salco Department:</b></td>
 											<!--- use label name here --->
