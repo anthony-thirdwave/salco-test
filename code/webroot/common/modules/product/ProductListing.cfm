@@ -96,6 +96,9 @@
 	</cfif>
 	
 	<cfif ATTRIBUTES.mode IS "displayRelated">
+		<cfif lRelatedProductID IS "">
+			<cfset lRelatedProductID="-1">
+		</cfif>
 		<cfinvoke component="/com/product/productFamilyHandler" 
 			method="GetProductList" 
 			returnVariable="qGetProductList"
