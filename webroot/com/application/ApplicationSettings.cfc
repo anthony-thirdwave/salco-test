@@ -229,7 +229,7 @@
 		<cfset APPLICATION.DefaultLanguageID=100 />
 
 		<cfset APPLICATION.ImageFileExtensionList=".jpg;.gif;.jpeg;.jpe;.swf;.png" />
-		<cfset APPLICATION.DocumentFileExtensionList=".pdf;.txt;.eps;.doc;.hqx;.sea;.ppt;.mov;.zip;.sit;.indt;.mpg;.mp3;.mp4;.xls;.key;.vcf" />
+		<cfset APPLICATION.DocumentFileExtensionList=".pdf;.txt;.eps;.doc;.hqx;.sea;.ppt;.mov;.zip;.sit;.indt;.mpg;.mp3;.mp4;.xls;.key;.vcf;.dwf" />
 		<cfset APPLICATION.MasterFileExtensionList=listAppend(APPLICATION.ImageFileExtensionList,APPLICATION.DocumentFileExtensionList,";") />
 
 		<!--- This is the e-mail address to which error reports should be sent.
