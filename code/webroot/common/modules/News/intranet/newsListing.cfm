@@ -18,6 +18,7 @@
 
 <cfinvoke component="com.ContentManager.NewsHandler"
 	homePageDisplay="#ATTRIBUTES.HomePageDisplay#"
+	categoryID="#ATTRIBUTES.CategoryID#"
 	TopicID="#ATTRIBUTES.topicID#"
 	method="GetNews"
 	returnVariable="qNewsListing">
