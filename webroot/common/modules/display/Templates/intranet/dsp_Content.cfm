@@ -54,7 +54,7 @@
 </cfif>
 </head>
 
-<cfoutput><body class="default content #CSSClass#" id="#CurrentCategoryAlias#"></cfoutput>
+<cfoutput><body class="default content #CSSClass#" id="#CSSID#"></cfoutput>
 <a name="top"></a>
 <!-- Main Element Container (wrapper) -->
 <div id="wrapper">
@@ -87,8 +87,17 @@
 			<cfelse>
 				<cfset BreadcrumbDisplayType="newsDetail">
 			</cfif>
+			<cfset breadcrumbCategoryID="#APPLICATION.NewsCategoryID#">
+		<cfelseif ListLen(CategoryThreadList) GTE "3" and ListGetAt(CategoryThreadList,3) is APPLICATION.safetyArchiveCategoryID>
+			<cfif currentCategoryID is APPLICATION.safetyArchiveCategoryID>
+				<cfset BreadcrumbDisplayType="news">
+			<cfelse>
+				<cfset BreadcrumbDisplayType="newsDetail">
+			</cfif>
+			<cfset breadcrumbCategoryID="#APPLICATION.safetyArchiveCategoryID#">
 		<cfelseif ListLen(CategoryThreadList) GTE "3" and ListGetAt(CategoryThreadList,3) is APPLICATION.EmployeeCategoryID>
 			<cfset BreadcrumbDisplayType="employee">
+			<cfset breadcrumbCategoryID="#currentCategoryID#">
 		<cfelse>
 			<cfset BreadcrumbDisplayType="">
 		</cfif>
@@ -98,7 +107,7 @@
 		<!-- employee/news navigation -->
 		<cfif len(BreadcrumbDisplayType)>
 			<cfsavecontent variable="BreadcrumbContent">
-				<cfmodule template="/common/modules/Display/Navigation/intranet/dsp_NavBreadcrumb.cfm" BreadcrumbDisplay="#BreadcrumbDisplayType#" CategoryID="#currentCategoryID#">
+				<cfmodule template="/common/modules/Display/Navigation/intranet/dsp_NavBreadcrumb.cfm" BreadcrumbDisplay="#BreadcrumbDisplayType#" CategoryID="#breadcrumbCategoryID#" newsID="#currentCategoryID#">
 			</cfsavecontent>
 			<cfoutput>#BreadcrumbContent#</cfoutput>
 		<cfelse>
@@ -106,7 +115,7 @@
 		</cfif>
 	</div>
 	<!-- Main Content Container -->
-	<div id="contentContainer" >
+	<div id="contentContainer">
 		<!-- Sub Content Containers -->
 			<!-- start left column -->
 			<div id="leftColumn">

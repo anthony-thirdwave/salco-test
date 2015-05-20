@@ -73,6 +73,7 @@
 		<cfelse>
 			<cfset APPLICATION.NewsCategoryID="6530">
 		</cfif>
+		<cfset APPLICATION.safetyArchiveCategoryID="7283">
 		
 		<cfset APPLICATION.IntranetUtilityNavCategoryID="6070">
 		<cfset APPLICATION.AnniversaryTopicID="6074">
@@ -138,6 +139,8 @@
 			<cfset APPLICATION.BirthdayTopicID="6276">
 			<cfset APPLICATION.DepartmentCategoryID="6098">
 			<cfset APPLICATION.EmployeeCategoryID="6065">
+
+			<cfset APPLICATION.safetyArchiveCategoryID="6936">
 		
 		<cfelseif local.siteType eq "staging">
 
