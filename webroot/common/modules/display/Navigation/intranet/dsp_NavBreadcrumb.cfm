@@ -1,4 +1,6 @@
 <cfparam name="ATTRIBUTES.BreadcrumbDisplay" default="">
+<cfparam name="ATTRIBUTES.CategoryID" default="">
+<cfparam name="ATTRIBUTES.NewsID" default="">
 
 <cfswitch expression="#ATTRIBUTES.BreadcrumbDisplay#">
 	<cfcase value="employee">
@@ -37,7 +39,8 @@
 		
 		<cfinvoke component="com.ContentManager.NewsHandler"
 		 	method="GetNews"
-			returnVariable="News">
+			returnVariable="News"
+			categoryID="#ATTRIBUTES.CategoryID#">
 		
 		<cfquery name="get_count" dbtype="query">
 		   SELECT COUNT(newsid) AS records 
@@ -63,7 +66,7 @@
 		<cfset end_page=start_page + show_pages - 1>
 		<cfoutput>
 			<nav id="empl-nav">
-			<div id="empl-nav-title">Search Stories:</div>
+			<div id="empl-nav-title">Browse Stories:</div>
 			<ul>
 				<li class="newsPrevPage">
 					<cfif url.pageNum gt 1>
@@ -91,44 +94,49 @@
 	<cfcase value="newsDetail">
 		<cfinvoke component="com.ContentManager.NewsHandler"
 		 	method="GetNews"
-			newsID="#ATTRIBUTES.CategoryID#"
-			returnVariable="qryNews">
-		
-		<cfset thisStoryRowCount=qryNews.rowNumber>
-		<cfset previousStoryRowCount=thisStoryRowCount - 1>
-		<cfset nextStoryRowCount=thisStoryRowCount + 1>
-		<cfparam name="NextStoryLink" default="">
-		<cfparam name="previousStoryLink" default="">
-		
-		<cfif previousStoryRowCount gt 0>
+			newsID="#ATTRIBUTES.NewsID#"
+			categoryID="#ATTRIBUTES.CategoryID#"
+			returnVariable="qryNewsBreadCrumb">
+
+		<cfif qryNewsBreadCrumb.recordCount GT "0">
+			<cfset thisStoryRowCount=qryNewsBreadCrumb.rowNumber>
+			<cfset previousStoryRowCount=thisStoryRowCount - 1>
+			<cfset nextStoryRowCount=thisStoryRowCount + 1>
+			<cfparam name="NextStoryLink" default="">
+			<cfparam name="previousStoryLink" default="">
+			
+			<cfif previousStoryRowCount gt 0>
+				<cfinvoke component="com.ContentManager.NewsHandler"
+				 	method="GetNews"
+				 	categoryID="#ATTRIBUTES.CategoryID#"
+					rowNumber="#previousStoryRowCount#"
+					returnVariable="previousStory">
+				<cfif previousStory.recordCount EQ 1>
+					<cfset previousStoryLink=previousStory.link>
+				</cfif>
+			</cfif>
+			
 			<cfinvoke component="com.ContentManager.NewsHandler"
 			 	method="GetNews"
-				rowNumber="#previousStoryRowCount#"
-				returnVariable="previousStory">
-			<cfif previousStory.recordCount EQ 1>
-				<cfset previousStoryLink=previousStory.link>
+			 	categoryID="#ATTRIBUTES.CategoryID#"
+				rowNumber="#nextStoryRowCount#"
+				returnVariable="nextStory">
+			
+			<cfif nextStory.recordCount EQ 1>
+				<cfset NextStoryLink=nextStory.link>
 			</cfif>
+			<cfoutput>
+				<nav id="newsStoryNav">
+					<ul>
+						<cfif len(NextStoryLink)>
+							<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">previous story</a></li>
+						</cfif>
+						<cfif len(previousStoryLink)>
+							<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">next story</a></li>
+						</cfif>
+					</ul>
+				</nav>
+			</cfoutput>
 		</cfif>
-		
-		<cfinvoke component="com.ContentManager.NewsHandler"
-		 	method="GetNews"
-			rowNumber="#nextStoryRowCount#"
-			returnVariable="nextStory">
-		
-		<cfif nextStory.recordCount EQ 1>
-			<cfset NextStoryLink=nextStory.link>
-		</cfif>
-		<cfoutput>
-			<nav id="newsStoryNav">
-				<ul>
-					<cfif len(NextStoryLink)>
-						<li><a class="next" href="#APPLICATION.utilsObj.parseCategoryUrl(NextStoryLink)#">previous story</a></li>
-					</cfif>
-					<cfif len(previousStoryLink)>
-						<li><a class="prev" href="#APPLICATION.utilsObj.parseCategoryUrl(previousStoryLink)#">next story</a></li>
-					</cfif>
-				</ul>
-			</nav>
-		</cfoutput>
 	</cfcase>
 </cfswitch>
