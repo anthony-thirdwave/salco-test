@@ -32,5 +32,5 @@
 	<hr>
 	<p>Please check your inbox for email confirmation.</p>
 	<br>
-	<p class='red'><b>We are dedicated to engaged employes!</b></p>
+	<p class='red'><b>We are dedicated to engaged employees!</b></p>
 </div>
