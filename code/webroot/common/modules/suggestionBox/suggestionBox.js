@@ -27,4 +27,10 @@ $(document).ready(function(){
   $anonymous.change(function(){
     $anonymous.prop('checked') ?  enable_anonymous() : disable_anonymous()
   })
+
+  $('form#applicationForm').submit(function(){
+    $(this).find('input[type=submit]').attr('disabled', 'disabled');
+    $('.img_container').removeClass('hidden');
+    $('textarea').addClass('hidden');
+  });
 });
