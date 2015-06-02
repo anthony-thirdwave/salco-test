@@ -3,7 +3,8 @@
 <!--- Declare values --->
 <cfparam name="ATTRIBUTES.ThankYouPage" default="/page/thank-you">
 
-<cfparam name="ATTRIBUTES.ToAddress" default="lisa_moffat@salcoproducts.com">
+<cfparam name="ATTRIBUTES.ToAddress" default="juan.ortiz@thirdwavellc.com">
+<!--- <cfparam name="ATTRIBUTES.ToAddress" default="lisa_moffat@salcoproducts.com"> --->
 <cfparam name="ATTRIBUTES.FromAddress" default="noreply@salcoproducts.com">
 
 <cfparam name="formsubmit" default="0">
@@ -152,7 +153,8 @@
 	<cfset querystring=GetToken(FormAction,2,"?")>
 	
 	<cfoutput>	
-	<div class="news">	<h2>Salco Suggestion Box</h2>
+	<div class="news">	
+			<h2>Salco Suggestion Box</h2>
 			<form action="#Location#?#querystring#" method="post" name="applicationForm" id="applicationForm" enctype="multipart/form-data">
 				<input type="hidden" name="formsubmit" value="1" />
 				<input name="email" type="text" class="hpfield" value="" style="display: none;"/>
@@ -206,6 +208,7 @@
 			
 					<div class="formRow memo<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
 						<textarea name="message" placeholder="Enter text...">#HTMLEditFormat(FORM.message)#</textarea>
+						<div class="img_container hidden"><img class="center_img" src="/common/images/loader.gif" alt="loader"></div>
 					</div>
 					
 					<!--- ====================================================--->

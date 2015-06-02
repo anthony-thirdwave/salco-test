@@ -141,3 +141,16 @@ textarea {
   box-shadow: 2px 2px 5px #888888;
   color: white;
 }
+
+.center_img {
+  display: block;
+  margin: 0 auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.img_container {
+  height: 300px
+}
