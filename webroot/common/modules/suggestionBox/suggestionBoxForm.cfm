@@ -3,8 +3,7 @@
 <!--- Declare values --->
 <cfparam name="ATTRIBUTES.ThankYouPage" default="/page/thank-you">
 
-<cfparam name="ATTRIBUTES.ToAddress" default="juan.ortiz@thirdwavellc.com">
-<!--- <cfparam name="ATTRIBUTES.ToAddress" default="lisa_moffat@salcoproducts.com"> --->
+<cfparam name="ATTRIBUTES.ToAddress" default="lisa_moffat@salcoproducts.com">
 <cfparam name="ATTRIBUTES.FromAddress" default="noreply@salcoproducts.com">
 
 <cfparam name="formsubmit" default="0">
@@ -37,6 +36,7 @@
 	<!--- live site --->
 <cfelse>
 	<cfset Mailer_Subject="#Mailer_Subject# TESTING ONLY!">
+	<cfset ATTRIBUTES.ToAddress="notifications@dev01.thirdwavellc.com">
 	<cfif 0>
 		<cfset ATTRIBUTES.ToAddress="lisa_moffat@salcoproducts.com">
 	</cfif>
