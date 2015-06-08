@@ -18,12 +18,11 @@
 </cfif>
 <cfset SearchNUM="20">
 
-<cfset lTab="ProductLiterature,Charts,Presentations,Instructions,E-Catalog">
+<cfset lTab="ProductLiterature,Charts,Instructions,E-Catalog">
 <cfset sTabName=StructNew()>
 <cfset StructInsert(sTabName,"ProductLiterature","Product Literature")>
 <cfset StructInsert(sTabName,"Charts","Charts")>
-<cfset StructInsert(sTabName,"Presentations","Presentations")>
-<cfset StructInsert(sTabName,"Instructions","Instructions")>
+<cfset StructInsert(sTabName,"Instructions","Instructions/Manuals")>
 <cfset StructInsert(sTabName,"E-Catalog","E-Catalog")>
 
 <cfset sFolderName=structNew()>
