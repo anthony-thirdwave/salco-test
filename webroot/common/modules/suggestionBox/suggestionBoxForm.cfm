@@ -55,8 +55,6 @@
 		<cfif ValidateEmailStatus GTE "200" AND anonymousSuggestion EQ 0>
 			<cfoutput><p>Debug: #anonymousSuggestion#</p></cfoutput>
 			<cfset ErrorMessage=ErrorMessage & "<li>Email entered is not formatted correctly.</li>">
-		<cfelse>
-			<cfset ATTRIBUTES.FromAddress="#form.missive#">
 		</cfif>
 	</cfif>
 
@@ -92,49 +90,48 @@
 
 			<!--- get label name associated with ID here --->
 
-				<cfif anonymousSuggestion EQ 0>
-					<cfmail	to="#ATTRIBUTES.ToAddress#" from="#ATTRIBUTES.FromAddress#"
-									type="html" subject="#Mailer_Subject#">
-									<table>
-										<tr>
-											<td colspan="2">
-												<p>Thank you for submitting your suggestion to our Innovation Program!<br>
-												Salco Products&rsquo; long term strategy and core values include using innovation to continually enhance our products, strengthen relationships with our customers and business partners as well as encourage employee participation and development.<br>
-												All suggestions are carefully evaluated by our Innovation Team.  While not every suggestion may be selected for implementation, all suggestions are important and valued by the leadership of Salco Products.<br>
-												As soon as a decision is made, you will be notified via email regarding the status of your submission.</p></td>
-										</tr>
-										<tr>
-											<td colspan="2"><b>Contact Form Submission</b><br>
-											Submitted #DateFormat(Now())# #TimeFormat(Now())#</td>
-										</tr>
-									<!--- 	<tr>
-											<td style="width: 20%;"><b>Full Name:</b></td>
-											<td>#form.employeeName#</td>
-										</tr> --->
-										<!--- <tr>
-											<td><b>Email:</b></td>
-											<td>#form.missive#</td>
-										</tr> --->
-										<tr>
-											<td><b>Salco Department:</b></td>
-											<!--- use label name here --->
-											<td>#departmentName.name#</td>
-										</tr>
-										<tr>
-											<td><b>Suggestion Area:</b></td>
-											<td>#areaName.name#</td>
-										</tr>
-										<tr>
-											<td><b>Message:</b></td>
-											<td>#form.message#</td>
-										</tr>
-										<tr>
-											<td><b>Confirmation Number:</b></td>
-											<td>#NumberFormat(suggestionID, "00000_")#</td>
-										</tr>
-									</table>
-								</cfmail>
-					</cfif>
+			<cfif anonymousSuggestion EQ 0>
+				<cfmail	to="#form.missive#" from="#ATTRIBUTES.FromAddress#" bcc="#ATTRIBUTES.ToAddress#" type="html" subject="#Mailer_Subject#">
+					<table>
+						<tr>
+							<td colspan="2">
+								<p>Thank you for submitting your suggestion to our Innovation Program!<br>
+								Salco Products&rsquo; long term strategy and core values include using innovation to continually enhance our products, strengthen relationships with our customers and business partners as well as encourage employee participation and development.<br>
+								All suggestions are carefully evaluated by our Innovation Team.  While not every suggestion may be selected for implementation, all suggestions are important and valued by the leadership of Salco Products.<br>
+								As soon as a decision is made, you will be notified via email regarding the status of your submission.</p></td>
+						</tr>
+						<tr>
+							<td colspan="2"><b>Contact Form Submission</b><br>
+							Submitted #DateFormat(Now())# #TimeFormat(Now())#</td>
+						</tr>
+					<!--- 	<tr>
+							<td style="width: 20%;"><b>Full Name:</b></td>
+							<td>#form.employeeName#</td>
+						</tr> --->
+						<!--- <tr>
+							<td><b>Email:</b></td>
+							<td>#form.missive#</td>
+						</tr> --->
+						<tr>
+							<td><b>Salco Department:</b></td>
+							<!--- use label name here --->
+							<td>#departmentName.name#</td>
+						</tr>
+						<tr>
+							<td><b>Suggestion Area:</b></td>
+							<td>#areaName.name#</td>
+						</tr>
+						<tr>
+							<td><b>Message:</b></td>
+							<td>#form.message#</td>
+						</tr>
+						<tr>
+							<td><b>Confirmation Number:</b></td>
+							<td>#NumberFormat(suggestionID, "00000_")#</td>
+						</tr>
+					</table>
+				</cfmail>
+			</cfif>
 
 			<!--- redirect to thank you page --->
 			<cflocation url="#ATTRIBUTES.ThankYouPage#&sid=#suggestionID#" addtoken="No">
@@ -149,75 +146,75 @@
 	</cfif>
 </cfif>
 	
-	<cfset Location=GetToken(FormAction,1,"?")>
-	<cfset querystring=GetToken(FormAction,2,"?")>
-	
-	<cfoutput>	
-	<div class="news">	
-			<h2>Salco Suggestion Box</h2>
-			<form action="#Location#?#querystring#" method="post" name="applicationForm" id="applicationForm" enctype="multipart/form-data">
-				<input type="hidden" name="formsubmit" value="1" />
-				<input name="email" type="text" class="hpfield" value="" style="display: none;"/>
-				<!--- ====================================================--->
-				<!--- enter form fields here --->
-	
-					<div class="formRow<cfif formsubmit EQ 1 and len(trim(employeeName)) eq 0> errorTxt</cfif> wide">
-						<input name="employeeName" id="employeeName" maxlength="50" type="text" value="#HTMLEditFormat(form.employeeName)#" placeholder="Employee Name"
-							<cfif form.anonymousSuggestion EQ 1>
-								disabled class='disabled'
-							</cfif> 
-						>
-						<input type="checkbox" name="anonymousSuggestion" id="anonymousSuggestion" value="1" 
-							<cfif form.anonymousSuggestion EQ 1>
-								checked = 'true'
-							</cfif> 
-						>
-						<label for='anonymousSuggestion'>Anonymous Suggestion *</label>
-					</div>
-	
+<cfset Location=GetToken(FormAction,1,"?")>
+<cfset querystring=GetToken(FormAction,2,"?")>
+
+<cfoutput>	
+<div class="news">	
+	<h2>Salco Suggestion Box</h2>
+	<form action="#Location#?#querystring#" method="post" name="applicationForm" id="applicationForm" enctype="multipart/form-data">
+	<input type="hidden" name="formsubmit" value="1" />
+	<input name="email" type="text" class="hpfield" value="" style="display: none;"/>
+	<!--- ====================================================--->
+	<!--- enter form fields here --->
+
+		<div class="formRow<cfif formsubmit EQ 1 and len(trim(employeeName)) eq 0> errorTxt</cfif> wide">
+			<input name="employeeName" id="employeeName" maxlength="50" type="text" value="#HTMLEditFormat(form.employeeName)#" placeholder="Employee Name"
+				<cfif form.anonymousSuggestion EQ 1>
+					disabled class='disabled'
+				</cfif> 
+			>
+			<input type="checkbox" name="anonymousSuggestion" id="anonymousSuggestion" value="1" 
+				<cfif form.anonymousSuggestion EQ 1>
+					checked = 'true'
+				</cfif> 
+			>
+			<label for='anonymousSuggestion'>Anonymous Suggestion *</label>
+		</div>
+
+
+		<div class="formRow<cfif formsubmit EQ 1 and len(trim(missive)) eq 0> errorTxt</cfif>">
+			<input name="missive" id="email" maxlength="50" type="text" value="#HTMLEditFormat(form.missive)#" placeholder="Email Address" 
+				<cfif form.anonymousSuggestion EQ 1>
+					disabled class='disabled'
+				</cfif> 
+			>
+		</div>
+<!--- <div class="fauxSelect"> --->
+		<div class="formRow">
+			<select name="salcoDepartment">
+				<option value="">Salco Department</option>
+				<cfloop query="getDepartmentsResult">
+					<option value="#getDepartmentsResult.departmentID#" <cfif FORM.salcoDepartment IS getDepartmentsResult.departmentID> selected</cfif>>#getDepartmentsResult.departmentName#</option>
+				</cfloop>
+	<!--- <cfloop index="ThisSubject" list="#lSubject#">
+					<option value="#ThisSubject#">#ThisSubject#</option>
+				</cfloop> --->
+			</select>
+		</div>
+<!--- </div> --->
+
+		<div class="formRow">
+			<select name="suggestionArea">
+				<option value="">Suggestion Area</option>
+				<cfloop query="getSuggestionAreasResult">
+					<option value="#getSuggestionAreasResult.areaID#" <cfif FORM.suggestionArea IS getSuggestionAreasResult.areaID> selected</cfif>>#getSuggestionAreasResult.areaName#</option>
+				</cfloop>
+			</select>
+		</div>
+
+		<div class="formRow memo<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
+			<textarea name="message" placeholder="Enter text...">#HTMLEditFormat(FORM.message)#</textarea>
+			<div class="img_container hidden"><img class="center_img" src="/common/images/loader.gif" alt="loader"></div>
+		</div>
 		
-					<div class="formRow<cfif formsubmit EQ 1 and len(trim(missive)) eq 0> errorTxt</cfif>">
-						<input name="missive" id="email" maxlength="50" type="text" value="#HTMLEditFormat(form.missive)#" placeholder="Email Address" 
-							<cfif form.anonymousSuggestion EQ 1>
-								disabled class='disabled'
-							</cfif> 
-						>
-					</div>
-			<!--- <div class="fauxSelect"> --->
-					<div class="formRow">
-						<select name="salcoDepartment">
-							<option value="">Salco Department</option>
-							<cfloop query="getDepartmentsResult">
-								<option value="#getDepartmentsResult.departmentID#" <cfif FORM.salcoDepartment IS getDepartmentsResult.departmentID> selected</cfif>>#getDepartmentsResult.departmentName#</option>
-							</cfloop>
-				<!--- <cfloop index="ThisSubject" list="#lSubject#">
-								<option value="#ThisSubject#">#ThisSubject#</option>
-							</cfloop> --->
-						</select>
-					</div>
-			<!--- </div> --->
-	
-					<div class="formRow">
-						<select name="suggestionArea">
-							<option value="">Suggestion Area</option>
-							<cfloop query="getSuggestionAreasResult">
-								<option value="#getSuggestionAreasResult.areaID#" <cfif FORM.suggestionArea IS getSuggestionAreasResult.areaID> selected</cfif>>#getSuggestionAreasResult.areaName#</option>
-							</cfloop>
-						</select>
-					</div>
-			
-					<div class="formRow memo<cfif formsubmit EQ 1 and len(trim(email)) eq 0> errorTxt</cfif>">
-						<textarea name="message" placeholder="Enter text...">#HTMLEditFormat(FORM.message)#</textarea>
-						<div class="img_container hidden"><img class="center_img" src="/common/images/loader.gif" alt="loader"></div>
-					</div>
-					
-					<!--- ====================================================--->
-					
-					<div class="formRow submit rightSubmit">
-						<p id='footerText'>Please remember that your suggestion will be entered into our annual drawing. In addition, select winners will also become members of our Innovation Comittee!<br><br>*Anonymous suggestions are not eligible for prize considerations.</p>
-						<cfset someStr="Submit your" & Chr(10) & "Suggestion" />
-						<input type="submit" name="submit" value="#someStr#" title="Send Suggestion"/>
-					</div>
-	
-			</form></div>
-	</cfoutput>
+		<!--- ====================================================--->
+		
+		<div class="formRow submit rightSubmit">
+			<p id='footerText'>Please remember that your suggestion will be entered into our annual drawing. In addition, select winners will also become members of our Innovation Comittee!<br><br>*Anonymous suggestions are not eligible for prize considerations.</p>
+			<cfset someStr="Submit your" & Chr(10) & "Suggestion" />
+			<input type="submit" name="submit" value="#someStr#" title="Send Suggestion"/>
+		</div>
+
+	</form></div>
+</cfoutput>
