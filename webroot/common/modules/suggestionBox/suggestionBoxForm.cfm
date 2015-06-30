@@ -95,9 +95,11 @@
 					<table>
 						<tr>
 							<td colspan="2">
-								<p>Thank you for submitting your suggestion to our Innovation Program!<br>
-								Salco Products&rsquo; long term strategy and core values include using innovation to continually enhance our products, strengthen relationships with our customers and business partners as well as encourage employee participation and development.<br>
-								All suggestions are carefully evaluated by our Innovation Team.  While not every suggestion may be selected for implementation, all suggestions are important and valued by the leadership of Salco Products.<br>
+								<p>Thank you for submitting your suggestion to our Innovation Program!</p>
+								<p>Salco Products&rsquo; long term strategy and core values include using innovation to continually enhance our products, strengthen relationships with our customers and business partners as well as encourage employee participation and development.</p>
+								<p>
+								All suggestions are carefully evaluated by our Innovation Team.  While not every suggestion may be selected for implementation, all suggestions are important and valued by the leadership of Salco Products.</p>
+								<p>
 								As soon as a decision is made, you will be notified via email regarding the status of your submission.</p></td>
 						</tr>
 						<tr>
