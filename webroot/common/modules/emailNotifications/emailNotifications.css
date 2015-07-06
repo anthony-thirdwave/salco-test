@@ -1,0 +1,64 @@
+.bold {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#center-content p {
+  margin: 10px 5px 5px 50px;
+}
+
+#center-content .notifications-form {
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 0px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#applicationForm .textarea-label {
+  font-size: 16px;
+}
+
+#center-content .email-options {
+  display: inline;
+  margin-left: 15px;
+  padding-top: 2px;
+  font-size: 18px;
+}
+
+#applicationForm input[type='text'] {
+  padding-top: 3px;
+  padding-bottom: 4px;
+}
+
+input[type='checkbox']{
+  margin-bottom: 22px;
+  margin-left: 40px
+  -ms-transform: scale(1.75); /* IE */
+  -moz-transform: scale(1.75); /* FF */
+  -webkit-transform: scale(1.75); /* Safari and Chrome */
+  -o-transform: scale(1.75); /* Opera */
+  padding: 10px;
+}
+
+input[type='checkbox']:checked {
+  /*background: */
+}
+
+#center-content .footer {
+  display: inline-block;
+  margin-top: 2px;
+  margin-left: 0;
+  font-size: 15px;
+}
+
+.rightSubmit input {
+  margin-left: 150px !important;
+}
+
+#center-content input[type='submit'] {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 0;
+}
+

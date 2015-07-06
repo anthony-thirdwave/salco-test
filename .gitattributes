@@ -604,6 +604,8 @@ webroot/common/modules/display/Templates/intranet/dsp_Content.cfm -text
 webroot/common/modules/display/dsp_NavSubPages.cfm -text
 webroot/common/modules/display/dsp_TeaserSlideShow.cfm -text
 webroot/common/modules/emailAFriend/emailAFriend.cfm -text
+webroot/common/modules/emailNotifications/emailNotifications.css -text
+webroot/common/modules/emailNotifications/emailNotificationsForm.cfm -text
 webroot/common/modules/employee/Intranet/employeeDetail.cfm -text
 webroot/common/modules/employee/Intranet/employeeListing.cfm -text
 webroot/common/modules/employee/Intranet/employeePhoneList.cfm -text
