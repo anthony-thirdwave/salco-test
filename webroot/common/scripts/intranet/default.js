@@ -106,11 +106,6 @@ $(window).load(function() {
 	if($("body").hasClass("image-gallery-full")==true){
 		imageGallery.init();
 	}
-	
-	if($("body").attr("id")=="m2m"){
-		vidmodal.init()
-	}
-	
 });
 
 var ieFixes={
@@ -346,7 +341,7 @@ $(window).load(function() {
 	/* window load funcitonality */
 	$("body").addClass("loaded");
 	
-	console.log($(window).width());
+	// console.log($(window).width());
 	// add kiosk timeout
 	var ttimer;
 	if($("html").hasClass("firefox")==true && $(window).width() > 1890){
@@ -1069,36 +1064,3 @@ var imageGallery={
 		location.hash="#close";
 	}
 }
-
-var vidmodal={
-		init:function(){
-			$("body").prepend('<div id="vidModalOverlord" class="hidden"><div id="vidModaloverlay"></div><div id="vidModalCenter"><div id="vidModalHolder"></div></div></div>');
-			
-			$(".trainingLinks a").bind("click",function(event){
-				event.preventDefault();
-				//alert($(this).attr("href"));
-				vidmodal.openVideo($(this).attr("href"))
-			});
-		},
-		openVideo:function(mmm){
-			$("#vidModalHolder").load(mmm +" iframe",function(){
-				$("#vidModalHolder").prepend('<a class="closeGal" title="Close" href="#"></a>');
-				$("#vidModalHolder").append('<a class="closeGal" title="Close" href="#"></a>');
-				$("#vidModalOverlord").attr("class","show");
-				setTimeout(function(){
-					$("#vidModaloverlay").bind("click",function(){
-						vidmodal.closeVid();
-					});
-					
-					$(".closeGal").bind("click",function(event){
-						event.preventDefault();
-						vidmodal.closeVid();
-					});
-				},500);
-			});
-		},
-		closeVid:function(){
-			$("#vidModalHolder").html("&nbsp;");
-			$("#vidModalOverlord").attr("class","hidden");
-		}
-	}
