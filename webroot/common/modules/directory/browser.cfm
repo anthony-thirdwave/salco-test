@@ -60,7 +60,9 @@
 					<cfquery name="TestIfVideo" dbtype="query">
 						select * from qDir2 where name='OpenMe.html' and type='File'
 					</cfquery>
-					<cfif TestIfVideo.RecordCount GT "0">
+					<cfif qDir2.recordCount IS "0">
+						<cfset QuerySetCell(qDirPrime,"LinkURL","[BLANK]")>
+					<cfelseif TestIfVideo.RecordCount GT "0">
 						<cfset QuerySetCell(qDirPrime,"LinkURL","http://#VideoHost##APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome)#/OpenMe.html")>
 					<cfelse>
 						<cf_AddToQueryString queryString="#PageQueryString#" name="d" value="#APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome)#">
@@ -124,16 +126,18 @@
 				<cfelse>
 					<cfset ThisLIClass="listingFile">
 				</cfif>
-				<li class="#ThisLIClass#">
-				<cfif UseIFrame>
-					<a href="/common/modules/directory/iframe.cfm?URL=#URLEncodedFormat(qDir3.linkURL)#&title=#URLEncodedFormat(qDir3.Name)#" target="_blank">
-				<cfelse>
-					<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
+				<cfif qDir3.linkURL IS NOT "[BLANK]">
+					<li class="#ThisLIClass#">
+					<cfif UseIFrame>
+						<a href="/common/modules/directory/iframe.cfm?URL=#URLEncodedFormat(qDir3.linkURL)#&title=#URLEncodedFormat(qDir3.Name)#" target="_blank">
+					<cfelse>
+						<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
+					</cfif>
+					<cfif qDir3.Thumbnail IS NOT "">
+						<img src="#qDir3.Thumbnail#">
+					</cfif>
+					<span>#qDir3.Name#</span></a></li>
 				</cfif>
-				<cfif qDir3.Thumbnail IS NOT "">
-					<img src="#qDir3.Thumbnail#">
-				</cfif>
-				<span>#qDir3.Name#</span></a></li>
 			</cfoutput>
 			</ul>
 			</div>
