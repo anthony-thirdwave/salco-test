@@ -60,7 +60,9 @@
 					<cfquery name="TestIfVideo" dbtype="query">
 						select * from qDir2 where name='OpenMe.html' and type='File'
 					</cfquery>
-					<cfif TestIfVideo.RecordCount GT "0">
+					<cfif qDir2.recordCount IS "0">
+						<cfset QuerySetCell(qDirPrime,"LinkURL","")>
+					<cfelseif TestIfVideo.RecordCount GT "0">
 						<cfset QuerySetCell(qDirPrime,"LinkURL","http://#VideoHost##APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome)#/OpenMe.html")>
 					<cfelse>
 						<cf_AddToQueryString queryString="#PageQueryString#" name="d" value="#APPLICATION.utilsObj.GetURLFromPath('#dir#\#qDir1.Name#',ATTRIBUTES.DirectoryHome)#">
@@ -107,19 +109,21 @@
 			<div class="listing">
 			<ul class="trainingLinks">
 			<cfoutput query="qDir3">
-				<cfif Right(qDir3.linkURL,Len("OpenMe.html")) IS "OpenMe.html">
-					<cfset ThisLIClass="listingVideo">
-				<cfelseif qDir3.type is "dir">
-					<cfset ThisLIClass="listingDir">
-				<cfelse>
-					<cfset ThisLIClass="listingFile">
+				<cfif qDir3.linkURL IS NOT "">
+					<cfif Right(qDir3.linkURL,Len("OpenMe.html")) IS "OpenMe.html">
+						<cfset ThisLIClass="listingVideo">
+					<cfelseif qDir3.type is "dir">
+						<cfset ThisLIClass="listingDir">
+					<cfelse>
+						<cfset ThisLIClass="listingFile">
+					</cfif>
+					<li class="#ThisLIClass#">
+					<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
+					<cfif qDir3.Thumbnail IS NOT "">
+						<img src="#qDir3.Thumbnail#">
+					</cfif>
+					<span>#qDir3.Name#</span></a></li>
 				</cfif>
-				<li class="#ThisLIClass#">
-				<a href="#qDir3.linkURL#"<cfif Left(qDir3.linkURL,4) IS "http"> target="_blank"</cfif>>
-				<cfif qDir3.Thumbnail IS NOT "">
-					<img src="#qDir3.Thumbnail#">
-				</cfif>
-				<span>#qDir3.Name#</span></a></li>
 			</cfoutput>
 			</ul>
 			</div>

@@ -1,3 +1,4 @@
+<cfsetting requesttimeout="3600">
 <cfparam name="ATTRIBUTES.FormAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_string#">
 <cfparam name="ATTRIBUTES.ObjectAction" default="List">
 <cfparam name="ATTRIBUTES.sCurrentCategoryPermissions">

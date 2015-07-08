@@ -341,7 +341,7 @@ $(window).load(function() {
 	/* window load funcitonality */
 	$("body").addClass("loaded");
 	
-	console.log($(window).width());
+	// console.log($(window).width());
 	// add kiosk timeout
 	var ttimer;
 	if($("html").hasClass("firefox")==true && $(window).width() > 1890){

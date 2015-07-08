@@ -1,3 +1,5 @@
+<cfsetting requesttimeout="5000">
+
 <cfparam name="ATTRIBUTES.CategoryID" default="-1">
 <cfparam name="ATTRIBUTES.FormAction" default="#CGI.SCRIPT_NAME#?#CGI.Query_String#">
 <cfparam name="ATTRIBUTES.EditAction" default="/common/admin/masterview/index.cfm?MVEid=1">
