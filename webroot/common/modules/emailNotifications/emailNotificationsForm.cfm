@@ -75,11 +75,11 @@
               <p>#firstName# #lastName# from company #company#, and email #missive# requested email notifications for the following literature:</p>
               <ul>
                 <cfif val(manuals) EQ "1">
-                  <li>Manuals &amp; Instructions Updates.</li>
+                  <li>Manuals &amp; Instructions Updates</li>
                 </cfif>
 
                 <cfif val(changes) EQ "1">
-                  <li>Design Changes or Improvements.</li>
+                  <li>Design Changes or Improvements</li>
                 </cfif>
 
                 <cfif val(press) EQ "1">
@@ -98,14 +98,14 @@
         <table>
           <tr>
             <td colspan="2">
-              <p>Thank you! You have been signed up for email notifications on the following::</p>
+              <p>Thank you! You have been signed up for email notifications on the following:</p>
               <ul>
                 <cfif val(manuals) EQ "1">
-                  <li>Manuals &amp; Instructions Updates.</li>
+                  <li>Manuals &amp; Instructions Updates</li>
                 </cfif>
 
                 <cfif val(changes) EQ "1">
-                  <li>Design Changes or Improvements.</li>
+                  <li>Design Changes or Improvements</li>
                 </cfif>
 
                 <cfif val(press) EQ "1">
