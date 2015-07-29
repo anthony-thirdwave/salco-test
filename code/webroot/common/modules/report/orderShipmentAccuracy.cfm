@@ -15,6 +15,15 @@ $(document).ready(function(){
     });
 });
 </script>
+
+<style>
+	article.goalsProgess .goalProgressTableHolder table.accuracy tr th.table-header-small {
+		padding: 0 10px;
+		padding-bottom: 12px;
+		font-size: 12px;
+	}
+</style>
+
 <cfquery name="qryQuarter" datasource="#APPLICATION.Data_DSN#">
 	SELECT	quarter,
 	convert (varchar(4),2000+convert(int,right([quarter],2))) +
@@ -48,52 +57,63 @@ $(document).ready(function(){
 	FROM	rp_ordershipmentAccuracy
 	WHERE	Quarter=<cfqueryparam value="#form.quarterSelect#" cfsqltype="cf_sql_varchar">
 </cfquery>
+
 <cfquery name="qryOrderYTD" dbtype="query">
 	SELECT SUM(TotalOrders) AS totalOrder
 	FROM	qryDataYTD
 </cfquery>
 
 <cfquery name="qryOrder" dbtype="query">
-	SELECT SUM(TotalOrders) AS totalOrder
+	SELECT TotalOrders AS totalOrder
 	FROM	qryData
 </cfquery>
-<cfquery name="qryRMA" dbtype="query">
+
+<!--- <cfquery name="qryRMA" dbtype="query">
 	SELECT SUM(RMACount) AS totalRMA
 	FROM	qryData
-</cfquery>
-<cfquery name="qryInquires" dbtype="query">
-	SELECT SUM(InquiryCount) AS totalInquires
+</cfquery> --->
+
+<cfquery name="qryIncidentCount" dbtype="query">
+	SELECT IncidentCount AS totalIncidents
 	FROM	qryData
 </cfquery>
+
 
 <cfquery name="qryInAccurateDataYTD" dbtype="query">
 	SELECT SUM(
-		+ DamagedDefectiveTotalsIllinois
-		+ DamagedDefectiveTotalsTexas
-		+ DataEntryErrorTotalsIllinois
-		+ DataEntryErrorTotalsTexas
-		+ DuplicateOrderTotalsIllinois
-		+ DuplicateOrderTotalsTexas
-		+ EngineeringIssueTotals
-		+ PickingErrorTotalsIllinois
-		+ PickingErrorTotalsTexas
-		+ ProductionErrorTotalsIllinois
-		+ ProductionErrorTotalsTexas
-		+ PurchasingErrorTotalsIllinois
-		+ PurchasingErrorTotalsTexas
-		+ QualifiedWrongPartTotalsIllinois
-		+ QualifiedWrongPartTotalsTexas
-		+ VendorErrorTotalsIllinois
-		+ VendorErrorTotalsTexas
-		+ QualityIssueTotalsIllinois
-		+ QualityIssueTotalsTexas
-		+ InventoryControlTotalsIllinois
-		+ InventoryControlTotalsTexas) AS total
+		+ DeliveryDamW
+		+ DeliveryDamWO
+		+ DocumentationW
+		+ DocumentationWO
+		+ HardDataEntryW
+		+ HardDataEntryWO
+		+ LateDeliveryW
+		+ LateDeliveryWO
+		+ NonconformingW
+		+ NonconformingWO
+		+ OrderEntryErrorW
+		+ OrderEntryErrorWO
+		+ PoorCommW
+		+ PoorCommWO
+		+ ProductMarkingW
+		+ ProductMarkingWO
+		+ SalcoWebsiteW
+		+ SalcoWebsiteWO
+		+ ShippingPackagingW
+		+ ShippingPackagingWO
+		+ VendorWebsiteW
+		+ VendorWebsiteWO
+		+ WrongLocationW
+		+ WrongLocationWO
+		+ WrongProductW
+		+ WrongProductWO
+		+ WrongQuantityW
+		+ WrongQuantityWO) AS total
 	FROM	qryDataYTD
 </cfquery>
 
-<cfif qryInAccurateDataYTD.total gt 0 and qryOrderYTD.totalOrder gt 0>
-	<cfset Accuracy=100 * (1 - ( (qryInAccurateDataYTD.total+qryInquires.totalInquires)/qryOrderYTD.totalOrder))>
+<cfif qryIncidentCount.totalIncidents gt 0 and qryOrderYTD.totalOrder gt 0>
+	<cfset Accuracy=100 * (1 - ( (qryIncidentCount.totalIncidents)/qryOrderYTD.totalOrder))>
 <cfelse>
 	<cfset Accuracy=0>
 </cfif>
@@ -138,10 +158,8 @@ $(document).ready(function(){
 		</div>
 		
 		<div class="miniTile shortenTile">
-			<h4>Number of <br>
-				RMA's &amp; Inquiries</h4>
-			<div class="botLeft">#NumberFormat(qryRMA.totalRMA,",")#<br>RMA's</div>
-			<div class="botLeft">#NumberFormat(qryInquires.totalInquires,",")#<br>Inquires</div>
+			<h4>Number of <br> Incidents</h4>
+			<div class="botLeft">#NumberFormat(qryIncidentCount.totalIncidents, ",")#<br>&nbsp;</div>
 		</div>
 	
 	</div>
@@ -152,129 +170,180 @@ $(document).ready(function(){
 			<tr>
 				<th>Category</th>
 				<th>Total</th>
-				<th>Lemont</th>
-				<th>Tomball</th>
+				<th class="table-header-small">With material return</th>
+				<th class="table-header-small">Without material return</th>
 			</tr>
 		</thead>
 		<cfoutput>
 		<tbody>
 			<cfquery name="qryDamaged" dbtype="query">
-				SELECT SUM(DamagedDefectiveTotalsIllinois + DamagedDefectiveTotalsTexas) AS total
-					, SUM(DamagedDefectiveTotalsIllinois) as Illinois, SUM(DamagedDefectiveTotalsTexas) as Tomball
+				SELECT SUM(DeliveryDamW + DeliveryDamWO) AS total
+					, SUM(DeliveryDamW) as with, SUM(DeliveryDamWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>DAMAGED/DEFECTIVE TOTALS</td>
+				<td>Delivery Damage </td>
 				<td>#qryDamaged.total#</td>
-				<td>#qryDamaged.Illinois#</td>
-				<td>#qryDamaged.Tomball#</td>
+				<td>#qryDamaged.with#</td>
+				<td>#qryDamaged.without#</td>
 			</tr>
-			<cfquery name="qryDataEntryError" dbtype="query">
-				SELECT SUM(DataEntryErrorTotalsIllinois + DataEntryErrorTotalsTexas) AS total
-				, SUM(DataEntryErrorTotalsIllinois) as Illinois, SUM(DataEntryErrorTotalsTexas) as Tomball
+
+			<cfquery name="qryDocumentation" dbtype="query">
+				SELECT SUM(DocumentationW + DocumentationWO) AS total
+					, SUM(DocumentationW) as with, SUM(DocumentationWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>DATA ENTRY ERROR TOTALS</td>
-				<td>#qryDataEntryError.total#</td>
-				<td>#qryDataEntryError.Illinois#</td>
-				<td>#qryDataEntryError.Tomball#</td>
+				<td>Documentation Wrong/Missing </td>
+				<td>#qryDocumentation.total#</td>
+				<td>#qryDocumentation.with#</td>
+				<td>#qryDocumentation.without#</td>
 			</tr>
-			<cfquery name="qryDuplicateOrder" dbtype="query">
-				SELECT SUM(DuplicateOrderTotalsIllinois + DuplicateOrderTotalsTexas) AS total
-				, SUM(DuplicateOrderTotalsIllinois) as Illinois, SUM(DuplicateOrderTotalsTexas) as Tomball
+
+			<cfquery name="qryHardDataEntry" dbtype="query">
+				SELECT SUM(HardDataEntryW + HardDataEntryWO) AS total
+					, SUM(DocumentationW) as with, SUM(DocumentationWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>DUPLICATE ORDER TOTALS</td>
-				<td>#qryDuplicateOrder.total#</td>
-				<td>#qryDuplicateOrder.Illinois#</td>
-				<td>#qryDuplicateOrder.Tomball#</td>
+				<td>Hard Data Entry Error </td>
+				<td>#qryHardDataEntry.total#</td>
+				<td>#qryHardDataEntry.with#</td>
+				<td>#qryHardDataEntry.without#</td>
 			</tr>
-			<tr>
-				<td>ENGINEERING ISSUE</td>
-				<td>#qryData.EngineeringIssueTotals#</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<cfquery name="qryPickingError" dbtype="query">
-				SELECT SUM(PickingErrorTotalsIllinois + PickingErrorTotalsTexas) AS total
-				, SUM(PickingErrorTotalsIllinois) as Illinois, SUM(PickingErrorTotalsTexas) as Tomball
+
+			<cfquery name="qryLateDelivery" dbtype="query">
+				SELECT SUM(LateDeliveryW + LateDeliveryWO) AS total
+					, SUM(LateDeliveryW) as with, SUM(LateDeliveryWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>PICKING ERROR TOTALS</td>
-				<td>#qryPickingError.total#</td>
-				<td>#qryPickingError.Illinois#</td>
-				<td>#qryPickingError.Tomball#</td>
+				<td>Late Delivery </td>
+				<td>#qryLateDelivery.total#</td>
+				<td>#qryLateDelivery.with#</td>
+				<td>#qryLateDelivery.without#</td>
 			</tr>
-			<cfquery name="qryProductionError" dbtype="query">
-				SELECT SUM(ProductionErrorTotalsIllinois + ProductionErrorTotalsTexas) AS total
-				, SUM(ProductionErrorTotalsIllinois) as Illinois, SUM(ProductionErrorTotalsTexas) as Tomball
+
+			<cfquery name="qryNonconforming" dbtype="query">
+				SELECT SUM(NonconformingW + NonconformingWO) AS total
+					, SUM(NonconformingW) as with, SUM(NonconformingWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>PRODUCTION ERROR TOTALS</td>
-				<td>#qryProductionError.total#</td>
-				<td>#qryProductionError.Illinois#</td>
-				<td>#qryProductionError.Tomball#</td>
+				<td>Nonconforming Product </td>
+				<td>#qryNonconforming.total#</td>
+				<td>#qryNonconforming.with#</td>
+				<td>#qryNonconforming.without#</td>
 			</tr>
-			<cfquery name="qryPurchasingError" dbtype="query">
-				SELECT SUM(PurchasingErrorTotalsIllinois + PurchasingErrorTotalsTexas) AS total
-				, SUM(PurchasingErrorTotalsIllinois) as Illinois, SUM(PurchasingErrorTotalsTexas) as Tomball
+
+			<cfquery name="qryOrderEntryError" dbtype="query">
+				SELECT SUM(OrderEntryErrorW + OrderEntryErrorWO) AS total
+					, SUM(OrderEntryErrorW) as with, SUM(OrderEntryErrorWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>PURCHASING ERROR TOTALS</td>
-				<td>#qryPurchasingError.total#</td>
-				<td>#qryPurchasingError.Illinois#</td>
-				<td>#qryPurchasingError.Tomball#</td>
+				<td>Order Entry Error </td>
+				<td>#qryOrderEntryError.total#</td>
+				<td>#qryOrderEntryError.with#</td>
+				<td>#qryOrderEntryError.without#</td>
 			</tr>
-			<cfquery name="qryQualifiedWrongParts" dbtype="query">
-				SELECT SUM(QualifiedWrongPartTotalsIllinois + QualifiedWrongPartTotalsTexas) AS total
-				, SUM(QualifiedWrongPartTotalsIllinois) as Illinois, SUM(QualifiedWrongPartTotalsTexas) as Tomball
+
+			<cfquery name="qryPoorComm" dbtype="query">
+				SELECT SUM(PoorCommW + PoorCommWO) AS total
+					, SUM(PoorCommW) as with, SUM(PoorCommWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>QUALIFIED WRONG PART TOTALS</td>
-				<td>#qryQualifiedWrongParts.total#</td>
-				<td>#qryQualifiedWrongParts.Illinois#</td>
-				<td>#qryQualifiedWrongParts.Tomball#</td>
+				<td>Poor Communication/Responsivness </td>
+				<td>#qryPoorComm.total#</td>
+				<td>#qryPoorComm.with#</td>
+				<td>#qryPoorComm.without#</td>
 			</tr>
-			<cfquery name="qryVendorError" dbtype="query">
-				SELECT SUM(VendorErrorTotalsIllinois + VendorErrorTotalsTexas) AS total
-				, SUM(VendorErrorTotalsIllinois) as Illinois, SUM(VendorErrorTotalsTexas) as Tomball
+
+			<cfquery name="qryProductMarking" dbtype="query">
+				SELECT SUM(ProductMarkingW + ProductMarkingWO) AS total
+					, SUM(ProductMarkingW) as with, SUM(ProductMarkingWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>VENDOR ERROR TOTALS</td>
-				<td>#qryVendorError.total#</td>
-				<td>#qryVendorError.Illinois#</td>
-				<td>#qryVendorError.Tomball#</td>
+				<td>Product Marking Wrong/Missing </td>
+				<td>#qryProductMarking.total#</td>
+				<td>#qryProductMarking.with#</td>
+				<td>#qryProductMarking.without#</td>
 			</tr>
-			<cfquery name="qryQualityIssue" dbtype="query">
-				SELECT SUM(QualityIssueTotalsIllinois + QualityIssueTotalsTexas) AS total
-				, SUM(QualityIssueTotalsIllinois) as Illinois, SUM(QualityIssueTotalsTexas) as Tomball
+
+			<cfquery name="qryHardDataEntry" dbtype="query">
+				SELECT SUM(HardDataEntryW + HardDataEntryWO) AS total
+					, SUM(HardDataEntryW) as with, SUM(HardDataEntryWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>QUALITY ISSUE TOTALS</td>
-				<td>#qryQualityIssue.total#</td>
-				<td>#qryQualityIssue.Illinois#</td>
-				<td>#qryQualityIssue.Tomball#</td>
+				<td>Salco Website Problem </td>
+				<td>#qryHardDataEntry.total#</td>
+				<td>#qryHardDataEntry.with#</td>
+				<td>#qryHardDataEntry.without#</td>
 			</tr>
-			
-			<cfquery name="qryInventoryControl" dbtype="query">
-				SELECT SUM(InventoryControlTotalsIllinois + InventoryControlTotalsTexas) AS total
-				, SUM(InventoryControlTotalsIllinois) as Illinois, SUM(InventoryControlTotalsTexas) as Tomball
+
+			<cfquery name="qryShippingPackaging" dbtype="query">
+				SELECT SUM(ShippingPackagingW + ShippingPackagingWO) AS total
+					, SUM(ShippingPackagingW) as with, SUM(ShippingPackagingWO) as without
 				FROM	qryData
 			</cfquery>
 			<tr>
-				<td>INVENTORY CONTROL TOTALS</td>
-				<td>#qryInventoryControl.total#</td>
-				<td>#qryInventoryControl.Illinois#</td>
-				<td>#qryInventoryControl.Tomball#</td>
+				<td>Shipping Packaging Issue </td>
+				<td>#qryShippingPackaging.total#</td>
+				<td>#qryShippingPackaging.with#</td>
+				<td>#qryShippingPackaging.without#</td>
 			</tr>
+
+			<cfquery name="qryVendorWebsite" dbtype="query">
+				SELECT SUM(VendorWebsiteW + VendorWebsiteWO) AS total
+					, SUM(VendorWebsiteW) as with, SUM(VendorWebsiteWO) as without
+				FROM	qryData
+			</cfquery>
+			<tr>
+				<td>Vendor Website Problem </td>
+				<td>#qryVendorWebsite.total#</td>
+				<td>#qryVendorWebsite.with#</td>
+				<td>#qryVendorWebsite.without#</td>
+			</tr>
+
+			<cfquery name="qryWrongLocation" dbtype="query">
+				SELECT SUM(WrongLocationW + WrongLocationWO) AS total
+					, SUM(WrongLocationW) as with, SUM(WrongLocationWO) as without
+				FROM	qryData
+			</cfquery>
+			<tr>
+				<td>Wrong Location </td>
+				<td>#qryWrongLocation.total#</td>
+				<td>#qryWrongLocation.with#</td>
+				<td>#qryWrongLocation.without#</td>
+			</tr>
+
+			<cfquery name="qryWrongProduct" dbtype="query">
+				SELECT SUM(WrongProductW + WrongProductWO) AS total
+					, SUM(WrongProductW) as with, SUM(WrongProductWO) as without
+				FROM	qryData
+			</cfquery>
+			<tr>
+				<td>Wrong Product </td>
+				<td>#qryWrongProduct.total#</td>
+				<td>#qryWrongProduct.with#</td>
+				<td>#qryWrongProduct.without#</td>
+			</tr>
+
+			<cfquery name="qryWrongQuantity" dbtype="query">
+				SELECT SUM(WrongQuantityW + WrongQuantityWO) AS total
+					, SUM(WrongQuantityW) as with, SUM(WrongQuantityWO) as without
+				FROM	qryData
+			</cfquery>
+			<tr>
+				<td>Wrong Quantity </td>
+				<td>#qryWrongQuantity.total#</td>
+				<td>#qryWrongQuantity.with#</td>
+				<td>#qryWrongQuantity.without#</td>
+			</tr>
+
 			</cfoutput>
 		</tbody>
 		
