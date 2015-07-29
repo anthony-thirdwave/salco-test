@@ -8,9 +8,10 @@
 <cfset sReportElt=StructNew()>
 <cfset StructInsert(sReportElt,"ReportName","ordershipmentAccuracy",1)>
 <cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
-<cfset StructInsert(sReportElt,"FileName","Template-Order-Shipment Accuracy-RMA Data.csv",1)>
+<cfset StructInsert(sReportElt,"FileName","Template-Order-Shipment Accuracy-RMA Data REVISED.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_ordershipmentAccuracy",1)>
-<cfset StructInsert(sReportElt,"FieldLists","Quarter,TotalOrders,RMACount,InquiryCount,DamagedDefectiveTotalsIllinois,DamagedDefectiveTotalsTexas,DataEntryErrorTotalsIllinois,DataEntryErrorTotalsTexas,DuplicateOrderTotalsIllinois,DuplicateOrderTotalsTexas,EngineeringIssueTotals,PickingErrorTotalsIllinois,PickingErrorTotalsTexas,ProductionErrorTotalsIllinois,ProductionErrorTotalsTexas,PurchasingErrorTotalsIllinois,PurchasingErrorTotalsTexas,QualifiedWrongPartTotalsIllinois,QualifiedWrongPartTotalsTexas,VendorErrorTotalsIllinois,VendorErrorTotalsTexas,QualityIssueTotalsIllinois,QualityIssueTotalsTexas,InventoryControlTotalsIllinois,InventoryControlTotalsTexas",1)>
+<cfset StructInsert(sReportElt,"FieldLists",
+"Quarter,TotalOrders,IncidentCount,DeliveryDamW,DeliveryDamWO,DocumentationW,DocumentationWO,HardDataEntryW,HardDataEntryWO,LateDeliveryW,LateDeliveryWO,NonconformingW,NonconformingWO,OrderEntryErrorW,OrderEntryErrorWO,PoorCommW,PoorCommWO,ProductMarkingW,ProductMarkingWO,SalcoWebsiteW,SalcoWebsiteWO,ShippingPackagingW,ShippingPackagingWO,VendorWebsiteW,VendorWebsiteWO,WrongLocationW,WrongLocationWO,WrongProductW,WrongProductWO,WrongQuantityW,WrongQuantityWO",1)>
 <cfset StructInsert(sReports,1,sReportElt,1)>
 
 <cfset sReportElt=StructNew()>
@@ -26,7 +27,7 @@
 <cfset StructInsert(sReportElt,"FileLocation","#BaseFileLocation#",1)>
 <cfset StructInsert(sReportElt,"FileName","Template-Sales.csv",1)>
 <cfset StructInsert(sReportElt,"TableName","rp_Sales",1)>
-<cfset StructInsert(sReportElt,"FieldLists","Year, Month,AnnualSalesGoal,QuarterlySalesGoal,MonthlySalesGoal,ActualSales",1)>
+<cfset StructInsert(sReportElt,"FieldLists","Year,Month,AnnualSalesGoal,QuarterlySalesGoal,MonthlySalesGoal,ActualSales",1)>
 <cfset StructInsert(sReports,3,sReportElt,1)>
 
 <cfset sReportElt=StructNew()>
@@ -45,12 +46,18 @@
 <cfset StructInsert(sReportElt,"FieldLists","[SO Count],value,month,year",1)>
 <cfset StructInsert(sReports,5,sReportElt,1)>
 
+
 <cfloop index="ThisReport" list="#structKeyList(sReports)#">
 	<cfoutput>Working on #sReports[ThisReport].ReportName#...<br></cfoutput>
 	<cfset thisFilePath="#sReports[ThisReport].FileLocation#\#sReports[ThisReport].FileName#">
 	<cfif FileExists(thisFilePath)>
 		<cfoutput>Import file exists (#sReports[ThisReport].FileName#)...<br></cfoutput>
 		<cffile action="read" file="#thisFilePath#" variable="orderCSVFile">
+
+		<cfif ThisReport IS "1">
+			<cfset orderCSVFile=Replace(orderCSVFile,"Quarter,Total Orders,Incident  Count,Delivery Dam W,Delivery Dam WO,Documentation W,Documentation WO,Hard Data Entry W,Hard Data Entry WO,Late Delivery W,Late Delivery WO,Nonconforming W,Nonconforming WO,Order Entry Error W,Order Entry Error WO,Poor Comm W,Poor Comm WO,Product Marking W,Product Marking WO,Salco Website W,Salco Website WO,Shipping Packaging W,Shipping Packaging WO,Vendor Website W,Vendor Website WO,Wrong Location W,Wrong Location WO,Wrong Product W,Wrong Product WO,Wrong Qunatity W,Wrong Quantity WO",sReports[ThisReport].FieldLists,"one")>
+		</cfif>
+
 		<cfinvoke component="/com/utils/utils"
 			method="CSVToQuery"
 			returnVariable="qResult"
@@ -100,6 +107,7 @@
 			</cfquery>
 			Importing data...<br>
 			<cfloop query="qResult" startRow="2">
+				<cfdump var="#qResult#">
 				<cfquery name="#sReports[ThisReport].TableName#_Insert" datasource="#APPLICATION.Data_DSN#">
 					INSERT INTO #sReports[ThisReport].TableName# (#sReports[ThisReport].FieldLists#)
 					VALUES	(
