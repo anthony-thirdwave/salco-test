@@ -1064,3 +1064,27 @@ var imageGallery={
 		location.hash="#close";
 	}
 }
+$(window).load(function(){
+   //alert($("html").hasClass("firefox")) 
+   if($("html").hasClass("firefox")==true){
+       testforKiosk.init();
+    }
+    
+   $(window).resize(function(){
+       if($("html").hasClass("firefox")==true){
+          testforKiosk.init();
+        }
+    });
+});
+
+testforKiosk={
+    init:function(){
+        //alert(window.fullScreen)
+        
+        if(window.fullScreen==true){
+            $("html").addClass("kioskMode");
+        }else{
+            $("html").removeClass("kioskMode");
+        }
+    }
+}
