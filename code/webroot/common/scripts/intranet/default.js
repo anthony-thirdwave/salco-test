@@ -98,6 +98,7 @@ var fauxSelects={
 	}
 	
 $(window).load(function() {
+   // alert(window.fullScreen)
 	// launch browser detect script
 	BrowserDetect.init();
 	//initiate maximus scripts
@@ -106,11 +107,6 @@ $(window).load(function() {
 	if($("body").hasClass("image-gallery-full")==true){
 		imageGallery.init();
 	}
-	
-	if($("body").attr("id")=="m2m"){
-		vidmodal.init()
-	}
-	
 });
 
 var ieFixes={
@@ -403,17 +399,28 @@ $(window).load(function() {
 		}).appendTo('#idletimeout');
 		/* 300 */
 		$.idleTimeout('#idletimeout', '#idletimeout a', {
-				idleAfter: 300,
+				idleAfter: 300, //300
 				pollingInterval: 60,
 				keepAliveURL: '/common/scripts/intranet/ping.html',
 				serverResponseEquals: 'OK',
 				onIdle: function(){
 					//window.location = "/";
+                     if(parent.length==0){
 					kioskPageSaver.changePage();
+                    console.log("starting screensaver");
+                     }else{
+                         console.log("screensaver... enact change");
+                         kioskPageSaver.changePage2();
+                         console.log("screensaver... changed");
+                     }
 				},
 				onResume: function(){
 			 
 					console.log("resuming");
+                    $("#screensaver-f").remove();
+                    $("#screensaverslidess").remove();
+                    
+                    clearTimeout(tsm);
 					//$("body").unbind("click");
 					//window.clearTimeout(ttimer);
 			 
@@ -836,7 +843,8 @@ var kioskPageSaver={
 			var randomForceNumber=Math.floor(Math.random()*999999);
 			console.log(randomnumber);
 			console.log(kioskPageSaver.pages[randomnumber]);
-			$("body").removeClass("fadein");
+            //start of old slides
+			/*$("body").removeClass("fadein");
 			$("body").addClass("fadeout");
 			
 			$("body").load(kioskPageSaver.pages[randomnumber]+"?ran=hope"+randomForceNumber+" #wrapper", function(){
@@ -863,11 +871,30 @@ var kioskPageSaver={
 					$('.employees a span img[src=""]').attr("src","/common/images/Intranet/template/temp-genericPerson.png");
 				}
 				
-			});
+			});*/
+            //end old script
+            
+            
+            if(parent.length==0){
+                //<div style="width:100%; height:100%; position:absolute; top:0; left:0; z-index:2010; background:rgba(0,0,0,.5);"></div>
+                if($("iframe").length<1){
+                giframe='<style id="screensaverslidess">iframe+a+#wrapper{display:none;} #idletimeout a{display:block;position:fixed; top:0; left:0; width:100%; height:100%; z-index:2020; }</style><iframe id="screensaver-f" width="100%" height="100%" frameborder="0" src="" style="position:fixed; top:0; left:0; opacity:0; transition:all .75s; z-index:2000;"></iframe>';
+                $("body").prepend(giframe);
+                $("#screensaver-f").attr("src",window.location.origin+"/"+kioskPageSaver.pages[randomnumber]+"?actions=no-iframe").css({opacity:1});
+                var tsm=setTimeout("kioskPageSaver.changePage2()",300000);
+                }
+            }
 		}else{
 			document.location="/";
 		}
-	}
+	},
+    changePage2:function(){
+        kioskPageSaver.pages=SlideShow; 
+		arl=kioskPageSaver.pages.length;
+        var randomnumber=Math.floor(Math.random()*arl);
+        $("#screensaver-f").attr("src",window.location.origin+"/"+kioskPageSaver.pages[randomnumber]).css({opacity:1});  
+                 var tsm=setTimeout("kioskPageSaver.changePage2()",300000);
+    }
 }
 
 var calendarAccordian={
@@ -1070,35 +1097,27 @@ var imageGallery={
 	}
 }
 
-var vidmodal={
-		init:function(){
-			$("body").prepend('<div id="vidModalOverlord" class="hidden"><div id="vidModaloverlay"></div><div id="vidModalCenter"><div id="vidModalHolder"></div></div></div>');
-			
-			$(".trainingLinks a").bind("click",function(event){
-				event.preventDefault();
-				//alert($(this).attr("href"));
-				vidmodal.openVideo($(this).attr("href"))
-			});
-		},
-		openVideo:function(mmm){
-			$("#vidModalHolder").load(mmm +" iframe",function(){
-				$("#vidModalHolder").prepend('<a class="closeGal" title="Close" href="#"></a>');
-				$("#vidModalHolder").append('<a class="closeGal" title="Close" href="#"></a>');
-				$("#vidModalOverlord").attr("class","show");
-				setTimeout(function(){
-					$("#vidModaloverlay").bind("click",function(){
-						vidmodal.closeVid();
-					});
-					
-					$(".closeGal").bind("click",function(event){
-						event.preventDefault();
-						vidmodal.closeVid();
-					});
-				},500);
-			});
-		},
-		closeVid:function(){
-			$("#vidModalHolder").html("&nbsp;");
-			$("#vidModalOverlord").attr("class","hidden");
-		}
-	}
+$(window).load(function(){
+   //alert($("html").hasClass("firefox")) 
+   if($("html").hasClass("firefox")==true){
+       testforKiosk.init();
+    }
+    
+   $(window).resize(function(){
+       if($("html").hasClass("firefox")==true){
+          testforKiosk.init();
+        }
+    });
+});
+
+testforKiosk={
+    init:function(){
+        //alert(window.fullScreen)
+        
+        if(window.fullScreen==true){
+            $("html").addClass("kioskMode");
+        }else{
+            $("html").removeClass("kioskMode");
+        }
+    }
+}
