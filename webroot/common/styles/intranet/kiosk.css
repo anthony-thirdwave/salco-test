@@ -2,7 +2,7 @@
 /* CSS Document */
 
 @media only screen and (min-width: 1890px) {
-	body{
+	.kioskMode body{
 		background-size: 100% auto;
 	}
 	
@@ -13,7 +13,7 @@
         -o-user-select: none; 
 	}
 	
-	#wrapper[class=""]{
+	.kioskMode #wrapper[class=""]{
 		width:998px;
 		transform: scale(1.9);
 		-ms-transform: scale(1.9); /* IE 9 */
@@ -25,13 +25,13 @@
 		-moz-transform-origin:center top; /* Firefox */
 	}
 	
-	#wrapper[class="pdf-flash"]{
+	.kioskMode #wrapper[class="pdf-flash"]{
 		
 	}
 	
-	#wrapper[class="pdf-flash"] #header{width:998px;}
+	.kioskMode #wrapper[class="pdf-flash"] #header{width:998px;}
 	
-	#wrapper[class="pdf-flash"] #header{
+	.kioskMode #wrapper[class="pdf-flash"] #header{
 		transform: scale(1.9);
 		-ms-transform: scale(1.9); /* IE 9 */
 		-ms-transform-origin:center top; /* IE 9 */
@@ -43,7 +43,7 @@
 		
 	}
 	
-	#wrapper[class="pdf-flash"] #leftColumn{
+	.kioskMode #wrapper[class="pdf-flash"] #leftColumn{
 		transform: scale(1.9);
 		-ms-transform: scale(1.9); /* IE 9 */
 		-ms-transform-origin:center 330px; /* IE 9 */
@@ -55,7 +55,7 @@
 		
 	}
 	
-	#wrapper[class="pdf-flash"] #rightColumn{
+	.kioskMode #wrapper[class="pdf-flash"] #rightColumn{
 		transform: scale(1.9);
 		-ms-transform: scale(1.9); /* IE 9 */
 		-ms-transform-origin:center 330px; /* IE 9 */
@@ -67,98 +67,98 @@
 		
 	}
 	
-	#shipment h1, #shipment .selects, #shipment .subTitle, #shipment .tileHolderSmall{
+	.kioskMode #shipment h1, .kioskMode #shipment .selects, .kioskMode #shipment .subTitle, #shipment .tileHolderSmall{
 		
 		-moz-transform: scale(1.9); /* Firefox */
 		-moz-transform-origin:-5px 0px 0; /* Firefox */
 	}
 	
-	#shipment .selects{
+	.kioskMode #shipment .selects{
 		-moz-transform-origin:-200px 0px 0; /* Firefox */
 		position:relative;
 		z-index:100;
 	}
 	
-	#shipment .subTitle{
+	.kioskMode #shipment .subTitle{
 		-moz-transform-origin:-5px -25px 0; /* Firefox */
 	}
 	
-	#shipment .tileHolderSmall{
+	.kioskMode #shipment .tileHolderSmall{
 		-moz-transform-origin:-5px -25px 0; /* Firefox */
 	}
 	
-	#shipment .goalProgressTableHolder{
+	.kioskMode #shipment .goalProgressTableHolder{
 		margin-top:150px;
 	}
 	
-	#wrapper[class="pdf-flash"] #rightColumn{
+	.kioskMode #wrapper[class="pdf-flash"] #rightColumn{
 		/*width:172px;*/
 	}
 	
 	
-	#wrapper[class="pdf-flash"] #contentContainer{
+	.kioskMode #wrapper[class="pdf-flash"] #contentContainer{
 		width:1600px;
 		/*margin:170px auto 0 auto;*/
 	}
 	
-	#wrapper[class="pdf-flash"] #centerColumn{
+	.kioskMode #wrapper[class="pdf-flash"] #centerColumn{
 		width:1074px;
 		margin:160px 0px 0 -255px;
 	}
 	
-	#wrapper[class="pdf-flash"] #centerColumn article.news{
+	.kioskMode #wrapper[class="pdf-flash"] #centerColumn article.news{
 		border-radius: 25px 25px 25px 25px;
 	}
 	
-	#wrapper[class="pdf-flash"] #centerColumn object, #wrapper[class="pdf-flash"] #centerColumn embed{
+	.kioskMode #wrapper[class="pdf-flash"] #centerColumn object, .kioskMode #wrapper[class="pdf-flash"] #centerColumn embed{
 		width:100%;
 	}
 	
-	#header #utilityNavigation #search #search-text{
+	.kioskMode #header #utilityNavigation #search #search-text{
 		margin:-1px -5px 0px 18px;
 	}
 	
-	#header{
+	.kioskMode #header{
 		position:relative;
 		background:url(/common/images/intranet/template/salcoScene.png) no-repeat 220px 102px;
 		width:auto;
 	}
 	
-	#header + .clearit{
+	.kioskMode #header + .clearit{
 		height:0px;
 	}
 	
-	#contentContainer #centerColumn{
+	.kioskMode #contentContainer #centerColumn{
 		margin:0px 10px;
 	}
 	
-	#contentContainer #leftColumn{
+	.kioskMode #contentContainer #leftColumn{
 		margin-left:15px;
 	}
 	
-	#header #utilityNavigation .utilityNavigation ul li:nth-child(1), #header #utilityNavigation .utilityNavigation ul li:nth-child(2) {
+	.kioskMode #header #utilityNavigation .utilityNavigation ul li:nth-child(1), .kioskMode #header #utilityNavigation .utilityNavigation ul li:nth-child(2) {
 	    display:none;
 	}
 	
 	
-	#header #utilityNavigation .utilityNavigation ul li:nth-child(3) {
+	.kioskMode #header #utilityNavigation .utilityNavigation ul li:nth-child(3) {
 	   border-radius: 8px 0 0 8px;
 	}
 	
-	#header #utilityNavigation .utilityNavigation ul li:nth-child(4) {
+	.kioskMode #header #utilityNavigation .utilityNavigation ul li:nth-child(4) {
 		border-radius: 0 8px 8px 0;
 	}
 	
 	
-	#header #utilityNavigation .utilityNavigation ul li:nth-child(5) {
+	.kioskMode #header #utilityNavigation .utilityNavigation ul li:nth-child(5) {
 	    display:none;
 	}
 	
-	#modalBG {
+	.kioskMode #modalBG {
 		position: fixed !important;
 		z-index: 1 !important;
 	}
-	.news-item .lrgImgs {
+	.kioskMode .news-item .lrgImgs {
 		top:120px !important;
 		position: absolute !important;
 		z-index:30 !important;
@@ -166,10 +166,10 @@
 	
 	
 
-	#header #utilityNavigation {
+	.kioskMode #header #utilityNavigation {
 		margin-right:14px;}
 		
-	#wrapper{
+	.kioskMode #wrapper{
 	opacity:0;
 	-webkit-transition: opacity .75s ease-out;
 	-moz-transition: opacity .75s ease-out;
@@ -177,15 +177,15 @@
 	transition: opacity .75s ease-out;
 }
 
-.loaded #wrapper{
+.kioskMode .loaded #wrapper{
 	opacity:1;
 }
 
-.fadeout #wrapper{
+.kioskMode .fadeout #wrapper{
 	opacity:0;
 }
 
-.fadeout.fadein #wrapper{
+.kioskMode .fadeout.fadein #wrapper{
 	opacity:1;
 	-webkit-transition: opacity .75s ease-out .5s;
 	-moz-transition: opacity .75s ease-out .5s;
@@ -193,7 +193,7 @@
 	transition: opacity .75s ease-out .5s;
 }
 
-.employees-listing #empl-nav li{
+.kioskMode .employees-listing #empl-nav li{
 	margin:0px 0px -4px 0px;
 	font-size:0px;
 	-webkit-transition: opacity .75s ease-out;
@@ -204,7 +204,7 @@
 
 }
 
-.employees-listing #empl-nav li a{
+.kioskMode .employees-listing #empl-nav li a{
 	font-size:17px;
 	display:inline-block;
 	padding-right:5px;
@@ -220,24 +220,24 @@
 	transition: opacity .75s ease-out;
 }
 
-.calendar-nav div:nth-child(1), .calendar-nav div:nth-child(3) {
+.kioskMode .calendar-nav div:nth-child(1), .calendar-nav div:nth-child(3) {
 	width:20%;
 }
 
-.calendar-nav div:nth-child(1) a, .calendar-nav div:nth-child(3) a {
+.kioskMode .calendar-nav div:nth-child(1) a, .calendar-nav div:nth-child(3) a {
 	display:block;
 	text-align:center;
 }
 
-.calendar-nav div.monthYr {
+.kioskMode .calendar-nav div.monthYr {
     width: 55% !important;
 }
 
-#empl-nav {
+.kioskMode #empl-nav {
 	margin-left:200px;
 }
 
-#modalBG:after{
+.kioskMode #modalBG:after{
 	content:"Tap on image border to hide navigation, Tap on image to show navigation";
 	position:absolute;
 	color:#fff;
@@ -282,8 +282,28 @@
         }
 	
 	
-	#inclWHolder, #inclmWOverlay{
+	.kioskMode #inclWHolder, .kioskMode #inclmWOverlay{
 		display:none;
+	}
+	
+	.kioskMode #vidModalHolder > .closeGal:nth-child(1){
+		display:none;
+	}
+	
+	.kioskMode #vidModalHolder > .closeGal:nth-child(3){
+		background: url("/common/images/intranet/template/closeBut2.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+		height: 21px;
+		width: 23px;
+		display:block;
+		float:right;
+		margin-top:-5px;
+	}
+	
+	.kioskMode #vidModalHolder > .closeGal:nth-child(3):after{
+		content:"";
+		clear:both;
+		display:block;
+		
 	}
 	
 }
