@@ -147,7 +147,7 @@ $(document).ready(function(){
 	<cfoutput>
 	<div class="tileHolderSmall">
 		<div class="miniTile">
-			<h4>Accuracy (YTD)</h4>
+			<h4>Accuracy</h4>
 			<div class="percentageLrg">#NumberFormat(Accuracy,'_____.__')#</div>
 		</div>
 		
