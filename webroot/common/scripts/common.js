@@ -1033,7 +1033,7 @@ var allContacts={
 			case "Jan Marino":
 				regionSet="region-19";
 			break;
-			case "Steve Vannocken":
+			case "Steve Van Nocken":
 				regionSet="region-14";
 			break;
 			case "Tyler Jepsen":
