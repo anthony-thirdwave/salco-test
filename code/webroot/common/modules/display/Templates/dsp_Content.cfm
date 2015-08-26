@@ -227,7 +227,7 @@
 			</div>
 		</cfdefaultcase>
 	</cfswitch>
-	<footer>
+	<footer id="pagefooter">
 		<ul>
 			<li>&copy; <cfoutput>#Year(Now())#</cfoutput> Salco Products, Inc.</li>
 			<li>
@@ -238,6 +238,15 @@
 					</ul>
 				</nav>
 			</li>
+            <li class="socialmedia">
+                <nav>
+                    <ul>
+                        <li><a href="https://www.linkedin.com/company/salco-products" target="_blank" title="LinkedIn"><img src="/common/images/template/social-linkin.png" ></a></li>
+                        <li><a href="https://plus.google.com/+SalcoProductsIncLemont" target="_blank" title="Google+"><img src="/common/images/template/social-google-plus.png"></a></li>
+                        <li><a href="https://www.youtube.com/salcoproductsinclemont" target="_blank" title="Youtube"><img src="/common/images/template/social-youtube.png"></a></li>
+                    </ul>
+                </nav>
+            </li>
 		</ul>
 	</footer>
 </div>
