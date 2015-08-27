@@ -3268,11 +3268,17 @@ font-family: "Myriad W01 Regular";
         right:0;
      }
      
+     .socialmedia:before{
+         content:"Connect with us! ";
+         position:absolute;
+         margin-left:-150px;
+     }
+     
      li.socialmedia li{
          margin-right:5px;}
      
      li.socialmedia li img{
-         width:20px;
+         width:28px;
       }
      
      li.socialmedia, li.socialmedia li:last-child {
