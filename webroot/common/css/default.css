@@ -3255,3 +3255,32 @@ font-family: "Myriad W01 Regular";
 	color: #ea1d25;
 	background: #e4e4e4;
 }
+
+#pagefooter{
+        width:900px; 
+        margin:auto;
+        position:relative;
+        padding-bottom:15px;
+    }
+    
+     .socialmedia{
+        position:absolute; 
+        right:0;
+     }
+     
+     .socialmedia:before{
+         content:"Connect with us! ";
+         position:absolute;
+         margin-left:-150px;
+     }
+     
+     li.socialmedia li{
+         margin-right:5px;}
+     
+     li.socialmedia li img{
+         width:28px;
+      }
+     
+     li.socialmedia, li.socialmedia li:last-child {
+         margin-right:0;
+      }

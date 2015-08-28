@@ -12,6 +12,10 @@
         -webkit-user-select: none; 
         -o-user-select: none; 
 	}
+    
+    .kioskMode .socialmedia{
+        display:none;
+     }
 	
 	.kioskMode #wrapper[class=""]{
 		width:998px;
@@ -305,6 +309,8 @@
 		display:block;
 		
 	}
+    
+    
 	
 }
 
