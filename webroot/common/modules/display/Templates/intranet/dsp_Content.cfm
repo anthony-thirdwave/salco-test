@@ -129,7 +129,16 @@
 							</div>
 						</cfif>
 					</cfif>
-				</div><!-- End of Main Navigation Elements -->	
+				</div><!-- End of Main Navigation Elements -->
+                
+                <nav class="socialmedia">
+                    <ul>
+                        <li><a href="https://www.linkedin.com/company/salco-products" target="_blank" title="LinkedIn"><img src="/common/images/template/social-linkin.png" ></a></li>
+                        <li><a href="https://plus.google.com/+SalcoProductsIncLemont" target="_blank" title="Google+"><img src="/common/images/template/social-google-plus.png"></a></li>
+                        <li><a href="https://www.youtube.com/salcoproductsinclemont" target="_blank" title="Youtube"><img src="/common/images/template/social-youtube.png"></a></li>
+                    </ul>
+                </nav>
+                	
 			</div>
 			<!-- end of left column -->
 		<!-- start of center column -->
