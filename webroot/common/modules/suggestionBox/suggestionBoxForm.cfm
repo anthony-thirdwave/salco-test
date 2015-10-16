@@ -44,16 +44,15 @@
 
 <cfif formsubmit EQ 1>
 	<!--- Form is submitted so lets process it --->
-	<cfif Len(Trim(employeeName)) Eq 0 AND anonymousSuggestion EQ 0>
+	<cfif Len(Trim(employeeName)) Eq 0>
 		<cfset ErrorMessage=ErrorMessage & "<li>Please enter your full name.</li>">
 	</cfif>
 	<!--- Missive == user submitted email --->
-	<cfif Len(Trim(missive)) Eq 0 AND anonymousSuggestion EQ 0>
+	<cfif Len(Trim(missive)) Eq 0>
 		<cfset ErrorMessage=ErrorMessage & "<li>Please enter a value for email.</li>">
 	<cfelse>
 		<cfmodule name="3w.errorcheck.validateemail" email="#form.missive#">
-		<cfif ValidateEmailStatus GTE "200" AND anonymousSuggestion EQ 0>
-			<cfoutput><p>Debug: #anonymousSuggestion#</p></cfoutput>
+		<cfif ValidateEmailStatus GTE "200">
 			<cfset ErrorMessage=ErrorMessage & "<li>Email entered is not formatted correctly.</li>">
 		</cfif>
 	</cfif>
@@ -90,50 +89,50 @@
 
 			<!--- get label name associated with ID here --->
 
-			<cfif anonymousSuggestion EQ 0>
-				<cfmail	to="#form.missive#" from="#ATTRIBUTES.FromAddress#" bcc="#ATTRIBUTES.ToAddress#" type="html" subject="#Mailer_Subject#">
-					<table>
-						<tr>
-							<td colspan="2">
-								<p>Thank you for submitting your suggestion to our Innovation Program!</p>
-								<p>Salco Products&rsquo; long term strategy and core values include using innovation to continually enhance our products, strengthen relationships with our customers and business partners as well as encourage employee participation and development.</p>
-								<p>
-								All suggestions are carefully evaluated by our Innovation Team.  While not every suggestion may be selected for implementation, all suggestions are important and valued by the leadership of Salco Products.</p>
-								<p>
-								As soon as a decision is made, you will be notified via email regarding the status of your submission.</p></td>
-						</tr>
-						<tr>
-							<td colspan="2"><b>Contact Form Submission</b><br>
-							Submitted #DateFormat(Now())# #TimeFormat(Now())#</td>
-						</tr>
-					<!--- 	<tr>
-							<td style="width: 20%;"><b>Full Name:</b></td>
-							<td>#form.employeeName#</td>
-						</tr> --->
-						<!--- <tr>
-							<td><b>Email:</b></td>
-							<td>#form.missive#</td>
-						</tr> --->
-						<tr>
-							<td><b>Salco Department:</b></td>
-							<!--- use label name here --->
-							<td>#departmentName.name#</td>
-						</tr>
-						<tr>
-							<td><b>Suggestion Area:</b></td>
-							<td>#areaName.name#</td>
-						</tr>
-						<tr>
-							<td><b>Message:</b></td>
-							<td>#form.message#</td>
-						</tr>
-						<tr>
-							<td><b>Confirmation Number:</b></td>
-							<td>#NumberFormat(suggestionID, "00000_")#</td>
-						</tr>
-					</table>
-				</cfmail>
-			</cfif>
+			
+			<cfmail	to="#form.missive#" from="#ATTRIBUTES.FromAddress#" bcc="#ATTRIBUTES.ToAddress#" type="html" subject="#Mailer_Subject#">
+				<table>
+					<tr>
+						<td colspan="2">
+							<p>Thank you for submitting your suggestion to our Innovation Program!</p>
+							<p>Salco Products&rsquo; long term strategy and core values include using innovation to continually enhance our products, strengthen relationships with our customers and business partners as well as encourage employee participation and development.</p>
+							<p>
+							All suggestions are carefully evaluated by our Innovation Team.  While not every suggestion may be selected for implementation, all suggestions are important and valued by the leadership of Salco Products.</p>
+							<p>
+							As soon as a decision is made, you will be notified via email regarding the status of your submission.</p></td>
+					</tr>
+					<tr>
+						<td colspan="2"><b>Contact Form Submission</b><br>
+						Submitted #DateFormat(Now())# #TimeFormat(Now())#</td>
+					</tr>
+				<!--- 	<tr>
+						<td style="width: 20%;"><b>Full Name:</b></td>
+						<td>#form.employeeName#</td>
+					</tr> --->
+					<!--- <tr>
+						<td><b>Email:</b></td>
+						<td>#form.missive#</td>
+					</tr> --->
+					<tr>
+						<td><b>Salco Department:</b></td>
+						<!--- use label name here --->
+						<td>#departmentName.name#</td>
+					</tr>
+					<tr>
+						<td><b>Suggestion Area:</b></td>
+						<td>#areaName.name#</td>
+					</tr>
+					<tr>
+						<td><b>Message:</b></td>
+						<td>#form.message#</td>
+					</tr>
+					<tr>
+						<td><b>Confirmation Number:</b></td>
+						<td>#NumberFormat(suggestionID, "00000_")#</td>
+					</tr>
+				</table>
+			</cfmail>
+		
 
 			<!--- redirect to thank you page --->
 			<cflocation url="#ATTRIBUTES.ThankYouPage#&sid=#suggestionID#" addtoken="No">
@@ -161,26 +160,12 @@
 	<!--- enter form fields here --->
 
 		<div class="formRow<cfif formsubmit EQ 1 and len(trim(employeeName)) eq 0> errorTxt</cfif> wide">
-			<input name="employeeName" id="employeeName" maxlength="50" type="text" value="#HTMLEditFormat(form.employeeName)#" placeholder="Employee Name"
-				<cfif form.anonymousSuggestion EQ 1>
-					disabled class='disabled'
-				</cfif> 
-			>
-			<input type="checkbox" name="anonymousSuggestion" id="anonymousSuggestion" value="1" 
-				<cfif form.anonymousSuggestion EQ 1>
-					checked = 'true'
-				</cfif> 
-			>
-			<label for='anonymousSuggestion'>Anonymous Suggestion *</label>
+			<input name="employeeName" id="employeeName" maxlength="50" type="text" value="#HTMLEditFormat(form.employeeName)#" placeholder="Employee Name">
 		</div>
 
 
 		<div class="formRow<cfif formsubmit EQ 1 and len(trim(missive)) eq 0> errorTxt</cfif>">
-			<input name="missive" id="email" maxlength="50" type="text" value="#HTMLEditFormat(form.missive)#" placeholder="Email Address" 
-				<cfif form.anonymousSuggestion EQ 1>
-					disabled class='disabled'
-				</cfif> 
-			>
+			<input name="missive" id="email" maxlength="50" type="text" value="#HTMLEditFormat(form.missive)#" placeholder="Email Address" >
 		</div>
 <!--- <div class="fauxSelect"> --->
 		<div class="formRow">
