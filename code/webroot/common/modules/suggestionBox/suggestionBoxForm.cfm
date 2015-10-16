@@ -198,7 +198,7 @@
 		<!--- ====================================================--->
 		
 		<div class="formRow submit rightSubmit">
-			<p id='footerText'>Please remember that your suggestion will be entered into our annual drawing. In addition, select winners will also become members of our Innovation Comittee!<br><br>*Anonymous suggestions are not eligible for prize considerations.</p>
+			<p id='footerText'>Please remember that your suggestion will be entered into our annual drawing. In addition, select winners will also become members of our Innovation Comittee!</p>
 			<cfset someStr="Submit your" & Chr(10) & "Suggestion" />
 			<input type="submit" name="submit" value="#someStr#" title="Send Suggestion"/>
 		</div>
