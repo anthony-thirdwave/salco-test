@@ -16,6 +16,11 @@
     .kioskMode .socialmedia{
         display:none;
      }
+
+     .kioskMode article.goalsProgess object, .kioskMode article.goalsProgess embed{
+		max-width:none;
+		max-height: none;
+	}
 	
 	.kioskMode #wrapper[class=""]{
 		width:998px;
