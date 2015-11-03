@@ -3871,6 +3871,11 @@ article.goalsProgess .goalProgressTableHolder table.orders tbody td, article.goa
 	font-weight:bold;
 }
 
+article.goalsProgess object, article.goalsProgess embed{
+	max-width:400px;
+	max-height:316px;
+}
+
 article.goalsProgess .goalProgressTableHolder table.orders tfoot td{
 	padding-bottom:16px;
 	vertical-align:bottom;
