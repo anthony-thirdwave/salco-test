@@ -87,7 +87,6 @@
 			<h1 style="">#qryNews.title#</h1>
 			<div class="byline"><cfif len(EmployeeName)><a href="#APPLICATION.utilsObj.parseCategoryUrl(EmployeeLink)#">#EmployeeName#</a></cfif></div>
 			</cfif>
-			<div class="date">#DateFormat(qryNews.publishDate,"m/dd/yyyy")#</div>
 			<cfif len(newsContent)>
 				<div class="artContent">
 					#newsContent#
