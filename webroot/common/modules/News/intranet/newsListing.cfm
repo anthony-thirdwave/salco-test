@@ -54,7 +54,6 @@
 		 		<dl>
 					<dt>#title#</dt>
 					<dd class="name"><cfif len(EmployeeName)>#EmployeeName#</cfif></dd>
-					<dd class="date">#DateFormat(publishDate,"m/dd/yyyy")#</dd>
 					<dd class="blurb">
 					<cfif EmergencyAlert>
 						#description#
