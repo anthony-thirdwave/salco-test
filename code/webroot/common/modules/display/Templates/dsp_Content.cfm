@@ -24,13 +24,30 @@
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-8851532-4']);
 			_gaq.push(['_trackPageview']);
-			
+
 			(function() {
 				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		</script>
+
+		<!--- adds script for social media in search results --->
+		<script type="application/ld+json">
+			{
+			  "@context" : "http://schema.org",
+			  "@type" : "Organization",
+			  "name" : "Salco Products Inc",
+			  "url" : "http://www.salcoproducts.com",
+			  "sameAs" : [
+			    "https://plus.google.com/+SalcoProductsIncLemont/posts",
+			    "https://www.linkedin.com/company/salco-products",
+			    "https://www.youtube.com/channel/UCc5grhboh2Rjr2PvddkXzXw"
+			  ]
+			}
+		</script>
+
+
 	</cfif>
 </cfoutput>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -73,13 +90,13 @@
 </cfif>
 <cfoutput>
 	<script type="text/javascript">
-		
+
 			<cfset ThisList="">
 			<cfloop index="i" from="1" to="#ListLen(CategoryThreadList)#" step="1">
 				<cfset ThisList=ListAppend(ThisList,ListGetAt(CategoryThreadList,i))>
 			</cfloop>
 			var globalNavItems='#ThisList#';
-		
+
 	</script>
 </cfoutput>
 </head>
@@ -97,7 +114,7 @@
 		</div>
 	</div>
 </div>
-<!-- modal html end --> 
+<!-- modal html end -->
 <!--- updated non-home template start --->
 <div id="site-wrapper">
 	<header id="site-header"><a href="/" id="salco-logo"><img src="/common/images/template-updated/logo-updated-resized.jpg" alt="Salco Products, Inc."/></a>
