@@ -1,7 +1,7 @@
-<cfsetting RequestTimeOut="60000">
+<cfsetting RequestTimeOut="60000" showdebugoutput="false">
 <cfset Commit="1">
 
-<cfset LogFile="productDeltaImport_#Year(now())##Month(now())##day(now())#.txt">
+<cfset LogFile="productDeltaImport_#Year(now())##numberformat(Month(now()),'00')##numberformat(day(now()),'00')#.txt">
 <cfset LogFilePath="#getDirectoryFromPath(getCurrentTemplatePath())#\logs\">
 <cfif directoryExists(LogFilePath) IS "0">
 	<cfdirectory action="create" directory="#LogFilePath#">
@@ -37,7 +37,7 @@
 <cfset sColumnName["Column_7"]="fccadfile1">
 <cfset sColumnName["Column_8"]="fccadfile2">
 <cfset sColumnName["Column_9"]="fccadfile3">
-<cfset sColumnName["Column_10"]="lsubpartno">
+<cfset sColumnName["Column_10"]="fcdncfile">
 
 <cfset sAttributeID=StructNew()>
 <cfset StructInsert(sAttributeID,"ProductDescription","7",1)><!--- ProductDescription --->
@@ -66,6 +66,7 @@
 			CSV="#Trim(thisImportContents)#"
 			returnVariable="GetProductsToImport">
 		<cfdump var="#GetProductsToImport#">
+		<cfflush>
 		<cfif GetProductsToImport.recordCount LTE "1">
 			<cfsavecontent variable="LogTextElement">
 				Empty import file: #sImportFiles[thisImport]#
@@ -103,7 +104,7 @@
 					<cfset ThisPublicDrawing="#Trim(ThisFile)#">
 					<cfset ThisPublicDrawingSize="#Trim(ThisFileSize)#">
 					<cfset ThisPartNumber="#Trim(sRow.FPartNo)#">
-					<cfset thisLSubPartNo="#Trim(sRow.lsubpartno)#">
+					<cfset thisLSubPartNo="#Trim(sRow.fcdncfile)#">
 					
 					<cfif ThisPublicDrawing IS NOT "" and fileExists(expandPath(ThisPublicDrawing)) IS "0">
 						<cfset LogTextElement="#LogTextElement##CRLF#+#expandPath(ThisPublicDrawing)# does not exist">
@@ -130,7 +131,7 @@
 								
 								<cfset thisNewLRelatedPageID="">
 								<cfset lPartNoMissing="">
-								<cfloop index="thisPartNo" list="#sRow.lsubpartno#">
+								<cfloop index="thisPartNo" list="#sRow.fcdncfile#">
 									<cfinvoke component="/com/product/producthandler" method="GetProductByProductNo" returnVariable="thisPartCategoryID" PartNo="#thisPartNo#">
 									<cfif val(thisPartCategoryID) GT "0">
 										<cfset thisNewLRelatedPageID=listAppend(thisNewLRelatedPageID,thisPartCategoryID)>
@@ -291,13 +292,14 @@
 						</cfif>
 					</cfif>
 				</cfif>
+				<cfflush>
 			</cfoutput>
 		</cfif>
 	</cfif>
 </cfloop>
 
 <cfif APPLICATION.Staging>
-<cfset NotificationEmail="lisa_moffat@salcoproducts.com,terry_weaver@salcoproducts.com,notifications@dev01.thirdwavellc.com">
+	<cfset NotificationEmail="lisa_moffat@salcoproducts.com,terry_weaver@salcoproducts.com,notifications@dev01.thirdwavellc.com">
 <cfelse>
 	<cfset NotificationEmail="notifications@dev01.thirdwavellc.com">
 </cfif>
