@@ -894,7 +894,7 @@
 		<cfset VAR LOCAL=StructNew()>
 		
 		<cfif 1 and ListLast(ARGUMENTS.DWFFile,".") IS "dwf">
-			<cfset LOCAL.ReturnString="http://sharecad.org/cadframe/load?url==http://#CGI.Server_Name##ARGUMENTS.DWFFile#">
+			<cfset LOCAL.ReturnString="http://sharecad.org/cadframe/load?url=http://#CGI.Server_Name##ARGUMENTS.DWFFile#">
 		<cfelse>
 			<cfset LOCAL.ReturnString="#ARGUMENTS.DWFFile#">
 		</cfif>
