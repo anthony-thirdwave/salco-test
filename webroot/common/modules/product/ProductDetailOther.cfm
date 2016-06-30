@@ -28,7 +28,7 @@
 		WHERE     CategoryID IN (#ATTRIBUTES.ProductID#,#Val(CurrentProductFamilyID)#)
 	</cfquery>
 	<cfset ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductDetailOther_v1.0_#ATTRIBUTES.ProductID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
-	<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
+	<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#") or 1>
 		<cfsaveContent Variable="FileContents">
 			<cfset MyProduct=CreateObject("component","com.Product.Product")>
 			<cfset MyProduct.Constructor(Val(ATTRIBUTES.ProductID),ATTRIBUTES.LanguageID)>
@@ -51,7 +51,7 @@
 					<h4>Downloads</h4>
 					<cfif ThisPublicDrawing IS NOT "" and FileExists(ExpandPath(ThisPublicDrawing))>
 						<p><a href="#APPLICATION.utilsObj.GetFreewheelLink(ThisPublicDrawing)#" target="_blank">CAD Drawing</a>
-						(#UCase(ListLast(ThisPublicDrawing,"."))#<cfif Val(ThisPublicDrawingSize) GT "0">, #Ceiling(ThisPublicDrawingSize/1024)#KB</cfif>)<br/>
+						(#UCase(ListLast(ThisPublicDrawing,"."))#<cfif Val(ThisPublicDrawingSize) GT "0">, #Ceiling(ThisPublicDrawingSize/1024)#KB</cfif>, <a href="#ThisPublicDrawing#">download</a>)<br/>
 						</p>
 					</cfif>
 					<cfloop index="i" from="1" to="#ArrayLen(aDownload)#" step="1">
