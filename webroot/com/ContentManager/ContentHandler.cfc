@@ -483,6 +483,16 @@
 		<cfreturn Check.ContentName>
 	</cffunction>
 
+	<cffunction name="getVideos" output="false" returntype="query">
+		
+		<cfset var LOCAL=StructNew()>
+
+		<cfdirectory action="list" directory="#APPLICATION.videoSourceDirectory#" filter="*.mp4" name="LOCAL.qReturn">
+
+		<cfreturn LOCAL.qReturn>
+		
+	</cffunction>
+
 	<cffunction name="TestAndTouchIfRepeated" output="false" returntype="string">
 		<cfargument name="ContentID" default="-1" type="numeric" required="true">
 		<cfargument name="Datasource" default="#APPLICATION.DSN#" type="String" required="true">
