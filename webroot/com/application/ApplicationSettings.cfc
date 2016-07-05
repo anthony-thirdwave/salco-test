@@ -170,7 +170,7 @@
 			<cfset APPLICATION.User_DSN="#local.uniqueName#_cms_production" />
 			<cfset APPLICATION.Data_DSN="#local.uniqueName#_cms_production" />
 
-			<cfset APPLICATION.videoSourceDirectory="D:\websites.staging\salco\Intranet Files\Videos\">
+			<cfset APPLICATION.videoSourceDirectory="D:\websites.staging\salco\Resources\Intranet Files\Videos">
 
 		<cfelse>
 
@@ -197,7 +197,7 @@
 			
 			<cfset APPLICATION.Staging_DSN="salco_cms_staging">
 
-			<cfset APPLICATION.videoSourceDirectory="D:\websites.staging\salco\Intranet Files\Videos\">
+			<cfset APPLICATION.videoSourceDirectory="D:\websites.staging\salco\Resources\Intranet Files\Videos">
 
 		</cfif>
 
