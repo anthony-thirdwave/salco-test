@@ -183,19 +183,38 @@
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"LinkURL")>
-	<cfif MyContentLocale.ContentTypeID IS "236">
-		<cfset ThisCaption="""See All"" URL<BR><small>Leave blank to omit</small>">
+
+	<cfif MyContentLocale.ContentTypeID IS "259">
+		<cfset TextPositionIDList="{left|Left of HTML}^^{right|Right of HTML}">
+		<cfinvoke component="com.ContentManager.ContentHandler" method="getVideos" returnVariable="qVideos">
+		<cfset lVideos="">
+		<cfoutput query="qVideos">
+			<cfset lVideos=ListAppend(lVideos,"{#qVideos.name#|#qVideos.name#}","^^")>
+		</cfoutput>
+		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+			ObjectAction="#FormMode#"
+			type="select"
+			caption="Video" 
+			ObjectName="MyContentLocale"
+			PropertyName="linkURL"
+			OptionValues="#lVideos#"
+			Required="Y"
+			FormEltStyle="width:200px;">
 	<cfelse>
-		<cfset ThisCaption="Link URL">
+		<cfif MyContentLocale.ContentTypeID IS "236">
+			<cfset ThisCaption="""See All"" URL<BR><small>Leave blank to omit</small>">
+		<cfelse>
+			<cfset ThisCaption="Link URL">
+		</cfif>
+		<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+			ObjectAction="#FormMode#"
+			type="text"
+			caption="#ThisCaption#" 
+			ObjectName="MyContentLocale"
+			PropertyName="LinkURL"
+			size="40" maxlength="512"
+			Required="N">
 	</cfif>
-	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
-		ObjectAction="#FormMode#"
-		type="text"
-		caption="#ThisCaption#" 
-		ObjectName="MyContentLocale"
-		PropertyName="LinkURL"
-		size="40" maxlength="512"
-		Required="N">
 </cfif>
 
 <cfif ListFindNoCase(Restrictions,"PageActionURL")>

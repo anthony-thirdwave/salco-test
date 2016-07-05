@@ -167,6 +167,9 @@
 			<cfcase value="258"><!--- Teaser Slide Show --->
 				<cfset this.sFields[ThisContentTypeID]="aFile">
 			</cfcase>
+			<cfcase value="259"><!--- Video --->
+				<cfset this.sFields[ThisContentTypeID]="LinkURL,ImageThumbnail">
+			</cfcase>
 			<cfdefaultcase><!--- Default --->
 				<cfset this.sFields[ThisContentTypeID]="">
 			</cfdefaultcase>

@@ -4,6 +4,7 @@
 <cfparam name="ATTRIBUTES.CurrentCategoryID" default="-1">
 <cfparam name="ATTRIBUTES.returnVariable" default="ReturnValue">
 <cfparam name="ATTRIBUTES.CurrentCategoryTypeID" default="-1">
+<cfparam name="ATTRIBUTES.contentNameDerived" default="">
 <cfif not IsDefined("ATTRIBUTES.sContentBody")>
 	<cfset ATTRIBUTES.sContentBody=StructNew()>
 </cfif>
@@ -31,7 +32,7 @@
 		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"HTML") and ATTRIBUTES.sContentBody.HTML IS NOT "">
 			<cfif application.applicationname is "intranet.salco">
 				<cfif ATTRIBUTES.currentCategoryTypeID neq 81>
-					<cfset FileContents="<article class='news'><div class='inArt'><div class='artContent'>#application.utilsObj.ObscureEMail(ATTRIBUTES.sContentBody.HTML)#</div></div></article>">
+					<cfset FileContents="#application.utilsObj.ObscureEMail(ATTRIBUTES.sContentBody.HTML)#">
 				</cfif>
 			<cfelse>
 				<cfset FileContents="#application.utilsObj.ReplaceMarks(ATTRIBUTES.sContentBody.HTML)#">
@@ -685,8 +686,56 @@
 	<cfcase value="258"><!--- Teaser Slide Show --->
 		<cfset FileContents="<cfmodule template=""/common/modules/display/dsp_TeaserSlideShow.cfm"" contentID=""#ATTRIBUTES.contentID#"">">
 	</cfcase>
-	<cfcase value="259"><!--- Search Result --->
-		<cfset FileContents="<cfmodule template=""/common/modules/Search/search.cfm"">">
+	<cfcase value="259"><!--- Video --->
+		<cfset thisLinkURL="">
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"linkURL") AND ATTRIBUTES.sContentBody.linkURL NEQ "">
+			<cfset thisLinkURL=ATTRIBUTES.sContentBody.linkURL>
+		</cfif>
+
+		<cfset thisImageThumbnail="">
+		<cfif StructKeyExists(ATTRIBUTES.sContentBody,"ImageThumbnail") AND ATTRIBUTES.sContentBody.ImageThumbnail NEQ "">
+			<cfset thisImageThumbnail=ATTRIBUTES.sContentBody.ImageThumbnail>
+		</cfif>
+
+		<cfset thisContentName=HTMLEditFormat(ATTRIBUTES.contentNameDerived)>
+
+		<cfsavecontent variable="fileContents">
+			<cfoutput>
+				<video width="525" height="298" controls="" id="salcoPlayer#ATTRIBUTES.ContentID#" class="projekktor"
+				<cfif thisImageThumbnail IS NOT "">
+					poster="#thisImageThumbnail#"
+				</cfif>
+				title="#thisContentName#"><source type="video/mp4" src="/resources/external/videos/#thisLinkURL#"></source>
+				</video>
+				<script type="text/javascript">
+					document.addEventListener("DOMContentLoaded", init, false);
+					
+					function init(){
+						var video = document.getElementById("salcoPlayer#ATTRIBUTES.ContentID#");
+						video.addEventListener("play", videoPlay, false);
+						video.addEventListener("pause", videoPause, false);
+						video.addEventListener("ended", videoEnd, false);
+						console.log(video);
+					}
+							
+					function videoPlay(event) {
+						trackEvent('Play', '#thisContentName#'); 
+					}
+					
+					function videoPause(event) {
+						trackEvent('Pause', '#thisContentName#'); 
+					}
+					
+					function videoEnd(event) {
+						trackEvent('Ended', '#thisContentName#'); 
+					}
+					
+					function trackEvent(action, title) {
+						_gaq.push(['_trackEvent', 'Video Library', action, title]);
+					}
+				</script>
+			</cfoutput>
+		</cfsavecontent>
 	</cfcase>
 	<cfcase value="260"><!--- Related Topic List --->
 		<cfsavecontent variable="FileContents">

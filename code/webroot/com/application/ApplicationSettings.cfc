@@ -141,6 +141,8 @@
 			<cfset APPLICATION.EmployeeCategoryID="6065">
 
 			<cfset APPLICATION.safetyArchiveCategoryID="6936">
+
+			<cfset APPLICATION.videoSourceDirectory="D:\websites\Salco\Intranet Files\Videos\">
 		
 		<cfelseif local.siteType eq "staging">
 
@@ -168,6 +170,8 @@
 			<cfset APPLICATION.User_DSN="#local.uniqueName#_cms_production" />
 			<cfset APPLICATION.Data_DSN="#local.uniqueName#_cms_production" />
 
+			<cfset APPLICATION.videoSourceDirectory="D:\websites.staging\salco\Intranet Files\Videos\">
+
 		<cfelse>
 
 			<cfset APPLICATION.WebRootPath="#local.productionPathPrefix#webroot\" />
@@ -192,6 +196,8 @@
 			<cfset APPLICATION.SSLConfigured=false />
 			
 			<cfset APPLICATION.Staging_DSN="salco_cms_staging">
+
+			<cfset APPLICATION.videoSourceDirectory="D:\websites.staging\salco\Intranet Files\Videos\">
 
 		</cfif>
 
