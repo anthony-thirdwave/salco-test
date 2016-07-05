@@ -74,27 +74,23 @@
 </cfif>				
 	
 <cfoutput query="qryNews">
-	<article class="news">
-		<div class="inArt">
-			<cfif len(newsImagesThumbnail)>
-				<div class="alignLeft">
-					#newsImagesThumbnail#
-				</div>
-			</cfif>
-			<cfif APPLICATION.ApplicationName EQ "www.salco">
-			<div class="byline"><cfif len(EmployeeName)>#EmployeeName#</cfif></div>
-			<cfelse>
-			<h1 style="">#qryNews.title#</h1>
-			<div class="byline"><cfif len(EmployeeName)><a href="#APPLICATION.utilsObj.parseCategoryUrl(EmployeeLink)#">#EmployeeName#</a></cfif></div>
-			</cfif>
-			<cfif len(newsContent)>
-				<div class="artContent">
-					#newsContent#
-				</div>
-			</cfif>
-			<div class="clearit"></div>
+	<cfif len(newsImagesThumbnail)>
+		<div class="alignLeft">
+			#newsImagesThumbnail#
 		</div>
-	</article>
+	</cfif>
+	<cfif APPLICATION.ApplicationName EQ "www.salco">
+	<div class="byline"><cfif len(EmployeeName)>#EmployeeName#</cfif></div>
+	<cfelse>
+	<h1 style="">#qryNews.title#</h1>
+	<div class="byline"><cfif len(EmployeeName)><a href="#APPLICATION.utilsObj.parseCategoryUrl(EmployeeLink)#">#EmployeeName#</a></cfif></div>
+	</cfif>
+	<cfif len(newsContent)>
+		<div class="artContent">
+			#newsContent#
+		</div>
+	</cfif>
+	<div class="clearit"></div>
 </cfoutput>
 <div class="lrgImgs">
 	<cfoutput>

@@ -50,6 +50,7 @@
 			contentid="#GetContent.ContentID#"
 			ContentLocaleID="#GetContent.ContentLocaleID#"
 			positionid="#ATTRIBUTES.ContentPositionID#"
+			contentNameDerived="#GetContent.contentNameDerived#"
 			returnvariable="TheseFileContents">
 		<cfif Trim(TheseFileContents) IS NOT "">
 			<cfset ContentCounter=ContentCounter+1>
@@ -88,5 +89,8 @@
 		</cfif>
 	</cfoutput>
 </cfloop>
-
-<cfset SetVariable("CALLER.#ATTRIBUTES.returnVariable#",FileContents)>
+<cfif GetCategory.categoryTypeID IS "82" and ATTRIBUTES.ContentPositionID IS "401">
+	<cfset SetVariable("CALLER.#ATTRIBUTES.returnVariable#","<article class='news'><div class='inArt'><div class='artContent'>#FileContents#</div></div></article>")>
+<cfelse>
+	<cfset SetVariable("CALLER.#ATTRIBUTES.returnVariable#",FileContents)>
+</cfif>
