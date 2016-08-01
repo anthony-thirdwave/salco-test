@@ -747,12 +747,12 @@ var contactUsMap={
 			
 			$("."+holdingC).attr("fill","#c1272d");
 			
-			if($(this).attr("class")!="regions region-19"){
-				$("#il-in-upper-us").attr("fill","none");
+			if($(this).attr("class")!="regions region-8"){
+				$("#il-in-upper-us").attr("fill","none").fadeI;
 				$("#il-in-upper-us").attr("stroke","none");
 				/*$("#il-upper-us").attr("stroke","none");*/
 			}
-			if($(this).attr("class")=="regions region-19"){
+			if($(this).attr("class")=="regions region-8"){
 				$("#il-in-upper-us").attr("fill","#c1272d");
 				$("#il-in-upper-us").attr("stroke","white");
 				/*$("#il-upper-border-us").attr("stroke","none");*/
@@ -776,13 +776,13 @@ var contactUsMap={
 			}*/
 			
 			if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
-						$("#tx-northern-us-line").attr("stroke","#fff");
+				$("#tx-northern-us-line").attr("stroke","#fff");
 			}else{
 				$("#tx-northern-us-line").attr("stroke","none");
 			}
 			
 			if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
-						$("#pa-western-us").attr("stroke","#fff");
+				$("#pa-western-us").attr("stroke","#fff");
 			}else{
 				$("#pa-western-us").attr("stroke","none");
 			}
@@ -875,9 +875,6 @@ var contactUsMap={
 					$("."+rO).eq(1).attr("stroke","#300000");
 				}
 				
-				
-				
-				
 				if($("."+holdingC).attr("fill")!="#c1272d"){
 					$("."+holdingC).attr("fill","#e8858c");
 					
@@ -893,17 +890,13 @@ var contactUsMap={
 						$("#il-in-upper-us").attr("stroke","white");
 						$("#il-upper-border-us").attr("stroke","#959595");
 						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
-							$("#il-in-upper-us").attr("fill","#e8858c");
-							
+							$("#il-in-upper-us").attr("fill","#e8858c");	
 						}
-						
-						
 					}*/
 					
 					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
 						$("#tx-northern-us-line").attr("stroke","#fff");
 					}
-					
 					
 					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
 						$("#pa-western-us").attr("stroke","#fff");
@@ -1104,7 +1097,7 @@ var allContacts={
 			case "Edwin Luper":
 				regionSet="region-12";
 			break;
-			case "Jan Marino":
+			case "David Clugg":
 				regionSet="region-19";
 			break;
 			case "Steve Van Nocken":
@@ -1115,46 +1108,43 @@ var allContacts={
 			break;
 		}
 		
-		
-		
 		$(".regions").each(function(index, element) {
-				if($(this).attr("fill")!="#c1272d"){
-					$(this).attr("fill","#959595");
-				}
-			});
-			
-			$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
-			
-			if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-			if(regionSet!="none"){
-				$("."+regionSet).attr("fill","#e8858c");
+			if($(this).attr("fill")!="#c1272d"){
+				$(this).attr("fill","#959595");
 			}
+		});
+		
+		$(".office-circle").each(function(index, element) {
+			if($(this).attr("class")=="office-circle"){
+				$(this).attr("stroke","transparent");
+			}
+		});
+		
+		if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
+					$("#il-in-upper-us").attr("fill","none");
+					$("#il-in-upper-us").attr("stroke","none");
+					$("#il-upper-border-us").attr("stroke","none");
+				}
+		if(regionSet!="none"){
+			$("."+regionSet).attr("fill","#e8858c");
+		}
 	},
 	clearit:function(){
 		$(".regions").each(function(index, element) {
-				if($(this).attr("fill")!="#c1272d"){
-					$(this).attr("fill","#959595");
-				}
-			});
-			
-			$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
-			
-			
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
+			if($(this).attr("fill")!="#c1272d"){
+				$(this).attr("fill","#959595");
+			}
+		});
+		
+		$(".office-circle").each(function(index, element) {
+			if($(this).attr("class")=="office-circle"){
+				$(this).attr("stroke","transparent");
+			}
+		});
+		
+		$("#il-in-upper-us").attr("fill","none");
+		$("#il-in-upper-us").attr("stroke","none");
+		$("#il-upper-border-us").attr("stroke","none");
 					
 	},
 	alphaListUpdate:function(nn){
@@ -1198,7 +1188,7 @@ var allContacts={
 			case "Edwin Luper":
 				regionSet="region-12";
 			break;
-			case "Jan Marino":
+			case "David Clugg":
 				regionSet="region-19";
 				$("#il-in-upper-us").attr("fill","#c1272d");
 			break;
