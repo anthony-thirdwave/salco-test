@@ -39,6 +39,8 @@
 <cfset CALLER.CSSClass="">
 <cfset CALLER.CategoryImageHeader="">
 <cfset REQUEST.CategoryImageHeader="">
+<cfset CALLER.ImageAltText1="">
+<cfset REQUEST.ImageAltText1="">
 <cfset CALLER.CategoryImageBackground="">
 
 <cfset DenyAccess="0">
@@ -94,11 +96,11 @@
 	
 	<cfif IsWDDX(GetPage.CategoryLocalePropertiesPacket)>
 		<cfwddx action="WDDX2CFML" input="#GetPage.CategoryLocalePropertiesPacket#" output="sCategoryProperties">
-		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader,CategoryImageBackground">
+		<cfloop index="ThisProp" list="MetaDescription,MetaKeywords,PageTitleOverride,CategoryImageHeader,CategoryImageBackground,ImageAltText1">
 			<cfif StructKeyExists(sCategoryProperties,"#ThisProp#") AND Trim(StructFind(sCategoryProperties, "#ThisProp#")) IS NOT "">
 				<cfset Setvariable("CALLER.#ThisProp#",StructFind(sCategoryProperties, "#ThisProp#"))>
-				<cfif ThisProp IS "CategoryImageHeader">
-					<cfset REQUEST.CategoryImageHeader=StructFind(sCategoryProperties, "#ThisProp#")>
+				<cfif listFindNoCase("ImageAltText1,CategoryImageHeader", ThisProp)>
+					<cfset Setvariable("REQUEST.#ThisProp#",StructFind(sCategoryProperties, "#ThisProp#"))>
 				</cfif>
 			</cfif>
 		</cfloop>

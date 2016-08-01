@@ -27,7 +27,7 @@
 		FROM         t_Category
 		WHERE     CategoryID IN (<cfqueryparam value="#ATTRIBUTES.ProductID#,#Val(CurrentProductFamilyID)#" cfsqltype="cf_sql_integer" list="yes">)
 	</cfquery>
-	<cfset ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductDetail_v1.0_#ATTRIBUTES.ProductID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
+	<cfset ExecuteTempFile="#ATTRIBUTES.LocaleID#/ProductDetail_v1.1_#ATTRIBUTES.ProductID#_loc#ATTRIBUTES.LocaleID#_#DateFormat(GetCache.CacheDateTime,'yyyymmdd')##TimeFormat(GetCache.CacheDateTime,'HHmmss')#.cfm">
 	<cfif NOT FileExists("#APPLICATION.ExecuteTempDir##ExecuteTempFile#")>
 		<cfsaveContent Variable="FileContents">
 			<cfset MyProduct=CreateObject("component","com.Product.Product")>
@@ -59,7 +59,12 @@
 				<h1>#ThisPartNumber#</h1>
 				<h3>#GetProduct.CategoryNameDerived#</h3>
 				<cfif IsDefined("REQUEST.CategoryImageHeader") and REQUEST.CategoryImageHeader IS NOT "">
-					<img class="hero" src="#REQUEST.CategoryImageHeader#" alt="#REQUEST.CategoryImageHeader#">
+					<cfif IsDefined("REQUEST.ImageAltText1") and REQUEST.ImageAltText1 IS NOT "">
+						<cfset thisAltText=REQUEST.ImageAltText1>
+					<cfelse>
+						<cfset thisAltText=REQUEST.CurrentCategoryName>
+					</cfif>
+					<img class="hero" src="#REQUEST.CategoryImageHeader#" alt="#HTMLEditFormat(thisAltText)#">
 				</cfif>
 				<p>#ThisProductDescription#</p>
 				

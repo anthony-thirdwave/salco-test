@@ -32,6 +32,7 @@
 	<cfproperty name="EmergencyAlert" type="boolean" default="">
 	<cfproperty name="IncludeInScreenSaver" type="boolean" default="">
 	<cfproperty name="lRelatedPageID" type="boolean" default="">
+	<cfproperty name="ImageAltText1" type="string" default="">
 	
 	<!--- /// added for page type employee/// --->
 	<cfproperty name="EmpFirstName" type="string" default="">
@@ -75,6 +76,7 @@
 	<cfset structInsert(sPropertyDisplayName,"IncludeInScreenSaver","Include In Screen Saver",1)>
 	<cfset structInsert(sPropertyDisplayName,"PageTitleOverride","page title override",1)>
 	<cfset structInsert(sPropertyDisplayName,"lRelatedPageID","related pages",1)>
+	<cfset structInsert(sPropertyDisplayName,"ImageAltText1","image alt text",1)>
 	
 	<!--- /// added for page type employee/// --->
 	<cfset structInsert(sPropertyDisplayName,"empFirstName","employee first name",1)>
@@ -101,7 +103,7 @@
 				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,CategoryImageRepresentative,CategoryImageRollover,CategoryImageAccent,lRelatedPageID">
 			</cfcase>
 			<cfcase value="64"><!--- Product --->
-				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,lRelatedPageID">
+				<cfset this.sFields[ThisCategoryTypeID]="CSSID,CategoryImageHeader,lRelatedPageID,ImageAltText1">
 			</cfcase>
 			<cfcase value="63"><!--- Product Series--->
 				<cfset this.sFields[ThisCategoryTypeID]="CSSClass">
@@ -176,7 +178,7 @@
 		<cfset this.SetProperty("IncludeInScreenSaver","")>
 		<cfset this.SetProperty("PageTitleOverride","")>
 		<cfset this.SetProperty("lRelatedPageID","")>
-		<cfset this.SetProperty("lRelatedPageID","")>
+		<cfset this.SetProperty("ImageAltText1","")>
 		
 		<!--- /// added for page type employee/// --->
 		<cfset this.SetProperty("empFirstName","")>
@@ -217,7 +219,7 @@
 					</cfquery>
 					<cfif isWDDX(GetCategoryProperties.PropertiesPacket)>
 						<cfwddx action="WDDX2CFML" input="#GetCategoryProperties.PropertiesPacket#" output="sProperties">
-						<cfloop index="ThisProperty" list="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,lRelatedPageID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
+						<cfloop index="ThisProperty" list="CategoryImageBackground,CategoryImageOn,CategoryImageRollover,CategoryImageHeader,CategoryImageAccent,CategoryImageRepresentative,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,MetaKeywords,MetaDescription,Byline1,Byline2,Title,PageTitleOverride,lRelatedPageID,ImageAltText1,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empImage,empImageThumb,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 							<cfif StructKeyExists(sProperties,"#ThisProperty#")>
 								<cfset this.SetProperty("#ThisProperty#",sProperties["#ThisProperty#"])>
 							</cfif>
@@ -268,6 +270,7 @@
 		<cfset var thisIncludeInScreenSaver="">
 		<cfset var thisPageTitleOverride="">
 		<cfset var thisLRelatedPageID="">
+		<cfset var thisImageAltText1="">
 		<cfset var Destination="">
 		<cfset var Source="">
 		<cfset var DestinationToSave="">
@@ -328,6 +331,7 @@
 			<cfset thisIncludeInScreenSaver=this.GetProperty("IncludeInScreenSaver")>
 			<cfset thisPageTitleOverride=this.GetProperty("PageTitleOverride")>
 			<cfset thisLRelatedPageID=this.GetProperty("lRelatedPageID")>
+			<cfset thisImageAltText1=this.GetProperty("ImageAltText1")>
 			
 			<cfset thisEmpFirstName=this.GetProperty("empFirstName")>
 			<cfset thisEmpLastName=this.GetProperty("empLastName")>
@@ -485,6 +489,7 @@
 			<cfset DevNull=StructInsert(sProperties,"IncludeInScreenSaver","#Trim(ThisIncludeInScreenSaver)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"PageTitleOverride","#Trim(ThisPageTitleOverride)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"lRelatedPageID","#Trim(ThisLRelatedPageID)#","1")>
+			<cfset DevNull=StructInsert(sProperties,"ImageAltText1","#Trim(ThisImageAltText1)#","1")>
 			
 			<cfset DevNull=StructInsert(sProperties,"empFirstName","#Trim(thisEmpFirstName)#","1")>
 			<cfset DevNull=StructInsert(sProperties,"empLastName","#Trim(thisEmpLastName)#","1")>

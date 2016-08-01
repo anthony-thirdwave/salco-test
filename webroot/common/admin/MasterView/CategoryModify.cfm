@@ -124,7 +124,7 @@
 
 		<!--- Handling MyCategoryLocale --->
 		<cfset MyCategoryLocale.SetCategoryTypeID(CategoryTypeID)>
-		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,lRelatedPageID,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
+		<cfloop index="ThisProperty" list="CategoryLocaleName,CategoryLocaleActive,CategoryLocaleURL,MetaKeywords,MetaDescription,CSSID,CSSClass,CallToActionURL,CategoryLocaleNameAlternative,DefaultCategoryLocale,Byline1,Byline2,Title,PageTitleOverride,lRelatedPageID,ImageAltText1,empFirstName,empLastName,empTitle,empPhone,empPhoneExt,empCellPhone,empEmail,empBirthDate,empJoinDate,SubTitle,HomePageDisplay,EmergencyAlert,IncludeInScreenSaver">
 			<cfparam name="FORM.#ThisProperty#" default="">
 			<cfset MyCategoryLocale.SetProperty("#ThisProperty#", FORM[ThisProperty])>
 		</cfloop>
