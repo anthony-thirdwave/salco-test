@@ -446,6 +446,18 @@
 		</cfif>
 	</cfloop>
 </cfif>
+
+<cfif ListFindNoCase(Restrictions,"ImageAltText1")>
+	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" TDBGColor2="white"
+		ObjectAction="#FormMode#"
+		type="text"
+		caption="Image Alt Text" 
+		ObjectName="MyCategoryLocale"
+		PropertyName="ImageAltText1"
+		size="40" maxlength="1000"
+		Required="N">
+</cfif>
+
 <cfif MyCategoryLocale.GetProperty("LocaleID") IS NOT APPLICATION.DefaultLocaleID and MyCategoryLocale.GetProperty("CategoryLocaleID") GT "0">
 	<cfparam name="DeleteLocaleRecord" default="0">
 	<cfmodule template="/common/modules/utils/DisplayFormElt.cfm" 
