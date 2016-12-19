@@ -23,7 +23,7 @@
 <!--- 
 	5731: ID of Orphan Products
  --->
-<cfset defaultProductFamilyID="6734">
+<cfset defaultProductFamilyID="5731">
 
 
 
@@ -33,11 +33,10 @@
 <cfset sColumnName["Column_3"]="fac">
 <cfset sColumnName["Column_4"]="fdescript">
 <cfset sColumnName["Column_5"]="fdstmemo">
-<cfset sColumnName["Column_6"]="fcomment">
-<cfset sColumnName["Column_7"]="fccadfile1">
-<cfset sColumnName["Column_8"]="fccadfile2">
-<cfset sColumnName["Column_9"]="fccadfile3">
-<cfset sColumnName["Column_10"]="fcdncfile">
+<cfset sColumnName["Column_6"]="fccadfile1">
+<cfset sColumnName["Column_7"]="fccadfile2">
+<cfset sColumnName["Column_8"]="fccadfile3">
+<cfset sColumnName["Column_9"]="fcdncfile">
 
 <cfset sAttributeID=StructNew()>
 <cfset StructInsert(sAttributeID,"ProductDescription","7",1)><!--- ProductDescription --->
@@ -65,8 +64,6 @@
 			method="CSVToQuery"
 			CSV="#Trim(thisImportContents)#"
 			returnVariable="GetProductsToImport">
-		<cfdump var="#GetProductsToImport#">
-		<cfflush>
 		<cfif GetProductsToImport.recordCount LTE "1">
 			<cfsavecontent variable="LogTextElement">
 				Empty import file: #sImportFiles[thisImport]#
@@ -228,6 +225,9 @@
 												Operation="modify"
 												EntityName="#Trim(sRow.fdescript)#"
 												Note="#FormatLog(LogTextElement)#">
+											<cfinvoke component="com.ContentManager.CategoryHandler" method="UpdateCacheDateTime" returnVariable="success"
+												Lookup="Category"
+												KeyID="#Val(GetTargetProduct.CategoryID)#">
 										</cfif>
 										
 									</cfif>
@@ -292,14 +292,13 @@
 						</cfif>
 					</cfif>
 				</cfif>
-				<cfflush>
 			</cfoutput>
 		</cfif>
 	</cfif>
 </cfloop>
 
 <cfif APPLICATION.Staging>
-	<cfset NotificationEmail="lisa_moffat@salcoproducts.com,terry_weaver@salcoproducts.com,notifications@dev01.thirdwavellc.com">
+	<cfset NotificationEmail="notifications@dev01.thirdwavellc.com">
 <cfelse>
 	<cfset NotificationEmail="notifications@dev01.thirdwavellc.com">
 </cfif>
