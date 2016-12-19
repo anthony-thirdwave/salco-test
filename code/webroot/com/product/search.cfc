@@ -10,19 +10,26 @@
 		
 		<cfswitch expression="#ARGUMENTS.searchType#">
 			<cfcase value="ProductNum">
-				<cfset LOCAL.criteria="Custom3:#lcase(htmlEditFormat(ARGUMENTS.searchTxt))#">
+				<cfset LOCAL.criteria="Custom3:#lcase(ARGUMENTS.searchTxt)#">
 			</cfcase>
 			<cfcase value="hopper-car,tank-car,railyard-accessories,hazarsolve">
-				<cfset LOCAL.criteria="#lcase(htmlEditFormat(ARGUMENTS.searchTxt))#">
+				<cfset LOCAL.searchTxt="">
+				<cfloop index="LOCAL.thisWord" list="#ARGUMENTS.searchTxt#" delimiters=" ">
+					<cfset LOCAL.searchTxt=listAppend(LOCAL.searchTxt, "+#LOCAL.thisWord#", " ")>
+				</cfloop>
+				<cfset LOCAL.criteria="#LOCAL.searchTxt#">
 			</cfcase>
 			<cfdefaultcase>
-				<cfset LOCAL.criteria="title:#lcase(htmlEditFormat(ARGUMENTS.searchTxt))#">
+				<cfset LOCAL.searchTxt="">
+				<cfloop index="LOCAL.thisWord" list="#ARGUMENTS.searchTxt#" delimiters=" ">
+					<cfset LOCAL.searchTxt=listAppend(LOCAL.searchTxt, "+#LOCAL.thisWord#", " ")>
+				</cfloop>
+				<cfset LOCAL.criteria="#LOCAL.searchTxt#">
 			</cfdefaultcase>
 		</cfswitch>
 		
 		<cfsearch name="ContentSearch"
 			collection="#LOCAL.CollectionName#"
-		 	type="simple"
 			criteria="#LOCAL.criteria#"
 			suggestions="always">
 		
@@ -99,7 +106,7 @@
 			</cfif>
 		</cfif>
 		
-		<cfif ContentSearch.RecordCount eq 0>
+		<cfif ContentSearch.RecordCount eq 0 and 0>
 			<!---  natural search --->
 			<!--- see above for why the 2 cfsearches: categorytree is slow --->
 			<cfsearch name="ContentSearch"
