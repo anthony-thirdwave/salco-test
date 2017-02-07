@@ -1,0 +1,38 @@
+<!-- Event Object -->
+<object>
+	<name>Event</name>
+	<implements>3W:Event</implements>
+	<table>
+		<name>t_Event</name>
+		<datasource>APPLICATION.EVENT_DSN</datasource>
+	</table>
+	<propertyList>
+		<property>
+		
+			<!-- this name is case sensitive if this has an xml restriction -->
+			<variableName>eventConfig</variableName>
+			<displayName>event config</displayName>
+			<restrictions>
+				<xml>
+					<handler>com.factory.thirdwave.handlers.object.ObjectValidate</handler>
+					<handlerConfigurationName>3W:ObjectValidator</handlerConfigurationName>
+					<objectName>Event:EventConfig</objectName>
+				</xml>
+			</restrictions>
+			<dbInfo>
+				<tableName>t_Event</tableName>
+				<columnName>EventConfig</columnName>
+				<dataType>cf_sql_varchar</dataType>
+			</dbInfo>
+		</property>
+		<property>
+			<variableName>EventAddressID</variableName>
+			<displayName>event address id</displayName>
+			<restrictions>
+				<idList>
+					<relationship>EventToAddress</relationship>
+				</idList>
+			</restrictions>
+		</property>
+	</propertyList>
+</object>

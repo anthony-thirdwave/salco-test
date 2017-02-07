@@ -1,0 +1,10 @@
+.excel-button {
+  -webkit-appearance: push-button;
+  color: #000000;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.excel-button:hover {
+  text-decoration: none;
+}

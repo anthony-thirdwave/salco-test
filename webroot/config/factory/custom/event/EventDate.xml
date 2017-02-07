@@ -1,0 +1,10 @@
+<!-- EventDate Object -->
+<object>
+	<name>EventDate</name>
+	<implements>3W:EventDate</implements>
+	<table>
+		<name>t_EventDate</name>
+		<datasource>APPLICATION.EVENT_DSN</datasource>
+	</table>
+	<propertyList />
+</object>

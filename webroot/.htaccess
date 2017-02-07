@@ -1,0 +1,27 @@
+RewriteEngine On
+RewriteBase /
+
+# include rewrite map
+RewriteMap legacy-links txt:legacyLinks.txt [NC]
+RewriteCond ${legacy-links:%{REQUEST_URI}} >"" [NC]
+RewriteRule ^(.*) ${legacy-links:%{REQUEST_URI}} [L,R=302,NC]
+
+# Ignore all files that have an extension of three letters.
+RewriteRule ^(.*\.[a-z]{2,4})$ $1 [L,QSA]
+RewriteRule ^(/)$ $1 [L,QSA]
+
+# Ignore all admin tool pages.
+RewriteRule ^(common/admin.*)$ $1 [L,QSA]
+RewriteRule ^(development.*)$ $1 [L,QSA]
+RewriteRule ^(resources/.*)$ $1 [L,QSA]
+
+#DYNAMIC_CONTENT
+RewriteRule ^foo-bar$ page/test-product-family-1
+#END_DYNAMIC_CONTENT
+
+# Handle content alias in the second level e.g. '/content/about'
+RewriteRule ^(.[^/.]*)/(.[^/.]*)/?$ content.cfm?page=$2 [L,QSA]
+
+# Handle content aliases in the top level e.g. '/about'
+RewriteRule ^(.[^/.]*)/?$ content.cfm?page=$1 [L,QSA]
+

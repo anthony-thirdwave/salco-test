@@ -1,0 +1,188 @@
+@charset "utf-8";
+/* CSS Document */
+
+#calendar{
+	padding-top:8px;
+	
+	}
+
+.calendar-head {
+ 
+   
+    border: 1px solid #c9c8c8;
+    height:auto;
+   margin-bottom:2px;
+   padding-right:2px;
+   width:auto;
+}
+
+.eventbox{ height:auto;}
+
+.event_calendar {-moz-font-feature-settings: inherit;
+    -moz-font-language-override: inherit;
+    border: 1px solid #c9c8c8;
+    font-family: inherit;
+    font-size: 12px;
+    font-size-adjust: inherit;
+    font-stretch: inherit;
+    font-style: inherit;
+    font-variant: inherit;
+    font-weight: normal;
+    line-height: inherit;
+    margin: 0 auto;
+    padding: 2px;
+    vertical-align: baseline;
+    background:#fff !important;
+    height:auto;
+    width:195px;
+	}
+.calendar-head div.calendar-nav, .calendar-head div.calendar-days {
+    padding: 0;
+}
+.calendar-head div {
+    padding: 0px;
+    text-align:center;
+}
+.calendar-days div:first-child {
+    padding: 0px;
+}
+.calendar-nav div {
+    display:inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 0px;
+   vertical-align:middle;
+}
+
+.calendar-nav div.monthYr {
+	width:150px;
+	text-align:center;
+	font-size: 12px;
+}
+
+.calendar-nav div a {
+    font-size: 12px;
+    line-height: 0.8em;
+    color:#4a4367;
+    text-decoration:none;
+    text-transform:uppercase;
+}
+
+.ie9 .calendar-head .calendar-days{
+	
+}
+
+.calendar-days div {
+     display:inline-block;
+    font-weight: bold;
+    margin-right: 2px;
+    text-align:left;
+    width: 22px;
+}
+
+.ie9 .calendar-days div:nth-child(1), .ie9 .calendar-days div:nth-child(2), .ie9 .calendar-days div:nth-child(3) {text-indent:0px;}
+
+.ie9 .calendar-days div { width:21px; text-indent:5px;}
+
+.calendar-days div:nth-child(6){
+	text-indent:4px;
+}
+.calendar-days div.last-day {
+    margin-right: 0;
+    padding: 4px 3px 4px 4px;
+}
+
+.ie9 .calendar-days div.last-day {
+	padding-right:0px;
+}
+
+.calendar-row, .calendar-days {
+    clear: left;
+}
+.calendar-row div {
+    background: none repeat scroll 0 0 #eeedeb;
+    border: 1px solid #A9ABA7;
+    border-radius: 3px 3px 3px 3px;
+    color: #6D6F71;
+    display:inline-block;
+    font-size: 10px;
+    height: 18px;
+    margin: 0px -1px 2px 0px;
+    padding: 6px 0px 0px 4px;
+    width: 20px;
+  
+}
+
+.calendar-row div.today{
+	border:1px solid #b5203c; 
+}
+
+.calendar-row div.eventDate{
+	background:#b5203c;
+	color:#fff;
+}
+
+.calendar-row div.eventDate a{
+	color:#fff;
+	text-decoration:none;
+}
+
+.eventsInlineDate{
+	margin:0px;
+	padding:0px;
+	font-size:13px;
+	border-bottom:1px solid #5e5e60;
+	padding-bottom:3px;
+}
+
+#calendarInlineEventsDisplay{
+	padding:13px 9px;
+}
+
+#calendarInlineEventsDisplay ul{
+	list-style:none;
+	padding:0px;
+	margin:0px;
+	font-size:11px;
+}
+
+#calendarInlineEventsDisplay ul li{
+	padding-top:12px;
+	-webkit-transition: color .75s ease-out;
+	-moz-transition: color .75s ease-out;
+	-o-transition: color .75s ease-out;
+	transition: color .75s ease-out;
+}
+
+#calendarInlineEventsDisplay ul li a{
+	color:#231f20;
+	text-decoration:none;
+	-webkit-transition: color .75s ease-out;
+	-moz-transition: color .75s ease-out;
+	-o-transition: color .75s ease-out;
+	transition: color .75s ease-out;
+}
+
+#calendarInlineEventsDisplay ul li a:hover, #calendarInlineEventsDisplay ul li:hover, #eventsInlineSeeAll a:hover {
+	color:#ed1c25;
+}
+
+#calendarInlineEventsDisplay ul li:before{
+	content:" - ";
+}
+
+#eventsInlineSeeAll{
+	padding-top:36px;
+	font-size:12px;
+	font-weight:bold;
+	
+}
+
+#eventsInlineSeeAll a{
+	color:#231f20;
+	text-decoration:none;
+	-webkit-transition: color .75s ease-out;
+	-moz-transition: color .75s ease-out;
+	-o-transition: color .75s ease-out;
+	transition: color .75s ease-out;
+}

@@ -1,0 +1,346 @@
+* html img,
+
+* html .png{
+
+    position:relative;
+
+    behavior: expression((this.runtimeStyle.behavior="none")&&(this.pngSet?this.pngSet=true:(this.nodeName == "IMG" && this.src.toLowerCase().indexOf('.png')>-1?(this.runtimeStyle.backgroundImage = "none",
+
+        this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.src + "', sizingMethod='image')",
+
+        this.src = "/common/images/spacer.gif"):(this.origBg = this.origBg? this.origBg :this.currentStyle.backgroundImage.toString().replace('url("','').replace('")',''),
+
+        this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + this.origBg + "', sizingMethod='crop')",
+
+        this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
+
+    );
+
+}
+
+
+.homeNavRight li a {
+
+	background: url(/common/images/template/ie6_home_nav_right_off.gif) no-repeat;
+
+}
+
+.homeNavRight li a:hover, .active, li.ui-state-active a, li.ui-tabs-selected a {
+	background: url(/common/images/template/ie6_home_nav_right_on_over.gif) left top no-repeat!important;
+}
+
+.holderCenter{
+	width:920px;	
+}
+
+.sideBar{
+	margin-left:-58px;
+	
+}
+
+.fade{
+	
+	
+}
+
+.subBackHome{
+	background:none;
+}
+
+.homeLeft .html{
+	padding-top:1px;
+}
+
+.homeRight .clearit{
+	width:150px;
+	clear:both;
+	height:1px;
+	overflow:hidden;
+	}
+	
+.homeRight {
+	height:502px;}
+
+.homeRight .holderProd{
+	margin-top:0px;}
+	
+.contBack{
+	background-image: none;
+}
+
+.subBack{
+	width:900px;
+	overflow:visible;
+}
+
+.fade{
+
+border-left:2px solid #ed1c24;
+	border-right:2px solid #ed1c24;
+	
+	background:#fff none;
+	overflow:hidden;
+	width:440px;
+	margin-left:-3px;
+	
+}
+
+
+	
+.carHolder h2{
+	width:460px;
+}	
+
+.gradSM{
+	background:none;
+}
+.holderWideHeader{
+	position:relative;
+	margin:0px 0px 0px 0px !important;
+	background-image:url(/common/images/template/content_topIE6.png);
+}
+
+.holderWide{
+	/**/
+	width:630px !important;
+	overflow:visible;
+	/**/
+	}
+	
+
+
+.sideBarContent {
+    background-image: url(/common/images/template/side_bar_bakIE6.png);
+	margin-top:-3px;
+}
+
+.holderWide {
+    overflow:hidden;
+	width:645px;
+	z-index: auto;
+}
+
+.contTopLeft {
+	float:left;
+}
+
+.contTopRight{
+	padding-top:42px;
+}
+
+.contBottom{
+	clear:both;
+}
+a.trigger, .last-child a.trigger, a.trigger:hover, .last-child a.trigger:hover{
+	background-image:url(/common/images/template/sprite_tabs_sub_sidenav-redonly.jpg);
+	background-position:top left !important;
+}
+
+#holderNavSearch .btnSearch{
+	margin-top:0px;
+}
+
+#typeahead{
+	position:relative;
+}
+
+#typeahead #searchProd{
+	position:absolute;
+	margin:25px 0px 0px -3px;}
+
+#typeahead #returns{
+	position:absolute;
+	margin:48px 0px 0px 0px !important;}
+	
+.holderWideFooter {
+    background-image: url("/common/images/template/content_bottomIE6.png");
+	margin-left:125px;
+}
+
+.treeHeader #productNav{
+	margin-left:-20px;
+	margin-top:-1px;
+	position:relative;
+}
+
+#productNav{
+	margin-top:20px;
+}
+
+.treeHeader a.trigger{
+	background:none;
+}
+
+.treeHeader a.trigger:hover{
+	background:none;
+}
+
+#productNav .keepingitReal a.active{
+	background:none !important;
+}
+
+#wide2 .holderFullSp {
+    background-image: url("/common/images/template/holder_sp_back2-ie6.png");
+}
+
+.holderFullHeaderSp {
+    background-image: url("/common/images/template/holder_sp_top-ie6.png");
+}
+
+
+
+.ppplay,
+.pppause  {
+display:block;
+position: absolute;
+top: 0;
+left: 0;
+background: url("/common/images/ie6controls.png") no-repeat left top transparent !important;
+width: 30px;
+height: 30px;
+cursor: pointer;
+border-right: 1px solid #000;
+margin-top: -5px;
+margin-left: -5px;
+}
+.ppplay:hover {
+background: url("/common/images/ie6controls.png") no-repeat left -35px transparent !important;
+}
+.ppplay:active {
+background: url("/common/images/ie6controls.png") no-repeat left -36px transparent !important;
+}
+
+.pppause {
+display:none;
+background: url("/common/images/ie6controls.png") no-repeat left -70px transparent !important;
+}
+.pppause:hover {
+display:none;
+background: url("/common/images/ie6controls.png") no-repeat left -105px transparent !important;
+}
+.pppause:active {
+display:none;
+background: url("/common/images/ie6controls.png") no-repeat left -106px transparent !important;
+}
+
+.pptimeleft {
+background: none !important;
+}
+.ppvmax  {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+.ppvmax:hover  {
+background: none !important;
+}
+.ppvmax:active  {
+background: none !important;
+}
+
+.ppmute  {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border-right: none !important;
+}
+.ppmute:hover  {
+background: none !important;
+}
+.ppmute:active  {
+background: none !important;
+}
+
+.ppvslider {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+.ppvmarker {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+.ppvknob  {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+.ppnext,
+.ppprev {
+display:block;
+position: absolute;
+top: 0;
+right: 255px;
+background: url("/common/images/ie6controls.png") no-repeat -59px top transparent !important;
+width: 30px;
+height: 30px;
+cursor: pointer;
+border-left:1px solid #413e3e;
+border-right:1px solid #000;
+}
+.ppnext { border-right:none;}
+.ppnext:hover {
+background: url("/common/images/ie6controls.png") no-repeat -59px -35px transparent !important;
+}
+.ppnext:active {
+background: url("/common/images/ie6controls.png") no-repeat -59px -36px transparent !important;
+}
+
+.ppprev {
+right: 284px;
+background: url("/common/images/ie6controls.png") no-repeat -32px top transparent !important;
+}
+
+.ppprev:hover {
+background: url("/common/images/ie6controls.png") no-repeat -32px -35px transparent !important;
+}
+.ppprev:active {
+background: url("/common/images/ie6controls.png") no-repeat -32px -36px transparent !important;
+}
+
+.ppplayhead, .pploaded {
+display: inline !important;
+position: relative !important;
+background: none !important;
+width: auto !important;
+height: auto !important;
+cursor: pointer;
+border: none !important;
+margin: 0 !important;
+padding: 0 !important;
+}
+
+
+
+
