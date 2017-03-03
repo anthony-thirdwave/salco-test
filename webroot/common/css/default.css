@@ -3257,30 +3257,35 @@ font-family: "Myriad W01 Regular";
 }
 
 #pagefooter{
-        width:900px; 
-        margin:auto;
-        position:relative;
-        padding-bottom:15px;
-    }
-    
-     .socialmedia{
-        position:absolute; 
-        right:0;
-     }
-     
-     .socialmedia:before{
-         content:"Connect with us! ";
-         position:absolute;
-         margin-left:-150px;
-     }
-     
-     li.socialmedia li{
-         margin-right:5px;}
-     
-     li.socialmedia li img{
-         width:28px;
-      }
-     
-     li.socialmedia, li.socialmedia li:last-child {
-         margin-right:0;
-      }
+    width:900px; 
+    margin:auto;
+    position:relative;
+    padding-bottom:15px;
+}
+
+ .socialmedia{
+    position:absolute; 
+    right:0;
+ }
+ 
+ .socialmedia:before{
+     content:"Connect with us! ";
+     position:absolute;
+     margin-left:-150px;
+ }
+ 
+ li.socialmedia li{
+     margin-right:5px;}
+ 
+ li.socialmedia li img{
+     width:28px;
+  }
+ 
+ li.socialmedia, li.socialmedia li:last-child {
+     margin-right:0;
+  }
+
+.techSales {
+	border-top: 1px solid #fff;
+	padding-top: 13px;	
+}
