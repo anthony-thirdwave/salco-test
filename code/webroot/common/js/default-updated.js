@@ -1,17 +1,15 @@
 // Default Scripts
-
 $(document).ready(function(e) {
+	
 	//set active main nav links
+	globalNavItems = globalNavItems.split(",");
 	
-	globalNavItems=globalNavItems.split(",");
-	
-	for(i=2;i<globalNavItems.length;i++){
-		
+	for(i=2;i<globalNavItems.length;i++){	
 		$("#nav-toggle-container a").each(function(index, element) {
 			if(globalNavItems[i]==$(this).attr("data-categoryid")){
 				$(this).addClass("navActive");
 			}
-		});		
+		});
 	}
 	
 	$('input#search-text').focus(function() {
@@ -25,49 +23,44 @@ $(document).ready(function(e) {
 			this.value = "Search Salco Products...";
 		}
 	});
+
 	// make sure search form is not blank or contains "Search Salco Products..."
-	$( 'form[action="/page/Search"]' ).submit(function( event ) {
-  		
+	$( 'form[action="/page/Search"]' ).submit(function( event ) {	
 		if($('input#search-text').val()=="" || $('input#search-text').val()=="Search Salco Products..."){
 			event.preventDefault();
-			}
+		}
 	});
 	
-		/* homepage right links statements */
-		
-		$("#statements-navigation a").bind("click",function(event){
-			event.preventDefault();
+	/* homepage right links statements */
+	$("#statements-navigation a").bind("click",function(event){
+		event.preventDefault();
 			
-			$(".ss-statements").each(function(index, element) {
-				$(this).removeClass("on");
-			});
+		$(".ss-statements").each(function(index, element) {
+			$(this).removeClass("on");
+		});
 			
-			$("#statements-navigation a").each(function(index, element) {
-				$(this).removeClass("on");
-			});
+		$("#statements-navigation a").each(function(index, element) {
+			$(this).removeClass("on");
+		});
 			
-			$($(this).attr("href")).addClass("on");
+		$($(this).attr("href")).addClass("on");
 			$(this).addClass("on");
 		});
-		//
 		
 		$("#feature-prod-nav li").each(function(index, element) {
-		
-			if($(this).children('a').attr('data-id')==""){
-				
+			if($(this).children('a').attr('data-id')==""){	
 				$($(this).children('a').attr('href')).css({cursor:"default"});
 			}
 		});
 		
 		$(".feat-prods").bind("click",function(){
 			featprodstitle=$(this).find("h4").html(); 
+			
 			if($("#feat-prods #feature-prod-nav .on a").attr("data-id")!=""){
 				_gaq.push(['_trackEvent', 'Featured', 'Clicks', featprodstitle]);
 				//alert(featprodstitle)
 				document.location=$("#feat-prods #feature-prod-nav .on a").attr("data-id");
-				
 			}
-			
 		});
 		
 		$("#feature-prod-nav li a").bind("click",function(event){
@@ -83,7 +76,6 @@ $(document).ready(function(e) {
 			
 			$($(this).attr("href")).addClass("on");
 			$(this).parent().addClass("on");
-			
 		});
 	
 		/* binds for modal links */
@@ -94,11 +86,9 @@ $(document).ready(function(e) {
 			$("#modal-content").load(temps+" #modal-content",function(){
 				location.hash=temps;
 			});
+
 			temps=temps.split(".");
 			temps=temps[0]+"_"+temps[1];
-			
-			
-			
 		});
 		
 		$("#modal-background").bind("click",function(event){
@@ -111,6 +101,7 @@ $(document).ready(function(e) {
 			$("#modal-holder").addClass("closing");
 			setTimeout("modalooo.closing()",950);
 		});
+
 		var browserWars=$.client.browser;
 		
 		browserSet.init();
@@ -125,10 +116,8 @@ $(document).ready(function(e) {
 		}
 		
 		/* faq */
-		if($("#faq").length>0){
-			
+		if($("#faq").length>0){	
 			setTimeout("faqf.init()",500);
-			
 		}
 		
 		/* video landing binding */
@@ -142,179 +131,168 @@ $(document).ready(function(e) {
 		//getNameinfo=getNameinfo.split(" ");
 		//document.location="/page/contact-us-form?contact="+getNameinfo[0]+"_"+getNameinfo[1];
 		allContacts.alphaListUpdate(getNameinfo);
-																		   
 	});
 		
-		$("#contact-us-aside a.email").bind("click",function(e){e.preventDefault(); 
+	$("#contact-us-aside a.email").bind("click",function(e){
+		e.preventDefault(); 
 		
 		getNameinfo=$(this).attr("data-name");
 		//getNameinfo=getNameinfo.split(" ");
-		document.location="/page/contact-us-form?contact="+getNameinfo;//[1]+"_"+getNameinfo[2];
-																		   
+		document.location="/page/contact-us-form?contact="+getNameinfo;//[1]+"_"+getNameinfo[2];																	   
 	});		
+	
 	if($("body").hasClass("product-family")==true || $("body").hasClass("product")==true ){
 		initNav();
 	}
 	
-	
 	/* pagination bindings */ 
-	
 	$(".pagList .pagination p a").bind("click", function(event){
 		event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().attr("id")); location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().attr("id");
 	});
-	
-			   	   
+
 	$(".pagList .pagination .pagination a").bind("click",function(event) {event.preventDefault(); getPage($(this).attr("href"), $(this).parent().parent().parent().parent().attr("id"));  location.hash="#"+$(this).attr("href")+"^"+$(this).parent().parent().parent().parent().attr("id");});
-	
-	
-	
+		
 	//, .product-family #center-content .featuredDownloads tbody tr td
 	$(".product #center-content .featuredDownloads tbody tr, .product-family #center-content .featuredDownloads tbody tr").bind("click", function(){
-			window.location=$(this).children("td").eq(0).children().attr("href");
-		})
+		window.location=$(this).children("td").eq(0).children().attr("href");
+	})
+});
 	
-	});
-	
-	/*var trackingStuff={
-		urlTracks:["/resources/content/5/8/documents/Salco-Calculator-2-3-2.xls","/resources/content/1/1/3/documents/Gasket-material-matrix_2.pdf", "/resources/content/1/2/documents/2014-Calendar.pdf", "/content.cfm/terms-and-conditions", "/resources/content/1/5/documents/Technical-Consulting-Services2_1.pdf"],
-		typeTracks:["Technical Information","Technical Information", "About Us", "Services", "Services"],
-		labelTracks:["Salco Torque Calculator ver2.3.2","Gasket Material Matrix", "Salco Holiday Calendar", "Terms and Conditions", "Technical Consulting"],
-		init:function(){
-			$("#site-wrapper a").each(function(index, element) {
-				for(i=0;i<trackingStuff.urlTracks.length;i++){
-					if($(this).attr("href")==trackingStuff.urlTracks[i]){
-						
-						tempStuffhold1=trackingStuff.typeTracks[i];
-						tempStuffhold2=trackingStuff.labelTracks[i];
-						$(this).bind("click",function(){ 
-							alert(tempStuffhold1+" - "+tempStuffhold2)
-							_gaq.push(['_trackEvent', tempStuffhold1, 'Clicks', tempStuffhold2]);
-						})
-					}
+/*var trackingStuff={
+	urlTracks:["/resources/content/5/8/documents/Salco-Calculator-2-3-2.xls","/resources/content/1/1/3/documents/Gasket-material-matrix_2.pdf", "/resources/content/1/2/documents/2014-Calendar.pdf", "/content.cfm/terms-and-conditions", "/resources/content/1/5/documents/Technical-Consulting-Services2_1.pdf"],
+	typeTracks:["Technical Information","Technical Information", "About Us", "Services", "Services"],
+	labelTracks:["Salco Torque Calculator ver2.3.2","Gasket Material Matrix", "Salco Holiday Calendar", "Terms and Conditions", "Technical Consulting"],
+	init:function(){
+		$("#site-wrapper a").each(function(index, element) {
+			for(i=0;i<trackingStuff.urlTracks.length;i++){
+				if($(this).attr("href")==trackingStuff.urlTracks[i]){
+					
+					tempStuffhold1=trackingStuff.typeTracks[i];
+					tempStuffhold2=trackingStuff.labelTracks[i];
+					$(this).bind("click",function(){ 
+						alert(tempStuffhold1+" - "+tempStuffhold2)
+						_gaq.push(['_trackEvent', tempStuffhold1, 'Clicks', tempStuffhold2]);
+					})
 				}
-			});
-		}
-	}*/
+			}
+		});
+	}
+}*/
 	
-	$(window).load(function(){
-	
-		contactUsMap.init();
-		/*trackingStuff.init();*/
+$(window).load(function(){	
+	// contactUsMap.init();
+	/*trackingStuff.init();*/
+			
+	//airslide fix for chrome
+	if($("body").attr("id")=="air-slide" && $("html").hasClass("chrome")==true){ 
+		chromereset=$("#product-hero-image").css("padding-top").replace("px","")-2;
+		$("#product-hero-image").css({paddingTop:chromereset+"px"});
+	}
 		
-		
-		//airslide fix for chrome
-		if($("body").attr("id")=="air-slide" && $("html").hasClass("chrome")==true){ 
-			chromereset=$("#product-hero-image").css("padding-top").replace("px","")-2;
-			$("#product-hero-image").css({paddingTop:chromereset+"px"});
-		}
-		
-		setTimeout(function(){
-			$("#main-navigation ul ul.level-2").each(function(index, element) {
-				$(this).css({height:"auto"});
-				//alert($(this).parent().children().children().html());
-				tempWidt="";
-				switch (index){
-					case 0:
+	setTimeout(function(){
+		$("#main-navigation ul ul.level-2").each(function(index, element) {
+			$(this).css({height:"auto"});
+			//alert($(this).parent().children().children().html());
+			tempWidt="";
+				
+			switch (index){
+				case 0:
 					tempHH=140;
 					break;
-					case 1:
+				case 1:
 					tempHH=186;
 					tempWidt='width:120px;';
 					break;
-					case 2:
+				case 2:
 					tempHH=80;
 					break;
-					
-				}
+			}
                 
-                tempSecL=0
-                 $(this).children().each(function(index, element) {
-                    // alert($(this).children().height()); 
-                    tempSecL=tempSecL+$(this).children().height(); 
-                });
-				
-				//alert(tempSecL)
-                
-               
-               
-                  tempHH=tempSecL*2;
-                  if(index==1){
-                      tempHH=tempSecL*2.25;
-                  }
-               
-                //alert(tempSecL);
-				
-				$("<style>#hasSubNav-"+index+" ul{width:"+$(this).parent().width()+"px;} #hasSubNav-"+index+":hover ul {height:"+tempHH+"px; "+tempWidt+"}</style>").insertBefore(this);
-				$(this).attr("style","");
-				$(this).parent().attr("id","hasSubNav-"+index);
-				
+			tempSecL=0
+                 
+			$(this).children().each(function(index, element) {
+				// alert($(this).children().height()); 
+				tempSecL=tempSecL+$(this).children().height(); 
 			});
+				
+			//alert(tempSecL)
+                
+			tempHH=tempSecL*2;
+             
+            if(index==1){
+				tempHH=tempSecL*2.25;
+			}
+               
+			//alert(tempSecL);
+				
+			$("<style>#hasSubNav-"+index+" ul{width:"+$(this).parent().width()+"px;} #hasSubNav-"+index+":hover ul {height:"+tempHH+"px; "+tempWidt+"}</style>").insertBefore(this);
+			$(this).attr("style","");
+			$(this).parent().attr("id","hasSubNav-"+index);
+		});
 			
 			
-			$("#products-navigation ul ul.level-2").each(function(index, element) {
-				$(this).css({height:"auto"});
-				 //alert($(this).children().height());
-                 tempSecL=0
-                 $(this).children().each(function(index, element) {
-                    tempSecL=tempSecL+$(this).height();
-                    
-                });
-                // 
-                $(this).attr("data-height",tempSecL);
-                $(this).css({minHeight:tempSecL+"px"});
+		$("#products-navigation ul ul.level-2").each(function(index, element) {
+			$(this).css({height:"auto"});
+			//alert($(this).children().height());
+            tempSecL=0
+                 
+            $(this).children().each(function(index, element) {
+				tempSecL=tempSecL+$(this).height();    
+			});
+
+			$(this).attr("data-height",tempSecL);
+			$(this).css({minHeight:tempSecL+"px"});
                 
                 
-				temperHi=0;
-				$(this).children().children().each(function(index, element) {
-					moomoo=$(this).children().children().offset();
-					temperHi=temperHi+$(this).children().height();
-					//if($(this).parent().hasClass("level-3")==false){
+			temperHi=0;
+
+			$(this).children().children().each(function(index, element) {
+				moomoo=$(this).children().children().offset();
+				temperHi=temperHi+$(this).children().height();
+				//if($(this).parent().hasClass("level-3")==false){
 					//alert($(this).html());
-					//}
-				});
+				//}
+			});
+									
+			tempWidthCarrot=$(this).parent().width();
 				
-								
-				tempWidthCarrot=$(this).parent().width();
-				
-				
-				
-				switch (index){
-					case 0:
+			switch (index){
+				case 0:
 					tempHH=100;
 					break;
-					case 1:
+				case 1:
 					tempHH=100;
 					break;
-					case 2:
+				case 2:
 					tempHH=110;
 					break;
-					case 3:
+				case 3:
 					tempHH=150;
 					break;
-					
-				}
+			}
 				
-				tempSecL=0
-                 $(this).children().each(function(index, element) {
-                    // alert($(this).children().height()); 
-                    tempSecL=tempSecL+$(this).children().height(); 
-                });
-				
-				//alert(tempSecL)
-                
-                //tempHH=tempSecL*1.85;
-                 if(index==2){
-                  tempHH=tempSecL*2; 
-                  //alert(tempHH) 
-                }else{
-                  tempHH=tempSecL*1.85;
-                }
-				
-				$("<style>#hasSubNavP-"+index+" ul{width:"+($(this).parent().width()+24)+"px !important;} #hasSubNavP-"+index+" ul li{width:"+($(this).parent().width()+14)+"px !important;} #hasSubNavP-"+index+" ul li a{width:"+($(this).parent().width()+5)+"px !important;} #hasSubNavP-"+index+" ul .level-3{width:"+($(this).parent().width()+16)+"px !important;margin-left:"+($(this).parent().width()+20)+"px !important;} #hasSubNavP-"+index+":hover ul {height:"+tempHH+"px;}</style>").insertBefore(this);
-				$(this).attr("style","");
-				$(this).parent().attr("id","hasSubNavP-"+index);
-				
+			tempSecL=0
+			
+			$(this).children().each(function(index, element) {
+				// alert($(this).children().height()); 
+				tempSecL=tempSecL+$(this).children().height(); 
 			});
+				
+			//alert(tempSecL)
+                
+			//tempHH=tempSecL*1.85;
+			if(index==2){
+				tempHH=tempSecL*2; 
+				//alert(tempHH) 
+			}
+			else{
+				tempHH=tempSecL*1.85;
+			}
+				
+			$("<style>#hasSubNavP-"+index+" ul{width:"+($(this).parent().width()+24)+"px !important;} #hasSubNavP-"+index+" ul li{width:"+($(this).parent().width()+14)+"px !important;} #hasSubNavP-"+index+" ul li a{width:"+($(this).parent().width()+5)+"px !important;} #hasSubNavP-"+index+" ul .level-3{width:"+($(this).parent().width()+16)+"px !important;margin-left:"+($(this).parent().width()+20)+"px !important;} #hasSubNavP-"+index+":hover ul {height:"+tempHH+"px;}</style>").insertBefore(this);
+			$(this).attr("style","");
+			$(this).parent().attr("id","hasSubNavP-"+index);
+		});
 			
 			$(".level-2 li").not(".level-3 li").each(function(index, element) {
 					//alert($(this).height());
@@ -337,30 +315,25 @@ $(document).ready(function(e) {
 			$("#center-content h3 + h2 + h1").html(tempsTitleSwitch2);
 			$("#center-content h3 + h2 + h1 + div h1").html(tempsTitleSwitch1);
 		}
-	
 	});
 	
-	
 	/* browser assigning */
-	
 	browserSet={
 		browser:$.client.browser,
 		os:$.client.os,
 		ieVerTest:function(){
 			rv=-1;
 			userAgent = navigator.userAgent.toLowerCase();
-			var pattern =new RegExp("msie ([0-9]{1,}[\.0-9]{0,})");
+			var pattern = new RegExp("msie ([0-9]{1,}[\.0-9]{0,})");
 			//return pattern.test(userAgent);
 			if (pattern.exec(userAgent) != null){
-				    rv = parseFloat( RegExp.$1 );
-				     
-			   }
-			  
+				rv = parseFloat( RegExp.$1 );     
+			}
+
 			return rv;
 		},
 		init:function(){
 			//console.log(browserSet.browser+" "+browserSet.os+" "+browserSet.ieVerTest());
-			
 			$("html").addClass(browserSet.browser.toLowerCase());
 			$("html").addClass(browserSet.os.toLowerCase());
 			if(browserSet.ieVerTest()!=-1){
@@ -368,14 +341,14 @@ $(document).ready(function(e) {
 				if($("html").hasClass("ie8")==true || $("html").hasClass("ie9")==true){
 					hpslides.init();
 				}
-			}else if(browserSet.browser=="Explorer" && browserSet.ieVerTest()==-1){
+			}
+			else if(browserSet.browser=="Explorer" && browserSet.ieVerTest()==-1){
 				$("html").addClass("ie11");
 			}
 		}
 	}
 	
 	/* homepage animations for ie8 and ie9 */
-	
 	var hpslides={
 		init:function(){
 			n=0;
@@ -389,28 +362,27 @@ $(document).ready(function(e) {
 		rotit:function(n){
 			en=$("#content-wrapper-home #left-content ul li").length-1;
 			if(n<en){
-					n++;
-				}else{
-					n=0;
-				}
-				
-				$("#content-wrapper-home #left-content ul li").animate({opacity:0});
-				$("#content-wrapper-home #left-content ul li").css({display:"block"});
-				$("#content-wrapper-home #left-content ul li").eq(n).animate({opacity:1});
-				//console.log($("#content-wrapper-home #left-content ul li").eq(n).html());
-				$("#content-wrapper-home #left-content img.hpfades").animate({opacity:0});
-				$("#content-wrapper-home #left-content img.hpfades").css({display:"block"});
-				$("#content-wrapper-home #left-content img.hpfades").eq(n).animate({opacity:1});
-				setTimeout("hpslides.rotit("+n+")",15000);
+				n++;
+			}
+			else{
+				n=0;
+			}
+			$("#content-wrapper-home #left-content ul li").animate({opacity:0});
+			$("#content-wrapper-home #left-content ul li").css({display:"block"});
+			$("#content-wrapper-home #left-content ul li").eq(n).animate({opacity:1});
+			//console.log($("#content-wrapper-home #left-content ul li").eq(n).html());
+			$("#content-wrapper-home #left-content img.hpfades").animate({opacity:0});
+			$("#content-wrapper-home #left-content img.hpfades").css({display:"block"});
+			$("#content-wrapper-home #left-content img.hpfades").eq(n).animate({opacity:1});
+			setTimeout("hpslides.rotit("+n+")",15000);
 		}
-		
 	}
-	
 	
 	/* script for modals */
 	var modalooo={
 		init:function(){
 			tempsCSS="";
+			
 			$(".modal-link").each(function(index, element) {
 				//alert($(this).attr("href"));
 				temps=$(this).attr("href");
@@ -419,23 +391,18 @@ $(document).ready(function(e) {
 				//alert(temps)
 				
 				$("#modal-holder").wrapAll('<div id="'+temps+'"></div>');
-				
 				tempsCSS+="#"+temps+":target #modal-background{height:100%; width:100%; z-index:100; opacity:1;}#"+temps+":target #modal-outer{height:490px; width:430px; z-index:110; opacity:1;}"
-				
-				
-				
 			});
 			
 			//news picture modal setup
 			$(".inArt .alignLeft .curveMe").each(function(index, element) {
 				$(this).attr("data-id",$("body").attr("id")+"-"+index);
-				
 				$("#modal-holder").wrapAll('<div id="'+$("body").attr("id")+"-"+index+'"></div>');
 				$("#modal-content").append('<img class="'+$("body").attr("id")+'-'+index+'" src="'+$(".lrgImgs img").eq(index).attr("src")+'" >');
 				tempClassy="."+$("body").attr("id")+"-"+index;
 				tempH=$(tempClassy).height();
 				tempW=$(tempClassy).width();
-				
+	
 				tempH2=$(tempClassy).height()+50;
 				tempW2=$(tempClassy).width()+20;
 				
@@ -452,7 +419,7 @@ $(document).ready(function(e) {
 			location.hash="";
 			$("#modal-holder").removeClass("closing");
 		},
-		initAboutUs:function(){
+		initAboutUs:function() {
 			$(".prop a").bind("click", function(event){
 				event.preventDefault();
 				$("#modal-content").html($(this).html());
@@ -484,871 +451,1068 @@ $(document).ready(function(e) {
 						$("#modal-holder").removeClass("closing");
 						$("#modal-content").html($(this).html());
 						$("#modal-outer").attr("style","");
-						
 					},750);
 				});
 			});
 		}
 	}
 	
-var faqf={
-		init:function(){
-		 acstyle="";
-		$(".outer").children().each(function(index, element) {
+	var faqf = {
+		init: function() {
+			acstyle = "";
+
+			$(".outer").children().each(function(index, element) {
 				//alert($(this).height())
 				$(this).parent().css({display:"block"});
 				$(this).parent().attr("id","outer-"+index);
 				$(this).parent().addClass("fixed");
-				acstyle+=".expanded #outer-"+index+'{height:'+$(this).height()+'px;} ';
-				
+				acstyle+=".expanded #outer-"+index+'{height:'+$(this).height()+'px;} ';	
 			});
 			
-			$("h4.h a").attr("style","");
-			
-			$("body").prepend('<style>'+acstyle+'</style>');
-			
+			$("h4.h a").attr("style", "");
+			$("body").prepend('<style>'+acstyle+'</style>');	
+		
 			$("h4.h").not(".subAcHd").bind("click",function(){
-				if($(this).parent().hasClass("expanded")==false){
+				if ($(this).parent().hasClass("expanded") == false) {
 					$(this).parent().addClass("expanded");
-				}else{
+				}
+				else {
 					$(this).parent().removeClass("expanded");
 				}
 			});	
 			
-			$("h4.h").bind("click", function(event){
+			$("h4.h").bind("click", function(event) {
 				event.preventDefault();
 			});
 		}
 	}
-	
-/* contact map */
 
-function highlightRegion(region){
-	
-	$("#contact-us-aside .office").each(function(index, element) {
-		$(this).parent().addClass("hidden");
-		//$(this).removeClass("shown");
-		//console.log($(this).parent().attr("id"));
-		
-	});
-	
-	$("#"+region).removeClass("hidden");
-	//$("#"+region).addClass("shown");
-}
+	/****************************************
+				Contact Map
+	****************************************/
 
-var contactUsMap={
-	ieOverItRegion:function(ieClasser){
-				holdingC=ieClasser;
-				holdingC=holdingC.split(" ");
-				holdingC=holdingC[1];
-				rO=holdingC;
+	// function highlightRegion(region) {
+
+	// 	$("#contact-us-aside .office").each(function(index, element) {
+	// 		$(this).parent().addClass("hidden");
+	// 		//$(this).removeClass("shown");
+	// 		//console.log($(this).parent().attr("id"));
+	// 	});
+	
+	// 	$("#"+region).removeClass("hidden");
+	// 	//$("#"+region).addClass("shown");
+	// }
+
+	// var contactUsMap = {
+	// 	ieOverItRegion:function(ieClasser) {
+	// 		holdingC=ieClasser;
+	// 		holdingC=holdingC.split(" ");
+	// 		holdingC=holdingC[1];
+	// 		rO=holdingC;
 				
-				rO=rO.split("-");
-				rO=rO[1];
-				rO="rOffice-"+rO;
-				if($("."+rO).eq(0).attr("fill")!="#000000"){
-					$("."+rO).eq(0).attr("fill","#300000");
-					$("."+rO).eq(0).attr("stroke","#300000");
-					$("."+rO).eq(1).attr("stroke","#300000");
-				}
+	// 		rO=rO.split("-");
+	// 		rO=rO[1];
+	// 		rO="rOffice-"+rO;
 				
-				
-				
-				
-				if($("."+holdingC).attr("fill")!="#c1272d"){
-					$("."+holdingC).attr("fill","#e8858c");
+	// 		if ($("."+rO).eq(0).attr("fill") != "#000000") {
+	// 			$("."+rO).eq(0).attr("fill","#300000");
+	// 			$("."+rO).eq(0).attr("stroke","#300000");
+	// 			$("."+rO).eq(1).attr("stroke","#300000");
+	// 		}
+								
+	// 		if ($("."+holdingC).attr("fill") != "#c1272d") {
+	// 			$("."+holdingC).attr("fill","#e8858c");
 					
-					if($(this).attr("class")=="regions region-11"){
-						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
-							$("#il-in-upper-us").attr("fill","#959595");
-						}
-						$("#il-in-upper-us").attr("stroke","white");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-					
-					/*if($(this).attr("class")=="regions region-7"){
-						$("#il-in-upper-us").attr("stroke","white");
-						$("#il-upper-border-us").attr("stroke","none");
-						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
-							$("#il-in-upper-us").attr("fill","#e8858c");
-							
-						}
+	// 			if ($(this).attr("class") == "regions region-11") {
+	// 				if ($("#il-in-upper-us").attr("fill") != "#c1272d") {
+	// 					$("#il-in-upper-us").attr("fill","#959595");
+	// 				}
 						
-						
-					}*/
+	// 				$("#il-in-upper-us").attr("stroke","white");
+	// 				$("#il-upper-border-us").attr("stroke","none");
+	// 			}
 					
-					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
-						$("#tx-northern-us-line").attr("stroke","#fff");
-					}
+	// 			/*if($(this).attr("class")=="regions region-7"){
+	// 				$("#il-in-upper-us").attr("stroke","white");
+	// 				$("#il-upper-border-us").attr("stroke","none");
+	// 				if($("#il-in-upper-us").attr("fill")!="#c1272d"){
+	// 					$("#il-in-upper-us").attr("fill","#e8858c");		
+	// 				}		
+	// 			}*/
+					
+	// 			if ($(this).attr("class") == "regions region-12" || $(this).attr("class") == "regions region-13") {
+	// 				$("#tx-northern-us-line").attr("stroke","#fff");
+	// 			}
 					
 					
-					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
-						$("#pa-western-us").attr("stroke","#fff");
-					}
-					
-				}
-	},
-	ieOffItRegion:function(ieClasser){
-				holdingC=ieClasser;
-				holdingC=holdingC.split(" ");
-				holdingC=holdingC[1];
-				
-				rO=holdingC;
-				
-				rO=rO.split("-");
-				rO=rO[1];
-				rO="rOffice-"+rO;
-				if($("."+rO).eq(0).attr("fill")!="#000000"){
-					$("."+rO).eq(0).attr("fill","transparent");
-					$("."+rO).eq(0).attr("stroke","transparent");
-					$("."+rO).eq(1).attr("stroke","transparent");
-				}
-				
-				if($("."+holdingC).attr("fill")!="#c1272d"){
-					$("."+holdingC).attr("fill","#959595");
-					
-				}
-				
-				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-				}
-				
-				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-				}
-				
-				if($("#il-in-upper-us").attr("fill")=="#c1272d" && $("#il-in-upper-us").attr("fill")=="#c1272d"){	
-					$("#il-upper-border-us").attr("stroke","#959595");
-				}
-				
-				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
-					$("#tx-northern-us-line").attr("stroke","none");
-				}
-				
-				if($("#pa-western-us").attr("fill")!="#c1272d" && $("#pa-us").attr("fill")!="#c1272d"){
-					$("#pa-western-us").attr("stroke","none");
-				}
-	},
-	init:function(){
-		tech.init();
-		highlightRegion('region0');
-		$("svg rect").bind("click",function(){contactUsMap.resetit();});
-		if(document.all){
+	// 			if ($(this).attr("class") == "regions region-11" || $(this).attr("class") == "regions region-1") {
+	// 				$("#pa-western-us").attr("stroke","#fff");
+	// 			}	
+	// 		}
+	// 	},
+	// 	ieOffItRegion:function(ieClasser) {
+	// 		holdingC=ieClasser;
+	// 		holdingC=holdingC.split(" ");
+	// 		holdingC=holdingC[1];
 			
+	// 		rO=holdingC;
+	// 		rO=rO.split("-");
+	// 		rO=rO[1];
+	// 		rO="rOffice-"+rO;
+	
+	// 		if ($("."+rO).eq(0).attr("fill") != "#000000") {
+	// 			$("."+rO).eq(0).attr("fill","transparent");
+	// 			$("."+rO).eq(0).attr("stroke","transparent");
+	// 			$("."+rO).eq(1).attr("stroke","transparent");
+	// 		}
 			
-			//$( ".office-dot" ).hover(function(){alert("m00m00")});
+	// 		if ($("."+holdingC).attr("fill") != "#c1272d") {
+	// 			$("."+holdingC).attr("fill","#959595");		
+	// 		}
 			
+	// 		if ($("#il-in-upper-us").attr("fill") != "#c1272d" && $("#il-in-upper-us").attr("fill") != "#959595") {
+	// 			$("#il-in-upper-us").attr("fill","none");
+	// 			$("#il-in-upper-us").attr("stroke","none");
+	// 		}
 			
-			$( ".office-dot" ).each(function(index, element) {
-				$(this).attr("onmouseover","contactUsMap.ieOverItOffices('"+$(this).attr('id')+"')");
-			});
+	// 		if ($("#in-us").attr("fill") == "#959595" && $("#il-in-upper-us").attr("fill") != "#c1272d") {
+	// 			$("#il-in-upper-us").attr("fill","none");
+	// 			$("#il-in-upper-us").attr("stroke","none");
+	// 		}
 			
-			$( ".office-dot" ).each(function(index, element) {
-				$(this).attr("onmouseout","contactUsMap.ieLeaveItOffices('"+$(this).attr('id')+"')");
-			});
+	// 		if ($("#il-in-upper-us").attr("fill") == "#c1272d" && $("#il-in-upper-us").attr("fill") == "#c1272d") {
+	// 			$("#il-upper-border-us").attr("stroke","#959595");
+	// 		}
 			
-			$( ".regions" ).each(function(index, element) {
-				$(this).attr("onmouseover","contactUsMap.ieOverItRegion('"+$(this).attr('class')+"')");
-			});
+	// 		if ($("#tx-northern-us").attr("fill") != "#c1272d" && $("#tx-us").attr("fill") != "#c1272d") {
+	// 			$("#tx-northern-us-line").attr("stroke","none");
+	// 		}
 			
-			$( ".regions" ).each(function(index, element) {
-				$(this).attr("onmouseout","contactUsMap.ieOffItRegion('"+$(this).attr('class')+"')");
-			});
-			
-		}
-		$(".office-dot").click(function(){
-			contactUsMap.resetit();
-			getOffice="#"+$(this).attr("id")+"-selected";
-			$(".office-circle").attr("class","office-circle");
-			$(".office-circle").attr("stroke","transparent");
-			
-			$(getOffice).attr("class","office-circle office-active");
-			$(".ncOffices").attr("fill","none");
-			$(".ncOffices").attr("stroke","none");
-			$("#il-in-upper-us").attr("fill","none");
-			$("#il-in-upper-us").attr("stroke","none");
-			//$("#region-id").html($(getOffice).attr("id"));
-			
-			if($(getOffice).attr("id")=="chicago-office-selected"){
-				highlightRegion('region13');
-			}else if($(getOffice).attr("id")=="houston-office-selected"){
-				highlightRegion('region12');
-			}else if($(getOffice).attr("id")=="sioux-city-office-selected"){
-				highlightRegion('region16');
-			}else if($(getOffice).attr("id")=="sarnia-on-ca-office-selected"){
-				highlightRegion('region1');
-			}
-			
-			$(getOffice).attr("stroke","#000000");
-		}).mouseenter(function(){
-			$(".regions").each(function(index, element) {
-				if($(this).attr("fill")!="#c1272d"){
-					$(this).attr("fill","#959595");
-				}
-			});
-			
-			$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
-			
-			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
-					}/**/
-			
-			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-upper-us").attr("stroke","none");
-					}*/
-
-			
-			getOffice="#"+$(this).attr("id")+"-selected";
-			$(getOffice).attr("stroke","#000000");
-		}
+	// 		if ($("#pa-western-us").attr("fill") != "#c1272d" && $("#pa-us").attr("fill") != "#c1272d") {
+	// 			$("#pa-western-us").attr("stroke","none");
+	// 		}
+	// 	},
+	// 	init:function(){
+	// 		tech.init();
+	// 		highlightRegion('region0');
+	// 		$("svg rect").bind("click",function(){contactUsMap.resetit();});
 		
-		).mouseleave(function(){
-			$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
+	// 		if (document.all) {	
+	// 			//$( ".office-dot" ).hover(function(){alert("m00m00")});
 			
-			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
+	// 			$( ".office-dot" ).each(function(index, element) {
+	// 				$(this).attr("onmouseover","contactUsMap.ieOverItOffices('"+$(this).attr('id')+"')");
+	// 			});
+			
+	// 			$( ".office-dot" ).each(function(index, element) {
+	// 				$(this).attr("onmouseout","contactUsMap.ieLeaveItOffices('"+$(this).attr('id')+"')");
+	// 			});
+			
+	// 			$( ".regions" ).each(function(index, element) {
+	// 				$(this).attr("onmouseover","contactUsMap.ieOverItRegion('"+$(this).attr('class')+"')");
+	// 			});
+			
+	// 			$( ".regions" ).each(function(index, element) {
+	// 				$(this).attr("onmouseout","contactUsMap.ieOffItRegion('"+$(this).attr('class')+"')");
+	// 			});
+	// 		}
+
+	// 		$(".office-dot").click(function() {
+	// 			contactUsMap.resetit();
+	// 			getOffice="#"+$(this).attr("id")+"-selected";
+			
+	// 			$(".office-circle").attr("class","office-circle");
+	// 			$(".office-circle").attr("stroke","transparent");
+			
+	// 			$(getOffice).attr("class","office-circle office-active");
+			
+	// 			// $(".ncOffices").attr("fill","none");
+	// 			// $(".ncOffices").attr("stroke","none");
+	// 			// $("#il-in-upper-us").attr("fill","none");
+	// 			// $("#il-in-upper-us").attr("stroke","none");
+	// 			//$("#region-id").html($(getOffice).attr("id"));
+				
+	// 			// if ($(getOffice).attr("id") == "chicago-office-selected") {
+	// 			// 	highlightRegion('region13');
+	// 			// }
+	// 			// else if ($(getOffice).attr("id") == "houston-office-selected") {
+	// 			// 	highlightRegion('region12');
+	// 			// }
+	// 			// else if ($(getOffice).attr("id") == "sioux-city-office-selected") {
+	// 			// 	highlightRegion('region16');
+	// 			// }
+	// 			// else if ($(getOffice).attr("id") == "sarnia-on-ca-office-selected") {
+	// 			// 	highlightRegion('region1');
+	// 			// }
+				
+	// 			$(getOffice).attr("stroke","#000000");
+	// 		})
+	// 		.mouseenter(function() {
+			
+	// 			// Commented this out as it was not needed to highlight states when over the button
+	// 			// $(".regions").each(function(index, element) {
+	// 			// 	if ($(this).attr('fill') !== '#C1272D') {
+	// 			// 		$(this).attr('fill', '#959595')
+	// 			// 	}
+	// 			// })
+			
+	// 			$('.office-circle').each(function(index, element) {
+	// 				if ($(this).attr('class') === 'office-circle') {
+	// 					$(this).attr('stroke', 'transparent')
+	// 				}
+	// 			})
+			
+	// 			// Commented this out as it was not needed to highlight states when over the button
+	// 			// if ($("#il-in-upper-us").attr("fill") != "#c1272d" && $("#il-in-upper-us").attr("fill") != "#959595") {
+	// 			// 	$("#il-in-upper-us").attr("fill","none");
+	// 			// 	$("#il-in-upper-us").attr("stroke","none");
+	// 			// 	$("#il-upper-border-us").attr("stroke","none");
+	// 			// }
+				
+	// 			// Already commented out
+	// 			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
+	// 						$("#il-upper-us").attr("stroke","none");
+	// 					}*/
+
+	// 			getOffice = '#' + $(this).attr('id') + '-selected'
+	// 			$(getOffice).attr('stroke', '#000000')
+	// 		})
+	// 		.mouseleave(function() {
+	// 			$('.office-circle').each(function(index, element) {
+	// 				if ($(this).attr('class') === 'office-circle') {
+	// 					$(this).attr('stroke', 'transparent')
+	// 				}
+	// 			})
+			
+	// 			// Commented this out as it was not needed to highlight states when over the button
+	// 			// if ($("#il-in-upper-us").attr("fill") != "#c1272d" && $("#il-in-upper-us").attr("fill") != "#959595") {
+	// 			// 	$("#il-in-upper-us").attr("fill","none");
+	// 			// 	$("#il-in-upper-us").attr("stroke","none");
+	// 			// 	$("#il-upper-border-us").attr("stroke","none");
+	// 			// }
+				
+	// 			// Already commented out
+	// 			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
+	// 						$("#il-upper-us").attr("stroke","none");
+	// 					}*/
+	// 		})
+
+	// 		var handleIllinoisIndianaClick = function(elementId) {
+	// 			// Show Illinoi/Indiana subsections, reset highlighting
+	// 			document.getElementById('il-us').setAttribute('fill', '#959595')
+	// 			document.getElementById('in-us').setAttribute('fill', '#959595')
+	// 			document.getElementById('il-in-upper-us').setAttribute('stroke', 'white')
+
+	// 			if (elementId === 'il-us') {
+	// 				// Central Illinois
+	// 				document.getElementById('il-mo-us-annex').setAttribute('stroke', 'white')
+	// 				document.getElementById('il-us').setAttribute('fill', '#C1272D')
+	// 				document.getElementById('il-in-upper-us').setAttribute('fill', '#959595')
+	// 			}
+	// 			else if (elementId === 'il-in-upper-us') {
+	// 				// North Illinois/Indiana
+	// 				document.getElementById('il-in-upper-us').setAttribute('fill', '#C1272D')
+	// 			}
+	// 			else if (elementId === 'il-mo-us-annex') {
+	// 				// Il/Mo Annex
+	// 				document.getElementById('il-mo-us-annex').setAttribute('stroke', 'white')
+	// 				document.getElementById('il-mo-us-annex').setAttribute('fill', '#C1272D')
+	// 			}
+	// 			else {
+	// 				// Indiana
+	// 				document.getElementById('il-mo-us-annex').setAttribute('stroke', 'none')
+	// 				document.getElementById('in-us').setAttribute('fill', '#C1272D')
+	// 				document.getElementById('il-in-upper-us').setAttribute('fill', '#959595')
+	// 			}
+	// 		}
+
+	// 		var handleIllinoisIndianaMouseEnter = function(elementId) {
+	// 			// Central Illinois/Illinois-Mo Annex
+	// 			if (elementId === 'il-us' ||  elementId === 'il-mo-us-annex') {
+	// 				$('#il-in-upper-us').attr('stroke', 'white')
+	// 				$('#il-mo-us-annex').attr('stroke', 'white')
+	// 				$('#' + elementId).attr('fill', '#E8858C')
+
+	// 				if (elementId === 'il-us') {
+	// 					if ($('#il-in-upper-us').attr('fill') === '#C1272D') {
+	// 						// If north Illinois is clicked, we have to maintain its clicked status
+	// 						$('il-us').attr('fill', 'E8858C')
+	// 						$('il-in-upper-us').attr('fill', '#C1272D')
+	// 					}
+	// 					else {
+	// 						$('#il-in-upper-us').attr('fill', '#959595')	
+	// 					}
+	// 				}
+	// 			}
+				
+	// 			// North Illinois/Indiana
+	// 			if (elementId === 'il-in-upper-us') {
+	// 				$('#il-in-upper-us').attr('stroke', 'white')
+	// 				$('#' + elementId).attr('fill', '#E8858C')
+	// 			}
 					
-			/*if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
-						$("#il-upper-us").attr("stroke","none");
-					}*/
+	// 			// Indiana
+	// 			if (elementId === 'in-us') {
+	// 				if ($('#il-in-upper-us').attr('fill') === '#C1272D') {
+	// 					// If we mouse enter Indiana and upper illinois/indiana is clicked
+	// 					// we have to make sure to only highlight lower indiana
+	// 					$('#in-us').attr('fill', '#E8858C')
+	// 					$('#il-in-upper-us').attr('fill', '#C1272D')
+	// 				}
+	// 				else {
+	// 					$('#il-in-upper-us').attr('stroke', 'white')
+	// 					$('#in-us').attr('fill', '#E8858C')
+	// 					$('#il-in-upper-us').attr('fill', '#959595')
+	// 				}
+	// 			}
+	// 		}
+
+	// 		var handleIllinoisIndianaMouseLeave = function(elementId) {
+	// 			var clickedElement = ''
+
+	// 			function isAnyRegionClicked(element) {
+	// 				if ($('#' + element).attr('fill') === '#C1272D') {
+	// 					clickedElement = element
+	// 				}
+	// 			}
+
+	// 			['il-us', 'il-in-upper-us', 'il-mo-us-annex', 'in-us'].forEach(isAnyRegionClicked)
+
+	// 			if (clickedElement.length) {
+	// 				// If there is any region in Illinois/Indiana clicked, we need special highlight rules
+	// 				if (clickedElement === 'in-us') {
+	// 					$('#in-us').attr('fill', '#C1272D')
+	// 					$('#il-us').attr('fill', '#959595')
+	// 					$('#il-mo-us-annex').attr('fill', '#959595')
+	// 				}
+	// 				else if (clickedElement === 'il-in-upper-us') {
+	// 					$('#in-us').attr('fill', '#959595')
+	// 					$('#il-mo-us-annex').attr('fill', '#959595')
+	// 					$('#il-us').attr('fill', '#959595')
+	// 					$('#il-in-upper-us').attr('fill', '#C1272D')
+	// 				}
+	// 				else if (clickedElement === 'il-mo-us-annex') {
+	// 					$('#il-us').attr('fill', '#959595')
+	// 					$('#in-us').attr('fill', '#959595')
+	// 					$('#il-mo-us-annex').attr('fill', '#C1272D')	
+	// 				}
+	// 				else {
+	// 					$('#in-us').attr('fill', '#959595')
+	// 					$('#il-mo-us-annex').attr('fill', '#959595')
+	// 					$('#il-in-upper-us').attr('fill', '#959595')
+	// 				}
+	// 			}
+	// 			else {
+	// 				// If no state is selected, this will handle mouse leave highlighting
+	// 				$('#il-in-upper-us').attr('stroke', 'none')
+	// 				$('#il-mo-us-annex').attr('stroke', 'none')
+	// 				$('#' + elementId).attr('fill', '#959595')
+	// 				$('#il-in-upper-us').attr('fill', 'none').fadeI
+	// 			}
+	// 		}
+
+	// 		var handlePennsylvaniaMouseEnter = function(elementId) {
+	// 			// Split Pennsylvania into subsections
+	// 			document.getElementById('pa-western-us').setAttribute('stroke', 'white')
+
+	// 			// Fill the subsection we are mousing over
+	// 			elementId === 'pa-western-us'
+	// 				? document.getElementById('pa-western-us').setAttribute('fill', '#E8858C')
+	// 				: document.getElementById('pa-us').setAttribute('fill', '#E8858C')
+	// 		}
+
+	// 		var handlePennsylvaniaMouseLeave = function(elementId) {
+	// 			var isPaRegionClicked = false;
+
+	// 			// If a subsection is not in a clicked state, we highlight it
+	// 			['pa-western-us', 'pa-us'].forEach(function(paElement) {
+	// 				document.getElementById(paElement).getAttribute('fill') !== '#C1272D'
+	// 					? document.getElementById(paElement).setAttribute('fill', '#959595')
+	// 					: isPaRegionClicked = true
+	// 			})
+
+	// 			// If a Pennsylvania subsection is in a clicked state, we don't hide the subsections
+	// 			if (!isPaRegionClicked) document.getElementById('pa-western-us').setAttribute('stroke', 'none');
+	// 		}
+
+	// 		var handleTexasMouseEnter = function(elementId) {
+	// 			document.getElementById('tx-northern-us-line').setAttribute('stroke', 'white')
+
+	// 			elementId === 'tx-northern-us'
+	// 				? document.getElementById('tx-northern-us').setAttribute('fill', '#E8858C')
+	// 				: document.getElementById('tx-us').setAttribute('fill', '#E8858C')
+	// 		}
+
+	// 		var handleTexasMouseLeave = function(elementId) {
+	// 			var isTexasRegionClicked = false;
+
+	// 			['tx-us', 'tx-northern-us'].forEach(function(txElement) {
+	// 				document.getElementById(txElement).getAttribute('fill') !== '#C1272D'
+	// 					? document.getElementById(txElement).setAttribute('fill', '#959595')
+	// 					: isTexasRegionClicked = true
+	// 			})
+
+	// 			if (!isTexasRegionClicked) document.getElementById('tx-northern-us-line').setAttribute('stroke', 'none')
+	// 		}
+
+	// 		var handleAlaskaClick = function() {
+	// 			for (var i = 1; i <= 20; i++) {
+	// 				document.getElementById('ak-' + i + '-us').setAttribute('fill', '#C1272D')
+	// 			}
+	// 		}
+
+	// 		var handleAlaskaHighlight = function(elementId, action) {
+	// 			// Only handle highlights if Alaska is not in a clicked state
+	// 			if (document.getElementById(elementId).getAttribute('fill') !== '#C1272D') {
+	// 				var highlightColor = ''
+
+	// 				action === 'mouseEnter'
+	// 					? highlightColor = '#E8858C'
+	// 					: highlightColor = '#959595'
+
+	// 				for (var i = 1; i <= 20; i++) {
+	// 					document.getElementById('ak-' + i + '-us').setAttribute('fill', highlightColor)
+	// 				}
+	// 			}
+	// 		}
+
+	// 		var handleRegionClick = function(idArray) {
+	// 			idArray.forEach(function(sectionId) {
+	// 				document.getElementById(sectionId).setAttribute('fill', '#C1272D')
+	// 			})
+	// 		}
+
+	// 		var handleRegionHighlight = function(elementId, idArray, action) {
+	// 			// Only handle highlights if this region is not in a clicked state
+	// 			if (document.getElementById(elementId).getAttribute('fill') !== '#C1272D') {
+	// 				var highlightColor = ''
+
+	// 				action === 'mouseEnter'
+	// 					? highlightColor = '#E8858C'
+	// 					: highlightColor = '#959595'
+
+	// 				idArray.forEach(function(sectionId) {
+	// 					document.getElementById(sectionId).setAttribute('fill', highlightColor)
+	// 				})
+	// 			}
+	// 		}
+		
+	// 		// Contact Us Map Click/Mouse Enter/Mouse Leave
+	// 		$('.regions').click(function() {
+
+	// 			// Un-select states/regions/offices
+	// 			$('.regions').attr('fill', '#959595')
+	// 			$('.office-circle').attr('stroke', 'transparent')
+
+	// 			// Fixes northern Illinois/Indiana border getting greyed out
+	// 			$('#il-in-upper-us').attr('fill', 'none').fadeI;
+
+	// 			// Fixes small Alaska island not getting greyed out
+	// 			document.getElementById('ak-14-us').setAttribute('fill', 'none')
+
+	// 			if (['il-us', 'il-in-upper-us', 'il-mo-us-annex', 'in-us'].includes(this.id)) {
+	// 				// Hide Pennsylvania subsections when we click on a different state
+	// 				document.getElementById('pa-western-us').setAttribute('stroke', 'none')
+	// 				document.getElementById('pa-us').setAttribute('stroke', 'white')
+
+	// 				// If we are dealing with Illinois/Indiana, handle their special rules
+	// 				handleIllinoisIndianaClick(this.id)
+	// 			}
+	// 			else {
+	// 				// Hide Illinois/Indiana subsections when we click on a different state
+	// 				$('#il-in-upper-us').attr('stroke', 'none')
+	// 				$('#il-mo-us-annex').attr('stroke', 'none')
+
+	// 				// Hide Pennsylvania subsections when we click on a different state
+	// 				if (this.id !== 'pa-western-us' && this.id !== 'pa-us') {
+	// 					document.getElementById('pa-western-us').setAttribute('stroke', 'none')
+	// 					document.getElementById('pa-us').setAttribute('stroke', 'white')
+	// 				}
+
+	// 				// Hide Texas subsection when we click on a different state
+	// 				if (this.id !== 'tx-us' && this.id !== 'tx-northern-us') {
+	// 					document.getElementById('tx-northern-us-line').setAttribute('stroke', 'none')
+	// 				}
+
+	// 				// Handle Alaska click
+	// 				if ((this.id).includes('ak-')) {
+	// 					handleAlaskaClick()
+	// 				}
+	// 				// Handle British Columbia click
+	// 				else if (['bc-ca', 'vi-ca', 'hg-ca', 'gi-ca'].includes(this.id)) {
+	// 					handleRegionClick(['bc-ca', 'vi-ca', 'hg-ca', 'gi-ca'])
+	// 				}
+	// 				else {
+	// 					// Highlights selected state
+	// 					document.getElementById(this.id).setAttribute('fill', '#C1272D')
+	// 				}
+	// 			}
 			
+
+	// 			// if ($(this).attr('class') == 'regions region-11') {
+	// 			// 	$('#il-in-upper-us').attr('fill', '#959595');
+	// 			// 	$('#il-in-upper-us').attr('stroke', 'white');
+	// 			// }
+	// 			// else {
+	// 			// 	$('#il-in-upper-us').attr('fill', '#959595');
+	// 			// 	$('#il-in-upper-us').attr('stroke', 'white');
+	// 			// }
+
+	// 			// if ($(this).attr('fill') === '#c1272d') {
+	// 			// 	$(this).attr('fill', '#959595')
+	// 			// }
+	// 			// else {
+	// 			// 	$(this).attr('fill', '#c1272d')				
+	// 			// }
+
+	// 			// $(this).attr('fill', '#FFFFFF')
+		
+	// 			// $(".regions").attr("fill","#959595");
+	// 			// $(".ncOffices").attr("stroke","transparent");
+				
+	// 			// $(".ncOffices").each(function(index, element) {
+	// 			// 	if($(this).attr("fill") != "none") {
+	// 			// 		$(this).attr("fill","transparent");
+	// 			// 	}
+	// 			// });
+
+	// 			//$(this).attr("fill","#c1272d");
+	// 			// holdingC=$("#"+$(this).attr("id")).attr("class");
+	// 			// holdingC=holdingC.split(" ");
+	// 			// holdingC=holdingC[1];
+				
+	// 			// $("."+holdingC).attr("fill","#c1272d");
+				
+	// 			// if ($(this).attr("class") != "regions region-8") {
+	// 			// 	$("#il-in-upper-us").attr("fill","none").fadeI;
+	// 			// 	$("#il-in-upper-us").attr("stroke","none");
+	// 			// 	/*$("#il-upper-us").attr("stroke","none");*/
+	// 			// }
+	// 			// if ($(this).attr("class") == "regions region-8") {
+	// 			// 	$("#il-in-upper-us").attr("fill","#c1272d");
+	// 			// 	$("#il-in-upper-us").attr("stroke","white");
+	// 			// 	/*$("#il-upper-border-us").attr("stroke","none");*/
+	// 			// }
+				
+	// 			// if ($(this).attr("class") == "regions region-11") {
+	// 				// $("#il-in-upper-us").attr("fill","#959595");
+	// 				// $("#il-in-upper-us").attr("stroke","white");
+	// 			// 	/*$("#il-upper-border-us").attr("stroke","none");*/
+	// 			// }
+				
+	// 			/*if($(this).attr("class")=="regions region-7"){
+	// 				$("#il-in-upper-us").attr("stroke","white");
+	// 				$("#il-in-upper-us").attr("fill","#c1272d");
+	// 				$("#il-upper-border-us").attr("stroke","#959595");
+	// 			}
+				
+	// 			if($(this).attr("class")=="regions region-8"){
+	// 				$("#il-upper-us").attr("stroke","white");
+	// 				$("#il-upper-border-us").attr("stroke","none");
+	// 			}*/
+				
+	// 			// if ($(this).attr("class") == "regions region-12" || $(this).attr("class") == "regions region-13") {
+	// 			// 	$("#tx-northern-us-line").attr("stroke","#fff");
+	// 			// }
+	// 			// else {
+	// 			// 	$("#tx-northern-us-line").attr("stroke","none");
+	// 			// }
+				
+	// 			// if ($(this).attr("class") == "regions region-11" || $(this).attr("class") == "regions region-1") {
+	// 			// 	$("#pa-western-us").attr("stroke","#fff");
+	// 			// }
+	// 			// else{
+	// 			// 	$("#pa-western-us").attr("stroke","none");
+	// 			// }
+				
+	// 			//$("#region-id").html(holdingC);
+				
+	// 			// switch(holdingC) {
+	// 			// 	case "region-1":
+	// 			// 		highlightRegion('region4')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-2":
+	// 			// 		highlightRegion('region8')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-3":
+	// 			// 		highlightRegion('region2')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-4":
+	// 			// 		highlightRegion('region3')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-5":
+	// 			// 		highlightRegion('region10')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-6":
+	// 			// 		highlightRegion('region16')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-7":
+	// 			// 		highlightRegion('region6')
+	// 			// 		break;
+	// 			// 	case "region-8":
+	// 			// 		highlightRegion('region15')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-9":
+	// 			// 		highlightRegion('region1')
+	// 			// 		break;
+	// 			// 	case "region-11":
+	// 			// 		highlightRegion('region9')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-12":
+	// 			// 		highlightRegion('region5')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-13":
+	// 			// 		highlightRegion('region11')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// 	case "region-14":
+	// 			// 		highlightRegion('region17')
+	// 			// 		break;
+	// 			// 	case "region-19":
+	// 			// 		highlightRegion('region19')
+	// 			// 		tech.sale('region18');
+	// 			// 		break;
+	// 			// }
+				
+	// 			// $(".office-circle").attr("stroke","transparent");
+	// 			// $(".office-circle").attr("class","office-circle");
+
+	// 			// rO = holdingC;
+	// 			// rO = rO.split("-");
+	// 			// rO = rO[1];
+	// 			// rO = "rOffice-" + rO;
+					
+	// 			// $("."+rO).eq(0).attr("fill","#000000");
+	// 			// $("."+rO).eq(0).attr("stroke","#000000");
+	// 			// $("."+rO).eq(1).attr("stroke","#000000");
+	// 		})
+	// 		.mouseenter(function() {
+	// 			// If a state/region is in a clicked state, we want to ignore mouse enter on it
+	// 			if ($(this).attr('fill') !== '#C1272D') {
+	// 				if (['il-us', 'il-mo-us-annex', 'il-in-upper-us', 'in-us'].includes(this.id)) {
+	// 					handleIllinoisIndianaMouseEnter(this.id)
+	// 				}
+	// 				else if (['pa-us', 'pa-western-us'].includes(this.id)) {
+	// 					handlePennsylvaniaMouseEnter(this.id)
+	// 				}
+	// 				else if (['tx-us', 'tx-northern-us'].includes(this.id)) {
+	// 					handleTexasMouseEnter(this.id)
+	// 				}
+	// 				else if ((this.id).includes('ak-')) {
+	// 					handleAlaskaHighlight(this.id, 'mouseEnter')
+	// 				}
+	// 				else {
+	// 					$(this).attr('fill', '#E8858C')
+	// 				}
+	// 			}
+	// 		})
+	// 		.mouseleave(function() {
+	// 			// If a state/region is in a clicked state, we want to ignore mouse leave on it
+	// 			if ($(this).attr('fill') !== '#C1272D') {
+	// 				if (['il-us', 'il-in-upper-us', 'il-mo-us-annex', 'in-us'].includes(this.id)) {
+	// 					handleIllinoisIndianaMouseLeave(this.id)
+	// 				}
+	// 				else if (['pa-us', 'pa-western-us'].includes(this.id)) {
+	// 					handlePennsylvaniaMouseLeave(this.id)
+	// 				}
+	// 				else if (['tx-us', 'tx-northern-us'].includes(this.id)) {
+	// 					handleTexasMouseLeave(this.id)
+	// 				}
+	// 				else if ((this.id).includes('ak-')) {
+	// 					handleAlaskaHighlight(this.id, 'mouseLeave')
+	// 				}
+	// 				else {
+	// 					$(this).attr('fill', '#959595')
+	// 				}
+	// 			}
+	// 		})
+				
+	// 		$("polygon:not(.regions)").bind("click", function() {
+	// 			contactUsMap.resetit();
+	// 		});	
+	// 	},
+	
+	// 	initIE: function() {
+	// 		//future
+	// 	},
+	
+	// 	resetit: function() {
+	// 		highlightRegion('region0');
+	// 		$(".regions").attr("fill","#959595");
+	// 		$("#il-upper-border-us").attr("stroke","none");
+	// 		$("#il-upper-us").attr("stroke","none");
+	// 		$('#il-mo-us-annex').attr('stroke', 'none');
+	// 		$(".ncOffices").attr("fill","none");
+	// 		$(".ncOffices").attr("stroke","none");
+	// 		$("#il-in-upper-us").attr("fill","none");
+	// 		$("#il-in-upper-us").attr("stroke","none");
+	// 		$(".office-circle").attr("stroke","transparent");
+	// 		$("#pa-western-us").attr("stroke","none");
+	// 		$("#tx-northern-us-line").attr("stroke","none");
+	// 		$('#ak-14-us').attr('fill', 'none')
+	// 	},
+	
+	// 	resetit2: function() {
+	// 		$(".regions").attr("fill","#959595");
+	// 		$("#il-upper-border-us").attr("stroke","none");
+	// 		$("#il-upper-us").attr("stroke","none");
+	// 		$(".ncOffices").attr("fill","none");
+	// 		$(".ncOffices").attr("stroke","none");
+	// 		$("#il-in-upper-us").attr("fill","none");
+	// 		$("#il-in-upper-us").attr("stroke","none");
+	// 		$(".office-circle").attr("stroke","transparent");
+	// 		$("#pa-western-us").attr("stroke","none");
+	// 		$("#tx-northern-us-line").attr("stroke","none");
+	// 	},
+
+	// 	ieOverItOffices: function(ieOO) {
+			
+	// 		$(".regions").each(function(index, element) {
+	// 			if ($(this).attr("fill") != "#c1272d") {
+	// 				$(this).attr("fill","#959595");
+	// 			}
+	// 		});
+				
+	// 		$(".office-circle").each(function(index, element) {
+	// 			if ($(this).attr("class") == "office-circle") {
+	// 				$(this).attr("stroke","transparent");
+	// 			}
+	// 		});
+				
+	// 		if ($("#il-in-upper-us").attr("fill") != "#c1272d" && $("#il-in-upper-us").attr("fill") != "#959595") {
+	// 			$("#il-in-upper-us").attr("fill","none");
+	// 			$("#il-in-upper-us").attr("stroke","none");
+	// 			$("#il-upper-border-us").attr("stroke","none");
+	// 		}
+				
+	// 		if ($("#il-upper-us").attr("fill") != "#c1272d" && $("#il-in-upper-us").attr("fill") != "#959595") {
+	// 			$("#il-upper-us").attr("stroke","none");
+	// 		}
+		
+	// 		getOffice = "#" + ieOO + "-selected";
+	// 		$(getOffice).attr("stroke","#000000");
+	// 	},
+	
+	// 	ieLeaveItOffices: function(ieLO) {
+	// 		$(".office-circle").each(function(index, element) {
+	// 			if ($(this).attr("class") == "office-circle") {
+	// 				$(this).attr("stroke","transparent");
+	// 			}
+	// 		});
+				
+	// 		if ($("#il-in-upper-us").attr("fill") != "#c1272d" && $("#il-in-upper-us").attr("fill") != "#959595") {
+	// 			$("#il-in-upper-us").attr("fill","none");
+	// 			$("#il-in-upper-us").attr("stroke","none");
+	// 			$("#il-upper-border-us").attr("stroke","none");
+	// 		}
+						
+	// 		if ($("#il-upper-us").attr("fill") != "#c1272d" && $("#il-upper-us").attr("fill") != "#959595") {
+	// 			$("#il-upper-us").attr("stroke","none");
+	// 		}
+	// 	}
+	// }
+
+	// var allContacts={
+	// 	init:function(){
+	// 		$( "#contAlpha .alphaemail" ).mouseover(function() {
+ //  				//console.log("in "+$(this).html());
+	// 			allContacts.rollover($(this).html());
+	// 		}).mouseout(function() {
+	// 	  		//console.log("out "+$(this).html());
+	// 			allContacts.clearit();
+	// 		});
+	// 	},
+
+	// 	rollover:function(nn){
+	// 		switch(nn) {
+	// 			case "Randy Bowman":
+	// 				//alert("hi Randy");
+	// 				regionSet="region-11";
+	// 				break;
+	// 			case "Todd Waggoner":
+	// 				regionSet="region-6";
+	// 				break;
+	// 			case "Joshua Chesser":
+	// 				regionSet="region-7";
+	// 				break;
+	// 			case "Al Isenegger":
+	// 				regionSet="region-9";
+	// 				break;
+	// 			case "Jim McLaughlin":
+	// 				regionSet="region-8";
+	// 				break;
+	// 			case "Pete Petersen":
+	// 				regionSet="region-1";
+	// 				break;
+	// 			case "Scottie Primeaux":
+	// 				regionSet="region-3";
+	// 				break;
+	// 			case "Dennis Rivardo":
+	// 				regionSet="region-4";
+	// 				break;
+	// 			case "Tony Segovia":
+	// 				regionSet="region-13";
+	// 				break;
+	// 			case "Scott Swanson":
+	// 				regionSet="region-5";
+	// 				break;
+	// 			case "Stoy Taylor":
+	// 				regionSet="region-2";
+	// 				break;
+	// 			case "Edwin Luper":
+	// 				regionSet="region-12";
+	// 				break;
+	// 			case "David Clugg":
+	// 				regionSet="region-19";
+	// 				break;
+	// 			case "Steve Van Nocken":
+	// 				regionSet="region-14";
+	// 				break;
+	// 			case "Tyler Jepsen":
+	// 				regionSet="region-9";/* none */
+	// 				break;
+	// 			}
+			
+	// 			$(".regions").each(function(index, element) {
+	// 				if($(this).attr("fill")!="#c1272d"){
+	// 					$(this).attr("fill","#959595");
+	// 				}
+	// 			});
+			
+	// 			$(".office-circle").each(function(index, element) {
+	// 				if($(this).attr("class")=="office-circle"){
+	// 					$(this).attr("stroke","transparent");
+	// 				}
+	// 			});
+			
+	// 			if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
+	// 				$("#il-in-upper-us").attr("fill","none");
+	// 				$("#il-in-upper-us").attr("stroke","none");
+	// 				$("#il-upper-border-us").attr("stroke","none");
+	// 			}
+	// 			if(regionSet!="none"){
+	// 				$("."+regionSet).attr("fill","#e8858c");
+	// 			}
+	// 		},
+
+	// 		clearit:function(){
+	// 			$(".regions").each(function(index, element) {
+	// 				if($(this).attr("fill")!="#c1272d"){
+	// 					$(this).attr("fill","#959595");
+	// 				}
+	// 			});
+		
+	// 			$(".office-circle").each(function(index, element) {
+	// 				if($(this).attr("class")=="office-circle"){
+	// 					$(this).attr("stroke","transparent");
+	// 				}
+	// 			});
+		
+	// 			$("#il-in-upper-us").attr("fill","none");
+	// 			$("#il-in-upper-us").attr("stroke","none");
+	// 			$("#il-upper-border-us").attr("stroke","none");	
+	// 		},
+	
+	// 		alphaListUpdate:function(nn){
+	// 			switch(nn){
+	// 				case "Randy Bowman":
+	// 					//alert("hi Randy");
+	// 					regionSet="region-11";
+	// 					break;
+	// 				case "Todd Waggoner":
+	// 					regionSet="region-6";
+	// 					break;
+	// 				case "Joshua Chesser":
+	// 					regionSet="region-7";
+	// 					break;
+	// 				case "Al Isenegger":
+	// 					regionSet="region-9";
+	// 					break;
+	// 				case "Jim McLaughlin":
+	// 					regionSet="region-8";
+	// 					break;
+	// 				case "Pete Petersen":
+	// 					regionSet="region-1";
+	// 					break;
+	// 				case "Scottie Primeaux":
+	// 					regionSet="region-3";
+	// 					break;
+	// 				case "Dennis Rivardo":
+	// 					regionSet="region-4";
+	// 					break;
+	// 				case "Tony Segovia":
+	// 					regionSet="region-13";
+	// 					break;
+	// 				case "Scott Swanson":
+	// 					regionSet="region-5";
+	// 					break;
+	// 				case "Stoy Taylor":
+	// 					regionSet="region-2";
+	// 					break;
+	// 				case "Edwin Luper":
+	// 					regionSet="region-12";
+	// 					break;
+	// 				case "David Clugg":
+	// 					regionSet="region-19";
+	// 					$("#il-in-upper-us").attr("fill","#c1272d");
+	// 					break;
+	// 				case "Steve Van Nocken":
+	// 					regionSet="region-14";
+	// 					break;
+	// 				case "Tyler Jepsen":
+	// 					regionSet="region-9";/* none */
+	// 					break;
+	// 			}
+		
+	// 			//$("."+regionSet).click();
+		
+	// 			$(".regions").each(function(index, element) {
+	// 				if($(this).attr("fill")!="#c1272d"){
+	// 					$(this).attr("fill","#959595");
+	// 				}
+	// 			});
+			
+	// 			$(".office-circle").each(function(index, element) {
+	// 				if($(this).attr("class")=="office-circle"){
+	// 					$(this).attr("stroke","transparent");
+	// 				}
+	// 			});
+			
+	// 			if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
+	// 				$("#il-in-upper-us").attr("fill","none");
+	// 				$("#il-in-upper-us").attr("stroke","none");
+	// 				$("#il-upper-border-us").attr("stroke","none");
+	// 			}
+					
+			
+	// 			if(regionSet!="none"){//alert(regionSet);
+	// 				$("."+regionSet).attr("fill","#c1272d");
+					
+	// 				setTimeout(function(){
+	// 					$("."+regionSet).attr("fill","#c1272d");
+						
+	// 					if(regionSet=="region-11"){
+	// 						$("#il-in-upper-us").attr("fill","#959595");
+	// 						$("#il-in-upper-us").attr("stroke","#fff");
+	// 						$("#il-upper-border-us").attr("stroke","none");
+	// 					}
+	// 				},100);
+	// 			}
+		
+	// 			/* if(regionSet!="region-9"){
+	// 				$("."+regionSet).attr("fill","#c1272d");
+	// 			}*/
+		
+	// 		switch(regionSet) {
+	// 			case "region-1":
+	// 				highlightRegion('region4')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-2":
+	// 				highlightRegion('region8')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-3":
+	// 				highlightRegion('region2')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-4":
+	// 				highlightRegion('region3')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-5":
+	// 				highlightRegion('region10')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-6":
+	// 				highlightRegion('region16')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-7":
+	// 				highlightRegion('region6')
+	// 				break;
+	// 			case "region-8":
+	// 				highlightRegion('region15')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-9":
+	// 				highlightRegion('region1')
+	// 				break;
+	// 			case "region-11":
+	// 				highlightRegion('region9')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-12":
+	// 				highlightRegion('region5')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-13":
+	// 				highlightRegion('region11')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 			case "region-14":
+	// 				highlightRegion('region17')
+	// 				break;
+	// 			case "region-19":
+	// 				highlightRegion('region19')
+	// 				//tech.sale('region18');
+	// 				break;
+	// 		}
+		
+	// 		//highlightRegion(regionSet);
+	// 	}
+	// }
+
+	// tech={
+	// 	init:function(){
+	// 		if($("body").attr("id")=="contact-us"){
+	// 			tempHoldTS=$("#region18").html();
+	// 			//$("#contact-us-aside .inner-content").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
+	// 			$("#region1").html(tempHoldTS);
+	// 			$("#region1 .regionTitle").html("Contact");
+	// 			allContacts.init();
+	// 			//console.log($("#right-aside .sideBarContent ").html())
+	// 			setTimeout(function(){
+					
+	// 				$("#contact-us-aside a.email").bind("click",function(e){e.preventDefault(); 
+			
+	// 		getNameinfo=$(this).attr("data-name");
+	// 		//getNameinfo=getNameinfo.split(" ");
+	// 		document.location="/page/contact-us-form?contact="+getNameinfo;//[1]+"_"+getNameinfo[2];
+																			   
+	// 	});
+					
+	// 				},500);
+	// 		}
+	// 	},
+	// 	sale:function(r){
+	// 		$("#"+r).removeClass("hidden");
+	// 	}
+	// }
+
+	if(navigator.userAgent.indexOf("WebKit")==-1){
+		jQuery(function ($) {
+			$(".product-family #center-content > h1").attr("data-pattern","/common/images/template-updated/gradient-text.png");
+			$(".product-family #center-content > h1").patternizer();
+				
+			$(".product-landing h1").patternizer();
+				
+			$(".product #center-content > h3").attr("data-pattern","/common/images/template-updated/gradient-text.png");
+			$(".product #center-content > h3").patternizer();
 		});
-		
-		$(".regions").click(function(){
-			
-			$(".regions").attr("fill","#959595");
-			$(".ncOffices").attr("stroke","transparent");
-			$(".ncOffices").each(function(index, element) {
-				if($(this).attr("fill")!="none"){
-					$(this).attr("fill","transparent");
-				}
-			});
-			//$(this).attr("fill","#c1272d");
-			holdingC=$("#"+$(this).attr("id")).attr("class");
-			
-			
-			holdingC=holdingC.split(" ");
-			holdingC=holdingC[1];
-			
-			$("."+holdingC).attr("fill","#c1272d");
-			
-			if($(this).attr("class")!="regions region-8"){
-				$("#il-in-upper-us").attr("fill","none").fadeI;
-				$("#il-in-upper-us").attr("stroke","none");
-				/*$("#il-upper-us").attr("stroke","none");*/
-			}
-			if($(this).attr("class")=="regions region-8"){
-				$("#il-in-upper-us").attr("fill","#c1272d");
-				$("#il-in-upper-us").attr("stroke","white");
-				/*$("#il-upper-border-us").attr("stroke","none");*/
-			}
-			
-			if($(this).attr("class")=="regions region-11"){
-				$("#il-in-upper-us").attr("fill","#959595");
-				$("#il-in-upper-us").attr("stroke","white");
-				/*$("#il-upper-border-us").attr("stroke","none");*/
-			}
-			
-			/*if($(this).attr("class")=="regions region-7"){
-				$("#il-in-upper-us").attr("stroke","white");
-				$("#il-in-upper-us").attr("fill","#c1272d");
-				$("#il-upper-border-us").attr("stroke","#959595");
-			}
-			
-			if($(this).attr("class")=="regions region-8"){
-				$("#il-upper-us").attr("stroke","white");
-				$("#il-upper-border-us").attr("stroke","none");
-			}*/
-			
-			if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
-				$("#tx-northern-us-line").attr("stroke","#fff");
-			}else{
-				$("#tx-northern-us-line").attr("stroke","none");
-			}
-			
-			if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
-				$("#pa-western-us").attr("stroke","#fff");
-			}else{
-				$("#pa-western-us").attr("stroke","none");
-			}
-			
-			
-			//$("#region-id").html(holdingC);
-			
-			switch(holdingC){
-				case "region-1":
-				highlightRegion('region4')
-				tech.sale('region18');
-				break;
-				case "region-2":
-				highlightRegion('region8')
-				tech.sale('region18');
-				break;
-				case "region-3":
-				highlightRegion('region2')
-				tech.sale('region18');
-				break;
-				case "region-4":
-				highlightRegion('region3')
-				tech.sale('region18');
-				break;
-				case "region-5":
-				highlightRegion('region10')
-				tech.sale('region18');
-				break;
-				case "region-6":
-				highlightRegion('region16')
-				tech.sale('region18');
-				break;
-				case "region-7":
-				highlightRegion('region6')
-				break;
-				case "region-8":
-				highlightRegion('region15')
-				tech.sale('region18');
-				break;
-				case "region-9":
-				highlightRegion('region1')
-				break;
-				case "region-11":
-				highlightRegion('region9')
-				tech.sale('region18');
-				break;
-				case "region-12":
-				highlightRegion('region5')
-				tech.sale('region18');
-				break;
-				case "region-13":
-				highlightRegion('region11')
-				tech.sale('region18');
-				break;
-				case "region-14":
-				highlightRegion('region17')
-				break;
-				case "region-19":
-				highlightRegion('region19')
-				tech.sale('region18');
-				break;
-				
-			}
-			
-			$(".office-circle").attr("stroke","transparent");
-			$(".office-circle").attr("class","office-circle");
-			rO=holdingC;
-			rO=rO.split("-");
-				rO=rO[1];
-				rO="rOffice-"+rO;
-				
-					$("."+rO).eq(0).attr("fill","#000000");
-					$("."+rO).eq(0).attr("stroke","#000000");
-					$("."+rO).eq(1).attr("stroke","#000000");
-				
-			
-		}).mouseenter(function(){
-				
-				holdingC=$(this).attr("class");
-				holdingC=holdingC.split(" ");
-				holdingC=holdingC[1];
-				rO=holdingC;
-				
-				rO=rO.split("-");
-				rO=rO[1];
-				rO="rOffice-"+rO;
-				if($("."+rO).eq(0).attr("fill")!="#000000"){
-					$("."+rO).eq(0).attr("fill","#300000");
-					$("."+rO).eq(0).attr("stroke","#300000");
-					$("."+rO).eq(1).attr("stroke","#300000");
-				}
-				
-				if($("."+holdingC).attr("fill")!="#c1272d"){
-					$("."+holdingC).attr("fill","#e8858c");
-					
-					if($(this).attr("class")=="regions region-11"){
-						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
-							$("#il-in-upper-us").attr("fill","#959595");
-						}
-						$("#il-in-upper-us").attr("stroke","white");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-					
-					/*if($(this).attr("class")=="regions region-7"){
-						$("#il-in-upper-us").attr("stroke","white");
-						$("#il-upper-border-us").attr("stroke","#959595");
-						if($("#il-in-upper-us").attr("fill")!="#c1272d"){
-							$("#il-in-upper-us").attr("fill","#e8858c");	
-						}
-					}*/
-					
-					if($(this).attr("class")=="regions region-12" || $(this).attr("class")=="regions region-13"){
-						$("#tx-northern-us-line").attr("stroke","#fff");
-					}
-					
-					if($(this).attr("class")=="regions region-11" || $(this).attr("class")=="regions region-1"){
-						$("#pa-western-us").attr("stroke","#fff");
-					}
-					
-				}
-			}).mouseleave(function(){
-				holdingC=$(this).attr("class");
-				holdingC=holdingC.split(" ");
-				holdingC=holdingC[1];
-				
-				rO=holdingC;
-				
-				rO=rO.split("-");
-				rO=rO[1];
-				rO="rOffice-"+rO;
-				if($("."+rO).eq(0).attr("fill")!="#000000"){
-					$("."+rO).eq(0).attr("fill","transparent");
-					$("."+rO).eq(0).attr("stroke","transparent");
-					$("."+rO).eq(1).attr("stroke","transparent");
-				}
-				
-				if($("."+holdingC).attr("fill")!="#c1272d"){
-					$("."+holdingC).attr("fill","#959595");
-					
-				}
-				
-				if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						/*$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");*/
-						
-						
-				}
-				
-				
-				if($("#il-in-upper-us").attr("fill")=="#c1272d" && $("#il-in-upper-us").attr("fill")=="#c1272d"){	
-					$("#il-upper-border-us").attr("stroke","#959595");
-				}
-				
-				if($("#in-us").attr("fill")=="#959595" && $("#il-in-upper-us").attr("fill")!="#c1272d"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-				}
-				
-				
-				if($("#tx-northern-us").attr("fill")!="#c1272d" && $("#tx-us").attr("fill")!="#c1272d"){
-					$("#tx-northern-us-line").attr("stroke","none");
-				}
-				
-				if($("#pa-western-us").attr("fill")!="#c1272d" && $("#pa-us").attr("fill")!="#c1272d"){
-					$("#pa-western-us").attr("stroke","none");
-				}
-				
-			});
-			
-			
-			
-			
-			
-			$("polygon:not(.regions)").bind("click", function(){
-				contactUsMap.resetit();
-			});
-			
-			
-			
-	},
-	
-	initIE:function(){
-		//future
-		
-	},
-	
-	resetit:function(){
-		highlightRegion('region0');
-		$(".regions").attr("fill","#959595");
-		$("#il-upper-border-us").attr("stroke","none");
-		$("#il-upper-us").attr("stroke","none");
-		$(".ncOffices").attr("fill","none");
-		$(".ncOffices").attr("stroke","none");
-		$("#il-in-upper-us").attr("fill","none");
-		$("#il-in-upper-us").attr("stroke","none");
-		$(".office-circle").attr("stroke","transparent");
-
-		$("#pa-western-us").attr("stroke","none");
-		$("#tx-northern-us-line").attr("stroke","none");
-	},
-	
-	resetit2:function(){
-		$(".regions").attr("fill","#959595");
-		$("#il-upper-border-us").attr("stroke","none");
-		$("#il-upper-us").attr("stroke","none");
-		$(".ncOffices").attr("fill","none");
-		$(".ncOffices").attr("stroke","none");
-		$("#il-in-upper-us").attr("fill","none");
-		$("#il-in-upper-us").attr("stroke","none");
-		$(".office-circle").attr("stroke","transparent");
-
-		$("#pa-western-us").attr("stroke","none");
-		$("#tx-northern-us-line").attr("stroke","none");
-	}, 
-	ieOverItOffices:function(ieOO){
-		
-		$(".regions").each(function(index, element) {
-				if($(this).attr("fill")!="#c1272d"){
-					$(this).attr("fill","#959595");
-				}
-			});
-			
-			$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
-			
-			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-			
-			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-upper-us").attr("stroke","none");
-					}
-
-			
-			getOffice="#"+ieOO+"-selected";
-			$(getOffice).attr("stroke","#000000");/* */
-	},
-	
-	ieLeaveItOffices:function(ieLO){
-		$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
-			
-			if($("#il-in-upper-us").attr("fill")!="#c1272d" && $("#il-in-upper-us").attr("fill")!="#959595"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-					
-			if($("#il-upper-us").attr("fill")!="#c1272d" && $("#il-upper-us").attr("fill")!="#959595"){
-						$("#il-upper-us").attr("stroke","none");
-					}
 	}
-	
-}
-
-var allContacts={
-	init:function(){
-		$( "#contAlpha .alphaemail" ).mouseover(function() {
-  			//console.log("in "+$(this).html());
-			allContacts.rollover($(this).html());
-			
-		}).mouseout(function() {
-		  	//console.log("out "+$(this).html());
-			allContacts.clearit();
-		});
-	},
-	rollover:function(nn){
 		
-		switch(nn){
-			case "Randy Bowman":
-				//alert("hi Randy");
-				regionSet="region-11";
-			break;
-			case "Todd Waggoner":
-				regionSet="region-6";
-			break;
-			case "Joshua Chesser":
-				regionSet="region-7";
-			break;
-			case "Al Isenegger":
-				regionSet="region-9";
-			break;
-			case "Jim McLaughlin":
-				regionSet="region-8";
-			break;
-			case "Pete Petersen":
-				regionSet="region-1";
-			break;
-			case "Scottie Primeaux":
-				regionSet="region-3";
-			break;
-			case "Dennis Rivardo":
-				regionSet="region-4";
-			break;
-			case "Tony Segovia":
-				regionSet="region-13";
-			break;
-			case "Scott Swanson":
-				regionSet="region-5";
-			break;
-			case "Stoy Taylor":
-				regionSet="region-2";
-			break;
-			case "Edwin Luper":
-				regionSet="region-12";
-			break;
-			case "David Clugg":
-				regionSet="region-19";
-			break;
-			case "Steve Van Nocken":
-				regionSet="region-14";
-			break;
-			case "Tyler Jepsen":
-				regionSet="region-9";/* none */
-			break;
-		}
-		
-		$(".regions").each(function(index, element) {
-			if($(this).attr("fill")!="#c1272d"){
-				$(this).attr("fill","#959595");
-			}
-		});
-		
-		$(".office-circle").each(function(index, element) {
-			if($(this).attr("class")=="office-circle"){
-				$(this).attr("stroke","transparent");
-			}
-		});
-		
-		if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
-					$("#il-in-upper-us").attr("fill","none");
-					$("#il-in-upper-us").attr("stroke","none");
-					$("#il-upper-border-us").attr("stroke","none");
-				}
-		if(regionSet!="none"){
-			$("."+regionSet).attr("fill","#e8858c");
-		}
-	},
-	clearit:function(){
-		$(".regions").each(function(index, element) {
-			if($(this).attr("fill")!="#c1272d"){
-				$(this).attr("fill","#959595");
-			}
-		});
-		
-		$(".office-circle").each(function(index, element) {
-			if($(this).attr("class")=="office-circle"){
-				$(this).attr("stroke","transparent");
-			}
-		});
-		
-		$("#il-in-upper-us").attr("fill","none");
-		$("#il-in-upper-us").attr("stroke","none");
-		$("#il-upper-border-us").attr("stroke","none");
-					
-	},
-	alphaListUpdate:function(nn){
-		
-		switch(nn){
-			case "Randy Bowman":
-				//alert("hi Randy");
-				regionSet="region-11";
-				
-			break;
-			case "Todd Waggoner":
-				regionSet="region-6";
-			break;
-			case "Joshua Chesser":
-				regionSet="region-7";
-			break;
-			case "Al Isenegger":
-				regionSet="region-9";
-			break;
-			case "Jim McLaughlin":
-				regionSet="region-8";
-			break;
-			case "Pete Petersen":
-				regionSet="region-1";
-			break;
-			case "Scottie Primeaux":
-				regionSet="region-3";
-			break;
-			case "Dennis Rivardo":
-				regionSet="region-4";
-			break;
-			case "Tony Segovia":
-				regionSet="region-13";
-			break;
-			case "Scott Swanson":
-				regionSet="region-5";
-			break;
-			case "Stoy Taylor":
-				regionSet="region-2";
-			break;
-			case "Edwin Luper":
-				regionSet="region-12";
-			break;
-			case "David Clugg":
-				regionSet="region-19";
-				$("#il-in-upper-us").attr("fill","#c1272d");
-			break;
-			case "Steve Van Nocken":
-				regionSet="region-14";
-			break;
-			case "Tyler Jepsen":
-				regionSet="region-9";/* none */
-			break;
-		}
-		
-		//$("."+regionSet).click();
-		
-		$(".regions").each(function(index, element) {
-				if($(this).attr("fill")!="#c1272d"){
-					$(this).attr("fill","#959595");
-				}
-			});
-			
-			$(".office-circle").each(function(index, element) {
-				if($(this).attr("class")=="office-circle"){
-					$(this).attr("stroke","transparent");
-				}
-			});
-			
-			if($("#il-in-upper-us").attr("fill")!="#c1272d" && regionSet!="region-11"){
-						$("#il-in-upper-us").attr("fill","none");
-						$("#il-in-upper-us").attr("stroke","none");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-					
-			
-			if(regionSet!="none"){//alert(regionSet);
-				$("."+regionSet).attr("fill","#c1272d");
-				setTimeout(function(){
-					$("."+regionSet).attr("fill","#c1272d");
-					
-					
-					if(regionSet=="region-11"){
-						$("#il-in-upper-us").attr("fill","#959595");
-						$("#il-in-upper-us").attr("stroke","#fff");
-						$("#il-upper-border-us").attr("stroke","none");
-					}
-					
-					},100);
-					
-				
-			}
-			
-			
-		
-		/* if(regionSet!="region-9"){
-			$("."+regionSet).attr("fill","#c1272d");
-		}*/
-		
-		switch(regionSet){
-				case "region-1":
-				highlightRegion('region4')
-				//tech.sale('region18');
-				break;
-				case "region-2":
-				highlightRegion('region8')
-				//tech.sale('region18');
-				break;
-				case "region-3":
-				highlightRegion('region2')
-				//tech.sale('region18');
-				break;
-				case "region-4":
-				highlightRegion('region3')
-				//tech.sale('region18');
-				break;
-				case "region-5":
-				highlightRegion('region10')
-				//tech.sale('region18');
-				break;
-				case "region-6":
-				highlightRegion('region16')
-				//tech.sale('region18');
-				break;
-				case "region-7":
-				highlightRegion('region6')
-				break;
-				case "region-8":
-				highlightRegion('region15')
-				//tech.sale('region18');
-				break;
-				case "region-9":
-				highlightRegion('region1')
-				break;
-				case "region-11":
-				highlightRegion('region9')
-				//tech.sale('region18');
-				break;
-				case "region-12":
-				highlightRegion('region5')
-				//tech.sale('region18');
-				break;
-				case "region-13":
-				highlightRegion('region11')
-				//tech.sale('region18');
-				break;
-				case "region-14":
-				highlightRegion('region17')
-				break;
-				case "region-19":
-				highlightRegion('region19')
-				//tech.sale('region18');
-				break;
-		}
-		//highlightRegion(regionSet);
-		
-	}
-}
-
-tech={
-	init:function(){
-		if($("body").attr("id")=="contact-us"){
-			tempHoldTS=$("#region18").html();
-			//$("#contact-us-aside .inner-content").append('<div id="region-1ts" class="hidden">'+tempHoldTS+'</div>');
-			$("#region1").html(tempHoldTS);
-			$("#region1 .regionTitle").html("Contact");
-			allContacts.init();
-			//console.log($("#right-aside .sideBarContent ").html())
-			setTimeout(function(){
-				
-				$("#contact-us-aside a.email").bind("click",function(e){e.preventDefault(); 
-		
-		getNameinfo=$(this).attr("data-name");
-		//getNameinfo=getNameinfo.split(" ");
-		document.location="/page/contact-us-form?contact="+getNameinfo;//[1]+"_"+getNameinfo[2];
-																		   
-	});
-				
-				},500);
-		}
-	},
-	sale:function(r){
-		$("#"+r).removeClass("hidden");
-	}
-}
-
-if(navigator.userAgent.indexOf("WebKit")==-1){
-			jQuery(function ($) {
-				$(".product-family #center-content > h1").attr("data-pattern","/common/images/template-updated/gradient-text.png");
-				$(".product-family #center-content > h1").patternizer();
-				
-				$(".product-landing h1").patternizer();
-				
-				
-				$(".product #center-content > h3").attr("data-pattern","/common/images/template-updated/gradient-text.png");
-				$(".product #center-content > h3").patternizer();
-				
-				
-			});
-		}
-		
-// function for ajax nav
-function initNav(){
-	
+	// function for ajax nav
+	function initNav(){
 		for(i=0;i<$("#productNav ul li").length;i++){
 			if($("#productNav ul li").eq(i).attr("class") != "mm"){
 				hodCat=$("#productNav ul li").eq(i).children().attr("data-CategoryID");
@@ -1389,35 +1553,32 @@ function initNav(){
 			$(this).addClass("expanded");
 			$(this).blur();
 		});
-		
-		
 	}
 	
-var doublejep=false;
+	var doublejep=false;
 
-function getNavItems(nn,dc){
-	/*if(document.all && $.browser.version == "7.0" || $.browser.version == "8.0"){
+	function getNavItems(nn,dc){
+		/*if(document.all && $.browser.version == "7.0" || $.browser.version == "8.0"){
 			nn=nn.toString();
 			nn=nn.split("/");
 			nn=nn[nn.length-1];
-			
 		}*/
-	if(doublejep==true){
 		
+		if(doublejep==true) {
 		}
-	if(doublejep==false){
-		$("#expander"+nn).addClass("navLoading");
-		$("#expander"+nn).removeClass("empty");
-		pathtomenu="/common/modules/display/Navigation/dsp_NavProductHelper.cfm?CategoryThreadList="+dc+"&CategoryID="
-		$("#expander"+nn).load(pathtomenu+nn+" ul", function(){initNav(); rebinder(nn);
-			ajuH=$("#acc3").height()+120;
-			if(ajuH>=$("#center-content").height()){
-				
-				$("#center-content").animate({height:ajuH+"px"})
-			}
-		});
+
+		if(doublejep==false){
+			$("#expander"+nn).addClass("navLoading");
+			$("#expander"+nn).removeClass("empty");
+			pathtomenu="/common/modules/display/Navigation/dsp_NavProductHelper.cfm?CategoryThreadList="+dc+"&CategoryID="
+			$("#expander"+nn).load(pathtomenu+nn+" ul", function(){initNav(); rebinder(nn);
+				ajuH=$("#acc3").height()+120;
+				if(ajuH>=$("#center-content").height()){
+					$("#center-content").animate({height:ajuH+"px"})
+				}
+			});
+		}
 	}
-}
 
 var stopAt="";
 var startAt=0;
