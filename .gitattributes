@@ -506,6 +506,7 @@ webroot/common/images/widget_arrow_up_grey.gif -text
 webroot/common/images/xml.gif -text
 webroot/common/js/PIE.htc -text
 webroot/common/js/backgroundsize.min.htc -text
+webroot/common/js/contactMap.js -text
 webroot/common/js/default-updated.js -text
 webroot/common/js/html5shiv.js -text
 webroot/common/js/jquery.client.js -text
