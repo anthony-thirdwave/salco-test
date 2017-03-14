@@ -375,6 +375,7 @@ $(window).load(function() {
         // Hide office contacts
         document.getElementById('region12').classList.add('hidden')
         document.getElementById('region13').classList.add('hidden')
+        document.getElementById('region14').classList.add('hidden')
     }
 
     /****************************************
@@ -394,7 +395,7 @@ $(window).load(function() {
             // Office Dot Click/Mouse Enter/Mouse Leave
             $('.office-dot').click(function() {
                 resetMap()
-
+                $("#regoin14").addClass("hidden");
                 var officeRegion = ''
                 
                 this.id === 'chicago-office' ? officeRegion = 'region13' : officeRegion = 'region12'
@@ -430,7 +431,7 @@ $(window).load(function() {
         
             // Contact Us Map Click/Mouse Enter/Mouse Leave
             $('.regions').click(function() {
-
+                $("#regoin14").addClass("hidden");
                 // Un-select states/regions/offices
                 $('.regions').attr('fill', '#959595')
                 $('.office-circle').attr('stroke', 'transparent')
