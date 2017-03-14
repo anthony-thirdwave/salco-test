@@ -487,6 +487,30 @@ $(window).load(function(){
 		}
 	}
 
+// for alpha list re intergration
+	function highlightRegion(region){
+		$('.regions').attr('fill', '#959595')
+        $('#il-mo-us-annex').attr('stroke', 'none')
+        $('#il-upper-us').attr('stroke', 'none')
+        $('#il-upper-border-us').attr('stroke', 'none')
+        $('#il-in-upper-us').attr('fill', 'none')
+        $('#il-in-upper-us').attr('stroke', 'none')
+        $('#pa-western-us').attr('stroke', 'none')
+        $('#tx-northern-us-line').attr('stroke', 'none')
+		if($("#"+region).hasClass("hidden")==true){
+			//$("div[id^='region']").addClass("hidden");
+			$("#contact-us-aside .inner-content > div").each(function(){
+				$(this).addClass("hidden")
+			});
+			$("#"+region).removeClass("hidden");
+		}else{
+			$("#contact-us-aside .inner-content > div").each(function(){
+				$(this).addClass("hidden")
+			});
+			$("#region0").removeClass("hidden");
+		}
+	}
+
 	/****************************************
 				Contact Map
 	****************************************/
