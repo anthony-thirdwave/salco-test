@@ -2257,9 +2257,7 @@ polygon, .office-circle, .ncOffices {
 .chrome #contAlpha caption, .safari #contAlpha caption {
 	font-size: 15px;
 }
-#contAlpha th {
-	display: none;
-}
+
 #contAlpha td {
 	color: #fff;
 	font-size: 12px;
