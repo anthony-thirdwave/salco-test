@@ -82,7 +82,7 @@ $(window).load(function() {
         },
         mexico: { 'contact': 'tony-segovia' },
         canada: {
-            'bc-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
+            'bc-ca': { contact: 'todd-waggoner', techSales: 'griffin-shiele' },
             'vi-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
             'ab-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
             'sk-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
