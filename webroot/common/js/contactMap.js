@@ -70,7 +70,7 @@ $(window).load(function() {
             'sc-us': { 'contact': 'stoy-taylor', 'techSales': 'nathan-monico' },
             'sd-us': { 'contact': 'jim-mclaughlin', 'techSales': 'bill-dillon' },
             'tn-us': { 'contact': 'randy-bowman', 'techSales': ['andy-shelp', 'bill-dillon'] },
-            'tx-northern-us': { 'contact': 'tony-segovia', 'techSales': 'tyler-jepsen' }
+            'tx-northern-us': { 'contact': 'tony-segovia', 'techSales': 'tyler-jepsen' },
             'tx-us': { 'contact': 'edwin-luper', 'techSales': 'tyler-jepsen' },
             'ut-us': { 'contact': 'todd-waggoner', 'techSales': 'griffin-shiele' },
             'va-us': { 'contact': 'pete-petersen', 'techSales': 'andy-shelp' },
@@ -78,16 +78,16 @@ $(window).load(function() {
             'wa-us': { 'contact': 'todd-waggoner', 'techSales': 'griffin-shiele' },
             'wi-us': { 'contact': 'jim-mclaughlin', 'techSales': ['andy-shelp', 'bill-dillon'] },
             'wv-us': { 'contact': 'randy-bowman', 'techSales': ['andy-shelp', 'bill-dillon'] },
-            'wy-us': { 'contact': 'jim-mclaughlin', 'techSales': 'bill-dillon' },
+            'wy-us': { 'contact': 'jim-mclaughlin', 'techSales': 'bill-dillon' }
         },
         mexico: { 'contact': 'tony-segovia' },
         canada: {
             'ab-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
             'bc-ca': { contact: 'todd-waggoner', techSales: 'griffin-shiele' },
             'mb-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
-            'region-1': { contact: 'pete-petersen', techSales: 'griffin-shiele' }
+            'region-1': { contact: 'pete-petersen', techSales: 'griffin-shiele' },
             'sk-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
-            'vi-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' },
+            'vi-ca': { contact: 'todd-waggoner', techSales: 'tyler-jepsen' }
         },
         alaska: { contact: 'scott-swanson', techSales: 'griffin-shiele' }
     }
