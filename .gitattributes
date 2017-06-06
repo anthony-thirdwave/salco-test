@@ -1,11 +1,15 @@
 * text=auto !eol
+collection/.gitkeep -text
 db/cms_db_creation_scripts/CreateDatabase.sql -text svneol=unset#application/octet-stream
 db/cms_db_creation_scripts/CreateSchema.sql -text
 db/cms_db_creation_scripts/CreateStoredProcedures.sql -text svneol=unset#application/octet-stream
 db/cms_db_creation_scripts/GrantPermissions.sql -text
 db/cms_db_creation_scripts/LoadData.sql -text
 db/cms_db_creation_scripts/README.txt -text
+externals/cfide/.gitkeep -text
 externals/flashApps/map/contactMap.fla -text
+temp/1/.gitkeep -text
+temp/2/.gitkeep -text
 webroot/.htaccess -text
 webroot/Application.cfc -text
 webroot/Invitation_Golf_2011.html -text
@@ -72,6 +76,8 @@ webroot/common/admin/Dashboard/index.cfm -text
 webroot/common/admin/Documentation/CMS_Instructions.pdf -text svneol=unset#unset
 webroot/common/admin/Documentation/data.cfm -text
 webroot/common/admin/Documentation/index.cfm -text
+webroot/common/admin/Documentation/videos/.gitkeep -text
+webroot/common/admin/Documentation/wireframes/.gitkeep -text
 webroot/common/admin/EventManager/displayDateBlock.cfm -text
 webroot/common/admin/EventManager/eventModify.cfm -text
 webroot/common/admin/EventManager/form.cfm -text
@@ -503,6 +509,8 @@ webroot/common/images/widget_arrow_up.gif -text
 webroot/common/images/widget_arrow_up2.gif -text
 webroot/common/images/widget_arrow_up_grey.gif -text
 webroot/common/images/xml.gif -text
+webroot/common/incoming/documents/.gitkeep -text
+webroot/common/incoming/images/.gitkeep -text
 webroot/common/js/PIE.htc -text
 webroot/common/js/backgroundsize.min.htc -text
 webroot/common/js/contactMap.js -text
@@ -647,6 +655,7 @@ webroot/common/modules/product/dsp_resource.cfm -text
 webroot/common/modules/product/import/ProductDeltaImport.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly.cfm -text
 webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
+webroot/common/modules/product/import/logs/.gitkeep -text
 webroot/common/modules/product/productFamilyDetail.cfm -text
 webroot/common/modules/report/backlog.cfm -text
 webroot/common/modules/report/getdateforweeknumber.cfm -text
@@ -1353,6 +1362,7 @@ webroot/config/factory/custom/event/EventRegistrationAddress.xml -text
 webroot/config/factory/custom/event/EventRegistrationInfo.xml -text
 webroot/config/factory/custom/event/EventRegistrationSnapshot.xml -text
 webroot/config/factory/custom/event/relationships/EventToAddress.xml -text
+webroot/config/factory/modules/custom/.gitkeep -text
 webroot/config/factory/modules/thirdwave/address/Address.xml -text
 webroot/config/factory/modules/thirdwave/event/Event.xml -text
 webroot/config/factory/modules/thirdwave/event/EventConfig.xml -text
@@ -1361,8 +1371,17 @@ webroot/config/factory/modules/thirdwave/event/eventDate/EventDateConfig.xml -te
 webroot/config/factory/modules/thirdwave/event/eventDate/eventDateConfig/Registration.xml -text
 webroot/config/factory/modules/thirdwave/event/eventDate/eventDateConfig/RepeatConfig.xml -text
 webroot/content.cfm -text
+webroot/development/.gitkeep -text
 webroot/favicon.ico -text
 webroot/golfinvite.pdf -text svneol=unset#unset
 webroot/index.cfm -text
 webroot/legacyLinks.txt -text
+webroot/resources/category/.gitkeep -text
+webroot/resources/content/.gitkeep -text
+webroot/resources/external/.gitkeep -text
+webroot/resources/images/.gitkeep -text
+webroot/resources/syndication/.gitkeep -text
+webroot/resources/video/.gitkeep -text
 webroot/robots.txt -text
+workarea/trash/resources/category/.gitkeep -text
+workarea/trash/resources/content/.gitkeep -text
