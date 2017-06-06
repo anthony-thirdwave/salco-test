@@ -1,11 +1,15 @@
 * text=auto !eol
+code/collection/.gitkeep -text
 code/db/cms_db_creation_scripts/CreateDatabase.sql -text svneol=unset#application/octet-stream
 code/db/cms_db_creation_scripts/CreateSchema.sql -text
 code/db/cms_db_creation_scripts/CreateStoredProcedures.sql -text svneol=unset#application/octet-stream
 code/db/cms_db_creation_scripts/GrantPermissions.sql -text
 code/db/cms_db_creation_scripts/LoadData.sql -text
 code/db/cms_db_creation_scripts/README.txt -text
+code/externals/cfide/.gitkeep -text
 code/externals/flashApps/map/contactMap.fla -text
+code/temp/1/.gitkeep -text
+code/temp/2/.gitkeep -text
 code/webroot/.htaccess -text
 code/webroot/Application.cfc -text
 code/webroot/Invitation_Golf_2011.html -text
@@ -72,6 +76,8 @@ code/webroot/common/admin/Dashboard/index.cfm -text
 code/webroot/common/admin/Documentation/CMS_Instructions.pdf -text svneol=unset#unset
 code/webroot/common/admin/Documentation/data.cfm -text
 code/webroot/common/admin/Documentation/index.cfm -text
+code/webroot/common/admin/Documentation/videos/.gitkeep -text
+code/webroot/common/admin/Documentation/wireframes/.gitkeep -text
 code/webroot/common/admin/EventManager/displayDateBlock.cfm -text
 code/webroot/common/admin/EventManager/eventModify.cfm -text
 code/webroot/common/admin/EventManager/form.cfm -text
@@ -503,6 +509,8 @@ code/webroot/common/images/widget_arrow_up.gif -text
 code/webroot/common/images/widget_arrow_up2.gif -text
 code/webroot/common/images/widget_arrow_up_grey.gif -text
 code/webroot/common/images/xml.gif -text
+code/webroot/common/incoming/documents/.gitkeep -text
+code/webroot/common/incoming/images/.gitkeep -text
 code/webroot/common/js/PIE.htc -text
 code/webroot/common/js/backgroundsize.min.htc -text
 code/webroot/common/js/contactMap.js -text
@@ -647,6 +655,7 @@ code/webroot/common/modules/product/dsp_resource.cfm -text
 code/webroot/common/modules/product/import/ProductDeltaImport.cfm -text
 code/webroot/common/modules/product/import/ProductImportWeekly.cfm -text
 code/webroot/common/modules/product/import/ProductImportWeekly_SSIS.cfm -text
+code/webroot/common/modules/product/import/logs/.gitkeep -text
 code/webroot/common/modules/product/productFamilyDetail.cfm -text
 code/webroot/common/modules/report/backlog.cfm -text
 code/webroot/common/modules/report/getdateforweeknumber.cfm -text
@@ -1353,6 +1362,7 @@ code/webroot/config/factory/custom/event/EventRegistrationAddress.xml -text
 code/webroot/config/factory/custom/event/EventRegistrationInfo.xml -text
 code/webroot/config/factory/custom/event/EventRegistrationSnapshot.xml -text
 code/webroot/config/factory/custom/event/relationships/EventToAddress.xml -text
+code/webroot/config/factory/modules/custom/.gitkeep -text
 code/webroot/config/factory/modules/thirdwave/address/Address.xml -text
 code/webroot/config/factory/modules/thirdwave/event/Event.xml -text
 code/webroot/config/factory/modules/thirdwave/event/EventConfig.xml -text
@@ -1361,11 +1371,20 @@ code/webroot/config/factory/modules/thirdwave/event/eventDate/EventDateConfig.xm
 code/webroot/config/factory/modules/thirdwave/event/eventDate/eventDateConfig/Registration.xml -text
 code/webroot/config/factory/modules/thirdwave/event/eventDate/eventDateConfig/RepeatConfig.xml -text
 code/webroot/content.cfm -text
+code/webroot/development/.gitkeep -text
 code/webroot/favicon.ico -text
 code/webroot/golfinvite.pdf -text svneol=unset#unset
 code/webroot/index.cfm -text
 code/webroot/legacyLinks.txt -text
+code/webroot/resources/category/.gitkeep -text
+code/webroot/resources/content/.gitkeep -text
+code/webroot/resources/external/.gitkeep -text
+code/webroot/resources/images/.gitkeep -text
+code/webroot/resources/syndication/.gitkeep -text
+code/webroot/resources/video/.gitkeep -text
 code/webroot/robots.txt -text
+code/workarea/trash/resources/category/.gitkeep -text
+code/workarea/trash/resources/content/.gitkeep -text
 prototype/Salco[!!-~]Public[!!-~]Website/5.6.0.2089.version -text
 prototype/Salco[!!-~]Public[!!-~]Website/AnnotationFieldSet/00/a578dc12175240c7b2bf9adb4d5b7c00/a578dc12175240c7b2bf9adb4d5b7c00.rppkg -text
 prototype/Salco[!!-~]Public[!!-~]Website/AnnotationFieldSet/e2/769be2a7240140e3805519e67b69fee2/769be2a7240140e3805519e67b69fee2.rppkg -text
